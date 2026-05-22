@@ -1,618 +1,472 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instagram Wedding Preview — Omah Aksara Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omah Aksara — Royal Polaroid Edition</title>
     
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="The Wedding Invitation">
-    <meta property="og:description" content="Bersama Anda, Merayakan Hari Kebahagiaan Kami. Buka Undangan Di Sini.">
-    <meta property="og:image" content="">
-    <meta id="meta-url" property="og:url" content="">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --bg: #ffffff; --card: #ffffff; --text: #000000; --muted: #737373; --border: #dbdbdb;
-            --blue: #0095f6; --red: #ff3040; 
-            --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        :root { 
+            --marun: #6b0505; 
+            --gold: #c5a880;
+            --gold-light: #e5d5be;
+            --bg-vintage: #fdfbf7; 
         }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #f3f1ec; 
+            color: #2d2d2d; 
+            overflow-x: hidden; 
+        }
+        .font-luxury { font-family: 'Cinzel', serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-aesthetic { font-family: 'Dancing Script', cursive; }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #fafafa; color: var(--text); font-size: 14px; line-height: 18px;
-            overflow-x: hidden;
+        /* Grain Overlay */
+        .grain { position: fixed; inset: -100%; width: 300%; height: 300%; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png'); opacity: .025; pointer-events: none; z-index: 99; }
+
+        /* Premium Polaroid Frame */
+        .polaroid {
+            background: #ffffff;
+            padding: 16px 16px 48px 16px;
+            box-shadow: 0 20px 40px rgba(43, 8, 8, 0.08), 0 1px 3px rgba(0,0,0,0.02);
+            transform: rotate(var(--rotation));
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            border: 1px solid rgba(197, 168, 128, 0.2);
+            position: relative;
+        }
+        .polaroid::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(0,0,0,0.02);
+            pointer-events: none;
+        }
+        .polaroid:hover { transform: rotate(0deg) scale(1.03); z-index: 10; box-shadow: 0 30px 60px rgba(43, 8, 8, 0.15); }
+        .polaroid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .polaroid-text { font-family: 'Dancing Script', cursive; color: var(--marun); text-align: center; margin-top: 16px; font-size: 1.35rem; }
+
+        .reveal { opacity: 0; transform: translateY(40px); }
+        
+        /* Gold Border Gradient */
+        .gold-border-gradient {
+            border-image: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold)) 1;
         }
 
-        /* Container Utama */
-        .phone-container { 
-            max-width: 390px; margin: 0 auto; min-height: 100vh; background: var(--bg); 
-            position: relative; border-left: 1px solid var(--border); border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column;
+        /* Luxury Button */
+        .btn-luxury {
+            background: linear-gradient(135deg, #7a0b0b, #540303);
+            color: #fcfaf6; padding: 16px 44px; border-radius: 2px;
+            font-size: 10px; letter-spacing: 4px; font-weight: 600; text-transform: uppercase;
+            box-shadow: 0 10px 25px rgba(107, 5, 5, 0.25);
+            border: 1px solid var(--gold);
+            transition: all 0.4s ease;
+        }
+        .btn-luxury:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(107, 5, 5, 0.35);
+            filter: brightness(1.1);
         }
 
-        /* Cover Layar */
-        .cover { position: fixed; inset: 0; max-width: 390px; margin: 0 auto; z-index: 999; display: flex; align-items: center; justify-content: center; background: #000; }
-        .cover-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-        .cover-btn { background: #fff; color: #000; font-size: 13px; font-weight: 700; padding: 12px 32px; border-radius: 8px; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-
-        /* Navigation Top Bar */
-        .ig-navbar { height: 44px; padding: 0 16px; }
-        .ig-logo { font-size: 22px; font-weight: 700; font-style: italic; letter-spacing: -0.5px; font-family: 'Times New Roman', Times, serif; }
-
-        /* Story Component */
-        .story-ring { width: 72px; height: 72px; border-radius: 50%; background: var(--ig-gradient); padding: 2px; margin: 0 auto 4px; transition: transform 0.15s ease; }
-        .story-ring:active { transform: scale(0.93); }
-        .story-ring img { width: 100%; height: 100%; border-radius: 50%; border: 2.5px solid #fff; object-fit: cover; background: #eee; }
-        .stories::-webkit-scrollbar { display: none; }
-
-        /* Shimmer Skeleton Loading Effect */
-        .shimmer {
-            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
-            background-size: 400% 100%; animation: skeleton-load 1.4s ease infinite;
-        }
-        @keyframes skeleton-load { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-        /* Tab Layout Styling */
-        .tab-icon { color: var(--muted); cursor: pointer; padding: 12px 0; border-top: 1px solid transparent; width: 25%; text-align: center; }
-        .tab-icon svg { width: 22px; height: 22px; margin: 0 auto; }
-        .tab-icon.active { color: var(--text); border-top: 1.5px solid var(--text); }
-        .ig-bottombar { height: 48px; padding: 0 20px; }
-
-        /* 3-Column Profile Grid */
-        .profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-        .grid-item { aspect-ratio: 1/1; object-fit: cover; width: 100%; height: 100%; background: #f3f4f6; transition: opacity 0.3s; opacity: 0; }
-        .grid-item.loaded { opacity: 1; }
-
-        /* Feed Modal */
-        .feed-modal-engine {
-            position: fixed; inset: 0; max-width: 390px; margin: 0 auto; bg: var(--bg); z-index: 100;
-            display: flex; flex-direction: column; background: white; transform: translateY(100%);
-        }
-        .feed-scroll-container {
-            flex: 1; overflow-y: auto; scroll-snap-type: y mandatory; 
-            overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
-        }
-        .post-card { scroll-snap-align: start; border-b: 1px solid var(--border); }
-        .post-img-container { position: relative; width: 100%; aspect-ratio: 1/1; background: #000; }
-
-        /* Heart Pop Animation */
-        .big-heart { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); color: rgba(255, 255, 255, 0.95); font-size: 90px; opacity: 0; pointer-events: none; z-index: 10; }
-        .animate-heart { animation: heartPop 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes heartPop {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            40% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; }
-            60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        /* Luxury Ticket Effect */
+        .luxury-ticket {
+            background: #ffffff;
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            box-shadow: inset 0 0 40px rgba(197, 168, 128, 0.05), 0 10px 30px rgba(0,0,0,0.02);
         }
 
-        /* Story Fullscreen Viewer */
-        .story-viewer-layer { position: fixed; inset: 0; max-width: 390px; margin: 0 auto; background: #111; z-index: 1000; display: none; flex-direction: column; justify-content: space-between; }
-        .story-progress-bar { display: flex; gap: 4px; padding: 10px 12px 4px; width: 100%; }
-        .story-progress-bg { flex: 1; height: 2px; background: rgba(255,255,255,0.35); border-radius: 1px; overflow: hidden; }
-        .story-progress-fill { width: 0%; height: 100%; background: #fff; }
-
-        /* Chat DM Bubble */
-        .chat-bubble { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; opacity: 0; transform: translateY(15px); }
-        .chat-left { background: #f1f1f1; color: #000; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .chat-right { background: var(--blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-
-        /* Floating Audio Button */
-        .music-floater { position: fixed; bottom: 64px; right: calc(50% - 175px); width: 42px; height: 42px; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; z-index: 90; cursor: pointer; border: 1px solid var(--border); }
-        @media (max-width: 390px) { .music-floater { right: 16px; } }
-        .rotating { animation: rotate 6s linear infinite; }
+        /* Music Spin */
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .spinning { animation: spin 10s linear infinite; }
         .paused { animation-play-state: paused; }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .progressive-blur { filter: blur(10px); transition: filter 0.5s ease; }
-        .progressive-ready { filter: blur(0); }
-
-        /* CSS Target Untuk Efek Otomatis ScrollTrigger */
-        .scroll-animate-item { opacity: 0; transform: translateY(30px); }
     </style>
 </head>
-<body class="bg-zinc-900 select-none">
+<body class="antialiased flex justify-center selection:bg-amber-100">
+    <div class="grain"></div>
 
-<div class="phone-container">
-
-    <div id="cover" class="cover">
-        <img id="cover-bg-img" class="cover-bg shadow-inner" src="" alt="Hero Image">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80"></div>
-        <div id="cover-content" class="relative z-10 w-[85%] text-center px-4 py-8">
-            <div class="w-20 h-20 rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 mx-auto mb-4 shadow-lg">
-                <div class="w-full h-full rounded-full bg-white p-0.5"><img id="avatar-cover" class="w-full h-full rounded-full object-cover" src=""></div>
-            </div>
-            <p class="text-[10px] uppercase tracking-[0.3em] text-zinc-300 font-bold mb-2">The Wedding Invitation</p>
-            <h1 id="coverNames" class="text-3xl font-extrabold text-white mb-6 tracking-tight">Loading...</h1>
-            <div class="my-6 bg-black/30 backdrop-blur-xs py-4 px-2 rounded-xl border border-white/10">
-                <p class="text-xs text-zinc-300 mb-1 font-light">Spesial Kepada Yth.</p>
-                <p id="guestName" class="text-lg font-bold text-white tracking-wide">Nama Tamu</p>
-                <p id="guestGroup" class="text-[10px] text-zinc-400 mt-1 font-medium tracking-wider uppercase"></p>
-            </div>
-            <button class="cover-btn" onclick="startInvitation()">BUKA UNDANGAN</button>
+    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center bg-[#fdfbf7] px-8 max-w-md mx-auto border-x border-stone-200/50">
+        <div class="space-y-1 mb-8">
+            <p class="uppercase tracking-[0.5em] text-[8px] text-stone-400 font-semibold">The Wedding Invitation</p>
+            <div class="w-8 h-[1px] bg-[#c5a880] mx-auto"></div>
         </div>
+
+        <div class="polaroid mb-8" style="--rotation: -2deg; width: 270px;">
+            <img id="cover-img" src="" alt="Cover Photo">
+            <div class="polaroid-text">The Wedding of</div>
+        </div>
+        
+        <h1 id="cover-names" class="font-luxury text-3xl font-normal text-stone-800 tracking-wide mb-8"></h1>
+        
+        <div class="flex justify-center space-x-6 mb-12 border-y border-stone-200/60 py-3 w-full max-w-[280px]">
+            <div class="text-center"><span id="days" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text-[7px] uppercase tracking-widest text-stone-400 font-medium">Dina</span></div>
+            <div class="text-center"><span id="hours" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text-[7px] uppercase tracking-widest text-stone-400 font-medium">Tabuh</span></div>
+            <div class="text-center"><span id="minutes" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text-[7px] uppercase tracking-widest text-stone-400 font-medium">Menit</span></div>
+        </div>
+
+        <div class="mb-10 space-y-2">
+            <p class="text-[8px] text-stone-400 uppercase tracking-[.4em] font-medium">Katur Dhumateng Panjenengan:</p>
+            <div class="border border-dashed border-[#c5a880]/60 bg-stone-50/50 px-6 py-2.5 rounded">
+                <p id="guest-name" class="font-serif text-lg text-stone-800 italic font-medium"></p>
+            </div>
+        </div>
+        
+        <button onclick="openInvitation()" class="btn-luxury">Buka Serat Ulem</button>
     </div>
 
-    <nav class="ig-navbar sticky top-0 z-50 bg-white border-b border-[var(--border)] flex items-center justify-between">
-        <div class="ig-logo cursor-pointer" onclick="switchTab('grid-area')">Instagram</div>
-        <div class="flex items-center gap-5">
-            <div class="relative cursor-pointer" onclick="switchTab('dm-gift')">
-                <svg class="w-6 h-6 text-stone-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path></svg>
-                <span class="absolute -top-1 -right-1.5 bg-red-500 text-white font-bold text-[9px] w-[15px] h-[15px] rounded-full flex items-center justify-center">1</span>
-            </div>
-        </div>
-    </nav>
 
-    <div class="flex-1 overflow-y-auto bg-white pb-[48px]" id="main-scroll-engine">
+    <main id="app" class="max-w-md w-full mx-auto opacity-0 bg-[#fdfbf7] shadow-2xl relative border-x border-stone-200/30 pb-16 space-y-28">
         
-        <div id="skeleton-container" class="p-4 space-y-4">
-            <div class="flex items-center gap-4">
-                <div class="w-16 h-16 rounded-full shimmer"></div>
-                <div class="flex-1 space-y-2"><div class="h-4 w-1/3 rounded shimmer"></div><div class="h-3 w-1/2 rounded shimmer"></div></div>
-            </div>
-        </div>
+        <section class="px-10 pt-28 text-center space-y-6">
+            <div id="islamic-greeting" class="text-[10px] tracking-widest text-stone-400 mb-6 font-bold uppercase hidden">Assalamu'alaikum Warahmatullahi Wabarakatuh</div>
+            <div class="w-6 h-[1px] bg-[#c5a880] mx-auto"></div>
+            <p id="quote-text" class="font-serif text-base italic leading-relaxed text-stone-600 font-light px-2"></p>
+            <p id="quote-source" class="text-[9px] uppercase tracking-[.3em] font-bold text-[#6b0505]"></p>
+        </section>
 
-        <div id="actual-content" class="hidden">
-            <div id="stories" class="stories flex gap-4 px-4 py-3 overflow-x-auto border-b border-zinc-100 bg-white"></div>
-
-            <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-white">
-                <div class="relative profile-pic">
-                    <div class="w-[77px] h-[77px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-purple-600">
-                        <img id="profile-main-avatar" class="w-full h-full rounded-full object-cover border-2 border-white bg-white" src="">
-                    </div>
-                    <div class="live-badge cursor-pointer shadow-md" id="live-badge-btn" style="display:none">LIVE</div>
-                </div>
-                <div class="flex gap-6 text-center pr-4">
-                    <div><p class="text-base font-bold tracking-tight" id="stats-posts">0</p><p class="text-xs text-stone-500 font-light">kiriman</p></div>
-                    <div><p class="text-base font-bold tracking-tight">2.026</p><p class="text-xs text-stone-500 font-light">pengikut</p></div>
-                    <div><p class="text-base font-bold tracking-tight">1</p><p class="text-xs text-stone-500 font-light">mengikuti</p></div>
-                </div>
+        <section class="px-8 space-y-24">
+            <div class="text-center space-y-3">
+                <p class="text-[8px] tracking-[.5em] uppercase text-stone-400 font-bold">Mempelai Pasangan</p>
+                <h3 class="font-luxury text-2xl font-normal text-stone-800 tracking-wide">Saking Karsa-Mu</h3>
+                <p class="text-xs text-stone-500 font-light leading-relaxed max-w-xs mx-auto italic">Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan untuk membina bait yang sakinah, mawaddah, warahmah.</p>
             </div>
             
-            <div class="px-4 pb-4 border-b border-zinc-100">
-                <h2 class="text-[13px] font-bold tracking-wide" id="ig-username-bio">wedding_couple</h2>
-                <p class="text-[13px] whitespace-pre-line mt-1 text-stone-800 leading-[18px] font-light" id="ig-bio-text"></p>
+            <div id="groom-box" class="reveal flex flex-col items-center text-center"></div>
+            <div class="text-center font-aesthetic text-4xl text-[#c5a880]/60 my-4">and</div>
+            <div id="bride-box" class="reveal flex flex-col items-center text-center"></div>
+        </section>
+
+        <section class="px-6 space-y-12">
+            <div class="text-center space-y-1">
+                <p class="text-[8px] tracking-[.5em] uppercase text-stone-400 font-bold">Our Journey</p>
+                <h3 class="font-luxury text-2xl font-normal text-stone-800 tracking-wide">Reroncen Cariyos</h3>
+            </div>
+            <div id="gallery-grid" class="grid grid-cols-1 gap-14 place-items-center"></div>
+        </section>
+
+        <section class="py-20 px-6 bg-gradient-to-b from-[#5c0404] to-[#3a0101] text-stone-100 text-center space-y-12 relative">
+            <div class="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png')] opacity-5 pointer-events-none"></div>
+            <div class="space-y-1 relative z-10">
+                <h3 class="text-[9px] tracking-[.5em] uppercase text-[#c5a880] font-bold">The Celebration</h3>
+                <p class="font-luxury text-xl font-normal tracking-wide">Waktu & Papan Pasamuan</p>
+            </div>
+            <div id="event-list" class="space-y-16 relative z-10"></div>
+        </section>
+
+        <section id="rsvp-section" class="px-6 space-y-12">
+            <div class="text-center space-y-1">
+                <p class="text-[8px] tracking-[.5em] uppercase text-stone-400 font-bold">Reservation & Wishes</p>
+                <h3 class="font-luxury text-2xl font-normal text-stone-800 tracking-wide">Doa Restu & Karsa</h3>
             </div>
 
-            <div class="flex bg-white sticky top-[44px] z-40 border-b border-zinc-100">
-                <div class="tab-icon active" id="tab-grid" onclick="switchTab('grid-area')">
-                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2h4v4H2V2zm6 0h4v4H8V2zm6 0h4v4h-4V2zM2 8h4v4H2V8zm6 0h4v4H8V8zm6 0h4v4h-4V8zM2 14h4v4H2v-4zm6 0h4v4H8v-4zm6 0h4v4h-4v-4z"/></svg>
+            <div class="luxury-ticket border border-[#c5a880]/50 rounded p-6 text-center shadow-sm space-y-5 relative overflow-hidden">
+                <div class="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#fdfbf7] rounded-full border-r border-[#c5a880]/30"></div>
+                <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#fdfbf7] rounded-full border-l border-[#c5a880]/30"></div>
+                
+                <p class="text-[7px] font-mono tracking-[0.4em] uppercase text-[#c5a880] font-bold">Royal Digital Pass Token</p>
+                <div class="py-3 border-y border-dashed border-stone-200">
+                    <p id="ticket-guest-name" class="font-serif text-lg text-stone-800 font-medium italic"></p>
+                    <p id="ticket-date" class="text-[9px] text-stone-400 font-medium uppercase tracking-widest mt-1.5"></p>
                 </div>
-                <div class="tab-icon" id="tab-reels" onclick="switchTab('reels-area')">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                </div>
-                <div class="tab-icon" id="tab-tagged" onclick="switchTab('tagged-area')">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                </div>
-                <div class="tab-icon" id="tab-dm" onclick="switchTab('dm-gift')">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
-                </div>
+                <p id="guest-note" class="text-xs text-stone-500 font-light leading-relaxed px-2 italic"></p>
+                <a id="rsvp-link" href="#" target="_blank" class="w-full block bg-stone-900 text-white py-3.5 text-[9px] uppercase tracking-[0.25em] font-medium hover:bg-stone-800 transition-colors border border-stone-700">
+                    Konfirmasi Kehadiran via WhatsApp
+                </a>
             </div>
 
-            <div id="grid-area" class="tab-content block bg-white">
-                <div id="grid-container" class="profile-grid"></div>
-            </div>
-
-            <div id="reels-area" class="tab-content hidden bg-black">
-                <div id="reels-container" class="space-y-0"></div>
-            </div>
-
-            <div id="tagged-area" class="tab-content hidden p-4 space-y-4 bg-stone-50">
-                <div class="bg-white border border-[var(--border)] p-4 rounded-xl shadow-xs scroll-animate-item">
-                    <h3 class="text-[13px] font-bold border-b pb-2 mb-3 tracking-wide text-stone-800"><i class="fa-solid fa-calendar text-amber-500 mr-2"></i>Agenda Utama</h3>
-                    <div id="eventList" class="space-y-4"></div>
+            <form id="wishes-form" class="space-y-5 text-left bg-stone-50 p-6 border border-stone-200/60 rounded">
+                <p class="font-luxury text-sm text-stone-800 font-semibold border-b border-stone-200 pb-2.5 tracking-wider">Kirim Doa Restu Online</p>
+                
+                <div class="space-y-1.5">
+                    <label class="text-[9px] uppercase tracking-wider font-semibold text-stone-500">Nama Lengkap</label>
+                    <input type="text" id="wish-name" required class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors">
                 </div>
 
-                <div class="bg-white border border-[var(--border)] p-4 rounded-xl shadow-xs scroll-animate-item">
-                    <h3 class="text-[13px] font-bold border-b pb-2 mb-3 tracking-wide text-stone-800"><i class="fa-solid fa-envelope text-blue-500 mr-2"></i>Konfirmasi RSVP & Doa</h3>
-                    <p id="dresscode-text" class="text-[11px] text-[var(--muted)] mb-3 font-light leading-relaxed"></p>
-                    <form id="wishes-form" class="space-y-2">
-                        <input type="text" id="wish-name" placeholder="Nama Lengkap" class="w-full text-xs p-3 bg-stone-50 border border-[var(--border)] rounded-lg focus:outline-none focus:border-stone-400" required>
-                        <textarea id="wish-message" rows="3" placeholder="Tuliskan ucapan selamat..." class="w-full text-xs p-3 bg-stone-50 border border-[var(--border)] rounded-lg focus:outline-none focus:border-stone-400" required></textarea>
-                        <select id="wish-status" class="w-full text-xs p-3 bg-stone-50 border border-[var(--border)] rounded-lg focus:outline-none">
-                            <option value="Hadir">Konfirmasi: Saya Akan Hadir</option>
-                            <option value="Tidak Hadir">Konfirmasi: Berhalangan Hadir</option>
-                        </select>
-                        <button type="submit" class="w-full bg-[var(--blue)] text-white text-xs font-bold py-3 rounded-lg active:opacity-80 transition shadow-xs">Kirim Konfirmasi</button>
-                    </form>
-                    <div id="wishes-box" class="space-y-2 max-h-56 overflow-y-auto mt-4 pr-1"></div>
+                <div class="space-y-1.5">
+                    <label class="text-[9px] uppercase tracking-wider font-semibold text-stone-500">Konfirmasi Kehadiran</label>
+                    <select id="wish-status" class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors">
+                        <option value="Hadir">Hadir</option>
+                        <option value="Tidak Hadir">Tidak Hadir / Berhalangan</option>
+                    </select>
                 </div>
-            </div>
 
-            <div id="dm-gift" class="tab-content hidden p-4 bg-white">
-                <div class="flex items-center gap-3 pb-3 mb-4 border-b border-[var(--border)]">
-                    <div class="w-10 h-10 rounded-full"><img id="dm-avatar" class="w-full h-full rounded-full object-cover" src=""></div>
-                    <div>
-                        <p class="text-sm font-bold" id="dm-user-title">wedding_couple</p>
-                        <p class="text-[11px] text-green-500 font-medium">● Online</p>
-                    </div>
+                <div class="space-y-1.5">
+                    <label class="text-[9px] uppercase tracking-wider font-semibold text-stone-500">Jumlah Tamu (Pax)</label>
+                    <select id="wish-pax" class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors">
+                        <option value="1">1 Pax (Orang)</option>
+                        <option value="2">2 Pax (Orang)</option>
+                    </select>
                 </div>
-                <div class="flex flex-col gap-3" id="gift-cards-area">
-                    <div class="chat-bubble chat-left" style="opacity: 1; transform: translateY(0);">
-                        Halo! Terima kasih sebelumnya atas niat baik doa restu Anda kepada kami. 🙏
-                    </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-[9px] uppercase tracking-wider font-semibold text-stone-500">Serat Ucapan / Doa</label>
+                    <textarea id="wish-message" rows="4" required class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors resize-none" placeholder="Tulis ungkapan doa restu mulia Anda..."></textarea>
                 </div>
+
+                <button type="submit" class="w-full bg-stone-900 text-white py-3.5 rounded text-[9px] uppercase tracking-[0.25em] font-medium hover:bg-stone-950 transition-colors border border-stone-800">
+                    Kirim Konfirmasi Online
+                </button>
+            </form>
+
+            <div class="space-y-3">
+                <p class="text-[8px] uppercase tracking-widest font-bold text-stone-400 text-left">Untaian Doa yang Mengalir</p>
+                <div id="wishes-box" class="space-y-3 max-h-[380px] overflow-y-auto pr-1"></div>
             </div>
-        </div>
+        </section>
+
+        <footer class="py-24 text-center bg-white px-8 border-t border-stone-100">
+            <p id="footer-note" class="text-xs text-stone-400 font-light italic mb-8 leading-relaxed max-w-xs mx-auto"></p>
+            <p id="footer-names" class="font-luxury text-2xl font-normal text-stone-800 tracking-wide"></p>
+            <p class="text-[7px] tracking-[0.4em] text-stone-300 uppercase mt-10 font-medium">Digital Craftsmanship by Omah Aksara</p>
+        </footer>
+    </main>
+
+    <div id="music-btn" class="hidden fixed bottom-6 right-6 z-40">
+        <button id="disk-wrap" class="w-10 h-10 bg-white/90 backdrop-blur border border-stone-200/80 rounded-full shadow-lg flex items-center justify-center spinning">
+            <i id="music-icon-state" class="fa-solid fa-play text-[10px] text-stone-600"></i>
+        </button>
     </div>
+    <audio id="audio" loop></audio>
 
-    <div id="feed-modal" class="feed-modal-engine">
-        <div class="sticky top-0 bg-white border-b border-[var(--border)] h-[44px] flex items-center px-4 justify-between z-50">
-            <svg onclick="closeFeedModal()" class="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
-            <p class="font-bold text-[15px]">Kiriman</p>
-            <div class="w-6"></div>
-        </div>
-        <div id="feed-container" class="feed-scroll-container"></div>
-    </div>
 
-    <div id="story-viewer" class="story-viewer-layer">
-        <div class="story-progress-bar" id="story-progress-container"></div>
-        <div class="px-3 py-2 flex items-center justify-between text-white z-50 bg-gradient-to-b from-black/60 to-transparent">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full border border-white/40 overflow-hidden"><img id="story-viewer-avatar" class="w-full h-full object-cover" src=""></div>
-                <span id="story-viewer-username" class="text-xs font-bold">username</span>
-            </div>
-            <i class="fa-solid fa-xmark text-lg cursor-pointer p-2" onclick="closeStoryViewer()"></i>
-        </div>
-        <div class="relative flex-1 flex items-center justify-center bg-black">
-            <div class="absolute inset-y-0 left-0 w-1/3 z-50 cursor-pointer" onclick="prevStory()"></div>
-            <div class="absolute inset-y-0 right-0 w-1/3 z-50 cursor-pointer" onclick="nextStory()"></div>
-            <img id="story-viewer-img" class="w-full max-h-full object-contain" src="">
-        </div>
-    </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('c') || 'budi-ani'; 
+        const guest = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+        const path = `../../public/clients/${slug}/`;
 
-    <div class="ig-bottombar absolute bottom-0 w-full bg-white border-t border-[var(--border)] flex justify-between items-center z-50">
-        <svg class="cursor-pointer text-stone-900 w-6 h-6" onclick="switchTab('grid-area')" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.099a10 10 0 0110 10c0 5.523-4.477 10-10 10s-10-4.477-10-10a10 10 0 0110-10zM12 4a8 8 0 100 16 8 8 0 000-16zm1 4v3h3v2h-3v3h-2v-3H8v-2h3V8h2z"/></svg>
-        <svg class="cursor-pointer text-stone-900 w-6 h-6" onclick="switchTab('reels-area')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-        <svg class="cursor-pointer text-stone-900 w-6 h-6" onclick="switchTab('tagged-area')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-        <div class="w-6 h-6 rounded-full overflow-hidden border border-stone-300 cursor-pointer" onclick="switchTab('dm-gift')"><img id="bar-avatar-small" class="w-full h-full object-cover" src=""></div>
-    </div>
+        // TAUTAN BINDING APPS SCRIPT ANDA (100% SINKRON DUA ARAH)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
 
-</div>
+        // ENGINE AMBIL DATA FROM SHEETS (doGet Adaptor)
+        function loadGoogleSheetsWishes() {
+            const wishesBox = document.getElementById('wishes-box');
+            if (!wishesBox) return;
 
-<div class="music-floater hidden" id="musicBtn" onclick="toggleMusic()">
-    <svg id="musicIcon" class="w-5 h-5 rotating" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"></path></svg>
-</div>
-<audio id="myAudio" loop></audio>
+            wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa dari Google Sheets...</p>`;
 
-<script>
-    gsap.registerPlugin(ScrollTrigger);
+            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
+            .then(res => res.json())
+            .then(wishes => {
+                wishesBox.innerHTML = '';
 
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get('c') || 'yaya-oci';
-    const to = (params.get('to') || 'Tamu Undangan').replace(/\+/g, ' ');
-    
-    const BASE_PATH = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-    const path = `${BASE_PATH}public/clients/${slug}/`;
+                if (!wishes || wishes.length === 0) {
+                    wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic">Belum ada ucapan tertulis. Berikan doa restu pertama Anda.</p>`;
+                    return;
+                }
 
-    let isPlaying = false;
-    let audioEngine = document.getElementById('myAudio');
-    let masterData = null;
-    let activeStories = [];
-    let currentStoryIdx = 0;
-    let storyTimer = null;
+                wishes.forEach(wish => {
+                    const badgeColor = wish.kehadiran === 'Hadir' 
+                        ? 'bg-stone-100 text-stone-600 border border-stone-200' 
+                        : 'bg-stone-50 text-stone-400 border border-stone-100';
 
-    document.getElementById('guestName').innerText = to;
-    document.getElementById('wish-name').value = to;
-    document.getElementById('meta-url').setAttribute('content', window.location.href);
+                    let displayTime = '';
+                    if(wish.timestamp) {
+                        const dateObj = new Date(wish.timestamp);
+                        displayTime = isNaN(dateObj) ? wish.timestamp : dateObj.toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+                    }
 
-    // Dynamic CMS Configuration Loader
-    fetch(`${path}data.json`)
-        .then(r => r.json())
-        .then(data => {
-            masterData = data;
-            injectThemeMode(data.theme);
-            buildApplicationDOM();
-        }).catch(err => console.error("Gagal melakukan inisialisasi skema template CMS:", err));
-
-    function injectThemeMode(theme) {
-        if (!theme) return;
-        const root = document.documentElement.style;
-        if(theme.background) root.setProperty('--bg', theme.background);
-        if(theme.primary) root.setProperty('--blue', theme.primary);
-        if(theme.text) root.setProperty('--text', theme.text);
-        if(theme.border) root.setProperty('--border', theme.border);
-    }
-
-    function buildApplicationDOM() {
-        const { couple: cp, events: evs, gallery: gl, quote, logistics: lg, loveStory: ls, liveStreaming: live, digitalGift: gifts } = masterData;
-
-        const pairNick = `${cp.groom.nickname} & ${cp.bride.nickname}`;
-        const igUser = `${cp.groom.nickname.toLowerCase()}_${cp.bride.nickname.toLowerCase()}`;
-
-        document.getElementById('coverNames').innerText = pairNick;
-        document.getElementById('avatar-cover').src = path + cp.groom.image;
-        document.getElementById('cover-bg-img').src = path + gl.heroImage;
-        document.querySelector("meta[property='og:image']").setAttribute('content', path + gl.heroImage);
-        
-        document.getElementById('profile-main-avatar').src = path + gl.heroImage;
-        document.getElementById('bar-avatar-small').src = path + cp.groom.image;
-        document.getElementById('dm-avatar').src = path + cp.bride.image;
-        document.getElementById('dm-user-title').innerText = igUser;
-        document.getElementById('ig-username-bio').innerText = igUser;
-        document.getElementById('stats-posts').innerText = gl.album.length;
-        
-        if(lg.music) {
-            audioEngine.src = path + lg.music;
-            audioEngine.preload = "auto";
-        }
-
-        if (masterData.guest && masterData.guest.group) {
-            document.getElementById('guestGroup').innerText = masterData.guest.group;
-        }
-
-        document.getElementById('ig-bio-text').innerText = `💍 ${cp.groom.name} & ${cp.bride.name}\n🗓️ ${new Date(evs[0].date).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}\n📍 ${evs[0].address.split(',')[0]}\n\n${quote.text || ''}`;
-
-        if(live && live.enabled) {
-            const liveBtn = document.getElementById('live-badge-btn');
-            liveBtn.style.display = 'block';
-            liveBtn.onclick = () => window.open(live.url, '_blank');
-        }
-
-        // STORIES BUILDER
-        activeStories.push({ type: 'profile', img: path + cp.groom.image, name: cp.groom.nickname });
-        activeStories.push({ type: 'profile', img: path + cp.bride.image, name: cp.bride.nickname });
-        gl.album.slice(0, 5).forEach((img, index) => {
-            activeStories.push({ type: 'gallery', img: path + img, name: `Moment ${index + 1}` });
-        });
-
-        const storyBox = document.getElementById('stories');
-        storyBox.innerHTML = '';
-        activeStories.forEach((st, idx) => {
-            storyBox.innerHTML += `
-                <div class="flex-shrink-0 text-center w-[72px]" onclick="openStoryViewer(${idx})">
-                    <div class="story-ring"><img class="progressive-blur" src="${st.img}" onload="this.classList.add('progressive-ready')"></div>
-                    <p class="text-[11px] text-stone-700 truncate w-full font-light">${st.name}</p>
-                </div>`;
-        });
-
-        // PHOTO GRID BUILDER
-        const gridContainer = document.getElementById('grid-container');
-        gridContainer.innerHTML = '';
-        gl.album.forEach((img, i) => {
-            gridContainer.innerHTML += `<img src="${path + img}" class="grid-item cursor-pointer" onclick="openFeedModal(${i})" onload="this.classList.add('loaded')" loading="lazy">`;
-        });
-
-        // FEED CARDS BUILDER
-        const feedContainer = document.getElementById('feed-container');
-        feedContainer.innerHTML = '';
-        gl.album.forEach((img, i) => {
-            const likesCount = (1530 + i * 42).toLocaleString('id-ID');
-            feedContainer.innerHTML += `
-                <div class="post-card bg-white" id="post-index-${i}">
-                    <div class="post-header flex items-center justify-between p-3">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-amber-400 to-fuchsia-600">
-                                <img src="${path + (i % 2 === 0 ? cp.groom.image : cp.bride.image)}" class="w-full h-full rounded-full border border-white object-cover">
+                    wishesBox.innerHTML += `
+                        <div class="p-4 bg-stone-50/60 border border-stone-200/40 rounded space-y-1 text-left">
+                            <div class="flex items-center justify-between">
+                                <p class="text-xs font-semibold text-stone-800">${wish.nama}</p>
+                                <span class="text-[7px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${badgeColor}">${wish.kehadiran}</span>
                             </div>
-                            <div>
-                                <p class="text-xs font-bold">${i % 2 === 0 ? cp.groom.nickname.toLowerCase() : cp.bride.nickname.toLowerCase()}</p>
-                                <p class="text-[10px] text-stone-500 font-light">${evs[0].address.split(',')[0]}</p>
-                            </div>
-                        </div>
-                        <i class="fa-solid fa-ellipsis text-stone-400 px-2"></i>
-                    </div>
-                    <div class="post-img-container" ondblclick="handleDoubleTap(${i})">
-                        <img src="${path + img}" class="w-full h-full object-cover" loading="lazy">
-                        <svg class="big-heart" id="heart-anim-${i}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-                    </div>
-                    <div class="post-actions flex items-center justify-between p-3">
-                        <div class="flex gap-4 items-center">
-                            <svg class="action-icon cursor-pointer w-6 h-6 text-stone-900" id="btn-like-${i}" onclick="toggleLikeIcon(${i})" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path></svg>
-                            <i class="fa-regular fa-comment text-xl cursor-pointer" onclick="switchTab('tagged-area'); closeFeedModal();"></i>
-                            <i class="fa-regular fa-paper-plane text-xl cursor-pointer" onclick="switchTab('dm-gift'); closeFeedModal();"></i>
-                        </div>
-                        <i class="fa-regular fa-bookmark text-xl"></i>
-                    </div>
-                    <div class="px-4 pb-4 space-y-1">
-                        <p class="text-xs font-bold text-stone-900">${likesCount} suka</p>
-                        <p class="text-xs font-light"><span class="font-bold mr-2">${igUser}</span>Momen terbaik dalam lembaran kisah hidup kami. Terima kasih atas dukungan tulus kalian. ✨</p>
-                    </div>
-                </div>`;
-        });
-
-        // EVENTS LIST BUILDER
-        const eventList = document.getElementById('eventList');
-        eventList.innerHTML = '';
-        evs.forEach(e => {
-            const dateObj = new Date(e.date);
-            eventList.innerHTML += `
-                <div class="p-3 bg-stone-50 border border-stone-100 rounded-xl">
-                    <p class="text-[11px] font-bold text-amber-600 uppercase tracking-wider mb-1">${e.title}</p>
-                    <p class="text-sm font-bold text-stone-900">${dateObj.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
-                    <p class="text-xs text-stone-600 mt-0.5">${e.startTime} - ${e.endTime} ${e.timezone || 'WIB'}</p>
-                    <p class="text-xs text-stone-500 mt-1 font-light leading-relaxed">${e.address}</p>
-                    ${e.googleMaps ? `<a href="${e.googleMaps}" target="_blank" class="inline-block mt-3 bg-white border border-stone-200 text-stone-700 font-bold text-[10px] px-3 py-1.5 rounded-lg shadow-2xs active:bg-stone-50"><i class="fa-solid fa-map-location-dot mr-1"></i> Buka Google Maps</a>` : ''}
-                </div>`;
-        });
-
-        // REELS STORIES BUILDER
-        if(ls && ls.length > 0) {
-            const reelsBox = document.getElementById('reels-container');
-            reelsBox.innerHTML = '';
-            ls.forEach((story, idx) => {
-                reelsBox.innerHTML += `
-                    <div class="w-full h-[calc(100vh-92px)] flex-shrink-0 bg-stone-950 relative flex flex-col justify-end p-6 border-b border-stone-800">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30"></div>
-                        <div class="relative z-10 space-y-2 text-white scroll-animate-item">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-xs">${idx+1}</div>
-                                <span class="text-xs font-bold tracking-widest text-zinc-300 uppercase">${story.year || 'Timeline'}</span>
-                            </div>
-                            <h4 class="font-extrabold text-lg text-white tracking-wide">${story.title}</h4>
-                            <p class="text-xs text-zinc-300 font-light leading-relaxed">${story.description}</p>
-                        </div>
-                    </div>`;
+                            <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line">${wish.ucapan}</p>
+                            <p class="text-[8px] text-stone-400 font-mono text-right pt-1">${displayTime}</p>
+                        </div>`;
+                });
+            })
+            .catch(err => {
+                console.error("Gagal sinkronisasi data:", err);
+                wishesBox.innerHTML = `<p class="text-[9px] text-red-400/80 text-center py-4 font-light italic">Gagal memuat arsip ucapan online.</p>`;
             });
         }
 
-        // DIGITAL DIRECT GIFTS BUILDER
-        if(gifts && gifts.length > 0) {
-            const giftCardsArea = document.getElementById('gift-cards-area');
-            gifts.forEach(g => {
-                giftCardsArea.innerHTML += `
-                    <div class="chat-bubble chat-right text-left space-y-1 shadow-3xs" style="opacity: 1; transform: translateY(0);">
-                        <p class="text-[9px] font-bold uppercase opacity-75 tracking-wider">${g.provider}</p>
-                        <p class="text-sm font-mono font-bold tracking-wide">${g.accountNumber}</p>
-                        <p class="text-[11px] opacity-90">a.n ${g.accountHolder}</p>
-                        <button onclick="navigator.clipboard.writeText('${g.accountNumber}'); alert('Nomor Rekening Berhasil Disalin')" class="mt-2 text-[10px] bg-white text-stone-900 px-2.5 py-1 rounded-md font-bold inline-block shadow-2xs">Salin Rekening</button>
+        // LOAD MASTER JSON ENGINE
+        fetch(`${path}data.json`).then(res => res.json()).then(data => {
+            const pair = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+            
+            document.getElementById('cover-names').textContent = pair;
+            document.getElementById('footer-names').textContent = pair;
+            document.getElementById('guest-name').textContent = guest;
+            document.getElementById('ticket-guest-name').textContent = guest;
+            document.getElementById('cover-img').src = path + data.gallery.heroImage;
+            document.getElementById('quote-text').textContent = data.quote.text;
+            document.getElementById('quote-source').textContent = data.quote.source;
+            
+            if(data.settings.islami) {
+                document.getElementById('islamic-greeting').classList.remove('hidden');
+            }
+
+            if(data.logistics && data.logistics.guestNote) {
+                document.getElementById('footer-note').textContent = data.logistics.guestNote;
+                document.getElementById('guest-note').textContent = data.logistics.guestNote;
+            }
+
+            // Set Meta RSVP WhatsApp Link fallback
+            if(data.logistics && data.logistics.rsvpWaNumber) {
+                document.getElementById('rsvp-link').href = `https://wa.me/${data.logistics.rsvpWaNumber}?text=Berkah%20Dalem,%20saya%20${encodeURIComponent(guest)}%20bermaksud%20konfirmasi%20kehadiran.`;
+            }
+
+            // Countdown Logic
+            const firstEvent = data.events[0];
+            const mainEventDateStr = new Date(firstEvent.date).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
+            document.getElementById('ticket-date').innerText = mainEventDateStr;
+
+            const eventTime = new Date(`${firstEvent.date}T${firstEvent.startTime}`).getTime();
+            setInterval(() => {
+                const diff = eventTime - new Date().getTime();
+                if (diff > 0) {
+                    document.getElementById('days').innerText = Math.floor(diff / 864e5).toString().padStart(2, '0');
+                    document.getElementById('hours').innerText = Math.floor((diff % 864e5) / 36e5).toString().padStart(2, '0');
+                    document.getElementById('minutes').innerText = Math.floor((diff % 36e5) / 6e4).toString().padStart(2, '0');
+                }
+            }, 1000);
+
+            // Couple Render Factory
+            const renderCouple = (p, target, rotation, genderRole) => {
+                document.getElementById(target).innerHTML = `
+                    <div class="polaroid mb-6" style="--rotation: ${rotation}; width: 250px;">
+                        <img src="${path + p.image}">
+                        <div class="polaroid-text">${p.nickname}</div>
+                    </div>
+                    <h4 class="font-luxury text-lg font-bold text-stone-800 tracking-wide">${p.name}</h4>
+                    ${p.instagram ? `<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" class="text-[9px] uppercase tracking-widest text-[#6b0505] mt-1 font-bold block"><i class="fa-brands fa-instagram mr-1"></i>@${p.instagram.replace('@','')}</a>` : ''}
+                    <p class="text-[10px] text-center max-w-[220px] tracking-widest opacity-50 mt-4 font-medium leading-relaxed">
+                        ${genderRole}<br><span class="text-stone-800 font-semibold">Bapak ${p.father}</span><br>&<br><span class="text-stone-800 font-semibold">Ibu ${p.mother}</span>
+                    </p>`;
+            };
+            
+            renderCouple(data.couple.groom, 'groom-box', '1.5deg', 'Putra Luhur saking :');
+            renderCouple(data.couple.bride, 'bride-box', '-1.5deg', 'Putri Luhur saking :');
+
+            // Polaroid Stories Renderer
+            data.gallery.album.forEach((img, i) => {
+                const story = data.loveStory[i] || { title: 'Sweet Moment', description: 'Kebersamaan kami.' };
+                const rot = i % 2 === 0 ? '-2.5deg' : '2.5deg';
+                document.getElementById('gallery-grid').innerHTML += `
+                    <div class="reveal flex flex-col items-center">
+                        <div class="polaroid" style="--rotation: ${rot}; width: 270px;">
+                            <img src="${path + img}">
+                            <div class="polaroid-text" style="font-size: 1.1rem;">${story.title}</div>
+                        </div>
+                        <p class="text-xs text-stone-500 text-center px-10 mt-6 opacity-80 leading-relaxed italic font-light">${story.description}</p>
                     </div>`;
             });
-        }
 
-        document.getElementById('skeleton-container').style.display = 'none';
-        document.getElementById('actual-content').classList.remove('hidden');
-    }
+            // Luxury Card Events Renderer
+            data.events.forEach(e => {
+                document.getElementById('event-list').innerHTML += `
+                    <div class="reveal px-4 border border-white/10 py-8 bg-black/10 rounded backdrop-blur-sm">
+                        <p class="text-[8px] tracking-[0.4em] font-bold uppercase mb-4 text-[#c5a880]">${e.title}</p>
+                        <p class="font-luxury text-xl font-normal mb-2 tracking-wide text-white">${new Date(e.date).toLocaleDateString('id-ID', {weekday: 'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text-xs font-mono opacity-90 mb-6 tracking-widest text-stone-200">${e.startTime} - ${e.endTime} ${e.timezone || 'WIB'}</p>
+                        <div class="w-4 h-px bg-[#c5a880]/40 mx-auto mb-6"></div>
+                        <p class="text-xs font-light opacity-80 leading-relaxed mb-8 px-6 text-stone-300 font-serif italic">${e.address}</p>
+                        <a href="${e.googleMaps}" target="_blank" class="inline-block border border-[#c5a880]/50 px-8 py-3 text-[8px] tracking-[0.3em] uppercase font-bold text-[#c5a880] bg-transparent hover:bg-[#c5a880] hover:text-stone-900 transition-all duration-400">Buka Peta Lokasi</a>
+                    </div>`;
+            });
 
-    // FUNGSI UTAMA BUKA UNDANGAN (PERBAIKAN ERROR TRANSAKSI CODE)
-    function startInvitation() {
-        audioEngine.volume = 0.2;
-        audioEngine.play().then(() => {
-            isPlaying = true;
-            document.getElementById('musicIcon').classList.remove('paused');
-        }).catch(err => console.log("Interaksi musik ditahan browser. Menunggu gestur lanjutan."));
+            // ENGINE SUBMIT FORM DATA KE SHEETS (doPost Adaptor)
+            document.getElementById('wishes-form').addEventListener('submit', function(e) {
+                e.preventDefault();
 
-        // Efek Outro Layar Cover Terbuka Ke Atas Halus
-        gsap.to("#cover", {
-            y: "-100vh",
-            duration: 1.2,
-            ease: "power4.inOut",
-            onComplete: () => {
-                document.getElementById('cover').style.display = 'none';
-                document.getElementById('main-scroll-engine').style.opacity = '1';
-                document.getElementById('musicBtn').classList.remove('hidden');
-                initScrollAnimations(); // Inisialisasi Trigger Gerakan Otomatis
+                const nameInput = document.getElementById('wish-name').value.trim();
+                const messageInput = document.getElementById('wish-message').value.trim();
+                const statusSelect = document.getElementById('wish-status').value;
+                const paxInput = parseInt(document.getElementById('wish-pax').value) || 1;
+
+                if(!nameInput || !messageInput) return;
+
+                const payload = {
+                    id_klien: slug,
+                    nama: nameInput,
+                    ucapan: messageInput,
+                    kehadiran: statusSelect,
+                    jumlah_tamu: paxInput
+                };
+
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerText;
+                submitBtn.innerText = "Mengirim...";
+                submitBtn.disabled = true;
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(() => {
+                    document.getElementById('wish-message').value = '';
+                    alert('Matur nuwun! Doa restu mulia Anda telah terikat aman di Google Sheets.');
+                    setTimeout(loadGoogleSheetsWishes, 1500);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Gagal mengirim konfirmasi online, mohon coba kembali.');
+                })
+                .finally(() => {
+                    submitBtn.innerText = originalBtnText;
+                    submitBtn.disabled = false;
+                });
+            });
+            
+            // Perbaikan Bug Pre-render element music di JSON handler
+            if(data.logistics && data.logistics.music) {
+                window.musicFile = path + data.logistics.music;
+            } else {
+                window.musicFile = path + 'musik.mp3';
             }
         });
-    }
 
-    // SISTEM TRANSISI ANIMASI AUTOMATIC GERAK SCROLL (GSAP SCROLLTRIGGER)
-    function initScrollAnimations() {
-        gsap.utils.toArray('.scroll-animate-item').forEach(item => {
-            gsap.to(item, {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 88%",
-                    toggleActions: "play none none none"
-                }
-            });
-        });
-    }
-
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.tab-icon').forEach(el => el.classList.remove('active'));
-        
-        if(tabId === 'grid-area') {
-            document.getElementById('grid-area').classList.remove('hidden');
-            document.getElementById('tab-grid').classList.add('active');
-        } else if(tabId === 'reels-area') {
-            document.getElementById('reels-area').classList.remove('hidden');
-            document.getElementById('tab-reels').classList.add('active');
-        } else if(tabId === 'tagged-area') {
-            document.getElementById('tagged-area').classList.remove('hidden');
-            document.getElementById('tab-tagged').classList.add('active');
-        } else if(tabId === 'dm-gift') {
-            document.getElementById('dm-gift').classList.remove('hidden');
-            document.getElementById('tab-dm').classList.add('active');
+        // ACTION BUTTON OPEN INVITATION WITH MUSIC WIDGET SYNC
+        function openInvitation() {
+            const audio = document.getElementById('audio');
+            audio.src = window.musicFile || (path + 'musik.mp3');
             
-            // Animasi Chat Masuk Satu per Satu Halus
-            gsap.to(".chat-bubble", { opacity: 1, y: 0, duration: 0.5, stagger: 0.2, ease: "power2.out" });
+            audio.play().then(() => {
+                document.getElementById('music-icon-state').className = "fa-solid fa-pause text-[10px] text-stone-600";
+            }).catch(e => console.log("Autoplay ditangguhkan browser"));
+            
+            const musicBtn = document.getElementById('music-btn');
+            const diskWrap = document.getElementById('disk-wrap');
+            const stateIcon = document.getElementById('music-icon-state');
+            musicBtn.classList.remove('hidden');
+
+            musicBtn.onclick = () => {
+                if(audio.paused) { 
+                    audio.play(); 
+                    diskWrap.classList.remove('paused');
+                    stateIcon.className = "fa-solid fa-pause text-[10px] text-stone-600";
+                } else { 
+                    audio.pause(); 
+                    diskWrap.classList.add('paused');
+                    stateIcon.className = "fa-solid fa-play text-[10px] text-stone-600";
+                }
+            };
+
+            gsap.to("#cover", { y: "-100%", duration: 1.4, ease: "power4.inOut", onComplete: () => {
+                document.getElementById('cover').style.display = 'none';
+                document.getElementById('app').style.opacity = '1';
+                
+                // Panggil records dari Google Sheet secara instan saat gerbang terbuka
+                loadGoogleSheetsWishes();
+
+                const obs = new IntersectionObserver(ents => {
+                    ents.forEach(en => { if(en.isIntersecting) gsap.to(en.target, { opacity: 1, y: 0, duration: 1.2 }); });
+                }, { threshold: 0.05 });
+                document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+            }});
         }
-        ScrollTrigger.refresh();
-    }
-
-    function toggleMusic() {
-        if(isPlaying) {
-            audioEngine.pause();
-            document.getElementById('musicIcon').classList.add('paused');
-        } else {
-            audioEngine.play();
-            document.getElementById('musicIcon').classList.remove('paused');
-        }
-        isPlaying = !isPlaying;
-    }
-
-    function openFeedModal(index) {
-        document.getElementById('feed-modal').style.transform = 'translateY(0)';
-        document.getElementById('feed-modal').style.transition = 'transform 0.4s cubic-bezier(0.1, 0.76, 0.55, 0.94)';
-        setTimeout(() => {
-            const targetPost = document.getElementById(`post-index-${index}`);
-            if(targetPost) targetPost.scrollIntoView({ behavior: 'auto' });
-        }, 50);
-    }
-
-    function closeFeedModal() {
-        document.getElementById('feed-modal').style.transform = 'translateY(100%)';
-    }
-
-    function handleDoubleTap(index) {
-        const heart = document.getElementById(`heart-anim-${index}`);
-        heart.classList.add('animate-heart');
-        setTimeout(() => heart.classList.remove('animate-heart'), 750);
-    }
-
-    function openStoryViewer(index) {
-        currentStoryIdx = index;
-        document.getElementById('story-viewer').style.display = 'flex';
-        showStoryContent();
-    }
-
-    function showStoryContent() {
-        clearTimeout(storyTimer);
-        const currentStory = activeStories[currentStoryIdx];
-        document.getElementById('story-viewer-username').innerText = currentStory.name.toLowerCase();
-        document.getElementById('story-viewer-avatar').src = currentStory.img;
-        document.getElementById('story-viewer-img').src = currentStory.img;
-
-        const progressContainer = document.getElementById('story-progress-container');
-        progressContainer.innerHTML = '';
-        activeStories.forEach((_, idx) => {
-            progressContainer.innerHTML += `
-                <div class="story-progress-bg">
-                    <div class="story-progress-fill" id="story-fill-${idx}" style="width: ${idx < currentStoryIdx ? '100%' : '0%'}"></div>
-                </div>`;
-        });
-
-        gsap.to(`#story-fill-${currentStoryIdx}`, {
-            width: '100%',
-            duration: 4,
-            ease: "none",
-            onComplete: () => nextStory()
-        });
-    }
-
-    function nextStory() {
-        if (currentStoryIdx < activeStories.length - 1) {
-            currentStoryIdx++;
-            showStoryContent();
-        } else {
-            closeStoryViewer();
-        }
-    }
-
-    function prevStory() {
-        if (currentStoryIdx > 0) {
-            currentStoryIdx--;
-            showStoryContent();
-        }
-    }
-
-    function closeStoryViewer() {
-        clearTimeout(storyTimer);
-        document.getElementById('story-viewer').style.display = 'none';
-    }
-</script>
+    </script>
 </body>
 </html>
