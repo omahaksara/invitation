@@ -1,135 +1,94 @@
 {
-  "settings": {
-    "themeColor": "#8B7355",
-    "bgColor": "#FAF7F2",
-    "textColor": "#3E3E3E",
-    "accentColor": "#B76E79",
-    "islami": true,
-    "showCountdown": true,
-    "showLoveStory": true,
-    "showProtocols": true
+  "meta": {
+    "slug": "yaya-oci",
+    "template": "elegance-motion",
+    "status": "published"
   },
-  "guest": {
-    "name": "Tamu Undangan",
-    "group": "Keluarga & Kerabat"
+  "settings": {
+    "islami": true,
+    "themeColor": "#8B7355",
+    "coupleFrame": "polaroid",
+    "autoColor": true
   },
   "couple": {
     "groom": {
-      "name": "Budi Santoso, S.T.",
-      "nickname": "Budi",
-      "father": "Bapak Ahmad Santoso",
-      "mother": "Ibu Siti Aminah",
+      "name": "Muhammad Jakpar",
+      "nickname": "Yaya",
+      "father": "Moh. Aliman (Alm)",
+      "mother": "Siti Kusnah (Almh)",
       "image": "foto-pria.jpg",
-      "instagram": "budi_santoso"
+      "instagram": "@muh_djafar27"
     },
     "bride": {
-      "name": "Ani Wijaya, S.E.",
-      "nickname": "Ani",
-      "father": "Bapak Heru Wijaya",
-      "mother": "Ibu Ratna Wijaya",
+      "name": "Khosi Saimima",
+      "nickname": "Oci",
+      "father": "Maksum",
+      "mother": "Sholihah",
       "image": "foto-wanita.jpg",
-      "instagram": "ani_wijaya"
+      "instagram": "@khosisaimima17"
     }
   },
   "quote": {
-    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا",
-    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya.",
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
     "source": "QS. Ar-Rum: 21"
   },
-  "countdown": {
-    "targetDate": "2026-11-12T08:00:00+07:00"
-  },
-  "loveStory": [
-    {
-      "year": "2023",
-      "title": "Pertama Bertemu",
-      "description": "Awal mula dipertemukan dalam satu ruang lingkup kerja yang sama, membangun komunikasi, dan menemukan banyak kesamaan visi."
-    },
-    {
-      "year": "2025",
-      "title": "Khitbah (Lamaran)",
-      "description": "Pertemuan dua keluarga besar untuk mengikat komitmen yang lebih serius dan menentukan hari baik menuju pernikahan."
-    }
-  ],
   "events": [
     {
       "title": "Akad Nikah",
-      "date": "2026-11-12",
-      "startTime": "08:00",
+      "date": "2026-09-06",
+      "startTime": "09:00",
       "endTime": "10:00",
-      "timezone": "WIB",
-      "address": "Kediaman Mempelai Wanita, Jl. Mawar No. 123, Jakarta",
-      "googleMaps": "https://maps.google.com"
+      "timezone": "WITA",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
     },
     {
-      "title": "Resepsi Pernikahan",
-      "date": "2026-11-12",
+      "title": "Walimatul 'Ursy",
+      "date": "2026-09-06",
       "startTime": "11:00",
-      "endTime": "14:00",
-      "timezone": "WIB",
-      "address": "Gedung Pertemuan Utama, Jl. Mawar No. 124, Jakarta",
-      "googleMaps": "https://maps.google.com"
+      "endTime": "23:59",
+      "timezone": "WITA",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
     }
   ],
-  "liveStreaming": {
-    "enabled": true,
-    "platform": "YouTube Live",
-    "url": "https://youtube.com"
-  },
+  "loveStory": [
+    {
+      "date": "Juni 2021",
+      "title": "First Meet",
+      "description": "Berawal dari sebuah tanggapan kecil di story."
+    },
+    {
+      "date": "14 April 2024",
+      "title": "Khitbah",
+      "description": "Kami memutuskan untuk bersama dalam ridho-Nya."
+    }
+  ],
   "gallery": {
     "heroImage": "foto-sampul.jpg",
-    "videoYoutubeId": "dQw4w9WgXcQ",
+    "videoYoutubeId": "",
     "album": [
       "foto1.jpg",
-      "foto2.jpg",
-      "foto3.jpg",
-      "foto4.jpg"
+      "foto2.jpg"
     ]
   },
-  "protocols": [
-    {
-      "icon": "😷",
-      "label": "Gunakan Masker Bila Kurang Fit"
-    },
-    {
-      "icon": "🧼",
-      "label": "Gunakan Hand Sanitizer"
-    },
-    {
-      "icon": "🙏",
-      "label": "Salam Jarak Jauh Disarankan"
-    }
-  ],
   "digitalGift": [
     {
-      "provider": "Bank BCA",
-      "accountNumber": "123456789",
-      "accountHolder": "Budi Santoso"
+      "provider": "BRI",
+      "accountNumber": "519501024699536",
+      "accountHolder": "Khosi Saimima"
     },
     {
-      "provider": "Kirim Hadiah Fisik",
-      "accountNumber": "Jl. Mawar No. 123, Jakarta",
-      "accountHolder": "Rumah Mempelai Wanita (Ani)"
+      "provider": "Mandiri",
+      "accountNumber": "1510022186495",
+      "accountHolder": "Muhammad Jakpar"
     }
   ],
   "logistics": {
     "music": "musik.mp3",
-    "rsvpWaNumber": "6285796461157",
-    "dressCode": "Earth Tone / Pastel",
-    "guestNote": "Tanpa mengurangi rasa hormat, kami memohon doa restu Bapak/Ibu."
-  },
-  "fitur": {
-    "ucapan": true,
-    "tampilkanUcapan": true
-  },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbyD7ZQ8VBKidMoa7SUkHKZJTBiXTWEnFRfBbB_slGI_pk4tE4RzvcnNat4il9R8ff0FYg/exec"
-  },
-  "teks": {
-    "ucapanJudul": "Doa & Ucapan",
-    "ucapanKosong": "Jadilah yang pertama mengirim ucapan",
-    "placeholderNama": "Nama Anda",
-    "placeholderUcapan": "Tulis ucapan terbaik...",
-    "tombolKirim": "Kirim Ucapan"
+    "rsvpWaNumber": "6282261567928",
+    "dressCode": "Sopan & Bebas",
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan tamu undangan berkenan hadir."
   }
 }
