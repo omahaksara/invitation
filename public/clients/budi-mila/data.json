@@ -1,68 +1,82 @@
 {
   "meta": {
-    "slug": "yaya-oci",
-    "template": "elegance-motion",
+    "slug": "budi-mila",
+    "template": "elegance",
     "status": "published"
   },
   "settings": {
-    "islami": true,
-    "themeColor": "#8B7355",
+    "islami": false,
+    "themeColor": "#6b0505",
     "coupleFrame": "polaroid",
-    "autoColor": true
+    "autoColor": false,
+    "showCountdown": true,
+    "playMusicOnOpen": true
   },
   "couple": {
     "groom": {
-      "name": "Muhammad Jakpar",
-      "nickname": "Yaya",
-      "father": "Moh. Aliman (Alm)",
-      "mother": "Siti Kusnah (Almh)",
+      "name": "Budi Setiawan",
+      "nickname": "Budi",
+      "father": "H. Slamet Riyadi",
+      "mother": "Hj. Endang Sulastri",
       "image": "foto-pria.jpg",
-      "instagram": "@muh_djafar27"
+      "instagram": "@budisetiawan"
     },
     "bride": {
-      "name": "Khosi Saimima",
-      "nickname": "Oci",
-      "father": "Maksum",
-      "mother": "Sholihah",
+      "name": "Mila Kartika Sari",
+      "nickname": "Mila",
+      "father": "Ir. H. Agus Salim",
+      "mother": "Hj. Dewi Lestari",
       "image": "foto-wanita.jpg",
-      "instagram": "@khosisaimima17"
+      "instagram": "@milakartika"
     }
   },
   "quote": {
-    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
-    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
-    "source": "QS. Ar-Rum: 21"
+    "text": "You are my today and all of my tomorrows.",
+    "source": "Leo Christopher"
   },
   "events": [
     {
       "title": "Akad Nikah",
-      "date": "2026-09-06",
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "timezone": "WITA",
-      "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+      "date": "2027-07-10",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "timezone": "WIB",
+      "address": "Kediaman Mempelai Wanita, Jl. Mawar No. 15, Jakarta Timur",
+      "googleMaps": "https://maps.app.goo.gl/linkAkadBudiMila",
+      "dressCode": "Batik / Pakaian Sopan"
     },
     {
-      "title": "Walimatul 'Ursy",
-      "date": "2026-09-06",
+      "title": "Resepsi Pernikahan",
+      "date": "2027-07-10",
       "startTime": "11:00",
-      "endTime": "23:59",
-      "timezone": "WITA",
-      "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+      "endTime": "14:00",
+      "timezone": "WIB",
+      "address": "Gedung Serbaguna Balai Sudirman, Jl. Dr. Saharjo No.268, Jakarta",
+      "googleMaps": "https://maps.app.goo.gl/linkResepsiBudiMila",
+      "dressCode": "Formal / Kebaya",
+      "note": "Sesi 1: 11.00-12.30 | Sesi 2: 12.30-14.00"
     }
   ],
   "loveStory": [
     {
-      "date": "Juni 2021",
-      "title": "First Meet",
-      "description": "Berawal dari sebuah tanggapan kecil di story."
+      "date": "Februari 2020",
+      "title": "Pertemuan Pertama",
+      "description": "Kantor yang sama, divisi berbeda. Kopi di pantry jadi alasan ngobrol tiap hari."
     },
     {
-      "date": "14 April 2024",
-      "title": "Khitbah",
-      "description": "Kami memutuskan untuk bersama dalam ridho-Nya."
+      "date": "10 Juli 2023",
+      "title": "Satu Tujuan",
+      "description": "Di tanggal cantik ini, kami memutuskan untuk melangkah ke jenjang serius."
+    },
+    {
+      "date": "12 Desember 2026",
+      "title": "Lamaran",
+      "description": "Keluarga besar bertemu. Bismillah, kami siap menuju hari bahagia."
+    },
+    {
+      "date": "10 Juli 2027",
+      "title": "Janji Suci",
+      "description": "Hari ini kami ikrarkan janji untuk saling mencintai dalam suka dan duka."
     }
   ],
   "gallery": {
@@ -70,25 +84,36 @@
     "videoYoutubeId": "",
     "album": [
       "foto1.jpg",
-      "foto2.jpg"
+      "foto2.jpg",
+      "foto3.jpg",
+      "foto4.jpg"
     ]
   },
   "digitalGift": [
     {
+      "provider": "BCA",
+      "accountNumber": "1234567890",
+      "accountHolder": "Mila Kartika Sari",
+      "qrImage": "qr-bca.jpg"
+    },
+    {
       "provider": "BRI",
-      "accountNumber": "519501024699536",
-      "accountHolder": "Khosi Saimima"
+      "accountNumber": "0987654321",
+      "accountHolder": "Budi Setiawan",
+      "qrImage": "qr-bri.png"
     },
     {
       "provider": "Mandiri",
-      "accountNumber": "1510022186495",
-      "accountHolder": "Muhammad Jakpar"
+      "accountNumber": "1122334455",
+      "accountHolder": "Budi Setiawan",
+      "qrImage": "qr-mandiri.png"
     }
   ],
   "logistics": {
     "music": "musik.mp3",
-    "rsvpWaNumber": "6282261567928",
-    "dressCode": "Sopan & Bebas",
-    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan tamu undangan berkenan hadir."
+    "rsvpWaNumber": "6281234567890",
+    "dressCode": "Sesuai keterangan acara",
+    "guestNote": "Kehadiran dan doa restu Anda sangat berarti bagi kami. Sampai jumpa di hari bahagia.",
+    "hashtag": "#BudilaMilaDay"
   }
 }
