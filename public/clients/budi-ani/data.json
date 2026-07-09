@@ -80,24 +80,24 @@
     "heroImage": "foto-sampul.jpg",
     "videoYoutubeId": "dQw4w9WgXcQ",
     "album": [
-      "foto1.jpg", 
-      "foto2.jpg", 
-      "foto3.jpg", 
+      "foto1.jpg",
+      "foto2.jpg",
+      "foto3.jpg",
       "foto4.jpg"
     ]
   },
   "protocols": [
-    { 
-      "icon": "😷", 
-      "label": "Gunakan Masker Bila Kurang Fit" 
+    {
+      "icon": "😷",
+      "label": "Gunakan Masker Bila Kurang Fit"
     },
-    { 
-      "icon": "🧼", 
-      "label": "Gunakan Hand Sanitizer" 
+    {
+      "icon": "🧼",
+      "label": "Gunakan Hand Sanitizer"
     },
-    { 
-      "icon": "🙏", 
-      "label": "Salam Jarak Jauh Disarankan" 
+    {
+      "icon": "🙏",
+      "label": "Salam Jarak Jauh Disarankan"
     }
   ],
   "digitalGift": [
@@ -122,9 +122,8 @@
     "ucapan": true,
     "tampilkanUcapan": true
   },
- "link": {
-  "apiUcapan": "https://script.google.com/macros/s/AKfycbyD7ZQ8VBKidMoa7SUkHKZJTBiXTWEnFRfBbB_slGI_pk4tE4RzvcnNat4il9R8ff0FYg/exec"
-}
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbyD7ZQ8VBKidMoa7SUkHKZJTBiXTWEnFRfBbB_slGI_pk4tE4RzvcnNat4il9R8ff0FYg/exec"
   },
   "teks": {
     "ucapanJudul": "Doa & Ucapan",
