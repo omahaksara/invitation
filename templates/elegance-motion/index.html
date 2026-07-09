@@ -3,126 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Pernikahan Digital</title>
+    <title>Undangan Pernikahan</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
-        :root { --theme: #8B7355; --bg: #FAF7F2; --gold: #C9A86A; --accent: #B76E79; }
-        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: #333; overflow-x: hidden; }
-      .font-script { font-family: 'Parisienne', cursive; }
-      .font-serif { font-family: 'Cormorant Garamond', serif; }
-      .reveal { opacity: 0; transform: translateY(30px); }
-      .polaroid-frame { background: white; padding: 12px 12px 40px 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 2px; display: inline-block; }
-      .btn-main { background: var(--theme); color: white; padding: 12px 30px; border-radius: 99px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.3s; }
-      .btn-main:hover { transform: scale(1.05); }
-      .btn-main:disabled { opacity: 0.6; cursor: not-allowed; }
-      .cd-item { background: white; padding: 10px; border-radius: 12px; min-width: 65px; border: 1px solid rgba(0,0,0,0.05); }
-      .timeline-item::before { content: ''; position: absolute; left: -21px; top: 6px; width: 10px; height: 10px; background: var(--theme); border-radius: 50%; }
+        :root { --primary: #2C2C2C; --bg: #FFFFFF; --line: #E5E5E5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--primary); }
+       .serif { font-family: 'Cormorant Garamond', serif; }
+       .divider { height: 1px; background: var(--line); margin: 48px auto; max-width: 80px; }
+       .btn { border: 1px solid var(--primary); padding: 12px 32px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition:.3s; }
+       .btn:hover { background: var(--primary); color: white; }
+       .btn:disabled { opacity:.4; cursor: not-allowed; }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <!-- COVER SCREEN -->
-    <div id="cover" class="fixed inset-0 z-[100] flex items-center justify-center text-center text-white">
-        <img id="cover-img" class="absolute inset-0 w-full h-full object-cover" src="">
-        <div class="absolute inset-0 bg-black/60"></div>
-        <div class="relative z-10 px-6">
-            <p id="bismillah" class="font-serif text-xl italic mb-4 hidden">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
-            <p class="text- tracking-[0.4em] uppercase mb-4 opacity-80">The Wedding Of</p>
-            <h1 id="names-cover" class="font-script text-6xl text-gold mb-10"></h1>
-            <p class="text- uppercase tracking-widest opacity-60">Kepada Yth.</p>
-            <h2 id="guest-name" class="text-xl font-light mt-2 mb-2"></h2>
-            <p id="guest-group" class="text-xs italic opacity-60 mb-10 tracking-wide"></p>
-            <button onclick="openInvitation()" class="btn-main cursor-pointer"><i class="fa-regular fa-envelope-open mr-2"></i> Buka Undangan</button>
+    <!-- COVER -->
+    <div id="cover" class="fixed inset-0 z-50 bg-white flex items-center justify-center text-center p-8">
+        <div>
+            <p class="text- tracking-[0.3em] uppercase mb-6 text-gray-500">The Wedding Of</p>
+            <h1 id="names-cover" class="serif text-5xl mb-8"></h1>
+            <p class="text- uppercase tracking-widest text-gray-400 mb-1">Kepada Yth.</p>
+            <h2 id="guest-name" class="text-lg mb-1"></h2>
+            <p id="guest-group" class="text-xs text-gray-400 mb-12"></p>
+            <button onclick="openInvitation()" class="btn">Buka Undangan</button>
         </div>
     </div>
 
-    <!-- MAIN APP CONTROLLER -->
-    <div id="app" class="hidden opacity-0 max-w-md mx-auto bg-white shadow-2xl">
+    <!-- MAIN -->
+    <main id="app" class="hidden max-w-xl mx-auto">
 
-        <!-- HERO JUMBOTRON -->
-        <section class="relative h- flex flex-col items-center justify-end pb-20 text-center text-white">
-            <img id="hero-img" class="absolute inset-0 w-full h-full object-cover" src="">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
-            <div class="relative z-10">
-                <h2 id="names-hero" class="font-script text-6xl text-gold"></h2>
-                <p id="date-hero" class="text-sm mt-4 tracking-[0.2em] font-light uppercase"></p>
+        <!-- HEADER -->
+        <section class="text-center py-24 px-8">
+            <p class="text- tracking-[0.3em] uppercase text-gray-500 mb-6">Undangan Pernikahan</p>
+            <h1 id="names-main" class="serif text-6xl mb-4"></h1>
+            <p id="date-main" class="text-sm text-gray-600"></p>
+        </section>
+
+        <!-- COUPLE -->
+        <section class="px-8 text-center">
+            <div class="divider"></div>
+            <div class="grid grid-cols-2 gap-8 max-w-md mx-auto">
+                <div>
+                    <img id="groom-img" src="" class="w-full aspect-square object-cover mb-4">
+                    <h3 id="groom-name" class="serif text-2xl"></h3>
+                    <p id="groom-parents" class="text- text-gray-500 mt-2 leading-relaxed"></p>
+                </div>
+                <div>
+                    <img id="bride-img" src="" class="w-full aspect-square object-cover mb-4">
+                    <h3 id="bride-name" class="serif text-2xl"></h3>
+                    <p id="bride-parents" class="text- text-gray-500 mt-2 leading-relaxed"></p>
+                </div>
             </div>
         </section>
 
-        <!-- COUNTDOWN TIMER -->
-        <section id="countdown-wrap" class="py-12 px-6 text-center reveal hidden">
-            <p class="text- uppercase tracking-[0.3em] mb-6 opacity-50">Menuju Hari Bahagia</p>
-            <div class="flex justify-center gap-3">
-                <div class="cd-item"><span id="days" class="text-xl font-bold text-[var(--theme)]">00</span><p class="text- uppercase">Hari</p></div>
-                <div class="cd-item"><span id="hours" class="text-xl font-bold text-[var(--theme)]">00</span><p class="text- uppercase">Jam</p></div>
-                <div class="cd-item"><span id="mins" class="text-xl font-bold text-[var(--theme)]">00</span><p class="text- uppercase">Menit</p></div>
-                <div class="cd-item"><span id="secs" class="text-xl font-bold text-[var(--theme)]">00</span><p class="text- uppercase">Detik</p></div>
+        <!-- QUOTE -->
+        <section id="quote-section" class="px-8 text-center hidden">
+            <div class="divider"></div>
+            <p id="quote-arab" class="serif text-xl mb-4 leading-loose hidden"></p>
+            <p id="quote-text" class="text-sm leading-relaxed italic text-gray-600 max-w-md mx-auto"></p>
+            <p id="quote-source" class="text- mt-4 tracking-[0.2em] uppercase text-gray-400"></p>
+        </section>
+
+        <!-- EVENTS -->
+        <section class="px-8">
+            <div class="divider"></div>
+            <div id="events-list"></div>
+        </section>
+
+        <!-- COUNTDOWN -->
+        <section id="countdown-section" class="px-8 text-center hidden">
+            <div class="divider"></div>
+            <div class="grid grid-cols-4 gap-4 max-w-sm mx-auto">
+                <div><div id="days" class="serif text-3xl">00</div><p class="text- uppercase text-gray-500 mt-1">Hari</p></div>
+                <div><div id="hours" class="serif text-3xl">00</div><p class="text- uppercase text-gray-500 mt-1">Jam</p></div>
+                <div><div id="mins" class="serif text-3xl">00</div><p class="text- uppercase text-gray-500 mt-1">Menit</p></div>
+                <div><div id="secs" class="serif text-3xl">00</div><p class="text- uppercase text-gray-500 mt-1">Detik</p></div>
             </div>
         </section>
 
-        <!-- BRIDE & GROOM PROFILE -->
-        <section class="py-20 px-8 text-center bg-[#FAF7F2]">
-            <div class="reveal mb-16">
-                <div class="polaroid-frame rotate-[-3deg] w-56"><img id="groom-img" src="" class="w-full h-56 object-cover"></div>
-                <h3 id="groom-name" class="font-script text-4xl text-[var(--theme)] mt-8"></h3>
-                <p id="groom-parents" class="text- mt-2 opacity-60 leading-relaxed"></p>
-                <a id="groom-ig" target="_blank" class="inline-block text- mt-3 opacity-50 hover:opacity-100 transition-opacity"><i class="fa-brands fa-instagram mr-1"></i></a>
-            </div>
-            <div class="font-script text-5xl opacity-10 my-10">&</div>
-            <div class="reveal mb-10">
-                <div class="polaroid-frame rotate- w-56"><img id="bride-img" src="" class="w-full h-56 object-cover"></div>
-                <h3 id="bride-name" class="font-script text-4xl text-[var(--theme)] mt-8"></h3>
-                <p id="bride-parents" class="text- mt-2 opacity-60 leading-relaxed"></p>
-                <a id="bride-ig" target="_blank" class="inline-block text- mt-3 opacity-50 hover:opacity-100 transition-opacity"><i class="fa-brands fa-instagram mr-1"></i></a>
-            </div>
+        <!-- GALLERY -->
+        <section id="gallery-section" class="px-8 hidden">
+            <div class="divider"></div>
+            <div id="gallery-grid" class="grid grid-cols-2 gap-2"></div>
         </section>
 
-        <!-- INJECTED DYNAMIC AREA -->
-        <div id="dynamic-area"></div>
+        <!-- UCAPAN -->
+        <section id="ucapan-section" class="px-8 pb-24 hidden">
+            <div class="divider"></div>
+            <h3 id="judul-ucapan" class="serif text-3xl text-center mb-8">Ucapan</h3>
 
-        <!-- FORM UCAPAN OMH AKSARA -->
-        <section data-section="ucapan" id="section-ucapan" class="reveal py-20 px-8 text-center bg-white hidden">
-          <div class="max-w-md mx-auto">
-            <h4 id="judul-ucapan" class="font-serif text-3xl mb-4 text-[var(--theme)]">Doa & Ucapan</h4>
-            <p class="text- opacity-60 mb-8 px-4">Berikan doa terbaik untuk kedua mempelai</p>
-
-            <form id="form-ucapan" class="text-left bg-[#FAF7F2] p-6 rounded-2xl mb-10 shadow-sm">
-              <input type="text" id="nama-ucapan" placeholder="Nama Anda" required class="w-full p-3 mb-3 border border-black/10 rounded-lg text-sm bg-white">
-              <textarea id="isi-ucapan" placeholder="Tulis ucapan terbaik..." required rows="4" class="w-full p-3 mb-3 border border-black/10 rounded-lg text-sm bg-white resize-none"></textarea>
-              <div class="flex gap-3 mb-4">
-                <select id="hadir-ucapan" class="flex-1 p-3 border border-black/10 rounded-lg text-sm bg-white">
-                  <option value="Hadir">Saya Akan Hadir</option>
-                  <option value="Tidak Hadir">Maaf Tidak Bisa Hadir</option>
-                </select>
-                <input type="number" id="pax-ucapan" value="1" min="1" placeholder="Jml" class="w-20 p-3 border border-black/10 rounded-lg text-sm bg-white text-center">
-              </div>
-              <button type="submit" id="btn-kirim" class="btn-main w-full text-">Kirim Ucapan</button>
+            <form id="form-ucapan" class="mb-12">
+                <input type="text" id="nama-ucapan" placeholder="Nama" required class="w-full border-b border-gray-300 py-3 mb-4 text-sm bg-transparent focus:outline-none focus:border-black">
+                <textarea id="isi-ucapan" placeholder="Ucapan" required rows="3" class="w-full border-b border-gray-300 py-3 mb-4 text-sm bg-transparent focus:outline-none focus:border-black resize-none"></textarea>
+                <div class="flex gap-4 mb-6">
+                    <select id="hadir-ucapan" class="flex-1 border-b border-gray-300 py-3 text-sm bg-transparent focus:outline-none">
+                        <option value="Hadir">Hadir</option>
+                        <option value="Tidak Hadir">Tidak Hadir</option>
+                    </select>
+                    <input type="number" id="pax-ucapan" value="1" min="1" placeholder="Jumlah" class="w-20 border-b border-gray-300 py-3 text-sm bg-transparent focus:outline-none text-center">
+                </div>
+                <button type="submit" id="btn-kirim" class="btn w-full">Kirim</button>
             </form>
 
             <div id="list-ucapan"></div>
-          </div>
         </section>
 
-        <!-- FOOTER BRANDING -->
-        <footer class="py-12 text-center border-t border-black/5 bg-[#FAF7F2]">
-            <p class="font-script text-3xl text-gold" id="footer-names"></p>
-            <p class="text- opacity-40 mt-4 tracking-widest uppercase">Digital Invitation by Omah Aksara</p>
+        <!-- FOOTER -->
+        <footer class="text-center py-16 border-t border-gray-200">
+            <p id="footer-names" class="serif text-2xl"></p>
         </footer>
-    </div>
+
+    </main>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger);
         const params = new URLSearchParams(window.location.search);
-        const slug = params.get('c') || 'yaya-oci';
+        const slug = params.get('c') || 'demo';
         const path = `../../public/clients/${slug}/`;
-        let weddingAudio;
-        let nickGroom = '';
-        let nickBride = '';
 
         const escapeHtml = (text) => {
           const div = document.createElement('div');
@@ -133,255 +131,151 @@
         document.getElementById('guest-name').innerText = (params.get('to') || 'Tamu Undangan').replace(/\+/g, ' ');
 
         fetch(`${path}data.json`).then(r => r.json()).then(data => {
-
-            if(data.settings?.themeColor) document.documentElement.style.setProperty('--theme', data.settings.themeColor);
-            if(data.settings?.accentColor) document.documentElement.style.setProperty('--accent', data.settings.accentColor);
-            if(data.settings?.bgColor) document.documentElement.style.setProperty('--bg', data.settings.bgColor);
-            if(data.settings?.islami) document.getElementById('bismillah').classList.remove('hidden');
-
-            nickGroom = data.couple.groom.nickname;
-            nickBride = data.couple.bride.nickname;
-            const pair = `${nickGroom} & ${nickBride}`;
-
+            // DATA UTAMA
+            const pair = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
             document.getElementById('names-cover').innerText = pair;
-            document.getElementById('names-hero').innerText = pair;
+            document.getElementById('names-main').innerText = pair;
             document.getElementById('footer-names').innerText = pair;
-            document.getElementById('cover-img').src = path + data.gallery.heroImage;
-            document.getElementById('hero-img').src = path + data.gallery.heroImage;
-
-            if (data.events[0]) {
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                const eventDate = new Date(data.events[0].date);
-                document.getElementById('date-hero').innerText = eventDate.toLocaleDateString('id-ID', options);
-            }
 
             if (data.guest?.group) document.getElementById('guest-group').innerText = data.guest.group;
 
-            document.getElementById('groom-name').innerText = data.couple.groom.name;
+            // TANGGAL
+            if (data.events[0]) {
+                const d = new Date(data.events[0].date);
+                document.getElementById('date-main').innerText = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            }
+
+            // MEMPELAI
             document.getElementById('groom-img').src = path + data.couple.groom.image;
-            document.getElementById('groom-parents').innerHTML = `Putra dari ${data.couple.groom.father} <br>& ${data.couple.groom.mother}`;
-            if (data.couple.groom.instagram) {
-                document.getElementById('groom-ig').innerHTML += `@${data.couple.groom.instagram}`;
-                document.getElementById('groom-ig').href = `https://instagram.com/${data.couple.groom.instagram}`;
-            }
+            document.getElementById('groom-name').innerText = data.couple.groom.name;
+            document.getElementById('groom-parents').innerHTML = `Putra dari<br>${data.couple.groom.father} & ${data.couple.groom.mother}`;
 
-            document.getElementById('bride-name').innerText = data.couple.bride.name;
             document.getElementById('bride-img').src = path + data.couple.bride.image;
-            document.getElementById('bride-parents').innerHTML = `Putri dari ${data.couple.bride.father} <br>& ${data.couple.bride.mother}`;
-            if (data.couple.bride.instagram) {
-                document.getElementById('bride-ig').innerHTML += `@${data.couple.bride.instagram}`;
-                document.getElementById('bride-ig').href = `https://instagram.com/${data.couple.bride.instagram}`;
+            document.getElementById('bride-name').innerText = data.couple.bride.name;
+            document.getElementById('bride-parents').innerHTML = `Putri dari<br>${data.couple.bride.father} & ${data.couple.bride.mother}`;
+
+            // QUOTE
+            if (data.quote) {
+                document.getElementById('quote-section').classList.remove('hidden');
+                if (data.quote.arab) {
+                    document.getElementById('quote-arab').innerText = data.quote.arab;
+                    document.getElementById('quote-arab').classList.remove('hidden');
+                }
+                document.getElementById('quote-text').innerText = data.quote.text;
+                document.getElementById('quote-source').innerText = data.quote.source;
             }
 
-            if(data.settings?.showCountdown && data.countdown?.targetDate) {
-                document.getElementById('countdown-wrap').classList.remove('hidden');
+            // EVENTS
+            document.getElementById('events-list').innerHTML = data.events.map(e => `
+                <div class="text-center mb-12">
+                    <h4 class="serif text-2xl mb-3">${e.title}</h4>
+                    <p class="text-sm mb-1">${new Date(e.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p class="text-xs text-gray-500 mb-4">${e.startTime} - ${e.endTime} ${e.timezone}</p>
+                    <p class="text- text-gray-600 mb-6 leading-relaxed max-w-xs mx-auto">${e.address}</p>
+                    <a href="${e.googleMaps}" target="_blank" class="btn inline-block">Lokasi</a>
+                </div>
+            `).join('');
+
+            // COUNTDOWN
+            if (data.settings?.showCountdown && data.countdown?.targetDate) {
+                document.getElementById('countdown-section').classList.remove('hidden');
                 const target = new Date(data.countdown.targetDate).getTime();
                 setInterval(() => {
                     const diff = target - new Date().getTime();
-                    if(diff > 0) {
+                    if (diff > 0) {
                         document.getElementById('days').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                        document.getElementById('hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                        document.getElementById('hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60))).padStart(2, '0');
                         document.getElementById('mins').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
                         document.getElementById('secs').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
                     }
                 }, 1000);
             }
 
-            let html = '';
-            if(data.quote) {
-                html += `<section class="reveal py-20 px-8 text-center italic">
-                    <i class="fa-solid fa-quote-left text-2xl opacity-10 mb-4 block"></i>
-                    ${data.quote.arab? `<p class="font-serif text-2xl text-[var(--theme)] mb-6 leading-loose">${data.quote.arab}</p>` : ''}
-                    <p class="text-sm font-light leading-relaxed px-2">"${data.quote.text}"</p>
-                    <p class="text- font-bold mt-4 tracking-[0.2em] uppercase text-gold">— ${data.quote.source}</p>
-                </section>`;
-            }
-            if(data.settings?.showLoveStory && data.loveStory) {
-                html += `<section class="reveal py-20 px-8 bg-[#FAF7F2]">
-                    <h4 class="font-serif text-3xl mb-12 text-center text-[var(--theme)]">Our Love Story</h4>
-                    <div class="relative max-w-xs mx-auto border-l border-black/10 pl-6 space-y-10">
-                        ${data.loveStory.map(story => `
-                            <div class="timeline-item relative">
-                                <span class="text- font-bold text-white px-2 py-0.5 rounded-full" style="background: var(--accent)">${story.year}</span>
-                                <h5 class="font-serif text-lg text-[var(--theme)] mt-2 font-bold">${story.title}</h5>
-                                <p class="text- font-light leading-relaxed mt-1 opacity-70">${story.description}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </section>`;
-            }
-            if(data.events?.length > 0) {
-                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                html += `<section class="reveal py-20 px-8 text-center">
-                    <h4 class="font-serif text-3xl mb-8 text-[var(--theme)]">Save The Date</h4>
-                    ${data.events.map(e => {
-                        const formattedDate = new Date(e.date).toLocaleDateString('id-ID', dateOptions);
-                        return `<div class="p-8 rounded-3xl bg-[#FAF7F2] border border-black/5 mb-6 shadow-sm">
-                                <h5 class="font-serif text-2xl text-[var(--theme)] mb-3 font-bold">${e.title}</h5>
-                                <p class="text-xs font-semibold text-gray-700">${formattedDate}</p>
-                                <p class="text- opacity-60 mb-4 font-mono mt-0.5">${e.startTime} - ${e.endTime} ${e.timezone}</p>
-                                <p class="text- px-2 leading-relaxed text-gray-600 mb-6">${e.address}</p>
-                                <a href="${e.googleMaps}" target="_blank" class="btn-main text- inline-block"><i class="fa-solid fa-map-location-dot mr-1"></i> Lihat Lokasi</a>
-                            </div>`;
-                    }).join('')}
-                </section>`;
-            }
-            if(data.liveStreaming?.enabled) {
-                html += `<section class="reveal py-16 px-8 text-center bg-stone-50 border-y border-black/5">
-                    <i class="fa-solid fa-video text-xl opacity-20 mb-2 block"></i>
-                    <h4 class="font-serif text-xl text-[var(--theme)] mb-2 font-bold">Live Streaming</h4>
-                    <p class="text- opacity-60 mb-6 max-w-xs mx-auto">Kami mengundang Anda menyaksikan prosesi sakral pernikahan kami secara virtual melalui tautan di bawah ini:</p>
-                    <a href="${data.liveStreaming.url}" target="_blank" class="btn-main text- inline-block" style="background: var(--accent)"><i class="fa-brands fa-youtube mr-1"></i> Tonton ${data.liveStreaming.platform}</a>
-                </section>`;
-            }
-            if(data.gallery?.album) {
-                html += `<section class="reveal py-20 px-4 text-center">
-                    <h4 class="font-serif text-3xl mb-8 text-[var(--theme)]">Our Gallery</h4>
-                    <div class="grid grid-cols-2 gap-2">
-                        ${data.gallery.album.map(img => `<div class="aspect-square rounded-lg overflow-hidden shadow-md"><img src="${path+img}" class="w-full h-full object-cover hover:scale-105 transition duration-300"></div>`).join('')}
-                    </div>
-                </section>`;
-            }
-            if(data.gallery?.videoYoutubeId) {
-                html += `<section class="reveal py-20 px-6 text-center bg-[#FAF7F2]">
-                    <h4 class="font-serif text-3xl mb-8 text-[var(--theme)]">Prewedding Video</h4>
-                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/${data.gallery.videoYoutubeId}" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </section>`;
-            }
-            if(data.settings?.showProtocols && data.protocols) {
-                html += `<section class="reveal py-20 px-6 text-center">
-                    <h4 class="font-serif text-2xl mb-8 text-[var(--theme)]">Protokol Acara</h4>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        ${data.protocols.map(p => `<div class="bg-stone-50 border border-black/5 p-4 rounded-xl min-w- flex flex-col items-center justify-center shadow-sm">
-                                <span class="text-xl mb-1">${p.icon}</span>
-                                <span class="text- font-medium opacity-70 max-w- text-center leading-tight">${p.label}</span>
-                            </div>`).join('')}
-                    </div>
-                </section>`;
-            }
-            if(data.digitalGift) {
-                html += `<section class="reveal py-20 px-8 text-center bg-[#FAF7F2]">
-                    <h4 class="font-serif text-3xl mb-4 text-[var(--theme)]">Digital Gift</h4>
-                    <p class="text- opacity-60 mb-8 px-4">Bagi keluarga dan kerabat yang ingin memberikan tanda kasih, dapat mengirimkannya melalui dompet digital / rekening berikut:</p>
-                    ${data.digitalGift.map(g => `<div class="p-6 bg-white rounded-2xl mb-4 shadow-sm border border-black/5">
-                            <p class="text- font-bold text-gold uppercase tracking-wider">${g.provider}</p>
-                            <p class="text-lg font-serif tracking-[0.15em] my-1 font-bold text-gray-800">${g.accountNumber}</p>
-                            <p class="text- opacity-50 uppercase">${g.accountHolder}</p>
-                        </div>`).join('')}
-                </section>`;
-            }
-            if(data.logistics?.rsvpWaNumber) {
-                const guestNameParam = encodeURIComponent(document.getElementById('guest-name').innerText);
-                html += `<section class="reveal py-20 px-8 text-center bg-white rounded-t- shadow-inner">
-                    <h4 class="font-serif text-3xl mb-4 text-[var(--theme)]">RSVP</h4>
-                    ${data.logistics.dressCode? `<p class="text- font-semibold bg-stone-100 inline-block px-4 py-1 rounded-full text-[var(--theme)] mb-6"><i class="fa-solid fa-shirt mr-1"></i> ${data.logistics.dressCode}</p>` : ''}
-                    <p class="text- opacity-70 mb-8 px-4 leading-relaxed">${data.logistics.guestNote || ''}</p>
-                    <a href="https://wa.me/${data.logistics.rsvpWaNumber}?text=Halo%20${encodeURIComponent(nickGroom)}%20%26%20${encodeURIComponent(nickBride)},%20Saya%20${guestNameParam}%20ingin%20mengonfirmasi%20kehadiran..." class="btn-main inline-block"><i class="fa-brands fa-whatsapp mr-2 text-sm"></i> Konfirmasi via WhatsApp</a>
-                </section>`;
+            // GALLERY
+            if (data.gallery?.album) {
+                document.getElementById('gallery-section').classList.remove('hidden');
+                document.getElementById('gallery-grid').innerHTML = data.gallery.album.map(img =>
+                    `<img src="${path+img}" class="w-full aspect-square object-cover">`
+                ).join('');
             }
 
-            document.getElementById('dynamic-area').innerHTML = html;
-            weddingAudio = new Audio(path + data.logistics.music);
-
-            // FITUR UCAPAN - OMH AKSARA
-            const sectionUcapan = document.getElementById('section-ucapan');
+            // UCAPAN
             if (data.fitur?.ucapan && data.link?.apiUcapan) {
-              sectionUcapan.classList.remove('hidden');
+                document.getElementById('ucapan-section').classList.remove('hidden');
+                document.getElementById('judul-ucapan').innerText = data.teks?.ucapanJudul || 'Ucapan';
 
-              document.getElementById('judul-ucapan').innerText = data.teks?.ucapanJudul || 'Doa & Ucapan';
-              document.getElementById('nama-ucapan').placeholder = data.teks?.placeholderNama || 'Nama Anda';
-              document.getElementById('isi-ucapan').placeholder = data.teks?.placeholderUcapan || 'Tulis ucapan...';
-              document.getElementById('btn-kirim').innerText = data.teks?.tombolKirim || 'Kirim Ucapan';
+                const apiUrl = data.link.apiUcapan;
+                const form = document.getElementById('form-ucapan');
+                const list = document.getElementById('list-ucapan');
+                const btn = document.getElementById('btn-kirim');
 
-              const apiUrl = data.link.apiUcapan;
-              const form = document.getElementById('form-ucapan');
-              const list = document.getElementById('list-ucapan');
-              const btn = document.getElementById('btn-kirim');
+                const loadUcapan = async () => {
+                    list.innerHTML = '<p class="text- text-gray-400 text-center">Memuat...</p>';
+                    try {
+                        const dataUcapan = await new Promise((resolve, reject) => {
+                            const callbackName = 'jsonp_' + Math.round(100000 * Math.random());
+                            window[callbackName] = (data) => {
+                                delete window[callbackName];
+                                document.body.removeChild(script);
+                                resolve(data);
+                            };
+                            const script = document.createElement('script');
+                            script.src = `${apiUrl}?c=${slug}&callback=${callbackName}`;
+                            script.onerror = reject;
+                            document.body.appendChild(script);
+                        });
 
-              const loadUcapan = async () => {
-                list.innerHTML = '<p class="text- text-gray-400">Memuat ucapan...</p>';
-                try {
-                  const dataUcapan = await new Promise((resolve, reject) => {
-                    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-                    window[callbackName] = function(data) {
-                      delete window[callbackName];
-                      document.body.removeChild(script);
-                      resolve(data);
-                    };
-                    const script = document.createElement('script');
-                    script.src = `${apiUrl}?c=${slug}&callback=${callbackName}`;
-                    script.onerror = reject;
-                    document.body.appendChild(script);
-                  });
+                        if (!dataUcapan.length) {
+                            list.innerHTML = `<p class="text- text-gray-400 text-center py-8">${data.teks?.ucapanKosong || 'Belum ada ucapan'}</p>`;
+                            return;
+                        }
+                        list.innerHTML = dataUcapan.map(u => `
+                            <div class="border-b border-gray-200 py-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <b class="text-sm">${escapeHtml(u.nama)}</b>
+                                    <span class="text- text-gray-500">${u.hadir} ${u.pax > 1? `(${u.pax})` : ''}</span>
+                                </div>
+                                <p class="text-sm leading-relaxed text-gray-700 mb-2">${escapeHtml(u.ucapan)}</p>
+                                <p class="text- text-gray-400">${new Date(u.waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                            </div>
+                        `).join('');
+                    } catch (e) {
+                        list.innerHTML = '<p class="text- text-red-500 text-center">Gagal memuat</p>';
+                    }
+                };
 
-                  if (!dataUcapan.length) {
-                    list.innerHTML = `<p class="text- text-gray-400 py-5">${data.teks?.ucapanKosong || 'Belum ada ucapan'}</p>`;
-                    return;
-                  }
-                  list.innerHTML = dataUcapan.map(u => `
-                    <div class="bg-[#FAF7F2] p-5 mb-3 rounded-xl text-left">
-                      <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
-                        <b class="text-[var(--theme)] text-sm">${escapeHtml(u.nama)}</b>
-                        <span class="text- px-3 py-1 rounded-full ${u.hadir === 'Hadir'? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                          ${u.hadir} ${u.pax > 1? `(${u.pax} org)` : ''}
-                        </span>
-                      </div>
-                      <p class="my-2 text- leading-relaxed text-gray-700 break-words">${escapeHtml(u.ucapan)}</p>
-                      <small class="text- text-gray-400">${new Date(u.waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
-                    </div>
-                  `).join('');
-                } catch (e) {
-                  list.innerHTML = '<p class="text- text-red-500">Gagal memuat ucapan</p>';
-                  console.log('Error load ucapan:', e);
-                }
-              };
+                if (data.fitur.tampilkanUcapan!== false) loadUcapan();
 
-              if (data.fitur.tampilkanUcapan!== false) loadUcapan();
-
-              form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                btn.disabled = true;
-                btn.innerText = 'Mengirim...';
-                try {
-                  await fetch(apiUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({
-                      idKlien: slug,
-                      nama: document.getElementById('nama-ucapan').value,
-                      ucapan: document.getElementById('isi-ucapan').value,
-                      hadir: document.getElementById('hadir-ucapan').value,
-                      pax: document.getElementById('pax-ucapan').value
-                    })
-                  });
-                  form.reset();
-                  setTimeout(loadUcapan, 1000);
-                } catch (err) {
-                  alert('Gagal mengirim ucapan. Coba lagi.');
-                }
-                btn.disabled = false;
-                btn.innerText = data.teks?.tombolKirim || 'Kirim Ucapan';
-              });
-            } else {
-              sectionUcapan.remove();
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    btn.disabled = true;
+                    btn.innerText = 'Mengirim...';
+                    try {
+                        await fetch(apiUrl, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            body: JSON.stringify({
+                                idKlien: slug,
+                                nama: document.getElementById('nama-ucapan').value,
+                                ucapan: document.getElementById('isi-ucapan').value,
+                                hadir: document.getElementById('hadir-ucapan').value,
+                                pax: document.getElementById('pax-ucapan').value
+                            })
+                        });
+                        form.reset();
+                        setTimeout(loadUcapan, 1000);
+                    } catch (err) {
+                        alert('Gagal mengirim');
+                    }
+                    btn.disabled = false;
+                    btn.innerText = data.teks?.tombolKirim || 'Kirim';
+                });
             }
-        }).catch(err => {
-          console.error('Error load data:', err);
-          document.body.innerHTML = '<div class="flex items-center justify-center h-screen"><p>Undangan tidak ditemukan</p></div>';
         });
 
         function openInvitation() {
-            if(weddingAudio) { weddingAudio.play(); weddingAudio.loop = true; }
-            gsap.to('#cover', { y: '-100%', duration: 1.2, ease: 'power4.inOut', onComplete: () => {
-                document.getElementById('cover').style.display = 'none';
-                document.getElementById('app').classList.remove('hidden');
-                gsap.to('#app', { opacity: 1, duration: 1 });
-                gsap.utils.toArray('.reveal').forEach(el => {
-                    gsap.to(el, { opacity: 1, y: 0, duration: 1, scrollTrigger: { trigger: el, start: 'top 90%' } });
-                });
-            }});
+            document.getElementById('cover').style.display = 'none';
+            document.getElementById('app').classList.remove('hidden');
         }
     </script>
 </body>
