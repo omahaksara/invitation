@@ -32,7 +32,7 @@
     }
   },
   "quote": {
-    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ Lَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا",
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا",
     "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya.",
     "source": "QS. Ar-Rum: 21"
   },
@@ -117,5 +117,19 @@
     "rsvpWaNumber": "6285796461157",
     "dressCode": "Earth Tone / Pastel",
     "guestNote": "Tanpa mengurangi rasa hormat, kami memohon doa restu Bapak/Ibu."
+  },
+  "fitur": {
+    "ucapan": true,
+    "tampilkanUcapan": true
+  },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbwqnO0xyY7e3ZnYC2RAhGnQvckTr5GHgYWOGwAvdBIrWhAqKXs42y7zDAErO2YHHLq9DQ/exec"
+  },
+  "teks": {
+    "ucapanJudul": "Doa & Ucapan",
+    "ucapanKosong": "Jadilah yang pertama mengirim ucapan",
+    "placeholderNama": "Nama Anda",
+    "placeholderUcapan": "Tulis ucapan terbaik...",
+    "tombolKirim": "Kirim Ucapan"
   }
 }
