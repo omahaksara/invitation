@@ -122,8 +122,9 @@
     "ucapan": true,
     "tampilkanUcapan": true
   },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbwqnO0xyY7e3ZnYC2RAhGnQvckTr5GHgYWOGwAvdBIrWhAqKXs42y7zDAErO2YHHLq9DQ/exec"
+ "link": {
+  "apiUcapan": "https://script.google.com/macros/s/AKfycbyD7ZQ8VBKidMoa7SUkHKZJTBiXTWEnFRfBbB_slGI_pk4tE4RzvcnNat4il9R8ff0FYg/exec"
+}
   },
   "teks": {
     "ucapanJudul": "Doa & Ucapan",
