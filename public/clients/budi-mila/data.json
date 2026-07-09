@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "slug": "yaya-oci",
+    "template": "elegance-motion",
+    "status": "published"
+  },
+  "settings": {
+    "islami": true,
+    "themeColor": "#8B7355",
+    "coupleFrame": "polaroid",
+    "autoColor": true
+  },
+  "couple": {
+    "groom": {
+      "name": "Muhammad Jakpar",
+      "nickname": "Yaya",
+      "father": "Moh. Aliman (Alm)",
+      "mother": "Siti Kusnah (Almh)",
+      "image": "foto-pria.jpg",
+      "instagram": "@muh_djafar27"
+    },
+    "bride": {
+      "name": "Khosi Saimima",
+      "nickname": "Oci",
+      "father": "Maksum",
+      "mother": "Sholihah",
+      "image": "foto-wanita.jpg",
+      "instagram": "@khosisaimima17"
+    }
+  },
+  "quote": {
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
+    "source": "QS. Ar-Rum: 21"
+  },
+  "events": [
+    {
+      "title": "Akad Nikah",
+      "date": "2026-09-06",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "timezone": "WITA",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+    },
+    {
+      "title": "Walimatul 'Ursy",
+      "date": "2026-09-06",
+      "startTime": "11:00",
+      "endTime": "23:59",
+      "timezone": "WITA",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+    }
+  ],
+  "loveStory": [
+    {
+      "date": "Juni 2021",
+      "title": "First Meet",
+      "description": "Berawal dari sebuah tanggapan kecil di story."
+    },
+    {
+      "date": "14 April 2024",
+      "title": "Khitbah",
+      "description": "Kami memutuskan untuk bersama dalam ridho-Nya."
+    }
+  ],
+  "gallery": {
+    "heroImage": "foto-sampul.jpg",
+    "videoYoutubeId": "",
+    "album": [
+      "foto1.jpg",
+      "foto2.jpg"
+    ]
+  },
+  "digitalGift": [
+    {
+      "provider": "BRI",
+      "accountNumber": "519501024699536",
+      "accountHolder": "Khosi Saimima"
+    },
+    {
+      "provider": "Mandiri",
+      "accountNumber": "1510022186495",
+      "accountHolder": "Muhammad Jakpar"
+    }
+  ],
+  "logistics": {
+    "music": "musik.mp3",
+    "rsvpWaNumber": "6282261567928",
+    "dressCode": "Sopan & Bebas",
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan tamu undangan berkenan hadir."
+  }
+}
