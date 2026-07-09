@@ -1,94 +1,167 @@
 {
   "meta": {
-    "slug": "yaya-oci",
+    "slug": "budi-ani",
     "template": "elegance-motion",
-    "status": "published"
+    "status": "published",
+    "domain": "",
+    "customUrl": ""
   },
   "settings": {
     "islami": true,
-    "themeColor": "#8B7355",
+    "themeColor": "#6b0505",
     "coupleFrame": "polaroid",
-    "autoColor": true
+    "autoColor": true,
+    "showCountdown": true,
+    "showLoveStory": true,
+    "showGallery": true,
+    "showGift": true,
+    "showUcapan": true,
+    "showProtocols": false,
+    "musicAutoplay": false
+  },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec",
+    "shortUrl": "",
+    "website": ""
   },
   "couple": {
     "groom": {
-      "name": "Muhammad Jakpar",
-      "nickname": "Yaya",
-      "father": "Moh. Aliman (Alm)",
-      "mother": "Siti Kusnah (Almh)",
+      "name": "Budi Santoso, S.T.",
+      "nickname": "Budi",
+      "father": "Bapak Ahmad Santoso",
+      "mother": "Ibu Siti Aminah",
       "image": "foto-pria.jpg",
-      "instagram": "@muh_djafar27"
+      "instagram": "@budi_santoso",
+      "tiktok": "",
+      "bio": "Putra pertama dari keluarga Santoso"
     },
     "bride": {
-      "name": "Khosi Saimima",
-      "nickname": "Oci",
-      "father": "Maksum",
-      "mother": "Sholihah",
+      "name": "Ani Wijaya, S.E.",
+      "nickname": "Ani",
+      "father": "Bapak Heru Wijaya",
+      "mother": "Ibu Ratna Wijaya",
       "image": "foto-wanita.jpg",
-      "instagram": "@khosisaimima17"
+      "instagram": "@ani_wijaya",
+      "tiktok": "",
+      "bio": "Putri kedua dari keluarga Wijaya"
     }
   },
   "quote": {
     "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
     "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
-    "source": "QS. Ar-Rum: 21"
+    "source": "QS. Ar-Rum: 21",
+    "english": ""
   },
   "events": [
     {
       "title": "Akad Nikah",
-      "date": "2026-09-06",
-      "startTime": "09:00",
+      "date": "2026-11-12",
+      "startTime": "08:00",
       "endTime": "10:00",
-      "timezone": "WITA",
-      "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+      "timezone": "WIB",
+      "address": "Kediaman Mempelai Wanita, Jl. Mawar No. 123, Jakarta Selatan",
+      "locationName": "Rumah Ani",
+      "googleMaps": "https://maps.google.com/?q=-6.2088,106.8456",
+      "embedMaps": "",
+      "liveStreaming": ""
     },
     {
-      "title": "Walimatul 'Ursy",
-      "date": "2026-09-06",
+      "title": "Resepsi Pernikahan",
+      "date": "2026-11-12",
       "startTime": "11:00",
-      "endTime": "23:59",
-      "timezone": "WITA",
-      "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+      "endTime": "14:00",
+      "timezone": "WIB",
+      "address": "Gedung Graha Saba, Jl. Mawar No. 124, Jakarta Selatan",
+      "locationName": "Graha Saba Ballroom",
+      "googleMaps": "https://maps.google.com/?q=-6.2088,106.8456",
+      "embedMaps": "",
+      "liveStreaming": ""
     }
   ],
+  "countdown": {
+    "targetDate": "2026-11-12T08:00:00+07:00",
+    "backgroundImage": "bg-countdown.jpg"
+  },
   "loveStory": [
     {
-      "date": "Juni 2021",
-      "title": "First Meet",
-      "description": "Berawal dari sebuah tanggapan kecil di story."
+      "date": "Januari 2023",
+      "year": "2023",
+      "title": "Pertama Bertemu",
+      "description": "Dipertemukan dalam satu ruang lingkup kerja yang sama. Awalnya hanya rekan, lama-lama jadi nyaman.",
+      "image": "story1.jpg"
     },
     {
-      "date": "14 April 2024",
-      "title": "Khitbah",
-      "description": "Kami memutuskan untuk bersama dalam ridho-Nya."
+      "date": "14 Februari 2024",
+      "year": "2024",
+      "title": "Lamaran",
+      "description": "Dengan restu kedua orang tua, kami mengikat janji untuk ke jenjang yang lebih serius.",
+      "image": "story2.jpg"
+    },
+    {
+      "date": "12 November 2026",
+      "year": "2026",
+      "title": "Menuju Halal",
+      "description": "Bismillah, kami siap menempuh hidup baru bersama dalam ikatan suci pernikahan.",
+      "image": "story3.jpg"
     }
   ],
   "gallery": {
     "heroImage": "foto-sampul.jpg",
+    "coverImage": "foto-cover.jpg",
     "videoYoutubeId": "",
+    "videoFile": "",
     "album": [
       "foto1.jpg",
-      "foto2.jpg"
+      "foto2.jpg",
+      "foto3.jpg",
+      "foto4.jpg",
+      "foto5.jpg",
+      "foto6.jpg"
     ]
   },
-  "digitalGift": [
-    {
-      "provider": "BRI",
-      "accountNumber": "519501024699536",
-      "accountHolder": "Khosi Saimima"
-    },
-    {
-      "provider": "Mandiri",
-      "accountNumber": "1510022186495",
-      "accountHolder": "Muhammad Jakpar"
-    }
-  ],
+  "digitalGift": {
+    "qris": "qris-budi-ani.jpg",
+    "accounts": [
+      {
+        "provider": "Bank BCA",
+        "accountNumber": "1234567890",
+        "accountHolder": "Budi Santoso",
+        "logo": "bca.png"
+      },
+      {
+        "provider": "Bank Mandiri",
+        "accountNumber": "0987654321",
+        "accountHolder": "Ani Wijaya",
+        "logo": "mandiri.png"
+      }
+    ],
+    "address": "Jl. Mawar No. 123, Jakarta Selatan 12345",
+    "receiver": "Budi & Ani"
+  },
+  "protocols": {
+    "title": "Informasi Tambahan",
+    "items": [
+      "Acara diselenggarakan secara intimate",
+      "Mohon konfirmasi kehadiran H-3"
+    ]
+  },
   "logistics": {
     "music": "musik.mp3",
-    "rsvpWaNumber": "6282261567928",
-    "dressCode": "Sopan & Bebas",
-    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan tamu undangan berkenan hadir."
+    "rsvpWaNumber": "6281234567890",
+    "dressCode": "Earth Tone / Sage Green",
+    "colorCode": "#8B7355, #A8B5A3, #EAE0D5",
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
+    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
+    "filterIG": "@omahaksara.filter",
+    "hashtag": "#BudiAniStory"
+  },
+  "guest": {
+    "defaultName": "Tamu Undangan",
+    "defaultGroup": "Keluarga & Sahabat"
+  },
+  "seo": {
+    "title": "Wedding of Budi & Ani",
+    "description": "Undangan Pernikahan Budi Santoso & Ani Wijaya - 12 November 2026",
+    "image": "foto-sampul.jpg"
   }
 }
