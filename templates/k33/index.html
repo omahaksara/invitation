@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Karsa — Omah Aksara</title>
+    <title>Undangan Pernikahan Digital</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,19 +34,19 @@
             -webkit-font-smoothing: antialiased;
         }
 
-      .font-serif { font-family: 'Cormorant Garamond', serif; }
-      .font-arab { font-family: 'Scheherazade New', serif; }
+    .font-serif { font-family: 'Cormorant Garamond', serif; }
+    .font-arab { font-family: 'Scheherazade New', serif; }
 
-      .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
-      .reveal.active { opacity: 1; transform: translateY(0); }
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
-      .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
-      .reveal.active.line-draw { width: 100%; }
+    .line-draw { width: 0%; height: 1px; background: var(--theme-color); opacity: 0.3; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); margin: 2rem auto; }
+    .reveal.active.line-draw { width: 2rem; }
 
         #cover { transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.8s; }
-      .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
+    .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
 
-      .btn-open {
+    .btn-open {
             border: 1px solid rgba(255,255,255,0.25);
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(15px);
@@ -57,9 +57,9 @@
             text-transform: uppercase;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-      .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
+    .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
 
-      .phone-wrapper {
+    .phone-wrapper {
             max-width: 425px;
             margin: 0 auto;
             background: var(--white-soft);
@@ -68,7 +68,7 @@
             min-height: 100vh;
         }
 
-      .editorial-frame {
+    .editorial-frame {
             position: relative;
             width: 80%;
             aspect-ratio: 3/4;
@@ -78,17 +78,17 @@
             border: 1px solid rgba(0,0,0,0.03);
             background: #f0ebe1;
         }
-      .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
-      .editorial-frame:hover img { transform: scale(1.06); }
+    .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
+    .editorial-frame:hover img { transform: scale(1.06); }
 
-      .arch-mask { border-radius: 200px 200px 0 0; }
+    .arch-mask { border-radius: 200px 200px 0 0; }
 
-      .timeline-card {
+    .timeline-card {
             position: relative;
             padding-left: 28px;
             border-left: 1px solid var(--soft-color);
         }
-      .timeline-card::before {
+    .timeline-card::before {
             content: '';
             position: absolute;
             left: -3px;
@@ -99,7 +99,7 @@
             background: var(--theme-color);
         }
 
-      .btn-editorial {
+    .btn-editorial {
             display: inline-block;
             border: 1px solid var(--theme-color);
             color: var(--theme-color);
@@ -110,9 +110,9 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             background: transparent;
         }
-      .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
+    .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
 
-      .music-disk-box {
+    .music-disk-box {
             position: fixed;
             bottom: 35px;
             right: calc(50% - 190px);
@@ -125,7 +125,7 @@
         }
         @media (max-width: 435px) {.music-disk-box { right: 25px; } }
 
-      .disk-text-wrap {
+    .disk-text-wrap {
             width: 52px;
             height: 52px;
             background: rgba(255, 255, 255, 0.9);
@@ -137,7 +137,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             animation: rotateDisk 8s linear infinite;
         }
-      .disk-text-wrap.paused { animation-play-state: paused; }
+    .disk-text-wrap.paused { animation-play-state: paused; }
         @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -180,7 +180,7 @@
     <section class="px-10 py-28 text-center reveal">
         <p id="quote-arab" class="font-arab text-3xl mb-10 text-[var(--theme-color)] leading-loose tracking-wide"></p>
         <p id="quote-text" class="font-serif italic text-lg text-stone-700 font-light leading-relaxed"></p>
-        <div class="h- w-8 bg-[var(--theme-color)]/30 mx-auto mt-8 mb-4 line-draw"></div>
+        <div class="line-draw"></div>
         <p id="quote-source" class="text- uppercase tracking-[0.35em] font-medium text-stone-400"></p>
     </section>
 
@@ -266,7 +266,7 @@
             </div>
 
             <button type="submit" class="btn-editorial w-full text-center py-3.5">
-                Kirim Konfirmasi
+                Kirim Ucapan
             </button>
         </form>
 
@@ -307,12 +307,12 @@
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
     const basePath = `../../public/clients/${clientSlug}/`;
 
-    // URL GOOGLE APPS SCRIPT - GANTI DENGAN URL KAMU
+    // GANTI DENGAN URL APPS SCRIPT KAMU - FORMAT /exec
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
 
     let invitationData = null;
 
-    // FUNGSI LOAD UCAPAN DARI GOOGLE SHEETS - FIXED
+    // LOAD UCAPAN DARI GOOGLE SHEETS - COMPATIBLE DENGAN APPS SCRIPT LAMA
     function loadGoogleSheetsWishes() {
         const wishesBox = document.getElementById('wishes-box');
         if (!wishesBox) return;
@@ -320,11 +320,11 @@
         wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Memuat ucapan...</p>`;
 
         fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
-      .then(res => {
+    .then(res => {
             if (!res.ok) throw new Error('Gagal fetch');
             return res.json();
        })
-      .then(wishes => {
+    .then(wishes => {
             wishesBox.innerHTML = '';
 
             if (!wishes || wishes.length === 0) {
@@ -334,7 +334,7 @@
 
             wishes.forEach(wish => {
                 const badgeColor = wish.kehadiran === 'Hadir'
-                  ? 'bg-stone-100 text-stone-600 border border-stone-200'
+                ? 'bg-stone-100 text-stone-600 border border-stone-200'
                     : 'bg-stone-50 text-stone-400 border border-stone-100';
 
                 let displayTime = '';
@@ -358,7 +358,7 @@
                 setTimeout(() => el.classList.add('active'), 100);
             });
         })
-      .catch(err => {
+    .catch(err => {
             console.error("Gagal sinkronisasi data:", err);
             wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal memuat ucapan. Periksa koneksi atau Apps Script.</p>`;
         });
@@ -406,11 +406,11 @@
     }
 
     fetch(`${basePath}data.json`)
-  .then(res => {
+.then(res => {
         if(!res.ok) throw new Error(`data.json tidak ditemukan di: ${basePath}data.json`);
         return res.json();
     })
-  .then(data => {
+.then(data => {
         invitationData = data;
         const { couple, settings, events, gallery, loveStory, quote, logistics } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
@@ -517,13 +517,13 @@
             document.getElementById('rsvp-link').href = `https://wa.me/${logistics.rsvpWaNumber}?text=Dengan%20hormat,%20saya%20${encodeURIComponent(guestName)}%20ingin%20mengonfirmasi%20kehadiran.`;
         }
     })
-  .catch(err => {
+.catch(err => {
         console.error("Gagal memuat data.json:", err);
         document.getElementById('cover-names').innerText = 'Undangan Digital';
         document.getElementById('cover-guest').innerText = guestName;
     });
 
-    // FORM SUBMIT - FIXED: Ganti mode no-cors dengan text/plain
+    // FORM SUBMIT - COMPATIBLE DENGAN APPS SCRIPT LAMA
     document.getElementById('wishes-form').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -547,14 +547,14 @@
         submitBtn.innerText = "Mengirim...";
         submitBtn.disabled = true;
 
-        // FIX: Hapus mode: 'no-cors' dan pakai text/plain biar Apps Script bisa baca
+        // PENTING: Pakai text/plain biar Apps Script lama bisa baca
         fetch(SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         })
-       .then(res => res.json())
-       .then(data => {
+    .then(res => res.json())
+    .then(data => {
             if(data.status === 'success') {
                 document.getElementById('wish-message').value = '';
                 alert('Terima kasih! Ucapan dan doa Anda telah berhasil dikirim.');
@@ -563,11 +563,11 @@
                 throw new Error(data.message || 'Gagal');
             }
         })
-       .catch(err => {
+    .catch(err => {
             console.error(err);
             alert('Gagal mengirim konfirmasi. Silakan coba lagi atau hubungi kami.');
         })
-       .finally(() => {
+    .finally(() => {
             submitBtn.innerText = originalBtnText;
             submitBtn.disabled = false;
         });
