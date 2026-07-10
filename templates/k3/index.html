@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Omah Aksara</title>
+    <title>Karsa — Omah Aksara</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,21 +33,19 @@
             -webkit-font-smoothing: antialiased;
         }
 
-      .font-serif { font-family: 'Cormorant Garamond', serif; }
-      .font-arab { font-family: 'Scheherazade New', serif; }
+     .font-serif { font-family: 'Cormorant Garamond', serif; }
+     .font-arab { font-family: 'Scheherazade New', serif; }
 
-        /* SCROLL REVEAL ELEGANT EDITORIAL */
-      .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
-      .reveal.active { opacity: 1; transform: translateY(0); }
+     .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+     .reveal.active { opacity: 1; transform: translateY(0); }
 
-      .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
-      .reveal.active.line-draw { width: 100%; }
+     .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
+     .reveal.active.line-draw { width: 100%; }
 
-        /* COVER SCREEN LUXE */
         #cover { transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.8s; }
-      .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
+     .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
 
-      .btn-open {
+     .btn-open {
             border: 1px solid rgba(255,255,255,0.25);
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(15px);
@@ -58,10 +56,9 @@
             text-transform: uppercase;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-      .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
+     .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
 
-        /* CONTAINER SIMULASI FRAMELESS SMARTPHONE */
-      .phone-wrapper {
+     .phone-wrapper {
             max-width: 425px;
             margin: 0 auto;
             background: var(--white-soft);
@@ -70,8 +67,7 @@
             min-height: 100vh;
         }
 
-        /* FINE ART PHOTO STRUCTURE */
-      .editorial-frame {
+     .editorial-frame {
             position: relative;
             width: 80%;
             aspect-ratio: 3/4;
@@ -81,19 +77,17 @@
             border: 1px solid rgba(0,0,0,0.03);
             background: #f0ebe1;
         }
-      .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
-      .editorial-frame:hover img { transform: scale(1.06); }
+     .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
+     .editorial-frame:hover img { transform: scale(1.06); }
 
-        /* ASYMMETRIC OVERLAYS */
-      .arch-mask { border-radius: 200px 200px 0 0; }
+     .arch-mask { border-radius: 200px 200px 0 0; }
 
-        /* TIMELINE DESIGN / SASMITA */
-      .timeline-card {
+     .timeline-card {
             position: relative;
             padding-left: 28px;
             border-left: 1px solid var(--soft-color);
         }
-      .timeline-card::before {
+     .timeline-card::before {
             content: '';
             position: absolute;
             left: -3px;
@@ -104,8 +98,7 @@
             background: var(--theme-color);
         }
 
-        /* BUTTON LUXE */
-      .btn-editorial {
+     .btn-editorial {
             display: inline-block;
             border: 1px solid var(--theme-color);
             color: var(--theme-color);
@@ -116,10 +109,10 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             background: transparent;
         }
-      .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
+     .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
+     .btn-editorial:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* INTERAKTIF MUSIC FLOATER ROTATION */
-      .music-disk-box {
+     .music-disk-box {
             position: fixed;
             bottom: 35px;
             right: calc(50% - 190px);
@@ -132,7 +125,7 @@
         }
         @media (max-width: 435px) {.music-disk-box { right: 25px; } }
 
-      .disk-text-wrap {
+     .disk-text-wrap {
             width: 52px;
             height: 52px;
             background: rgba(255, 255, 255, 0.9);
@@ -144,7 +137,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             animation: rotateDisk 8s linear infinite;
         }
-      .disk-text-wrap.paused { animation-play-state: paused; }
+     .disk-text-wrap.paused { animation-play-state: paused; }
         @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -194,18 +187,14 @@
     <!-- ASSYMETRIC PROFILE (THE COUPLE) -->
     <section class="py-16 bg-[#F3EFE6]/40">
         <!-- Groom -->
-        <div id="groom-section" class="px-8 mb-20">
-            <!-- Data Terinjeksi Disini -->
-        </div>
+        <div id="groom-section" class="px-8 mb-20"></div>
 
         <div class="py-6 text-center reveal">
             <span class="font-serif font-light text-4xl italic text-stone-300">&</span>
         </div>
 
         <!-- Bride -->
-        <div id="bride-section" class="px-8">
-            <!-- Data Terinjeksi Disini -->
-        </div>
+        <div id="bride-section" class="px-8"></div>
     </section>
 
     <!-- MEMOIR / LOVE STORY -->
@@ -245,7 +234,7 @@
         </a>
     </section>
 
-    <!-- SECTION UCAPAN & DOA ONLINE - BARU -->
+    <!-- SECTION UCAPAN & DOA ONLINE -->
     <section id="wishes-section" class="py-28 px-10 bg-[#FDFDFB] border-t border-stone-200/50">
         <div class="text-center mb-12 reveal">
             <p class="text- uppercase tracking-[0.4em] text-stone-400 mb-2">Ucapan & Doa Restu</p>
@@ -281,9 +270,10 @@
                 <textarea id="wish-message" rows="4" required class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors resize-none" placeholder="Tulis ucapan dan doa restu Anda..."></textarea>
             </div>
 
-            <button type="submit" class="btn-editorial w-full text-center!py-3.5">
+            <button type="submit" id="submit-wish-btn" class="btn-editorial w-full text-center!py-3.5">
                 Kirim Ucapan
             </button>
+            <p id="form-status" class="text-xs text-center pt-2"></p>
         </form>
 
         <div class="mt-16 space-y-4">
@@ -305,7 +295,6 @@
 <!-- EXCLUSIVE ROTATING AUDIO FLOATER -->
 <div id="music-btn" class="music-disk-box hidden">
     <div id="disk-wrap" class="disk-text-wrap">
-        <!-- SVG Teks Melingkar Kreatif -->
         <svg class="w-full h-full p-1 text-[var(--text-color)] opacity-70" viewBox="0 0 100 100">
             <path id="textPath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"></path>
             <text font-size="8.3" font-family="Cormorant Garamond" letter-spacing="3" fill="currentColor">
@@ -324,10 +313,9 @@
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
     const basePath = `../../public/clients/${clientSlug}/`;
 
-    // URL GOOGLE APPS SCRIPT - GANTI DENGAN URL KAMU
+    // URL GOOGLE APPS SCRIPT - GANTI DENGAN URL LAMA KAMU
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
 
-    // Menyimpan data undangan setelah berhasil dimuat, dipakai di luar blok.then
     let invitationData = null;
 
     // FUNGSI LOAD UCAPAN DARI GOOGLE SHEETS
@@ -338,8 +326,8 @@
         wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Memuat ucapan...</p>`;
 
         fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
-      .then(res => res.json())
-      .then(wishes => {
+     .then(res => res.json())
+     .then(wishes => {
             wishesBox.innerHTML = '';
 
             if (!wishes || wishes.length === 0) {
@@ -349,7 +337,7 @@
 
             wishes.forEach(wish => {
                 const badgeColor = wish.kehadiran === 'Hadir'
-                  ? 'bg-stone-100 text-stone-600 border border-stone-200'
+                 ? 'bg-stone-100 text-stone-600 border border-stone-200'
                     : 'bg-stone-50 text-stone-400 border border-stone-100';
 
                 let displayTime = '';
@@ -369,26 +357,70 @@
                     </div>`;
             });
 
-            // Re-trigger reveal animation
             document.querySelectorAll('#wishes-box.reveal').forEach(el => {
                 setTimeout(() => el.classList.add('active'), 100);
             });
         })
-      .catch(err => {
+     .catch(err => {
             console.error("Gagal sinkronisasi data:", err);
             wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal memuat ucapan.</p>`;
         });
     }
 
-    // Menyiapkan tombol buka amplop & efek reveal agar TETAP berfungsi
-    // walaupun data.json gagal dimuat (mis. path salah / 404 / offline).
+    // FUNGSI KIRIM UCAPAN KE GOOGLE SHEETS
+    document.getElementById('wishes-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submit-wish-btn');
+        const statusEl = document.getElementById('form-status');
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Mengirim...';
+        statusEl.innerText = '';
+        statusEl.className = 'text-xs text-center pt-2 text-stone-500';
+
+        const data = {
+            id_klien: clientSlug,
+            nama: document.getElementById('wish-name').value,
+            kehadiran: document.getElementById('wish-status').value,
+            pax: document.getElementById('wish-pax').value,
+            ucapan: document.getElementById('wish-message').value,
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Penting untuk Apps Script
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+       .then(() => {
+            statusEl.innerText = 'Terima kasih, ucapan Anda berhasil dikirim.';
+            statusEl.className = 'text-xs text-center pt-2 text-green-600';
+            document.getElementById('wishes-form').reset();
+            // Reload ucapan setelah 1 detik
+            setTimeout(() => {
+                loadGoogleSheetsWishes();
+                statusEl.innerText = '';
+            }, 1000);
+        })
+       .catch(err => {
+            console.error("Gagal kirim ucapan:", err);
+            statusEl.innerText = 'Gagal mengirim ucapan. Silakan coba lagi.';
+            statusEl.className = 'text-xs text-center pt-2 text-red-500';
+        })
+       .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Kirim Ucapan';
+        });
+    });
+
     function bindOpenButton() {
         document.getElementById('open-btn').onclick = () => {
             const cover = document.getElementById('cover');
             cover.style.transform = 'translateY(-100%)';
             document.getElementById('app').style.opacity = '1';
 
-            // Pengaktifan Audio Lagu Latar Belakang (hanya jika data berhasil dimuat)
             const logistics = invitationData?.logistics;
             if(logistics?.music) {
                 const audio = document.getElementById('audio');
@@ -416,7 +448,6 @@
                 };
             }
 
-            // Inisialisasi Intersection Observer untuk Animasi Muncul Halus
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
             }, { threshold: 0.08 });
@@ -425,16 +456,15 @@
     }
 
     fetch(`${basePath}data.json`)
-  .then(res => {
+ .then(res => {
         if(!res.ok) throw new Error(`data.json tidak ditemukan (status ${res.status}) di path: ${basePath}data.json`);
         return res.json();
     })
-  .then(data => {
+ .then(data => {
         invitationData = data;
         const { couple, settings, events, gallery, loveStory, quote, logistics } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
 
-        // 1. Ekstraksi Warna Otomatis Cerdas
         const imgForColor = document.getElementById('cover-image');
         imgForColor.src = basePath + gallery.heroImage;
         imgForColor.onload = () => {
@@ -448,7 +478,6 @@
         if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
         if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
 
-        // Pasang Konten Data Master
         document.getElementById('cover-names').innerText = pairNick;
         document.getElementById('hero-names').innerText = pairNick;
         document.getElementById('footer-names').innerText = pairNick;
@@ -461,7 +490,6 @@
             document.getElementById('quote-source').textContent = quote.source || '';
         }
 
-        // Penggantian Struktur Layout Profil Menjadi Asimetris Artistik
         document.getElementById('groom-section').innerHTML = `
             <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.groom.image}"></div>
             <div class="mt-8 text-left pl-4 reveal">
@@ -480,7 +508,6 @@
                 ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text- tracking-[0.3em] uppercase font-medium text-amber-700/80">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-1"></i></a>` : ''}
             </div>`;
 
-        // Modul Agenda Acara Premium
         if(events?.length) {
             document.getElementById('event-section').classList.remove('hidden');
             events.forEach(ev => {
@@ -496,7 +523,6 @@
                     </div>`;
             });
 
-            // Konfigurasi Mesin Hitung Mundur Waktu Sekelas Jam Mewah
             const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00`).getTime();
             setInterval(() => {
                 const now = new Date().getTime();
@@ -514,7 +540,6 @@
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
 
-        // Jalur Cerita Romansa Kalem
         if(loveStory?.length) {
             document.getElementById('story-section').classList.remove('hidden');
             loveStory.forEach(ls => {
@@ -527,7 +552,6 @@
             });
         }
 
-        // Galeri Estetik
         if(gallery?.album?.length) {
             document.getElementById('gallery-section').classList.remove('hidden');
             gallery.album.forEach(img => {
@@ -535,30 +559,19 @@
             });
         }
 
-        // Integrasi Modul RSVP Sastra Berkelas
         if(logistics?.rsvpWaNumber) {
             document.getElementById('rsvp-section').classList.remove('hidden');
             document.getElementById('guest-note').innerText = logistics.guestNote || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.';
             document.getElementById('rsvp-link').href = `https://wa.me/${logistics.rsvpWaNumber}?text=Assalamualaikum%20Wr.%20Wb.%20Dengan%20hormat,%20saya%20${encodeURIComponent(guestName)}%20ingin%20mengonfirmasi%20kehadiran%20pada%20acara%20pernikahan...`;
         }
     })
-  .catch(err => {
-        // Sebelumnya: tidak ada.catch() sama sekali di sini.
-        // Kalau data.json gagal dimuat (404 / path salah / offline), seluruh
-        // rangkaian.then() di atas berhenti diam-diam TANPA pesan apapun,
-        // dan yang lebih parah: tombol "Buka Undangan" tidak pernah
-        // mendapat fungsi klik (karena dulu ada di dalam blok.then ini),
-        // jadi halaman tampak nge-blank dan tombolnya tidak bisa diklik.
+ .catch(err => {
         console.error("Gagal memuat data.json:", err);
         document.getElementById('cover-names').innerText = 'Data Belum Termuat';
         document.getElementById('cover-guest').innerText = guestName;
     });
 
-    // Load ucapan saat halaman dibuka
     loadGoogleSheetsWishes();
-
-    // Tombol buka amplop kini selalu aktif, baik data.json berhasil
-    // maupun gagal dimuat.
     bindOpenButton();
 </script>
 
