@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title id="meta-title">Undangan Pernikahan</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ivory: #FDFBF7;
+            --sage: #8A9A5B;
+            --champagne: #D4B996;
+            --charcoal: #2D2D2D;
+            --muted: #8C;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--ivory);
+            color: var(--charcoal);
+            font-size: 16px;
+            line-height: 1.9;
+            -webkit-font-smoothing: antialiased;
+        }
+   .font-script { font-family: 'Great Vibes', cursive; }
+   .font-serif { font-family: 'Cormorant Garamond', serif; }
+
+        /* Watercolor Botanical */
+   .floral-accent {
+            position: absolute; opacity: 0.15; pointer-events: none;
+        }
+
+   .reveal { opacity: 0; transform: translateY(30px); }
+   .reveal.in { opacity: 1; transform: translateY(0); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+
+   .btn-sage {
+            background: var(--sage); color: white;
+            padding: 16px 44px; border-radius: 50px;
+            font-size: 11px; letter-spacing: 3px; font-weight: 500; text-transform: uppercase;
+            min-height: 48px; display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.4s ease; border: 1px solid var(--sage);
+        }
+   .btn-sage:hover { background: #6d7a47; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(138, 154, 91, 0.3); }
+   .btn-sage:disabled { opacity: 0.6; cursor: not-allowed; }
+
+   .ornament-divider {
+            display: flex; align-items: center; text-align: center; color: var(--champagne);
+        }
+   .ornament-divider::before,.ornament-divider::after {
+            content: ''; flex: 1; border-bottom: 1px solid var(--champagne); opacity: 0.4;
+        }
+   .ornament-divider:not(:empty)::before { margin-right:.75em; }
+   .ornament-divider:not(:empty)::after { margin-left:.75em; }
+
+        input, select, textarea, button { min-height: 48px; font-size: 14px!important; }
+        input, select, textarea {
+            width: 100%; padding: 14px 18px; border: 1px solid #E8E3DB; border-radius: 8px;
+            background: white; transition: all 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--sage); box-shadow: 0 3px rgba(138, 154, 91, 0.1); }
+
+       .color-swatch { width: 36px; height: 36px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+   .spinning { animation: spin 8s linear infinite; }
+   .paused { animation-play-state: paused; }
+    </style>
+</head>
+<body class="flex justify-center">
+
+    <main class="w-full max-w-md bg-[--ivory] shadow-2xl relative overflow-x-hidden">
+        
+        <!-- 1. COVER -->
+        <section id="cover" class="fixed inset-0 z-[100] w-full max-w-md mx-auto bg-[--ivory] flex-col justify-between items-center py-16 px-8 text-center">
+            <img class="floral-accent top-0 left-0 w-32 -translate-x-1/2 -translate-y-1/2 rotate-45" src="data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 10C60 10 50 30 30 40C10 50 20 70 40 80C60 90 60 110 60 110' stroke='%23D4B996' stroke-opacity='0.5' stroke-width='1'/%3E%3C/svg%3E">
+            <img class="floral-accent bottom-0 right-0 w-36 translate-x-1/3 translate-y-1/3 -rotate-12" src="data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 120 120' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 10C60 10 50 30 40C10 50 20 70 40 80C60 90 60 110 60 110' stroke='%23D4B996' stroke-opacity='0.5' stroke-width='1'/%3E%3C/svg%3E">
+            
+            <div class="space-y-2">
+                <p class="text- tracking-[0.4em] uppercase text-stone-400 font-medium">Undangan Pernikahan</p>
+                <div class="w-12 h-[1px] bg-[--champagne] mx-auto"></div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="relative w-64 h-80 mx-auto rounded-t-full overflow-hidden border-4 border-white shadow-xl">
+                    <img id="cover-img" src="" class="w-full h-full object-cover" loading="eager">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+                <h1 id="cover-names" class="font-script text-5xl text-[--primary] leading-tight"></h1>
+                <p id="cover-date" class="font-serif text-sm text-stone-600 tracking-wider"></p>
+            </div>
+
+            <div class="space-y-6 w-full">
+                <div class="bg-white/70 backdrop-blur-sm border-stone-200/60 p-5 rounded-xl space-y-2">
+                    <p class="text- tracking-[0.3em] uppercase text-stone-400">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+                    <h3 id="guest-name" class="text-xl font-serif text-stone-800"></h3>
+                    <p id="guest-group" class="text- font-mono text-stone-400 tracking-wider"></p>
+                </div>
+                
+                <button onclick="openInvitation()" class="btn-sage w-full">Buka Undangan</button>
+            </div>
+        </section>
+
+        <!-- 2. APP CONTENT -->
+        <div id="app" class="opacity-0">
+            
+            <!-- PEMBUKA -->
+            <section id="pembuka" class="py-24 px-8 text-center space-y-6 bg-white">
+                <p id="bismillah" class="text-sm font-serif text-stone-600 hidden">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+                <p id="salam" class="text- tracking-[0.3em] uppercase text-stone-400 font-medium">Assalamu'alaikum Wr. Wb.</p>
+                <div class="w-12 h-[1px] bg-[--champagne] mx-auto my-6"></div>
+                <p id="quote-text" class="font-serif text-lg italic leading-relaxed text-stone-600 px-4"></p>
+                <p id="quote-source" class="text- uppercase tracking-[.3em] font-bold text-[--sage]"></p>
+            </section>
+
+            <!-- MEMPELAI -->
+            <section class="py-20 px-8 text-center space-y-16 bg-[--ivory]">
+                <div class="space-y-2">
+                    <p class="text- tracking-[.4em] uppercase text-stone-400 font-medium">Bismillahirrahmanirrahim</p>
+                    <h3 class="font-serif text-3xl text-[--sage] font-light">Dengan Memohon Rahmat Allah SWT</h3>
+                </div>
+
+                <div id="groom-box" class="reveal space-y-4"></div>
+                <div class="font-script text-5xl text-[--champagne]/60">&</div>
+                <div id="bride-box" class="reveal space-y-4"></div>
+            </section>
+
+            <!-- COUNTDOWN + SAVE DATE -->
+            <section class="py-16 px-8 bg-white text-center space-y-8 border-y border-stone-100">
+                <h3 class="font-serif text-2xl text-[--sage]">Menuju Hari Bahagia</h3>
+                <div id="countdown-wrap" class="grid grid-cols-4 gap-3 max-w-xs mx-auto"></div>
+                <div id="calendar-wrap" class="max-w-xs mx-auto mt-8"></div>
+            </section>
+
+            <!-- ACARA -->
+            <section class="py-20 px-8 bg-[--ivory] space-y-10">
+                <div class="text-center space-y-1">
+                    <p class="text- tracking-[.4em] uppercase text-stone-400 font-medium">Susunan Acara</p>
+                    <h3 class="font-serif text-3xl text-[--sage] font-light">Rangkaian Akad & Resepsi</h3>
+                </div>
+                <div id="event-list" class="space-y-6"></div>
+                <div class="text-center pt-6 border-t border-stone-200">
+                    <p class="text- tracking-[0.3em] uppercase text-stone-500 mb-2">Busana</p>
+                    <p id="dresscode-text" class="text-sm text-stone-600 italic"></p>
+                    <div id="color-palette" class="flex justify-center gap-2 mt-3"></div>
+                </div>
+            </section>
+
+            <!-- LOKASI -->
+            <section id="lokasi-section" class="py-16 px-8 bg-white text-center space-y-6">
+                <h3 class="font-serif text-2xl text-[--sage]">Peta Lokasi</h3>
+                <div id="maps-embed" class="w-full aspect-video rounded-xl overflow-hidden border-stone-200"></div>
+                <a id="maps-link" target="_blank" class="btn-sage inline-block">Buka di Google Maps</a>
+            </section>
+
+            <!-- GALERI -->
+            <section class="py-20 px-6 bg-[--ivory]">
+                <h3 class="font-serif text-2xl text-[--sage] text-center mb-10">Galeri Kenangan</h3>
+                <div id="gallery-grid" class="columns-2 gap-3 space-y-3"></div>
+            </section>
+
+            <!-- LOVE STORY -->
+            <section id="story-section" class="py-20 px-8 bg-white">
+                <h3 class="font-serif text-2xl text-[--sage] text-center mb-12">Kisah Kami</h3>
+                <div class="relative">
+                    <div class="absolute left-4 top-2 bottom-2 w-[1px] bg-[--champagne]/40"></div>
+                    <div id="story-list" class="space-y-10"></div>
+                </div>
+            </section>
+
+            <!-- GIFT -->
+            <section id="gift-section" class="py-20 px-8 bg-[--ivory] text-center space-y-8">
+                <h3 class="font-serif text-2xl text-[--sage]">Hadiah Pernikahan</h3>
+                <p class="text-xs text-stone-500 px-4">Doa restu Anda adalah hadiah terindah. Namun jika berkenan memberi tanda kasih, dapat melalui:</p>
+                <div id="gift-list" class="space-y-4"></div>
+            </section>
+
+            <!-- RSVP + UCAPAN -->
+            <section id="rsvp-section" class="py-20 px-8 bg-white space-y-12">
+                <div class="text-center space-y-1">
+                    <p class="text- tracking-[.4em] uppercase text-stone-400 font-medium">Buku Tamu</p>
+                    <h3 class="font-serif text-3xl text-[--sage] font-light">Konfirmasi & Doa</h3>
+                </div>
+
+                <form id="rsvp-form" class="space-y-4 text-left bg-stone-50 p-6 rounded-xl border border-stone-200/60">
+                    <p class="font-serif text-sm text-stone-800 font-semibold border-b border-stone-200 pb-2">Konfirmasi Kehadiran</p>
+                    <input type="text" id="rsvp-name" placeholder="Nama Lengkap Anda" required>
+                    <select id="rsvp-status" required>
+                        <option value="">Pilih Konfirmasi</option>
+                        <option value="Hadir">InsyaAllah Hadir</option>
+                        <option value="Tidak Hadir">Mohon Maaf Berhalangan</option>
+                    </select>
+                    <select id="rsvp-pax">
+                        <option value="1">1 Orang</option>
+                        <option value="2">2 Orang</option>
+                    </select>
+                    <button type="submit" class="btn-sage w-full">Kirim via WhatsApp</button>
+                </form>
+
+                <form id="wish-form" class="space-y-4 text-left bg-stone-50 p-6 rounded-xl border border-stone-200/60">
+                    <p class="font-serif text-sm text-stone-800 font-semibold border-b border-stone-200 pb-2">Kirim Doa Restu</p>
+                    <input type="text" id="wish-name" placeholder="Nama Anda" required>
+                    <textarea id="wish-message" rows="4" placeholder="Tuliskan doa & ucapan terbaik..." required></textarea>
+                    <button type="submit" class="w-full bg-[--sage] text-white py-3.5 rounded-lg text- uppercase tracking-[0.25em] font-medium hover:opacity-90">
+                        Kirim Ucapan
+                    </button>
+                </form>
+
+                <div class="space-y-3">
+                    <p class="text- uppercase tracking-widest font-bold text-stone-400 text-left">Doa dari Para Tamu</p>
+                    <div id="wishes-box" class="space-y-3 max-h-[400px] overflow-y-auto pr-1"></div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="py-20 text-center bg-[--sage] text-white px-8">
+                <p id="footer-note" class="text-xs font-light italic mb-8 leading-relaxed max-w-xs mx-auto opacity-80"></p>
+                <p id="footer-names" class="font-script text-4xl tracking-wide"></p>
+                <p class="text-[9px] tracking-[0.4em] opacity-50 uppercase mt-10 font-medium">Omah Aksara</p>
+            </footer>
+        </div>
+
+        <!-- FLOATING MUSIC -->
+        <div id="music-btn" class="hidden fixed bottom-6 right-6 z-40">
+            <button id="disk-wrap" class="w-12 h-12 bg-white/90 backdrop-blur border border-stone-200 rounded-full shadow-lg flex items-center justify-center spinning">
+                <i id="music-icon-state" class="fa-solid fa-music text-sm text-[--sage]"></i>
+            </button>
+        </div>
+        <audio id="audio" loop></audio>
+    </main>
+
+    <script>
+        // === OMHA AKSARA UNIVERSAL LOADER V2 - IVORY SCRIPT ===
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('c') || 'budi-ani';
+        const guest = (params.get('to') || 'Tamu Undangan').replace(/\+/g, ' ');
+        const path = `../../public/clients/${slug}/`;
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+
+        fetch(`${path}data.json`).then(res => res.json()).then(d => {
+            // 1. THEME & META
+            if(d.settings?.themeColor) document.documentElement.style.setProperty('--sage', d.settings.themeColor);
+            document.getElementById('meta-title').textContent = d.seo.title;
+
+            // 2. COVER
+            const pair = `${d.couple.groom.nickname} & ${d.couple.bride.nickname}`;
+            setText('cover-names', pair);
+            setText('guest-name', guest);
+            setSrc('cover-img', path + d.gallery.coverImage);
+            setText('cover-date', new Date(d.events[0].date).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}));
+
+            // 3. QUOTE
+            if(d.settings.islami) document.getElementById('bismillah')?.classList.remove('hidden');
+            setText('quote-text', d.quote.text);
+            setText('quote-source', d.quote.source);
+
+            // 4. MEMPELAI
+            renderCouple(d.couple.groom, 'groom-box');
+            renderCouple(d.couple.bride, 'bride-box');
+
+            // 5. COUNTDOWN + KALENDER
+            if(d.settings.showCountdown && d.events?.[0]) {
+                const target = new Date(`${d.events[0].date}T${d.events[0].startTime}`).getTime();
+                setInterval(() => {
+                    const diff = target - new Date().getTime();
+                    if (diff > 0) {
+                        setText('days', Math.floor(diff / 864e5).toString().padStart(2, '0'));
+                        setText('hours', Math.floor((diff % 864e5) / 36e5).toString().padStart(2, '0'));
+                        setText('minutes', Math.floor((diff % 36e5) / 6e4).toString().padStart(2, '0'));
+                    }
+                }, 1000);
+                renderCalendar(d.events[0].date);
+            }
+
+            // 6. ACARA
+            d.events.forEach(ev => {
+                document.getElementById('event-list').innerHTML += `
+                    <div class="bg-white border-stone-200/60 p-6 rounded-xl text-center space-y-3 reveal">
+                        <p class="font-serif text-xl text-[--sage]">${ev.title}</p>
+                        <p class="text-sm font-medium">${new Date(ev.date).toLocaleDateString('id-ID', {weekday: 'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text-xs font-mono text-stone-500">${ev.startTime} - ${ev.endTime} ${ev.timezone || 'WIB'}</p>
+                        <div class="w-8 h-[1px] bg-[--champagne] mx-auto my-3"></div>
+                        <p class="text-xs text-stone-500 italic px-4">${ev.address}</p>
+                        <a href="${ev.googleMaps}" target="_blank" class="inline-block mt-4 text- tracking-widest uppercase border-b border-[--sage] pb-0.5 text-[--sage]">Buka Peta</a>
+                    </div>`;
+            });
+
+            // 7. DRESS CODE
+            if(d.logistics?.dressCode) setText('dresscode-text', d.logistics.dressCode);
+            if(d.logistics?.colorCode) {
+                d.logistics.colorCode.split(',').forEach(c => {
+                    document.getElementById('color-palette').innerHTML += `<div class="color-swatch" style="background:${c
