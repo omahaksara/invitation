@@ -3,72 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omah Aksara — Royal Polaroid</title>
+    <title>Wedding Invitation — Nocturne Aurum</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Jost:wght@200;300;400;500&family=Tangerine:wght@700&display=swap" rel="stylesheet">
 
     <style>
-        :root { --marun: #6b0505; --gold: #c5a880; --bg: #fdfbf7; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #e7e5e4; }
-        .font-luxury { font-family: 'Cinzel', serif; }
-        .font-serif { font-family: 'Playfair Display', serif; }
-        .polaroid { background: white; padding: 15px 15px 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(197, 168, 128, 0.2); }
-        .btn-luxury { background: linear-gradient(135deg, #7a0b0b, #540303); color: #fdfbf7; padding: 15px 40px; text-transform: uppercase; letter-spacing: 0.2em; font-family: 'Cinzel', serif; font-size: 12px; }
-        .invitation-container { max-width: 448px; margin: 0 auto; background: #fdfbf7; min-height: 100vh; position: relative; overflow: hidden; border-left: 1px solid #e7e5e4; border-right: 1px solid #e7e5e4; }
+        :root {
+            --bg: #0a0a0b;
+            --bg-soft: #111114;
+            --paper: #f4f1ea;
+            --gold: #d4af37;
+            --gold-dark: #a98b2d;
+            --text: #e8e6e3;
+            --text-muted: #9a9488;
+        }
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+       .font-display { font-family: 'Cormorant Garamond', serif; }
+       .font-script { font-family: 'Tangerine', cursive; }
+
+        /* Gold Foil Texture */
+       .gold-foil {
+            background: linear-gradient(135deg, #d4af37 0%, #f7e7b8 25%, #d4af37 50%, #a98b2d 75%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Luxury Glass */
+       .glass {
+            background: rgba(17, 17, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        /* Ornate Border */
+       .ornate-border {
+            position: relative;
+        }
+       .ornate-border::before,.ornate-border::after {
+            content: '';
+            position: absolute;
+            width: 60px; height: 60px;
+            border: 1px solid var(--gold);
+            opacity: 0.3;
+        }
+       .ornate-border::before {
+            top: -1px; left: -1px;
+            border-right: none; border-bottom: none;
+        }
+       .ornate-border::after {
+            bottom: -1px; right: -1px;
+            border-left: none; border-top: none;
+        }
+
+       .reveal { opacity: 0; transform: translateY(30px); }
+
+        /* Button Aurum */
+       .btn-aurum {
+            background: transparent;
+            color: var(--gold);
+            padding: 14px 42px;
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            border: 1px solid var(--gold);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+       .btn-aurum::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--gold);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: -1;
+        }
+       .btn-aurum:hover {
+            color: var(--bg);
+        }
+       .btn-aurum:hover::before {
+            left: 0;
+        }
+
+        /* Velvet Section */
+       .velvet {
+            background: radial-gradient(ellipse at top, #1a1a1d 0%, #0a0a0b 100%);
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+        }
+
+        /* Music Spin */
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+       .spinning { animation: spin 15s linear infinite; }
+       .paused { animation-play-state: paused; }
+
+        /* Scrollbar Luxury */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <!-- COVER SECTION -->
-    <div id="cover" class="fixed inset-0 z-50 flex flex-col items-center justify-between py-12 px-6 bg-[#fdfbf7] w-full max-w-md mx-auto border-x border-stone-200">
-        <div class="text-center">
-            <p class="font-serif italic text-stone-400 text-sm">The Wedding of</p>
+    <!-- COVER -->
+    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center px-8" style="background: radial-gradient(circle at center, #151518 0%, #0a0a0b 100%);">
+
+        <!-- Art Deco Ornament -->
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');"></div>
+
+        <div class="space-y-2 mb-10">
+            <p class="text-[9px] tracking-[0.6em] text-[var(--text-muted)] uppercase">The Wedding Of</p>
+            <svg width="80" height="8" viewBox="0 0 80 8" class="mx-auto opacity-40">
+                <path d="M0 4 L30 4 M50 4 L80 4 M35 0 L40 4 L35 8 M45 0 L40 4 L45 8" stroke="var(--gold)" fill="none" stroke-width="0.5"/>
+            </svg>
         </div>
-        <div class="polaroid w-[260px]">
-            <img id="cover-img" src="https://placehold.co/400x500" class="w-full aspect-[4/5] object-cover">
+
+        <h1 id="cover-names" class="font-display text-5xl md:text-6xl font-light gold-foil mb-4"></h1>
+        <p class="font-script text-3xl text-[var(--gold)] opacity-80 mb-12">eternally</p>
+
+        <div class="glass px-10 py-6 mb-12">
+            <div class="flex justify-center space-x-8">
+                <div class="text-center"><span id="days" class="font-display text-3xl font-light block text-white">00</span><span class="text-[8px] uppercase tracking-widest text-[var(--text-muted)]">Days</span></div>
+                <div class="text-center"><span id="hours" class="font-display text-3xl font-light block text-white">00</span><span class="text-[8px] uppercase tracking-widest text-[var(--text-muted)]">Hours</span></div>
+                <div class="text-center"><span id="minutes" class="font-display text-3xl font-light block text-white">00</span><span class="text-[8px] uppercase tracking-widest text-[var(--text-muted)]">Minutes</span></div>
+            </div>
         </div>
-        <div class="text-center">
-            <h1 id="cover-names" class="font-luxury text-2xl text-stone-800">Nama Pasangan</h1>
-            <p class="font-serif italic text-stone-500 mt-2">Katur Dhumateng: <span id="guest-name" class="font-bold">Tamu Undangan</span></p>
+
+        <div class="mb-10 space-y-3">
+            <p class="text-[9px] text-[var(--text-muted)] uppercase tracking-[.4em]">Kepada Yth.</p>
+            <p id="guest-name" class="font-display text-2xl text-white italic"></p>
         </div>
-        <button onclick="openInvitation()" class="btn-luxury">Buka Undangan</button>
+
+        <button onclick="openInvitation()" class="btn-aurum">Buka Undangan</button>
     </div>
 
-    <!-- MAIN APP -->
-    <main id="app" class="invitation-container opacity-0 transition-opacity duration-1000">
-        <section class="p-10 text-center space-y-10">
-            <h2 class="font-luxury text-xl">Mempelai Pasangan</h2>
-            
-            <div id="groom-box" class="space-y-4">
-                <div class="polaroid w-48 mx-auto rotate-[-2deg]"><img src="https://placehold.co/400x400"></div>
-                <p class="font-luxury font-bold">Mempelai Pria</p>
+    <!-- MAIN -->
+    <main id="app" class="max-w-md w-full mx-auto opacity-0 bg-[var(--bg-soft)] shadow-2xl">
+
+        <!-- QUOTE -->
+        <section class="px-10 pt-24 pb-16 text-center space-y-6 velvet">
+            <div id="islamic-greeting" class="text-[10px] tracking-[0.4em] text-[var(--text-muted)] mb-6 uppercase hidden">Assalamu'alaikum Warahmatullahi Wabarakatuh</div>
+            <svg width="100" height="10" viewBox="0 0 100 10" class="mx-auto opacity-30">
+                <path d="M0 5 Q25 0 50 5 T100 5" stroke="var(--gold)" fill="none" stroke-width="0.5"/>
+            </svg>
+            <p id="quote-text" class="font-display text-xl italic leading-relaxed text-[var(--text)] px-4"></p>
+            <p id="quote-source" class="text-[9px] uppercase tracking-[.4em] gold-foil font-medium"></p>
+        </section>
+
+        <!-- COUPLE -->
+        <section class="px-8 py-20 space-y-20 bg-[var(--bg)]">
+            <div class="text-center space-y-3">
+                <p class="text-[9px] tracking-[.5em] uppercase text-[var(--text-muted)]">Ar-Rahman</p>
+                <h3 class="font-display text-3xl font-light text-white">The Beloved</h3>
             </div>
 
-            <div class="font-serif text-3xl text-[#c5a880] italic">&</div>
+            <div id="groom-box" class="reveal text-center space-y-4"></div>
+            <div class="text-center font-script text-5xl gold-foil opacity-60">&</div>
+            <div id="bride-box" class="reveal text-center space-y-4"></div>
+        </section>
 
-            <div id="bride-box" class="space-y-4">
-                <div class="polaroid w-48 mx-auto rotate-[2deg]"><img src="https://placehold.co/400x400"></div>
-                <p class="font-luxury font-bold">Mempelai Wanita</p>
+        <!-- GALLERY -->
+        <section class="px-4 py-20 space-y-12 velvet">
+            <div class="text-center space-y-2">
+                <p class="text-[9px] tracking-[.5em] uppercase text-[var(--text-muted)]">Gallery</p>
+                <h3 class="font-display text-3xl font-light text-white">Our Moments</h3>
+            </div>
+            <div id="gallery-grid" class="grid grid-cols-2 gap-2"></div>
+        </section>
+
+        <!-- EVENTS -->
+        <section class="py-20 px-6 text-center space-y-12 bg-[var(--bg)]">
+            <div class="space-y-2">
+                <h3 class="text-[9px] tracking-[.5em] uppercase text-[var(--text-muted)]">Save The Date</h3>
+                <p class="font-display text-3xl font-light text-white">Celebration</p>
+            </div>
+            <div id="event-list" class="space-y-12"></div>
+        </section>
+
+        <!-- RSVP -->
+        <section class="px-6 py-20 space-y-12 velvet">
+            <div class="text-center space-y-2">
+                <p class="text-[9px] tracking-[.5em] uppercase text-[var(--text-muted)]">Reservation</p>
+                <h3 class="font-display text-3xl font-light text-white">Doa & Restu</h3>
+            </div>
+
+            <div class="glass p-8 text-center space-y-5 ornate-border">
+                <p class="text-[8px] tracking-[0.4em] uppercase text-[var(--gold)]">Digital Card</p>
+                <div class="py-4 border-y border-[var(--gold)] border-opacity-20">
+                    <p id="ticket-guest-name" class="font-display text-2xl text-white italic"></p>
+                    <p id="ticket-date" class="text-[9px] text-[var(--text-muted)] uppercase tracking-widest mt-2"></p>
+                </div>
+                <p id="guest-note" class="text-xs text-[var(--text-muted)] italic px-2"></p>
+                <a id="rsvp-link" href="#" target="_blank" class="btn-aurum inline-block w-full">
+                    Konfirmasi WhatsApp
+                </a>
+            </div>
+
+            <form id="wishes-form" class="space-y-4 text-left">
+                <input type="text" id="wish-name" required placeholder="Nama Anda" class="w-full p-4 bg-transparent border border-[var(--gold)] border-opacity-20 text-white text-sm focus:outline-none focus:border-[var(--gold)] placeholder-[var(--text-muted)]">
+
+                <select id="wish-status" class="w-full p-4 bg-transparent border border-[var(--gold)] border-opacity-20 text-white text-sm focus:outline-none focus:border-[var(--gold)]">
+                    <option value="Hadir" class="bg-[var(--bg)]">Saya Akan Hadir</option>
+                    <option value="Tidak Hadir" class="bg-[var(--bg)]">Mohon Maaf Berhalangan</option>
+                </select>
+
+                <textarea id="wish-message" rows="4" required placeholder="Tulis ucapan & doa terbaik..." class="w-full p-4 bg-transparent border border-[var(--gold)] border-opacity-20 text-white text-sm focus:outline-none focus:border-[var(--gold)] resize-none placeholder-[var(--text-muted)]"></textarea>
+
+                <button type="submit" class="btn-aurum w-full">
+                    Kirim Ucapan
+                </button>
+            </form>
+
+            <div class="space-y-4">
+                <p class="text-[9px] uppercase tracking-[0.4em] text-[var(--text-muted)]">Ucapan Tamu</p>
+                <div id="wishes-box" class="space-y-3 max-h-[350px] overflow-y-auto pr-2"></div>
             </div>
         </section>
 
-        <section class="bg-[#6b0505] text-stone-100 p-10 text-center">
-            <h2 class="font-luxury text-xl mb-6">Waktu & Tempat</h2>
-            <p class="font-serif italic">Detail acara akan tampil di sini.</p>
-        </section>
+        <!-- FOOTER -->
+        <footer class="py-20 text-center px-8 bg-black">
+            <p id="footer-note" class="text-xs text-[var(--text-muted)] italic mb-8 leading-relaxed"></p>
+            <p id="footer-names" class="font-display text-3xl gold-foil"></p>
+            <p class="text-[7px] tracking-[0.5em] text-[var(--text-muted)] uppercase mt-10">Nocturne Aurum</p>
+        </footer>
     </main>
 
+    <!-- MUSIC -->
+    <div id="music-btn" class="hidden fixed bottom-6 right-6 z-40">
+        <button id="disk-wrap" class="w-11 h-11 glass rounded-full shadow-lg flex items-center justify-center spinning">
+            <i id="music-icon-state" class="fa-solid fa-pause text-xs text-[var(--gold)]"></i>
+        </button>
+    </div>
+    <audio id="audio" loop></audio>
+
     <script>
-        function openInvitation() {
-            // Animasi Cover naik ke atas
-            gsap.to("#cover", { y: "-100%", duration: 1.2, ease: "power4.inOut", onComplete: () => {
-                document.getElementById('cover').style.display = 'none';
-            }});
-            // Fade in Main App
-            document.getElementById('app').classList.remove('opacity-0');
-        }
-    </script>
-</body>
-</html>
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('c') || 'budi-ani';
+        const guest = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+        const path = `../../public/clients/${slug}/`;
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+
+        function loadGoogleSheetsWishes() {
+            const wishesBox = document.getElementById('wishes-box');
+            if (!wishesBox) return;
+            wishesBox.innerHTML = `<p class="text-[10px] text-[var(--text-muted)] text-center py-4 animate-pulse">Memuat ucapan...</p>`;
+            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
+           .then(res => res.json())
+           .then(wishes => {
+                wishesBox.innerHTML = '';
+                if (!wishes || wishes.length === 0) {
+                    wishesBox.innerHTML = `<p class="text-[10px] text-[var(--text-muted)] text-center py-4">Jadilah yang pertama mengirim doa.</p>`;
+                    return;
+                }
+                wishes.forEach(wish => {
+                    const badgeColor = wish.kehadiran === 'Hadir'? 'text-[var(--gold)]' : '
