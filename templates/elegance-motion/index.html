@@ -3,83 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omah Aksara — Royal Polaroid Edition</title>
+    <title>Omah Aksara — Royal Polaroid</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
-        :root { --marun: #6b0505; --gold: #c5a880; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f3f1ec; color: #2d2d2d; }
+        :root { --marun: #6b0505; --gold: #c5a880; --bg: #fdfbf7; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #e7e5e4; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        .polaroid { background: #ffffff; padding: 16px 16px 40px 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(197, 168, 128, 0.2); transition: transform 0.3s; }
-        .btn-luxury { background: linear-gradient(135deg, #7a0b0b, #540303); color: #fff; padding: 14px 30px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
-        .reveal { opacity: 0; transform: translateY(30px); }
+        .polaroid { background: white; padding: 15px 15px 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(197, 168, 128, 0.2); }
+        .btn-luxury { background: linear-gradient(135deg, #7a0b0b, #540303); color: #fdfbf7; padding: 15px 40px; text-transform: uppercase; letter-spacing: 0.2em; font-family: 'Cinzel', serif; font-size: 12px; }
+        .invitation-container { max-width: 448px; margin: 0 auto; background: #fdfbf7; min-height: 100vh; position: relative; overflow: hidden; border-left: 1px solid #e7e5e4; border-right: 1px solid #e7e5e4; }
     </style>
 </head>
-<body class="flex justify-center">
+<body>
 
     <!-- COVER SECTION -->
-    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-between py-12 px-6 bg-[#fdfbf7] max-w-md w-full border-x">
-        <div class="text-center space-y-2">
-            <p class="font-serif text-[11px] uppercase tracking-[0.3em] text-stone-400 italic">The Wedding of</p>
-            <div class="w-16 h-[1px] bg-[#c5a880] mx-auto"></div>
+    <div id="cover" class="fixed inset-0 z-50 flex flex-col items-center justify-between py-12 px-6 bg-[#fdfbf7] w-full max-w-md mx-auto border-x border-stone-200">
+        <div class="text-center">
+            <p class="font-serif italic text-stone-400 text-sm">The Wedding of</p>
         </div>
-        <div class="flex flex-col items-center">
-            <div class="polaroid" style="width: 260px;">
-                <img id="cover-img" src="" class="w-full aspect-[4/5] object-cover">
-                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-[#6b0505] rounded-full border-4 border-[#fdfbf7] flex items-center justify-center text-white font-luxury">B&A</div>
-            </div>
-            <h1 id="cover-names" class="font-luxury text-2xl text-stone-800 mt-12"></h1>
+        <div class="polaroid w-[260px]">
+            <img id="cover-img" src="https://placehold.co/400x500" class="w-full aspect-[4/5] object-cover">
         </div>
-        <button onclick="openInvitation()" class="btn-luxury w-full">Buka Undangan</button>
+        <div class="text-center">
+            <h1 id="cover-names" class="font-luxury text-2xl text-stone-800">Nama Pasangan</h1>
+            <p class="font-serif italic text-stone-500 mt-2">Katur Dhumateng: <span id="guest-name" class="font-bold">Tamu Undangan</span></p>
+        </div>
+        <button onclick="openInvitation()" class="btn-luxury">Buka Undangan</button>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main id="app" class="max-w-md w-full opacity-0 bg-[#fdfbf7] min-h-screen border-x pb-20">
-        
-        <!-- SECTION: MEMPELAI -->
-        <section class="p-10 text-center space-y-8">
+    <!-- MAIN APP -->
+    <main id="app" class="invitation-container opacity-0 transition-opacity duration-1000">
+        <section class="p-10 text-center space-y-10">
             <h2 class="font-luxury text-xl">Mempelai Pasangan</h2>
-            <div id="groom-box" class="reveal"></div>
-            <div class="text-2xl font-serif text-[#c5a880] italic">&</div>
-            <div id="bride-box" class="reveal"></div>
+            
+            <div id="groom-box" class="space-y-4">
+                <div class="polaroid w-48 mx-auto rotate-[-2deg]"><img src="https://placehold.co/400x400"></div>
+                <p class="font-luxury font-bold">Mempelai Pria</p>
+            </div>
+
+            <div class="font-serif text-3xl text-[#c5a880] italic">&</div>
+
+            <div id="bride-box" class="space-y-4">
+                <div class="polaroid w-48 mx-auto rotate-[2deg]"><img src="https://placehold.co/400x400"></div>
+                <p class="font-luxury font-bold">Mempelai Wanita</p>
+            </div>
         </section>
 
-        <!-- SECTION: GALLERY -->
-        <section class="px-6 space-y-12">
-            <h2 class="font-luxury text-xl text-center">Reroncen Cariyos</h2>
-            <div id="gallery-grid" class="grid gap-10"></div>
-        </section>
-
-        <!-- SECTION: EVENT -->
-        <section class="p-10 bg-[#6b0505] text-white text-center space-y-6">
-            <h2 class="font-luxury text-xl">Waktu & Papan</h2>
-            <div id="event-list" class="space-y-8"></div>
-        </section>
-
-        <!-- SECTION: WISHES -->
-        <section class="p-8 space-y-6">
-            <h2 class="font-luxury text-lg text-center">Doa Restu</h2>
-            <div id="wishes-box" class="space-y-4 max-h-60 overflow-y-auto bg-stone-100 p-4 rounded"></div>
+        <section class="bg-[#6b0505] text-stone-100 p-10 text-center">
+            <h2 class="font-luxury text-xl mb-6">Waktu & Tempat</h2>
+            <p class="font-serif italic">Detail acara akan tampil di sini.</p>
         </section>
     </main>
 
     <script>
-        // Logika Utama
         function openInvitation() {
-            gsap.to("#cover", { y: "-100%", duration: 1, ease: "power4.inOut" });
-            gsap.to("#app", { opacity: 1, duration: 1 });
+            // Animasi Cover naik ke atas
+            gsap.to("#cover", { y: "-100%", duration: 1.2, ease: "power4.inOut", onComplete: () => {
+                document.getElementById('cover').style.display = 'none';
+            }});
+            // Fade in Main App
+            document.getElementById('app').classList.remove('opacity-0');
         }
-
-        // Contoh fungsi render (Sesuaikan dengan data.json Anda)
-        fetch('path/ke/data.json')
-            .then(res => res.json())
-            .then(data => {
-                // Isi DOM dengan data
-                document.getElementById('cover-names').textContent = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
-                // Tambahkan logika render untuk groom-box, bride-box, gallery, dan events di sini...
-            });
     </script>
 </body>
 </html>
