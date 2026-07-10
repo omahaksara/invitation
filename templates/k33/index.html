@@ -301,36 +301,85 @@
 
 <audio id="audio" loop></audio>
 
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const clientSlug = params.get('c') || 'karsa-sample';
-    const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
-    const basePath = `../../public/clients/${clientSlug}/`;
+  <script>
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('c') || 'budi-ani'; 
+        const guest = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+        const path = `../../public/clients/${slug}/`;
 
-    // GANTI DENGAN URL APPS SCRIPT KAMU - FORMAT /exec
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+        // TAUTAN BINDING APPS SCRIPT ANDA (100% SINKRON DUA ARAH)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
 
-    let invitationData = null;
+        // ENGINE AMBIL DATA FROM SHEETS (doGet Adaptor)
+        function loadGoogleSheetsWishes() {
+            const wishesBox = document.getElementById('wishes-box');
+            if (!wishesBox) return;
 
-    // LOAD UCAPAN DARI GOOGLE SHEETS - COMPATIBLE DENGAN APPS SCRIPT LAMA
-    function loadGoogleSheetsWishes() {
-        const wishesBox = document.getElementById('wishes-box');
-        if (!wishesBox) return;
+            wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa dari Google Sheets...</p>`;
 
-        wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Memuat ucapan...</p>`;
+            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
+            .then(res => res.json())
+            .then(wishes => {
+                wishesBox.innerHTML = '';
 
-        fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
-    .then(res => {
-            if (!res.ok) throw new Error('Gagal fetch');
-            return res.json();
-       })
-    .then(wishes => {
-            wishesBox.innerHTML = '';
+                if (!wishes || wishes.length === 0) {
+                    wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic">Belum ada ucapan tertulis. Berikan doa restu pertama Anda.</p>`;
+                    return;
+                }
 
-            if (!wishes || wishes.length === 0) {
-                wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic">Belum ada ucapan. Jadilah yang pertama memberikan doa restu.</p>`;
-                return;
+                wishes.forEach(wish => {
+                    const badgeColor = wish.kehadiran === 'Hadir' 
+                        ? 'bg-stone-100 text-stone-600 border border-stone-200' 
+                        : 'bg-stone-50 text-stone-400 border border-stone-100';
+
+                    let displayTime = '';
+                    if(wish.timestamp) {
+                        const dateObj = new Date(wish.timestamp);
+                        displayTime = isNaN(dateObj) ? wish.timestamp : dateObj.toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+                    }
+
+                    wishesBox.innerHTML += `
+                        <div class="p-4 bg-stone-50/60 border border-stone-200/40 rounded space-y-1 text-left">
+                            <div class="flex items-center justify-between">
+                                <p class="text-xs font-semibold text-stone-800">${wish.nama}</p>
+                                <span class="text-[7px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${badgeColor}">${wish.kehadiran}</span>
+                            </div>
+                            <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line">${wish.ucapan}</p>
+                            <p class="text-[8px] text-stone-400 font-mono text-right pt-1">${displayTime}</p>
+                        </div>`;
+                });
+            })
+            .catch(err => {
+                console.error("Gagal sinkronisasi data:", err);
+                wishesBox.innerHTML = `<p class="text-[9px] text-red-400/80 text-center py-4 font-light italic">Gagal memuat arsip ucapan online.</p>`;
+            });
+        }
+
+        // LOAD MASTER JSON ENGINE
+        fetch(`${path}data.json`).then(res => res.json()).then(data => {
+            const pair = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+            
+            document.getElementById('cover-names').textContent = pair;
+            document.getElementById('footer-names').textContent = pair;
+            document.getElementById('guest-name').textContent = guest;
+            document.getElementById('ticket-guest-name').textContent = guest;
+            document.getElementById('cover-img').src = path + data.gallery.heroImage;
+            document.getElementById('quote-text').textContent = data.quote.text;
+            document.getElementById('quote-source').textContent = data.quote.source;
+            
+            if(data.settings.islami) {
+                document.getElementById('islamic-greeting').classList.remove('hidden');
             }
+
+            if(data.logistics && data.logistics.guestNote) {
+                document.getElementById('footer-note').textContent = data.logistics.guestNote;
+                document.getElementById('guest-note').textContent = data.logistics.guestNote;
+            }
+
+            // Set Meta RSVP WhatsApp Link fallback
+            if(data.logistics && data.logistics.rsvpWaNumber) {
+                document.getElementById('rsvp-link').href = `https://wa.me/${data.logistics.rsvpWaNumber}?text=Berkah%20Dalem,%20saya%20${encodeURIComponent(guest)}%20bermaksud%20konfirmasi%20kehadiran.`;
+}
 
             wishes.forEach(wish => {
                 const badgeColor = wish.kehadiran === 'Hadir'
