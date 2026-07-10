@@ -4,84 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omah Aksara — Royal Polaroid Edition</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-        :root { --marun: #6b0505; --gold: #c5a880; --bg-vintage: #fdfbf7; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f3f1ec; color: #2d2d2d; overflow-x: hidden; }
+        :root { --marun: #6b0505; --gold: #c5a880; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f3f1ec; color: #2d2d2d; }
         .font-luxury { font-family: 'Cinzel', serif; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        
-        .polaroid { background: #ffffff; padding: 16px 16px 40px 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid rgba(197, 168, 128, 0.2); }
-        .btn-luxury { background: linear-gradient(135deg, #7a0b0b, #540303); color: #fcfaf6; border-radius: 2px; border: 1px solid var(--gold); text-transform: uppercase; letter-spacing: 0.2em; font-family: 'Cinzel', serif; }
-        
-        .reveal { opacity: 0; transform: translateY(40px); }
-        .grain { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E"); pointer-events: none; z-index: 99; }
+        .polaroid { background: #ffffff; padding: 16px 16px 40px 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(197, 168, 128, 0.2); transition: transform 0.3s; }
+        .btn-luxury { background: linear-gradient(135deg, #7a0b0b, #540303); color: #fff; padding: 14px 30px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
+        .reveal { opacity: 0; transform: translateY(30px); }
     </style>
 </head>
-<body class="antialiased flex justify-center">
-    <div class="grain"></div>
+<body class="flex justify-center">
 
     <!-- COVER SECTION -->
-    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-between py-12 px-6 bg-[#fdfbf7] max-w-md mx-auto border-x border-stone-200/50">
+    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-between py-12 px-6 bg-[#fdfbf7] max-w-md w-full border-x">
         <div class="text-center space-y-2">
             <p class="font-serif text-[11px] uppercase tracking-[0.3em] text-stone-400 italic">The Wedding of</p>
             <div class="w-16 h-[1px] bg-[#c5a880] mx-auto"></div>
         </div>
-
-        <div class="flex flex-col items-center w-full">
-            <div class="polaroid relative" style="width: 260px;">
-                <img id="cover-img" src="" alt="Cover" class="w-full aspect-[4/5] object-cover">
-                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-[#6b0505] rounded-full border-4 border-[#fdfbf7] flex items-center justify-center shadow-xl">
-                    <span id="monogram" class="font-luxury text-white text-xl">B & A</span>
-                </div>
+        <div class="flex flex-col items-center">
+            <div class="polaroid" style="width: 260px;">
+                <img id="cover-img" src="" class="w-full aspect-[4/5] object-cover">
+                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-[#6b0505] rounded-full border-4 border-[#fdfbf7] flex items-center justify-center text-white font-luxury">B&A</div>
             </div>
-            <h1 id="cover-names" class="font-luxury text-2xl text-stone-800 mt-12 tracking-wide text-center"></h1>
-            <p class="font-serif text-sm text-stone-500 italic mt-2">— ad infinitum —</p>
+            <h1 id="cover-names" class="font-luxury text-2xl text-stone-800 mt-12"></h1>
         </div>
-
-        <div class="w-full space-y-6">
-            <div class="text-center">
-                <p class="text-[10px] uppercase tracking-[0.2em] text-stone-400 mb-3">Katur Dhumateng Panjenengan:</p>
-                <div class="bg-stone-50/80 border border-stone-200 py-3 px-4 rounded shadow-inner">
-                    <p id="guest-name" class="font-serif text-md text-stone-800 italic font-medium"></p>
-                </div>
-            </div>
-            <button onclick="openInvitation()" class="btn-luxury w-full py-4 shadow-xl">Buka Undangan</button>
-        </div>
+        <button onclick="openInvitation()" class="btn-luxury w-full">Buka Undangan</button>
     </div>
 
-    <!-- APP CONTENT (Hidden initially) -->
-    <main id="app" class="max-w-md w-full mx-auto opacity-0 bg-[#fdfbf7] shadow-2xl border-x border-stone-200/30 pb-16 space-y-20">
-        <!-- Add your sections here -->
+    <!-- MAIN CONTENT -->
+    <main id="app" class="max-w-md w-full opacity-0 bg-[#fdfbf7] min-h-screen border-x pb-20">
+        
+        <!-- SECTION: MEMPELAI -->
+        <section class="p-10 text-center space-y-8">
+            <h2 class="font-luxury text-xl">Mempelai Pasangan</h2>
+            <div id="groom-box" class="reveal"></div>
+            <div class="text-2xl font-serif text-[#c5a880] italic">&</div>
+            <div id="bride-box" class="reveal"></div>
+        </section>
+
+        <!-- SECTION: GALLERY -->
+        <section class="px-6 space-y-12">
+            <h2 class="font-luxury text-xl text-center">Reroncen Cariyos</h2>
+            <div id="gallery-grid" class="grid gap-10"></div>
+        </section>
+
+        <!-- SECTION: EVENT -->
+        <section class="p-10 bg-[#6b0505] text-white text-center space-y-6">
+            <h2 class="font-luxury text-xl">Waktu & Papan</h2>
+            <div id="event-list" class="space-y-8"></div>
+        </section>
+
+        <!-- SECTION: WISHES -->
+        <section class="p-8 space-y-6">
+            <h2 class="font-luxury text-lg text-center">Doa Restu</h2>
+            <div id="wishes-box" class="space-y-4 max-h-60 overflow-y-auto bg-stone-100 p-4 rounded"></div>
+        </section>
     </main>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const slug = params.get('c') || 'budi-ani';
-        const guest = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
-        const path = `../../public/clients/${slug}/`;
+        // Logika Utama
+        function openInvitation() {
+            gsap.to("#cover", { y: "-100%", duration: 1, ease: "power4.inOut" });
+            gsap.to("#app", { opacity: 1, duration: 1 });
+        }
 
-        // Load Data
-        fetch(`${path}data.json`)
+        // Contoh fungsi render (Sesuaikan dengan data.json Anda)
+        fetch('path/ke/data.json')
             .then(res => res.json())
             .then(data => {
+                // Isi DOM dengan data
                 document.getElementById('cover-names').textContent = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
-                document.getElementById('guest-name').textContent = guest;
-                document.getElementById('cover-img').src = path + data.gallery.heroImage;
-                document.getElementById('monogram').textContent = `${data.couple.groom.nickname.charAt(0)} & ${data.couple.bride.nickname.charAt(0)}`;
+                // Tambahkan logika render untuk groom-box, bride-box, gallery, dan events di sini...
             });
-
-        function openInvitation() {
-            gsap.to("#cover", { y: "-100%", duration: 1.2, ease: "power4.inOut", onComplete: () => {
-                document.getElementById('cover').style.display = 'none';
-                document.getElementById('app').style.opacity = '1';
-            }});
-        }
     </script>
 </body>
 </html>
