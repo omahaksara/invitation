@@ -34,19 +34,19 @@
             -webkit-font-smoothing: antialiased;
         }
 
-    .font-serif { font-family: 'Cormorant Garamond', serif; }
-    .font-arab { font-family: 'Scheherazade New', serif; }
+       .font-serif { font-family: 'Cormorant Garamond', serif; }
+       .font-arab { font-family: 'Scheherazade New', serif; }
 
-    .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+       .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+       .reveal.active { opacity: 1; transform: translateY(0); }
 
-    .line-draw { width: 0%; height: 1px; background: var(--theme-color); opacity: 0.3; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); margin: 2rem auto; }
-    .reveal.active.line-draw { width: 2rem; }
+       .line-draw { width: 0%; height: 1px; background: var(--theme-color); opacity: 0.3; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); margin: 2rem auto; }
+       .reveal.active.line-draw { width: 2rem; }
 
         #cover { transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.8s; }
-    .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
+       .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
 
-    .btn-open {
+       .btn-open {
             border: 1px solid rgba(255,255,255,0.25);
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(15px);
@@ -57,9 +57,10 @@
             text-transform: uppercase;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-    .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
+       .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
+       .btn-open:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .phone-wrapper {
+       .phone-wrapper {
             max-width: 425px;
             margin: 0 auto;
             background: var(--white-soft);
@@ -68,7 +69,7 @@
             min-height: 100vh;
         }
 
-    .editorial-frame {
+       .editorial-frame {
             position: relative;
             width: 80%;
             aspect-ratio: 3/4;
@@ -78,17 +79,17 @@
             border: 1px solid rgba(0,0,0,0.03);
             background: #f0ebe1;
         }
-    .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
-    .editorial-frame:hover img { transform: scale(1.06); }
+       .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
+       .editorial-frame:hover img { transform: scale(1.06); }
 
-    .arch-mask { border-radius: 200px 200px 0 0; }
+       .arch-mask { border-radius: 200px 200px 0 0; }
 
-    .timeline-card {
+       .timeline-card {
             position: relative;
             padding-left: 28px;
             border-left: 1px solid var(--soft-color);
         }
-    .timeline-card::before {
+       .timeline-card::before {
             content: '';
             position: absolute;
             left: -3px;
@@ -99,7 +100,7 @@
             background: var(--theme-color);
         }
 
-    .btn-editorial {
+       .btn-editorial {
             display: inline-block;
             border: 1px solid var(--theme-color);
             color: var(--theme-color);
@@ -110,9 +111,9 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             background: transparent;
         }
-    .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
+       .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
 
-    .music-disk-box {
+       .music-disk-box {
             position: fixed;
             bottom: 35px;
             right: calc(50% - 190px);
@@ -125,7 +126,7 @@
         }
         @media (max-width: 435px) {.music-disk-box { right: 25px; } }
 
-    .disk-text-wrap {
+       .disk-text-wrap {
             width: 52px;
             height: 52px;
             background: rgba(255, 255, 255, 0.9);
@@ -137,8 +138,10 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             animation: rotateDisk 8s linear infinite;
         }
-    .disk-text-wrap.paused { animation-play-state: paused; }
+       .disk-text-wrap.paused { animation-play-state: paused; }
         @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+       .honeypot { position: absolute; left: -9999px; }
     </style>
 </head>
 
@@ -150,15 +153,17 @@
     <div class="cover-gradient absolute inset-0"></div>
 
     <div class="relative z-10 text-center text-white px-8 max-w-sm">
+        <p id="islamic-greeting" class="font-arab text-xl mb-4 opacity-70 hidden">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
         <p class="font-serif italic text-lg tracking-wide mb-3 opacity-70">Undangan Pernikahan</p>
-        <h1 id="cover-names" class="font-serif text-5xl font-light mb-12 tracking-wide leading-tight"></h1>
+        <h1 id="cover-names" class="font-serif text-5xl font-light mb-12 tracking-wide leading-tight">Memuat...</h1>
 
-        <div class="h- w-12 bg-white/20 mx-auto mb-10"></div>
+        <div class="h-px w-12 bg-white/20 mx-auto mb-10"></div>
 
-        <p class="uppercase tracking-[0.4em] text- mb-2.5 text-stone-400 font-medium">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+        <p class="uppercase tracking-[0.4em] text-xs mb-2.5 text-stone-400 font-medium">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
         <h2 id="cover-guest" class="font-serif text-2xl font-light tracking-wide text-stone-200 mb-14"></h2>
 
         <button id="open-btn" class="btn-open">Buka Undangan</button>
+        <p id="cover-error" class="text-xs text-red-300 mt-4 hidden"></p>
     </div>
 </section>
 
@@ -171,7 +176,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-black/10"></div>
         <div class="relative z-10 text-center w-full">
             <p class="font-serif italic text-xl text-stone-600 mb-2">Pernikahan</p>
-            <div class="h- w-10 bg-stone-300 mx-auto mb-6"></div>
+            <div class="h-px w-10 bg-stone-300 mx-auto mb-6"></div>
             <h2 id="hero-names" class="font-serif text-5xl font-light tracking-wide text-[var(--text-color)]"></h2>
         </div>
     </section>
@@ -181,7 +186,7 @@
         <p id="quote-arab" class="font-arab text-3xl mb-10 text-[var(--theme-color)] leading-loose tracking-wide"></p>
         <p id="quote-text" class="font-serif italic text-lg text-stone-700 font-light leading-relaxed"></p>
         <div class="line-draw"></div>
-        <p id="quote-source" class="text- uppercase tracking-[0.35em] font-medium text-stone-400"></p>
+        <p id="quote-source" class="text-xs uppercase tracking-[0.35em] font-medium text-stone-400"></p>
     </section>
 
     <!-- COUPLE -->
@@ -195,33 +200,33 @@
 
     <!-- STORY -->
     <section id="story-section" class="py-28 bg-white hidden">
-        <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Kisah Kami</p>
+        <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Kisah Kami</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-20 tracking-wide">Perjalanan Cinta</h3>
         <div id="story-list" class="px-10 space-y-12"></div>
     </section>
 
     <!-- EVENTS -->
     <section id="event-section" class="py-28 px-8 border-t border-stone-200/50 hidden">
-        <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Waktu & Tempat</p>
+        <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Waktu & Tempat</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Rangkaian Acara</h3>
         <div id="event-list" class="space-y-4"></div>
 
         <div id="countdown-wrap" class="mt-20 pt-14 border-t border-dashed border-stone-300/60 hidden text-center">
-            <p class="uppercase tracking-[0.3em] text- font-medium mb-8 text-stone-400">Menuju Hari Bahagia</p>
+            <p class="uppercase tracking-[0.3em] text-xs font-medium mb-8 text-stone-400">Menuju Hari Bahagia</p>
             <div id="countdown" class="flex justify-center gap-6"></div>
         </div>
     </section>
 
     <!-- GALLERY -->
     <section id="gallery-section" class="py-28 px-6 bg-[#FBFBFA] border-t border-stone-100 hidden">
-        <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Galeri</p>
+        <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Galeri</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Momen Bahagia</h3>
         <div id="gallery-grid" class="grid grid-cols-2 gap-2"></div>
     </section>
 
     <!-- RSVP -->
     <section id="rsvp-section" class="py-28 px-10 bg-[var(--theme-color)] text-white text-center hidden">
-        <p class="text- uppercase tracking-[0.4em] text-stone-300/80 mb-3">Konfirmasi</p>
+        <p class="text-xs uppercase tracking-[0.4em] text-stone-300/80 mb-3">Konfirmasi</p>
         <h3 class="font-serif text-4xl font-light tracking-wide mb-8">Konfirmasi Kehadiran</h3>
         <p id="guest-note" class="text-xs font-light tracking-wide text-stone-200/90 mb-12 max-w-xs mx-auto leading-relaxed"></p>
         <a id="rsvp-link" target="_blank" class="btn-open inline-block text-[var(--text-color)] font-medium border-none px-12 shadow-md bg-white">
@@ -232,20 +237,22 @@
     <!-- WISHES -->
     <section id="wishes-section" class="py-28 px-10 bg-[#FDFDFB] border-t border-stone-200/50">
         <div class="text-center mb-12 reveal">
-            <p class="text- uppercase tracking-[0.4em] text-stone-400 mb-2">Ucapan & Doa</p>
+            <p class="text-xs uppercase tracking-[0.4em] text-stone-400 mb-2">Ucapan & Doa</p>
             <h3 class="font-serif font-light text-3xl text-[var(--text-color)] tracking-wide">Doa Restu</h3>
         </div>
 
         <form id="wishes-form" class="space-y-5 text-left bg-stone-50 p-6 border border-stone-200/60 rounded-sm reveal">
             <p class="font-serif text-lg text-[var(--text-color)] font-light border-b border-stone-200 pb-3 tracking-wide">Kirim Ucapan Doa</p>
 
+            <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off">
+
             <div class="space-y-1.5">
-                <label class="text- uppercase tracking-wider font-medium text-stone-500">Nama Lengkap</label>
+                <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Nama Lengkap</label>
                 <input type="text" id="wish-name" required class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors">
             </div>
 
             <div class="space-y-1.5">
-                <label class="text- uppercase tracking-wider font-medium text-stone-500">Konfirmasi Kehadiran</label>
+                <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Konfirmasi Kehadiran</label>
                 <select id="wish-status" class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors">
                     <option value="Hadir">Hadir</option>
                     <option value="Tidak Hadir">Tidak Hadir / Berhalangan</option>
@@ -253,7 +260,7 @@
             </div>
 
             <div class="space-y-1.5">
-                <label class="text- uppercase tracking-wider font-medium text-stone-500">Jumlah Tamu</label>
+                <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Jumlah Tamu</label>
                 <select id="wish-pax" class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors">
                     <option value="1">1 Orang</option>
                     <option value="2">2 Orang</option>
@@ -261,7 +268,7 @@
             </div>
 
             <div class="space-y-1.5">
-                <label class="text- uppercase tracking-wider font-medium text-stone-500">Ucapan / Doa</label>
+                <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Ucapan / Doa</label>
                 <textarea id="wish-message" rows="4" required class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors resize-none" placeholder="Tuliskan doa restu Anda..."></textarea>
             </div>
 
@@ -271,7 +278,7 @@
         </form>
 
         <div class="mt-16 space-y-4">
-            <p class="text- uppercase tracking-[0.4em] font-medium text-stone-400 text-left reveal">Ucapan & Doa</p>
+            <p class="text-xs uppercase tracking-[0.4em] font-medium text-stone-400 text-left reveal">Ucapan & Doa</p>
             <div id="wishes-box" class="space-y-3 max-h- overflow-y-auto pr-1"></div>
         </div>
     </section>
@@ -280,7 +287,8 @@
     <footer class="py-28 bg-[#111411] text-white text-center px-8">
         <p class="font-serif italic text-lg text-stone-400 mb-6">Terima Kasih</p>
         <h2 id="footer-names" class="font-serif text-4xl font-light tracking-widest text-stone-200 mb-12"></h2>
-        <div class="h- w-8 bg-stone-700 mx-auto mb-8"></div>
+        <div class="h-px w-8 bg-stone-700 mx-auto mb-8"></div>
+        <p id="footer-note" class="text-xs text-stone-400 font-light leading-relaxed max-w-xs mx-auto mb-8"></p>
         <p class="text- uppercase tracking-[0.6em] text-stone-500 font-mono">Dibuat oleh Omah Aksara Digital Studio</p>
     </footer>
 
@@ -295,95 +303,43 @@
                 <textPath href="#textPath"> • SENANDUNG AKSARA • GENDING RAMPAK </textPath>
             </text>
         </svg>
-        <i id="music-icon-state" class="fa-solid fa-play absolute text- text-stone-600"></i>
+        <i id="music-icon-state" class="fa-solid fa-play absolute text-xs text-stone-600"></i>
     </div>
 </div>
 
 <audio id="audio" loop></audio>
 
-  <script>
-        const params = new URLSearchParams(window.location.search);
-        const slug = params.get('c') || 'budi-ani'; 
-        const guest = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
-        const path = `../../public/clients/${slug}/`;
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('c') || 'budi-ani';
+    const guest = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+    const basePath = `../../public/clients/${slug}/`;
 
-        // TAUTAN BINDING APPS SCRIPT ANDA (100% SINKRON DUA ARAH)
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+    let invitationData = null;
+    let countdownInterval = null;
 
-        // ENGINE AMBIL DATA FROM SHEETS (doGet Adaptor)
-        function loadGoogleSheetsWishes() {
-            const wishesBox = document.getElementById('wishes-box');
-            if (!wishesBox) return;
+    document.getElementById('cover-guest').textContent = guest;
 
-            wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa dari Google Sheets...</p>`;
+    function loadGoogleSheetsWishes() {
+        const wishesBox = document.getElementById('wishes-box');
+        if (!wishesBox) return;
 
-            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
-            .then(res => res.json())
-            .then(wishes => {
-                wishesBox.innerHTML = '';
+        wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Memuat ucapan...</p>`;
 
-                if (!wishes || wishes.length === 0) {
-                    wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic">Belum ada ucapan tertulis. Berikan doa restu pertama Anda.</p>`;
-                    return;
-                }
+        fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
+       .then(res => res.json())
+       .then(wishes => {
+            wishesBox.innerHTML = '';
 
-                wishes.forEach(wish => {
-                    const badgeColor = wish.kehadiran === 'Hadir' 
-                        ? 'bg-stone-100 text-stone-600 border border-stone-200' 
-                        : 'bg-stone-50 text-stone-400 border border-stone-100';
-
-                    let displayTime = '';
-                    if(wish.timestamp) {
-                        const dateObj = new Date(wish.timestamp);
-                        displayTime = isNaN(dateObj) ? wish.timestamp : dateObj.toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
-                    }
-
-                    wishesBox.innerHTML += `
-                        <div class="p-4 bg-stone-50/60 border border-stone-200/40 rounded space-y-1 text-left">
-                            <div class="flex items-center justify-between">
-                                <p class="text-xs font-semibold text-stone-800">${wish.nama}</p>
-                                <span class="text-[7px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${badgeColor}">${wish.kehadiran}</span>
-                            </div>
-                            <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line">${wish.ucapan}</p>
-                            <p class="text-[8px] text-stone-400 font-mono text-right pt-1">${displayTime}</p>
-                        </div>`;
-                });
-            })
-            .catch(err => {
-                console.error("Gagal sinkronisasi data:", err);
-                wishesBox.innerHTML = `<p class="text-[9px] text-red-400/80 text-center py-4 font-light italic">Gagal memuat arsip ucapan online.</p>`;
-            });
-        }
-
-        // LOAD MASTER JSON ENGINE
-        fetch(`${path}data.json`).then(res => res.json()).then(data => {
-            const pair = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
-            
-            document.getElementById('cover-names').textContent = pair;
-            document.getElementById('footer-names').textContent = pair;
-            document.getElementById('guest-name').textContent = guest;
-            document.getElementById('ticket-guest-name').textContent = guest;
-            document.getElementById('cover-img').src = path + data.gallery.heroImage;
-            document.getElementById('quote-text').textContent = data.quote.text;
-            document.getElementById('quote-source').textContent = data.quote.source;
-            
-            if(data.settings.islami) {
-                document.getElementById('islamic-greeting').classList.remove('hidden');
+            if (!wishes || wishes.length === 0) {
+                wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic">Belum ada ucapan tertulis. Jadilah yang pertama.</p>`;
+                return;
             }
-
-            if(data.logistics && data.logistics.guestNote) {
-                document.getElementById('footer-note').textContent = data.logistics.guestNote;
-                document.getElementById('guest-note').textContent = data.logistics.guestNote;
-            }
-
-            // Set Meta RSVP WhatsApp Link fallback
-            if(data.logistics && data.logistics.rsvpWaNumber) {
-                document.getElementById('rsvp-link').href = `https://wa.me/${data.logistics.rsvpWaNumber}?text=Berkah%20Dalem,%20saya%20${encodeURIComponent(guest)}%20bermaksud%20konfirmasi%20kehadiran.`;
-}
 
             wishes.forEach(wish => {
                 const badgeColor = wish.kehadiran === 'Hadir'
-                ? 'bg-stone-100 text-stone-600 border border-stone-200'
+                   ? 'bg-stone-100 text-stone-600 border border-stone-200'
                     : 'bg-stone-50 text-stone-400 border border-stone-100';
 
                 let displayTime = '';
@@ -407,10 +363,48 @@
                 setTimeout(() => el.classList.add('active'), 100);
             });
         })
-    .catch(err => {
+       .catch(err => {
             console.error("Gagal sinkronisasi data:", err);
-            wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal memuat ucapan. Periksa koneksi atau Apps Script.</p>`;
+            wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal memuat ucapan.</p>`;
         });
+    }
+
+    function initCountdown(events) {
+        if (!events?.length) return;
+
+        const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00`).getTime();
+        const now = new Date().getTime();
+
+        if (now > targetTime) {
+            document.getElementById('countdown-wrap').classList.add('hidden');
+            return;
+        }
+
+        document.getElementById('countdown-wrap').classList.remove('hidden');
+
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetTime - now;
+
+            if (diff <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = `<p class="font-serif text-2xl text-stone-700">Acara Sedang Berlangsung</p>`;
+                return;
+            }
+
+            const d = Math.floor(diff / (1000*60*60*24));
+            const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const s = Math.floor((diff % (1000*60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = `
+                <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${d}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Hari</span></div>
+                <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${h}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Jam</span></div>
+                <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${m}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Menit</span></div>
+                <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${s}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Detik</span></div>`;
+        }, 1000);
     }
 
     function bindOpenButton() {
@@ -418,17 +412,17 @@
             const cover = document.getElementById('cover');
             cover.style.transform = 'translateY(-100%)';
             cover.style.opacity = '0';
+            setTimeout(() => cover.style.display = 'none', 1800);
             document.getElementById('app').style.opacity = '1';
 
-            const logistics = invitationData?.logistics;
-            if(logistics?.music) {
+            if(invitationData?.logistics?.music) {
                 const audio = document.getElementById('audio');
                 const diskWrap = document.getElementById('disk-wrap');
                 const stateIcon = document.getElementById('music-icon-state');
 
-                audio.src = basePath + logistics.music;
+                audio.src = basePath + invitationData.logistics.music;
                 audio.play().then(() => {
-                    stateIcon.className = "fa-solid fa-pause text- text-stone-600";
+                    stateIcon.className = "fa-solid fa-pause text-xs text-stone-600";
                 }).catch(() => {});
 
                 const musicBtn = document.getElementById('music-btn');
@@ -438,11 +432,11 @@
                     if(audio.paused) {
                         audio.play();
                         diskWrap.classList.remove('paused');
-                        stateIcon.className = "fa-solid fa-pause text- text-stone-600";
+                        stateIcon.className = "fa-solid fa-pause text-xs text-stone-600";
                     } else {
                         audio.pause();
                         diskWrap.classList.add('paused');
-                        stateIcon.className = "fa-solid fa-play text- text-stone-600";
+                        stateIcon.className = "fa-solid fa-play text-xs text-stone-600";
                     }
                 };
             }
@@ -455,11 +449,11 @@
     }
 
     fetch(`${basePath}data.json`)
-.then(res => {
-        if(!res.ok) throw new Error(`data.json tidak ditemukan di: ${basePath}data.json`);
+   .then(res => {
+        if(!res.ok) throw new Error(`data.json tidak ditemukan`);
         return res.json();
     })
-.then(data => {
+   .then(data => {
         invitationData = data;
         const { couple, settings, events, gallery, loveStory, quote, logistics } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
@@ -478,11 +472,11 @@
 
         if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
         if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
+        if(settings?.islami) document.getElementById('islamic-greeting').classList.remove('hidden');
 
         document.getElementById('cover-names').innerText = pairNick;
         document.getElementById('hero-names').innerText = pairNick;
         document.getElementById('footer-names').innerText = pairNick;
-        document.getElementById('cover-guest').innerText = guestName;
         document.getElementById('hero-image').src = basePath + gallery.heroImage;
 
         if(quote?.text) {
@@ -492,30 +486,32 @@
         }
 
         document.getElementById('groom-section').innerHTML = `
-            <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.groom.image}"></div>
+            <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.groom.image}" loading="lazy"></div>
             <div class="mt-8 text-left pl-4 reveal">
-                <p class="uppercase tracking-[0.4em] text- mb-3 text-stone-400 font-medium">Mempelai Pria</p>
+                <p class="uppercase tracking-[0.4em] text-xs mb-3 text-stone-400 font-medium">Mempelai Pria</p>
                 <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${couple.groom.name}</h4>
                 <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra dari Bapak ${couple.groom.father} & Ibu ${couple.groom.mother}</p>
-                ${couple.groom.instagram? `<a href="https://instagram.com/${couple.groom.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text- tracking-[0.3em] uppercase font-medium text-amber-700/80"><i class="fa-brands fa-instagram mr-1"></i>${couple.groom.instagram}</a>` : ''}
+                ${couple.groom.instagram? `<a href="https://instagram.com/${couple.groom.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-xs tracking-[0.3em] uppercase font-medium text-amber-700/80"><i class="fa-brands fa-instagram mr-1"></i>${couple.groom.instagram}</a>` : ''}
             </div>`;
 
         document.getElementById('bride-section').innerHTML = `
-            <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.bride.image}"></div>
+            <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.bride.image}" loading="lazy"></div>
             <div class="mt-8 text-right pr-4 reveal">
-                <p class="uppercase tracking-[0.4em] text- mb-3 text-stone-400 font-medium">Mempelai Wanita</p>
+                <p class="uppercase tracking-[0.4em] text-xs mb-3 text-stone-400 font-medium">Mempelai Wanita</p>
                 <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${couple.bride.name}</h4>
                 <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putri dari Bapak ${couple.bride.father} & Ibu ${couple.bride.mother}</p>
-                ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text- tracking-[0.3em] uppercase font-medium text-amber-700/80">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-1"></i></a>` : ''}
+                ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-xs tracking-[0.3em] uppercase font-medium text-amber-700/80">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-1"></i></a>` : ''}
             </div>`;
 
         if(events?.length) {
             document.getElementById('event-section').classList.remove('hidden');
+            const eventList = document.getElementById('event-list');
+            eventList.innerHTML = '';
             events.forEach(ev => {
-                document.getElementById('event-list').innerHTML += `
+                eventList.innerHTML += `
                     <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
                         <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5>
-                        <p class="text- uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text-xs uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
                         <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
                             <p class="font-mono">${ev.startTime} — ${ev.endTime} ${ev.timezone || 'WIB'}</p>
                             <p class="pt-2 px-2 font-serif text-sm text-stone-600 italic leading-relaxed">${ev.address}</p>
@@ -523,30 +519,17 @@
                         <a href="${ev.googleMaps}" target="_blank" class="btn-editorial">Lihat Lokasi</a>
                     </div>`;
             });
-
-            const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00`).getTime();
-            setInterval(() => {
-                const now = new Date().getTime();
-                const diff = targetTime - now;
-                const d = Math.max(0, Math.floor(diff / (1000*60*60*24)));
-                const h = Math.max(0, Math.floor((diff % (1000*60*60*24)) / (1000*60*60)));
-                const m = Math.max(0, Math.floor((diff % (1000*60*60)) / (1000*60)));
-                const s = Math.max(0, Math.floor((diff % (1000*60)) / 1000));
-                document.getElementById('countdown').innerHTML = `
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${d}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Hari</span></div>
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${h}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Jam</span></div>
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${m}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Menit</span></div>
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${s}</span><span class="text- text-stone-400 font-medium uppercase tracking-widest mt-1 block">Detik</span></div>`;
-            }, 1000);
-            document.getElementById('countdown-wrap').classList.remove('hidden');
+            initCountdown(events);
         }
 
         if(loveStory?.length) {
             document.getElementById('story-section').classList.remove('hidden');
+            const storyList = document.getElementById('story-list');
+            storyList.innerHTML = '';
             loveStory.forEach(ls => {
-                document.getElementById('story-list').innerHTML += `
+                storyList.innerHTML += `
                     <div class="timeline-card reveal">
-                        <p class="text- font-mono tracking-widest text-amber-700/80 mb-1">${ls.date || ls.year}</p>
+                        <p class="text-xs font-mono tracking-widest text-amber-700/80 mb-1">${ls.date || ls.year}</p>
                         <h6 class="font-serif text-xl font-light text-stone-800 mb-2 tracking-wide">${ls.title}</h6>
                         <p class="text-xs text-stone-500 font-light leading-relaxed italic">${ls.description}</p>
                     </div>`;
@@ -555,26 +538,37 @@
 
         if(gallery?.album?.length) {
             document.getElementById('gallery-section').classList.remove('hidden');
+            const galleryGrid = document.getElementById('gallery-grid');
+            galleryGrid.innerHTML = '';
             gallery.album.forEach(img => {
-                document.getElementById('gallery-grid').innerHTML += `<img src="${basePath + img}" class="reveal shadow-sm hover:opacity-95 transition-opacity w-full h-auto" loading="lazy">`;
+                galleryGrid.innerHTML += `<img src="${basePath + img}" class="reveal shadow-sm hover:opacity-95 transition-opacity w-full h-auto" loading="lazy">`;
             });
         }
 
         if(logistics?.rsvpWaNumber) {
             document.getElementById('rsvp-section').classList.remove('hidden');
             document.getElementById('guest-note').innerText = logistics.guestNote || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.';
-            document.getElementById('rsvp-link').href = `https://wa.me/${logistics.rsvpWaNumber}?text=Dengan%20hormat,%20saya%20${encodeURIComponent(guestName)}%20ingin%20mengonfirmasi%20kehadiran.`;
+            document.getElementById('rsvp-link').href = `https://wa.me/${logistics.rsvpWaNumber}?text=Assalamu'alaikum,%20saya%20${encodeURIComponent(guest)}%20ingin%20mengonfirmasi%20kehadiran.`;
+            document.getElementById('footer-note').innerText = logistics.guestNote || '';
         }
+
+        bindOpenButton();
+        loadGoogleSheetsWishes();
     })
-.catch(err => {
+   .catch(err => {
         console.error("Gagal memuat data.json:", err);
-        document.getElementById('cover-names').innerText = 'Undangan Digital';
-        document.getElementById('cover-guest').innerText = guestName;
+        document.getElementById('cover-names').innerText = 'Gagal Memuat';
+        document.getElementById('cover-error').innerText = 'File data.json tidak ditemukan. Periksa path folder.';
+        document.getElementById('cover-error').classList.remove('hidden');
+        document.getElementById('open-btn').innerText = 'Muat Ulang';
+        document.getElementById('open-btn').onclick = () => location.reload();
     });
 
-    // FORM SUBMIT - COMPATIBLE DENGAN APPS SCRIPT LAMA
     document.getElementById('wishes-form').addEventListener('submit', function(e) {
         e.preventDefault();
+
+        // Honeypot check
+        if (this.website.value) return;
 
         const nameInput = document.getElementById('wish-name').value.trim();
         const messageInput = document.getElementById('wish-message').value.trim();
@@ -584,7 +578,7 @@
         if(!nameInput ||!messageInput) return;
 
         const payload = {
-            id_klien: clientSlug,
+            id_klien: slug,
             nama: nameInput,
             ucapan: messageInput,
             kehadiran: statusSelect,
@@ -596,35 +590,15 @@
         submitBtn.innerText = "Mengirim...";
         submitBtn.disabled = true;
 
-        // PENTING: Pakai text/plain biar Apps Script lama bisa baca
         fetch(SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         })
-    .then(res => res.json())
-    .then(data => {
+       .then(res => res.json())
+       .then(data => {
             if(data.status === 'success') {
                 document.getElementById('wish-message').value = '';
-                alert('Terima kasih! Ucapan dan doa Anda telah berhasil dikirim.');
-                setTimeout(loadGoogleSheetsWishes, 1000);
-            } else {
-                throw new Error(data.message || 'Gagal');
-            }
-        })
-    .catch(err => {
-            console.error(err);
-            alert('Gagal mengirim konfirmasi. Silakan coba lagi atau hubungi kami.');
-        })
-    .finally(() => {
-            submitBtn.innerText = originalBtnText;
-            submitBtn.disabled = false;
-        });
-    });
-
-    loadGoogleSheetsWishes();
-    bindOpenButton();
-</script>
-
-</body>
-</html>
+                document.getElementById('wish-name').value = '';
+                alert('Terima kasih! Ucapan Anda berhasil dikirim.');
+                setTimeout(load
