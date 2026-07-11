@@ -8,17 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --theme-color: #5A6955; --bg-color: #F7F5F0; --text-color: #242923; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { background: var(--bg-color); color: var(--text-color); font-family: 'Montserrat', sans-serif; overflow-x: hidden; line-height: 1.8; }
-     .font-serif { font-family: 'Cormorant Garamond', serif; }
-     .font-arab { font-family: 'Scheherazade New', serif; }
-     .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
-     .reveal.active { opacity: 1; transform: translateY(0); }
-     .phone-wrapper { max-width: 425px; margin: 0 auto; background: #FDFDFB; box-shadow: 0 40px 100px rgba(0,0,0,0.04); position: relative; min-height: 100vh; }
-     .btn-editorial { display: inline-block; border: 1px solid var(--theme-color); color: var(--theme-color); padding: 14px 38px; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; transition: all 0.5s; background: transparent; cursor: pointer; }
-     .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
-     .btn-editorial:disabled { opacity: 0.5; cursor: not-allowed; }
+ .font-serif { font-family: 'Cormorant Garamond', serif; }
+ .font-arab { font-family: 'Scheherazade New', serif; }
+ .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+ .reveal.active { opacity: 1; transform: translateY(0); }
+ .phone-wrapper { max-width: 425px; margin: 0 auto; background: #FDFDFB; box-shadow: 0 40px 100px rgba(0,0,0,0.04); position: relative; min-height: 100vh; }
+ .btn-editorial { display: inline-block; border: 1px solid var(--theme-color); color: var(--theme-color); padding: 14px 38px; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; transition: all 0.5s; background: transparent; cursor: pointer; }
+ .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
+ .btn-editorial:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 
@@ -81,12 +81,10 @@
 
         <form id="wishes-form" class="space-y-5 text-left bg-stone-50 p-6 border border-stone-200/60 rounded-sm reveal">
             <p class="font-serif text-lg text-[var(--text-color)] font-light border-b border-stone-200 pb-3 tracking-wide">Kirim Doa Restu</p>
-
             <div class="space-y-1.5">
                 <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Nama Lengkap</label>
                 <input type="text" id="wish-name" required class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors">
             </div>
-
             <div class="space-y-1.5">
                 <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Konfirmasi Kehadiran</label>
                 <select id="wish-status" class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors">
@@ -94,20 +92,19 @@
                     <option value="Tidak Hadir">Tidak Hadir</option>
                 </select>
             </div>
-
             <div class="space-y-1.5">
                 <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Jumlah</label>
                 <select id="wish-pax" class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors">
                     <option value="1">1 Orang</option>
                     <option value="2">2 Orang</option>
+                    <option value="3">3 Orang</option>
+                    <option value="4">4 Orang</option>
                 </select>
             </div>
-
             <div class="space-y-1.5">
                 <label class="text-xs uppercase tracking-wider font-medium text-stone-500">Ucapan</label>
                 <textarea id="wish-message" rows="4" required class="w-full p-3 bg-white border border-stone-200 rounded-sm text-xs focus:outline-none focus:border-[var(--theme-color)] transition-colors resize-none" placeholder="Mohon doa restu"></textarea>
             </div>
-
             <button type="submit" class="btn-editorial w-full text-center py-3.5">Kirim</button>
         </form>
 
@@ -128,8 +125,8 @@
 </main>
 
 <script>
-    // ===== CONFIG - UDAH DIPASANG URL KAMU =====
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfJn1JLJHjwisZJNiQuvROesFuVEZfkq6xlrGSZU0HF0lsE4G0DRNtlQbbHvh3SS70eg/exec;
+    // ===== CONFIG - UDAH PAKE URL APPS SCRIPT KAMU =====
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4p9v8We69uVViQht2hB2N4Kc5CVoiMD4wRhKOI5zVKFdIL_LIpJ6CSlljDyEKHOAnaQ/exec';
     const params = new URLSearchParams(window.location.search);
     const ID_KLIEN = params.get('c') || 'budi-ani';
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
@@ -138,47 +135,27 @@
     document.getElementById('cover-guest').textContent = guestName;
 
     // ===== LOAD DATA.JSON =====
-    fetch(`${basePath}data.json`)
-.then(res => {
-        if(!res.ok) throw new Error('data.json tidak ditemukan');
+    fetch(`${basePath}data.json`).then(res => {
+        if(!res.ok) throw new Error('data.json tidak ditemukan di ' + basePath);
         return res.json();
-    })
-.then(data => {
+    }).then(data => {
         const pair = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
         document.getElementById('cover-names').textContent = pair;
         document.getElementById('hero-names').textContent = pair;
         document.getElementById('footer-names').textContent = pair;
-
         if(data.quote?.text) {
             document.getElementById('quote-arab').textContent = data.quote.arab || '';
             document.getElementById('quote-text').innerHTML = `“${data.quote.text}”`;
             document.getElementById('quote-source').textContent = data.quote.source || '';
         }
-
-        document.getElementById('groom-section').innerHTML = `
-            <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${data.couple.groom.name}</h4>
-            <p class="text-xs text-stone-500 font-light leading-relaxed">Putra Bapak ${data.couple.groom.father} dan Ibu ${data.couple.groom.mother}</p>`;
-
-        document.getElementById('bride-section').innerHTML = `
-            <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${data.couple.bride.name}</h4>
-            <p class="text-xs text-stone-500 font-light leading-relaxed">Putri Bapak ${data.couple.bride.father} dan Ibu ${data.couple.bride.mother}</p>`;
-
+        document.getElementById('groom-section').innerHTML = `<h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${data.couple.groom.name}</h4><p class="text-xs text-stone-500 font-light leading-relaxed">Putra Bapak ${data.couple.groom.father} dan Ibu ${data.couple.groom.mother}</p>`;
+        document.getElementById('bride-section').innerHTML = `<h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${data.couple.bride.name}</h4><p class="text-xs text-stone-500 font-light leading-relaxed">Putri Bapak ${data.couple.bride.father} dan Ibu ${data.couple.bride.mother}</p>`;
         if(data.events?.length) {
             document.getElementById('event-section').classList.remove('hidden');
             data.events.forEach(ev => {
-                document.getElementById('event-list').innerHTML += `
-                    <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
-                        <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5>
-                        <p class="text-xs uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
-                        <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
-                            <p class="font-mono">Pukul ${ev.startTime} — ${ev.endTime} ${ev.timezone || 'WIB'}</p>
-                            <p class="pt-2 px-2 font-serif text-sm text-stone-600 leading-relaxed">Bertempat di ${ev.address}</p>
-                        </div>
-                        <a href="${ev.googleMaps}" target="_blank" class="btn-editorial">Penunjuk Lokasi</a>
-                    </div>`;
+                document.getElementById('event-list').innerHTML += `<div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal"><h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5><p class="text-xs uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p><div class="text-xs font-light text-stone-500 space-y-1 mb-6"><p class="font-mono">Pukul ${ev.startTime} — ${ev.endTime} ${ev.timezone || 'WIB'}</p><p class="pt-2 px-2 font-serif text-sm text-stone-600 leading-relaxed">Bertempat di ${ev.address}</p></div><a href="${ev.googleMaps}" target="_blank" class="btn-editorial">Penunjuk Lokasi</a></div>`;
             });
         }
-
         document.getElementById('open-btn').onclick = () => {
             document.getElementById('cover').style.transform = 'translateY(-100%)';
             document.getElementById('app').style.opacity = '1';
@@ -187,19 +164,17 @@
             }, { threshold: 0.08 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
-    })
-.catch(err => {
+    }).catch(err => {
         console.error("Gagal load data.json:", err);
         document.getElementById('cover-names').textContent = 'Data Belum Termuat';
     });
 
-    // ===== KIRIM UCAPAN - ANTI CORS PAKE TEXT/PLAIN =====
+    // ===== KIRIM UCAPAN =====
     document.getElementById('wishes-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = this.querySelector('button');
         btn.disabled = true;
         btn.textContent = 'Mengirim...';
-
         const payload = {
             idKlien: ID_KLIEN,
             nama: document.getElementById('wish-name').value,
@@ -207,30 +182,25 @@
             hadir: document.getElementById('wish-status').value,
             pax: parseInt(document.getElementById('wish-pax').value)
         };
-
         fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {'Content-Type': 'text/plain;charset=utf-8'},
             body: JSON.stringify(payload),
             mode: 'no-cors'
-        })
-     .then(() => {
+        }).then(() => {
             alert('Terima kasih. Ucapan Anda telah kami terima.');
             this.reset();
-            setTimeout(loadUcapan, 1500);
-        })
-     .catch(() => alert('Gagal terhubung. Periksa koneksi internet Anda.'))
-     .finally(() => {
+            setTimeout(loadUcapan, 2000);
+        }).catch(() => alert('Gagal terhubung.')).finally(() => {
             btn.disabled = false;
             btn.textContent = 'Kirim';
         });
     });
 
-    // ===== AMBIL UCAPAN - ANTI CORS PAKE JSONP =====
+    // ===== AMBIL UCAPAN - AUTO TAMPILIN RIWAYAT =====
     function loadUcapan() {
         const list = document.getElementById('wishes-box');
         list.innerHTML = '<p class="text-xs text-center text-stone-400">Memuat data...</p>';
-
         const callbackName = 'jsonp_' + Date.now();
         window[callbackName] = function(data) {
             list.innerHTML = '';
@@ -239,36 +209,18 @@
                 cleanup();
                 return;
             }
-
             data.forEach(item => {
-                const badge = item.hadir === 'Hadir'
-              ? '<span class="text- px-2 py-0.5 bg-green-100 text-green-700 rounded">Hadir</span>'
-                    : '<span class="text- px-2 py-0.5 bg-stone-100 text-stone-500 rounded">Tidak Hadir</span>';
-
-                const waktu = new Date(item.waktu).toLocaleDateString('id-ID', {
-                    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-                });
-
-                list.innerHTML += `
-                    <div class="border border-stone-200/40 p-4 rounded-sm space-y-1 text-left reveal">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-medium text-stone-800">${item.nama}</p>
-                            ${badge}
-                        </div>
-                        <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line pt-1">${item.ucapan}</p>
-                        <p class="text- text-stone-400 font-mono text-right pt-2">${waktu} • ${item.pax} orang</p>
-                    </div>`;
+                const badge = item.hadir === 'Hadir'? '<span class="text- px-2 py-0.5 bg-green-100 text-green-700 rounded">Hadir</span>' : '<span class="text- px-2 py-0.5 bg-stone-100 text-stone-500 rounded">Tidak Hadir</span>';
+                const waktu = new Date(item.waktu).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
+                list.innerHTML += `<div class="border border-stone-200/40 p-4 rounded-sm space-y-1 text-left reveal"><div class="flex items-center justify-between"><p class="text-xs font-medium text-stone-800">${item.nama}</p>${badge}</div><p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line pt-1">${item.ucapan}</p><p class="text- text-stone-400 font-mono text-right pt-2">${waktu} • ${item.pax} orang</p></div>`;
             });
-
             document.querySelectorAll('#wishes-box.reveal').forEach(el => el.classList.add('active'));
             cleanup();
         };
-
         function cleanup() {
             delete window[callbackName];
             if (script.parentNode) script.parentNode.removeChild(script);
         }
-
         const script = document.createElement('script');
         script.src = `${SCRIPT_URL}?c=${ID_KLIEN}&callback=${callbackName}&_=${Date.now()}`;
         script.onerror = () => {
