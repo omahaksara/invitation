@@ -85,25 +85,32 @@
   },
   "loveStory": [
     {
-      "date": "Januari 2023",
-      "year": "2023",
-      "title": "Pertama Bertemu",
-      "description": "Dipertemukan dalam satu ruang lingkup kerja yang sama. Awalnya hanya rekan, lama-lama jadi nyaman.",
+      "date": "Awal Perjalanan",
+      "year": "2026",
+      "title": "Awal Kisah",
+      "description": "Tidak ada yang terjadi secara kebetulan di dunia. Semua sudah diatur dengan sangat indah oleh Allah SWT. Kami tidak pernah menyangka bermula dari sapaan di ruang digital serta pertemuan sederhana menjadi awal sebuah perjalanan panjang yang membawa kami sampai di titik ini.",
       "image": "foto1.jpg"
     },
     {
-      "date": "14 Februari 2024",
-      "year": "2024",
-      "title": "Lamaran",
-      "description": "Dengan restu kedua orang tua, kami mengikat janji untuk ke jenjang yang lebih serius.",
+      "date": "Proses Bertumbuh",
+      "year": "2026",
+      "title": "Saling Bertumbuh",
+      "description": "Perjalanan kami tidak selalu dipenuhi tawa. Kami 2 insan yang sama-sama pernah melewati hubungan panjang yang tidak berakhir di pelaminan. Dari pengalaman tersebut, kami belajar tentang kesabaran, keikhlasan dan arti menemukan orang yang tepat. Terkadang Allah tidak mempertemukan kita dengan orang yang cepat, tetapi dengan orang yang tepat pada waktu yang paling indah.",
       "image": "foto2.jpg"
     },
     {
-      "date": "12 November 2026",
+      "date": "Januari 2026",
       "year": "2026",
-      "title": "Menuju Halal",
-      "description": "Bismillah, kami siap menempuh hidup baru bersama dalam ikatan suci pernikahan.",
+      "title": "Lamaran",
+      "description": "Perjalanan dua insan ini bukan tanpa ujian dan cerita. Namun setiap proses yang dilewati justru membawa kami semakin yakin satu sama lain. Sampai pada akhirnya, pada Januari 2026 kami dipertemukan dalam sebuah ikatan yang penuh doa dan restu keluarga.",
       "image": "foto3.jpg"
+    },
+    {
+      "date": "Masa Depan",
+      "year": "2026",
+      "title": "Awal Selamanya",
+      "description": "Kami percaya, bukan karena bertemu lalu berjodoh. Tetapi karena berjodohlah, maka Allah mempertemukan dua insan dengan cara terbaik-Nya. Pernikahan ini bukan akhir dari kisah kami, melainkan awal dari perjalanan panjang yang akan kami tulis bersama hingga akhir. Apa yang menjadi takdirmu, akan menemukan jalannya untuk menemukanmu.",
+      "image": "foto4.jpg"
     }
   ],
   "gallery": {
