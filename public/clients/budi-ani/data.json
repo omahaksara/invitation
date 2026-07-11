@@ -1,7 +1,7 @@
 {
   "meta": {
     "slug": "budi-ani",
-    "template": "elegance-motion",
+    "template": "royal",
     "status": "published",
     "domain": "",
     "customUrl": ""
@@ -9,6 +9,7 @@
   "settings": {
     "islami": true,
     "themeColor": "#6b0505",
+    "bgColor": "#fdfbf7",
     "coupleFrame": "polaroid",
     "autoColor": true,
     "showCountdown": true,
@@ -20,7 +21,7 @@
     "musicAutoplay": false
   },
   "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec",
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec",
     "shortUrl": "",
     "website": ""
   },
@@ -80,7 +81,7 @@
   ],
   "countdown": {
     "targetDate": "2026-11-12T08:00:00+07:00",
-    "backgroundImage": "bg-countdown.jpg"
+    "backgroundImage": ""
   },
   "loveStory": [
     {
@@ -88,51 +89,49 @@
       "year": "2023",
       "title": "Pertama Bertemu",
       "description": "Dipertemukan dalam satu ruang lingkup kerja yang sama. Awalnya hanya rekan, lama-lama jadi nyaman.",
-      "image": "story1.jpg"
+      "image": "foto1.jpg"
     },
     {
       "date": "14 Februari 2024",
       "year": "2024",
       "title": "Lamaran",
       "description": "Dengan restu kedua orang tua, kami mengikat janji untuk ke jenjang yang lebih serius.",
-      "image": "story2.jpg"
+      "image": "foto2.jpg"
     },
     {
       "date": "12 November 2026",
       "year": "2026",
       "title": "Menuju Halal",
       "description": "Bismillah, kami siap menempuh hidup baru bersama dalam ikatan suci pernikahan.",
-      "image": "story3.jpg"
+      "image": "foto3.jpg"
     }
   ],
   "gallery": {
     "heroImage": "foto-sampul.jpg",
-    "coverImage": "foto-cover.jpg",
+    "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
     "album": [
       "foto1.jpg",
       "foto2.jpg",
       "foto3.jpg",
-      "foto4.jpg",
-      "foto5.jpg",
-      "foto6.jpg"
+      "foto4.jpg"
     ]
   },
   "digitalGift": {
-    "qris": "qris-budi-ani.jpg",
+    "qris": "qr-bca.jpg",
     "accounts": [
       {
         "provider": "Bank BCA",
         "accountNumber": "1234567890",
         "accountHolder": "Budi Santoso",
-        "logo": "bca.png"
+        "logo": "qr-bca.jpg"
       },
       {
         "provider": "Bank Mandiri",
         "accountNumber": "0987654321",
         "accountHolder": "Ani Wijaya",
-        "logo": "mandiri.png"
+        "logo": "qr-mandiri.png"
       }
     ],
     "address": "Jl. Mawar No. 123, Jakarta Selatan 12345",
