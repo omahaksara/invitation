@@ -2,7 +2,7 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title id="page-title">Undangan Pernikahan Digital</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -129,7 +129,7 @@
      .disk-text-wrap {
             width: 52px;
             height: 52px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 0.9);
             border: 1px solid var(--soft-color);
             border-radius: 50%;
             display: flex;
@@ -188,7 +188,7 @@
 
     <!-- QUOTE -->
     <section class="px-10 py-28 text-center reveal">
-        <p id="quote-arab" class="font-arab text-3xl mb-10 text-[var(--theme-color)] leading-loose tracking-wide"></p>
+        <p id="quote-arab" class="font-arab text-3xl mb-10 text-[var(--theme-color)] leading-loose tracking-wide hidden"></p>
         <p id="quote-text" class="font-serif italic text-lg text-stone-700 font-light leading-relaxed"></p>
         <div class="h- w-8 bg-[var(--theme-color)]/30 mx-auto mt-8 mb-4 line-draw"></div>
         <p id="quote-source" class="text- uppercase tracking-[0.35em] font-medium text-stone-400"></p>
@@ -237,7 +237,7 @@
         </a>
     </section>
 
-    <!-- WISHES SECTION - SUDAH DISINKRONKAN -->
+    <!-- WISHES SECTION - UDAH DISINKRONKAN -->
     <section id="wishes-section" class="py-28 px-8 bg-[#FDFDFB] border-t border-stone-200/50">
         <div class="text-center mb-12 reveal">
             <p class="text- uppercase tracking-[0.4em] text-stone-400 mb-2">Buku Tamu Digital</p>
@@ -283,7 +283,7 @@
         <div class="mt-16 space-y-4">
             <p class="text- uppercase tracking-[0.4em] font-medium text-stone-400 text-left reveal">Ucapan Doa & Restu</p>
             <div id="wishes-box" class="space-y-3 max-h- overflow-y-auto pr-1"></div>
-            <button id="load-more" class="w-full text- text-stone-500 py-3 border-stone-300 rounded-sm hover:bg-stone-50 hidden">Muat Lebih Banyak</button>
+            <button id="load-more" class="w-full text- text-stone-500 py-3 border border-stone-300 rounded-sm hover:bg-stone-50 hidden">Muat Lebih Banyak</button>
         </div>
     </section>
 
@@ -418,7 +418,7 @@
             document.getElementById('event-section').classList.remove('hidden');
             events.forEach(ev => {
                 document.getElementById('event-list').innerHTML += `
-                    <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
+                    <div class="bg-white border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
                         <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5>
                         <p class="text- uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
                         <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
@@ -455,17 +455,17 @@
                     timestamp: new Date().toISOString()
                 })
             })
-     .then(() => {
+    .then(() => {
                 document.getElementById('wish-message').value = '';
                 document.getElementById('wish-name').value = '';
                 showToast('Terima kasih! Ucapan Anda telah berhasil dikirim!');
                 setTimeout(loadGoogleSheetsWishes, 2000);
             })
-     .catch(err => {
+    .catch(err => {
                 console.error(err);
                 showToast('Gagal mengirim. Silakan coba lagi.', true);
             })
-     .finally(() => {
+    .finally(() => {
                 submitBtn.innerText = 'Kirim Konfirmasi Kehadiran';
                 submitBtn.disabled = false;
             });
@@ -525,13 +525,13 @@
         wishesBox.innerHTML = `<p class="text- text-stone-500 text-center py-4 font-light italic animate-pulse">Memuat data ucapan...</p>`;
 
         fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
- .then(res => res.json())
- .then(wishes => {
+.then(res => res.json())
+.then(wishes => {
             allWishes = wishes || [];
             currentPage = 1;
             renderWishes();
         })
- .catch(err => {
+.catch(err => {
             wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Sistem gagal memuat data ucapan.</p>`;
         });
     }
@@ -552,7 +552,7 @@
 
         wishesToShow.forEach(wish => {
             const badgeColor = wish.kehadiran === 'Hadir'
-       ? 'bg-stone-700 text-stone-200 border-stone-600'
+      ? 'bg-stone-700 text-stone-200 border-stone-600'
                 : 'bg-stone-800 text-stone-500 border-stone-700';
             let displayTime = wish.timestamp? new Date(wish.timestamp).toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
 
