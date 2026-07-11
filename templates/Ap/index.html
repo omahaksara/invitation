@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Undangan Pernikahan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --theme-color: #6b0505; --bg-color: #fdfbf7; }
+        body { background: var(--bg-color); font-family: sans-serif; }
+        .phone-wrapper { max-width: 450px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
 
+<main id="app" class="phone-wrapper flex flex-col items-center justify-center p-6 text-center">
+    <!-- Konten akan dimuat oleh JavaScript -->
+    <div id="content">
+        <h1 class="text-2xl font-bold">Memuat Undangan...</h1>
+    </div>
+</main>
+
+<script>
+    // Pastikan data.json berada di folder yang sama dengan file ini
+    fetch('data.json')
+    .then(response => {
+        if (!response.ok) throw new Error('File data.json tidak ditemukan!');
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('content').innerHTML = `
+            <img src="${data.gallery.coverImage}" class="w-32 h-32 rounded-full mx-auto mb-4 border-2">
+            <h2 class="text-3xl font-serif">${data.couple.groom.nickname} & ${data.couple.bride.nickname}</h2>
+            <p class="mt-4 text-gray-600">${data.events[0].date}</p>
+            <button onclick="alert('Selamat Datang!')" class="mt-6 bg-[#6b0505] text-white px-6 py-2 rounded">Buka Undangan</button>
+        `;
+    })
+    .catch(error => {
+        document.getElementById('content').innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+        console.error('Error:', error);
+    });
+</script>
+
+</body>
+</html>
