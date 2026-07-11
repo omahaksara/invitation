@@ -317,6 +317,14 @@
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Orang Undangan';
     const basePath = `../../public/clients/${clientSlug}/`;
 
+    // GANTI DENGAN URL GOOGLE APPS SCRIPT KAMU
+    // PERBAIKAN: sebelumnya variabel ini TIDAK PERNAH dideklarasikan sama sekali
+    // di file ini. Jadi setiap kali kode menjalankan fetch(SCRIPT_URL...) atau
+    // submit form, langsung terjadi "ReferenceError: SCRIPT_URL is not defined"
+    // dan proses sinkronisasi berhenti diam-diam (biasanya baru kelihatan
+    // errornya di Console browser, tekan F12).
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+
     fetch(`${basePath}data.json`)
     .then(res => res.json())
     .then(data => {
@@ -425,7 +433,6 @@
         }
 
         // === FITUR KOMENTAR GOOGLE SHEETS ===
-        // TAUTAN BINDING APPS SCRIPT ANDA (100% SINKRON DUA ARAH)
         // ENGINE AMBIL DATA DARI SHEETS (doGet Adaptor)
         function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
@@ -433,7 +440,10 @@
 
             wishesBox.innerHTML = `<p class="text-[9px] text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa dari Google Sheets...</p>`;
 
-            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
+            // PERBAIKAN: sebelumnya di sini dipakai variabel "slug" yang tidak
+            // pernah dideklarasikan (typo dari "clientSlug"), sehingga request
+            // ke Google Sheets gagal sebelum sempat dikirim.
+            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
             .then(res => res.json())
             .then(wishes => {
                 wishesBox.innerHTML = '';
@@ -480,8 +490,9 @@
             btn.innerHTML = 'Sedang mengirim...';
             btn.disabled = true;
             
+            // PERBAIKAN: "slug" -> "clientSlug" (variabel yang benar-benar ada)
             const payload = {
-                id_klien: slug,
+                id_klien: clientSlug,
                 nama: document.getElementById('wish-name').value,
                 ucapan: document.getElementById('wish-message').value,
                 kehadiran: document.getElementById('wish-status').value,
@@ -508,6 +519,11 @@
                 btn.disabled = false;
             });
         });
+
+        // PERBAIKAN: sebelumnya loadGoogleSheetsWishes() tidak pernah dipanggil
+        // saat halaman pertama kali dibuka, jadi daftar ucapan tetap kosong
+        // sampai ada yang submit form baru. Sekarang dipanggil langsung di sini.
+        loadGoogleSheetsWishes();
 
         // Trigger Pembukaan Amplop Surat Undangan
         document.getElementById('open-btn').onclick = () => {
@@ -553,4 +569,3 @@
 
 </body>
 </html>
-
