@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Wedding of Budi & Ani</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --theme-color: #6b0505; --bg-color: #fdfbf7; --text-color: #242923; --soft-color: #E2D9CB; }
+        body { background: var(--bg-color); color: var(--text-color); font-family: 'Montserrat', sans-serif; }
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        .font-arab { font-family: 'Scheherazade New', serif; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .phone-wrapper { max-width: 450px; margin: 0 auto; background: var(--bg-color); min-height: 100vh; position: relative; }
+        .btn-open { background: var(--theme-color); color: white; padding: 15px 30px; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<!-- COVER -->
+<section id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#fdfbf7] text-center px-6">
+    <img id="cover-img" src="" class="w-40 h-40 rounded-full object-cover mb-8 border-4 border-stone-200">
+    <h1 class="font-serif text-4xl mb-4" id="main-title">Undangan Pernikahan</h1>
+    <h2 id="couple-names" class="text-xl mb-10 font-light">Budi & Ani</h2>
+    <button id="open-btn" class="btn-open">Buka Undangan</button>
+</section>
+
+<!-- MAIN APP -->
+<main id="app" class="phone-wrapper opacity-0 transition-opacity duration-1000">
+    
+    <!-- HERO -->
+    <section class="h-screen flex flex-col items-center justify-center text-center p-6">
+        <h2 class="font-serif text-5xl mb-4" id="hero-names">Budi & Ani</h2>
+        <p id="event-date" class="uppercase tracking-widest text-sm"></p>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="py-20 px-8 text-center reveal">
+        <p class="font-arab text-3xl mb-6 text-[var(--theme-color)]" id="q-arab"></p>
+        <p class="font-serif italic text-lg" id="q-text"></p>
+        <p class="text-xs uppercase mt-4 opacity-60" id="q-source"></p>
+    </section>
+
+    <!-- LOVE STORY -->
+    <section class="py-20 px-8 reveal">
+        <h3 class="font-serif text-3xl text-center mb-12">Kisah Kami</h3>
+        <div id="story-container" class="space-y-10"></div>
+    </section>
+
+    <!-- EVENTS -->
+    <section class="py-20 px-8 reveal bg-stone-100">
+        <h3 class="font-serif text-3xl text-center mb-12">Acara</h3>
+        <div id="event-container" class="space-y-8"></div>
+    </section>
+
+    <!-- GIFT -->
+    <section class="py-20 px-8 text-center reveal">
+        <h3 class="font-serif text-3xl mb-8">Amplop Digital</h3>
+        <div id="gift-container"></div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="py-20 px-8 reveal">
+        <h3 class="font-serif text-3xl text-center mb-8">Konfirmasi Kehadiran</h3>
+        <iframe id="rsvp-iframe" class="w-full h-[500px] border-0"></iframe>
+    </section>
+
+</main>
+
+<script>
+    // Load JSON Data
+    fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+        // Init UI
+        document.getElementById('cover-img').src = data.gallery.coverImage;
+        document.getElementById('couple-names').innerText = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+        document.getElementById('hero-names').innerText = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+        document.getElementById('event-date').innerText = data.events[0].date;
+        
+        // Quote
+        document.getElementById('q-arab').innerText = data.quote.arab;
+        document.getElementById('q-text').innerText = data.quote.text;
+        document.getElementById('q-source').innerText = data.quote.source;
+
+        // Love Story
+        const storyCont = document.getElementById('story-container');
+        data.loveStory.forEach(item => {
+            storyCont.innerHTML += `
+                <div class="border-l-2 border-[var(--theme-color)] pl-6">
+                    <p class="font-bold text-[var(--theme-color)]">${item.date}</p>
+                    <h4 class="font-serif text-xl">${item.title}</h4>
+                    <p class="text-sm italic">${item.description}</p>
+                </div>`;
+        });
+
+        // Events
+        const eventCont = document.getElementById('event-container');
+        data.events.forEach(ev => {
+            eventCont.innerHTML += `
+                <div class="bg-white p-6 shadow-sm">
+                    <h4 class="font-serif text-2xl">${ev.title}</h4>
+                    <p class="text-sm">${ev.date} | ${ev.startTime}</p>
+                    <p class="text-sm mt-2 font-light">${ev.address}</p>
+                </div>`;
+        });
+
+        // Gift
+        document.getElementById('gift-container').innerHTML = `<p>${data.digitalGift.receiver}</p><p class="font-bold">${data.digitalGift.accounts[0].accountNumber} - ${data.digitalGift.accounts[0].accountHolder}</p>`;
+        
+        // RSVP Link
+        document.getElementById('rsvp-iframe').src = data.link.apiUcapan;
+
+        // Open Button
+        document.getElementById('open-btn').onclick = () => {
+            document.getElementById('cover').style.display = 'none';
+            document.getElementById('app').style.opacity = '1';
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+        };
+    });
+</script>
+</body>
+</html>
