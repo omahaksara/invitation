@@ -1,227 +1,4 @@
-<!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Omah Aksara — Wedding Invitation</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --marun: #6b0505;
-            --gold: #c5a880;
-            --gold-light: #e5d5be;
-            --bg-vintage: #fdfbf7;
-        }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #f3f1ec;
-            color: #2d2d2d;
-            overflow-x: hidden;
-        }
-      .font-luxury { font-family: 'Cinzel', serif; }
-      .font-serif { font-family: 'Playfair Display', serif; }
-      .font-aesthetic { font-family: 'Dancing Script', cursive; }
-      .grain { position: fixed; inset: -100%; width: 300%; height: 300%; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png'); opacity:.025; pointer-events: none; z-index: 99; }
-      .polaroid {
-            background: #ffffff;
-            padding: 16px 16px 48px 16px;
-            box-shadow: 0 20px 40px rgba(43, 8, 8, 0.08), 0 1px 3px rgba(0,0,0,0.02);
-            transform: rotate(var(--rotation));
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            border: 1px solid rgba(197, 168, 128, 0.2);
-            position: relative;
-        }
-      .polaroid::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 1px solid rgba(0,0,0,0.02);
-            pointer-events: none;
-        }
-      .polaroid:hover { transform: rotate(0deg) scale(1.03); z-index: 10; box-shadow: 0 30px 60px rgba(43, 8, 8, 0.15); }
-      .polaroid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-      .polaroid-text { font-family: 'Dancing Script', cursive; color: var(--marun); text-align: center; margin-top: 16px; font-size: 1.35rem; }
-      .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1); }
-      .reveal.active { opacity: 1; transform: translateY(0); }
-      .btn-luxury {
-            background: linear-gradient(135deg, #7a0b0b, #540303);
-            color: #fcfaf6; padding: 16px 44px; border-radius: 2px;
-            font-size: 10px; letter-spacing: 4px; font-weight: 600; text-transform: uppercase;
-            box-shadow: 0 10px 25px rgba(107, 5, 5, 0.25);
-            border: 1px solid var(--gold);
-            transition: all 0.4s ease;
-        }
-      .btn-luxury:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(107, 5, 5, 0.35);
-            filter: brightness(1.1);
-        }
-      .luxury-ticket {
-            background: #ffffff;
-            border: 1px solid rgba(197, 168, 128, 0.4);
-            box-shadow: inset 0 0 40px rgba(197, 168, 128, 0.05), 0 10px 30px rgba(0,0,0,0.02);
-        }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      .spinning { animation: spin 10s linear infinite; }
-      .paused { animation-play-state: paused; }
-    </style>
-</head>
-<body class="antialiased flex justify-center selection:bg-amber-100">
-    <div class="grain"></div>
-
-    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center bg-[#fdfbf7] px-8 max-w-md mx-auto border-x border-stone-200/50">
-        <div class="space-y-1 mb-8">
-            <p class="uppercase tracking-[0.5em] text- text-stone-400 font-semibold">The Wedding Invitation</p>
-            <div class="w-8 h- bg-[#c5a880] mx-auto"></div>
-        </div>
-
-        <div class="polaroid mb-8" style="--rotation: -2deg; width: 270px;">
-            <img id="cover-img" src="" alt="Cover Photo">
-            <div class="polaroid-text">The Wedding of</div>
-        </div>
-
-        <h1 id="cover-names" class="font-luxury text-3xl font-normal text-stone-800 tracking-wide mb-8"></h1>
-
-        <div id="countdown-wrap" class="flex justify-center space-x-6 mb-12 border-y border-stone-200/60 py-3 w-full max-w-">
-            <div class="text-center"><span id="days" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text- uppercase tracking-widest text-stone-400 font-medium">Hari</span></div>
-            <div class="text-center"><span id="hours" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text- uppercase tracking-widest text-stone-400 font-medium">Jam</span></div>
-            <div class="text-center"><span id="minutes" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text- uppercase tracking-widest text-stone-400 font-medium">Menit</span></div>
-        </div>
-
-        <div class="mb-10 space-y-2">
-            <p class="text- text-stone-400 uppercase tracking-[.4em] font-medium">Katur Dhumateng Panjenengan:</p>
-            <div class="border border-dashed border-[#c5a880]/60 bg-stone-50/50 px-6 py-2.5 rounded">
-                <p id="guest-name" class="font-serif text-lg text-stone-800 italic font-medium"></p>
-            </div>
-        </div>
-
-        <button onclick="openInvitation()" class="btn-luxury">Buka Serat Ulem</button>
-    </div>
-
-    <main id="app" class="max-w-md w-full mx-auto opacity-0 bg-[#fdfbf7] shadow-2xl relative border-x border-stone-200/30 pb-16 space-y-28">
-
-        <section class="px-10 pt-28 text-center space-y-6">
-            <div id="islamic-greeting" class="text- tracking-widest text-stone-400 mb-6 font-bold uppercase hidden">Assalamu'alaikum Warahmatullahi Wabarakatuh</div>
-            <div class="w-6 h- bg-[#c5a880] mx-auto"></div>
-            <p id="quote-text" class="font-serif text-base italic leading-relaxed text-stone-600 font-light px-2"></p>
-            <p id="quote-source" class="text- uppercase tracking-[.3em] font-bold text-[#6b0505]"></p>
-        </section>
-
-        <section class="px-8 space-y-24">
-            <div class="text-center space-y-3">
-                <p class="text- tracking-[.5em] uppercase text-stone-400 font-bold">Mempelai Pasangan</p>
-                <h3 class="font-luxury text-2xl font-normal text-stone-800 tracking-wide">Saking Karsa-Mu</h3>
-                <p class="text-xs text-stone-500 font-light leading-relaxed max-w-xs mx-auto italic">Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan.</p>
-            </div>
-
-            <div id="groom-box" class="reveal flex flex-col items-center text-center"></div>
-            <div class="text-center font-aesthetic text-4xl text-[#c5a880]/60 my-4">and</div>
-            <div id="bride-box" class="reveal flex flex-col items-center text-center"></div>
-        </section>
-
-        <section id="love-story-section" class="px-6 space-y-12">
-            <div class="text-center space-y-1">
-                <p class="text- tracking-[.5em] uppercase text-stone-400 font-bold">Our Journey</p>
-                <h3 class="font-luxury text-2xl font-normal text-stone-800 tracking-wide">Reroncen Cariyos</h3>
-            </div>
-            <div id="gallery-grid" class="grid grid-cols-1 gap-14 place-items-center"></div>
-        </section>
-
-        <section class="py-20 px-6 bg-gradient-to-b from-[#5c0404] to-[#3a0101] text-stone-100 text-center space-y-12 relative">
-            <div class="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png')] opacity-5 pointer-events-none"></div>
-            <div class="space-y-1 relative z-10">
-                <h3 class="text- tracking-[.5em] uppercase text-[#c5a880] font-bold">The Celebration</h3>
-                <p class="font-luxury text-xl font-normal tracking-wide">Waktu & Papan Pasamuan</p>
-            </div>
-            <div id="event-list" class="space-y-16 relative z-10"></div>
-        </section>
-
-        <section id="rsvp-section" class="px-6 space-y-12">
-            <div class="text-center space-y-1">
-                <p class="text- tracking-[.5em] uppercase text-stone-400 font-bold">Reservation & Wishes</p>
-                <h3 class="font-luxury text-2xl font-normal text-stone-800 tracking-wide">Doa Restu & Karsa</h3>
-            </div>
-
-            <div class="luxury-ticket border border-[#c5a880]/50 rounded p-6 text-center shadow-sm space-y-5 relative overflow-hidden">
-                <div class="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#fdfbf7] rounded-full border-r border-[#c5a880]/30"></div>
-                <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#fdfbf7] rounded-full border-l border-[#c5a880]/30"></div>
-
-                <p class="text- font-mono tracking-[0.4em] uppercase text-[#c5a880] font-bold">Digital Pass Token</p>
-                <div class="py-3 border-y border-dashed border-stone-200">
-                    <p id="ticket-guest-name" class="font-serif text-lg text-stone-800 font-medium italic"></p>
-                    <p id="ticket-date" class="text- text-stone-400 font-medium uppercase tracking-widest mt-1.5"></p>
-                </div>
-                <p id="guest-note" class="text-xs text-stone-500 font-light leading-relaxed px-2 italic"></p>
-                <a id="rsvp-link" href="#" target="_blank" class="w-full block bg-stone-900 text-white py-3.5 text- uppercase tracking-[0.25em] font-medium hover:bg-stone-800 transition-colors border border-stone-700">
-                    Konfirmasi via WhatsApp
-                </a>
-            </div>
-
-            <form id="wishes-form" class="space-y-5 text-left bg-stone-50 p-6 border border-stone-200/60 rounded">
-                <p class="font-luxury text-sm text-stone-800 font-semibold border-b border-stone-200 pb-2.5 tracking-wider">Kirim Doa Restu Online</p>
-
-                <div class="space-y-1.5">
-                    <label class="text- uppercase tracking-wider font-semibold text-stone-500">Nama Lengkap</label>
-                    <input type="text" id="wish-name" required class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors">
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text- uppercase tracking-wider font-semibold text-stone-500">Konfirmasi Kehadiran</label>
-                    <select id="wish-status" class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors">
-                        <option value="Hadir">Hadir</option>
-                        <option value="Tidak Hadir">Tidak Hadir / Berhalangan</option>
-                    </select>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text- uppercase tracking-wider font-semibold text-stone-500">Jumlah Tamu</label>
-                    <select id="wish-pax" class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors">
-                        <option value="1">1 Orang</option>
-                        <option value="2">2 Orang</option>
-                        <option value="3">3 Orang</option>
-                        <option value="4">4 Orang</option>
-                    </select>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text- uppercase tracking-wider font-semibold text-stone-500">Serat Ucapan / Doa</label>
-                    <textarea id="wish-message" rows="4" required class="w-full p-3 bg-white border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 transition-colors resize-none" placeholder="Tulis ungkapan doa restu Anda..."></textarea>
-                </div>
-
-                <button type="submit" class="w-full bg-stone-900 text-white py-3.5 rounded text- uppercase tracking-[0.25em] font-medium hover:bg-stone-950 transition-colors border border-stone-800">
-                    Kirim Konfirmasi Online
-                </button>
-            </form>
-
-            <div class="space-y-3">
-                <p class="text- uppercase tracking-widest font-bold text-stone-400 text-left">Untaian Doa yang Mengalir</p>
-                <div id="wishes-box" class="space-y-3 max-h- overflow-y-auto pr-1"></div>
-            </div>
-        </section>
-
-        <footer class="py-24 text-center bg-white px-8 border-t border-stone-100">
-            <p id="footer-note" class="text-xs text-stone-400 font-light italic mb-8 leading-relaxed max-w-xs mx-auto"></p>
-            <p id="footer-names" class="font-luxury text-2xl font-normal text-stone-800 tracking-wide"></p>
-            <p class="text- tracking-[0.4em] text-stone-300 uppercase mt-10 font-medium">Digital Craftsmanship by Omah Aksara</p>
-        </footer>
-    </main>
-
-    <div id="music-btn" class="hidden fixed bottom-6 right-6 z-40">
-        <button id="disk-wrap" class="w-10 h-10 bg-white/90 backdrop-blur border border-stone-200/80 rounded-full shadow-lg flex items-center justify-center spinning">
-            <i id="music-icon-state" class="fa-solid fa-play text- text-stone-600"></i>
-        </button>
-    </div>
-    <audio id="audio" loop></audio>
-
-    <script>
+<script>
     // GLOBAL VARIABLE - AUTO UNTUK SEMUA KLIEN
     const params = new URLSearchParams(window.location.search);
     const clientSlug = params.get('c') || 'demo';
@@ -230,15 +7,23 @@
     let SCRIPT_URL = '';
     let dataGlobal = {};
 
+    console.log('[OMAH] Client:', clientSlug, '| Path:', path);
+
     // LOAD MASTER JSON - AUTO JALAN BUAT SEMUA KLIEN
     fetch(`${path}data.json`)
-  .then(res => {
-        if (!res.ok) throw new Error('data.json tidak ditemukan');
+.then(res => {
+        console.log('[OMAH] Fetch data.json status:', res.status);
+        if (!res.ok) throw new Error(`data.json tidak ditemukan di ${path}data.json`);
         return res.json();
     })
-  .then(data => {
+.then(data => {
         dataGlobal = data;
-        SCRIPT_URL = data.link.apiUcapan; // AMBIL DARI JSON OTOMATIS
+        SCRIPT_URL = data.link.apiUcapan;
+        console.log('[OMAH] SCRIPT_URL loaded:', SCRIPT_URL);
+
+        if(!SCRIPT_URL) {
+            throw new Error('link.apiUcapan kosong di data.json');
+        }
 
         // SET SEO
         document.getElementById('page-title').textContent = data.seo.title;
@@ -341,22 +126,27 @@
         }
 
     }).catch(err => {
-        console.error('Gagal load data.json:', err);
-        document.body.innerHTML = '<div class="text-center p-10 text-red-600">Gagal memuat undangan. Pastikan URL?c=nama-klien sudah benar.</div>';
+        console.error('[OMAH] Gagal load data.json:', err);
+        document.body.innerHTML = `<div class="text-center p-10 text-red-600">Gagal memuat undangan: ${err.message}<br><br>Pastikan:<br>1. URL?c=budi-ani sudah benar<br>2. Folder public/clients/budi-ani/data.json ada<br>3. Buka via Live Server, jangan file://</div>`;
     });
 
-    // LOAD UCAPAN FUNCTION - JSONP UNIVERSAL + FIX ERROR
+    // LOAD UCAPAN FUNCTION - JSONP UNIVERSAL + DEBUG
     function loadGoogleSheetsWishes() {
         const wishesBox = document.getElementById('wishes-box');
         if (!wishesBox ||!SCRIPT_URL) {
-            console.error('SCRIPT_URL kosong. Cek data.json -> link.apiUcapan');
+            console.error('[OMAH] SCRIPT_URL kosong. Cek data.json -> link.apiUcapan');
+            wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">API Ucapan belum dikonfigurasi</p>`;
             return;
         }
 
         wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa restu...</p>`;
 
         const callbackName = 'jsonp_wishes_' + Date.now();
+        const fullUrl = `${SCRIPT_URL}?c=${encodeURIComponent(clientSlug)}&callback=${callbackName}`;
+        console.log('[OMAH] Loading wishes from:', fullUrl);
+
         window[callbackName] = (wishes) => {
+            console.log('[OMAH] Wishes received:', wishes);
             wishesBox.innerHTML = '';
 
             if (!wishes || wishes.error) {
@@ -373,7 +163,7 @@
 
             wishes.forEach(wish => {
                 const badgeColor = wish.hadir === 'Hadir'
-              ? 'bg-stone-100 text-stone-600 border border-stone-200'
+             ? 'bg-stone-100 text-stone-600 border border-stone-200'
                   : 'bg-stone-50 text-stone-400 border border-stone-100';
 
                 let displayTime = '';
@@ -396,9 +186,10 @@
         };
 
         const script = document.createElement('script');
-        script.src = `${SCRIPT_URL}?c=${encodeURIComponent(clientSlug)}&callback=${callbackName}`;
+        script.src = fullUrl;
         script.onerror = () => {
-            wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal konek ke server ucapan. Cek URL API.</p>`;
+            console.error('[OMAH] JSONP failed to load:', fullUrl);
+            wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal konek ke server ucapan. Cek: 1) URL API bener 2) Deploy Anyone 3) Buka via Live Server</p>`;
             delete window[callbackName];
         };
         document.body.appendChild(script);
@@ -431,20 +222,22 @@
             return;
         }
 
+        console.log('[OMAH] Sending payload:', payload);
+
         try {
             const res = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // PENTING BIAR GAK CORS ERROR
+                mode: 'no-cors',
                 headers: {'Content-Type': 'text/plain;charset=utf-8'},
                 body: JSON.stringify(payload)
             });
-            // Karena no-cors, kita gak bisa baca response. Anggap sukses aja
+            console.log('[OMAH] POST sent, no-cors mode');
             alert('Matur nuwun, ucapan sudah terkirim!');
             e.target.reset();
-            setTimeout(() => loadGoogleSheetsWishes(), 2000); // tunggu 2 detik baru reload
+            setTimeout(() => loadGoogleSheetsWishes(), 2000);
         } catch(err) {
+            console.error('[OMAH] POST Error:', err);
             alert('Gagal kirim ucapan. Coba lagi.');
-            console.error(err);
         } finally {
             btn.disabled = false;
             btn.innerText = 'Kirim Konfirmasi Online';
@@ -487,6 +280,4 @@
             document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         }});
     }
-    </script>
-</body>
-</html>
+</script>
