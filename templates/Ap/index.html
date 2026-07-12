@@ -5,39 +5,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Undangan Pernikahan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root { --theme-color: #6b0505; --bg-color: #fdfbf7; }
-        body { background: var(--bg-color); font-family: sans-serif; }
-        .phone-wrapper { max-width: 450px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        body { background: var(--bg-color); font-family: 'Inter', sans-serif; color: #2d2d2d; }
+       .font-serif { font-family: 'Cormorant Garamond', serif; }
+       .phone-wrapper { max-width: 450px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+       .btn-primary { background: var(--theme-color); color: white; transition: 0.3s; }
+       .btn-primary:hover { opacity: 0.9; }
+       .reveal { opacity: 0; transform: translateY(20px); transition: all 1s ease; }
+       .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-<main id="app" class="phone-wrapper flex flex-col items-center justify-center p-6 text-center">
-    <!-- Konten akan dimuat oleh JavaScript -->
-    <div id="content">
-        <h1 class="text-2xl font-bold">Memuat Undangan...</h1>
+<main id="app" class="phone-wrapper">
+    <!-- Cover -->
+    <section id="cover" class="min-h-screen flex flex-col items-center justify-center p-8 text-center">
+        <div id="content-loading">
+            <h1 class="text-xl font-serif text-gray-500">Sedang Menyiapkan Undangan...</h1>
+        </div>
+
+        <div id="content-main" class="hidden w-full">
+            <p id="salam-islami" class="text-sm text-gray-600 mb-6 hidden">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+
+            <img id="cover-image" class="w-40 h-40 rounded-full mx-auto mb-6 border-4 border-white shadow-lg object-cover" src="" alt="Foto Sampul">
+
+            <p class="text-sm tracking-[0.3em] uppercase text-gray-500 mb-2">Undangan Pernikahan</p>
+            <h1 id="couple-names" class="text-4xl font-serif text-[var(--theme-color)] mb-8 leading-tight"></h1>
+
+            <div class="w-12 h-px bg-[var(--theme-color)]/30 mx-auto mb-8"></div>
+
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-500 mb-2">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+            <p id="guest-name" class="text-xl font-serif mb-10"></p>
+
+            <button onclick="bukaUndangan()" class="btn-primary px-8 py-3 text- tracking-[0.3em] uppercase font-medium rounded-sm">
+                Buka Sambutan
+            </button>
+        </div>
+    </section>
+
+    <!-- Isi Undangan -->
+    <div id="invitation-content" class="hidden">
+        <!-- Ayat / Quote -->
+        <section class="px-8 py-20 text-center border-b border-gray-100">
+            <p id="quote-arab" class="text-2xl mb-6 text-[var(--theme-color)] leading-loose" dir="rtl"></p>
+            <p id="quote-text" class="text-sm italic text-gray-600 leading-relaxed"></p>
+            <p id="quote-source" class="text- uppercase tracking-[0.3em] mt-4 font-medium text-gray-400"></p>
+        </section>
+
+        <!-- Mempelai -->
+        <section class="px-8 py-16 bg-gray-50">
+            <p class="text- tracking-[0.4em] uppercase text-center text-gray-500 mb-12">Mempelai</p>
+            <div id="groom-info" class="text-center mb-12"></div>
+            <div class="text-center font-serif text-2xl text-[var(--theme-color)] my-6">&</div>
+            <div id="bride-info" class="text-center"></div>
+        </section>
+
+        <!-- Acara -->
+        <section class="px-8 py-16 text-center">
+            <p class="text- tracking-[0.4em] uppercase text-gray-500 mb-12">Penyelenggaraan Acara</p>
+            <div id="event-list" class="space-y-10"></div>
+        </section>
+
+        <!-- RSVP & Ucapan -->
+        <section id="rsvp-section" class="px-8 py-16 bg-gray-50 hidden">
+            <p class="text- tracking-[0.4em] uppercase text-center text-gray-500 mb-8">Konfirmasi Kehadiran & Ucapan</p>
+            <form id="rsvp-form" class="space-y-4 text-left">
+                <input type="text" id="nama" placeholder="Nama Lengkap Anda" required class="w-full border border-gray-200 p-3 text-sm focus:outline-none focus:border-[var(--theme-color)]">
+                <select id="kehadiran" class="w-full border border-gray-200 p-3 text-sm focus:outline-none focus:border-[var(--theme-color)]">
+                    <option value="Hadir">InsyaAllah Hadir</option>
+                    <option value="Tidak Hadir">Mohon Maaf Tidak Dapat Hadir</option>
+                </select>
+                <select id="jumlah" class="w-full border border-gray-200 p-3 text-sm focus:outline-none focus:border-[var(--theme-color)]">
+                    <option value="1">1 Orang</option>
+                    <option value="2">2 Orang</option>
+                </select>
+                <textarea id="ucapan" placeholder="Tuliskan ucapan & doa restu" required rows="4" class="w-full border border-gray-200 p-3 text-sm focus:outline-none focus:border-[var(--theme-color)]"></textarea>
+                <button type="submit" class="btn-primary w-full py-3 text- tracking-[0.3em] uppercase">Kirim Konfirmasi</button>
+            </form>
+            <div id="ucapan-list" class="mt-12 space-y-4 max-h-80 overflow-y-auto"></div>
+        </section>
+
+        <!-- Penutup -->
+        <footer class="px-8 py-20 text-center">
+            <p class="text-xs text-gray-500 leading-relaxed mb-8">
+                Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
+            </p>
+            <p class="text-xs text-gray-500 mb-8">Atas kehadiran dan doa restunya, kami ucapkan terima kasih.</p>
+            <p class="text-2xl font-serif text-[var(--theme-color)]" id="footer-names"></p>
+            <p class="text- tracking-[0.4em] uppercase text-gray-300 mt-16">Omah Aksara Digital</p>
+        </footer>
     </div>
 </main>
 
 <script>
-    // Pastikan data.json berada di folder yang sama dengan file ini
-    fetch('data.json')
-    .then(response => {
-        if (!response.ok) throw new Error('File data.json tidak ditemukan!');
+    const params = new URLSearchParams(window.location.search);
+    const clientSlug = params.get('c') || 'demo';
+    const guestName = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+    const basePath = `../../public/clients/${clientSlug}/`;
+    let SCRIPT_URL = ''; // Ambil dari data.json
+
+    // FIX: Ambil data.json dari folder klien sesuai dokumentasi
+    fetch(`${basePath}data.json`)
+   .then(response => {
+        if (!response.ok) throw new Error('Data undangan tidak ditemukan. Mohon periksa kembali tautan Anda.');
         return response.json();
     })
-    .then(data => {
-        document.getElementById('content').innerHTML = `
-            <img src="${data.gallery.coverImage}" class="w-32 h-32 rounded-full mx-auto mb-4 border-2">
-            <h2 class="text-3xl font-serif">${data.couple.groom.nickname} & ${data.couple.bride.nickname}</h2>
-            <p class="mt-4 text-gray-600">${data.events[0].date}</p>
-            <button onclick="alert('Selamat Datang!')" class="mt-6 bg-[#6b0505] text-white px-6 py-2 rounded">Buka Undangan</button>
-        `;
+   .then(data => {
+        // FIX: Ambil SCRIPT_URL dari JSON sesuai aturan emas
+        if (data.link?.apiUcapan) SCRIPT_URL = data.link.apiUcapan;
+
+        // FIX: Apply themeColor dari settings
+        if (data.settings?.themeColor) document.documentElement.style.setProperty('--theme-color', data.settings.themeColor);
+        if (data.settings?.bgColor) document.documentElement.style.setProperty('--bg-color', data.settings.bgColor);
+
+        const pair = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+
+        // Cover
+        document.getElementById('couple-names').textContent = pair;
+        document.getElementById('guest-name').textContent = guestName;
+        document.getElementById('cover-image').src = basePath + encodeURIComponent(data.gallery.heroImage);
+        if (data.settings?.islami) document.getElementById('salam-islami').classList.remove('hidden');
+
+        // Quote
+        document.getElementById('quote-arab').textContent = data.quote?.arab || '';
+        document.getElementById('quote-text').textContent = `"${data.quote?.text || ''}"`;
+        document.getElementById('quote-source').textContent = data.quote?.source || '';
+
+        // Mempelai
+        const renderPerson = (p, el) => {
+            document.getElementById(el).innerHTML = `
+                <img src="${basePath + encodeURIComponent(p.image)}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-md">
+                <h3 class="text-2xl font-serif text-[var(--theme-color)]">${p.name}</h3>
+                <p class="text-xs text-gray-500 mt-2">${p.father} & ${p.mother}</p>
+            `;
+        };
+        renderPerson(data.couple.groom, 'groom-info');
+        renderPerson(data.couple.bride, 'bride-info');
+
+        // Acara
+        data.events.forEach(e => {
+            document.getElementById('event-list').innerHTML += `
+                <div>
+                    <p class="text- tracking-[0.3em] uppercase font-medium text-[var(--theme-color)] mb-2">${e.title}</p>
+                    <p class="text-lg font-semibold">${new Date(e.date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    <p class="text-sm text-gray-600 my-2">${e.startTime} - ${e.endTime} ${e.timezone}</p>
+                    <p class="text-xs text-gray-500 mb-4">${e.address}</p>
+                    <a href="${e.googleMaps}" target="_blank" class="text- tracking-[0.2em] uppercase border border-[var(--theme-color)] text-[var(--theme-color)] px-4 py-2 inline-block hover:bg-[var(--theme-color)] hover:text-white transition">Petunjuk Lokasi</a>
+                </div>
+            `;
+        });
+
+        document.getElementById('footer-names').textContent = pair;
+        document.getElementById('content-loading').classList.add('hidden');
+        document.getElementById('content-main').classList.remove('hidden');
+
+        // FIX: Tampilkan RSVP jika showUcapan true
+        if (data.settings?.showUcapan!== false && SCRIPT_URL) {
+            document.getElementById('rsvp-section').classList.remove('hidden');
+            loadUcapan();
+        }
     })
-    .catch(error => {
-        document.getElementById('content').innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+   .catch(error => {
+        document.getElementById('content-loading').innerHTML = `<p class="text-red-600 text-sm">Mohon maaf, terjadi kendala: ${error.message}</p>`;
         console.error('Error:', error);
+    });
+
+    function bukaUndangan() {
+        document.getElementById('cover').style.display = 'none';
+        document.getElementById('invitation-content').classList.remove('hidden');
+        window.scrollTo(0, 0);
+    }
+
+    // FIX: Fungsi RSVP sesuai dokumentasi
+    function loadUcapan() {
+        if (!SCRIPT_URL) return;
+        fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
+       .then(res => res.json())
+       .then(data => {
+            const box = document.getElementById('ucapan-list');
+            box.innerHTML = '';
+            if (!data.length) {
+                box.innerHTML = '<p class="text-xs text-gray-400 text-center">Belum ada ucapan yang masuk</p>';
+                return;
+            }
+            data.forEach(u => {
+                box.innerHTML += `
+                    <div class="bg-white p-4 border border-gray-100 text-left">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="font-semibold text-sm">${u.nama}</p>
+                            <span class="text- px-2 py-1 bg-[var(--theme-color)]/10 text-[var(--theme-color)]">${u.kehadiran}</span>
+                        </div>
+                        <p class="text-xs text-gray-600">${u.ucapan}</p>
+                    </div>
+                `;
+            });
+        }).catch(() => {});
+    }
+
+    document.getElementById('rsvp-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!SCRIPT_URL) return alert('Sistem ucapan belum dikonfigurasi');
+
+        const btn = e.target.querySelector('button');
+        btn.innerText = 'Mengirim...';
+        btn.disabled = true;
+
+        const payload = {
+            id_klien: clientSlug,
+            nama: document.getElementById('nama').value,
+            ucapan: document.getElementById('ucapan').value,
+            kehadiran: document.getElementById('kehadiran').value,
+            jumlah_tamu: parseInt(document.getElementById('jumlah').value)
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(payload)
+        }).then(() => {
+            btn.innerText = 'Terkirim ✓';
+            setTimeout(() => {
+                btn.innerText = 'Kirim Konfirmasi';
+                btn.disabled = false;
+            }, 2000);
+            loadUcapan();
+            e.target.reset();
+        }).catch(() => {
+            btn.innerText = 'Gagal, Coba Lagi';
+            btn.disabled = false;
+        });
     });
 </script>
 
