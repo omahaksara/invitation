@@ -7,12 +7,11 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- FIX: Update FA ke 6.5.1 biar icon gak kotak -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -27,11 +26,13 @@
             color: #2d2d2d;
             overflow-x: hidden;
         }
-      .font-luxury { font-family: 'Cinzel', serif; }
-      .font-serif { font-family: 'Playfair Display', serif; }
-      .font-aesthetic { font-family: 'Dancing Script', cursive; }
-      .grain { position: fixed; inset: -100%; width: 300%; height: 300%; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png'); opacity:.025; pointer-events: none; z-index: 99; }
-      .polaroid {
+     .font-luxury { font-family: 'Cinzel', serif; }
+     .font-serif { font-family: 'Playfair Display', serif; }
+     .font-aesthetic { font-family: 'Dancing Script', cursive; }
+      /* FIX 1: Font cover lebih mewah */
+     .font-cover-name { font-family: 'Great Vibes', cursive; }
+     .grain { position: fixed; inset: -100%; width: 300%; height: 300%; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png'); opacity:.025; pointer-events: none; z-index: 99; }
+     .polaroid {
             background: #ffffff;
             padding: 16px 16px 48px 16px;
             box-shadow: 0 20px 40px rgba(43, 8, 8, 0.08), 0 1px 3px rgba(0,0,0,0.02);
@@ -40,18 +41,18 @@
             border: 1px solid rgba(197, 168, 128, 0.2);
             position: relative;
         }
-      .polaroid::after {
+     .polaroid::after {
             content: '';
             position: absolute;
             inset: 0;
             border: 1px solid rgba(0,0,0,0.02);
             pointer-events: none;
         }
-      .polaroid:hover { transform: rotate(0deg) scale(1.03); z-index: 10; box-shadow: 0 30px 60px rgba(43, 8, 8, 0.15); }
-      .polaroid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-      .polaroid-text { font-family: 'Dancing Script', cursive; color: var(--marun); text-align: center; margin-top: 16px; font-size: 1.35rem; }
-      .reveal { opacity: 0; transform: translateY(40px); }
-      .btn-luxury {
+     .polaroid:hover { transform: rotate(0deg) scale(1.03); z-index: 10; box-shadow: 0 30px 60px rgba(43, 8, 8, 0.15); }
+     .polaroid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+     .polaroid-text { font-family: 'Dancing Script', cursive; color: var(--marun); text-align: center; margin-top: 16px; font-size: 1.35rem; }
+     .reveal { opacity: 0; transform: translateY(40px); }
+     .btn-luxury {
             background: linear-gradient(135deg, #7a0b0b, #540303);
             color: #fcfaf6; padding: 16px 44px; border-radius: 2px;
             font-size: 10px; letter-spacing: 4px; font-weight: 600; text-transform: uppercase;
@@ -59,45 +60,46 @@
             border: 1px solid var(--gold);
             transition: all 0.4s ease;
         }
-      .btn-luxury:hover {
+     .btn-luxury:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 30px rgba(107, 5, 5, 0.35);
             filter: brightness(1.1);
         }
-      .luxury-ticket {
+     .luxury-ticket {
             background: #ffffff;
             border: 1px solid rgba(197, 168, 128, 0.4);
             box-shadow: inset 0 0 40px rgba(197, 168, 128, 0.05), 0 10px 30px rgba(0,0,0,0.02);
         }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      .spinning { animation: spin 10s linear infinite; }
-      .paused { animation-play-state: paused; }
+     .spinning { animation: spin 10s linear infinite; }
+     .paused { animation-play-state: paused; }
     </style>
 </head>
 <body class="antialiased flex justify-center selection:bg-amber-100">
     <div class="grain"></div>
 
     <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center bg-[#fdfbf7] px-8 max-w-md mx-auto border-x border-stone-200/50">
-        <div class="space-y-1 mb-8">
+        <div class="space-y-1 mb-6">
             <p class="uppercase tracking-[0.5em] text- text-stone-400 font-semibold">Undangan Pernikahan</p>
             <div class="w-8 h-px bg-[#c5a880] mx-auto"></div>
         </div>
 
-        <div class="polaroid mb-8" style="--rotation: -2deg; width: 270px;">
+        <div class="polaroid mb-6" style="--rotation: -2deg; width: 270px;">
             <img id="cover-img" src="" alt="Foto Sampul">
             <div class="polaroid-text">The Wedding of</div>
         </div>
 
-        <h1 id="cover-names" class="font-luxury text-3xl font-normal text-stone-800 tracking-wide mb-8"></h1>
+        <!-- FIX 1: Font nama lebih mewah + size gede -->
+        <h1 id="cover-names" class="font-cover-name text-5xl font-normal text-stone-800 mb-6"></h1>
 
-        <!-- FIX: Countdown pake settings.showCountdown -->
-        <div id="countdown-cover" class="flex justify-center space-x-6 mb-12 border-y border-stone-200/60 py-3 w-full max-w-xs hidden">
+        <!-- FIX 2: Margin countdown dikecilin biar tombol naik -->
+        <div id="countdown-cover" class="flex justify-center space-x-6 mb-6 border-y border-stone-200/60 py-3 w-full max-w-xs hidden">
             <div class="text-center"><span id="days" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text- uppercase tracking-widest text-stone-400 font-medium">Hari</span></div>
             <div class="text-center"><span id="hours" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text- uppercase tracking-widest text-stone-400 font-medium">Jam</span></div>
             <div class="text-center"><span id="minutes" class="font-serif text-2xl font-light block text-stone-800">00</span><span class="text- uppercase tracking-widest text-stone-400 font-medium">Menit</span></div>
         </div>
 
-        <div class="mb-10 space-y-2">
+        <div class="mb-8 space-y-2">
             <p class="text- text-stone-400 uppercase tracking-[.4em] font-medium">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
             <div class="border border-dashed border-[#c5a880]/60 bg-stone-50/50 px-6 py-2.5 rounded">
                 <p id="guest-name" class="font-serif text-lg text-stone-800 italic font-medium"></p>
@@ -128,7 +130,6 @@
             <div id="bride-box" class="reveal flex flex-col items-center text-center"></div>
         </section>
 
-        <!-- FIX: Section Gallery pake settings.showLoveStory & showGallery -->
         <section id="story-section" class="px-6 space-y-12 hidden">
             <div class="text-center space-y-1">
                 <p class="text- tracking-[.5em] uppercase text-stone-400 font-bold">Perjalanan Kami</p>
@@ -146,7 +147,6 @@
             <div id="event-list" class="space-y-16 relative z-10"></div>
         </section>
 
-        <!-- FIX: Section Gift baru sesuai dokumentasi -->
         <section id="gift-section" class="px-8 py-20 text-center bg-[#faf9f6] space-y-8 hidden">
             <div class="space-y-2">
                 <p class="text- tracking-[.5em] uppercase text-stone-400 font-bold">Wedding Gift</p>
@@ -156,7 +156,6 @@
             <div id="gift-list" class="space-y-6"></div>
         </section>
 
-        <!-- FIX: Section RSVP baru sesuai dokumentasi -->
         <section id="rsvp-section" class="px-6 space-y-12 hidden">
             <div class="text-center space-y-1">
                 <p class="text- tracking-[.5em] uppercase text-stone-400 font-bold">Konfirmasi & Ucapan</p>
@@ -237,61 +236,65 @@
         const clientSlug = params.get('c') || 'budi-ani';
         const guestName = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
         const basePath = `../../public/clients/${clientSlug}/`;
-        // FIX: SCRIPT_URL default, tapi akan di-override dari data.json
         let SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
 
         function escapeHtml(text) {
             const div = document.createElement('div');
-            div.textContent = text;
+            div.textContent = text || '';
             return div.innerHTML;
         }
 
-        // FIX: Load ucapan dari Google Sheets
-        async function loadGoogleSheetsWishes() {
+        // FIX 3: Load ucapan pake JSONP biar gak kena CORS
+        function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
             if (!wishesBox) return;
-
             wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Memuat ucapan...</p>`;
 
-            try {
-                const response = await fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`);
-                if (!response.ok) throw new Error('Network error');
-                const wishes = await response.json();
-                wishesBox.innerHTML = '';
+            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+            window[callbackName] = function(data) {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                renderWishes(data);
+            };
 
-                if (!wishes || wishes.length === 0) {
-                    wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic">Belum ada ucapan. Jadilah yang pertama.</p>`;
-                    return;
-                }
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}&callback=${callbackName}`;
+            script.onerror = () => {
+                wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal memuat ucapan. Cek Apps Script.</p>`;
+            };
+            document.body.appendChild(script);
+        }
 
-                wishes.forEach(wish => {
-                    const badgeColor = wish.kehadiran === 'Hadir'? 'bg-green-100 text-green-700' : 'bg-stone-100 text-stone-500';
-                    let displayTime = wish.timestamp? new Date(wish.timestamp).toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
+        function renderWishes(wishes) {
+            const wishesBox = document.getElementById('wishes-box');
+            wishesBox.innerHTML = '';
 
-                    wishesBox.innerHTML += `
-                        <div class="p-4 bg-stone-50/60 border border-stone-200/40 rounded space-y-1 text-left">
-                            <div class="flex items-center justify-between">
-                                <p class="text-xs font-semibold text-stone-800">${escapeHtml(wish.nama)}</p>
-                                <span class="text- px-2 py-0.5 rounded font-bold uppercase tracking-wider ${badgeColor}">${escapeHtml(wish.kehadiran)}</span>
-                            </div>
-                            <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line">${escapeHtml(wish.ucapan)}</p>
-                            <p class="text- text-stone-400 font-mono text-right pt-1">${displayTime}</p>
-                        </div>`;
-                });
-            } catch (err) {
-                console.error("Gagal load ucapan:", err);
-                wishesBox.innerHTML = `<p class="text- text-red-400/80 text-center py-4 font-light italic">Gagal memuat ucapan.</p>`;
+            if (!wishes || wishes.length === 0) {
+                wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic">Belum ada ucapan. Jadilah yang pertama.</p>`;
+                return;
             }
+
+            wishes.forEach(wish => {
+                const badgeColor = wish.kehadiran === 'Hadir'? 'bg-green-100 text-green-700' : 'bg-stone-100 text-stone-500';
+                let displayTime = wish.timestamp? new Date(wish.timestamp).toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
+
+                wishesBox.innerHTML += `
+                    <div class="p-4 bg-stone-50/60 border border-stone-200/40 rounded space-y-1 text-left">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs font-semibold text-stone-800">${escapeHtml(wish.nama)}</p>
+                            <span class="text- px-2 py-0.5 rounded font-bold uppercase tracking-wider ${badgeColor}">${escapeHtml(wish.kehadiran)}</span>
+                        </div>
+                        <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line">${escapeHtml(wish.ucapan)}</p>
+                        <p class="text- text-stone-400 font-mono text-right pt-1">${displayTime}</p>
+                    </div>`;
+            });
         }
 
         fetch(`${basePath}data.json`).then(res => res.json()).then(data => {
             const { couple, settings, events, gallery, loveStory, quote, logistics, digitalGift, link, countdown } = data;
             const pair = `${couple.groom.nickname} & ${couple.bride.nickname}`;
 
-            // FIX: Ambil SCRIPT_URL dari data.json sesuai dokumentasi
             if (link?.apiUcapan) SCRIPT_URL = link.apiUcapan;
-
-            // FIX: Apply themeColor & bgColor dari settings
             if (settings?.themeColor) document.documentElement.style.setProperty('--marun', settings.themeColor);
             if (settings?.bgColor) document.documentElement.style.setProperty('--bg-vintage', settings.bgColor);
 
@@ -303,11 +306,10 @@
             document.getElementById('quote-text').textContent = quote.text;
             document.getElementById('quote-source').textContent = quote.source;
 
-            // FIX: Salam islami
             if (settings?.islami) document.getElementById('islamic-greeting').classList.remove('hidden');
 
-            // FIX: Countdown pake settings.showCountdown & targetDate ISO
-            if (settings?.showCountdown!== false) {
+            // FIX: Countdown default true kalau gak ada setting
+            if (settings?.showCountdown!== false && countdown?.targetDate) {
                 document.getElementById('countdown-cover').classList.remove('hidden');
                 const eventTime = new Date(countdown.targetDate).getTime();
                 setInterval(() => {
@@ -348,7 +350,6 @@
             renderCouple(data.couple.groom, 'groom-box', '1.5deg', 'Putra dari :');
             renderCouple(data.couple.bride, 'bride-box', '-1.5deg', 'Putri dari :');
 
-            // FIX: Gallery + LoveStory pake settings.showGallery & showLoveStory
             if (settings?.showLoveStory!== false && settings?.showGallery!== false && gallery?.album?.length) {
                 document.getElementById('story-section').classList.remove('hidden');
                 gallery.album.forEach((img, i) => {
@@ -377,7 +378,6 @@
                     </div>`;
             });
 
-            // FIX: Section Gift sesuai dokumentasi
             if (settings?.showGift!== false && digitalGift?.accounts?.length) {
                 document.getElementById('gift-section').classList.remove('hidden');
                 digitalGift.accounts.forEach(acc => {
@@ -391,22 +391,21 @@
                 });
             }
 
-            // FIX: Section RSVP sesuai dokumentasi
             if (settings?.showUcapan!== false) {
                 document.getElementById('rsvp-section').classList.remove('hidden');
                 loadGoogleSheetsWishes();
             }
 
-            // FIX: Music autoplay sesuai settings
             if (logistics?.music) {
                 document.getElementById('audio').src = basePath + encodeURIComponent(logistics.music);
                 if (settings?.musicAutoplay) {
                     document.getElementById('audio').play().catch(() => {});
                 }
             }
+        }).catch(err => {
+            console.error('Gagal load data.json:', err);
         });
 
-        // FIX: Submit form ke Google Sheets
         document.getElementById('wishes-form')?.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
@@ -424,6 +423,7 @@
             };
 
             try {
+                // POST tetap pake no-cors karena Apps Script
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
