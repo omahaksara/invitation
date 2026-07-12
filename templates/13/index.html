@@ -8,11 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
@@ -148,37 +147,10 @@
         }
        .disk-text-wrap.paused { animation-play-state: paused; }
         @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* TOAST NOTIF */
-       .toast {
-            position: fixed;
-            top: 24px; left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            z-index: 200;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-       .toast.show { transform: translateX(-50%) translateY(0); }
-
-        /* COLOR PALETTE DOTS */
-       .color-dot {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: inline-block;
-        }
     </style>
 </head>
 
 <body>
-
-<!-- TOAST -->
-<div id="toast" class="toast bg-white px-6 py-4 rounded-full shadow-2xl border border-stone-200 max-w-sm">
-    <div class="flex items-center gap-3">
-        <i class="fa-solid fa-circle-check text-green-500"></i>
-        <p id="toast-msg" class="text-xs font-medium text-stone-700"></p>
-    </div>
-</div>
 
 <!-- LUXURY COVER LAYER -->
 <section id="cover" class="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#111411]">
@@ -244,7 +216,7 @@
         <div id="story-list" class="px-10 space-y-12"></div>
     </section>
 
-    <!-- SASMITA ACARA / EVENTS + EMBED MAPS + LIVE STREAMING -->
+    <!-- SASMITA ACARA / EVENTS -->
     <section id="event-section" class="py-28 px-8 border-t border-stone-200/50 hidden">
         <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Jadwal Acara</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Detail Acara</h3>
@@ -257,44 +229,11 @@
         </div>
     </section>
 
-    <!-- DRESS CODE & COLOR PALETTE -->
-    <section id="dresscode-section" class="py-24 px-8 bg-[#FBFBFA] text-center hidden">
-        <p class="text- uppercase tracking-[0.4em] text-stone-400 mb-2">Dress Code</p>
-        <h3 class="font-serif font-light text-3xl text-[var(--text-color)] mb-8 tracking-wide">Attire</h3>
-        <p id="dresscode-text" class="font-serif text-xl text-stone-700 mb-8"></p>
-        <div id="color-palette" class="flex justify-center gap-3"></div>
-    </section>
-
-    <!-- BOUTIQUE GALLERY MASONRY + VIDEO/GIF -->
+    <!-- BOUTIQUE GALLERY MASONRY -->
     <section id="gallery-section" class="py-28 px-6 bg-[#FBFBFA] border-t border-stone-100 hidden">
         <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Dokumentasi</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Galeri Foto</h3>
-
-        <!-- VIDEO/GIF CONTAINER -->
-        <div id="video-container" class="mb-8 rounded-2xl overflow-hidden shadow-lg hidden"></div>
-
-        <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
-
-        <!-- HASHTAG & FILTER IG -->
-        <div id="hashtag-filter" class="text-center mt-12 space-y-2 hidden">
-            <p id="hashtag-text" class="font-serif text-2xl text-[var(--theme-color)]"></p>
-            <p id="filter-ig-text" class="text-xs text-stone-500"></p>
-        </div>
-    </section>
-
-    <!-- PROTOKOL / INFO TAMBAHAN -->
-    <section id="protocols-section" class="py-24 px-8 bg-white hidden">
-        <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Informasi</p>
-        <h3 id="protocols-title" class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide"></h3>
-        <div id="protocols-list" class="space-y-4 max-w-sm mx-auto"></div>
-    </section>
-
-    <!-- DIGITAL GIFT -->
-    <section id="gift-section" class="py-28 px-8 bg-[#F3EFE6]/30 hidden">
-        <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Tanda Kasih</p>
-        <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-6 tracking-wide">Wedding Gift</h3>
-        <p class="text-xs text-stone-500 text-center mb-16 max-w-xs mx-auto leading-relaxed">Doa restu Anda merupakan karunia yang sangat berarti bagi kami</p>
-        <div id="gift-list" class="space-y-6"></div>
+        <div id="gallery-grid" class="gallery-masonry"></div>
     </section>
 
     <!-- KOMENTAR & KONFIRMASI KEHADIRAN -->
@@ -339,18 +278,42 @@
                 </button>
             </form>
 
-            <!-- RSVP WhatsApp -->
-            <div id="rsvp-wa-btn" class="text-center mb-10 hidden">
-                <a id="wa-link" target="_blank" class="inline-flex items-center gap-3 border border-[var(--theme-color)] text-[var(--theme-color)] px-8 py-3 text- uppercase tracking-[0.3em] hover:bg-[var(--theme-color)] hover:text-white transition">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    Konfirmasi via WhatsApp
-                </a>
-            </div>
-
             <!-- List Komentar -->
             <div class="border-t border-[var(--soft-color)] pt-8">
                 <p class="text- uppercase tracking-[0.3em] mb-6 text-center text-[var(--theme-color)]/80">Daftar Ucapan Tamu</p>
                 <div id="wishes-box" class="space-y-4 max-h- overflow-y-auto pr-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WEDDING GIFT / TRANSFER -->
+    <section id="gift-section" class="py-28 px-8 bg-white border-t border-stone-200/50 text-center hidden">
+        <p class="text- uppercase tracking-[0.4em] text-stone-400 mb-2">Tanda Kasih</p>
+        <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-6 tracking-wide">Wedding Gift</h3>
+        <p id="gift-note" class="text-xs text-stone-500 font-light leading-relaxed max-w-xs mx-auto mb-10 italic">
+            Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.
+        </p>
+
+        <button id="gift-toggle" class="btn-editorial mb-10">
+            <i class="fa-solid fa-gift mr-2"></i>Kirim Hadiah
+        </button>
+
+        <div id="gift-box" class="hidden max-w-sm mx-auto space-y-6">
+            <!-- QRIS Utama -->
+            <div id="gift-qris" class="bg-[#F3EFE6]/60 border border-[var(--soft-color)] p-6 hidden">
+                <p class="font-serif text-lg text-[var(--text-color)] mb-3">Scan QRIS</p>
+                <img id="qris-img" src="" alt="QRIS" class="w-48 h-48 mx-auto border border-stone-200 bg-white p-1">
+                <p class="text- uppercase tracking-[0.3em] text-stone-400 mt-3">A.n Kedua Mempelai</p>
+            </div>
+
+            <!-- List Rekening Bank -->
+            <div id="gift-accounts" class="space-y-6"></div>
+
+            <!-- Alamat Kado Fisik -->
+            <div id="gift-address" class="bg-[#F3EFE6]/60 border border-[var(--soft-color)] p-6 hidden">
+                <p class="font-serif text-lg text-[var(--text-color)] mb-2">Kirim Kado Fisik</p>
+                <p id="gift-receiver" class="text-xs font-medium text-stone-600"></p>
+                <p id="gift-address-text" class="text-xs text-stone-500 font-light leading-relaxed mt-1"></p>
             </div>
         </div>
     </section>
@@ -383,62 +346,38 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-    const clientSlug = params.get('c') || 'budi-ani';
-    const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+    const clientSlug = params.get('c') || 'karsa-sample';
+    const guestName = params.get('to')?.replace(/\+/g,' ') || 'Orang Undangan';
     const basePath = `../../public/clients/${clientSlug}/`;
 
-    function showToast(msg) {
-        document.getElementById('toast-msg').textContent = msg;
-        document.getElementById('toast').classList.add('show');
-        setTimeout(() => document.getElementById('toast').classList.remove('show'), 3000);
-    }
-
-    function copyRekening(num, el) {
-        navigator.clipboard.writeText(num);
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        showToast('Nomor rekening disalin!');
-        const original = el.innerHTML;
-        el.innerHTML = '<i class="fa-solid fa-check mr-2"></i>Disalin';
-        setTimeout(() => el.innerHTML = original, 2000);
-    }
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
 
     fetch(`${basePath}data.json`)
-   .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}: data.json tidak ditemukan`);
-        return res.json();
-    })
+   .then(res => res.json())
    .then(data => {
-        const { couple, settings, events, gallery, loveStory, quote, logistics, digitalGift, link, countdown, protocols } = data;
+        const { couple, settings, events, gallery, loveStory, quote, logistics, digitalGift } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
 
-        // WARNA
+        // 1. Ekstraksi Warna Otomatis Cerdas
+        const imgForColor = document.getElementById('cover-image');
+        imgForColor.src = basePath + gallery.heroImage;
+        imgForColor.onload = () => {
+            if(!settings?.themeColor) {
+                const colorThief = new ColorThief();
+                const color = colorThief.getColor(imgForColor);
+                document.documentElement.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+            }
+        };
+
         if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
         if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
 
-        // COVER
-        const coverImg = gallery.heroImage || gallery.coverImage || gallery.album?.[0];
-        if (coverImg) {
-            const imgUrl = basePath + encodeURIComponent(coverImg);
-            document.getElementById('cover-image').src = imgUrl;
-            document.getElementById('hero-image').src = imgUrl;
-
-            // Auto color dari gambar
-            if(!settings?.themeColor) {
-                const img = new Image();
-                img.crossOrigin = 'Anonymous';
-                img.src = imgUrl;
-                img.onload = () => {
-                    const colorThief = new ColorThief();
-                    const color = colorThief.getColor(img);
-                    document.documentElement.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-                };
-            }
-        }
-
+        // Pasang Konten Data Master
         document.getElementById('cover-names').innerText = pairNick;
         document.getElementById('hero-names').innerText = pairNick;
         document.getElementById('footer-names').innerText = pairNick;
         document.getElementById('cover-guest').innerText = guestName;
+        document.getElementById('hero-image').src = basePath + gallery.heroImage;
 
         if(quote?.text) {
             document.getElementById('quote-arab').textContent = quote.arab || '';
@@ -446,59 +385,42 @@
             document.getElementById('quote-source').textContent = quote.source || '';
         }
 
-        // COUPLE + TIKTOK
-        const renderCouple = (p, target) => {
-            let social = '';
-            if (p.instagram) social += `<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" class="text-stone-500 hover:text-[var(--theme-color)] transition"><i class="fa-brands fa-instagram"></i></a>`;
-            if (p.tiktok) social += `<a href="https://tiktok.com/@${p.tiktok.replace('@','')}" target="_blank" class="text-stone-500 hover:text-[var(--theme-color)] transition"><i class="fa-brands fa-tiktok"></i></a>`;
+        // Penggantian Struktur Layout Profil Menjadi Asimetris Artistik
+        document.getElementById('groom-section').innerHTML = `
+            <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.groom.image}"></div>
+            <div class="mt-8 text-left pl-4 reveal">
+                <p class="uppercase tracking-[0.4em] text- mb-3 text-stone-400 font-medium">Mempelai Pria</p>
+                <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${couple.groom.name}</h4>
+                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra kandung dari Bapak ${couple.groom.father} & Ibu ${couple.groom.mother}</p>
+                ${couple.groom.instagram? `<a href="https://instagram.com/${couple.groom.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text- tracking-[0.3em] uppercase font-medium text-amber-700/80"><i class="fa-brands fa-instagram mr-1"></i>${couple.groom.instagram}</a>` : ''}
+            </div>`;
 
-            document.getElementById(target).innerHTML = `
-                <div class="editorial-frame arch-mask reveal"><img src="${basePath + encodeURIComponent(p.image)}"></div>
-                <div class="mt-8 text-left pl-4 reveal">
-                    <p class="uppercase tracking-[0.4em] text- mb-3 text-stone-400 font-medium">Mempelai ${p === couple.groom? 'Pria' : 'Wanita'}</p>
-                    <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${p.name}</h4>
-                    <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra/putri dari Bapak ${p.father} & Ibu ${p.mother}</p>
-                    <div class="flex gap-4 mt-4 text-lg">${social}</div>
-                </div>`;
-        };
-        renderCouple(couple.groom, 'groom-section');
-        renderCouple(couple.bride, 'bride-section');
+        document.getElementById('bride-section').innerHTML = `
+            <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.bride.image}"></div>
+            <div class="mt-8 text-right pr-4 reveal">
+                <p class="uppercase tracking-[0.4em] text- mb-3 text-stone-400 font-medium">Mempelai Wanita</p>
+                <h4 class="font-serif text-4xl font-light text-[var(--text-color)] mb-2 tracking-wide">${couple.bride.name}</h4>
+                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putri kandung dari Bapak ${couple.bride.father} & Ibu ${couple.bride.mother}</p>
+                ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text- tracking-[0.3em] uppercase font-medium text-amber-700/80">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-1"></i></a>` : ''}
+            </div>`;
 
-        // LOVE STORY
-        if(loveStory?.length) {
-            document.getElementById('story-section').classList.remove('hidden');
-            loveStory.forEach(ls => {
-                document.getElementById('story-list').innerHTML += `
-                    <div class="timeline-card reveal">
-                        <p class="text- font-mono tracking-widest text-[var(--theme-color)] mb-1">${ls.date || ls.year}</p>
-                        <h6 class="font-serif text-xl font-light text-stone-800 mb-2 tracking-wide">${ls.title}</h6>
-                        <p class="text-xs text-stone-500 font-light leading-relaxed italic">${ls.description}</p>
-                    </div>`;
-            });
-        }
-
-        // EVENTS + EMBED MAPS + LIVE STREAMING
+        // Modul Agenda Acara Premium
         if(events?.length) {
             document.getElementById('event-section').classList.remove('hidden');
             events.forEach(ev => {
-                let embedMap = ev.embedMaps? `<iframe src="${ev.embedMaps}" class="w-full h-48 rounded-lg mt-4" loading="lazy" style="border:0;"></iframe>` : '';
-                let liveBtn = ev.liveStreaming? `<a href="${ev.liveStreaming}" target="_blank" class="inline-flex items-center gap-2 mt-4 text- uppercase tracking-[0.3em] text-red-600 font-medium"><i class="fa-solid fa-circle text- animate-pulse"></i>Live Streaming</a>` : '';
-
                 document.getElementById('event-list').innerHTML += `
                     <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
                         <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5>
-                        <p class="text- uppercase tracking-[0.3em] text-[var(--theme-color)] font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text- uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
                         <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
                             <p class="font-mono">${ev.startTime} — ${ev.endTime} ${ev.timezone || 'WIB'}</p>
                             <p class="pt-2 px-2 font-serif text-sm text-stone-600 italic leading-relaxed">${ev.address}</p>
                         </div>
                         <a href="${ev.googleMaps}" target="_blank" class="btn-editorial">Buka Peta Lokasi</a>
-                        ${liveBtn}
-                        ${embedMap}
                     </div>`;
             });
 
-            // COUNTDOWN
+            // Konfigurasi Mesin Hitung Mundur Waktu Sekelas Jam Mewah
             const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00`).getTime();
             setInterval(() => {
                 const now = new Date().getTime();
@@ -516,28 +438,121 @@
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
 
-        // DRESS CODE & COLOR PALETTE
-        if (logistics?.dressCode || logistics?.colorCode) {
-            document.getElementById('dresscode-section').classList.remove('hidden');
-            if (logistics.dressCode) document.getElementById('dresscode-text').textContent = logistics.dressCode;
-            if (logistics.colorCode) {
-                logistics.colorCode.split(',').forEach(c => {
-                    document.getElementById('color-palette').innerHTML += `<div class="color-dot" style="background: ${c.trim()}"></div>`;
+        // Jalur Cerita Romansa Kalem
+        if(loveStory?.length) {
+            document.getElementById('story-section').classList.remove('hidden');
+            loveStory.forEach(ls => {
+                document.getElementById('story-list').innerHTML += `
+                    <div class="timeline-card reveal">
+                        <p class="text- font-mono tracking-widest text-amber-700/80 mb-1">${ls.date || ls.year}</p>
+                        <h6 class="font-serif text-xl font-light text-stone-800 mb-2 tracking-wide">${ls.title}</h6>
+                        <p class="text-xs text-stone-500 font-light leading-relaxed italic">${ls.description}</p>
+                    </div>`;
+            });
+        }
+
+        // Galeri Estetik
+        if(gallery?.album?.length) {
+            document.getElementById('gallery-section').classList.remove('hidden');
+            gallery.album.forEach(img => {
+                document.getElementById('gallery-grid').innerHTML += `<img src="${basePath + img}" class="reveal shadow-sm hover:opacity-95 transition-opacity" loading="lazy">`;
+            });
+        }
+
+        // WEDDING GIFT - Render dari data.json
+        if(settings?.showGift && digitalGift) {
+            document.getElementById('gift-section').classList.remove('hidden');
+            const { qris, accounts, address, receiver } = digitalGift;
+
+            // QRIS
+            if(qris) {
+                document.getElementById('gift-qris').classList.remove('hidden');
+                document.getElementById('qris-img').src = basePath + qris;
+            }
+
+            // Rekening Bank
+            if(accounts?.length) {
+                const accountsContainer = document.getElementById('gift-accounts');
+                accountsContainer.innerHTML = '';
+                accounts.forEach((item, i) => {
+                    accountsContainer.innerHTML += `
+                    <div class="bg-[#F3EFE6]/60 border border-[var(--soft-color)] p-6 reveal">
+                        <img src="${basePath + item.logo}" alt="QR ${item.provider}" class="w-40 h-40 mx-auto mb-4 border border-stone-200 bg-white p-1">
+                        <p class="font-serif text-lg text-[var(--text-color)] mb-1">${item.provider}</p>
+                        <div class="flex items-center justify-center gap-2">
+                            <p id="rekening-${i}" class="text-sm font-mono tracking-wider text-stone-600">${item.accountNumber}</p>
+                            <button onclick="copyRek('rekening-${i}', this)" class="text-[var(--theme-color)] text-">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="text- uppercase tracking-[0.3em] text-stone-400 mt-2">a.n ${item.accountHolder}</p>
+                    </div>`;
                 });
+            }
+
+            // Alamat Kado Fisik
+            if(address && receiver) {
+                document.getElementById('gift-address').classList.remove('hidden');
+                document.getElementById('gift-receiver').textContent = receiver;
+                document.getElementById('gift-address-text').textContent = address;
             }
         }
 
-        // GALLERY + VIDEO/GIF
-        if(gallery?.album?.length || gallery?.videoYoutubeId || gallery?.videoFile || gallery?.weddingGif) {
-            document.getElementById('gallery-section').classList.remove('hidden');
+        // Toggle Wedding Gift
+        const giftToggle = document.getElementById('gift-toggle');
+        const giftBox = document.getElementById('gift-box');
+        if(giftToggle) {
+            giftToggle.onclick = () => {
+                giftBox.classList.toggle('hidden');
+                giftToggle.innerHTML = giftBox.classList.contains('hidden')
+                 ? '<i class="fa-solid fa-gift mr-2"></i>Kirim Hadiah'
+                    : '<i class="fa-solid fa-xmark mr-2"></i>Tutup';
+            }
+        }
 
-            // VIDEO/GIF
-            if (gallery.videoYoutubeId) {
-                document.getElementById('video-container').classList.remove('hidden');
-                document.getElementById('video-container').innerHTML = `<iframe class="w-full aspect-video" src="https://www.youtube.com/embed/${gallery.videoYoutubeId}" frameborder="0" allowfullscreen></iframe>`;
-            } else if (gallery.videoFile) {
-                document.getElementById('video-container').classList.remove('hidden');
-                document.getElementById('video-container').innerHTML = `<video src="${basePath + encodeURIComponent(gallery.videoFile)}" controls class="w-full"></video>`;
-            } else if (gallery.weddingGif) {
-                document.getElementById('video-container').classList.remove('hidden');
-                document.getElementById('video-container').innerHTML = `<img src="${basePath + encodeURIComponent(gallery.weddingGif)}" class
+        // Copy No Rekening
+        window.copyRek = (id, btn) => {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                setTimeout(() => btn.innerHTML = original, 1500);
+            });
+        }
+
+        // === FITUR KOMENTAR GOOGLE SHEETS ===
+        // ENGINE AMBIL DATA DARI SHEETS (doGet Adaptor)
+        function loadGoogleSheetsWishes() {
+            const wishesBox = document.getElementById('wishes-box');
+            if (!wishesBox) return;
+
+            wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa dari Google Sheets...</p>`;
+
+            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`)
+           .then(res => res.json())
+           .then(wishes => {
+                wishesBox.innerHTML = '';
+
+                if (!wishes || wishes.length === 0) {
+                    wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic">Belum ada ucapan tertulis. Berikan doa restu pertama Anda.</p>`;
+                    return;
+                }
+
+                wishes.forEach(wish => {
+                    const badgeColor = wish.kehadiran === 'Hadir'
+                       ? 'bg-[var(--theme-color)]/10 text-[var(--theme-color)] border border-[var(--theme-color)]/20'
+                        : 'bg-stone-100 text-stone-500 border border-stone-200';
+
+                    let displayTime = '';
+                    if(wish.timestamp) {
+                        const dateObj = new Date(wish.timestamp);
+                        displayTime = isNaN(dateObj)? wish.timestamp : dateObj.toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+                    }
+
+                    wishesBox.innerHTML += `
+                        <div class="p-4 bg-white/50 border border-[var(--soft-color)] space-y-2 text-left">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm font-medium text-[var(--text-color)]">${wish.nama}</p>
+                                <span class="text- px-2 py-1 font-medium uppercase tracking-wider ${badgeColor}">${wish.kehadiran}</span>
+                            </div>
+                            <p class="text-xs text-[
