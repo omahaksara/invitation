@@ -18,7 +18,7 @@
     "showGift": true,
     "showUcapan": true,
     "showProtocols": false,
-    "musicAutoplay": false
+    "musicAutoplay": true
   },
   "link": {
     "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec",
@@ -174,7 +174,7 @@
     ]
   },
   "logistics": {
-    "music": "musik.mp3",
+    "music": "https://omahaksara.github.io/lagu/contohlagu%20(6).mp3",
     "rsvpWaNumber": "",
     "dressCode": "",
     "colorCode": "",
