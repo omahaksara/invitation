@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "slug": "afif-sindi",
+    "template": "royal",
+    "status": "published",
+    "domain": "",
+    "customUrl": ""
+  },
+  "settings": {
+    "islami": true,
+    "themeColor": "#6b0505",
+    "bgColor": "#fdfbf7",
+    "coupleFrame": "polaroid",
+    "autoColor": true,
+    "showCountdown": true,
+    "showLoveStory": true,
+    "showGallery": true,
+    "showGift": true,
+    "showUcapan": true,
+    "showProtocols": false,
+    "musicAutoplay": false
+  },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec",
+    "shortUrl": "",
+    "website": ""
+  },
+  "couple": {
+    "groom": {
+      "name": "Afif Pandu Setiawan, S.T.",
+      "nickname": "Afif",
+      "father": "Bpk. Rahmat Hidayat",
+      "mother": "Ibu Sri Kustiah",
+      "image": "foto-pria.jpg",
+      "instagram": "@afif.pandu",
+      "tiktok": "",
+      "bio": "Putra dari Bpk. Rahmat Hidayat & Ibu Sri Kustiah"
+    },
+    "bride": {
+      "name": "Sindi Taurinsia, S.Farm.",
+      "nickname": "Sindi",
+      "father": "Bpk H. Supriadi",
+      "mother": "Ibu Hj. Puji Lestari",
+      "image": "foto-wanita.jpg",
+      "instagram": "@sindi_taurinsia",
+      "tiktok": "",
+      "bio": "Putri dari Bpk H. Supriadi & Ibu Hj. Puji Lestari"
+    }
+  },
+  "quote": {
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
+    "source": "QS. Ar-Rum: 21",
+    "english": ""
+  },
+  "events": [
+    {
+      "title": "Akad Nikah",
+      "date": "2026-07-25",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "timezone": "WITA",
+      "address": "Jln. Teratai Dsn 1 Desa Kotaraya Selatan",
+      "locationName": "Kediaman Mempelai",
+      "googleMaps": "",
+      "embedMaps": "",
+      "liveStreaming": ""
+    },
+    {
+      "title": "Resepsi Pernikahan",
+      "date": "2026-07-25",
+      "startTime": "19:00",
+      "endTime": "Selesai",
+      "timezone": "WITA",
+      "address": "Jln. Teratai Dsn 1 Desa Kotaraya Selatan",
+      "locationName": "Kediaman Mempelai",
+      "googleMaps": "",
+      "embedMaps": "",
+      "liveStreaming": ""
+    }
+  ],
+  "countdown": {
+    "targetDate": "2026-07-25T09:00:00+08:00",
+    "backgroundImage": ""
+  },
+  "loveStory": [
+    {
+      "date": "Awal Perjalanan",
+      "year": "2026",
+      "title": "Awal Kisah",
+      "description": "",
+      "image": "foto1.jpg"
+    },
+    {
+      "date": "Proses Bertumbuh",
+      "year": "2026",
+      "title": "Saling Bertumbuh",
+      "description": "",
+      "image": "foto2.jpg"
+    },
+    {
+      "date": "Januari 2026",
+      "year": "2026",
+      "title": "Lamaran",
+      "description": "",
+      "image": "foto3.jpg"
+    },
+    {
+      "date": "Masa Depan",
+      "year": "2026",
+      "title": "Awal Selamanya",
+      "description": "",
+      "image": "foto4.jpg"
+    }
+  ],
+  "gallery": {
+    "heroImage": "foto-sampul.jpg",
+    "coverImage": "foto-sampul.jpg",
+    "videoYoutubeId": "",
+    "videoFile": "",
+    "album": [
+      "foto1.jpg",
+      "foto2.jpg",
+      "foto3.jpg",
+      "foto4.jpg"
+    ]
+  },
+  "digitalGift": {
+    "qris": "",
+    "accounts": [
+      {
+        "provider": "Bank Mandiri",
+        "accountNumber": "1510022288309",
+        "accountHolder": "Afif Pandu Setiawan",
+        "logo": "qr-mandiri.png"
+      },
+      {
+        "provider": "Bank Mandiri",
+        "accountNumber": "1510022143470",
+        "accountHolder": "Sindi Taurinsia",
+        "logo": "qr-mandiri.png"
+      }
+    ],
+    "address": "",
+    "receiver": "Afif & Sindi"
+  },
+  "protocols": {
+    "title": "Informasi Tambahan",
+    "items": [
+      "Acara diselenggarakan secara intimate",
+      "Mohon konfirmasi kehadiran H-3"
+    ]
+  },
+  "logistics": {
+    "music": "musik.mp3",
+    "rsvpWaNumber": "",
+    "dressCode": "",
+    "colorCode": "",
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
+    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
+    "filterIG": "",
+    "hashtag": "#AfifSindiStory"
+  },
+  "guest": {
+    "defaultName": "Tamu Undangan",
+    "defaultGroup": "Keluarga & Sahabat"
+  },
+  "seo": {
+    "title": "Wedding of Afif & Sindi",
+    "description": "Undangan Pernikahan Afif Pandu Setiawan & Sindi Taurinsia - 25 Juli 2026",
+    "image": "foto-sampul.jpg"
+  }
+}
