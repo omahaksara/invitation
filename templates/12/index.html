@@ -151,15 +151,14 @@
 <audio id="audio" loop></audio>
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const clientSlug = params.get('c') || 'afif-sindi';
-    const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+   const params = new URLSearchParams(window.location.search);
+const clientSlug = params.get('c') || 'afif-sindi'; // Fallback biar ga kosong
+const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
 
-    const basePath = `../../public/clients/${clientSlug}/`;
+console.log('Client Slug:', clientSlug); // Buat debug di F12
 
-    // URL BARU VERSI 17
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydwXVE1Js7p97z5iEAGPejtnRdTgj2mhcPyIjZOUq5rsp0JQdIGOTCyULFWVU3gF6mjQ/exec';
-
+const basePath = `../../public/clients/${clientSlug}/`;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwt-FOm_Gzp76VYRP6Qy1yFOSgTDXOH_WnXk7d2jfkourzEAMuAOKT51lOrMJ44AP6pyQ/exec';
     fetch(`${basePath}data.json`, { cache: 'no-store' })
 .then(res => {
         if(!res.ok) throw new Error(`data.json tidak ditemukan. Cek: ${basePath}data.json`);
