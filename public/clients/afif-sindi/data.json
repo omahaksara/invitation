@@ -214,8 +214,4 @@
     "description": "Undangan Pernikahan Afif Pandu Setiawan & Sindi Taurinsia - 25 Juli 2026",
     "image": "foto-sampul.jpg"
   },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbydAgyv2GqcmbMhwy9UyehhajELpBKmCkG9xhxgo01tINf4BYuFL2uLOK1Ca0ZKreg94A/exec",
-    "note": "URL Google Apps Script database ucapan. Sama untuk semua klien Omah Aksara"
-  }
 }
