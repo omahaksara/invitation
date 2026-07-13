@@ -1,7 +1,7 @@
 {
   "meta": {
     "slug": "afif-sindi",
-    "template": "royal",
+    "template": "karsa",
     "status": "published",
     "domain": "",
     "customUrl": ""
@@ -10,8 +10,8 @@
     "islami": true,
     "themeColor": "#6b0505",
     "bgColor": "#fdfbf7",
-    "coupleFrame": "polaroid",
-    "autoColor": true,
+    "coupleFrame": "arch-mask",
+    "autoColor": false,
     "showCountdown": true,
     "showLoveStory": true,
     "showGallery": true,
@@ -30,7 +30,7 @@
       "instagram": "@afif.pandu",
       "tiktok": "",
       "phone": "6281234567890",
-      "bio": "Putra dari Rahmat Hidayat & Sri Kustiah"
+      "bio": "Putra dari Bapak Rahmat Hidayat & Ibu Sri Kustiah"
     },
     "bride": {
       "name": "Sindi Taurinsia, S.Farm.",
@@ -41,7 +41,7 @@
       "instagram": "@sindi_taurinsia",
       "tiktok": "",
       "phone": "6289876543210",
-      "bio": "Putri dari H. Supriadi & Hj. Puji Lestari"
+      "bio": "Putri dari Bapak H. Supriadi & Ibu Hj. Puji Lestari"
     }
   },
   "quote": {
@@ -67,7 +67,7 @@
       "title": "Resepsi Pernikahan",
       "date": "2026-07-25",
       "startTime": "19:00",
-      "endTime": "Selesai",
+      "endTime": "23:00",
       "timezone": "WITA",
       "address": "Jln. Teratai Dsn 1 Desa Kotaraya Selatan",
       "locationName": "Kediaman Mempelai",
@@ -106,13 +106,6 @@
         "note": "Cadangan 2"
       },
       {
-        "name": "Marry You",
-        "file": "contohlagu (5).mp3",
-        "url": "https://omahaksara.github.io/lagu/contohlagu%20(5).mp3",
-        "isDefault": false,
-        "note": "Cadangan 3"
-      },
-      {
         "name": "Lagu Lokal Afif Sindi",
         "file": "musik.mp3",
         "url": "./musik.mp3",
@@ -120,8 +113,7 @@
         "note": "File lokal di folder afif-sindi, pake kalau online error"
       }
     ],
-    "autoplay": true,
-    "instruction": "Ganti isDefault: true ke lagu lain kalau mau ganti default. Cuma boleh 1 yang true"
+    "autoplay": true
   },
   "loveStory": [
     {
@@ -213,5 +205,5 @@
     "title": "Wedding of Afif & Sindi",
     "description": "Undangan Pernikahan Afif Pandu Setiawan & Sindi Taurinsia - 25 Juli 2026",
     "image": "foto-sampul.jpg"
-  },
+  }
 }
