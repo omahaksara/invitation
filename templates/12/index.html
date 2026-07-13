@@ -228,7 +228,7 @@
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
     console.log('Client Slug:', clientSlug);
     const basePath = `../../public/clients/${clientSlug}/`;
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwt-FOm_Gzp76VYRP6Qy1yFOSgTDXOH_WnXk7d2jfkourzEAMuAOKT51lOrMJ44AP6pyQ/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
 
     fetch(`${basePath}data.json`, { cache: 'no-store' })
    .then(res => {
