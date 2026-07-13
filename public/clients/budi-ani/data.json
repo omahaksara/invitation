@@ -1,7 +1,7 @@
 {
   "meta": {
     "slug": "budi-ani",
-    "template": "royal",
+    "template": "karsa",
     "status": "published",
     "domain": "",
     "customUrl": ""
@@ -10,20 +10,15 @@
     "islami": true,
     "themeColor": "#6b0505",
     "bgColor": "#fdfbf7",
-    "coupleFrame": "polaroid",
-    "autoColor": true,
+    "coupleFrame": "arch-mask",
+    "autoColor": false,
     "showCountdown": true,
     "showLoveStory": true,
     "showGallery": true,
     "showGift": true,
     "showUcapan": true,
     "showProtocols": false,
-    "musicAutoplay": false
-  },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec",
-    "shortUrl": "",
-    "website": ""
+    "musicAutoplay": true
   },
   "couple": {
     "groom": {
@@ -34,6 +29,7 @@
       "image": "foto-pria.jpg",
       "instagram": "@budi_santoso",
       "tiktok": "",
+      "phone": "6281234567890",
       "bio": "Putra pertama dari keluarga Santoso"
     },
     "bride": {
@@ -44,6 +40,7 @@
       "image": "foto-wanita.jpg",
       "instagram": "@ani_wijaya",
       "tiktok": "",
+      "phone": "6289876543210",
       "bio": "Putri kedua dari keluarga Wijaya"
     }
   },
@@ -81,7 +78,42 @@
   ],
   "countdown": {
     "targetDate": "2026-11-12T08:00:00+07:00",
-    "backgroundImage": ""
+    "backgroundImage": "foto-sampul.jpg"
+  },
+  "music": {
+    "description": "Playlist musik undangan. Yang isDefault: true yang diputar otomatis",
+    "defaultSong": "contohlagu (6).mp3",
+    "playlist": [
+      {
+        "name": "Beautiful In White - Lagu Utama",
+        "file": "contohlagu (6).mp3",
+        "url": "https://omahaksara.github.io/lagu/contohlagu%20(6).mp3",
+        "isDefault": true,
+        "note": "Dipilih sebagai lagu utama Budi & Ani"
+      },
+      {
+        "name": "Perfect - Ed Sheeran",
+        "file": "contohlagu (1).mp3",
+        "url": "https://omahaksara.github.io/lagu/contohlagu%20(1).mp3",
+        "isDefault": false,
+        "note": "Cadangan 1"
+      },
+      {
+        "name": "A Thousand Years",
+        "file": "contohlagu (4).mp3",
+        "url": "https://omahaksara.github.io/lagu/contohlagu%20(4).mp3",
+        "isDefault": false,
+        "note": "Cadangan 2"
+      },
+      {
+        "name": "Lagu Lokal Budi Ani",
+        "file": "musik.mp3",
+        "url": "./musik.mp3",
+        "isDefault": false,
+        "note": "File lokal di folder budi-ani, pake kalau online error"
+      }
+    ],
+    "autoplay": true
   },
   "loveStory": [
     {
@@ -95,7 +127,7 @@
       "date": "Proses Bertumbuh",
       "year": "2026",
       "title": "Saling Bertumbuh",
-      "description": "Perjalanan kami tidak selalu dipenuhi tawa. Kami 2 insan yang sama-sama pernah melewati hubungan panjang yang tidak berakhir di pelaminan. Dari pengalaman tersebut, kami belajar tentang kesabaran, keikhlasan dan arti menemukan orang yang tepat. Terkadang Allah tidak mempertemukan kita dengan orang yang cepat, tetapi dengan orang yang tepat pada waktu yang paling indah.",
+      "description": "Perjalanan kami tidak selalu dipenuhi tawa. Kami 2 insan yang sama-sama pernah melewati hubungan panjang yang tidak berakhir di pelaminan. Dari pengalaman tersebut, kami belajar tentang kesabaran, keikhlasan dan arti menemukan orang yang tepat. “Terkadang Allah tidak mempertemukan kita dengan orang yang cepat, tetapi dengan orang yang tepat pada waktu yang paling indah”",
       "image": "foto2.jpg"
     },
     {
@@ -109,7 +141,7 @@
       "date": "Masa Depan",
       "year": "2026",
       "title": "Awal Selamanya",
-      "description": "Kami percaya, bukan karena bertemu lalu berjodoh. Tetapi karena berjodohlah, maka Allah mempertemukan dua insan dengan cara terbaik-Nya. Pernikahan ini bukan akhir dari kisah kami, melainkan awal dari perjalanan panjang yang akan kami tulis bersama hingga akhir. Apa yang menjadi takdirmu, akan menemukan jalannya untuk menemukanmu.",
+      "description": "Kami percaya, bukan karena bertemu lalu berjodoh. Tetapi karena berjodohlah, maka Allah mempertemukan dua insan dengan cara terbaik-Nya. Dan dengan rasa syukur, kami memutuskan untuk mengikrarkan janji suci pernikahan. Pernikahan ini bukan akhir dari kisah kami, melainkan awal dari perjalanan panjang yang akan kami tulis bersama hingga akhir. “Apa yang menjadi takdirmu, akan menemukan jalannya untuk menemukanmu”",
       "image": "foto4.jpg"
     }
   ],
@@ -126,19 +158,22 @@
     ]
   },
   "digitalGift": {
+    "description": "Rekening Wedding Gift Budi & Ani. Otomatis muncul di section Gift",
     "qris": "qr-bca.jpg",
     "accounts": [
       {
         "provider": "Bank BCA",
         "accountNumber": "1234567890",
         "accountHolder": "Budi Santoso",
-        "logo": "qr-bca.jpg"
+        "logo": "qr-bca.jpg",
+        "note": "Rekening utama Budi"
       },
       {
         "provider": "Bank Mandiri",
         "accountNumber": "0987654321",
         "accountHolder": "Ani Wijaya",
-        "logo": "qr-mandiri.png"
+        "logo": "qr-mandiri.png",
+        "note": "Rekening utama Ani"
       }
     ],
     "address": "Jl. Mawar No. 123, Jakarta Selatan 12345",
@@ -152,7 +187,6 @@
     ]
   },
   "logistics": {
-    "music": "musik.mp3",
     "rsvpWaNumber": "6281234567890",
     "dressCode": "Earth Tone / Sage Green",
     "colorCode": "#8B7355, #A8B5A3, #EAE0D5",
@@ -164,6 +198,11 @@
   "guest": {
     "defaultName": "Tamu Undangan",
     "defaultGroup": "Keluarga & Sahabat"
+  },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec",
+    "shortUrl": "",
+    "website": ""
   },
   "seo": {
     "title": "Wedding of Budi & Ani",
