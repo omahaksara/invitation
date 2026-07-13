@@ -155,11 +155,10 @@
     const clientSlug = params.get('c') || 'afif-sindi';
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
 
-    // PATH UNIVERSAL - FIX UTAMA
     const basePath = `../../public/clients/${clientSlug}/`;
 
-    // LINK GOOGLE APPS SCRIPT KAMU VERSI 16
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydAgyv2GqcmbMhwy9UyehhajELpBKmCkG9xhxgo01tINf4BYuFL2uLOK1Ca0ZKreg94A/exec';
+    // URL BARU VERSI 17
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydwXVE1Js7p97z5iEAGPejtnRdTgj2mhcPyIjZOUq5rsp0JQdIGOTCyULFWVU3gF6mjQ/exec';
 
     fetch(`${basePath}data.json`, { cache: 'no-store' })
 .then(res => {
@@ -234,7 +233,7 @@
             setInterval(() => {
                 const now = new Date().getTime();
                 const diff = targetTime - now;
-                const d = Math.max(0, Math.floor(diff / (1000*60*60*24)));
+                const d = Math.max(0, Math.floor(diff / (1000*60*24)));
                 const h = Math.max(0, Math.floor((diff % (1000*60*60*24)) / (1000*60*60)));
                 const m = Math.max(0, Math.floor((diff % (1000*60*60)) / (1000*60)));
                 const s = Math.max(0, Math.floor((diff % (1000*60)) / 1000));
@@ -247,7 +246,6 @@
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
 
-        // LOVE STORY + FOTO
         if(loveStory?.length && settings.showLoveStory) {
             document.getElementById('story-section').classList.remove('hidden');
             document.getElementById('story-list').innerHTML = '';
@@ -307,13 +305,16 @@
             };
         }
 
-        // UCAPAN GOOGLE SHEETS - FIX URL + CACHE
+        // UCAPAN PAKE JSONP - ANTI CORS
         function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
             wishesBox.innerHTML = `<p class="text-xs text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa...</p>`;
-            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}&t=${Date.now()}`, { cache: 'no-store' })
-       .then(res => res.json())
-       .then(wishes => {
+
+            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+            window[callbackName] = function(wishes) {
+                delete window[callbackName];
+                document.body.removeChild(script);
+
                 wishesBox.innerHTML = '';
                 if (!wishes || wishes.length === 0) {
                     wishesBox.innerHTML = `<p class="text-xs text-stone-400 text-center py-4 font-light italic">Belum ada ucapan. Jadilah yang pertama.</p>`;
@@ -335,11 +336,16 @@
                             </div>
                         </div>`;
                 });
-            })
-       .catch(err => {
-                console.error("Gagal load ucapan:", err);
-                wishesBox.innerHTML = `<p class="text-xs text-red-500/80 text-center py-4 font-light italic">Gagal memuat ucapan. Cek Apps Script.</p>`;
-            });
+            };
+
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}&callback=${callbackName}`;
+            script.onerror = function() {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                wishesBox.innerHTML = `<p class="text-xs text-red-500/80 text-center py-4 font-light italic">Gagal memuat ucapan. Cek koneksi.</p>`;
+            };
+            document.body.appendChild(script);
         }
 
         document.getElementById('wishes-form').addEventListener('submit', function(e){
@@ -355,13 +361,13 @@
                 jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
             };
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-       .then(() => {
+      .then(() => {
                 document.getElementById('wishes-form').reset();
                 btn.innerHTML = 'Terkirim ✓';
                 setTimeout(() => { btn.innerHTML = 'Kirim Ucapan'; btn.disabled = false; }, 2000);
                 setTimeout(loadGoogleSheetsWishes, 1500);
             })
-       .catch(() => {
+      .catch(() => {
                 btn.innerHTML = 'Gagal. Coba Lagi';
                 btn.disabled = false;
             });
