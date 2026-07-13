@@ -4,54 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Karsa — Omah Aksara</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
     <style>
-        :root {
-            --theme-color: #5A6955;
-            --bg-color: #F7F5F0;
-            --text-color: #242923;
-            --soft-color: #E2D9CB;
-            --white-soft: #FDFDFB;
-            --accent: #C49263;
-        }
+        :root { --theme-color: #5A6955; --bg-color: #F7F5F0; --text-color: #242923; --soft-color: #E2D9CB; --white-soft: #FDFDFB; --accent: #C49263; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
         body { background: var(--bg-color); color: var(--text-color); font-family: 'Montserrat', sans-serif; overflow-x: hidden; line-height: 1.8; -webkit-font-smoothing: antialiased; }
-       .font-serif { font-family: 'Cormorant Garamond', serif; }
-       .font-arab { font-family: 'Scheherazade New', serif; }
-       .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
-       .reveal.active { opacity: 1; transform: translateY(0); }
-       .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
-       .reveal.active.line-draw { width: 100%; }
+     .font-serif { font-family: 'Cormorant Garamond', serif; }
+     .font-arab { font-family: 'Scheherazade New', serif; }
+     .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+     .reveal.active { opacity: 1; transform: translateY(0); }
+     .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
+     .reveal.active.line-draw { width: 100%; }
         #cover { transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.8s; }
-       .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
-       .btn-open { border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 18px 44px; letter-spacing: 5px; font-size: 9px; text-transform: uppercase; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-       .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
-       .phone-wrapper { max-width: 425px; margin: 0 auto; background: var(--white-soft); box-shadow: 0 40px 100px rgba(0,0,0,0.04); position: relative; min-height: 100vh; }
-       .editorial-frame { position: relative; width: 80%; aspect-ratio: 3/4; margin: 0 auto; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.07); border: 1px solid rgba(0,0,0,0.03); background: #f0ebe1; }
-       .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
-       .editorial-frame:hover img { transform: scale(1.06); }
-       .arch-mask { border-radius: 200px 200px 0 0; }
-       .timeline-card { position: relative; padding-left: 28px; border-left: 1px solid var(--soft-color); }
-       .timeline-card::before { content: ''; position: absolute; left: -3px; top: 6px; width: 5px; height: 5px; border-radius: 50%; background: var(--theme-color); }
-       .btn-editorial { display: inline-block; border: 1px solid var(--theme-color); color: var(--theme-color); padding: 14px 38px; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); background: transparent; }
-       .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
-       .music-disk-box { position: fixed; bottom: 35px; right: calc(50% - 190px); z-index: 90; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; }
+     .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
+     .btn-open { border: 1px solid rgba(255,255,0.25); background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 18px 44px; letter-spacing: 5px; font-size: 9px; text-transform: uppercase; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+     .btn-open:hover { background: #ffffff; color: #111411; border-color: #ffffff; letter-spacing: 7px; }
+     .phone-wrapper { max-width: 425px; margin: 0 auto; background: var(--white-soft); box-shadow: 0 40px 100px rgba(0,0,0,0.04); position: relative; min-height: 100vh; }
+     .editorial-frame { position: relative; width: 80%; aspect-ratio: 3/4; margin: 0 auto; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.07); border: 1px solid rgba(0,0,0,0.03); background: #f0ebe1; }
+     .editorial-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 3s ease; }
+     .editorial-frame:hover img { transform: scale(1.06); }
+     .arch-mask { border-radius: 200px 200px 0; }
+     .timeline-card { position: relative; padding-left: 28px; border-left: 1px solid var(--soft-color); }
+     .timeline-card::before { content: ''; position: absolute; left: -3px; top: 6px; width: 5px; height: 5px; border-radius: 50%; background: var(--theme-color); }
+     .btn-editorial { display: inline-block; border: 1px solid var(--theme-color); color: var(--theme-color); padding: 14px 38px; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); background: transparent; }
+     .btn-editorial:hover { background: var(--theme-color); color: #fff; letter-spacing: 5px; }
+     .music-disk-box { position: fixed; bottom: 35px; right: calc(50% - 190px); z-index: 90; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; }
         @media (max-width: 435px) {.music-disk-box { right: 25px; } }
-       .disk-text-wrap { width: 52px; height: 52px; background: rgba(255, 255, 255, 0.9); border: 1px solid var(--soft-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: rotateDisk 8s linear infinite; }
-       .disk-text-wrap.paused { animation-play-state: paused; }
+     .disk-text-wrap { width: 52px; height: 52px; background: rgba(255, 255, 0.9); border: 1px solid var(--soft-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: rotateDisk 8s linear infinite; }
+     .disk-text-wrap.paused { animation-play-state: paused; }
         @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
-
 <body>
 
 <!-- COVER -->
@@ -70,8 +59,6 @@
 
 <!-- MAIN APP -->
 <main id="app" class="phone-wrapper opacity-0 pb-1">
-    
-    <!-- HERO -->
     <section class="relative h- flex items-end justify-center px-6 pb-20 overflow-hidden">
         <img id="hero-image" class="absolute inset-0 w-full h-full object-cover" src="">
         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-black/10"></div>
@@ -82,7 +69,6 @@
         </div>
     </section>
 
-    <!-- QUOTE -->
     <section class="px-10 py-28 text-center reveal">
         <p id="quote-arab" class="font-arab text-3xl mb-10 text-[var(--theme-color)] leading-loose tracking-wide"></p>
         <p id="quote-text" class="font-serif italic text-lg text-stone-700 font-light leading-relaxed"></p>
@@ -90,23 +76,18 @@
         <p id="quote-source" class="text- uppercase tracking-[0.35em] font-medium text-stone-400"></p>
     </section>
 
-    <!-- COUPLE -->
     <section class="py-16 bg-[#F3EFE6]/40">
         <div id="groom-section" class="px-8 mb-20"></div>
-        <div class="py-6 text-center reveal">
-            <span class="font-serif font-light text-4xl italic text-stone-300">&</span>
-        </div>
+        <div class="py-6 text-center reveal"><span class="font-serif font-light text-4xl italic text-stone-300">&</span></div>
         <div id="bride-section" class="px-8"></div>
     </section>
 
-    <!-- LOVE STORY -->
     <section id="story-section" class="py-28 bg-white hidden">
         <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Perjalanan Cinta Kami</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-20 tracking-wide">Awal Pertemuan</h3>
         <div id="story-list" class="px-10 space-y-12"></div>
     </section>
 
-    <!-- EVENTS -->
     <section id="event-section" class="py-28 px-8 border-t border-stone-200/50 hidden">
         <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Jadwal Acara</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Detail Acara</h3>
@@ -117,56 +98,31 @@
         </div>
     </section>
 
-    <!-- GALLERY -->
     <section id="gallery-section" class="py-28 px-6 bg-[#FBFBFA] border-t border-stone-100 hidden">
         <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Dokumentasi</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Galeri Foto</h3>
         <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
     </section>
 
-    <!-- WEDDING GIFT -->
     <section id="gift-section" class="py-28 px-8 bg-stone-50 border-t border-stone-100 hidden">
         <p class="text- uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Wedding Gift</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Kirim Hadiah Digital</h3>
         <div id="gift-container" class="space-y-3"></div>
     </section>
 
-    <!-- UCAPAN -->
     <section id="rsvp-section" class="py-28 px-6 md:px-10 bg-[var(--bg-color)] text-[var(--text-color)]">
         <div class="max-w-2xl mx-auto">
             <p class="text- uppercase tracking-[0.4em] text-[var(--theme-color)]/70 mb-3 text-center">Pesan / Doa Restu</p>
             <h3 class="font-serif text-4xl font-light tracking-wide mb-8 text-center">Konfirmasi</h3>
-            
             <form id="wishes-form" class="space-y-4 bg-white/60 backdrop-blur-sm p-6 md:p-8 border border-[var(--soft-color)] mb-10">
-                <div>
-                    <label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Nama</label>
-                    <input type="text" id="wish-name" required class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none focus:border-[var(--theme-color)] transition">
-                </div>
+                <div><label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Nama</label><input type="text" id="wish-name" required class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none focus:border-[var(--theme-color)] transition"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Kehadiran</label>
-                        <select id="wish-status" class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none focus:border-[var(--theme-color)] transition">
-                            <option value="Hadir">Hadir</option>
-                            <option value="Tidak Hadir">Tidak Hadir</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Jumlah</label>
-                        <select id="wish-pax" class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none focus:border-[var(--theme-color)] transition">
-                            <option value="1">1 Pax</option>
-                            <option value="2">2 Pax</option>
-                            <option value="3">3 Pax</option>
-                            <option value="4">4 Pax</option>
-                        </select>
-                    </div>
+                    <div><label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Kehadiran</label><select id="wish-status" class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none focus:border-[var(--theme-color)] transition"><option value="Hadir">Hadir</option><option value="Tidak Hadir">Tidak Hadir</option></select></div>
+                    <div><label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Jumlah</label><select id="wish-pax" class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none focus:border-[var(--theme-color)] transition"><option value="1">1 Pax</option><option value="2">2 Pax</option><option value="3">3 Pax</option><option value="4">4 Pax</option></select></div>
                 </div>
-                <div>
-                    <label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Pesan / Doa</label>
-                    <textarea id="wish-message" required rows="3" class="w-full bg-transparent border border-[var(--soft-color)] p-3 text-sm focus:outline-none focus:border-[var(--theme-color)] transition resize-none"></textarea>
-                </div>
+                <div><label class="block text- uppercase tracking-[0.3em] mb-2 text-[var(--theme-color)]/80">Pesan / Doa</label><textarea id="wish-message" required rows="3" class="w-full bg-transparent border border-[var(--soft-color)] p-3 text-sm focus:outline-none focus:border-[var(--theme-color)] transition resize-none"></textarea></div>
                 <button type="submit" class="w-full bg-[var(--theme-color)] text-white text- uppercase tracking-[0.4em] py-4 hover:bg-[var(--text-color)] transition duration-500">Kirim Ucapan</button>
             </form>
-            
             <div class="border-t border-[var(--soft-color)] pt-8">
                 <p class="text- uppercase tracking-[0.3em] mb-6 text-center text-[var(--theme-color)]/80">Daftar Ucapan Tamu</p>
                 <div id="wishes-box" class="space-y-4 max-h- overflow-y-auto pr-2"></div>
@@ -174,14 +130,12 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="py-28 bg-[#111411] text-white text-center px-8">
         <p class="font-serif italic text-lg text-stone-400 mb-6">Terima Kasih,</p>
         <h2 id="footer-names" class="font-serif text-4xl font-light tracking-widest text-stone-200 mb-12"></h2>
         <div class="h- w-8 bg-stone-700 mx-auto mb-8"></div>
         <p class="text- uppercase tracking-[0.6em] text-stone-500 font-mono">Designed by Omah Aksara Digital Studio</p>
     </footer>
-
 </main>
 
 <!-- MUSIC FLOATER -->
@@ -189,39 +143,32 @@
     <div id="disk-wrap" class="disk-text-wrap">
         <svg class="w-full h-full p-1 text-[var(--text-color)] opacity-70" viewBox="0 0 100 100">
             <path id="textPath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"></path>
-            <text font-size="8.3" font-family="Cormorant Garamond" letter-spacing="3" fill="currentColor">
-                <textPath href="#textPath"> • SENANDUNG AKSARA • GENDING RAMPAK </textPath>
-            </text>
+            <text font-size="8.3" font-family="Cormorant Garamond" letter-spacing="3" fill="currentColor"><textPath href="#textPath"> • SENANDUNG AKSARA • GENDING RAMPAK </textPath></text>
         </svg>
         <i id="music-icon-state" class="fa-solid fa-play absolute text- text-stone-600"></i>
     </div>
 </div>
-
 <audio id="audio" loop></audio>
 
 <script>
     const params = new URLSearchParams(window.location.search);
     const clientSlug = params.get('c') || 'afif-sindi';
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
-    const basePath = `./`; // Karena index.html & data.json 1 folder
-    
-    // URL APPS SCRIPT KAMU - UDAH BENER
+    const basePath = `./`; // SEMUA FILE 1 FOLDER
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydAgyv2GqcmbMhwy9UyehhajELpBKmCkG9xhxgo01tINf4BYuFL2uLOK1Ca0ZKreg94A/exec';
 
     fetch(`${basePath}data.json`)
-   .then(res => {
-        if(!res.ok) throw new Error('data.json tidak ditemukan');
+.then(res => {
+        if(!res.ok) throw new Error('data.json tidak ditemukan di ' + basePath);
         return res.json();
     })
-   .then(data => {
+.then(data => {
         const { couple, settings, events, gallery, loveStory, quote, logistics, music, digitalGift } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
 
-        // Theme Color
         if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
         if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
 
-        // Cover & Hero
         document.getElementById('cover-names').innerText = pairNick;
         document.getElementById('hero-names').innerText = pairNick;
         document.getElementById('footer-names').innerText = pairNick;
@@ -229,14 +176,12 @@
         document.getElementById('hero-image').src = basePath + gallery.heroImage;
         document.getElementById('cover-image').src = basePath + gallery.heroImage;
 
-        // Quote
         if(quote?.text) {
             document.getElementById('quote-arab').textContent = quote.arab || '';
             document.getElementById('quote-text').innerHTML = `“ ${quote.text} ”`;
             document.getElementById('quote-source').textContent = quote.source || '';
         }
 
-        // Couple
         document.getElementById('groom-section').innerHTML = `
             <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.groom.image}"></div>
             <div class="mt-8 text-left pl-4 reveal">
@@ -255,12 +200,11 @@
                 ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text- tracking-[0.3em] uppercase font-medium text-amber-700/80">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-1"></i></a>` : ''}
             </div>`;
 
-        // Events
         if(events?.length && settings.showCountdown) {
             document.getElementById('event-section').classList.remove('hidden');
             events.forEach(ev => {
                 document.getElementById('event-list').innerHTML += `
-                    <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
+                    <div class="bg-white border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
                         <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5>
                         <p class="text- uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
                         <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
@@ -270,13 +214,11 @@
                         <a href="${ev.googleMaps}" target="_blank" class="btn-editorial">Buka Peta Lokasi</a>
                     </div>`;
             });
-
-            // Countdown
             const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00+08:00`).getTime();
             setInterval(() => {
                 const now = new Date().getTime();
                 const diff = targetTime - now;
-                const d = Math.max(0, Math.floor(diff / (1000*60*60*24)));
+                const d = Math.max(0, Math.floor(diff / (1000*60*24)));
                 const h = Math.max(0, Math.floor((diff % (1000*60*60*24)) / (1000*60*60)));
                 const m = Math.max(0, Math.floor((diff % (1000*60*60)) / (1000*60)));
                 const s = Math.max(0, Math.floor((diff % (1000*60)) / 1000));
@@ -289,7 +231,6 @@
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
 
-        // Love Story
         if(loveStory?.length && settings.showLoveStory) {
             document.getElementById('story-section').classList.remove('hidden');
             loveStory.forEach(ls => {
@@ -302,7 +243,6 @@
             });
         }
 
-        // Gallery
         if(gallery?.album?.length && settings.showGallery) {
             document.getElementById('gallery-section').classList.remove('hidden');
             gallery.album.forEach(img => {
@@ -310,7 +250,6 @@
             });
         }
 
-        // Wedding Gift
         if(digitalGift?.accounts?.length && settings.showGift) {
             document.getElementById('gift-section').classList.remove('hidden');
             digitalGift.accounts.forEach((bank, i) => {
@@ -326,25 +265,22 @@
             });
         }
 
-        // MUSIC - PAKE YANG DEFAULT TRUE
+        // MUSIC - PAKE YANG DEFAULT TRUE - contohlagu (6).mp3
         if(music?.playlist?.length && settings.musicAutoplay) {
             const defaultSong = music.playlist.find(song => song.isDefault) || music.playlist[0];
             const audio = document.getElementById('audio');
             const diskWrap = document.getElementById('disk-wrap');
             const stateIcon = document.getElementById('music-icon-state');
-            
             audio.src = defaultSong.url;
-            
             const musicBtn = document.getElementById('music-btn');
             musicBtn.classList.remove('hidden');
-            
             musicBtn.onclick = () => {
-                if(audio.paused) { 
-                    audio.play(); 
+                if(audio.paused) {
+                    audio.play();
                     diskWrap.classList.remove('paused');
                     stateIcon.className = "fa-solid fa-pause text- text-stone-600";
-                } else { 
-                    audio.pause(); 
+                } else {
+                    audio.pause();
                     diskWrap.classList.add('paused');
                     stateIcon.className = "fa-solid fa-play absolute text- text-stone-600 pl-";
                 }
@@ -355,20 +291,19 @@
         function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
             wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa...</p>`;
-
             fetch(`${SCRIPT_URL}?id_klien=${clientSlug}`)
-           .then(res => res.json())
-           .then(wishes => {
+        .then(res => res.json())
+        .then(wishes => {
                 wishesBox.innerHTML = '';
                 if (!wishes || wishes.length === 0) {
                     wishesBox.innerHTML = `<p class="text- text-stone-400 text-center py-4 font-light italic">Belum ada ucapan. Jadilah yang pertama.</p>`;
                     return;
                 }
                 wishes.forEach(wish => {
-                    const badgeColor = wish.kehadiran === 'Hadir'? 'bg-[var(--theme-color)]/10 text-[var(--theme-color)] border border-[var(--theme-color)]/20' : 'bg-stone-100 text-stone-500 border border-stone-200';
+                    const badgeColor = wish.kehadiran === 'Hadir'? 'bg-[var(--theme-color)]/10 text-[var(--theme-color)] border border-[var(--theme-color)]/20' : 'bg-stone-100 text-stone-500 border-stone-200';
                     let displayTime = wish.timestamp? new Date(wish.timestamp).toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
                     wishesBox.innerHTML += `
-                        <div class="p-4 bg-white/50 border border-[var(--soft-color)] space-y-2 text-left">
+                        <div class="p-4 bg-white/50 border-[var(--soft-color)] space-y-2 text-left">
                             <div class="flex items-center justify-between">
                                 <p class="text-sm font-medium text-[var(--text-color)]">${wish.nama}</p>
                                 <span class="text- px-2 py-1 font-medium uppercase tracking-wider ${badgeColor}">${wish.kehadiran}</span>
@@ -381,18 +316,17 @@
                         </div>`;
                 });
             })
-           .catch(err => {
+        .catch(err => {
                 console.error("Gagal load ucapan:", err);
                 wishesBox.innerHTML = `<p class="text- text-red-500/80 text-center py-4 font-light italic">Gagal memuat ucapan.</p>`;
             });
         }
-        
+
         document.getElementById('wishes-form').addEventListener('submit', function(e){
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             btn.innerHTML = 'Mengirim...';
             btn.disabled = true;
-            
             const payload = {
                 id_klien: clientSlug,
                 nama: document.getElementById('wish-name').value,
@@ -400,15 +334,14 @@
                 kehadiran: document.getElementById('wish-status').value,
                 jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
             };
-            
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-           .then(() => {
+        .then(() => {
                 document.getElementById('wishes-form').reset();
                 btn.innerHTML = 'Terkirim ✓';
                 setTimeout(() => { btn.innerHTML = 'Kirim Ucapan'; btn.disabled = false; }, 2000);
                 setTimeout(loadGoogleSheetsWishes, 1500);
             })
-           .catch(() => {
+        .catch(() => {
                 btn.innerHTML = 'Gagal. Coba Lagi';
                 btn.disabled = false;
             });
@@ -422,19 +355,25 @@
             const cover = document.getElementById('cover');
             cover.style.transform = 'translateY(-100%)';
             document.getElementById('app').style.opacity = '1';
-            
-            // Auto play musik
             if(music?.autoplay && music?.playlist?.length) {
-                const defaultSong = music.playlist.find(song => song.isDefault) || music.playlist[0];
                 document.getElementById('audio').play().catch(() => {});
             }
-
-            // Reveal animasi
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
             }, { threshold: 0.08 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
     })
-   .catch(err => {
+.catch(err => {
         console.error('Gagal load data.json:', err);
+        document.body.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;"><h1>Error</h1><p>data.json tidak ditemukan di folder ini.</p><p>Pastikan file ada di: ${basePath}data.json</p></div>`;
+    });
+
+    function copyRek(id) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text);
+        alert('No. Rekening berhasil disalin: ' + text);
+    }
+</script>
+</body>
+</html>
