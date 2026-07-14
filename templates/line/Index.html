@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Karsa — Omah Aksara</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Great+Vibes&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --theme-color: #5A6955;
+            --bg-color: #F7F5F0;
+            --text-color: #242923;
+            --soft-color: #E2D9CB;
+            --white-soft: #FDFDFB;
+            --accent: #C49263;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-color); color: var(--text-color); font-family: 'Montserrat', sans-serif; overflow-x: hidden; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+       .font-serif { font-family: 'Cormorant Garamond', serif; }
+       .font-script { font-family: 'Great Vibes', cursive; }
+       .font-arab { font-family: 'Scheherazade New', serif; }
+       .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+       .reveal.active { opacity: 1; transform: translateY(0); }
+        #cover { transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.8s; }
+       .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
+       .btn-open { border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); padding: 18px 44px; letter-spacing: 5px; font-size: 9px; text-transform: uppercase; transition: all 0.6s; }
+       .btn-open:hover { background: #ffffff; color: #111411; letter-spacing: 7px; }
+       .phone-wrapper { max-width: 480px; margin: 0 auto; background: var(--white-soft); box-shadow: 0 40px 100px rgba(0,0,0,0.04); position: relative; min-height: 100vh; }
+
+        /* Boho Baru */
+       .floral-corner { position: absolute; width: 120px; opacity: 0.8; pointer-events: none; z-index: 2; }
+       .floral-left { left: -20px; bottom: -20px; }
+       .floral-right { right: -20px; top: 80px; transform: rotate(180deg); }
+       .count-box { border: 1px solid #EDE9E3; padding: 14px 10px; min-width: 68px; text-align: center; background: #fff; }
+       .count-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; line-height: 1; color: #B8B3AD; }
+       .count-label { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: #9C9C9C; margin-top: 4px; }
+       .timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: repeating-linear-gradient(to bottom, var(--soft-color) 0 6px, transparent 6px 12px); transform: translateX(-50%); }
+       .circle-frame { width: 180px; height: 180px; border-radius: 50%; overflow: hidden; margin: 0 auto; border: 6px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; }
+       .masonry { column-count: 2; column-gap: 8px; }
+       .masonry img { width: 100%; margin-bottom: 8px; break-inside: avoid; }
+
+       .music-disk-box { position: fixed; bottom: 35px; right: calc(50% - 190px); z-index: 90; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        @media (max-width: 480px) {.music-disk-box { right: 25px; } }
+       .disk-text-wrap { width: 52px; height: 52px; background: rgba(255,255,255,0.9); border: 1px solid var(--soft-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: rotateDisk 8s linear infinite; }
+       .disk-text-wrap.paused { animation-play-state: paused; }
+        @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<!-- COVER TETAP ID LAMA -->
+<section id="cover" class="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#111411]">
+    <img id="cover-image" class="absolute inset-0 w-full h-full object-cover opacity-50 scale-105" src="" crossorigin="anonymous">
+    <div class="cover-gradient absolute inset-0"></div>
+    <div class="relative z-10 text-center text-white px-8 max-w-sm">
+        <p class="font-serif italic text-lg tracking-wide mb-3 opacity-70">The Wedding of</p>
+        <h1 id="cover-names" class="font-serif text-5xl font-light mb-12 tracking-wide leading-tight"></h1>
+        <div class="h-px w-12 bg-white/20 mx-auto mb-10"></div>
+        <p class="uppercase tracking-[0.4em] text-xs mb-2.5 text-stone-400 font-medium">Salam Hangat Untuk:</p>
+        <h2 id="cover-guest" class="font-serif text-2xl font-light tracking-wide text-stone-200 mb-14"></h2>
+        <button id="open-btn" class="btn-open">Dengan Bahagia Mengundang</button>
+    </div>
+</section>
+
+<main id="app" class="phone-wrapper opacity-0 pb-1">
+    <!-- HERO ALA GAMBAR -->
+    <section class="relative h-[85vh] flex items-center justify-center px-6 overflow-hidden">
+        <img id="hero-image" class="absolute inset-0 w-full h-full object-cover" src="">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="relative z-10 text-center text-white">
+            <div class="mb-4 flex justify-center"><i class="fa-solid fa-leaf text-white/60 text-xl"></i></div>
+            <h2 id="hero-names" class="font-serif text-4xl font-light tracking-[0.2em] uppercase"></h2>
+            <p class="font-script text-xl mt-3 opacity-80">We Are Getting Married</p>
+            <a href="#event-section" class="mt-8 inline-block bg-white/90 text-stone-800 px-8 py-3 text-[10px] tracking-[4px] uppercase">Read More</a>
+        </div>
+    </section>
+
+    <!-- TANGGAL + COUNTDOWN KOTAK -->
+    <section class="py-16 px-6 text-center bg-white relative overflow-hidden reveal">
+        <img src="https://i.ibb.co/LzZ2M4v/leaf.png" class="floral-corner floral-right opacity-40" style="width:140px">
+        <img src="https://i.ibb.co/LzZ2M4v/leaf.png" class="floral-corner floral-left opacity-40" style="width:110px; transform: rotate(90deg)">
+        <p id="event-date-display" class="font-script text-2xl text-stone-500 mb-2">October 20th, 2019</p>
+        <p id="event-location-display" class="text-[10px] tracking-[3px] uppercase text-stone-400">Lokasi</p>
+        <div id="countdown-wrap" class="mt-10 hidden">
+            <div id="countdown" class="flex justify-center gap-2 flex-wrap"></div>
+        </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="px-10 py-16 text-center reveal bg-[#FDFCFB]">
+        <p id="quote-arab" class="font-arab text-2xl mb-6 text-[var(--theme-color)] leading-loose"></p>
+        <p id="quote-text" class="font-serif italic text-lg text-stone-700 font-light leading-relaxed"></p>
+        <p id="quote-source" class="text-[9px] uppercase tracking-[0.35em] font-medium text-stone-400 mt-6"></p>
+    </section>
+
+    <!-- OUR LOVE STORY - CIRCLE -->
+    <section id="story-section" class="py-20 bg-white hidden relative">
+        <div class="text-center mb-14">
+            <p class="font-script text-3xl text-[var(--theme-color)]">Our · Love · Story</p>
+            <p class="text-[9px] tracking-[4px] uppercase text-stone-400 mt-2">Perjalanan Kami</p>
+        </div>
+        <div class="flex justify-between items-start px-6 gap-4">
+            <div id="groom-section" class="w-1/3 text-center"></div>
+            <div class="w-1/3"><div id="story-center-img" class="circle-frame"></div></div>
+            <div id="bride-section" class="w-1/3 text-center"></div>
+        </div>
+        <div id="story-list" class="px-10 mt-16 space-y-8"></div>
+    </section>
+
+    <!-- WEDDING TIMELINE -->
+    <section id="event-section" class="py-20 px-6 bg-[#FFFEFD] hidden relative">
+        <div class="text-center mb-14">
+            <p class="font-script text-3xl text-[var(--theme-color)]">Wedding · Timeline</p>
+            <p class="text-[9px] tracking-[4px] uppercase text-stone-400">Organization</p>
+        </div>
+        <div class="relative max-w-sm mx-auto">
+            <div class="timeline-line"></div>
+            <div id="event-list" class="space-y-12"></div>
+        </div>
+    </section>
+
+    <!-- GALLERY MASONRY -->
+    <section id="gallery-section" class="py-20 px-4 bg-white hidden">
+        <div class="text-center mb-10">
+            <p class="font-script text-3xl text-[var(--theme-color)]">Wedding · Gallery</p>
+            <p class="text-[9px] tracking-[4px] uppercase text-stone-400">Memories</p>
+        </div>
+        <div id="gallery-grid" class="masonry"></div>
+    </section>
+
+    <!-- GIFT -->
+    <section id="gift-section" class="py-20 px-8 bg-stone-50 border-t border-stone-100 hidden">
+        <p class="font-script text-3xl text-center text-[var(--theme-color)] mb-10">Wedding Gift</p>
+        <div id="gift-container" class="space-y-3"></div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp-section" class="py-20 px-6 bg-[#F7F5F0]">
+        <div class="max-w-2xl mx-auto">
+            <p class="font-script text-3xl text-center text-[var(--theme-color)]">Join Us</p>
+            <form id="wishes-form" class="space-y-4 bg-white/60 p-6 border border-[var(--soft-color)] mt-8 mb-10">
+                <div><label class="block text-[9px] uppercase tracking-[0.3em] mb-2">Nama</label><input type="text" id="wish-name" required class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm focus:outline-none"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-[9px] uppercase tracking-[0.3em] mb-2">Kehadiran</label><select id="wish-status" class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm"><option value="Hadir">Hadir</option><option value="Tidak Hadir">Tidak Hadir</option></select></div>
+                    <div><label class="block text-[9px] uppercase tracking-[0.3em] mb-2">Jumlah</label><select id="wish-pax" class="w-full bg-transparent border-b border-[var(--soft-color)] py-2 text-sm"><option value="1">1 Pax</option><option value="2">2 Pax</option><option value="3">3 Pax</option><option value="4">4 Pax</option></select></div>
+                </div>
+                <div><label class="block text-[9px] uppercase tracking-[0.3em] mb-2">Pesan</label><textarea id="wish-message" required rows="3" class="w-full bg-transparent border border-[var(--soft-color)] p-3 text-sm resize-none"></textarea></div>
+                <button type="submit" class="w-full bg-[var(--theme-color)] text-white text-[10px] uppercase tracking-[0.4em] py-4">Kirim Ucapan</button>
+            </form>
+            <div id="wishes-box" class="space-y-4 max-h-96 overflow-y-auto pr-2"></div>
+        </div>
+    </section>
+
+    <footer class="py-16 bg-[#111411] text-white text-center px-8">
+        <p class="font-script text-2xl text-stone-400 mb-4">We Can't Wait To See You!</p>
+        <h2 id="footer-names" class="font-serif text-3xl font-light tracking-widest text-stone-200 mb-8"></h2>
+        <p class="text-[9px] uppercase tracking-[0.6em] text-stone-500">Designed by Omah Aksara</p>
+    </footer>
+</main>
+
+<div id="music-btn" class="music-disk-box hidden">
+    <div id="disk-wrap" class="disk-text-wrap"><svg class="w-full h-full p-1 opacity-70" viewBox="0 0 100 100"><path id="textPath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"></path><text font-size="8.3" font-family="Cormorant Garamond" letter-spacing="3" fill="currentColor"><textPath href="#textPath"> • SENANDUNG AKSARA • GENDING RAMPAK </textPath></text></svg><i id="music-icon-state" class="fa-solid fa-play absolute text-xs"></i></div>
+</div>
+<audio id="audio" loop></audio>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const clientSlug = params.get('c') || 'afif-sindi';
+    const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+    const basePath = `../../public/clients/${clientSlug}/`;
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
+
+    fetch(`${basePath}data.json`, { cache: 'no-store' })
+  .then(res => {
+        if(!res.ok) throw new Error(`data.json tidak ditemukan`);
+        return res.json();
+    })
+  .then(data => {
+        const { couple, settings, events, gallery, loveStory, quote, music, digitalGift } = data;
+        const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
+        if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
+        if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
+
+        // ID LAMA WAJIB ADA
+        document.getElementById('cover-names').innerText = pairNick;
+        document.getElementById('hero-names').innerText = `${couple.groom.nickname} · ${couple.bride.nickname}`.toUpperCase();
+        document.getElementById('footer-names').innerText = pairNick;
+        document.getElementById('cover-guest').innerText = guestName;
+        document.getElementById('hero-image').src = basePath + gallery.heroImage;
+        document.getElementById('cover-image').src = basePath + gallery.heroImage;
+
+        if(quote?.text) {
+            document.getElementById('quote-arab').textContent = quote.arab || '';
+            document.getElementById('quote-text').innerHTML = `“ ${quote.text} ”`;
+            document.getElementById('quote-source').textContent = quote.source || '';
+        }
+
+        // GROOM & BRIDE - CIRCLE STYLE BARU TAPI ID LAMA
+        document.getElementById('groom-section').innerHTML = `
+            <div class="circle-frame" style="width:100px; height:100px"><img src="${basePath + couple.groom.image}" class="w-full h-full object-cover"></div>
+            <h4 class="font-serif text-sm mt-3">${couple.groom.nickname}</h4>
+            <p class="text-[8px] text-stone-400 mt-1">Putra dari<br>${couple.groom.father}<br>& ${couple.groom.mother}</p>`;
+        document.getElementById('bride-section').innerHTML = `
+            <div class="circle-frame" style="width:100px; height:100px"><img src="${basePath + couple.bride.image}" class="w-full h-full object-cover"></div>
+            <h4 class="font-serif text-sm mt-3">${couple.bride.nickname}</h4>
+            <p class="text-[8px] text-stone-400 mt-1">Putri dari<br>${couple.bride.father}<br>& ${couple.bride.mother}</p>`;
+
+        document.getElementById('story-center-img').innerHTML = `<img src="${basePath + gallery.heroImage}" class="w-full h-full object-cover">`;
+
+        // EVENT LIST - TIMELINE ICON
+        if(events?.length) {
+            document.getElementById('event-section').classList.remove('hidden');
+            document.getElementById('event-date-display').innerText = new Date(events[0].date).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+            document.getElementById('event-location-display').innerText = events[0].locationName || events[0].address;
+            document.getElementById('event-list').innerHTML = '';
+            const icons = ['fa-ring', 'fa-champagne-glasses', 'fa-camera', 'fa-cake-candles'];
+            events.forEach((ev,i) => {
+                const isLeft = i % 2 === 0;
+                document.getElementById('event-list').innerHTML += `
+                    <div class="relative flex ${isLeft? 'justify-start' : 'justify-end'}">
+                        <div class="w-[44%] ${isLeft? 'text-right pr-6' : 'text-left pl-6'}">
+                            <h5 class="font-serif text-[11px] tracking-[2px] uppercase">${ev.title}</h5>
+                            <p class="text-[8px] text-[#C9A89A] tracking-widest">Wedding</p>
+                            <p class="text-[10px] text-stone-500 mt-1">${ev.startTime} - ${ev.endTime}<br>${ev.address}</p>
+                        </div>
+                        <div class="absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-white border border-stone-200 rounded-full flex items-center justify-center"><i class="fa-solid ${icons[i] || 'fa-heart'} text-stone-400 text-sm"></i></div>
+                    </div>`;
+            });
+
+            // COUNTDOWN KOTAK
+            const tzMap = { WITA: '+08:00', WIB: '+07:00', WIT: '+09:00' };
+            const tz = tzMap[events[0].timezone] || '+08:00';
+            const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00${tz}`).getTime();
+            setInterval(() => {
+                const diff = targetTime - new Date().getTime();
+                const d = Math.max(0, Math.floor(diff / (1000*60*60*24)));
+                const h = Math.max(0, Math.floor((diff % (1000*60*60*24)) / (1000*60*60)));
+                const m = Math.max(0, Math.floor((diff % (1000*60*60)) / (1000*60)));
+                const s = Math.max(0, Math.floor((diff % (1000*60)) / 1000));
+                document.getElementById('countdown').innerHTML = `
+                    <div class="count-box"><div class="count-num">${d.toString().padStart(2,'0')}</div><div class="count-label">Days</div></div>
+                    <div class="count-box"><div class="count-num">${h.toString().padStart(2,'0')}</div><div class="count-label">Hours</div></div>
+                    <div class="count-box"><div class="count-num">${m.toString().padStart(2,'0')}</div><div class="count-label">Minutes</div></div>
+                    <div class="count-box"><div class="count-num">${s.toString().padStart(2,'0')}</div><div class="count-label">Seconds</div></div>`;
+            }, 1000);
+            document.getElementById('countdown-wrap').classList.remove('hidden');
+        }
+
+        if(loveStory?.length && settings.showLoveStory) {
+            document.getElementById('story-section').classList.remove('hidden');
+            document.getElementById('story-list').innerHTML = '';
+            loveStory.forEach(ls => {
+                document.getElementById('story-list').innerHTML += `
+                    <div class="reveal text-center">
+                        <p class="text-[9px] tracking-widest text-[#C9A89A]">${ls.date}</p>
+                        <h6 class="font-serif text-lg">${ls.title}</h6>
+                        <p class="text-xs text-stone-500 mt-2 leading-relaxed">${ls.description}</p>
+                    </div>`;
+            });
+        }
+
+        if(gallery?.album?.length && settings.showGallery) {
+            document.getElementById('gallery-section').classList.remove('hidden');
+            document.getElementById('gallery-grid').innerHTML = '';
+            gallery.album.forEach(img => {
+                document.getElementById('gallery-grid').innerHTML += `<img src="${basePath + img}" class="reveal">`;
+            });
+        }
+
+        if(digitalGift?.accounts?.length && settings.showGift) {
+            document.getElementById('gift-section').classList.remove('hidden');
+            document.getElementById('gift-container').innerHTML = '';
+            digitalGift.accounts.forEach((bank, i) => {
+                document.getElementById('gift-container').innerHTML += `
+                    <div class="p-4 bg-white border text-center">
+                        <p class="text-[10px] text-stone-400">${bank.provider}</p>
+                        <p class="font-serif text-lg my-1" id="rek-${i}">${bank.accountNumber}</p>
+                        <p class="text-xs mb-3">a.n ${bank.accountHolder}</p>
+                        <button onclick="copyRek('rek-${i}')" class="text-[9px] border px-4 py-2 uppercase tracking-widest">Salin</button>
+                    </div>`;
+            });
+        }
+
+        if(music?.playlist?.length && settings.musicAutoplay) {
+            const defaultSong = music.playlist.find(s => s.isDefault) || music.playlist[0];
+            const audio = document.getElementById('audio');
+            audio.src = defaultSong.url;
+            document.getElementById('music-btn').classList.remove('hidden');
+            document.getElementById('music-btn').onclick = () => {
+                const wrap = document.getElementById('disk-wrap');
+                const icon = document.getElementById('music-icon-state');
+                if(audio.paused){ audio.play(); wrap.classList.remove('paused'); icon.className = "fa-solid fa-pause absolute text-xs"; }
+                else{ audio.pause(); wrap.classList.add('paused'); icon.className = "fa-solid fa-play absolute text-xs"; }
+            };
+        }
+
+        // JSONP UCAPAN TETAP
+        function loadGoogleSheetsWishes() {
+            const box = document.getElementById('wishes-box');
+            box.innerHTML = `<p class="text-xs text-center py-4 animate-pulse">Memuat doa...</p>`;
+            const cb = 'cb_' + Math.round(Math.random()*100000);
+            window[cb] = function(wishes) {
+                delete window[cb]; document.body.removeChild(script);
+                box.innerHTML = '';
+                if(!wishes ||!wishes.length){ box.innerHTML = `<p class="text-xs text-center">Belum ada ucapan</p>`; return; }
+                wishes.forEach(w => {
+                    box.innerHTML += `<div class="p-3 bg-white border text-left"><p class="text-xs font-medium">${w.nama} - <span class="text-[10px] text-stone-400">${w.kehadiran}</span></p><p class="text-xs text-stone-600 mt-1">${w.ucapan}</p></div>`;
+                });
+            };
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}&callback=${cb}`;
+            document.body.appendChild(script);
+        }
+        document.getElementById('wishes-form').addEventListener('submit', function(e){
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.innerHTML = 'Mengirim...'; btn.disabled = true;
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
+                id_klien: clientSlug,
+                nama: document.getElementById('wish-name').value,
+                ucapan: document.getElementById('wish-message').value,
+                kehadiran: document.getElementById('wish-status').value,
+                jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
+            }) }).then(() => {
+                e.target.reset(); btn.innerHTML = 'Terkirim ✓';
+                setTimeout(()=>{ btn.innerHTML = 'Kirim Ucapan'; btn.disabled = false; }, 2000);
+                setTimeout(loadGoogleSheetsWishes, 1500);
+            });
+        });
+        loadGoogleSheetsWishes();
+
+        document.getElementById('open-btn').onclick = () => {
+            document.getElementById('cover').style.transform = 'translateY(-100%)';
+            document.getElementById('app').style.opacity = '1';
+            if(settings.musicAutoplay) document.getElementById('audio').play().catch(()=>{});
+            const obs = new IntersectionObserver(ents => { ents.forEach(en => { if(en.isIntersecting) en.target.classList.add('active'); }); }, { threshold: 0.08 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        };
+    })
+  .catch(err => {
+        document.body.innerHTML = `<div style="padding:40px;text-align:center"><h1>Error Load Data</h1><p>${err.message}</p><p>Slug: ${clientSlug}</p></div>`;
+    });
+    function copyRek(id){ navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>alert('Disalin: '+document.getElementById(id).innerText)); }
+</script>
+</body>
+</html>
