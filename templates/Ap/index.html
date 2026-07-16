@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Omah Aksara</title>
+    <title>Karsa — Omah Aksara</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
@@ -17,7 +17,19 @@
             --soft-color: #F7D6D0;  
             --white-soft: #FFFBFB;  
             --accent: #E8A598;      
+            --card-bg: #FFFFFF;
         }
+        
+        /* Tema Gelap (Dark Mode) */
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #E0E0E0;
+            --soft-color: #2D2424;
+            --white-soft: #1E1E1E;
+            --accent: #D48C7F;
+            --card-bg: #1A1A1A;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
         body {
@@ -27,12 +39,12 @@
             overflow-x: hidden;
             line-height: 1.8;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
         .font-serif { font-family: 'Cormorant Garamond', serif; }
         .font-script { font-family: 'Playfair Display', serif; font-style: italic; }
         .font-arab { font-family: 'Scheherazade New', serif; }
         
-        /* Sparkle & Cloud Overlay Texture */
         .sparkle-bg {
             background-image: radial-gradient(rgba(232, 165, 152, 0.15) 1px, transparent 0);
             background-size: 24px 24px;
@@ -51,15 +63,15 @@
             box-shadow: 0 40px 80px rgba(74,62,61,0.08);
             position: relative;
             min-height: 100vh;
+            transition: background-color 0.5s ease;
         }
 
-        /* Polaroid Frame Styles */
         .polaroid-frame {
-            background: white;
+            background: var(--card-bg);
             padding: 12px 12px 28px 12px;
-            box-shadow: 0 10px 25px rgba(232, 165, 152, 0.25);
-            border: 1px solid rgba(247, 214, 208, 0.5);
-            transition: transform 0.5s ease;
+            box-shadow: 0 10px 25px rgba(232, 165, 152, 0.15);
+            border: 1px solid var(--soft-color);
+            transition: transform 0.5s ease, background-color 0.5s ease;
         }
         .polaroid-left { transform: rotate(-3deg); }
         .polaroid-right { transform: rotate(4deg); }
@@ -68,42 +80,91 @@
         .story-card {
             position: relative;
             padding: 24px;
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px;
             border: 1px solid var(--soft-color);
-            box-shadow: 0 4px 15px rgba(232,165,152,0.1);
+            box-shadow: 0 4px 15px rgba(232,165,152,0.05);
+            transition: background-color 0.5s ease;
         }
 
         .wish-item {
             background: var(--white-soft);
             border-bottom: 1px dashed var(--soft-color);
             padding: 16px 0;
+            transition: background-color 0.5s ease;
         }
         
-        .music-disk-box {
+        /* Floating Controls */
+        .control-btn-box {
             position: fixed;
             bottom: 30px;
-            right: calc(50% - 190px);
             z-index: 90;
-            cursor: pointer;
-            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--soft-color);
+            border-radius: 30px;
+            box-shadow: 0 8px 24px rgba(232, 165, 152, 0.2);
+            padding: 4px;
+            transition: background-color 0.5s ease;
         }
-        @media (max-width: 435px) { .music-disk-box { right: 20px; } }
         
-        .disk-minimal {
-            width: 46px;
-            height: 46px;
+        .music-layout { right: calc(50% - 190px); padding-right: 12px; }
+        .theme-layout { left: calc(50% - 190px); }
+        
+        @media (max-width: 435px) { 
+            .music-layout { right: 20px; } 
+            .theme-layout { left: 20px; }
+        }
+        
+        .circle-btn {
+            width: 38px;
+            height: 38px;
             background: var(--accent);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 16px rgba(232, 165, 152, 0.4);
+            cursor: pointer;
+            border: none;
         }
-        .disk-minimal.paused { animation-play-state: paused !important; }
+        .circle-btn.paused { animation-play-state: paused !important; }
         .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Calendar Styling */
+        .calendar-sheet {
+            background: var(--card-bg);
+            border: 1px solid var(--soft-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(74,62,61,0.02);
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+        .calendar-sheet::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: var(--accent);
+        }
+        .calendar-grid span { display: inline-flex; align-items: center; justify-content: center; aspect-ratio: 1/1; font-size: 11px; position: relative; }
+        .calendar-grid .marked-day { font-weight: 600; color: #b45309; }
+        .calendar-grid .marked-day::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            width: 5px; height: 5px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+        
+        /* Form inputs adaptation */
+        input, select, textarea {
+            background-color: var(--card-bg) !important;
+            color: var(--text-color) !important;
+        }
     </style>
 </head>
 <body class="sparkle-bg">
@@ -130,7 +191,7 @@
 <main id="app" class="phone-wrapper opacity-0 pb-1 sparkle-bg">
     
     <!-- HERO SECTION -->
-    <section class="relative min-h-screen flex flex-col justify-between px-8 pt-24 pb-16 bg-gradient-to-b from-[#FFF0F2] to-[var(--white-soft)]">
+    <section class="relative min-h-screen flex flex-col justify-between px-8 pt-24 pb-16 bg-gradient-to-b from-transparent to-[var(--white-soft)]">
         <div class="w-full text-center">
             <p class="text-[9px] uppercase tracking-[0.4em] text-rose-400 mb-2">The Wedding of</p>
             <h2 id="hero-names" class="font-serif text-4xl font-light tracking-wide text-[var(--text-color)]"></h2>
@@ -146,88 +207,99 @@
     </section>
 
     <!-- QUOTE SECTION -->
-    <section class="px-8 py-24 text-center bg-white/60 backdrop-blur-sm reveal">
+    <section class="px-8 py-24 text-center bg-white/5 backdrop-blur-sm reveal">
         <p id="quote-arab" class="font-arab text-3xl mb-8 text-[var(--accent)] leading-loose"></p>
-        <p id="quote-text" class="font-serif italic text-base text-stone-600 font-light leading-relaxed px-4"></p>
+        <p id="quote-text" class="font-serif italic text-base text-[var(--text-color)] font-light leading-relaxed px-4 opacity-80"></p>
         <p id="quote-source" class="text-[9px] uppercase tracking-[0.3em] font-medium text-rose-400 mt-6"></p>
     </section>
 
     <!-- BRIDE AND GROOM SECTION -->
-    <section class="py-24 space-y-24 bg-gradient-to-b from-transparent via-white/40 to-transparent">
+    <section class="py-24 space-y-24 bg-gradient-to-b from-transparent via-white/5 to-transparent">
         <div id="groom-section" class="px-8"></div>
         <div id="bride-section" class="px-8"></div>
     </section>
 
     <!-- LOVE STORY TIMELINE -->
-    <section id="story-section" class="py-24 bg-white/80 backdrop-blur-sm hidden">
+    <section id="story-section" class="py-24 bg-white/5 backdrop-blur-sm hidden">
         <p class="text-[10px] uppercase tracking-[0.4em] text-center text-rose-400 mb-2">Jalinan Kasih</p>
         <h3 class="font-serif text-center font-light text-2xl text-[var(--text-color)] mb-16 tracking-wide">Catatan Waktu</h3>
         <div id="story-list" class="px-8 space-y-12"></div>
     </section>
 
     <!-- EVENTS & COUNTDOWN SECTION -->
-    <section id="event-section" class="py-24 px-6 bg-[var(--white-soft)] border-t border-rose-100 hidden">
+    <section id="event-section" class="py-24 px-6 bg-[var(--white-soft)] border-t border-rose-100/10 hidden">
         <p class="text-[10px] uppercase tracking-[0.4em] text-center text-rose-400 mb-2">Pelaksanaan</p>
         <h3 class="font-serif text-center font-light text-2xl text-[var(--text-color)] mb-16 tracking-wide">Agenda Acara</h3>
+        
+        <!-- CALENDAR VIEW COMPONENT -->
+        <div class="mb-12 px-2 reveal">
+            <div class="calendar-sheet p-5 text-center">
+                <h4 id="calendar-month-year" class="font-serif text-base text-[var(--text-color)] tracking-wide mb-4 uppercase"></h4>
+                <div class="grid grid-cols-7 text-[9px] uppercase tracking-wider text-stone-400 font-medium border-b border-stone-100/10 pb-2 mb-2">
+                    <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div id="calendar-days" class="grid grid-cols-7 gap-y-1 calendar-grid text-[var(--text-color)] font-light opacity-90"></div>
+            </div>
+        </div>
+
         <div id="event-list" class="space-y-8"></div>
         
-        <div id="countdown-wrap" class="mt-20 pt-12 border-t border-rose-200/60 hidden text-center">
+        <div id="countdown-wrap" class="mt-20 pt-12 border-t border-rose-200/20 hidden text-center">
             <p class="uppercase tracking-[0.3em] text-[9px] font-medium mb-8 text-rose-400">Menuju Hari Bahagia</p>
             <div id="countdown" class="flex justify-center gap-3"></div>
         </div>
     </section>
 
     <!-- GALLERY ALBUM SECTION -->
-    <section id="gallery-section" class="py-24 px-6 bg-white/50 hidden">
+    <section id="gallery-section" class="py-24 px-6 bg-white/5 hidden">
         <p class="text-[10px] uppercase tracking-[0.4em] text-center text-rose-400 mb-2">Dokumentasi</p>
         <h3 class="font-serif text-center font-light text-2xl text-[var(--text-color)] mb-12 tracking-wide">Galeri Rupa</h3>
         <div id="gallery-grid" class="grid grid-cols-2 gap-4 auto-rows-max px-2"></div>
     </section>
 
     <!-- DIGITAL GIFT / ACCOUNT CARD SECTION -->
-    <section id="gift-section" class="py-24 px-8 bg-gradient-to-b from-transparent to-white/60 hidden">
+    <section id="gift-section" class="py-24 px-8 bg-gradient-to-b from-transparent to-white/5 hidden">
         <p class="text-[10px] uppercase tracking-[0.4em] text-center text-rose-400 mb-2">Tanda Kasih</p>
         <h3 class="font-serif text-center font-light text-2xl text-[var(--text-color)] mb-12 tracking-wide">Dompet Digital</h3>
         <div id="gift-container" class="space-y-6"></div>
     </section>
 
     <!-- RSVP & WISHES FORM -->
-    <section id="rsvp-section" class="py-24 px-6 bg-white">
+    <section id="rsvp-section" class="py-24 px-6">
         <div class="max-w-md mx-auto">
             <p class="text-[10px] uppercase tracking-[0.4em] text-rose-400 mb-2 text-center">Konfirmasi Kehadiran</p>
             <h3 class="font-serif text-3xl font-light tracking-wide mb-12 text-center">Doa & Restu</h3>
             
-            <form id="wishes-form" class="space-y-6 bg-[var(--white-soft)] p-6 border border-rose-100 rounded-2xl mb-12 shadow-sm">
+            <form id="wishes-form" class="space-y-6 bg-[var(--white-soft)] p-6 border border-rose-100/10 rounded-2xl mb-12 shadow-sm">
                 <div>
-                    <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-500">Nama Lengkap</label>
-                    <input type="text" id="wish-name" required class="w-full bg-white border border-rose-100 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-300 transition">
+                    <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-400">Nama Lengkap</label>
+                    <input type="text" id="wish-name" required class="w-full border border-rose-100/20 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-300 transition">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-500">Kehadiran</label>
-                        <select id="wish-status" class="w-full bg-white border border-rose-100 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-300 transition">
+                        <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-400">Kehadiran</label>
+                        <select id="wish-status" class="w-full border border-rose-100/20 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-300 transition">
                             <option value="Hadir">Hadir</option>
                             <option value="Tidak Hadir">Tidak Hadir</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-500">Jumlah Orang</label>
-                        <select id="wish-pax" class="w-full bg-white border border-rose-100 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-300 transition">
+                        <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-400">Jumlah Orang</label>
+                        <select id="wish-pax" class="w-full border border-rose-100/20 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-300 transition">
                             <option value="1">1 Person</option><option value="2">2 Persons</option><option value="3">3 Persons</option><option value="4">4 Persons</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-500">Untaian Kata / Doa</label>
-                    <textarea id="wish-message" required rows="4" class="w-full bg-white border border-rose-100 rounded-lg p-3 text-xs focus:outline-none focus:border-rose-300 transition resize-none"></textarea>
+                    <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-400">Untaian Kata / Doa</label>
+                    <textarea id="wish-message" required rows="4" class="w-full border border-rose-100/20 rounded-lg p-3 text-xs focus:outline-none focus:border-rose-300 transition iframe resize-none"></textarea>
                 </div>
                 
-                <!-- DUA TOMBOL BERDAMPINGAN -->
                 <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button type="submit" class="w-full bg-[var(--text-color)] text-white text-[9px] uppercase tracking-[0.15em] py-4 rounded-xl hover:bg-[var(--accent)] transition duration-500 font-medium text-center shadow-md shadow-rose-950/10">
+                    <button type="submit" class="w-full bg-[var(--accent)] text-white text-[9px] uppercase tracking-[0.15em] py-4 rounded-xl hover:opacity-90 transition duration-500 font-medium text-center shadow-md">
                         Buku Tamu
                     </button>
-                    <button type="button" onclick="sendViaWhatsApp()" class="w-full bg-emerald-700 text-white text-[9px] uppercase tracking-[0.15em] py-4 rounded-xl hover:bg-emerald-800 transition duration-500 font-medium text-center shadow-md shadow-emerald-950/10">
+                    <button type="button" onclick="sendViaWhatsApp()" class="w-full bg-emerald-700 text-white text-[9px] uppercase tracking-[0.15em] py-4 rounded-xl hover:bg-emerald-800 transition duration-500 font-medium text-center shadow-md">
                         <i class="fa-brands fa-whatsapp mr-1 text-xs"></i> Kirim WA
                     </button>
                 </div>
@@ -235,22 +307,27 @@
 
             <div class="pt-4">
                 <p class="text-[10px] uppercase tracking-[0.2em] mb-6 text-center text-stone-400">Daftar Ucapan Tamu</p>
-                <div id="wishes-box" class="space-y-1 max-h-96 overflow-y-auto pr-1"></div>
+                <div id="wishes-box" class="space-y-1"></div>
+                <div class="text-center mt-6">
+                    <button id="load-more-btn" onclick="renderWishesList(true)" class="hidden text-[9px] uppercase tracking-[0.2em] border border-rose-200/30 px-4 py-2 rounded-lg text-rose-400 hover:bg-rose-50/10 transition">
+                        Muat Ucapan Lainnya
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- LOGISTICS / DRESSCODE INFO -->
-    <section id="logistics-section" class="py-24 px-8 bg-gradient-to-b from-white to-[var(--bg-color)] text-center hidden">
+    <section id="logistics-section" class="py-24 px-8 text-center hidden">
         <p class="text-[10px] uppercase tracking-[0.4em] text-rose-400 mb-2">Ketentuan</p>
         <h3 class="font-serif text-2xl font-light text-[var(--text-color)] mb-8 tracking-wide">Dress Code</h3>
-        <p id="dresscode-text" class="text-xs text-stone-500 font-light italic mb-6"></p>
+        <p id="dresscode-text" class="text-xs text-stone-400 font-light italic mb-6"></p>
         <div id="color-palette" class="flex justify-center gap-3 mb-8"></div>
         <p id="guest-note" class="text-xs text-stone-400 font-light max-w-xs mx-auto leading-relaxed"></p>
     </section>
 
     <!-- FOOTER SECTION -->
-    <footer class="py-24 bg-[#2D1B19] text-white text-center px-8">
+    <footer class="py-24 bg-[#1F1211] text-white text-center px-8">
         <p class="font-script text-2xl text-rose-200/80 mb-4">Matur Nuwun,</p>
         <h2 id="footer-names" class="font-serif text-3xl font-light tracking-widest text-[#FFFBFB] mb-12"></h2>
         <div class="h-px w-6 bg-rose-900 mx-auto mb-8"></div>
@@ -258,10 +335,22 @@
     </footer>
 </main>
 
-<!-- AUDIO CONTROL SYSTEM -->
-<div id="music-btn" class="music-disk-box hidden">
-    <div id="disk-wrap" class="disk-minimal animate-spin-slow paused">
-        <i id="music-icon-state" class="fa-solid fa-music text-xs"></i>
+<!-- FLOATING CONTROLS PANEL -->
+<!-- Left Side: Dark/Light Mode Theme Switcher -->
+<div class="control-btn-box theme-layout">
+    <button class="circle-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
+        <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
+    </button>
+</div>
+
+<!-- Right Side: Audio Controller Multi Track -->
+<div id="music-btn" class="control-btn-box music-layout hidden">
+    <div id="disk-wrap" class="circle-btn animate-spin-slow paused" onclick="toggleAudio()">
+        <i id="music-icon-state" class="fa-solid fa-music text-[10px]"></i>
+    </div>
+    <div class="ml-3 flex flex-col justify-center max-w-[100px]">
+        <span id="track-title" class="text-[8px] uppercase tracking-wider text-stone-400 truncate font-medium">Loading...</span>
+        <button onclick="nextTrack()" class="text-left text-[7px] text-rose-400 uppercase tracking-widest mt-0.5 font-bold hover:text-rose-600">Next Song →</button>
     </div>
 </div>
 
@@ -273,13 +362,32 @@
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
     let rsvpWaNumber = "";
     let SCRIPT_URL = "";
+    
+    let playlistTracks = [];
+    let currentTrackIndex = 0;
+    
+    let allWishes = [];
+    let displayedWishesCount = 5;
 
     const isSubFolder = window.location.pathname.includes('/templates/');
     const basePath = isSubFolder ? `../../public/clients/${clientSlug}/` : `public/clients/${clientSlug}/`;
 
+    // --- DARK & LIGHT MODE HANDLER ---
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const icon = document.getElementById('theme-icon');
+        if (currentTheme === 'dark') {
+            document.documentElement.removeAttribute('data-theme');
+            icon.className = "fa-solid fa-moon text-xs";
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.className = "fa-solid fa-sun text-xs";
+        }
+    }
+
     fetch(`${basePath}data.json`, { cache: 'no-store' })
    .then(res => {
-        if(!res.ok) throw new Error(`data.json tidak ditemukan di ${basePath}`);
+        if(!res.ok) throw new Error(`data.json tidak ditemukan`);
         return res.json();
     })
    .then(data => {
@@ -299,9 +407,6 @@
         document.getElementById('hero-image').src = basePath + gallery.heroImage;
         document.getElementById('cover-image').src = basePath + gallery.coverImage;
         
-        document.getElementById('hero-image').onerror = function() { this.src = 'https://placehold.co/600x800/fecdd3/4c0519?text=Hero'; };
-        document.getElementById('cover-image').onerror = function() { this.src = 'https://placehold.co/600x800/4c0519/fecdd3?text=Cover'; };
-        
         if(quote?.text) {
             document.getElementById('quote-arab').textContent = quote.arab || '';
             document.getElementById('quote-text').innerHTML = `“ ${quote.text} ”`;
@@ -309,57 +414,68 @@
         }
         
         document.getElementById('groom-section').innerHTML = `
-            <div class="polaroid-frame polaroid-left max-w-[260px] mx-auto reveal"><img src="${basePath + couple.groom.image}" onerror="this.src='https://placehold.co/400x400?text=Groom'"></div>
+            <div class="polaroid-frame polaroid-left max-w-[260px] mx-auto reveal"><img src="${basePath + couple.groom.image}"></div>
             <div class="mt-8 text-center px-4 reveal">
                 <span class="text-[9px] uppercase tracking-[0.4em] text-rose-400 block mb-2">— MEMPELAI PRIA —</span>
                 <h4 class="font-serif text-3xl font-light text-[var(--text-color)] mb-2 tracking-wide">${couple.groom.name}</h4>
-                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra dari ${couple.groom.father} & ${couple.groom.mother}</p>
-                ${couple.groom.instagram? `<a href="https://instagram.com/${couple.groom.instagram.replace('@','')}" target="_blank" class="inline-block mt-3 text-[10px] tracking-[0.2em] uppercase font-medium text-rose-400"><i class="fa-brands fa-instagram mr-1"></i>${couple.groom.instagram}</a>` : ''}
+                <p class="text-xs text-stone-400 font-light italic leading-relaxed">Putra dari ${couple.groom.father} & ${couple.groom.mother}</p>
             </div>`;
             
         document.getElementById('bride-section').innerHTML = `
-            <div class="polaroid-frame polaroid-right max-w-[260px] mx-auto reveal"><img src="${basePath + couple.bride.image}" onerror="this.src='https://placehold.co/400x400?text=Bride'"></div>
+            <div class="polaroid-frame polaroid-right max-w-[260px] mx-auto reveal"><img src="${basePath + couple.bride.image}"></div>
             <div class="mt-8 text-center px-4 reveal">
                 <span class="text-[9px] uppercase tracking-[0.4em] text-rose-400 block mb-2">— MEMPELAI WANITA —</span>
                 <h4 class="font-serif text-3xl font-light text-[var(--text-color)] mb-2 tracking-wide">${couple.bride.name}</h4>
-                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putri dari ${couple.bride.father} & ${couple.bride.mother}</p>
-                ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-3 text-[10px] tracking-[0.2em] uppercase font-medium text-rose-400"><i class="fa-brands fa-instagram mr-1"></i>${couple.bride.instagram}</a>` : ''}
+                <p class="text-xs text-stone-400 font-light italic leading-relaxed">Putri dari ${couple.bride.father} & ${couple.bride.mother}</p>
             </div>`;
 
         if(events?.length) {
             document.getElementById('event-section').classList.remove('hidden');
+            buildCalendar(events[0].date);
+            
             document.getElementById('event-list').innerHTML = '';
-            events.forEach(ev => {
+            events.forEach((ev, i) => {
+                const eventTitle = encodeURIComponent(`${pairNick} Wedding - ${ev.title}`);
+                const eventDateFormatted = ev.date.replace(/-/g, '');
+                const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&dates=${eventDateFormatted}/${eventDateFormatted}&details=${encodeURIComponent(ev.address)}`;
+
                 document.getElementById('event-list').innerHTML += `
-                    <div class="bg-white border border-rose-100 rounded-2xl p-8 text-center shadow-sm reveal">
+                    <div class="bg-[var(--card-bg)] border border-rose-100/10 rounded-2xl p-8 text-center shadow-sm reveal transition-colors duration-500">
                         <h5 class="font-serif text-xl font-light text-[var(--text-color)] tracking-wide mb-2">${ev.title}</h5>
                         <div class="h-px w-6 bg-[var(--accent)] mx-auto mb-4"></div>
-                        <p class="text-xs uppercase tracking-[0.2em] text-stone-600 font-medium mb-3">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text-xs uppercase tracking-[0.2em] text-stone-400 font-medium mb-3">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
                         <div class="text-xs font-light text-stone-500 space-y-2 mb-6">
-                            <p class="font-mono text-[11px] bg-rose-50 inline-block px-3 py-1 rounded-full text-rose-700">${ev.startTime} — ${ev.endTime} ${ev.timezone || ''}</p>
-                            <p class="pt-2 px-2 font-serif text-sm text-stone-600 italic leading-relaxed">${ev.address}</p>
+                            <p class="font-mono text-[11px] bg-rose-50/10 inline-block px-3 py-1 rounded-full text-rose-400">${ev.startTime} — ${ev.endTime}</p>
+                            <p class="pt-2 px-2 font-serif text-sm text-[var(--text-color)] italic leading-relaxed opacity-90">${ev.address}</p>
                         </div>
-                        <a href="${ev.googleMaps}" target="_blank" class="inline-block border border-rose-200 text-rose-600 px-6 py-3 rounded-xl text-[9px] uppercase tracking-[0.3em] bg-transparent hover:bg-rose-950 hover:text-white hover:border-transparent transition-all duration-300">Lihat Peta</a>
+                        
+                        <div class="space-y-3">
+                            <div class="flex flex-wrap justify-center gap-2">
+                                <button onclick="toggleMapBox('mapbox-${i}', '${ev.googleMaps}')" class="inline-block border border-rose-200/30 text-rose-400 px-4 py-2.5 rounded-xl text-[9px] uppercase tracking-[0.2em]">
+                                    <i class="fa-solid fa-map-location-dot mr-1"></i> Buka Peta
+                                </button>
+                                <a href="${googleCalUrl}" target="_blank" class="inline-block bg-rose-50/10 border border-rose-200/30 text-rose-400 px-4 py-2.5 rounded-xl text-[9px] uppercase tracking-[0.2em]">
+                                    <i class="fa-regular fa-calendar-plus mr-1"></i> Simpan Agenda
+                                </a>
+                            </div>
+                            <div id="mapbox-${i}" class="hidden w-full h-48 rounded-xl overflow-hidden border border-rose-100/10 mt-4"></div>
+                        </div>
                     </div>`;
             });
             
             if (settings.showCountdown) {
-                const tzMap = { WITA: '+08:00', WIB: '+07:00', WIT: '+09:00' };
-                const tz = tzMap[events[0].timezone] || '+07:00';
-                const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00${tz}`).getTime();
-                
+                const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00+07:00`).getTime();
                 setInterval(() => {
-                    const now = new Date().getTime();
-                    const diff = targetTime - now;
+                    const diff = targetTime - new Date().getTime();
                     const d = Math.max(0, Math.floor(diff / (1000*60*60*24)));
                     const h = Math.max(0, Math.floor((diff % (1000*60*60*24)) / (1000*60*60)));
                     const m = Math.max(0, Math.floor((diff % (1000*60*60)) / (1000*60)));
                     const s = Math.max(0, Math.floor((diff % (1000*60)) / 1000));
                     document.getElementById('countdown').innerHTML = `
-                        <div class="text-center min-w-[60px] bg-white rounded-xl border border-rose-50 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-700">${d}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Hari</span></div>
-                        <div class="text-center min-w-[60px] bg-white rounded-xl border border-rose-50 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-700">${h}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Jam</span></div>
-                        <div class="text-center min-w-[60px] bg-white rounded-xl border border-rose-50 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-700">${m}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Menit</span></div>
-                        <div class="text-center min-w-[60px] bg-white rounded-xl border border-rose-50 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-700">${s}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Detik</span></div>`;
+                        <div class="text-center min-w-[60px] bg-[var(--card-bg)] rounded-xl border border-rose-50/10 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-400">${d}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Hari</span></div>
+                        <div class="text-center min-w-[60px] bg-[var(--card-bg)] rounded-xl border border-rose-50/10 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-400">${h}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Jam</span></div>
+                        <div class="text-center min-w-[60px] bg-[var(--card-bg)] rounded-xl border border-rose-50/10 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-400">${m}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Menit</span></div>
+                        <div class="text-center min-w-[60px] bg-[var(--card-bg)] rounded-xl border border-rose-50/10 p-2 shadow-sm"><span class="block font-serif text-2xl text-rose-400">${s}</span><span class="text-[8px] text-stone-400 uppercase tracking-widest mt-0.5 block">Detik</span></div>`;
                 }, 1000);
                 document.getElementById('countdown-wrap').classList.remove('hidden');
             }
@@ -367,40 +483,36 @@
         
         if(loveStory?.length && settings.showLoveStory) {
             document.getElementById('story-section').classList.remove('hidden');
-            document.getElementById('story-list').innerHTML = '';
             loveStory.forEach(ls => {
                 document.getElementById('story-list').innerHTML += `
                     <div class="story-card reveal">
                         <span class="text-[10px] font-mono tracking-widest text-rose-400 block mb-1">${ls.date || ls.year}</span>
-                        <h6 class="font-serif text-lg font-light text-stone-800 mb-3 tracking-wide">${ls.title}</h6>
-                        ${ls.image? `<img src="${basePath + ls.image}" class="w-full h-48 object-cover rounded-xl mb-4" loading="lazy" onerror="this.style.display='none'">` : ''}
-                        <p class="text-xs text-stone-500 font-light leading-relaxed italic">${ls.description}</p>
+                        <h6 class="font-serif text-lg font-light text-[var(--text-color)] mb-3 tracking-wide">${ls.title}</h6>
+                        <p class="text-xs text-stone-400 font-light leading-relaxed italic">${ls.description}</p>
                     </div>`;
             });
         }
         
         if(gallery?.album?.length && settings.showGallery) {
             document.getElementById('gallery-section').classList.remove('hidden');
-            document.getElementById('gallery-grid').innerHTML = '';
             gallery.album.forEach((img, index) => {
                 const rotationClass = index % 2 === 0 ? 'polaroid-left' : 'polaroid-right';
                 document.getElementById('gallery-grid').innerHTML += `
-                    <div class="polaroid-frame ${rotationClass} mb-4 bg-white p-2 pb-6">
-                        <img src="${basePath + img}" class="reveal w-full object-cover" loading="lazy" onerror="this.parentNode.style.display='none'">
+                    <div class="polaroid-frame ${rotationClass} mb-4 p-2 pb-6">
+                        <img src="${basePath + img}" class="reveal w-full object-cover" loading="lazy">
                     </div>`;
             });
         }
         
         if(digitalGift?.accounts?.length && settings.showGift) {
             document.getElementById('gift-section').classList.remove('hidden');
-            document.getElementById('gift-container').innerHTML = '';
             digitalGift.accounts.forEach((bank, i) => {
                 document.getElementById('gift-container').innerHTML += `
-                    <div class="p-6 bg-white border border-rose-100 rounded-2xl text-center reveal shadow-sm">
+                    <div class="p-6 bg-[var(--card-bg)] border border-rose-100/10 rounded-2xl text-center reveal shadow-sm">
                         <span class="text-[9px] uppercase tracking-widest text-rose-400 block mb-1">${bank.provider}</span>
-                        <p class="font-serif text-xl text-stone-800 tracking-wide my-1" id="rek-${i}">${bank.accountNumber}</p>
-                        <p class="text-[11px] text-stone-500 font-light mb-4">a.n ${bank.accountHolder}</p>
-                        <button onclick="copyRek('rek-${i}')" class="text-[9px] border border-rose-200 text-rose-600 px-4 py-2 rounded-lg hover:bg-rose-950 hover:text-white transition-all uppercase tracking-wider">
+                        <p class="font-serif text-xl text-[var(--text-color)] tracking-wide my-1" id="rek-${i}">${bank.accountNumber}</p>
+                        <p class="text-[11px] text-stone-400 font-light mb-4">a.n ${bank.accountHolder}</p>
+                        <button onclick="copyRek('rek-${i}')" class="text-[9px] border border-rose-200/30 text-rose-400 px-4 py-2 rounded-lg hover:bg-rose-400 hover:text-white transition-all uppercase tracking-wider">
                             <i class="fa-regular fa-copy mr-1"></i> Salin Rekening
                         </button>
                     </div>`;
@@ -413,117 +525,33 @@
             document.getElementById('guest-note').textContent = logistics.guestNote || '';
             if(logistics.colorCode) {
                 const paletteContainer = document.getElementById('color-palette');
-                paletteContainer.innerHTML = '';
                 logistics.colorCode.split(',').forEach(color => {
                     paletteContainer.innerHTML += `<div class="w-6 h-6 rounded-full border border-white shadow-sm" style="background-color: ${color.trim()}"></div>`;
                 });
             }
         }
         
-        if(music?.playlist?.length && settings.musicAutoplay) {
-            const defaultSong = music.playlist.find(song => song.isDefault) || music.playlist[0];
-            const audio = document.getElementById('audio');
-            const diskWrap = document.getElementById('disk-wrap');
-            const stateIcon = document.getElementById('music-icon-state');
-            audio.src = defaultSong.url;
-            const musicBtn = document.getElementById('music-btn');
-            musicBtn.classList.remove('hidden');
+        if(music?.playlist?.length) {
+            playlistTracks = music.playlist;
+            const defIdx = playlistTracks.findIndex(song => song.isDefault);
+            currentTrackIndex = defIdx !== -1 ? defIdx : 0;
+            setupTrack(currentTrackIndex);
             
-            musicBtn.onclick = () => {
-                if(audio.paused) {
-                    audio.play();
-                    diskWrap.classList.remove('paused');
-                    stateIcon.className = "fa-solid fa-pause text-xs";
-                } else {
-                    audio.pause();
-                    diskWrap.classList.add('paused');
-                    stateIcon.className = "fa-solid fa-music text-xs";
-                }
-            };
+            if(settings.musicAutoplay) {
+                document.getElementById('music-btn').classList.remove('hidden');
+            }
         }
-        
-        function loadGoogleSheetsWishes() {
-            if(!SCRIPT_URL) return;
-            const wishesBox = document.getElementById('wishes-box');
-            wishesBox.innerHTML = `<p class="text-[11px] text-rose-300 text-center py-4 font-light italic animate-pulse">Memuat doa restu...</p>`;
-            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-            window[callbackName] = function(wishes) {
-                delete window[callbackName];
-                document.body.removeChild(script);
-                wishesBox.innerHTML = '';
-                if (!wishes || wishes.length === 0) {
-                    wishesBox.innerHTML = `<p class="text-[11px] text-stone-400 text-center py-4 font-light italic">Belum ada ucapan tertulis.</p>`;
-                    return;
-                }
-                wishes.forEach(wish => {
-                    const presenceBadge = wish.kehadiran === 'Hadir' ? 'text-emerald-600 bg-emerald-50' : 'text-stone-400 line-through';
-                    let displayTime = wish.timestamp? new Date(wish.timestamp).toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
-                    wishesBox.innerHTML += `
-                        <div class="wish-item">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-xs font-medium text-stone-800">${wish.nama}</p>
-                                <span class="text-[9px] px-2 py-0.5 rounded ${presenceBadge}">${wish.kehadiran}</span>
-                            </div>
-                            <p class="text-xs text-stone-600 font-light leading-relaxed whitespace-pre-line">${wish.ucapan}</p>
-                            <div class="flex justify-between items-center mt-2 opacity-60">
-                                <span class="text-[9px] font-light">${wish.pax} Pax</span>
-                                <span class="text-[9px] font-mono">${displayTime}</span>
-                            </div>
-                        </div>`;
-                });
-            };
-            const script = document.createElement('script');
-            script.src = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}&callback=${callbackName}`;
-            script.onerror = function() {
-                delete window[callbackName];
-                document.body.removeChild(script);
-                wishesBox.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Gagal memuat daftar ucapan.</p>`;
-            };
-            document.body.appendChild(script);
-        }
-        
-        document.getElementById('wishes-form').addEventListener('submit', function(e){
-            e.preventDefault();
-            if(!SCRIPT_URL) return alert('API URL untuk Buku Tamu tidak terkonfigurasi.');
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '...';
-            btn.disabled = true;
-            const payload = {
-                id_klien: clientSlug,
-                nama: document.getElementById('wish-name').value,
-                ucapan: document.getElementById('wish-message').value,
-                kehadiran: document.getElementById('wish-status').value,
-                jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
-            };
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(payload)
-            })
-           .then(() => {
-                document.getElementById('wishes-form').reset();
-                btn.innerHTML = 'Terkirim ✓';
-                setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
-                setTimeout(loadGoogleSheetsWishes, 1500);
-            })
-           .catch(() => {
-                btn.innerHTML = 'Gagal';
-                btn.disabled = false;
-                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
-            });
-        });
         
         loadGoogleSheetsWishes();
         
         document.getElementById('open-btn').onclick = () => {
-            const cover = document.getElementById('cover');
-            cover.classList.add('unveil');
+            document.getElementById('cover').classList.add('unveil');
             document.getElementById('app').style.opacity = '1';
             
-            if(settings.musicAutoplay && music?.playlist?.length) {
+            if(settings.musicAutoplay && playlistTracks.length) {
                 document.getElementById('audio').play().then(() => {
                     document.getElementById('disk-wrap').classList.remove('paused');
+                    document.getElementById('music-icon-state').className = "fa-solid fa-pause text-[10px]";
                 }).catch(() => {});
             }
             
@@ -532,38 +560,173 @@
             }, { threshold: 0.05 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
-    })
-   .catch(err => {
-        document.body.innerHTML = `<div class="p-10 text-center font-sans text-stone-500"><h4>Error Load Data</h4><p>${err.message}</p></div>`;
     });
 
+    function buildCalendar(dateString) {
+        const targetDate = new Date(dateString);
+        const year = targetDate.getFullYear();
+        const month = targetDate.getMonth();
+        const dayOfMonth = targetDate.getDate();
+        
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        
+        const container = document.getElementById('calendar-days');
+        container.innerHTML = '';
+        
+        for (let i = 0; i < firstDay; i++) {
+            container.innerHTML += `<span></span>`;
+        }
+        
+        for (let d = 1; d <= totalDays; d++) {
+            if (d === dayOfMonth) {
+                container.innerHTML += `<span class="marked-day text-rose-500 bg-rose-50/20 rounded-full font-bold">${d}</span>`;
+            } else {
+                container.innerHTML += `<span>${d}</span>`;
+            }
+        }
+    }
+
+    function setupTrack(index) {
+        const audio = document.getElementById('audio');
+        const track = playlistTracks[index];
+        audio.src = track.url;
+        document.getElementById('track-title').innerText = track.title || 'Wedding Song';
+    }
+
+    function toggleAudio() {
+        const audio = document.getElementById('audio');
+        const diskWrap = document.getElementById('disk-wrap');
+        const stateIcon = document.getElementById('music-icon-state');
+        if(audio.paused) {
+            audio.play();
+            diskWrap.classList.remove('paused');
+            stateIcon.className = "fa-solid fa-pause text-[10px]";
+        } else {
+            audio.pause();
+            diskWrap.classList.add('paused');
+            stateIcon.className = "fa-solid fa-music text-[10px]";
+        }
+    }
+
+    function nextTrack() {
+        currentTrackIndex = (currentTrackIndex + 1) % playlistTracks.length;
+        setupTrack(currentTrackIndex);
+        const audio = document.getElementById('audio');
+        audio.play().then(() => {
+            document.getElementById('disk-wrap').classList.remove('paused');
+            document.getElementById('music-icon-state').className = "fa-solid fa-pause text-[10px]";
+        });
+    }
+
+    function toggleMapBox(boxId, mapsUrl) {
+        const box = document.getElementById(boxId);
+        if(!box.classList.contains('hidden')) {
+            box.classList.add('hidden');
+            return;
+        }
+        box.classList.remove('hidden');
+        if(box.innerHTML === '') {
+            let embedUrl = mapsUrl.includes('embed') ? mapsUrl : mapsUrl.replace('/maps/', '/maps/embed/');
+            if(!embedUrl.includes('embed')) {
+                box.innerHTML = `<a href="${mapsUrl}" target="_blank" class="block text-center p-8 text-xs text-rose-500 underline">Buka di Aplikasi Google Maps</a>`;
+                return;
+            }
+            box.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>`;
+        }
+    }
+
+    // --- STRUKTUR DATA REFACTORING (STANDAR FETCH CORS DENGAN TRY/CATCH) ---
+    async function loadGoogleSheetsWishes() {
+        if(!SCRIPT_URL) return;
+        const wishesBox = document.getElementById('wishes-box');
+        wishesBox.innerHTML = `<p class="text-[11px] text-rose-300 text-center py-4 italic anonymity-pulse">Memuat doa restu...</p>`;
+        
+        try {
+            const urlWithParams = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`;
+            const response = await fetch(urlWithParams, {
+                method: 'GET',
+                mode: 'cors',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if(!response.ok) throw new Error();
+            
+            const wishesData = await response.json();
+            allWishes = Array.isArray(wishesData) ? wishesData : [];
+            renderWishesList(false);
+        } catch (error) {
+            wishesBox.innerHTML = `<p class="text-[11px] text-red-500 text-center py-4 font-light">Gagal memuat daftar ucapan.</p>`;
+        }
+    }
+
+    function renderWishesList(loadMore = false) {
+        if(loadMore) displayedWishesCount += 5;
+        const wishesBox = document.getElementById('wishes-box');
+        
+        if (allWishes.length === 0) {
+            wishesBox.innerHTML = `<p class="text-[11px] text-stone-400 text-center py-4 italic">Belum ada ucapan tertulis.</p>`;
+            return;
+        }
+        
+        wishesBox.innerHTML = '';
+        const slice = allWishes.slice(0, displayedWishesCount);
+        slice.forEach(wish => {
+            const presenceBadge = wish.kehadiran === 'Hadir' ? 'text-emerald-600 bg-emerald-50/10' : 'text-stone-400 line-through';
+            wishesBox.innerHTML += `
+                <div class="wish-item">
+                    <div class="flex items-center justify-between mb-1">
+                        <p class="text-xs font-medium text-[var(--text-color)]">${wish.nama}</p>
+                        <span class="text-[9px] px-2 py-0.5 rounded ${presenceBadge}">${wish.kehadiran}</span>
+                    </div>
+                    <p class="text-xs text-stone-400 font-light leading-relaxed Regal-break whitespace-pre-line">${wish.ucapan}</p>
+                </div>`;
+        });
+        
+        const btn = document.getElementById('load-more-btn');
+        if(allWishes.length > displayedWishesCount) {
+            btn.classList.remove('hidden');
+        } else {
+            btn.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('wishes-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        
+        const payload = {
+            id_klien: clientSlug,
+            nama: document.getElementById('wish-name').value,
+            ucapan: document.getElementById('wish-message').value,
+            kehadiran: document.getElementById('wish-status').value,
+            jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
+        };
+        
+        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+       .then(() => {
+            document.getElementById('wishes-form').reset();
+            btn.disabled = false;
+            setTimeout(loadGoogleSheetsWishes, 1500);
+        }).catch(() => { btn.disabled = false; });
+    });
+    
     function sendViaWhatsApp() {
         const nama = document.getElementById('wish-name').value;
         const status = document.getElementById('wish-status').value;
         const pax = document.getElementById('wish-pax').value;
         const pesan = document.getElementById('wish-message').value;
-        
-        if(!nama || !pesan) {
-            alert('Mohon lengkapi nama dan pesan terlebih dahulu.');
-            return;
-        }
-        
-        if(!rsvpWaNumber) {
-            alert('Nomor WhatsApp konfirmasi tidak ditemukan.');
-            return;
-        }
-        
+        if(!nama || !pesan) return alert('Mohon lengkapi nama dan pesan terlebih dahulu.');
         const teks = `Halo, saya ingin mengonfirmasi kehadiran.\n\n*Nama:* ${nama}\n*Status:* ${status}\n*Jumlah Tamu:* ${pax} Orang\n*Ucapan/Doa:* ${pesan}`;
-        const urlWA = `https://api.whatsapp.com/send?phone=${rsvpWaNumber}&text=${encodeURIComponent(teks)}`;
-        
-        window.open(urlWA, '_blank');
+        window.open(`https://api.whatsapp.com/send?phone=${rsvpWaNumber}&text=${encodeURIComponent(teks)}`, '_blank');
     }
 
-    function copyRek(id) {
-        const text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Nomor rekening disalin: ' + text);
-        });
+    document.copyRek = function(id) {
+        navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => { alert('Nomor rekening disalin'); });
     }
 </script>
 </body>
