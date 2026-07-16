@@ -212,7 +212,16 @@
                     <label class="block text-[9px] uppercase tracking-[0.2em] mb-2 text-stone-500">Untaian Kata / Doa</label>
                     <textarea id="wish-message" required rows="4" class="w-full bg-white border border-stone-200 p-3 text-xs focus:outline-none focus:border-stone-400 transition resize-none"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-[var(--text-color)] text-white text-[10px] uppercase tracking-[0.3em] py-4 hover:bg-[var(--theme-color)] transition duration-500 font-medium">Kirim Doa Restu</button>
+                
+                <!-- DUA TOMBOL BERDAMPINGAN -->
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <button type="submit" class="w-full bg-[var(--text-color)] text-white text-[9px] uppercase tracking-[0.15em] py-4 hover:bg-[var(--theme-color)] transition duration-500 font-medium text-center">
+                        Buku Tamu
+                    </button>
+                    <button type="button" onclick="sendViaWhatsApp()" class="w-full bg-emerald-700 text-white text-[9px] uppercase tracking-[0.15em] py-4 hover:bg-emerald-800 transition duration-500 font-medium text-center">
+                        <i class="fa-brands fa-whatsapp mr-1 text-xs"></i> Kirim WA
+                    </button>
+                </div>
             </form>
 
             <div class="pt-4">
@@ -242,11 +251,11 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-    const clientSlug = params.get('c') || 'afif-sindi';
+    const clientSlug = params.get('c') || 'budi-ani';
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
+    let rsvpWaNumber = "6281234567890"; // Fallback default
+    let SCRIPT_URL = '';
 
-    /* AUTOMATIC PATH EXTRACTOR FOR REPOSITORY COMPATIBILITY */
     const isSubFolder = window.location.pathname.includes('/templates/');
     const basePath = isSubFolder ? `../../public/clients/${clientSlug}/` : `public/clients/${clientSlug}/`;
 
@@ -256,8 +265,11 @@
         return res.json();
     })
    .then(data => {
-        const { couple, settings, events, gallery, loveStory, quote, music, digitalGift } = data;
+        const { couple, settings, events, gallery, loveStory, quote, music, digitalGift, logistics, link } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
+        
+        if(logistics?.rsvpWaNumber) rsvpWaNumber = logistics.rsvpWaNumber;
+        if(link?.apiUcapan) SCRIPT_URL = link.apiUcapan;
         
         if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
         if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
@@ -283,7 +295,7 @@
             <div class="mt-12 text-left px-4 reveal">
                 <span class="text-[9px] uppercase tracking-[0.4em] text-stone-400 block mb-2">— Mempelai Pria</span>
                 <h4 class="font-serif text-3xl font-light text-[var(--text-color)] mb-3 tracking-wide">${couple.groom.name}</h4>
-                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra dari Bapak ${couple.groom.father} & Ibu ${couple.groom.mother}</p>
+                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra dari ${couple.groom.father} & ${couple.groom.mother}</p>
                 ${couple.groom.instagram? `<a href="https://instagram.com/${couple.groom.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-[10px] tracking-[0.2em] uppercase font-medium text-stone-600"><i class="fa-brands fa-instagram mr-2"></i>${couple.groom.instagram}</a>` : ''}
             </div>`;
             
@@ -292,7 +304,7 @@
             <div class="mt-12 text-right px-4 reveal">
                 <span class="text-[9px] uppercase tracking-[0.4em] text-stone-400 block mb-2">Mempelai Wanita —</span>
                 <h4 class="font-serif text-3xl font-light text-[var(--text-color)] mb-3 tracking-wide">${couple.bride.name}</h4>
-                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putri dari Bapak ${couple.bride.father} & Ibu ${couple.bride.mother}</p>
+                <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putri dari ${couple.bride.father} & ${couple.bride.mother}</p>
                 ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-[10px] tracking-[0.2em] uppercase font-medium text-stone-600">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-2"></i></a>` : ''}
             </div>`;
 
@@ -315,7 +327,7 @@
             
             if (settings.showCountdown) {
                 const tzMap = { WITA: '+08:00', WIB: '+07:00', WIT: '+09:00' };
-                const tz = tzMap[events[0].timezone] || '+08:00';
+                const tz = tzMap[events[0].timezone] || '+07:00';
                 const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00${tz}`).getTime();
                 
                 setInterval(() => {
@@ -396,6 +408,7 @@
         }
         
         function loadGoogleSheetsWishes() {
+            if(!SCRIPT_URL) return;
             const wishesBox = document.getElementById('wishes-box');
             wishesBox.innerHTML = `<p class="text-[11px] text-stone-400 text-center py-4 font-light italic animate-pulse">Memuat doa restu...</p>`;
             const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
@@ -436,8 +449,10 @@
         
         document.getElementById('wishes-form').addEventListener('submit', function(e){
             e.preventDefault();
+            if(!SCRIPT_URL) return alert('API URL untuk Buku Tamu tidak terkonfigurasi.');
             const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerHTML = 'Mengirim...';
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '...';
             btn.disabled = true;
             const payload = {
                 id_klien: clientSlug,
@@ -454,12 +469,13 @@
            .then(() => {
                 document.getElementById('wishes-form').reset();
                 btn.innerHTML = 'Terkirim ✓';
-                setTimeout(() => { btn.innerHTML = 'Kirim Doa Restu'; btn.disabled = false; }, 2000);
+                setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
                 setTimeout(loadGoogleSheetsWishes, 1500);
             })
            .catch(() => {
-                btn.innerHTML = 'Gagal Mengirim';
+                btn.innerHTML = 'Gagal';
                 btn.disabled = false;
+                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
             });
         });
         
@@ -485,6 +501,23 @@
    .catch(err => {
         document.body.innerHTML = `<div class="p-10 text-center font-sans text-stone-500"><h4>Error Load Data</h4><p>${err.message}</p></div>`;
     });
+
+    function sendViaWhatsApp() {
+        const nama = document.getElementById('wish-name').value;
+        const status = document.getElementById('wish-status').value;
+        const pax = document.getElementById('wish-pax').value;
+        const pesan = document.getElementById('wish-message').value;
+        
+        if(!nama || !pesan) {
+            alert('Mohon lengkapi nama dan pesan terlebih dahulu.');
+            return;
+        }
+        
+        const teks = `Halo, saya ingin mengonfirmasi kehadiran.\n\n*Nama:* ${nama}\n*Status:* ${status}\n*Jumlah Tamu:* ${pax} Orang\n*Ucapan/Doa:* ${pesan}`;
+        const urlWA = `https://api.whatsapp.com/send?phone=${rsvpWaNumber}&text=${encodeURIComponent(teks)}`;
+        
+        window.open(urlWA, '_blank');
+    }
 
     function copyRek(id) {
         const text = document.getElementById(id).innerText;
