@@ -17,7 +17,7 @@
     "showGallery": true,
     "showGift": true,
     "showUcapan": true,
-    "showProtocols": false,
+    "showProtocols": true,
     "musicAutoplay": true
   },
   "couple": {
@@ -95,22 +95,19 @@
         "name": "Perfect - Ed Sheeran",
         "file": "contohlagu (1).mp3",
         "url": "https://omahaksara.github.io/lagu/contohlagu%20(1).mp3",
-        "isDefault": false,
-        "note": "Cadangan 1"
+        "isDefault": false
       },
       {
         "name": "A Thousand Years",
         "file": "contohlagu (4).mp3",
         "url": "https://omahaksara.github.io/lagu/contohlagu%20(4).mp3",
-        "isDefault": false,
-        "note": "Cadangan 2"
+        "isDefault": false
       },
       {
-        "name": "Lagu Lokal Budi Ani",
+        "name": "Fallback Lokal",
         "file": "musik.mp3",
         "url": "./musik.mp3",
-        "isDefault": false,
-        "note": "File lokal di folder budi-ani, pake kalau online error"
+        "isDefault": false
       }
     ],
     "autoplay": true
@@ -127,7 +124,7 @@
       "date": "Proses Bertumbuh",
       "year": "2026",
       "title": "Saling Bertumbuh",
-      "description": "Perjalanan kami tidak selalu dipenuhi tawa. Kami 2 insan yang sama-sama pernah melewati hubungan panjang yang tidak berakhir di pelaminan. Dari pengalaman tersebut, kami belajar tentang kesabaran, keikhlasan dan arti menemukan orang yang tepat. “Terkadang Allah tidak mempertemukan kita dengan orang yang cepat, tetapi dengan orang yang tepat pada waktu yang paling indah”",
+      "description": "Perjalanan kami tidak selalu dipenuhi tawa. Kami 2 insan yang sama-sama pernah melewati hubungan panjang yang tidak berakhir di pelaminan. Dari pengalaman tersebut, kami belajar tentang kesabaran, keikhlasan dan arti menemukan orang yang tepat.",
       "image": "foto2.jpg"
     },
     {
@@ -141,7 +138,7 @@
       "date": "Masa Depan",
       "year": "2026",
       "title": "Awal Selamanya",
-      "description": "Kami percaya, bukan karena bertemu lalu berjodoh. Tetapi karena berjodohlah, maka Allah mempertemukan dua insan dengan cara terbaik-Nya. Dan dengan rasa syukur, kami memutuskan untuk mengikrarkan janji suci pernikahan. Pernikahan ini bukan akhir dari kisah kami, melainkan awal dari perjalanan panjang yang akan kami tulis bersama hingga akhir. “Apa yang menjadi takdirmu, akan menemukan jalannya untuk menemukanmu”",
+      "description": "Kami percaya, bukan karena bertemu lalu berjodoh. Tetapi karena berjodohlah, maka Allah mempertemukan dua insan dengan cara terbaik-Nya.",
       "image": "foto4.jpg"
     }
   ],
@@ -150,12 +147,7 @@
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
-    "album": [
-      "foto1.jpg",
-      "foto2.jpg",
-      "foto3.jpg",
-      "foto4.jpg"
-    ]
+    "album": ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg"]
   },
   "digitalGift": {
     "description": "Rekening Wedding Gift Budi & Ani. Otomatis muncul di section Gift",
@@ -181,32 +173,11 @@
   },
   "protocols": {
     "title": "Informasi Tambahan",
-    "items": [
-      "Acara diselenggarakan secara intimate",
-      "Mohon konfirmasi kehadiran H-3"
-    ]
+    "items": ["Acara diselenggarakan secara intimate", "Mohon konfirmasi kehadiran H-3"]
   },
   "logistics": {
     "rsvpWaNumber": "6281234567890",
     "dressCode": "Earth Tone / Sage Green",
     "colorCode": "#8B7355, #A8B5A3, #EAE0D5",
     "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
-    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
-    "filterIG": "@omahaksara.filter",
-    "hashtag": "#BudiAniStory"
-  },
-  "guest": {
-    "defaultName": "Tamu Undangan",
-    "defaultGroup": "Keluarga & Sahabat"
-  },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec",
-    "shortUrl": "",
-    "website": ""
-  },
-  "seo": {
-    "title": "Wedding of Budi & Ani",
-    "description": "Undangan Pernikahan Budi Santoso & Ani Wijaya - 12 November 2026",
-    "image": "foto-sampul.jpg"
-  }
-}
+    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada
