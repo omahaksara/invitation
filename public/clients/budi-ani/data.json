@@ -2,22 +2,19 @@
   "meta": {
     "slug": "budi-ani",
     "template": "karsa",
-    "status": "published",
-    "domain": "",
-    "customUrl": ""
+    "status": "published"
   },
   "settings": {
     "islami": true,
     "themeColor": "#6b0505",
     "bgColor": "#fdfbf7",
     "coupleFrame": "arch-mask",
-    "autoColor": false,
     "showCountdown": true,
     "showLoveStory": true,
     "showGallery": true,
     "showGift": true,
     "showUcapan": true,
-    "showProtocols": true,
+    "showProtocols": false,
     "musicAutoplay": true
   },
   "couple": {
@@ -28,9 +25,7 @@
       "mother": "Ibu Siti Aminah",
       "image": "foto-pria.jpg",
       "instagram": "@budi_santoso",
-      "tiktok": "",
-      "phone": "6281234567890",
-      "bio": "Putra pertama dari keluarga Santoso"
+      "phone": "6281234567890"
     },
     "bride": {
       "name": "Ani Wijaya, S.E.",
@@ -39,16 +34,13 @@
       "mother": "Ibu Ratna Wijaya",
       "image": "foto-wanita.jpg",
       "instagram": "@ani_wijaya",
-      "tiktok": "",
-      "phone": "6289876543210",
-      "bio": "Putri kedua dari keluarga Wijaya"
+      "phone": "6289876543210"
     }
   },
   "quote": {
-    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
-    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
-    "source": "QS. Ar-Rum: 21",
-    "english": ""
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم...",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup...",
+    "source": "QS. Ar-Rum: 21"
   },
   "events": [
     {
@@ -56,24 +48,18 @@
       "date": "2026-11-12",
       "startTime": "08:00",
       "endTime": "10:00",
-      "timezone": "WIB",
       "address": "Kediaman Mempelai Wanita, Jl. Mawar No. 123, Jakarta Selatan",
       "locationName": "Rumah Ani",
-      "googleMaps": "https://maps.google.com/?q=-6.2088,106.8456",
-      "embedMaps": "",
-      "liveStreaming": ""
+      "googleMaps": "https://maps.google.com/?q=-6.2088,106.8456"
     },
     {
       "title": "Resepsi Pernikahan",
       "date": "2026-11-12",
       "startTime": "11:00",
       "endTime": "14:00",
-      "timezone": "WIB",
       "address": "Gedung Graha Saba, Jl. Mawar No. 124, Jakarta Selatan",
       "locationName": "Graha Saba Ballroom",
-      "googleMaps": "https://maps.google.com/?q=-6.2088,106.8456",
-      "embedMaps": "",
-      "liveStreaming": ""
+      "googleMaps": "https://maps.google.com/?q=-6.2088,106.8456"
     }
   ],
   "countdown": {
@@ -81,103 +67,43 @@
     "backgroundImage": "foto-sampul.jpg"
   },
   "music": {
-    "description": "Playlist musik undangan. Yang isDefault: true yang diputar otomatis",
-    "defaultSong": "contohlagu (6).mp3",
+    "defaultSong": "musik.mp3",
     "playlist": [
-      {
-        "name": "Beautiful In White - Lagu Utama",
-        "file": "contohlagu (6).mp3",
-        "url": "https://omahaksara.github.io/lagu/contohlagu%20(6).mp3",
-        "isDefault": true,
-        "note": "Dipilih sebagai lagu utama Budi & Ani"
-      },
-      {
-        "name": "Perfect - Ed Sheeran",
-        "file": "contohlagu (1).mp3",
-        "url": "https://omahaksara.github.io/lagu/contohlagu%20(1).mp3",
-        "isDefault": false
-      },
-      {
-        "name": "A Thousand Years",
-        "file": "contohlagu (4).mp3",
-        "url": "https://omahaksara.github.io/lagu/contohlagu%20(4).mp3",
-        "isDefault": false
-      },
-      {
-        "name": "Fallback Lokal",
-        "file": "musik.mp3",
-        "url": "./musik.mp3",
-        "isDefault": false
-      }
-    ],
-    "autoplay": true
+      { "name": "Beautiful In White", "file": "contohlagu (6).mp3", "url": "https://omahaksara.github.io/lagu/contohlagu%20(6).mp3", "isDefault": false },
+      { "name": "Perfect - Ed Sheeran", "file": "contohlagu (1).mp3", "url": "https://omahaksara.github.io/lagu/contohlagu%20(1).mp3", "isDefault": false },
+      { "name": "A Thousand Years", "file": "contohlagu (4).mp3", "url": "https://omahaksara.github.io/lagu/contohlagu%20(4).mp3", "isDefault": false },
+      { "name": "Fallback Lokal", "file": "musik.mp3", "url": "./musik.mp3", "isDefault": true }
+    ]
   },
-  "loveStory": [
-    {
-      "date": "Awal Perjalanan",
-      "year": "2026",
-      "title": "Awal Kisah",
-      "description": "Tidak ada yang terjadi secara kebetulan di dunia. Semua sudah diatur dengan sangat indah oleh Allah SWT. Kami tidak pernah menyangka bermula dari sapaan di ruang digital serta pertemuan sederhana menjadi awal sebuah perjalanan panjang yang membawa kami sampai di titik ini.",
-      "image": "foto1.jpg"
-    },
-    {
-      "date": "Proses Bertumbuh",
-      "year": "2026",
-      "title": "Saling Bertumbuh",
-      "description": "Perjalanan kami tidak selalu dipenuhi tawa. Kami 2 insan yang sama-sama pernah melewati hubungan panjang yang tidak berakhir di pelaminan. Dari pengalaman tersebut, kami belajar tentang kesabaran, keikhlasan dan arti menemukan orang yang tepat.",
-      "image": "foto2.jpg"
-    },
-    {
-      "date": "Januari 2026",
-      "year": "2026",
-      "title": "Lamaran",
-      "description": "Perjalanan dua insan ini bukan tanpa ujian dan cerita. Namun setiap proses yang dilewati justru membawa kami semakin yakin satu sama lain. Sampai pada akhirnya, pada Januari 2026 kami dipertemukan dalam sebuah ikatan yang penuh doa dan restu keluarga.",
-      "image": "foto3.jpg"
-    },
-    {
-      "date": "Masa Depan",
-      "year": "2026",
-      "title": "Awal Selamanya",
-      "description": "Kami percaya, bukan karena bertemu lalu berjodoh. Tetapi karena berjodohlah, maka Allah mempertemukan dua insan dengan cara terbaik-Nya.",
-      "image": "foto4.jpg"
-    }
-  ],
   "gallery": {
     "heroImage": "foto-sampul.jpg",
     "coverImage": "foto-sampul.jpg",
-    "videoYoutubeId": "",
-    "videoFile": "",
-    "album": ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg"]
+    "album": ["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg"]
   },
   "digitalGift": {
-    "description": "Rekening Wedding Gift Budi & Ani. Otomatis muncul di section Gift",
     "qris": "qr-bca.jpg",
     "accounts": [
-      {
-        "provider": "Bank BCA",
-        "accountNumber": "1234567890",
-        "accountHolder": "Budi Santoso",
-        "logo": "qr-bca.jpg",
-        "note": "Rekening utama Budi"
-      },
-      {
-        "provider": "Bank Mandiri",
-        "accountNumber": "0987654321",
-        "accountHolder": "Ani Wijaya",
-        "logo": "qr-mandiri.png",
-        "note": "Rekening utama Ani"
-      }
-    ],
-    "address": "Jl. Mawar No. 123, Jakarta Selatan 12345",
-    "receiver": "Budi & Ani"
-  },
-  "protocols": {
-    "title": "Informasi Tambahan",
-    "items": ["Acara diselenggarakan secara intimate", "Mohon konfirmasi kehadiran H-3"]
+      { "provider": "Bank BCA", "accountNumber": "1234567890", "accountHolder": "Budi Santoso", "logo": "qr-bca.jpg" },
+      { "provider": "Bank Mandiri", "accountNumber": "0987654321", "accountHolder": "Ani Wijaya", "logo": "qr-mandiri.png" }
+    ]
   },
   "logistics": {
     "rsvpWaNumber": "6281234567890",
     "dressCode": "Earth Tone / Sage Green",
     "colorCode": "#8B7355, #A8B5A3, #EAE0D5",
-    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
-    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada
+    "guestNote": "Kami mengharapkan doa restu.",
+    "noteFooter": "Merupakan kehormatan bagi kami jika Bapak/Ibu berkenan hadir."
+  },
+  "guest": {
+    "defaultName": "Tamu Undangan",
+    "defaultGroup": "Keluarga & Sahabat"
+  },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbxcAKoeHvoo0pdc1AY5LWUDvR7jA6W7I4UcXbx8gI_U8vsvZfjdasCSAqVU5QJy7k0axA/exec"
+  },
+  "seo": {
+    "title": "Wedding of Budi & Ani",
+    "description": "Undangan Pernikahan Budi Santoso & Ani Wijaya - 12 November 2026",
+    "image": "foto-sampul.jpg"
+  }
+}
