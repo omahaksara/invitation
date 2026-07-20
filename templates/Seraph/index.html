@@ -57,7 +57,7 @@
 <!-- HERO -->
 <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center bg-[var(--soft-color)]">
   <h2 id="hero-names" class="seraph-title text-4xl mb-8"></h2>
-  <img id="hero-image" class="w-64 h-64 object-cover rounded-xl shadow-lg border-4 border-[var(--accent)]" src="">
+  <img id="hero-image" class="w-64 h-64 object-cover rounded-xl shadow-lg border-4 border-[var(--accent)]" src="" alt="Hero Image">
 </section>
 
 <!-- QUOTE -->
@@ -80,7 +80,7 @@
 </section>
 
 <!-- EVENTS -->
-<section id="event-section" class="py-24 bg-[var(--bg-color)] text-center">
+<section id="event-section" class="py-24 bg-[var(--bg-color)] text-center hidden">
   <h3 class="seraph-title text-3xl mb-12">Agenda Acara</h3>
   <div id="event-list" class="space-y-8"></div>
   <div id="countdown-wrap" class="mt-12 hidden">
@@ -104,14 +104,14 @@
 <!-- RSVP -->
 <section id="rsvp-section" class="py-24 bg-[var(--soft-color)] text-center">
   <h3 class="seraph-title text-3xl mb-12">Doa & Restu</h3>
-  <form id="wishes-form" class="space-y-6 max-w-md mx-auto">
-    <input type="text" id="wish-name" placeholder="Nama Lengkap" class="w-full px-4 py-2 rounded-lg border">
-    <select id="wish-status" class="w-full px-4 py-2 rounded-lg border">
+  <form id="wishes-form" class="space-y-6 max-w-md mx-auto" name="submit-to-google-sheet">
+    <input type="text" id="wish-name" name="nama" placeholder="Nama Lengkap" class="w-full px-4 py-2 rounded-lg border" required>
+    <select id="wish-status" name="kehadiran" class="w-full px-4 py-2 rounded-lg border" required>
       <option value="Hadir">Hadir</option>
       <option value="Tidak Hadir">Tidak Hadir</option>
     </select>
-    <textarea id="wish-message" rows="4" placeholder="Ucapan / Doa" class="w-full px-4 py-2 rounded-lg border"></textarea>
-    <button type="submit" class="seraph-card w-full">Kirim Ucapan</button>
+    <textarea id="wish-message" name="ucapan" rows="4" placeholder="Ucapan / Doa" class="w-full px-4 py-2 rounded-lg border" required></textarea>
+    <button type="submit" id="submit-btn" class="seraph-card w-full font-bold">Kirim Ucapan</button>
   </form>
   <div id="wishes-box" class="mt-12 space-y-4"></div>
 </section>
@@ -133,12 +133,21 @@
 <audio id="audio" loop></audio>
 
 <script>
+  // 1. Pengaturan Parameter & Tautan Google Sheet
   const params = new URLSearchParams(window.location.search);
-  const clientSlug = params.get('c') || 'budi-ani';
+  const clientSlug = params.get('c') || 'afif-sindi';
   const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+  
+  console.log('Client Slug:', clientSlug);
+  
   const basePath = `../../public/clients/${clientSlug}/`;
+  const fetchUrl = `${basePath}data.json`; 
+  
+  // Ini adalah tautan Google Sheet yang Anda berikan
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
 
-  fetch(`${basePath}data.json`, { cache: 'no-store' })
+  // 2. Mengambil Data Detail Undangan dari data.json
+  fetch(fetchUrl, { cache: 'no-store' })
     .then(res => res.json())
     .then(data => {
       const { couple, events, gallery, loveStory, quote, logistics } = data;
@@ -148,13 +157,64 @@
       document.getElementById('hero-names').innerText = pairNick;
       document.getElementById('footer-names').innerText = pairNick;
       document.getElementById('cover-guest').innerText = guestName;
-      document.getElementById('hero-image').src = basePath + gallery.heroImage;
+      
+      // Mengisi nama tamu ke dalam formulir secara otomatis (jika ada di link)
+      if(guestName !== 'Tamu Undangan') {
+        document.getElementById('wish-name').value = guestName;
+      }
 
-      if(events?.length){
+      if (gallery && gallery.heroImage) {
+          document.getElementById('hero-image').src = basePath + gallery.heroImage;
+      }
+
+      if (events && events.length > 0) {
         document.getElementById('event-section').classList.remove('hidden');
         document.getElementById('event-list').innerHTML = events.map(ev => `
           <div class="seraph-card reveal-seraph">
             <h5 class="seraph-title text-xl mb-2">${ev.title}</h5>
             <p class="text-gray-700 text-sm">${new Date(ev.date).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</p>
             <p class="text-gray-500 text-xs">${ev.startTime} — ${ev.endTime}</p>
-            <p class="text-gray-500 text-xs italic">${ev.address}</p
+            <p class="text-gray-500 text-xs italic">${ev.address}</p>
+          </div>
+        `).join('');
+      }
+    })
+    .catch(error => {
+        console.error("Gagal memuat data json:", error);
+    });
+
+  // 3. Menangani Pengiriman Formulir Doa & Restu ke Google Sheet
+  const form = document.forms['submit-to-google-sheet'];
+  const submitBtn = document.getElementById('submit-btn');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault(); // Mencegah halaman berpindah saat tombol ditekan
+    
+    // Mengubah teks tombol agar tamu tahu pesan sedang dikirim
+    submitBtn.innerText = 'Mengirim...';
+    submitBtn.disabled = true;
+
+    // Mengirim data ke Google Sheet
+    fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form)})
+      .then(response => {
+        alert('Terima kasih! Ucapan dan doa Anda berhasil dikirim.');
+        form.reset(); // Mengosongkan formulir setelah berhasil
+        
+        // Mengembalikan nama tamu jika sebelumnya terisi otomatis
+        if(guestName !== 'Tamu Undangan') {
+          document.getElementById('wish-name').value = guestName;
+        }
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        alert('Maaf, ucapan gagal dikirim. Silakan coba lagi.');
+      })
+      .finally(() => {
+        // Mengembalikan tombol seperti semula
+        submitBtn.innerText = 'Kirim Ucapan';
+        submitBtn.disabled = false;
+      });
+  });
+</script>
+</body>
+</html>
