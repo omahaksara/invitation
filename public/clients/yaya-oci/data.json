@@ -1,14 +1,29 @@
 {
   "meta": {
     "slug": "yaya-oci",
-    "template": "elegance-motion",
-    "status": "published"
+    "template": "daisy",
+    "status": "published",
+    "domain": "",
+    "customUrl": ""
+  },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec",
+    "sheetUcapan": "https://docs.google.com/spreadsheets/d/1xxx-xxxx-xxxx-xxxx",
+    "apiRsvp": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec"
   },
   "settings": {
     "islami": true,
     "themeColor": "#8B7355",
+    "bgColor": "#fdfbf7",
     "coupleFrame": "polaroid",
-    "autoColor": true
+    "autoColor": true,
+    "showCountdown": true,
+    "showLoveStory": true,
+    "showGallery": true,
+    "showGift": true,
+    "showUcapan": true,
+    "showProtocols": true,
+    "musicAutoplay": true
   },
   "couple": {
     "groom": {
@@ -17,7 +32,9 @@
       "father": "Moh. Aliman (Alm)",
       "mother": "Siti Kusnah (Almh)",
       "image": "foto-pria.jpg",
-      "instagram": "@muh_djafar27"
+      "instagram": "@muh_djafar27",
+      "bio": "Putra dari Bapak Moh. Aliman (Alm) & Ibu Siti Kusnah (Almh)",
+      "phone": "6282261567928"
     },
     "bride": {
       "name": "Khosi Saimima",
@@ -25,7 +42,9 @@
       "father": "Maksum",
       "mother": "Sholihah",
       "image": "foto-wanita.jpg",
-      "instagram": "@khosisaimima17"
+      "instagram": "@khosisaimima17",
+      "bio": "Putri dari Bapak Maksum & Ibu Sholihah",
+      "phone": "6282261567928"
     }
   },
   "quote": {
@@ -53,42 +72,54 @@
       "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
     }
   ],
+  "countdown": {
+    "targetDate": "2026-09-06T09:00:00+08:00",
+    "backgroundImage": "foto-sampul.jpg"
+  },
+  "music": {
+    "playlist": [
+      {
+        "name": "Wedding Song - Yaya & Oci",
+        "file": "musik.mp3",
+        "url": "./musik.mp3",
+        "isDefault": true
+      }
+    ]
+  },
   "loveStory": [
     {
       "date": "Juni 2021",
       "title": "First Meet",
-      "description": "Berawal dari sebuah tanggapan kecil di story."
+      "description": "Berawal dari sebuah tanggapan kecil di story.",
+      "image": "foto1.jpg"
     },
     {
       "date": "14 April 2024",
       "title": "Khitbah",
-      "description": "Kami memutuskan untuk bersama dalam ridho-Nya."
+      "description": "Kami memutuskan untuk bersama dalam ridho-Nya.",
+      "image": "foto2.jpg"
     }
   ],
   "gallery": {
     "heroImage": "foto-sampul.jpg",
-    "videoYoutubeId": "",
-    "album": [
-      "foto1.jpg",
-      "foto2.jpg"
+    "coverImage": "foto-sampul.jpg",
+    "album": ["foto1.jpg", "foto2.jpg"]
+  },
+  "digitalGift": {
+    "description": "Doa restu Anda adalah hadiah terindah.",
+    "accounts": [
+      { "provider": "BRI", "accountNumber": "519501024699536", "accountHolder": "Khosi Saimima" },
+      { "provider": "Mandiri", "accountNumber": "1510022186495", "accountHolder": "Muhammad Jakpar" }
     ]
   },
-  "digitalGift": [
-    {
-      "provider": "BRI",
-      "accountNumber": "519501024699536",
-      "accountHolder": "Khosi Saimima"
-    },
-    {
-      "provider": "Mandiri",
-      "accountNumber": "1510022186495",
-      "accountHolder": "Muhammad Jakpar"
-    }
-  ],
   "logistics": {
-    "music": "musik.mp3",
     "rsvpWaNumber": "6282261567928",
     "dressCode": "Sopan & Bebas",
     "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan tamu undangan berkenan hadir."
+  },
+  "seo": {
+    "title": "Wedding of Yaya & Oci",
+    "description": "Undangan Pernikahan Yaya & Oci - 06 September 2026",
+    "image": "foto-sampul.jpg"
   }
 }
