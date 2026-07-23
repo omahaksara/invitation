@@ -1,26 +1,23 @@
 {
   "meta": {
     "slug": "yaya-oci",
-    "template": "daisy",
-    "status": "published"
-  },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec",
-    "sheetUcapan": "https://docs.google.com/spreadsheets/d/1xxx-xxxx-xxxx-xxxx",
-    "apiRsvp": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec"
+    "template": "o",
+    "status": "published",
+    "domain": "",
+    "customUrl": ""
   },
   "settings": {
     "islami": true,
     "themeColor": "#8B7355",
     "bgColor": "#fdfbf7",
-    "coupleFrame": "polaroid",
-    "autoColor": true,
+    "coupleFrame": "arch-mask",
+    "autoColor": false,
     "showCountdown": true,
     "showLoveStory": true,
     "showGallery": true,
     "showGift": true,
     "showUcapan": true,
-    "showProtocols": true,
+    "showProtocols": false,
     "musicAutoplay": true
   },
   "couple": {
@@ -31,8 +28,9 @@
       "mother": "Siti Kusnah (Almh)",
       "image": "foto-pria.jpg",
       "instagram": "@muh_djafar27",
-      "bio": "Putra dari Bapak Moh. Aliman (Alm) & Ibu Siti Kusnah (Almh)",
-      "phone": "6282261567928"
+      "tiktok": "",
+      "phone": "6282261567928",
+      "bio": "Putra dari Bapak Moh. Aliman (Alm) & Ibu Siti Kusnah (Almh)"
     },
     "bride": {
       "name": "Khosi Saimima",
@@ -41,14 +39,16 @@
       "mother": "Sholihah",
       "image": "foto-wanita.jpg",
       "instagram": "@khosisaimima17",
-      "bio": "Putri dari Bapak Maksum & Ibu Sholihah",
-      "phone": "6282261567928"
+      "tiktok": "",
+      "phone": "6282261567928",
+      "bio": "Putri dari Bapak Maksum & Ibu Sholihah"
     }
   },
   "quote": {
     "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
     "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
-    "source": "QS. Ar-Rum: 21"
+    "source": "QS. Ar-Rum: 21",
+    "english": ""
   },
   "events": [
     {
@@ -58,9 +58,10 @@
       "endTime": "10:00",
       "timezone": "WITA",
       "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
       "locationName": "Kediaman Mempelai",
-      "embedMaps": ""
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "embedMaps": "",
+      "liveStreaming": ""
     },
     {
       "title": "Walimatul 'Ursy",
@@ -69,9 +70,10 @@
       "endTime": "23:59",
       "timezone": "WITA",
       "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
       "locationName": "Kediaman Mempelai",
-      "embedMaps": ""
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "embedMaps": "",
+      "liveStreaming": ""
     }
   ],
   "countdown": {
@@ -79,7 +81,7 @@
     "backgroundImage": "foto-sampul.jpg"
   },
   "music": {
-    "description": "Playlist Yaya & Oci",
+    "description": "Playlist musik Yaya & Oci",
     "defaultSong": "musik.mp3",
     "autoplay": true,
     "playlist": [
@@ -87,7 +89,8 @@
         "name": "Wedding Song - Yaya & Oci",
         "file": "musik.mp3",
         "url": "./musik.mp3",
-        "isDefault": true
+        "isDefault": true,
+        "note": "Lagu utama Yaya & Oci"
       }
     ]
   },
@@ -111,26 +114,47 @@
     "heroImage": "foto-sampul.jpg",
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
+    "videoFile": "",
     "album": ["foto1.jpg", "foto2.jpg"]
   },
   "digitalGift": {
     "description": "Doa restu Anda adalah hadiah terindah. Namun jika berkenan memberikan tanda kasih, dapat melalui:",
+    "qris": "",
     "accounts": [
-      { "provider": "BRI", "accountNumber": "519501024699536", "accountHolder": "Khosi Saimima" },
-      { "provider": "Mandiri", "accountNumber": "1510022186495", "accountHolder": "Muhammad Jakpar" }
+      {
+        "provider": "BRI",
+        "accountNumber": "519501024699536",
+        "accountHolder": "Khosi Saimima",
+        "logo": "",
+        "note": ""
+      },
+      {
+        "provider": "Mandiri",
+        "accountNumber": "1510022186495",
+        "accountHolder": "Muhammad Jakpar",
+        "logo": "",
+        "note": ""
+      }
     ],
+    "address": "",
     "receiver": "Yaya & Oci"
+  },
+  "protocols": {
+    "title": "Informasi Tambahan",
+    "items": ["Acara diselenggarakan secara intimate"]
+  },
+  "logistics": {
+    "rsvpWaNumber": "6282261567928",
+    "dressCode": "",
+    "colorCode": "",
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
+    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
+    "filterIG": "",
+    "hashtag": "#YayaOciWedding"
   },
   "guest": {
     "defaultName": "Tamu Undangan",
     "defaultGroup": "Keluarga & Sahabat"
-  },
-  "logistics": {
-    "rsvpWaNumber": "6282261567928",
-    "dressCode": "Sopan & Bebas",
-    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
-    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
-    "hashtag": "#YayaOciWedding"
   },
   "seo": {
     "title": "Wedding of Yaya & Oci",
