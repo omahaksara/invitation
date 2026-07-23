@@ -1,53 +1,164 @@
 {
-  "meta": { "slug": "yaya-oci", "template": "my", "status": "published" },
-  "link": {
-    "apiUcapan": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec",
-    "sheetUcapan": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec",
-    "apiRsvp": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec"
+  "meta": {
+    "slug": "yaya-oci",
+    "template": "o",
+    "status": "published",
+    "domain": "",
+    "customUrl": ""
   },
   "settings": {
-    "islami": true, "themeColor": "#8B7355", "bgColor": "#fdfbf7",
-    "coupleFrame": "arch-mask", "autoColor": false,
-    "showCountdown": true, "showLoveStory": true, "showGallery": true,
-    "showGift": true, "showUcapan": true, "showProtocols": false, "musicAutoplay": true
+    "islami": true,
+    "themeColor": "#8B7355",
+    "bgColor": "#fdfbf7",
+    "coupleFrame": "arch-mask",
+    "autoColor": false,
+    "showCountdown": true,
+    "showLoveStory": true,
+    "showGallery": true,
+    "showGift": true,
+    "showUcapan": true,
+    "showProtocols": false,
+    "musicAutoplay": true
   },
   "couple": {
-    "groom": { "name": "Muhammad Jakpar", "nickname": "Yaya", "father": "Moh. Aliman (Alm)", "mother": "Siti Kusnah (Almh)", "image": "foto-pria.jpg", "instagram": "@muh_djafar27", "phone": "6282261567928", "bio": "Putra dari Bapak Moh. Aliman (Alm) & Ibu Siti Kusnah (Almh)" },
-    "bride": { "name": "Khosi Saimima", "nickname": "Oci", "father": "Maksum", "mother": "Sholihah", "image": "foto-wanita.jpg", "instagram": "@khosisaimima17", "phone": "6282261567928", "bio": "Putri dari Bapak Maksum & Ibu Sholihah" }
+    "groom": {
+      "name": "Muhammad Jakpar",
+      "nickname": "Yaya",
+      "father": "Moh. Aliman (Alm)",
+      "mother": "Siti Kusnah (Almh)",
+      "image": "foto-pria.jpg",
+      "instagram": "@muh_djafar27",
+      "tiktok": "",
+      "phone": "6282261567928",
+      "bio": "Putra dari Bapak Moh. Aliman (Alm) & Ibu Siti Kusnah (Almh)"
+    },
+    "bride": {
+      "name": "Khosi Saimima",
+      "nickname": "Oci",
+      "father": "Maksum",
+      "mother": "Sholihah",
+      "image": "foto-wanita.jpg",
+      "instagram": "@khosisaimima17",
+      "tiktok": "",
+      "phone": "6282261567928",
+      "bio": "Putri dari Bapak Maksum & Ibu Sholihah"
+    }
   },
   "quote": {
     "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
     "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
-    "source": "QS. Ar-Rum: 21"
+    "source": "QS. Ar-Rum: 21",
+    "english": ""
   },
   "events": [
-    { "title": "Akad Nikah", "date": "2026-09-06", "startTime": "09:00", "endTime": "10:00", "timezone": "WITA", "address": "Desa Petunasugi (SPD), Dusun 4", "locationName": "Kediaman Mempelai", "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi" },
-    { "title": "Walimatul 'Ursy", "date": "2026-09-06", "startTime": "11:00", "endTime": "23:59", "timezone": "WITA", "address": "Desa Petunasugi (SPD), Dusun 4", "locationName": "Kediaman Mempelai", "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi" }
+    {
+      "title": "Akad Nikah",
+      "date": "2026-09-06",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "timezone": "WITA",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "locationName": "Kediaman Mempelai",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "embedMaps": "",
+      "liveStreaming": ""
+    },
+    {
+      "title": "Walimatul 'Ursy",
+      "date": "2026-09-06",
+      "startTime": "11:00",
+      "endTime": "23:59",
+      "timezone": "WITA",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "locationName": "Kediaman Mempelai",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "embedMaps": "",
+      "liveStreaming": ""
+    }
   ],
-  "countdown": { "targetDate": "2026-09-06T09:00:00+08:00", "backgroundImage": "foto-sampul.jpg" },
+  "countdown": {
+    "targetDate": "2026-09-06T09:00:00+08:00",
+    "backgroundImage": "foto-sampul.jpg"
+  },
   "music": {
-    "description": "Playlist Yaya & Oci", "defaultSong": "musik.mp3", "autoplay": true,
-    "playlist": [{ "name": "Wedding Song - Yaya & Oci", "file": "musik.mp3", "url": "./musik.mp3", "isDefault": true }]
+    "description": "Playlist Yaya & Oci",
+    "defaultSong": "musik.mp3",
+    "playlist": [
+      {
+        "name": "Wedding Song - Yaya & Oci",
+        "file": "musik.mp3",
+        "url": "./musik.mp3",
+        "isDefault": true,
+        "note": "Lagu utama Yaya & Oci"
+      }
+    ],
+    "autoplay": true
   },
   "loveStory": [
-    { "date": "Juni 2021", "year": "2021", "title": "First Meet", "description": "Berawal dari sebuah tanggapan kecil di story.", "image": "foto1.jpg" },
-    { "date": "14 April 2024", "year": "2024", "title": "Khitbah", "description": "Kami memutuskan untuk bersama dalam ridho-Nya.", "image": "foto2.jpg" }
+    {
+      "date": "Juni 2021",
+      "year": "2021",
+      "title": "First Meet",
+      "description": "Berawal dari sebuah tanggapan kecil di story.",
+      "image": "foto1.jpg"
+    },
+    {
+      "date": "14 April 2024",
+      "year": "2024",
+      "title": "Khitbah",
+      "description": "Kami memutuskan untuk bersama dalam ridho-Nya.",
+      "image": "foto2.jpg"
+    }
   ],
-  "gallery": { "heroImage": "foto-sampul.jpg", "coverImage": "foto-sampul.jpg", "album": ["foto1.jpg", "foto2.jpg"] },
+  "gallery": {
+    "heroImage": "foto-sampul.jpg",
+    "coverImage": "foto-sampul.jpg",
+    "videoYoutubeId": "",
+    "videoFile": "",
+    "album": ["foto1.jpg", "foto2.jpg"]
+  },
   "digitalGift": {
     "description": "Doa restu Anda adalah hadiah terindah.",
+    "qris": "",
     "accounts": [
-      { "provider": "BRI", "accountNumber": "519501024699536", "accountHolder": "Khosi Saimima" },
-      { "provider": "Mandiri", "accountNumber": "1510022186495", "accountHolder": "Muhammad Jakpar" }
+      {
+        "provider": "BRI",
+        "accountNumber": "519501024699536",
+        "accountHolder": "Khosi Saimima",
+        "logo": "",
+        "note": "Rekening Oci"
+      },
+      {
+        "provider": "Mandiri",
+        "accountNumber": "1510022186495",
+        "accountHolder": "Muhammad Jakpar",
+        "logo": "",
+        "note": "Rekening Yaya"
+      }
     ],
+    "address": "",
     "receiver": "Yaya & Oci"
+  },
+  "protocols": {
+    "title": "Informasi Tambahan",
+    "items": ["Acara diselenggarakan secara intimate", "Mohon konfirmasi kehadiran H-3"]
   },
   "logistics": {
     "rsvpWaNumber": "6282261567928",
+    "dressCode": "",
+    "colorCode": "",
     "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
     "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
+    "filterIG": "",
     "hashtag": "#YayaOciWedding"
   },
-  "guest": { "defaultName": "Tamu Undangan", "defaultGroup": "Keluarga & Sahabat" },
-  "seo": { "title": "Wedding of Yaya & Oci", "description": "Undangan Pernikahan Yaya & Oci - 06 September 2026", "image": "foto-sampul.jpg" }
+  "guest": {
+    "defaultName": "Tamu Undangan",
+    "defaultGroup": "Keluarga & Sahabat"
+  },
+  "seo": {
+    "title": "Wedding of Yaya & Oci",
+    "description": "Undangan Pernikahan Yaya & Oci - 06 September 2026",
+    "image": "foto-sampul.jpg"
+  }
 }
