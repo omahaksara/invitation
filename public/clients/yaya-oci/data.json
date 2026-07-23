@@ -2,9 +2,7 @@
   "meta": {
     "slug": "yaya-oci",
     "template": "daisy",
-    "status": "published",
-    "domain": "",
-    "customUrl": ""
+    "status": "published"
   },
   "link": {
     "apiUcapan": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec",
@@ -60,7 +58,9 @@
       "endTime": "10:00",
       "timezone": "WITA",
       "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "locationName": "Kediaman Mempelai",
+      "embedMaps": ""
     },
     {
       "title": "Walimatul 'Ursy",
@@ -69,7 +69,9 @@
       "endTime": "23:59",
       "timezone": "WITA",
       "address": "Desa Petunasugi (SPD), Dusun 4",
-      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi"
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "locationName": "Kediaman Mempelai",
+      "embedMaps": ""
     }
   ],
   "countdown": {
@@ -77,6 +79,9 @@
     "backgroundImage": "foto-sampul.jpg"
   },
   "music": {
+    "description": "Playlist Yaya & Oci",
+    "defaultSong": "musik.mp3",
+    "autoplay": true,
     "playlist": [
       {
         "name": "Wedding Song - Yaya & Oci",
@@ -89,12 +94,14 @@
   "loveStory": [
     {
       "date": "Juni 2021",
+      "year": "2021",
       "title": "First Meet",
       "description": "Berawal dari sebuah tanggapan kecil di story.",
       "image": "foto1.jpg"
     },
     {
       "date": "14 April 2024",
+      "year": "2024",
       "title": "Khitbah",
       "description": "Kami memutuskan untuk bersama dalam ridho-Nya.",
       "image": "foto2.jpg"
@@ -103,19 +110,27 @@
   "gallery": {
     "heroImage": "foto-sampul.jpg",
     "coverImage": "foto-sampul.jpg",
+    "videoYoutubeId": "",
     "album": ["foto1.jpg", "foto2.jpg"]
   },
   "digitalGift": {
-    "description": "Doa restu Anda adalah hadiah terindah.",
+    "description": "Doa restu Anda adalah hadiah terindah. Namun jika berkenan memberikan tanda kasih, dapat melalui:",
     "accounts": [
       { "provider": "BRI", "accountNumber": "519501024699536", "accountHolder": "Khosi Saimima" },
       { "provider": "Mandiri", "accountNumber": "1510022186495", "accountHolder": "Muhammad Jakpar" }
-    ]
+    ],
+    "receiver": "Yaya & Oci"
+  },
+  "guest": {
+    "defaultName": "Tamu Undangan",
+    "defaultGroup": "Keluarga & Sahabat"
   },
   "logistics": {
     "rsvpWaNumber": "6282261567928",
     "dressCode": "Sopan & Bebas",
-    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan tamu undangan berkenan hadir."
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
+    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
+    "hashtag": "#YayaOciWedding"
   },
   "seo": {
     "title": "Wedding of Yaya & Oci",
