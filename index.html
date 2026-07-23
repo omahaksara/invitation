@@ -6,30 +6,30 @@
     <title>Undangan Pernikahan</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300&display=swap" rel="stylesheet">
     <style>
-        body { 
+        body {
             font-family: 'Inter', sans-serif;
-            background: #FBF8F3; 
-            color: #C87941; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
+            background: #FBF8F3;
+            color: #C87941;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             margin: 0;
             text-align: center;
         }
-        .wrap { animation: fadeIn 1s ease; }
-        .names { 
+       .wrap { animation: fadeIn 1s ease; }
+       .names {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
             margin: 0.5rem 0;
         }
-        .sub { 
-            font-size: 0.8rem; 
-            letter-spacing: 0.2em; 
+       .sub {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             opacity: 0.7;
         }
-        .dots::after { content: ''; animation: dots 1.5s infinite; }
+       .dots::after { content: ''; animation: dots 1.5s infinite; }
         @keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     </style>
@@ -42,29 +42,60 @@
     </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const client = params.get('c');
-        
+        // ===== 1. SUPPORT SHORTLINK OTOMATIS =====
+        // Support:?c=, /yaya-oci, /yaya-oci?to=, /yaya-oci&to= (model lama Pandu)
+        let rawUrl = window.location.href;
+        let searchParams = new URLSearchParams(window.location.search);
+        let client = searchParams.get('c');
+        let toParam = searchParams.get('to');
+
+        if(!toParam && rawUrl.includes('&to=')){
+            toParam = rawUrl.split('&to=')[1].split('&')[0].split('#')[0];
+            toParam = decodeURIComponent(toParam.replace(/\+/g,' '));
+        }
+
+        if(!client){
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            const maybe = parts[0] === 'invitation' && parts.length >=2? parts[1] : parts[0];
+            if(maybe &&!['templates','public','invitation'].includes(maybe)){
+                client = maybe.split('&')[0].split('?')[0];
+            }
+        }
+
         if (!client) {
             document.getElementById('names').textContent = 'Aksara';
         } else {
+            client = client.split('&')[0].split('?')[0];
             fetch(`public/clients/${client}/data.json`)
-                .then(res => res.json())
-                .then(data => {
+               .then(res => res.json())
+               .then(data => {
                     const g = data.couple?.groom?.nickname || '';
                     const b = data.couple?.bride?.nickname || '';
                     document.getElementById('names').textContent = `${g} & ${b}`;
-                    
+
                     const template = data.meta?.template || 'terra-soft';
-                    // kasih jeda 1.2 detik biar keliatan keren
                     setTimeout(() => {
-                        window.location.href = `templates/${template}/index.html${window.location.search}`;
+                        const toQuery = toParam? `&to=${encodeURIComponent(toParam)}` : '';
+                        window.location.href = `templates/${template}/index.html?c=${client}${toQuery}`;
                     }, 1200);
                 })
-                .catch(() => {
+               .catch(() => {
                     document.getElementById('names').textContent = 'Undangan';
                 });
         }
+
+        // ===== 2. SOFT PROTECTION - NGGAK GANGGU SCREENSHOT =====
+        // Cuma block klik kanan di gambar, screenshot tetep bisa
+        document.addEventListener('contextmenu', e => {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        document.addEventListener('dragstart', e => {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+
+        // Branding console
+        console.log("%cSTOP!", "color:#C87941;font-size:40px;font-weight:bold;font-family:Playfair Display");
+        console.log("%cProtected by Omah Aksara Engine © 2026", "color:#999;font-size:12px;");
     </script>
 </body>
 </html>
