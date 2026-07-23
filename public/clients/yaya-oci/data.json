@@ -1,7 +1,7 @@
 {
   "meta": {
     "slug": "yaya-oci",
-    "template": "my",
+    "template": "o",
     "status": "published",
     "domain": "",
     "customUrl": ""
@@ -45,7 +45,7 @@
     }
   },
   "quote": {
-    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً",
     "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
     "source": "QS. Ar-Rum: 21",
     "english": ""
@@ -86,10 +86,17 @@
     "playlist": [
       {
         "name": "Wedding Song - Yaya & Oci",
-        "file": ""contohlagu (7).mp3",
-        "url": ".https://omahaksara.github.io/lagu/contohlagu%20(7).mp3",
+        "file": "musik.mp3",
+        "url": "./musik.mp3",
         "isDefault": true,
-        "note": "Lagu utama Yaya & Oci"
+        "note": "Lagu utama lokal"
+      },
+      {
+        "name": "Cadangan Online - Beautiful In White",
+        "file": "contohlagu (6).mp3",
+        "url": "https://omahaksara.github.io/lagu/contohlagu%20(6).mp3",
+        "isDefault": false,
+        "note": "Cadangan kalau lokal gagal"
       }
     ],
     "autoplay": true
@@ -115,7 +122,7 @@
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
-    "album": ["foto1.jpg", "foto2.jpg"]
+    "album": ["foto1.jpg", "foto2.jpg", "foto-sampul.jpg"]
   },
   "digitalGift": {
     "description": "Doa restu Anda adalah hadiah terindah.",
