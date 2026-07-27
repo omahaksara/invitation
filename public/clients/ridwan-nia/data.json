@@ -1,7 +1,7 @@
 {
   "meta": {
     "slug": "ridwan-nia",
-    "template": "o",
+    "template": "karsa-luxe",
     "status": "published",
     "domain": "",
     "customUrl": ""
@@ -29,7 +29,7 @@
       "image": "foto-pria.jpg",
       "instagram": "ridwan_ondow",
       "tiktok": "",
-      "phone": "6281234567890",
+      "phone": "6280000000000",
       "bio": "Putra ke-Tiga dari Bapak Suparjo & Ibu Ratiah"
     },
     "bride": {
@@ -40,7 +40,7 @@
       "image": "foto-wanita.jpg",
       "instagram": "",
       "tiktok": "",
-      "phone": "6281234567890",
+      "phone": "6280000000000",
       "bio": "Putri ke-Tiga dari Bapak Girin & Ibu Winarti"
     }
   },
@@ -106,14 +106,14 @@
       "date": "Menuju Halal",
       "year": "2022",
       "title": "Lamaran",
-      "description": "Dengan restu kedua orang tua, kami memutuskan untuk melangkah ke jenjang yang lebih serius dan mengikat janji suci.",
+      "description": "Dengan restu kedua orang tua, kami memutuskan untuk melangkah ke jenjang yang lebih serius.",
       "image": ""
     },
     {
       "date": "21-22 September 2022",
       "year": "2022",
-      "title": "Hari Bahagia",
-      "description": "Dengan memohon rahmat Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk menjadi saksi hari bahagia kami.",
+      "title": "Hari Bahagia - Alhamdulillah Telah Terlaksana",
+      "description": "Terima kasih atas doa restu Bapak/Ibu/Saudara/i yang telah hadir.",
       "image": ""
     }
   ],
@@ -122,67 +122,57 @@
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
-    "album": [
-      "galeri1.jpg",
-      "galeri2.jpg",
-      "galeri3.jpg",
-      "galeri4.jpg",
-      "galeri5.jpg",
-      "galeri6.jpg"
-    ]
+    "album": ["galeri1.jpg", "galeri2.jpg", "galeri3.jpg", "galeri4.jpg", "galeri5.jpg", "galeri6.jpg"]
   },
   "liveDocumentation": {
     "enabled": true,
     "driveFolderId": "1tsshKVkE_Hs_m0H-u3titFxq0D3AqtCb",
     "driveFolderLink": "https://drive.google.com/drive/folders/1tsshKVkE_Hs_m0H-u3titFxq0D3AqtCb?usp=sharing",
-    "title": "Dokumentasi Pernikahan",
-    "subtitle": "Alhamdulillah acara telah selesai. Terima kasih atas doa restunya. Foto-foto bisa langsung dilihat & didownload di sini"
+    "title": "Alhamdulillah Telah Selesai - Dokumentasi",
+    "subtitle": "Terima kasih atas doa restunya. Foto-foto resepsi bisa langsung dilihat & didownload di sini. Geser ke samping ya."
   },
   "digitalGift": {
-    "description": "Wedding Gift Ridwan & Nia",
+    "description": "Wedding Gift Ridwan & Nia - ARSIP",
     "qris": "",
     "accounts": [
       {
-        "provider": "BRI",
-        "accountNumber": "1234567890",
-        "accountHolder": "Ridwan",
+        "provider": "BRI - ARSIP",
+        "accountNumber": "0000000000000000",
+        "accountHolder": "RIDWAN (ARSIP - UNDANGAN LAMA 2022)",
         "logo": "",
-        "note": "Rekening Mempelai Pria"
+        "note": "Rekening Arsip - Tidak Aktif"
       },
       {
-        "provider": "BRI",
-        "accountNumber": "0987654321",
-        "accountHolder": "Nia Novianti",
+        "provider": "BRI - ARSIP",
+        "accountNumber": "0000000000000000",
+        "accountHolder": "NIA NOVIANTI (ARSIP - UNDANGAN LAMA 2022)",
         "logo": "",
-        "note": "Rekening Mempelai Wanita"
+        "note": "Rekening Arsip - Tidak Aktif"
       }
     ],
     "address": "Dusun III, Tinombala Induk",
-    "receiver": "Ridwan & Nia"
+    "receiver": "Ridwan & Nia - ARSIP 2022"
   },
   "protocols": {
     "title": "Informasi",
-    "items": [
-      "Tetap jaga kesehatan",
-      "Datang dengan bahagia"
-    ]
+    "items": ["Acara telah selesai pada 2022", "Terima kasih atas doanya"]
   },
   "logistics": {
-    "rsvpWaNumber": "6281234567890",
+    "rsvpWaNumber": "6280000000000",
     "dressCode": "Bebas Sopan",
     "colorCode": "",
-    "guestNote": "Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir memberikan doa restu.",
-    "noteFooter": "Kehadiran dan doa restu Anda adalah kebahagiaan bagi kami.",
+    "guestNote": "Acara ini telah terlaksana pada 21-22 September 2022. Terima kasih atas doa restunya.",
+    "noteFooter": "Kehadiran dan doa restu Anda pada 2022 adalah kebahagiaan bagi kami.",
     "filterIG": "",
-    "hashtag": "#RidwanNiaWedding"
+    "hashtag": "#RidwanNiaWedding2022"
   },
   "guest": {
     "defaultName": "Tamu Undangan",
     "defaultGroup": "Keluarga & Sahabat"
   },
   "seo": {
-    "title": "Wedding of Ridwan & Nia",
-    "description": "Undangan Pernikahan Ridwan & Nia Novianti - 21-22 September 2022 - Dusun III Tinombala Induk",
+    "title": "Wedding of Ridwan & Nia - 2022 (Arsip)",
+    "description": "Arsip Undangan Pernikahan Ridwan & Nia Novianti - 21-22 September 2022",
     "image": "foto-sampul.jpg"
   }
 }
