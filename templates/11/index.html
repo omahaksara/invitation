@@ -181,7 +181,7 @@
         </div>
     </section>
 
-    <!-- LIVE DOCUMENTATION GOOGLE DRIVE (FITUR BARU YANG DI-MERGE) -->
+    <!-- LIVE DOCUMENTATION GOOGLE DRIVE -->
     <section id="live-doc-section" class="hidden py-28 px-6 bg-[#FBFBFA] border-t border-stone-100">
         <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">LIVE FROM RECEPTION</p>
         <h3 id="live-doc-title" class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-3 tracking-wide">Hasil Resepsi Hari Ini</h3>
@@ -191,7 +191,7 @@
         <p id="drive-empty" class="hidden text-center text-xs text-stone-400 py-10 italic">Fotografer belum upload. Cek lagi setelah acara dimulai ya.</p>
     </section>
 
-    <!-- POJOK BETAH (FITUR EKSKLUSIF OMAH AKSARA) -->
+    <!-- POJOK BETAH -->
     <section class="py-20 px-8 bg-[#F7F5F0] border-t border-stone-100">
         <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Interaksi Tamu</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-10 tracking-wide">Pojok Betah Tamu</h3>
@@ -368,7 +368,7 @@
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
 
-        // INTEGRASI LIVE DOCUMENTATION DRIVE GOOGLE SHEETS API
+        // INTEGRASI LIVE DOCUMENTATION DRIVE GOOGLE SHEETS API (DENGAN OBSERVER AGAR TAMPIL)
         if(liveDocumentation?.enabled && liveDocumentation?.driveFolderId){
             document.getElementById('live-doc-section').classList.remove('hidden');
             document.getElementById('live-doc-title').innerText = liveDocumentation.title || "Hasil Resepsi";
@@ -390,7 +390,16 @@
                         </div>
                         <a href="${f.download}" target="_blank" class="block text-xs tracking-widest text-center mt-3 text-stone-500 uppercase font-medium hover:text-black">Download HD</a>
                     </div>`).join('');
-                new Swiper(".liveSwiper", { slidesPerView: 1.4, spaceBetween: 16, freeMode: true, autoplay: { delay: 3500 } });
+                
+                const liveSwiper = new Swiper(".liveSwiper", { 
+                    slidesPerView: 1.4, 
+                    spaceBetween: 16, 
+                    freeMode: true, 
+                    observer: true, 
+                    observeParents: true, 
+                    autoplay: { delay: 3500, disableOnInteraction: false } 
+                });
+                liveSwiper.update();
             }).catch(() => {
                 document.getElementById('drive-empty').classList.remove('hidden');
             });
@@ -455,7 +464,6 @@
             };
         }
 
-        // UCAPAN MENGGUNAKAN JSONP (ANTI-CORS)
         function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
             wishesBox.innerHTML = `<p class="text-xs text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa...</p>`;
@@ -547,7 +555,6 @@
         document.body.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;"><h1>Error Load Data</h1><p>${err.message}</p><p>Slug: ${clientSlug}</p><p>Pastikan folder <code>public/clients/${clientSlug}/data.json</code> ada</p></div>`;
     });
 
-    // INTERAKSI SPESIAL (SPIN & LIGHTBOX)
     document.getElementById('spin-btn')?.addEventListener('click', () => {
         const hadiah = [
             "Dapat peluk virtual hangat dari pengantin 🤗", 
@@ -572,9 +579,31 @@
 
     function copyRek(id) {
         const text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text).then(() => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('No. Rekening berhasil disalin: ' + text);
+            }).catch(() => {
+                fallbackCopyText(text);
+            });
+        } else {
+            fallbackCopyText(text);
+        }
+    }
+
+    function fallbackCopyText(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
             alert('No. Rekening berhasil disalin: ' + text);
-        });
+        } catch (err) {
+            alert('Gagal menyalin nomor rekening.');
+        }
+        document.body.removeChild(textArea);
     }
 </script>
 </body>
