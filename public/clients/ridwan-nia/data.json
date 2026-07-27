@@ -59,8 +59,8 @@
       "timezone": "WITA",
       "address": "Dusun III, Tinombala Induk, Ongka Malino, Parigi Moutong, Sulawesi Tengah",
       "locationName": "Kediaman Mempelai Wanita",
-      "googleMaps": "https://maps.google.com/?q=Dusun+III+Tinombala+Induk",
-      "embedMaps": "",
+      "googleMaps": "https://www.google.com/maps/search/?api=1&query=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong",
+      "embedMaps": "https://www.google.com/maps?q=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong+Sulawesi+Tengah&z=15&output=embed",
       "liveStreaming": ""
     },
     {
@@ -71,8 +71,8 @@
       "timezone": "WITA",
       "address": "Dusun III, Tinombala Induk, Ongka Malino, Parigi Moutong, Sulawesi Tengah",
       "locationName": "Kediaman Mempelai Wanita",
-      "googleMaps": "https://maps.google.com/?q=Dusun+III+Tinombala+Induk",
-      "embedMaps": "",
+      "googleMaps": "https://www.google.com/maps/search/?api=1&query=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong",
+      "embedMaps": "https://www.google.com/maps?q=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong+Sulawesi+Tengah&z=15&output=embed",
       "liveStreaming": ""
     }
   ],
@@ -106,14 +106,14 @@
       "date": "Menuju Halal",
       "year": "2022",
       "title": "Lamaran",
-      "description": "Dengan restu kedua orang tua, kami memutuskan untuk melangkah ke jenjang yang lebih serius.",
+      "description": "Dengan restu kedua orang tua, kami memutuskan untuk melangkah ke jenjang yang lebih serius dan mengikat janji suci.",
       "image": ""
     },
     {
       "date": "21-22 September 2022",
       "year": "2022",
       "title": "Hari Bahagia - Alhamdulillah Telah Terlaksana",
-      "description": "Terima kasih atas doa restu Bapak/Ibu/Saudara/i yang telah hadir.",
+      "description": "Dengan memohon rahmat Allah SWT, kami mengucapkan terima kasih atas doa restu Bapak/Ibu/Saudara/i.",
       "image": ""
     }
   ],
@@ -122,57 +122,67 @@
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
-    "album": ["galeri1.jpg", "galeri2.jpg", "galeri3.jpg", "galeri4.jpg", "galeri5.jpg", "galeri6.jpg"]
+    "album": [
+      "galeri1.jpg",
+      "galeri2.jpg",
+      "galeri3.jpg",
+      "galeri4.jpg",
+      "galeri5.jpg",
+      "galeri6.jpg"
+    ]
   },
   "liveDocumentation": {
     "enabled": true,
     "driveFolderId": "1tsshKVkE_Hs_m0H-u3titFxq0D3AqtCb",
     "driveFolderLink": "https://drive.google.com/drive/folders/1tsshKVkE_Hs_m0H-u3titFxq0D3AqtCb?usp=sharing",
-    "title": "Alhamdulillah Telah Selesai - Dokumentasi",
-    "subtitle": "Terima kasih atas doa restunya. Foto-foto resepsi bisa langsung dilihat & didownload di sini. Geser ke samping ya."
+    "title": "Dokumentasi Pernikahan - Alhamdulillah Telah Selesai",
+    "subtitle": "Terima kasih atas doa restunya pada 2022. Semua foto resepsi bisa langsung dilihat & didownload HD di sini"
   },
   "digitalGift": {
-    "description": "Wedding Gift Ridwan & Nia - ARSIP",
+    "description": "Wedding Gift Ridwan & Nia - ARSIP 2022",
     "qris": "",
     "accounts": [
       {
         "provider": "BRI - ARSIP",
         "accountNumber": "0000000000000000",
-        "accountHolder": "RIDWAN (ARSIP - UNDANGAN LAMA 2022)",
+        "accountHolder": "RIDWAN - ARSIP UNDANGAN LAMA",
         "logo": "",
-        "note": "Rekening Arsip - Tidak Aktif"
+        "note": "Rekening Arsip - Tidak Aktif - 0000"
       },
       {
         "provider": "BRI - ARSIP",
         "accountNumber": "0000000000000000",
-        "accountHolder": "NIA NOVIANTI (ARSIP - UNDANGAN LAMA 2022)",
+        "accountHolder": "NIA NOVIANTI - ARSIP UNDANGAN LAMA",
         "logo": "",
-        "note": "Rekening Arsip - Tidak Aktif"
+        "note": "Rekening Arsip - Tidak Aktif - 0000"
       }
     ],
     "address": "Dusun III, Tinombala Induk",
     "receiver": "Ridwan & Nia - ARSIP 2022"
   },
   "protocols": {
-    "title": "Informasi",
-    "items": ["Acara telah selesai pada 2022", "Terima kasih atas doanya"]
+    "title": "Informasi Arsip",
+    "items": [
+      "Acara telah selesai pada 21-22 September 2022",
+      "Halaman ini adalah arsip kenangan digital"
+    ]
   },
   "logistics": {
     "rsvpWaNumber": "6280000000000",
     "dressCode": "Bebas Sopan",
     "colorCode": "",
-    "guestNote": "Acara ini telah terlaksana pada 21-22 September 2022. Terima kasih atas doa restunya.",
-    "noteFooter": "Kehadiran dan doa restu Anda pada 2022 adalah kebahagiaan bagi kami.",
+    "guestNote": "Acara ini telah terlaksana pada 21-22 September 2022. Terima kasih atas doa restu yang telah diberikan.",
+    "noteFooter": "Jazakumullah khairan katsiran atas doa restu Anda.",
     "filterIG": "",
-    "hashtag": "#RidwanNiaWedding2022"
+    "hashtag": "#RidwanNia2022"
   },
   "guest": {
     "defaultName": "Tamu Undangan",
     "defaultGroup": "Keluarga & Sahabat"
   },
   "seo": {
-    "title": "Wedding of Ridwan & Nia - 2022 (Arsip)",
-    "description": "Arsip Undangan Pernikahan Ridwan & Nia Novianti - 21-22 September 2022",
+    "title": "Arsip Wedding of Ridwan & Nia - 21-22 Sept 2022",
+    "description": "Arsip Undangan Pernikahan Ridwan & Nia Novianti - 21-22 September 2022 - Dusun III Tinombala Induk",
     "image": "foto-sampul.jpg"
   }
 }
