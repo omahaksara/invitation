@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="seo-title">Undangan — Omah Aksara</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Instrument+Sans:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{ --sage:#7A8D7F; --sand:#FFFBF5; --dark:#2B2B2B; --paper:#FFFFFF; --blush:#F2EDE8; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--sand);color:var(--dark);font-family:'Instrument Sans',sans-serif;overflow:hidden;height:100vh}
+.font-serif{font-family:'Bodoni Moda',serif}.font-script{font-family:'Pinyon Script',cursive}
+.phone-wrapper{max-width:440px;height:100vh;margin:0 auto;background:var(--sand);position:relative;overflow:hidden;box-shadow:0 20px 80px rgba(0,0,0,0.08)}
+.step-section{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem;text-align:center;background:var(--sand);transform:translateY(100%);transition:transform 0.9s cubic-bezier(0.77,0,0.175,1);opacity:0;pointer-events:none;z-index:10}
+.step-section.active{transform:translateY(0);opacity:1;pointer-events:auto;z-index:20}
+#step-cover{transform:translateY(0);opacity:1;pointer-events:auto;z-index:50}
+#step-cover.hidden-cover{transform:translateY(-105%);opacity:0;pointer-events:none}
+.modern-card{background:var(--paper);border-radius:24px;box-shadow:0 10px 40px rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.04)}
+.progress-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,0.1);transition:all 0.4s}.progress-dot.active{background:var(--sage);width:20px}
+.music-box{position:fixed;bottom:24px;right:calc(50% - 200px);z-index:99;cursor:pointer;display:none}
+@media(max-width:450px){.music-box{right:20px}}
+.disk{width:44px;height:44px;background:var(--dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,0.15);animation:spin 8s linear infinite}
+.disk.paused{animation-play-state:paused}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.custom-scroll::-webkit-scrollbar{width:0}
+</style>
+</head>
+<body>
+<div class="phone-wrapper">
+  <div class="absolute top-6 left-1/2 -translate-x-1/2 z-[60] flex gap-2 bg-white/70 backdrop-blur-md px-3 py-2 rounded-full" id="progress"></div>
+
+  <!-- STEP 0 COVER -->
+  <section id="step-cover" class="step-section p-0 justify-between">
+    <div class="absolute inset-0"><img id="cover-bg" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div></div>
+    <div class="relative z-10 pt-20 text-white"><p id="cover-subtitle" class="text- tracking-[0.4em] uppercase opacity-80"></p></div>
+    <div class="relative z-10 w-full px-6 pb-8">
+      <div class="modern-card p-7 text-left">
+        <p class="text- tracking-[0.3em] uppercase text-stone-400 mb-1">Pawiwahan</p>
+        <h1 id="cover-names" class="font-serif text- leading-[0.9] text-[#2B2B2B] mb-5">...</h1>
+        <div class="h- bg-stone-100 my-4"></div>
+        <p id="cover-group-label" class="text- uppercase tracking-[0.2em] text-stone-400 mb-1"></p>
+        <h2 id="cover-guest" class="font-serif text-xl text-[#2B2B2B] mb-5"></h2>
+        <button onclick="nextStep(1)" class="w-full bg-[#2B2B2B] text-white rounded-full py-4 text- uppercase tracking-[0.3em] font-medium">Buka Undangan <i class="fa-solid fa-arrow-right ml-2"></i></button>
+      </div>
+      <p class="text- tracking-[0.4em] uppercase text-white/70 mt-6 text-center">Omah Aksara • Estetik Modern</p>
+    </div>
+  </section>
+
+  <!-- STEP 1 QUOTE -->
+  <section id="step-1" class="step-section bg-[#FFFBF5]"><div class="max-w- mx-auto"><div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mx-auto mb-6 shadow-sm"><i class="fa-solid fa-quote-left text-stone-300"></i></div><p id="quote-text" class="font-serif text- leading-relaxed text-[#2B2B2B] mb-4"></p><p id="quote-source" class="text- uppercase tracking-[0.3em] text-stone-400"></p><button onclick="nextStep(2)" class="mt-10 rounded-full border border-stone-200 px-8 py-3 text- uppercase tracking-[0.3em]">Lanjut</button></div></section>
+
+  <!-- STEP 2 COUPLE -->
+  <section id="step-2" class="step-section overflow-y-auto custom-scroll block py-16"><div class="max-w- mx-auto space-y-10"><div class="text-center"><div class="w- h- rounded- overflow-hidden mx-auto mb-4 shadow-lg"><img id="groom-img" class="w-full h-full object-cover"></div><h3 id="groom-name" class="font-serif text-2xl"></h3><p id="groom-bio" class="text- text-stone-500 mt-1"></p></div><div class="text-center"><div class="w- h- rounded- overflow-hidden mx-auto mb-4 shadow-lg"><img id="bride-img" class="w-full h-full object-cover"></div><h3 id="bride-name" class="font-serif text-2xl"></h3><p id="bride-bio" class="text- text-stone-500 mt-1"></p></div><button onclick="nextStep(3)" class="w-full bg-[#2B2B2B] text-white rounded-full py-4 text- uppercase tracking-[0.3em]">Acara</button></div></section>
+
+  <!-- STEP 3 EVENT -->
+  <section id="step-3" class="step-section overflow-y-auto custom-scroll block py-14"><div class="max-w- mx-auto w-full"><h3 class="font-serif text-3xl mb-8 text-left">Rangkaian<br>Acara Suci</h3><div id="event-container" class="space-y-4 text-left mb-6"></div><div id="countdown-wrap" class="modern-card p-4 hidden"><div id="countdown" class="flex justify-between"></div></div><button onclick="nextStep(4)" class="w-full bg-[#2B2B2B] text-white rounded-full py-4 text- uppercase tracking-[0.3em] mt-6">Lihat Galeri</button></div></section>
+
+  <!-- STEP 4 GALLERY -->
+  <section id="step-4" class="step-section overflow-y-auto custom-scroll block py-14"><div class="max-w- mx-auto w-full"><h3 class="font-serif text-3xl mb-6 text-left">Momen<br>Berharga</h3><div id="gallery-grid" class="grid grid-cols-2 gap-3 mb-8"></div><button onclick="nextStep(5)" class="w-full bg-[#2B2B2B] text-white rounded-full py-4 text- uppercase tracking-[0.3em]">Tanda Kasih</button></div></section>
+
+  <!-- STEP 5 GIFT & WISH -->
+  <section id="step-5" class="step-section overflow-y-auto custom-scroll block py-14"><div class="max-w- mx-auto w-full text-left"><h3 class="font-serif text-3xl mb-6">Kirim Hadiah</h3><div id="gift-container" class="space-y-3 mb-10"></div><h3 class="font-serif text-2xl mb-4">Doa & Restu</h3><form id="wishes-form" class="modern-card p-4 space-y-3 mb-6"><input id="wish-name" required placeholder="Nama" class="w-full bg-[#FFFBF5] rounded-xl px-4 py-3 text-sm outline-none"><div class="grid grid-cols-2 gap-2"><select id="wish-status" class="bg-[#FFFBF5] rounded-xl px-3 py-3 text-sm"><option>Hadir</option><option>Tidak Hadir</option></select><select id="wish-pax" class="bg-[#FFFBF5] rounded-xl px-3 py-3 text-sm"><option value="1">1 Orang</option><option value="2">2 Orang</option></select></div><textarea id="wish-message" required rows="3" placeholder="Ucapan..." class="w-full bg-[#FFFBF5] rounded-xl p-4 text-sm resize-none outline-none"></textarea><button class="w-full bg-[#2B2B2B] text-white rounded-full py-3 text- uppercase tracking-[0.3em]">Kirim</button></form><div id="wishes-box" class="space-y-3 max-h- overflow-y-auto"></div><div class="text-center mt-10"><h4 id="footer-names" class="font-serif text-xl"></h4><p id="hashtag" class="text- text-stone-400 mt-1"></p></div></div></section>
+</div>
+
+<div id="music-box" class="music-box"><div id="disk-wrap" class="disk paused" onclick="toggleMusic()"><i class="fa-solid fa-music text-xs"></i></div></div><audio id="audio" loop></audio>
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-3" id="step-nav-buttons" style="display:none"><button onclick="prevStep()" class="w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center"><i class="fa-solid fa-arrow-left text-xs"></i></button><button onclick="nextStep()" class="w-10 h-10 rounded-full bg-[#2B2B2B] text-white shadow-lg flex items-center justify-center"><i class="fa-solid fa-arrow-right text-xs"></i></button></div>
+
+<script>
+const params=new URLSearchParams(location.search);
+const clientSlug=params.get('c')||localStorage.getItem('invitation_client')||'komang-windi';
+const guestName=(params.get('to')?.replace(/\+/g,' ')||localStorage.getItem('invitation_guest')||'Tamu Undangan');
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
+let basePath=localStorage.getItem('invitation_base')||`../../public/clients/${clientSlug}/`;
+const possiblePaths=[`../../public/clients/${clientSlug}/`,`../public/clients/${clientSlug}/`,`./public/clients/${clientSlug}/`,`/invitation/public/clients/${clientSlug}/`,`./invitation/public/clients/${clientSlug}/`];
+let currentStep=0,totalSteps=5;
+function updateProgress(){document.getElementById('progress').innerHTML=Array.from({length:totalSteps},(_,i)=>`<div class="progress-dot ${i+1===currentStep?'active':''}"></div>`).join('')}
+function showStep(s){if(s>totalSteps)s=0;if(s<0)s=totalSteps;currentStep=s;const c=document.getElementById('step-cover'),n=document.getElementById('step-nav-buttons');if(currentStep===0){c.classList.remove('hidden-cover');n.style.display='none'}else{c.classList.add('hidden-cover');n.style.display='flex'}for(let i=1;i<=totalSteps;i++){const el=document.getElementById(`step-${i}`);if(el)el.classList.toggle('active',i===currentStep)}updateProgress()}
+function nextStep(t){if(t!==undefined){showStep(t);if(t>0)playAudio()}else{showStep(currentStep+1);if(currentStep>0)playAudio()}}
+function prevStep(){showStep(currentStep-1)}
+let audioEl=document.getElementById('audio');function playAudio(){if(audioEl.paused){audioEl.play().catch(()=>{});document.getElementById('disk-wrap').classList.remove('paused')}}
+function toggleMusic(){if(audioEl.paused){audioEl.play();document.getElementById('disk-wrap').classList.remove('paused')}else{audioEl.pause();document.getElementById('disk-wrap').classList.add('paused')}}
+async function init(){
+ let data=null; if(localStorage.getItem('invitation_data')){try{data=JSON.parse(localStorage.getItem('invitation_data'))}catch{}}
+ if(!data){for(let p of possiblePaths){try{const r=await fetch(p+'data.json',{cache:'no-store'});if(r.ok){basePath=p;data=await r.json();break}}catch{}}}
+ if(!data)return;
+ const {couple,settings,events,gallery,quote,music,digitalGift,guest,logistics,seo}=data;
+ const pairNick=`${couple.groom.nickname} & ${couple.bride.nickname}`;
+ if(settings.themeColor){document.documentElement.style.setProperty('--sage',settings.themeColor)}
+ document.getElementById('seo-title').innerText=seo?.title||`Undangan ${pairNick}`;
+ document.getElementById('cover-subtitle').innerText=guest?.defaultGroup||'Om Swastiastu';
+ document.getElementById('cover-group-label').innerText=guest?.defaultGroup||'Kepada Yth.';
+ document.getElementById('cover-names').innerText=pairNick;
+ document.getElementById('cover-guest').innerText=guestName;
+ document.getElementById('footer-names').innerText=pairNick;
+ document.getElementById('hashtag').innerText=logistics?.hashtag||'';
+ document.getElementById('wish-name').value=guestName!=='Tamu Undangan'?guestName:'';
+ document.getElementById('cover-bg').src=basePath+(gallery.heroImage||gallery.coverImage||'');
+ document.getElementById('quote-text').innerText=quote?.text?`“ ${quote.text} ”`:'';
+ document.getElementById('quote-source').innerText=quote?.source||'';
+ document.getElementById('groom-img').src=basePath+couple.groom.image; document.getElementById('groom-name').innerText=couple.groom.name; document.getElementById('groom-bio').innerText=couple.groom.bio||'';
+ document.getElementById('bride-img').src=basePath+couple.bride.image; document.getElementById('bride-name').innerText=couple.bride.name; document.getElementById('bride-bio').innerText=couple.bride.bio||'';
+ if(events?.length){
+  document.getElementById('event-container').innerHTML=events.map(ev=>`<div class="modern-card p-5 text-left"><h5 class="font-serif text- mb-1">${ev.title}</h5><p class="text- text-stone-400 mb-2">${new Date(ev.date).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})} • ${ev.startTime} ${ev.timezone}</p><p class="text- text-stone-600">${ev.locationName||''} ${ev.address||''}</p></div>`).join('');
+  if(settings.showCountdown){
+   const tzMap={WITA:'+08:00',WIB:'+07:00',WIT:'+09:00'}; const tz=tzMap[events[0].timezone]||'+08:00'; const target=new Date(`${events[0].date}T${events[0].startTime}:00${tz}`).getTime();
+   setInterval(()=>{const diff=target-Date.now();const d=Math.max(0,Math.floor(diff/86400000)),h=Math.max(0,Math.floor(diff%86400000/3600000)),m=Math.max(0,Math.floor(diff%3600000/60000)),s=Math.max(0,Math.floor(diff%60000/1000));document.getElementById('countdown').innerHTML=`<div class="text-center"><p class="font-serif text-xl">${d}</p><p class="text- uppercase text-stone-400">Hari</p></div><div class="text-center"><p class="font-serif text-xl">${h}</p><p class="text- uppercase text-stone-400">Jam</p></div><div class="text-center"><p class="font-serif text-xl">${m}</p><p class="text- uppercase text-stone-400">Menit</p></div><div class="text-center"><p class="font-serif text-xl">${s}</p><p class="text- uppercase text-stone-400">Detik</p></div>`},1000);
+   document.getElementById('countdown-wrap').classList.remove('hidden');
+  }
+ }
+ if(gallery?.album?.length){document.getElementById('gallery-grid').innerHTML=gallery.album.map(i=>`<div class="rounded- overflow-hidden aspect-[4/5] bg-stone-100"><img src="${basePath+i}" class="w-full h-full object-cover"></div>`).join('')}
+ if(digitalGift?.accounts?.length){
+  document.getElementById('gift-container').innerHTML=digitalGift.accounts.map((b,i)=>`<div class="modern-card p-5 text-center"><p class="text- uppercase tracking-[0.3em] text-stone-400">${b.provider}</p><p id="rek-${i}" class="font-serif text-lg mt-1">${b.accountNumber}</p><p class="text- text-stone-500 mb-2">a.n ${b.accountHolder}</p>${b.logo?`<img src="${basePath+b.logo}" class="w-28 mx-auto my-2 rounded-xl">`:''}<button onclick="copyRek('rek-${i}')" class="mt-2 text- uppercase tracking-[0.2em] border border-stone-200 rounded-full px-4 py-2">Salin</button></div>`).join('')
+ }
+ if(music?.playlist?.length){const def=music.playlist.find(s=>s.isDefault)||music.playlist[0]; audioEl.src=def.url?.startsWith('http')?def.url:basePath+(def.file||def.url); document.getElementById('music-box').style.display='block'}
+ loadWishes();
+}
+init();
+document.getElementById('wishes-form').onsubmit=function(e){e.preventDefault();const p={id_klien:clientSlug,nama:document.getElementById('wish-name').value,ucapan:document.getElementById('wish-message').value,kehadiran:document.getElementById('wish-status').value,jumlah_tamu:document.getElementById('wish-pax').value};const b=this.querySelector('button');b.innerText='Mengirim...';b.disabled=true;fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{if(d.status==='ok'){alert('Terima kasih!');this.reset();document.getElementById('wish-name').value=guestName;loadWishes()}}).finally(()=>{b.innerText='Kirim';b.disabled=false})};
+function loadWishes(){fetch(SCRIPT_URL+"?id_klien="+clientSlug).then(r=>r.json()).then(w=>{const box=document.getElementById('wishes-box');if(!Array.isArray(w)||!w.length){box.innerHTML='<p class="text-center text-stone-400 text-">Belum ada ucapan</p>';return}box.innerHTML=w.map(x=>`<div class="modern-card p-4 text-left"><div class="flex justify-between"><h6 class="font-serif text-">${x.nama}</h6><span class="text- bg-[#FFFBF5] px-2 py-1 rounded-full">${x.kehadiran}</span></div><p class="text- text-stone-600 mt-2">${x.ucapan}</p></div>`).join('')})}
+function copyRek(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>alert('Disalin!'))}
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{let d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>70){if(d<0)nextStep();else prevStep()}});
+</script>
+</body>
+</html>
