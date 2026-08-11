@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="seo-title">The Wedding</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Manrope:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--taupe:#C8BCAE;--taupe-dark:#A89885;--paper:#F8F5F2;--dark:#3E3A36}
+body{background:var(--paper);color:var(--dark);font-family:'Manrope',sans-serif}
+.font-serif{font-family:'Cormorant Garamond',serif}.font-script{font-family:'Great Vibes',cursive}
+.arch-top{border-top-left-radius:200px;border-top-right-radius:200px}
+.bottom-nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:90%;max-width:340px;background:#fff;border-radius:30px;box-shadow:0 10px 30px rgba(0,0,0,0.08);display:flex;justify-content:space-around;padding:12px;z-index:99}
+.bottom-nav a{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:#aaa}
+.bottom-nav a.active{background:var(--taupe);color:#fff}
+</style>
+</head>
+<body>
+<div class="max-w- mx-auto bg-white min-h-screen relative pb-24 shadow-xl">
+
+  <!-- HERO -->
+  <div class="relative h-">
+    <img id="cover-bg" class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+    <div class="absolute bottom-0 w-full px-6 pb-10 text-center text-white">
+      <p class="text- tracking-[0.4em] uppercase">The Wedding Of</p>
+      <h1 id="cover-names" class="font-script text-5xl mt-2 leading-none"></h1>
+      <p id="cover-date" class="text- tracking-[0.3em] uppercase mt-3 opacity-80"></p>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="bg-[#F8F5F2] p-8 text-center">
+    <p id="quote-text" class="font-serif text- leading-relaxed italic text-stone-600"></p>
+    <p id="quote-source" class="text- uppercase tracking-[0.2em] mt-3 text-stone-400"></p>
+  </div>
+
+  <!-- AKAD - ARCH MODEL KAYA FOTO KIRI -->
+  <div id="section-event" class="p-6">
+    <div class="bg-[#F8F5F2] arch-top pt-14 pb-8 px-6 text-center relative">
+      <div class="absolute top-6 left-1/2 -translate-x-1/2"><i class="fa-solid fa-ring text-[#C8BCAE]"></i></div>
+      <h2 class="font-serif text-3xl">AKAD</h2><p class="font-script text-2xl -mt-2 text-[#A89885]">Nikah</p>
+      <div id="event-container" class="mt-6 space-y-6"></div>
+    </div>
+  </div>
+
+  <!-- COUPLE - THE BRIDE / THE GROOM KAYA FOTO KANAN -->
+  <div id="section-couple" class="p-6">
+    <p class="text-center text- tracking-[0.4em] uppercase mb-4">Our Beloved</p>
+    <div class="relative">
+      <h2 class="absolute -top-2 right-0 font-serif text-5xl opacity-10 rotate-">THE BRIDE</h2>
+      <div class="flex gap-4 items-end"><div class="w-[55%] arch-top overflow-hidden aspect-[3/4]"><img id="bride-img" class="w-full h-full object-cover"></div><div class="pb-4"><p id="bride-nick" class="font-script text-3xl"></p><p id="bride-name" class="font-serif text-sm"></p><p id="bride-bio" class="text- text-stone-500 mt-1"></p></div></div>
+    </div>
+    <div class="relative mt-12">
+      <h2 class="absolute -top-2 left-0 font-serif text-5xl opacity-10 rotate-[-10deg]">THE GROOM</h2>
+      <div class="flex gap-4 items-end flex-row-reverse text-right"><div class="w-[55%] arch-top overflow-hidden aspect-[3/4]"><img id="groom-img" class="w-full h-full object-cover"></div><div class="pb-4"><p id="groom-nick" class="font-script text-3xl"></p><p id="groom-name" class="font-serif text-sm"></p><p id="groom-bio" class="text- text-stone-500 mt-1"></p></div></div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div id="section-gallery" class="p-6 bg-[#F8F5F2]"><h2 class="font-serif text-2xl text-center mb-6">Our Gallery</h2><div id="gallery-grid" class="grid grid-cols-3 gap-2"></div></div>
+
+  <!-- GIFT -->
+  <div id="section-gift" class="p-6"><h2 class="font-serif text-2xl text-center mb-6">Amplop Digital</h2><div id="gift-container" class="space-y-3"></div></div>
+
+  <!-- WISHES -->
+  <div id="section-wishes" class="p-6 bg-[#3E3A36] text-white rounded-t-"><h2 class="font-script text-4xl text-center mb-6">Ucapan Doa</h2><form id="wishes-form" class="space-y-3 mb-6"><input id="wish-name" class="w-full rounded-full px-5 py-3 text-sm text-black" placeholder="Nama"><textarea id="wish-message" rows="3" class="w-full rounded-2xl p-4 text-sm text-black" placeholder="Doa restu..."></textarea><div class="grid grid-cols-2 gap-2"><select id="wish-status" class="rounded-full px-4 py-3 text-sm text-black"><option>Hadir</option><option>Tidak Hadir</option></select><select id="wish-pax" class="rounded-full px-4 py-3 text-sm text-black"><option value="1">1 Orang</option><option value="2">2 Orang</option></select></div><button class="w-full bg-[#C8BCAE] rounded-full py-3 text-sm uppercase tracking-widest">Kirim</button></form><div id="wishes-box" class="space-y-3"></div></div>
+
+</div>
+
+<!-- BOTTOM NAV KAYA DI FOTO -->
+<div class="bottom-nav">
+  <a href="#top" class="active"><i class="fa-solid fa-house text-xs"></i></a>
+  <a href="#section-couple"><i class="fa-solid fa-heart text-xs"></i></a>
+  <a href="#section-event"><i class="fa-solid fa-calendar text-xs"></i></a>
+  <a href="#section-gallery"><i class="fa-solid fa-images text-xs"></i></a>
+  <a href="#section-gift"><i class="fa-solid fa-gift text-xs"></i></a>
+</div>
+
+<audio id="audio" loop></audio>
+<script>
+// SCRIPT ADAPTER SAMA PERSIS KAYA SEBELUMNYA - SUPPORT?c=komang-windi
+const params=new URLSearchParams(location.search);
+const clientSlug=params.get('c')||'komang-windi';
+const guestName=params.get('to')?.replace(/\+/g,' ')||'Tamu Undangan';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
+let basePath=`../../public/clients/${clientSlug}/`;
+const possiblePaths=[`../../public/clients/${clientSlug}/`,`../public/clients/${clientSlug}/`,`./public/clients/${clientSlug}/`,`/invitation/public/clients/${clientSlug}/`];
+async function init(){
+ let data=null;for(let p of possiblePaths){try{const r=await fetch(p+'data.json',{cache:'no-store'});if(r.ok){basePath=p;data=await r.json();break}}catch{}}if(!data)return;
+ const {couple,events,gallery,quote,digitalGift,seo}=data;
+ document.getElementById('cover-names').innerText=`${couple.groom.nickname} & ${couple.bride.nickname}`;
+ document.getElementById('cover-bg').src=basePath+(gallery.heroImage||'');
+ document.getElementById('cover-date').innerText=new Date(events[0].date).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+ document.getElementById('quote-text').innerText=quote?.text||''; document.getElementById('quote-source').innerText=quote?.source||'';
+ document.getElementById('groom-img').src=basePath+couple.groom.image; document.getElementById('groom-name').innerText=couple.groom.name; document.getElementById('groom-nick').innerText=couple.groom.nickname; document.getElementById('groom-bio').innerText=couple.groom.bio||'';
+ document.getElementById('bride-img').src=basePath+couple.bride.image; document.getElementById('bride-name').innerText=couple.bride.name; document.getElementById('bride-nick').innerText=couple.bride.nickname; document.getElementById('bride-bio').innerText=couple.bride.bio||'';
+ document.getElementById('event-container').innerHTML=events.map(ev=>`<div><p class="font-serif text-xl">${ev.title}</p><p class="font-script text-lg text-[#A89885]">${new Date(ev.date).toLocaleDateString('id-ID',{weekday:'long'})}, ${ev.startTime}</p><p class="text- mt-1">${ev.address}</p><a href="${ev.googleMaps}" target="_blank" class="inline-block mt-3 bg-[#3E3A36] text-white text- px-5 py-2 rounded-full">Lihat Lokasi</a></div>`).join('<div class="h- bg-stone-200 my-4"></div>');
+ document.getElementById('gallery-grid').innerHTML=gallery.album.map(i=>`<div class="rounded-2xl overflow-hidden aspect-[3/4]"><img src="${basePath+i}" class="w-full h-full object-cover"></div>`).join('');
+ document.getElementById('gift-container').innerHTML=digitalGift.accounts.map((b,i)=>`<div class="bg-[#F8F5F2] rounded-2xl p-4 flex justify-between items-center"><div><p class="text- uppercase">${b.provider}</p><p id="rek-${i}" class="font-serif">${b.accountNumber}</p></div>${b.logo?`<img src="${basePath+b.logo}" class="w-12 h-12 object-contain">`:''}</div>`).join('');
+ if(data.music?.playlist?.length){const a=document.getElementById('audio');a.src=basePath+data.music.playlist[0].file;document.addEventListener('click',()=>a.play(),{once:true})}
+ loadWishes();
+}
+function loadWishes(){fetch(SCRIPT_URL+"?id_klien="+clientSlug).then(r=>r.json()).then(w=>{document.getElementById('wishes-box').innerHTML=w.map(x=>`<div class="bg-white/10 rounded-2xl p-4"><p class="font-serif text-sm">${x.nama}</p><p class="text-xs opacity-80 mt-1">${x.ucapan}</p></div>`).join('')})}
+init();
+</script>
+</body>
+</html>
