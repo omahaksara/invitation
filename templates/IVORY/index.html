@@ -44,7 +44,6 @@
         .font-script { font-family: 'Playfair Display', serif; font-style: italic; }
         .font-arab { font-family: 'Scheherazade New', serif; }
         
-        /* Background Efek Asap Lembut & Aksen Bunga */
         .smoke-overlay {
             background: radial-gradient(circle at top, rgba(252, 218, 215, 0.6) 0%, transparent 70%);
         }
@@ -65,7 +64,6 @@
             transition: background-color 0.5s ease;
         }
 
-        /* Foto Bertumpuk Gaya Editorial Polaroid Sesuai Gambar Referensi */
         .editorial-frame {
             background: var(--card-bg);
             padding: 10px 10px 24px 10px;
@@ -94,7 +92,6 @@
             padding: 16px 0;
         }
         
-        /* Floating Controls */
         .control-btn-box {
             position: fixed;
             bottom: 30px;
@@ -133,7 +130,6 @@
         .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* Gaya Komponen Kalender Mewah Lembut Sesuai Gambar Referensi */
         .calendar-sheet {
             background: var(--card-bg);
             border: 1px solid var(--soft-color);
@@ -167,7 +163,7 @@
 </head>
 <body>
 
-<!-- COVER SECTION (TAMPILAN DEPAN ESTETIK & MANIS) -->
+<!-- COVER SECTION -->
 <section id="cover" class="fixed inset-0 z-[100] flex flex-col justify-between overflow-hidden bg-[#FFFBFB] smoke-overlay text-center px-8 py-16">
     <div class="absolute inset-0 opacity-40 mix-blend-multiply">
         <img id="cover-image" class="w-full h-full object-cover filter blur-[2px]" src="" crossorigin="anonymous">
@@ -197,14 +193,13 @@
 <!-- MAIN APPLICATION CONTAINER -->
 <main id="app" class="phone-wrapper opacity-0 pb-1 smoke-overlay">
     
-    <!-- HERO SECTION (EDITORIAL FOTO BERTUMPUK) -->
+    <!-- HERO SECTION -->
     <section class="relative min-h-screen flex flex-col justify-between px-8 pt-24 pb-16 bg-gradient-to-b from-transparent to-[var(--white-soft)]">
         <div class="w-full text-center">
             <p class="text-[9px] uppercase tracking-[0.4em] text-[var(--accent)] mb-2">The Wedding Celebration</p>
             <h2 id="hero-names" class="font-serif text-4xl font-light tracking-wide text-[var(--text-color)]"></h2>
         </div>
         
-        <!-- Tata Letak Album Bertumpuk Estetik -->
         <div class="w-full px-6 my-auto space-y-4 relative">
             <div class="editorial-frame frame-stack-1 max-w-[240px] mx-auto">
                 <img id="hero-image" src="">
@@ -241,7 +236,6 @@
         <p class="text-[10px] uppercase tracking-[0.4em] text-center text-[var(--accent)] mb-2">Waktu & Tempat</p>
         <h3 class="font-serif text-center font-light text-2xl text-[var(--text-color)] mb-16 tracking-wide">Agenda Acara</h3>
         
-        <!-- CALENDAR VIEW COMPONENT -->
         <div class="mb-12 px-2 reveal">
             <div class="calendar-sheet p-6 text-center">
                 <h4 id="calendar-month-year" class="font-serif text-base text-[var(--text-color)] tracking-widest mb-4 uppercase"></h4>
@@ -310,7 +304,6 @@
                     <button type="submit" class="w-full bg-[var(--accent)] text-white text-[9px] uppercase tracking-[0.15em] py-4 rounded-xl hover:opacity-90 transition duration-500 font-medium text-center shadow-md">
                         Buku Tamu
                     </button>
-                    <!-- Tombol WhatsApp dengan Protokol Seluler Langsung -->
                     <button type="button" onclick="sendViaWhatsAppMobile()" class="w-full bg-emerald-700 text-white text-[9px] uppercase tracking-[0.15em] py-4 rounded-xl hover:bg-emerald-800 transition duration-500 font-medium text-center shadow-md">
                         <i class="fa-brands fa-whatsapp mr-1 text-xs"></i> Kirim WA
                     </button>
@@ -394,12 +387,185 @@
         }
     }
 
+    // --- FUNGSI PENDUKUNG YANG SEBELUMNYA HILANG / TERPOTONG ---
+    function buildCalendar(dateString) {
+        const dateObj = new Date(dateString);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth();
+        const targetDate = dateObj.getDate();
+
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        let daysHtml = '';
+        for (let i = 0; i < firstDayIndex; i++) {
+            daysHtml += `<span></span>`;
+        }
+        for (let d = 1; d <= totalDays; d++) {
+            const isMarked = d === targetDate ? 'marked-day' : '';
+            daysHtml += `<span class="${isMarked}">${d}</span>`;
+        }
+        document.getElementById('calendar-days').innerHTML = daysHtml;
+    }
+
+    function toggleMapBox(containerId, mapEmbedUrl) {
+        const box = document.getElementById(containerId);
+        if (box.classList.contains('hidden')) {
+            box.classList.remove('hidden');
+            if (!box.innerHTML && mapEmbedUrl) {
+                box.innerHTML = `<iframe src="${mapEmbedUrl}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+            }
+        } else {
+            box.classList.add('hidden');
+        }
+    }
+
+    function copyRek(elementId) {
+        const text = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Nomor rekening berhasil disalin!');
+        }).catch(err => {
+            console.error('Gagal menyalin text: ', err);
+        });
+    }
+
+    function setupTrack(index) {
+        if (!playlistTracks.length) return;
+        const track = playlistTracks[index];
+        const audio = document.getElementById('audio');
+        audio.src = basePath + track.src;
+        document.getElementById('track-title').innerText = track.title || 'Musik Pernikahan';
+    }
+
+    function toggleAudio() {
+        const audio = document.getElementById('audio');
+        const disk = document.getElementById('disk-wrap');
+        const iconState = document.getElementById('music-icon-state');
+
+        if (audio.paused) {
+            audio.play().then(() => {
+                disk.classList.remove('paused');
+                iconState.className = "fa-solid fa-pause text-[10px]";
+            }).catch(e => console.log(e));
+        } else {
+            audio.pause();
+            disk.classList.add('paused');
+            iconState.className = "fa-solid fa-music text-[10px]";
+        }
+    }
+
+    function nextTrack() {
+        if (!playlistTracks.length) return;
+        currentTrackIndex = (currentTrackIndex + 1) % playlistTracks.length;
+        setupTrack(currentTrackIndex);
+        const audio = document.getElementById('audio');
+        const disk = document.getElementById('disk-wrap');
+        const iconState = document.getElementById('music-icon-state');
+        
+        audio.play().then(() => {
+            disk.classList.remove('paused');
+            iconState.className = "fa-solid fa-pause text-[10px]";
+        }).catch(e => console.log(e));
+    }
+
+    function loadGoogleSheetsWishes() {
+        if (!SCRIPT_URL) return;
+        fetch(SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    allWishes = data.reverse(); // Terbaru di atas
+                    renderWishesList();
+                }
+            })
+            .catch(err => console.log('Gagal memuat ucapan:', err));
+    }
+
+    function renderWishesList(loadMore = false) {
+        const container = document.getElementById('wishes-box');
+        if (loadMore) displayedWishesCount += 5;
+        
+        container.innerHTML = '';
+        const sliceData = allWishes.slice(0, displayedWishesCount);
+        
+        sliceData.forEach(item => {
+            container.innerHTML += `
+                <div class="wish-item">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-serif text-sm font-semibold text-[var(--text-color)]">${item.name || item.nama}</span>
+                        <span class="text-[8px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-50/20 text-[var(--accent)]">${item.status || 'Hadir'}</span>
+                    </div>
+                    <p class="text-xs text-stone-500 font-light leading-relaxed">${item.message || item.pesan}</p>
+                </div>`;
+        });
+
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        if (allWishes.length > displayedWishesCount) {
+            loadMoreBtn.classList.remove('hidden');
+        } else {
+            loadMoreBtn.classList.add('hidden');
+        }
+    }
+
+    function sendViaWhatsAppMobile() {
+        const name = document.getElementById('wish-name').value;
+        const status = document.getElementById('wish-status').value;
+        const pax = document.getElementById('wish-pax').value;
+        const message = document.getElementById('wish-message').value;
+
+        if (!name || !message) {
+            alert('Mohon isi nama dan pesan terlebih dahulu.');
+            return;
+        }
+
+        const text = `Halo, saya ${name}.\nKonfirmasi Kehadiran: ${status} (${pax} Orang).\nPesan: ${message}`;
+        const encoded = encodeURIComponent(text);
+        window.open(`https://wa.me/${rsvpWaNumber}?text=${encoded}`, '_blank');
+    }
+
+    // Submit Form Handler
+    document.getElementById('wishes-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('wish-name').value;
+        const status = document.getElementById('wish-status').value;
+        const pax = document.getElementById('wish-pax').value;
+        const message = document.getElementById('wish-message').value;
+
+        const newData = { name, status, pax, message, date: new Date().toISOString() };
+        
+        if (SCRIPT_URL) {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newData)
+            }).then(() => {
+                alert('Ucapan berhasil dikirim!');
+                allWishes.unshift(newData);
+                renderWishesList();
+                document.getElementById('wishes-form').reset();
+            }).catch(err => {
+                alert('Terjadi kesalahan saat mengirim.');
+            });
+        } else {
+            // Simulasi lokal jika SCRIPT_URL belum diset
+            allWishes.unshift(newData);
+            renderWishesList();
+            alert('Ucapan berhasil disimpan (Lokal)!');
+            document.getElementById('wishes-form').reset();
+        }
+    });
+
+    // --- FETCH DATA JSON UTAMA ---
     fetch(`${basePath}data.json`, { cache: 'no-store' })
-   .then(res => {
+    .then(res => {
         if(!res.ok) throw new Error(`data.json tidak ditemukan`);
         return res.json();
     })
-   .then(data => {
+    .then(data => {
         const { couple, settings, events, gallery, loveStory, quote, music, digitalGift, logistics, link } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
         
@@ -568,182 +734,11 @@
                     document.getElementById('music-icon-state').className = "fa-solid fa-pause text-[10px]";
                 }).catch(() => {});
             }
-            
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-            }, { threshold: 0.05 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
+    })
+    .catch(err => {
+        console.error("Gagal memuat data undangan:", err);
     });
-
-    function buildCalendar(dateString) {
-        const targetDate = new Date(dateString);
-        const year = targetDate.getFullYear();
-        const month = targetDate.getMonth();
-        const dayOfMonth = targetDate.getDate();
-        
-        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const totalDays = new Date(year, month + 1, 0).getDate();
-        
-        const container = document.getElementById('calendar-days');
-        container.innerHTML = '';
-        
-        for (let i = 0; i < firstDay; i++) {
-            container.innerHTML += `<span></span>`;
-        }
-        
-        for (let d = 1; d <= totalDays; d++) {
-            if (d === dayOfMonth) {
-                container.innerHTML += `<span class="marked-day">${d}</span>`;
-            } else {
-                container.innerHTML += `<span>${d}</span>`;
-            }
-        }
-    }
-
-    function setupTrack(index) {
-        const audio = document.getElementById('audio');
-        const track = playlistTracks[index];
-        audio.src = track.url;
-        document.getElementById('track-title').innerText = track.title || 'Wedding Song';
-    }
-
-    function toggleAudio() {
-        const audio = document.getElementById('audio');
-        const diskWrap = document.getElementById('disk-wrap');
-        const stateIcon = document.getElementById('music-icon-state');
-        if(audio.paused) {
-            audio.play();
-            diskWrap.classList.remove('paused');
-            stateIcon.className = "fa-solid fa-pause text-[10px]";
-        } else {
-            audio.pause();
-            diskWrap.classList.add('paused');
-            stateIcon.className = "fa-solid fa-music text-[10px]";
-        }
-    }
-
-    function nextTrack() {
-        currentTrackIndex = (currentTrackIndex + 1) % playlistTracks.length;
-        setupTrack(currentTrackIndex);
-        const audio = document.getElementById('audio');
-        audio.play().then(() => {
-            document.getElementById('disk-wrap').classList.remove('paused');
-            document.getElementById('music-icon-state').className = "fa-solid fa-pause text-[10px]";
-        });
-    }
-
-    function toggleMapBox(boxId, mapsUrl) {
-        const box = document.getElementById(boxId);
-        if(!box.classList.contains('hidden')) {
-            box.classList.add('hidden');
-            return;
-        }
-        box.classList.remove('hidden');
-        if(box.innerHTML === '') {
-            let embedUrl = mapsUrl.includes('embed') ? mapsUrl : mapsUrl.replace('/maps/', '/maps/embed/');
-            if(!embedUrl.includes('embed')) {
-                box.innerHTML = `<a href="${mapsUrl}" target="_blank" class="block text-center p-8 text-xs text-rose-500 underline">Buka di Aplikasi Google Maps</a>`;
-                return;
-            }
-            box.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>`;
-        }
-    }
-
-    async function loadGoogleSheetsWishes() {
-        if(!SCRIPT_URL) return;
-        const wishesBox = document.getElementById('wishes-box');
-        wishesBox.innerHTML = `<p class="text-[11px] text-rose-300 text-center py-4 italic animate-pulse">Memuat doa restu...</p>`;
-        
-        try {
-            const urlWithParams = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}`;
-            const response = await fetch(urlWithParams, {
-                method: 'GET',
-                mode: 'cors',
-                headers: { 'Accept': 'application/json' }
-            });
-            
-            if(!response.ok) throw new Error();
-            
-            const wishesData = await response.json();
-            allWishes = Array.isArray(wishesData) ? wishesData : [];
-            renderWishesList(false);
-        } catch (error) {
-            wishesBox.innerHTML = `<p class="text-[11px] text-red-400 text-center py-4 font-light">Gagal memuat daftar ucapan.</p>`;
-        }
-    }
-
-    function renderWishesList(loadMore = false) {
-        if(loadMore) displayedWishesCount += 5;
-        const wishesBox = document.getElementById('wishes-box');
-        
-        if (allWishes.length === 0) {
-            wishesBox.innerHTML = `<p class="text-[11px] text-stone-400 text-center py-4 italic">Belum ada ucapan tertulis.</p>`;
-            return;
-        }
-        
-        wishesBox.innerHTML = '';
-        const slice = allWishes.slice(0, displayedWishesCount);
-        slice.forEach(wish => {
-            const presenceBadge = wish.kehadiran === 'Hadir' ? 'text-emerald-600 bg-emerald-50/10' : 'text-stone-400 line-through';
-            wishesBox.innerHTML += `
-                <div class="wish-item">
-                    <div class="flex items-center justify-between mb-1">
-                        <p class="text-xs font-medium text-[var(--text-color)]">${wish.nama}</p>
-                        <span class="text-[9px] px-2 py-0.5 rounded ${presenceBadge}">${wish.kehadiran}</span>
-                    </div>
-                    <p class="text-xs text-stone-400 font-light leading-relaxed whitespace-pre-line">${wish.ucapan}</p>
-                </div>`;
-        });
-        
-        const btn = document.getElementById('load-more-btn');
-        if(allWishes.length > displayedWishesCount) {
-            btn.classList.remove('hidden');
-        } else {
-            btn.classList.add('hidden');
-        }
-    }
-
-    document.getElementById('wishes-form').addEventListener('submit', function(e){
-        e.preventDefault();
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        
-        const payload = {
-            id_klien: clientSlug,
-            nama: document.getElementById('wish-name').value,
-            ucapan: document.getElementById('wish-message').value,
-            kehadiran: document.getElementById('wish-status').value,
-            jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
-        };
-        
-        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-       .then(() => {
-            document.getElementById('wishes-form').reset();
-            btn.disabled = false;
-            setTimeout(loadGoogleSheetsWishes, 1500);
-        }).catch(() => { btn.disabled = false; });
-    });
-    
-    // Protokol Khusus Deeplink Mobile WhatsApp untuk Eksekusi Aplikasi Instan
-    function sendViaWhatsAppMobile() {
-        const nama = document.getElementById('wish-name').value;
-        const status = document.getElementById('wish-status').value;
-        const pax = document.getElementById('wish-pax').value;
-        const pesan = document.getElementById('wish-message').value;
-        if(!nama || !pesan) return alert('Mohon lengkapi nama dan pesan terlebih dahulu.');
-        const teks = `Halo, saya ingin mengonfirmasi kehadiran.\n\n*Nama:* ${nama}\n*Status:* ${status}\n*Jumlah Tamu:* ${pax} Orang\n*Ucapan/Doa:* ${pesan}`;
-        
-        // Menggunakan skema URI whatsapp:// khusus perangkat mobile
-        window.location.href = `whatsapp://send?phone=${rsvpWaNumber}&text=${encodeURIComponent(teks)}`;
-    }
-
-    function copyRek(id) {
-        navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => { alert('Nomor rekening disalin'); });
-    }
 </script>
 </body>
 </html>
