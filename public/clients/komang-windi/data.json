@@ -1,0 +1,138 @@
+{
+  "meta": {
+    "slug": "komang-windi",
+    "template": "o",
+    "status": "published",
+    "domain": "",
+    "customUrl": ""
+  },
+  "settings": {
+    "islami": false,
+    "themeColor": "#7a1010",
+    "bgColor": "#fffaf0",
+    "coupleFrame": "arch-mask",
+    "autoColor": false,
+    "showCountdown": true,
+    "showLoveStory": true,
+    "showGallery": true,
+    "showGift": true,
+    "showUcapan": true,
+    "showProtocols": false,
+    "musicAutoplay": true
+  },
+  "couple": {
+    "groom": {
+      "name": "I Komang Sumertayasa",
+      "nickname": "Komang",
+      "father": "I Ketut Murjane",
+      "mother": "Ni Made Kerti",
+      "image": "foto-pria.jpg",
+      "instagram": "",
+      "bio": "Putra dari Bapak I Ketut Murjane & Ibu Ni Made Kerti"
+    },
+    "bride": {
+      "name": "Wayan Windi Anggreni",
+      "nickname": "Windi",
+      "father": "Wayan Suparta",
+      "mother": "Wayan Sulatri",
+      "image": "foto-wanita.jpg",
+      "instagram": "",
+      "bio": "Putri dari Bapak Wayan Suparta & Ibu Wayan Sulatri"
+    }
+  },
+  "quote": {
+    "arab": "",
+    "text": "Grbhnami te saubhagatvaya hastam, maya patya jaradastir yatha asah. Bhago aryama savita puramdhir mahyam tvadurgarhaspatyaya devah.",
+    "source": "Rg Veda X.85.36",
+    "english": "Aku memegang tanganmu demi kebahagiaan, semoga engkau sebagai istri/suami mencapai usia lanjut bersamaku."
+  },
+  "events": [
+    {
+      "title": "Upacara Mepamit",
+      "date": "2026-08-25",
+      "startTime": "08:00",
+      "endTime": "Selesai",
+      "timezone": "WITA",
+      "address": "Desa Kotaraya Timur",
+      "locationName": "Kediaman Mempelai Wanita",
+      "googleMaps": "",
+      "embedMaps": "",
+      "liveStreaming": ""
+    },
+    {
+      "title": "Resepsi Pernikahan",
+      "date": "2026-08-25",
+      "startTime": "17:00",
+      "endTime": "Selesai",
+      "timezone": "WITA",
+      "address": "Persatuan Utara",
+      "locationName": "Kediaman Mempelai Pria",
+      "googleMaps": "",
+      "embedMaps": "",
+      "liveStreaming": ""
+    }
+  ],
+  "countdown": {
+    "targetDate": "2026-08-25T08:00:00+08:00",
+    "backgroundImage": "foto-sampul.jpg"
+  },
+  "music": {
+    "description": "Lagu Hindu Bali",
+    "defaultSong": "gus-teja-feel-with-love.mp3",
+    "playlist": [
+      {
+        "name": "Gus Teja - Feel With Love",
+        "file": "gus-teja-feel-with-love.mp3",
+        "url": "./gus-teja-feel-with-love.mp3",
+        "isDefault": true,
+        "note": "Lagu utama Komang & Windi"
+      }
+    ],
+    "autoplay": true
+  },
+  "loveStory": [
+    {
+      "date": "Awal Bertemu",
+      "year": "2026",
+      "title": "Awal Perjalanan",
+      "description": "Atas Asung Kerta Wara Nugraha Ida Sang Hyang Widhi Wasa, kami dipertemukan dan saling melengkapi.",
+      "image": ""
+    },
+    {
+      "date": "Menuju Pawiwahan",
+      "year": "2026",
+      "title": "Memantapkan Hati",
+      "description": "Dengan restu keluarga, kami memutuskan untuk melangkah ke jenjang Pawiwahan yang suci.",
+      "image": ""
+    }
+  ],
+  "gallery": {
+    "heroImage": "foto-sampul.jpg",
+    "coverImage": "foto-sampul.jpg",
+    "videoYoutubeId": "",
+    "album": []
+  },
+  "digitalGift": {
+    "description": "Tanpa mengurangi rasa hormat, bagi yang ingin memberikan tanda kasih",
+    "qris": "",
+    "accounts": [],
+    "address": "Persatuan Utara",
+    "receiver": "Komang & Windi"
+  },
+  "logistics": {
+    "rsvpWaNumber": "",
+    "dressCode": "Busana Adat Bali / Sopan",
+    "guestNote": "Om Swastiastu, Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+    "noteFooter": "Atas kehadiran dan doa restunya, kami sekeluarga mengucapkan terima kasih.",
+    "hashtag": "#KomangWindiPawiwahan"
+  },
+  "guest": {
+    "defaultName": "Tamu Undangan",
+    "defaultGroup": "Om Swastiastu"
+  },
+  "seo": {
+    "title": "Pawiwahan Komang & Windi - 25 Agustus 2026",
+    "description": "Undangan Pawiwahan I Komang Sumertayasa & Wayan Windi Anggreni - Selasa, 25 Agustus 2026",
+    "image": "foto-sampul.jpg"
+  }
+}
