@@ -1,1 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawiwahan — Omah Aksara</title>
+    <!-- Google Fonts: Nuansa Klasik & Bali Elegan -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS untuk Layout Modern -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --cream: #FAF6ED;
+            --dark-balinese: #1A1814;
+            --terracotta: #8B4513;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            background: var(--dark-balinese); 
+            color: var(--cream); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow-x: hidden; 
+            line-height: 1.8; 
+        }
+
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-script { font-family: 'Pinyon Script', cursive; }
+
+        /* Transisi Cover Elegan */
+        #cover {
+            transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+        #cover.unveil {
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        /* Container Smartphone Wrapper */
+        .phone-wrapper {
+            max-width: 440px;
+            margin: 0 auto;
+            background: var(--dark-balinese);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            position: relative;
+            min-height: 100vh;
+            border-left: 1px solid rgba(212, 175, 55, 0.2);
+            border-right: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Border Emas Bali */
+        .balinese-border {
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            position: relative;
+        }
+        .balinese-border::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: -6px; right: -6px; bottom: -6px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            pointer-events: none;
+        }
+
+        /* Animasi Muncul Halus */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Pemutar Musik Melayang */
+        .music-disk-box {
+            position: fixed;
+            bottom: 30px;
+            right: calc(50% - 200px);
+            z-index: 90;
+            cursor: pointer;
+        }
+        @media (max-width: 450px) { .music-disk-box { right: 20px; } }
+        .disk-spin {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, #D4AF37, #8B4513);
+            color: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(212,175,55,0.4);
+            animation: spin 10s linear infinite;
+        }
+        .disk-spin.paused { animation-play-state: paused; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<!-- COVER / HALAMAN PEMBUKA -->
+<section id="cover" class="fixed inset-0 z-[100] flex flex-col justify-between items-center text-center p-8 bg-[#12100E] overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img id="cover-image" class="w-full h-full object-cover opacity-30 scale-105 transition-transform duration-1000">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#12100E] via-[#12100E]/70 to-transparent"></div>
+    </div>
+
+    <!-- Header Atas (Ditarik dari JSON) -->
+    <div class="relative z-10 pt-10">
+        <span id="cover-subtitle" class="text-xs uppercase tracking-[0.5em] text-[#D4AF37] block font-cinzel"></span>
+        <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mt-3"></div>
+    </div>
+
+    <!-- Tengah: Nama Mempelai & Tamu -->
+    <div class="relative z-10 max-w-sm w-full my-auto">
+        <p class="text-xs uppercase tracking-[0.3em] text-stone-400 mb-3">The Wedding Of</p>
+        <h1 id="cover-names" class="font-cinzel text-3xl md:text-4xl font-semibold tracking-wide text-[#F3E5AB] mb-8 leading-snug">...</h1>
+        
+        <div class="balinese-border bg-[#1A1814]/80 backdrop-blur-md p-6 my-6 shadow-2xl">
+            <p id="cover-group-label" class="uppercase tracking-[0.2em] text-[10px] text-[#D4AF37] mb-1"></p>
+            <h2 id="cover-guest" class="font-cinzel text-xl text-white font-medium tracking-wide mt-2">Tamu Undangan</h2>
+        </div>
+
+        <button id="open-btn" class="mt-4 bg-gradient-to-r from-[#D4AF37] to-[#AA7C11] text-[#12100E] text-xs uppercase tracking-[0.3em] font-bold py-4 px-10 shadow-xl hover:brightness-110 transition-all duration-300">
+            <i class="fa-solid fa-envelope-open-text mr-2"></i> Buka Undangan
+        </button>
+    </div>
+
+    <!-- Footer Bawah Cover -->
+    <div class="relative z-10 pb-4">
+        <p class="text-[10px] tracking-[0.4em] uppercase text-stone-500 font-cinzel">Omah Aksara Digital</p>
+    </div>
+</section>
+
+<!-- KONTEN UTAMA APLIKASI -->
+<main id="app" class="phone-wrapper opacity-0 transition-opacity duration-1000">
+    
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex flex-col justify-between items-center text-center p-8 pt-20 pb-12">
+        <div class="absolute inset-0 z-0">
+            <img id="hero-image" class="w-full h-full object-cover opacity-25">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#1A1814] via-transparent to-[#1A1814]"></div>
+        </div>
+
+        <div class="relative z-10">
+            <span id="hero-greeting" class="text-xs uppercase tracking-[0.4em] text-[#D4AF37] font-cinzel block mb-2"></span>
+            <p class="text-xs uppercase tracking-[0.3em] text-stone-400">Pernikahan Suci Kami</p>
+        </div>
+
+        <div class="relative z-10 my-auto w-full max-w-[280px]">
+            <div class="balinese-border p-3 bg-[#12100E]/80 shadow-2xl">
+                <div class="aspect-[3/4] overflow-hidden">
+                    <img id="hero-photo" class="w-full h-full object-cover filter contrast-105">
+                </div>
+            </div>
+            <h2 id="main-names" class="font-cinzel text-2xl font-semibold tracking-wider text-[#F3E5AB] mt-6"></h2>
+        </div>
+
+        <div class="relative z-10">
+            <i class="fa-solid fa-chevron-down text-[#D4AF37] text-xs animate-bounce"></i>
+        </div>
+    </section>
+
+    <!-- QUOTE / KUTIPAN SECTION (Dinamis dari JSON) -->
+    <section id="quote-section" class="px-8 py-24 text-center bg-[#151310] relative reveal border-y border-[#D4AF37]/20 hidden">
+        <div class="max-w-xs mx-auto">
+            <i class="fa-solid fa-quote-left text-[#D4AF37] text-3xl mb-6 opacity-80"></i>
+            <p id="quote-arab" class="font-cinzel text-lg mb-6 text-[#F3E5AB] leading-relaxed"></p>
+            <p id="quote-text" class="font-serif italic text-sm text-stone-300 font-light leading-relaxed mb-6"></p>
+            <div class="w-8 h-[1px] bg-[#D4AF37] mx-auto mb-4"></div>
+            <p id="quote-source" class="text-[10px] uppercase tracking-[0.4em] font-cinzel text-[#D4AF37]"></p>
+        </div>
+    </section>
+
+    <!-- MEMPELAI SECTION -->
+    <section class="py-24 px-6 space-y-24 bg-[#1A1814]">
+        <div id="groom-section" class="text-center reveal"></div>
+        <div id="bride-section" class="text-center reveal"></div>
+    </section>
+
+    <!-- AGENDA / ACARA SECTION -->
+    <section id="event-section" class="py-24 px-6 bg-[#12100E] border-t border-[#D4AF37]/20 hidden">
+        <div class="text-center mb-16">
+            <span class="text-[10px] uppercase tracking-[0.5em] text-[#D4AF37] font-cinzel block mb-2">Waktu & Tempat</span>
+            <h3 class="font-cinzel text-2xl text-[#F3E5AB]">Rangkaian Acara</h3>
+        </div>
+        <div id="event-list" class="space-y-8"></div>
+        <div id="countdown-wrap" class="mt-20 pt-12 border-t border-stone-800 hidden text-center">
+            <p class="uppercase tracking-[0.3em] text-[10px] font-cinzel mb-8 text-[#D4AF37]">Menuju Hari Bahagia</p>
+            <div id="countdown" class="flex justify-center gap-3"></div>
+        </div>
+    </section>
+
+    <!-- LOVE STORY SECTION -->
+    <section id="story-section" class="py-24 px-6 bg-[#1A1814] hidden">
+        <div class="text-center mb-16">
+            <span class="text-[10px] uppercase tracking-[0.5em] text-[#D4AF37] font-cinzel block mb-2">Perjalanan Kami</span>
+            <h3 class="font-cinzel text-2xl text-[#F3E5AB]">Kisah Kasih</h3>
+        </div>
+        <div id="story-list" class="space-y-8"></div>
+    </section>
+
+    <!-- GALERI RUPA SECTION -->
+    <section id="gallery-section" class="py-24 px-6 bg-[#12100E] hidden">
+        <div class="text-center mb-12">
+            <span class="text-[10px] uppercase tracking-[0.5em] text-[#D4AF37] font-cinzel block mb-2">Kenangan Indah</span>
+            <h3 class="font-cinzel text-2xl text-[#F3E5AB]">Galeri Rupa</h3>
+        </div>
+        <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
+    </section>
+
+    <!-- TANDA KASIH SECTION -->
+    <section id="gift-section" class="py-24 px-6 bg-[#1A1814] hidden">
+        <div class="text-center mb-12">
+            <span class="text-[10px] uppercase tracking-[0.5em] text-[#D4AF37] font-cinzel block mb-2">Tanda Kasih</span>
+            <h3 class="font-cinzel text-2xl text-[#F3E5AB]">Kirim Hadiah</h3>
+        </div>
+        <div id="gift-container" class="space-y-4"></div>
+    </section>
+
+    <!-- UCAPAN & DOA RESTU SECTION -->
+    <section class="py-24 px-6 bg-[#12100E] border-t border-[#D4AF37]/20">
+        <div class="max-w-md mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-[10px] uppercase tracking-[0.5em] text-[#D4AF37] font-cinzel block mb-2">Doa & Restu</span>
+                <h3 class="font-cinzel text-2xl text-[#F3E5AB]">Kehadiran & Ucapan</h3>
+            </div>
+
+            <form id="wishes-form" class="space-y-4 bg-[#1A1814] p-6 balinese-border mb-12">
+                <input type="text" id="wish-name" required placeholder="Nama Lengkap" class="w-full bg-[#12100E] border border-stone-800 text-stone-200 px-4 py-3 text-xs focus:border-[#D4AF37] outline-none">
+                <div class="grid grid-cols-2 gap-4">
+                    <select id="wish-status" class="w-full bg-[#12100E] border border-stone-800 text-stone-200 px-3 py-3 text-xs focus:border-[#D4AF37] outline-none">
+                        <option value="Hadir">Hadir</option>
+                        <option value="Tidak Hadir">Tidak Hadir</option>
+                    </select>
+                    <select id="wish-pax" class="w-full bg-[#12100E] border border-stone-800 text-stone-200 px-3 py-3 text-xs focus:border-[#D4AF37] outline-none">
+                        <option value="1">1 Orang</option>
+                        <option value="2">2 Orang</option>
+                        <option value="3">3 Orang</option>
+                        <option value="4">4 Orang</option>
+                    </select>
+                </div>
+                <textarea id="wish-message" required rows="4" placeholder="Tuliskan ucapan dan doa restu..." class="w-full bg-[#12100E] border border-stone-800 text-stone-200 p-4 text-xs resize-none focus:border-[#D4AF37] outline-none"></textarea>
+                <button type="submit" class="w-full bg-gradient-to-r from-[#D4AF37] to-[#AA7C11] text-[#12100E] font-bold text-xs uppercase tracking-[0.3em] py-4 transition-all hover:brightness-110">Kirim Doa Restu</button>
+            </form>
+
+            <div id="wishes-box" class="space-y-4 max-h-[400px] overflow-y-auto pr-2"></div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-20 bg-[#0F0D0C] text-center px-8 border-t border-[#D4AF37]/30">
+        <h2 id="footer-names" class="font-cinzel text-2xl text-[#F3E5AB] mb-6 tracking-wide"></h2>
+        <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mb-6"></div>
+        <p class="text-[10px] uppercase tracking-[0.5em] text-stone-500 font-cinzel">Omah Aksara Digital Studio</p>
+    </footer>
+</main>
+
+<!-- TOMBOL MUSIK MELAYANG -->
+<div id="music-btn" class="music-disk-box hidden">
+    <div id="disk-wrap" class="disk-spin paused">
+        <i class="fa-solid fa-music text-xs"></i>
+    </div>
+</div>
+<audio id="audio" loop></audio>
+
+<!-- SCRIPT SISTEM DINAMIS JSON & SLUG -->
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const clientSlug = params.get('c') || 'bali-spektakuler';
+    const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+
+    const possiblePaths = [
+        `../../public/clients/${clientSlug}/`, 
+        `../public/clients/${clientSlug}/`, 
+        `./public/clients/${clientSlug}/`, 
+        `./invitation/public/clients/${clientSlug}/`
+    ];
+    let basePath = possiblePaths[0];
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
+
+    async function initClient() {
+        for (let p of possiblePaths) {
+            try {
+                const r = await fetch(p + 'data.json', { cache: 'no-store' });
+                if (r.ok) { basePath = p; break; }
+            } catch(e){}
+        }
+
+        fetch(basePath + 'data.json', { cache: 'no-store' })
+        .then(res => { if(!res.ok) throw new Error('data.json tidak ditemukan'); return res.json(); })
+        .then(data => {
+            const { couple, settings, events, gallery, loveStory, quote, music, digitalGift, guest } = data;
+            const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
+
+            // Teks Header/Cover ditarik sepenuhnya dari JSON (bebas unsur agama statis di HTML)
+            document.getElementById('cover-subtitle').innerText = (settings?.islami ? 'Pernikahan Suci' : 'Pawiwahan Suci');
+            document.getElementById('cover-group-label').innerText = guest?.defaultGroup || 'Kepada Yth. Bapak/Ibu/Saudara/i';
+            document.getElementById('hero-greeting').innerText = guest?.defaultGroup || 'Pernikahan Suci Kami';
+
+            document.getElementById('cover-names').innerText = pairNick;
+            document.getElementById('main-names').innerText = pairNick;
+            document.getElementById('footer-names').innerText = pairNick;
+            document.getElementById('cover-guest').innerText = guestName;
+
+            const coverImg = basePath + (gallery.heroImage || gallery.coverImage || '');
+            document.getElementById('cover-image').src = coverImg;
+            document.getElementById('hero-image').src = coverImg;
+            document.getElementById('hero-photo').src = coverImg;
+
+            // Quote / Kutipan fleksibel dari JSON
+            if(quote && (quote.text || quote.arab)) {
+                document.getElementById('quote-section').classList.remove('hidden');
+                document.getElementById('quote-arab').textContent = quote.arab || '';
+                document.getElementById('quote-text').innerHTML = quote.text ? `“ ${quote.text} ”` : '';
+                document.getElementById('quote-source').textContent = quote.source || '';
+            }
+
+            document.getElementById('groom-section').innerHTML = `
+                <div class="balinese-border p-3 max-w-[260px] mx-auto bg-[#12100E] mb-8 shadow-xl">
+                    <div class="aspect-[3/4] overflow-hidden"><img src="${basePath + couple.groom.image}" class="w-full h-full object-cover"></div>
+                </div>
+                <span class="text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] font-cinzel block mb-2">— Mempelai Pria —</span>
+                <h4 class="font-cinzel text-2xl text-[#F3E5AB] mb-3">${couple.groom.name}</h4>
+                <p class="text-xs text-stone-400 italic max-w-xs mx-auto">${couple.groom.bio || ''}</p>
+            `;
+
+            document.getElementById('bride-section').innerHTML = `
+                <div class="balinese-border p-3 max-w-[260px] mx-auto bg-[#12100E] mb-8 shadow-xl">
+                    <div class="aspect-[3/4] overflow-hidden"><img src="${basePath + couple.bride.image}" class="w-full h-full object-cover"></div>
+                </div>
+                <span class="text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] font-cinzel block mb-2">— Mempelai Wanita —</span>
+                <h4 class="font-cinzel text-2xl text-[#F3E5AB] mb-3">${couple.bride.name}</h4>
+                <p class="text-xs text-stone-400 italic max-w-xs mx-auto">${couple.bride.bio || ''}</p>
+            `;
+
+            if(events?.length) {
+                document.getElementById('event-section').classList.remove('hidden');
+                document.getElementById('event-list').innerHTML = events.map(ev => `
+                    <div class="balinese-border bg-[#1A1814] p-8 text-center shadow-xl">
+                        <h5 class="font-cinzel text-xl text-[#F3E5AB] mb-3">${ev.title}</h5>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] mb-4">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text-xs font-mono text-stone-300 mb-2">${ev.startTime} — ${ev.endTime} ${ev.timezone}</p>
+                        <p class="text-xs italic text-stone-400 mb-6">${ev.address}</p>
+                        <a href="${ev.googleMaps}" target="_blank" class="inline-block border border-[#D4AF37] text-[#D4AF37] px-6 py-3 text-[10px] uppercase tracking-[0.3em] hover:bg-[#D4AF37] hover:text-[#12100E] transition-all">Buka Google Maps</a>
+                    </div>
+                `).join('');
+
+                if(settings.showCountdown) {
+                    const tzMap = { WITA: '+08:00', WIB: '+07:00', WIT: '+09:00' };
+                    const tz = tzMap[events[0].timezone] || '+08:00';
+                    const targetTime = new Date(`${events[0].date}T${events[0].startTime}:00${tz}`).getTime();
+                    setInterval(() => {
+                        const diff = targetTime - new Date().getTime();
+                        const d = Math.max(0, Math.floor(diff / 86400000)), h = Math.max(0, Math.floor(diff % 86400000 / 3600000)), m = Math.max(0, Math.floor(diff % 3600000 / 60000)), s = Math.max(0, Math.floor(diff % 60000 / 1000));
+                        document.getElementById('countdown').innerHTML = `
+                            <div class="balinese-border p-3 bg-[#12100E] min-w-[65px]"><span class="font-cinzel text-xl text-[#F3E5AB]">${d}</span><span class="block text-[8px] uppercase text-[#D4AF37]">Hari</span></div>
+                            <div class="balinese-border p-3 bg-[#12100E] min-w-[65px]"><span class="font-cinzel text-xl text-[#F3E5AB]">${h}</span><span class="block text-[8px] uppercase text-[#D4AF37]">Jam</span></div>
+                            <div class="balinese-border p-3 bg-[#12100E] min-w-[65px]"><span class="font-cinzel text-xl text-[#F3E5AB]">${m}</span><span class="block text-[8px] uppercase text-[#D4AF37]">Menit</span></div>
+                            <div class="balinese-border p-3 bg-[#12100E] min-w-[65px]"><span class="font-cinzel text-xl text-[#F3E5AB]">${s}</span><span class="block text-[8px] uppercase text-[#D4AF37]">Detik</span></div>
+                        `;
+                    }, 1000);
+                    document.getElementById('countdown-wrap').classList.remove('hidden');
+                }
+            }
+
+            if(loveStory?.length && settings.showLoveStory) {
+                document.getElementById('story-section').classList.remove('hidden');
+                document.getElementById('story-list').innerHTML = loveStory.map(ls => `
+                    <div class="balinese-border p-6 bg-[#12100E] relative">
+                        <span class="text-[10px] font-mono text-[#D4AF37] block mb-1">${ls.date || ls.year}</span>
+                        <h6 class="font-cinzel text-lg text-[#F3E5AB] mb-3">${ls.title}</h6>
+                        <p class="text-xs text-stone-400 italic leading-relaxed">${ls.description}</p>
+                    </div>
+                `).join('');
+            }
+
+            if(gallery?.album?.length && settings.showGallery) {
+                document.getElementById('gallery-section').classList.remove('hidden');
+                document.getElementById('gallery-grid').innerHTML = gallery.album.map(img => `
+                    <div class="balinese-border overflow-hidden aspect-[4/5] bg-[#1A1814]">
+                        <img src="${basePath + img}" class="reveal w-full h-full object-cover" loading="lazy" onerror="this.parentElement.style.display='none'">
+                    </div>
+                `).join('');
+            }
+
+            if(digitalGift?.accounts?.length && settings.showGift) {
+                document.getElementById('gift-section').classList.remove('hidden');
+                document.getElementById('gift-container').innerHTML = digitalGift.accounts.map((bank, i) => `
+                    <div class="balinese-border p-6 bg-[#12100E] text-center">
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] font-cinzel">${bank.provider}</span>
+                        <p class="font-cinzel text-lg text-white my-2" id="rek-${i}">${bank.accountNumber}</p>
+                        <p class="text-xs text-stone-400 mb-4">a.n ${bank.accountHolder}</p>
+                        <button onclick="copyRek('rek-${i}')" class="border border-[#D4AF37] text-[#D4AF37] px-4 py-2 text-[10px] uppercase tracking-[0.3em] hover:bg-[#D4AF37] hover:text-[#12100E] transition-all">Salin Rekening</button>
+                    </div>
+                `).join('');
+            }
+
+            if(music?.playlist?.length) {
+                const defaultSong = music.playlist.find(s => s.isDefault) || music.playlist[0];
+                const audio = document.getElementById('audio');
+                audio.src = defaultSong.url.startsWith('http') ? defaultSong.url : basePath + defaultSong.file;
+                document.getElementById('music-btn').classList.remove('hidden');
+                document.getElementById('music-btn').onclick = () => {
+                    if(audio.paused){ audio.play(); document.getElementById('disk-wrap').classList.remove('paused'); }
+                    else { audio.pause(); document.getElementById('disk-wrap').classList.add('paused'); }
+                };
+            }
+
+            loadWishes();
+
+            document.getElementById('open-btn').onclick = () => {
+                document.getElementById('cover').classList.add('unveil');
+                document.getElementById('app').style.opacity = '1';
+                document.getElementById('audio')?.play().catch(()=>{});
+                document.getElementById('disk-wrap')?.classList.remove('paused');
+                const observer = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.05 });
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            };
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
+
+    initClient();
+
+    document.getElementById('wishes-form').onsubmit = function(e) {
+        e.preventDefault();
+        const payload = {
+            id_klien: clientSlug,
+            nama: document.getElementById('wish-name').value,
+            ucapan: document.getElementById('wish-message').value,
+            kehadiran: document.getElementById('wish-status').value,
+            jumlah_tamu: document.getElementById('wish-pax').value
+        };
+        const btn = this.querySelector('button');
+        const originalText = btn.innerText;
+        btn.innerText = 'Mengirim...';
+        btn.disabled = true;
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'ok') {
+                alert('Terima kasih, doa restu Anda telah terkirim.');
+                document.getElementById('wishes-form').reset();
+                loadWishes();
+            } else {
+                alert('Gagal mengirim ucapan.');
+            }
+        })
+        .finally(() => { btn.innerText = originalText; btn.disabled = false; });
+    };
+
+    function loadWishes() {
+        fetch(SCRIPT_URL + "?id_klien=" + clientSlug)
+        .then(res => res.json())
+        .then(wishes => {
+            const box = document.getElementById('wishes-box');
+            if (!Array.isArray(wishes) || wishes.length === 0) {
+                box.innerHTML = '<p class="text-xs text-center text-stone-500 py-4">Belum ada ucapan.</p>';
+                return;
+            }
+            box.innerHTML = wishes.map(w => `
+                <div class="balinese-border p-4 bg-[#1A1814] reveal active">
+                    <div class="flex justify-between items-center mb-2">
+                        <h6 class="font-cinzel font-semibold text-xs text-[#F3E5AB]">${w.nama}</h6>
+                        <span class="text-[8px] uppercase tracking-wider px-2 py-0.5 bg-[#12100E] text-[#D4AF37] border border-[#D4AF37]/30">${w.kehadiran} (${w.pax} Pax)</span>
+                    </div>
+                    <p class="text-xs text-stone-300 leading-relaxed">${w.ucapan}</p>
+                </div>
+            `).join('');
+        }).catch(err => console.error(err));
+    }
+
+    function copyRek(id) {
+        navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => alert('Nomor rekening berhasil disalin!'));
+    }
+</script>
+</body>
+</html>
