@@ -6,6 +6,9 @@
     "domain": "",
     "customUrl": ""
   },
+  "link": {
+    "apiUcapan": "https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec"
+  },
   "settings": {
     "islami": true,
     "themeColor": "#8B7355",
@@ -122,7 +125,11 @@
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
-    "album": ["foto1.jpg", "foto2.jpg", "foto-sampul.jpg"]
+    "album": [
+      "foto1.jpg",
+      "foto2.jpg",
+      "foto-sampul.jpg"
+    ]
   },
   "digitalGift": {
     "description": "Doa restu Anda adalah hadiah terindah.",
@@ -148,7 +155,10 @@
   },
   "protocols": {
     "title": "Informasi Tambahan",
-    "items": ["Acara diselenggarakan secara intimate", "Mohon konfirmasi kehadiran H-3"]
+    "items": [
+      "Acara diselenggarakan secara intimate",
+      "Mohon konfirmasi kehadiran H-3"
+    ]
   },
   "logistics": {
     "rsvpWaNumber": "6282261567928",
