@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Undangan Pernikahan</title>
+<meta name="theme-color" content="#FFFFFF">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Outfit:wght@300;400;500;600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{--gray:#4A4A4A;--bg:#FFFFFF;--soft:#F5F5F5}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--gray);overflow-x:hidden}
+.font-hand{font-family:'Fredoka',sans-serif}
+.font-arab{font-family:'Scheherazade New',serif}
+.card{background:#fff;border-radius:28px;box-shadow:0 8px 30px -10px rgba(0,0,0,.08);transition:all .4s cubic-bezier(.34,1.56,.64,1);will-change:transform}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 45px -12px rgba(0,0,0,.12)}
+.nav-pill{background:var(--soft);border-radius:999px;padding:6px 16px;font-size:11px;font-weight:500;letter-spacing:.05em}
+.reveal{opacity:0;transform:translateY(50px)}
+#cover{transition:opacity 1.2s ease}
+.btn-press:active{transform:scale(.96)}
+img{max-width:100%;height:auto}
+.hide{display:none !important}
+@media (min-width:768px){body{max-width:480px;margin:0 auto;box-shadow:0 0 50px -20px rgba(0,0,0,.1)}}
+</style>
+</head>
+
+<body>
+<div id="loader" class="fixed inset-0 z-[200] bg-white flex items-center justify-center">
+  <div class="text-center">
+    <div class="w-10 h-10 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mx-auto"></div>
+    <p class="font-hand text-xl text-gray-400 mt-4">Loading...</p>
+  </div>
+</div>
+
+<!-- COVER -->
+<div id="cover" class="fixed inset-0 z-50 flex items-center justify-center text-center bg-white px-6">
+  <div class="max-w-sm">
+    <p class="font-arab text-2xl mb-8 text-gray-600 opacity-0" id="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+    <p class="font-hand text-4xl mb-2 opacity-0" id="cover-sub">The Wedding Of</p>
+    <h1 id="cover-names" class="font-hand text-5xl font-semibold mt-4 leading-tight opacity-0"></h1>
+    <div class="mt-12 opacity-0" id="cover-guest">
+      <p class="text-[10px] uppercase tracking-[.35em] opacity-50">Kepada Yth.</p>
+      <p id="guest-name" class="mt-3 text-xl font-medium"></p>
+      <p id="guest-group" class="text-xs opacity-50 italic mt-1"></p>
+    </div>
+    <button id="openInvitation" class="mt-14 px-10 py-3.5 rounded-full bg-gray-800 text-white text-[11px] uppercase tracking-[.3em] btn-press opacity-0">Buka Undangan</button>
+  </div>
+</div>
+
+<main id="app" class="opacity-0 px-5 py-8 space-y-8 pb-20">
+  <!-- NAV PILL -->
+  <div class="flex justify-center gap-2 reveal">
+    <div class="nav-pill">Creative</div>
+    <div class="nav-pill">Stories</div>
+    <div class="nav-pill">Typography</div>
+  </div>
+  <div class="flex justify-center reveal">
+    <div class="nav-pill">Archive by Omah Aksara</div>
+  </div>
+
+  <!-- HERO CARD -->
+  <div class="card p-5 flex items-center gap-4 reveal">
+    <img id="hero-img" class="w-24 h-24 object-cover rounded-2xl flex-shrink-0" src="">
+    <div class="min-w-0">
+      <h2 id="hero-names" class="font-hand text-2xl font-semibold leading-tight truncate"></h2>
+      <p id="hero-date" class="text-xs opacity-60 mt-1.5"></p>
+      <p id="quote-text" class="text-xs opacity-70 mt-2 leading-relaxed line-clamp-3"></p>
+    </div>
+  </div>
+
+  <!-- COUPLE CARDS -->
+  <div id="groom-card" class="card p-5 flex items-center gap-4 reveal"></div>
+  <div id="bride-card" class="card p-5 flex items-center gap-4 flex-row-reverse reveal"></div>
+
+  <!-- COUNTDOWN CARD -->
+  <div id="countdown-container" class="card p-6 text-center reveal">
+    <h3 class="font-hand text-2xl font-semibold mb-5">Menuju Hari Bahagia</h3>
+    <div id="countdown" class="grid grid-cols-4 gap-3"></div>
+  </div>
+
+  <!-- LOVE STORY -->
+  <div id="love-story-section" class="space-y-6">
+    <div class="text-center py-2 reveal">
+      <div class="nav-pill inline-block">Our Love Story</div>
+    </div>
+    <div id="love-story" class="space-y-6"></div>
+  </div>
+
+  <!-- EVENTS -->
+  <div id="event-cards" class="space-y-6"></div>
+
+  <!-- DRESSCODE CARD -->
+  <div id="dresscode-section" class="card p-6 text-center reveal">
+    <h3 class="font-hand text-2xl font-semibold">Dresscode</h3>
+    <div class="flex justify-center gap-3 my-5">
+      <div class="w-7 h-7 rounded-full bg-[#A67C52] shadow-inner"></div>
+      <div class="w-7 h-7 rounded-full bg-[#4A4A4A] shadow-inner"></div>
+      <div class="w-7 h-7 rounded-full bg-white border border-gray-200 shadow-inner"></div>
+    </div>
+    <p id="dresscode" class="text-sm opacity-70"></p>
+  </div>
+
+  <!-- GALLERY -->
+  <div id="gallery-section" class="space-y-6">
+    <div class="text-center py-2 reveal">
+      <div class="nav-pill inline-block">Our Moments Gallery</div>
+    </div>
+    <div id="gallery-cards" class="space-y-6"></div>
+  </div>
+
+  <!-- MOHON DOA RESTU -->
+  <div class="card p-6 text-center reveal">
+    <h3 class="font-hand text-2xl font-semibold mb-4">Mohon Doa Restu</h3>
+    <p id="guest-message" class="text-sm opacity-70 leading-relaxed mb-6 px-1"></p>
+    <div id="qrcode" class="flex justify-center mb-5"></div>
+    <a id="contact-link" target="_blank" class="inline-block px-9 py-3.5 rounded-full bg-gray-800 text-white text-[11px] uppercase tracking-[.25em] btn-press">Hubungi Kami</a>
+  </div>
+
+  <!-- GIFT -->
+  <div id="gift-section" class="space-y-6">
+    <div class="text-center py-2 reveal">
+      <div class="nav-pill inline-block">Wedding Gift</div>
+    </div>
+    <div id="gift-cards" class="space-y-6"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="text-center pt-4 pb-8 reveal">
+    <p class="font-hand text-3xl font-semibold text-gray-700">See You!</p>
+    <h3 id="footer-names" class="font-hand text-2xl mt-2"></h3>
+    <div class="nav-pill mt-8 inline-block">Inspired by Pinterest</div>
+  </div>
+</main>
+
+<button id="music-btn" class="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center btn-press opacity-0">
+  <svg id="music-on" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3.895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3.895-3 2s1.343 2 3 2 3-.895 3-2V3z"/></svg>
+  <svg id="music-off" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"/></svg>
+</button>
+
+<audio id="audio" loop></audio>
+
+<script>
+let d = {};
+let slug = "budi-ani";
+let base = `../../public/clients/${slug}/`;
+
+const params = new URLSearchParams(location.search);
+const guest = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+
+const match = window.location.pathname.match(/\/clients\/([^\/]+)/) || window.location.pathname.match(/\/([^\/]+)\/?$/);
+if (params.get('c')) {
+    slug = params.get('c');
+} else if (match && match[1] && !['luxury', 'templates', 'invitation'].includes(match[1])) {
+    slug = match[1];
+}
+base = `../../public/clients/${slug}/`;
+
+function fixImagePath(imgName) {
+    if (!imgName || imgName.trim() === "") return "";
+    if (imgName.startsWith('http') || imgName.startsWith('data:')) return imgName;
+    const cleanName = imgName.split('/').pop();
+    return `${base}${cleanName}`;
+}
+
+fetch(`${base}data.json`)
+.then(r => {
+    if(!r.ok) throw new Error("Gagal mengambil data JSON.");
+    return r.json();
+})
+.then(data => {
+    d = data;
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const g = d.couple.groom;
+    const b = d.couple.bride;
+    const pair = `${g.nickname} & ${b.nickname}`;
+    const ev = d.events?.[0];
+    
+    // COVER
+    document.getElementById('cover-names').textContent = pair;
+    document.getElementById('guest-name').textContent = guest;
+    if(d.guest?.group) document.getElementById('guest-group').textContent = d.guest.group;
+    
+    // HERO
+    const heroImgUrl = fixImagePath(d.gallery?.heroImage || 'foto-sampul.jpg');
+    document.getElementById('hero-img').src = heroImgUrl;
+    document.getElementById('hero-names').textContent = pair;
+    if(ev) {
+        document.getElementById('hero-date').textContent = new Date(ev.date).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+    }
+    if(d.quote) {
+        document.getElementById('quote-text').textContent = d.quote.text || '';
+    }
+    
+    // COUPLE CARD GROOM & BRIDE
+    const gIg = g.instagram ? g.instagram.replace('@','') : 'groom_ig';
+    document.getElementById('groom-card').innerHTML = `
+        <img src="${fixImagePath(g.image)}" class="w-24 h-24 object-cover rounded-2xl flex-shrink-0" loading="lazy">
+        <div class="min-w-0">
+          <h3 class="font-hand text-xl font-semibold truncate">${g.name || g.nickname}</h3>
+          <p class="text-xs opacity-60 mt-1.5 leading-relaxed">Putra dari Bpk. ${g.father} & Ibu ${g.mother}</p>
+          ${gIg ? `<a href="https://instagram.com/${gIg}" target="_blank" class="text-xs opacity-70 mt-2 inline-block hover:underline">@${gIg}</a>` : ''}
+        </div>`;
+        
+    const bIg = b.instagram ? b.instagram.replace('@','') : 'bride_ig';
+    document.getElementById('bride-card').innerHTML = `
+        <img src="${fixImagePath(b.image)}" class="w-24 h-24 object-cover rounded-2xl flex-shrink-0" loading="lazy">
+        <div class="text-right min-w-0">
+          <h3 class="font-hand text-xl font-semibold truncate">${b.name || b.nickname}</h3>
+          <p class="text-xs opacity-60 mt-1.5 leading-relaxed">Putri dari Bpk. ${b.father} & Ibu ${b.mother}</p>
+          ${bIg ? `<a href="https://instagram.com/${bIg}" target="_blank" class="text-xs opacity-70 mt-2 inline-block hover:underline">@${bIg}</a>` : ''}
+        </div>`;
+    
+    // COUNTDOWN SYSTEM
+    if (d.settings?.showCountdown && ev) {
+        const target = new Date(`${ev.date}T${ev.startTime}:00`).getTime();
+        const cd = document.getElementById('countdown');
+        const up = () => {
+            const dist = target - Date.now();
+            if(dist <= 0 || isNaN(dist)){
+                cd.innerHTML = `<div class="col-span-4 font-hand text-xl py-2">Hari Bahagia Telah Tiba! 💍</div>`;
+                return;
+            }
+            const dd=Math.floor(dist/86400000), hh=Math.floor((dist/3600000)%24), mm=Math.floor((dist/60000)%60), ss=Math.floor((dist/1000)%60);
+            cd.innerHTML = [['Hari',dd],['Jam',hh],['Menit',mm],['Detik',ss]].map(([l,v])=>`<div class="bg-gray-50 rounded-2xl py-3.5"><div class="font-hand text-2xl font-semibold">${v}</div><div class="text-[10px] opacity-50 mt-1 uppercase tracking-wider">${l}</div></div>`).join('');
+        }; 
+        up(); 
+        setInterval(up, 1000);
+    } else {
+        document.getElementById('countdown-container')?.classList.add('hide');
+    }
+    
+    // LOVE STORY LOOP SYSTEM
+    const storyContainer = document.getElementById('love-story');
+    if (d.settings?.showLoveStory && d.loveStory && storyContainer) {
+        storyContainer.innerHTML = '';
+        d.loveStory.forEach((i, idx) => {
+            storyContainer.innerHTML += `
+              <div class="card p-5 flex items-center gap-4 ${idx%2?'flex-row-reverse':''} reveal">
+                <div class="w-20 h-20 bg-gray-50 rounded-2xl flex-shrink-0 flex items-center justify-center font-hand text-xl">${(i.year || i.date).toString().split(' ')[0]}</div>
+                <div class="${idx%2?'text-right':''} min-w-0">
+                  <h3 class="font-hand text-xl font-semibold">${i.title}</h3>
+                  <p class="text-[11px] opacity-60 mt-1">${i.year || i.date}</p>
+                  <p class="text-xs opacity-70 mt-2 leading-relaxed">${i.description}</p>
+                </div>
+              </div>`;
+        });
+    } else {
+        document.getElementById('love-story-section')?.classList.add('hide');
+    }
+    
+    // EVENTS LOOP SYSTEM
+    const eventsContainer = document.getElementById('event-cards');
+    if (eventsContainer && d.events) {
+        eventsContainer.innerHTML = '';
+        d.events.forEach((e, idx) => {
+            eventsContainer.innerHTML += `
+              <div class="card p-5 flex items-center gap-4 ${idx%2?'flex-row-reverse':''} reveal">
+                <div class="w-20 h-20 bg-gray-50 rounded-2xl flex-shrink-0 flex items-center justify-center font-hand text-xs text-center p-1">${e.startTime}<br>s/d<br>${e.endTime}</div>
+                <div class="${idx%2?'text-right':''} min-w-0">
+                  <h3 class="font-hand text-xl font-semibold">${e.title}</h3>
+                  <p class="text-[11px] opacity-60 mt-1.5">${new Date(e.date).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</p>
+                  <p class="text-xs opacity-70 mt-2 leading-relaxed truncate-2-lines">📍 ${e.address}</p>
+                  <a href="${e.googleMaps}" target="_blank" class="text-[11px] underline opacity-70 mt-2.5 inline-block hover:text-gray-900">Lihat Lokasi Maps</a>
+                </div>
+              </div>`;
+        });
+    }
+    
+    // DRESSCODE SYSTEM
+    if(d.logistics?.dressCode) {
+        document.getElementById('dresscode').textContent = d.logistics.dressCode;
+    } else {
+        document.getElementById('dresscode-section')?.classList.add('hide');
+    }
+    
+    // GALLERY ALBUM LOOP SYSTEM
+    const galleryContainer = document.getElementById('gallery-cards');
+    if (galleryContainer && d.gallery?.album) {
+        galleryContainer.innerHTML = '';
+        d.gallery.album.forEach((img, idx) => {
+            galleryContainer.innerHTML += `
+              <div class="card p-5 flex items-center gap-4 ${idx%2?'flex-row-reverse':''} reveal">
+                <img src="${fixImagePath(img)}" class="w-24 h-24 object-cover rounded-2xl flex-shrink-0" loading="lazy">
+                <div class="${idx%2?'text-right':''} min-w-0">
+                  <h3 class="font-hand text-xl font-semibold">Moment ${idx+1}</h3>
+                  <p class="text-xs opacity-70 mt-2 leading-relaxed">Bagian dari kisah indah perjalanan cinta kami.</p>
+                </div>
+              </div>`;
+        });
+    } else {
+        document.getElementById('gallery-section')?.classList.add('hide');
+    }
+    
+    // RSVP & LOGISTIK WHATSAPP SYSTEM
+    if (d.logistics) {
+        document.getElementById('guest-message').textContent = d.logistics.guestMessage || d.logistics.guestNote || '';
+        const waNumber = d.logistics.contactWaNumber || d.logistics.rsvpWaNumber;
+        const text = encodeURIComponent(`Assalamualaikum, saya *${guest}* ingin melakukan konfirmasi kehadiran untuk undangan pernikahan *${pair}*. Terima kasih!`);
+        const waLink = `https://wa.me/${waNumber}?text=${text}`;
+        
+        new QRCode(document.getElementById('qrcode'), {text: waLink, width: 110, height: 110, colorDark: "#4A4A4A", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H});
+        document.getElementById('contact-link').href = waLink;
+    }
+    
+    // DIGITAL GIFT SYSTEM (ADAPTIF REKENING MAUPUN QR CODE IMAGE)
+    const giftContainer = document.getElementById('gift-cards');
+    if (giftContainer && d.digitalGift) {
+        giftContainer.innerHTML = '';
+        d.digitalGift.forEach((gf, idx) => {
+            const isQrCode = gf.accountNumber.toLowerCase().includes('.jpg') || gf.accountNumber.toLowerCase().includes('.png');
+            giftContainer.innerHTML += `
+              <div class="card p-6 text-center reveal">
+                <h3 class="font-hand text-xl font-semibold">${gf.provider}</h3>
+                ${isQrCode ? 
+                    `<img src="${fixImagePath(gf.accountNumber)}" class="w-36 h-36 object-contain mx-auto my-4 bg-stone-50 p-2 border rounded-xl" loading="lazy">` :
+                    `<p class="font-hand text-2xl font-semibold mt-3 tracking-wide text-gray-800">${gf.accountNumber}</p>`
+                }
+                <p class="text-xs opacity-60 mt-1.5">a.n ${gf.accountHolder}</p>
+                ${gf.qrImage ? `<img src="${fixImagePath(gf.qrImage)}" class="w-32 mx-auto mt-4 rounded-xl shadow-sm" loading="lazy">` : ''}
+                ${!isQrCode ? `
+                    <button onclick="navigator.clipboard.writeText('${gf.accountNumber}'); alert('Nomor rekening berhasil disalin!');" 
+                    class="mt-4 px-6 py-2 rounded-full border border-gray-300 text-[10px] uppercase tracking-wider hover:bg-gray-50 btn-press">
+                        Salin No. Rekening
+                    </button>
+                ` : ''}
+              </div>`;
+        });
+    } else {
+        document.getElementById('gift-section')?.classList.add('hide');
+    }
+    
+    // FOOTER
+    document.getElementById('footer-names').textContent = pair;
+    
+    // PRE-LOAD MEDIA MUSIK
+    if(d.logistics?.music) {
+        document.getElementById('audio').src = fixImagePath(d.logistics.music);
+    }
+    
+    // LOADER DISMISS & INTRO GSAP TIMELINE
+    document.getElementById('loader').style.display='none';
+    const tl = gsap.timeline();
+    tl.to('#bismillah',{opacity:1,y:0,duration:1,ease:'power3.out'})
+      .to('#cover-sub',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=0.7')
+      .to('#cover-names',{opacity:1,y:0,duration:1.2,ease:'power3.out'},'-=0.7')
+      .to('#cover-guest',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=0.8')
+      .to('#openInvitation',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=0.7');
+      
+    // ACTION: BUKA UNDANGAN
+    document.getElementById('openInvitation').onclick = () => {
+        gsap.to('#cover',{opacity:0,duration:1.2,ease:'power2.inOut',onComplete:()=>{
+            document.getElementById('cover').style.display='none';
+            gsap.to('#app',{opacity:1,duration:1});
+            gsap.to('#music-btn',{opacity:1,duration:1,delay:.5});
+            
+            if(d.logistics?.music) {
+                document.getElementById('audio').play().catch(e => console.log("Autoplay ditahan sistem browser. Menunggu interaksi pengguna."));
+            }
+            
+            // GSAP SCROLLTRIGGER ENGINE FOR Pinterest REVEAL CARDS
+            gsap.utils.toArray('.reveal').forEach((el, i) => {
+                gsap.fromTo(el, 
+                    {opacity:0, y:50},
+                    {opacity:1, y:0, duration:1.2, delay: i * 0.05, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 92%'} }
+                );
+            });
+        }});
+    };
+    
+    // MUSIC TOGGLE CONTROLLER
+    const audio = document.getElementById('audio'), btn = document.getElementById('music-btn');
+    const onIcon = document.getElementById('music-on'), offIcon = document.getElementById('music-off');
+    btn.onclick = () => {
+        if(audio.paused){
+            audio.play();
+            onIcon.classList.remove('hidden');
+            offIcon.classList.add('hidden');
+        } else {
+            audio.pause();
+            onIcon.classList.add('hidden');
+            offIcon.classList.remove('hidden');
+        }
+    };
+})
+.catch(err => {
+    console.error("Terjadi kegagalan engine utama:", err);
+    document.getElementById('loader').style.display='none';
+    alert("Gagal memuat basis data JSON. Silakan periksa kembali folder klien.");
+});
+</script>
+</body>
+</html>

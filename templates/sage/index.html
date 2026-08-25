@@ -1,0 +1,681 @@
+<!-- ========================= -->
+<!-- OMAH AKSARA — KENZ SAGE 2026 -->
+<!-- SYARI • CINEMATIC • GEN Z -->
+<!-- ========================= -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Undangan Pernikahan</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --theme-color:#8B9A8B;
+    --bg-color:#F4F1EA;
+    --text-color:#4E5A4E;
+    --accent-color:#E7E2D8;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    background:var(--bg-color);
+    color:var(--text-color);
+    overflow-x:hidden;
+}
+
+/* PAPER TEXTURE */
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    opacity:.07;
+    pointer-events:none;
+    z-index:999;
+}
+
+.font-serif{
+    font-family:'Cormorant Garamond',serif;
+}
+
+.font-arab{
+    font-family:'Scheherazade New',serif;
+}
+
+.text-theme{
+    color:var(--theme-color);
+}
+
+.bg-theme{
+    background:var(--theme-color);
+}
+
+.border-theme{
+    border-color:var(--theme-color);
+}
+
+/* GLASS CARD */
+.glass{
+    background:rgba(255,255,255,.35);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 10px 40px rgba(0,0,0,.05);
+}
+
+/* HERO */
+.hero-overlay{
+    background:
+    linear-gradient(
+        to top,
+        rgba(0,0,0,.72),
+        rgba(0,0,0,.18),
+        rgba(0,0,0,.32)
+    );
+}
+
+/* SOFT ANIMATION */
+.fade-up{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1.2s ease;
+}
+
+.fade-up.show{
+    opacity:1;
+    transform:none;
+}
+
+/* GALLERY */
+.gallery-card{
+    overflow:hidden;
+    border-radius:28px;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.gallery-card img{
+    transition:1.2s ease;
+}
+
+.gallery-card:hover img{
+    transform:scale(1.08);
+}
+
+/* POLAROID */
+.polaroid{
+    background:white;
+    padding:10px 10px 30px;
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+/* MUSIC */
+#music-toggle{
+    backdrop-filter:blur(15px);
+    background:rgba(255,255,255,.25);
+    border:1px solid rgba(255,255,255,.35);
+}
+
+/* DIVIDER */
+.divider{
+    width:60px;
+    height:1px;
+    background:rgba(139,154,139,.35);
+    margin:80px auto;
+}
+
+.hide { display: none !important; }
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= -->
+<!-- COVER -->
+<!-- ================= -->
+
+<div id="cover" class="fixed inset-0 z-50 flex items-center justify-center text-center text-white overflow-hidden">
+
+    <img id="cover-image"
+    class="absolute inset-0 w-full h-full object-cover"
+    src="">
+
+    <div class="absolute inset-0 backdrop-blur-sm hero-overlay"></div>
+
+    <div class="relative z-10 px-8">
+
+        <p class="font-arab text-3xl mb-5">
+            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
+        </p>
+
+        <p class="uppercase tracking-[.4em] text-xs opacity-70">
+            Walimatul 'Ursy
+        </p>
+
+        <h1 id="cover-names"
+        class="font-serif text-6xl md:text-7xl mt-5 italic">
+        </h1>
+
+        <div class="mt-10">
+            <p class="text-xs uppercase tracking-[.3em] opacity-60">
+                Kepada Yth.
+            </p>
+
+            <p id="guest-name"
+            class="mt-3 text-xl font-light">
+            </p>
+            
+            <p id="guest-group" class="text-xs opacity-50 italic mt-1"></p>
+        </div>
+
+        <button id="openInvitation"
+        class="mt-12 px-10 py-4 rounded-full border border-white/30 bg-white/10 backdrop-blur-md uppercase tracking-[.25em] text-xs hover:bg-white hover:text-black transition-all duration-700">
+
+            Buka Undangan
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ================= -->
+<!-- MAIN -->
+<!-- ================= -->
+
+<main id="app"
+class="max-w-md mx-auto opacity-0 transition duration-1000">
+
+<!-- HERO -->
+
+<section class="relative h-screen flex items-end justify-center text-center overflow-hidden">
+
+    <img id="hero-image"
+    class="absolute inset-0 w-full h-full object-cover"
+    src="">
+
+    <div class="absolute inset-0 hero-overlay"></div>
+
+    <div class="relative z-10 px-8 pb-24 text-white">
+
+        <p class="uppercase tracking-[.4em] text-xs opacity-70">
+            The Wedding Of
+        </p>
+
+        <h1 id="hero-names"
+        class="font-serif text-7xl italic leading-none mt-5">
+        </h1>
+
+        <div class="w-16 h-px bg-white/30 mx-auto my-8"></div>
+
+        <p id="hero-date"
+        class="tracking-[.2em] uppercase text-xs">
+        </p>
+
+    </div>
+
+</section>
+
+<div class="px-6 pb-24">
+
+<!-- QUOTE -->
+
+<div class="divider"></div>
+
+<section id="quote-section"
+class="glass rounded-[32px] p-8 text-center fade-up">
+
+    <p id="quote-arab"
+    class="font-arab text-3xl leading-loose text-theme">
+    </p>
+
+    <p id="quote-text"
+    class="italic mt-6 leading-relaxed text-sm">
+    </p>
+
+    <p id="quote-source"
+    class="mt-5 uppercase tracking-[.3em] text-[10px] opacity-60">
+    </p>
+
+</section>
+
+<!-- COUPLE -->
+
+<div class="divider"></div>
+
+<section class="fade-up">
+
+    <div id="groom-section" class="text-center"></div>
+
+    <div class="font-serif text-5xl text-center my-12 text-theme">
+        &
+    </div>
+
+    <div id="bride-section" class="text-center"></div>
+
+</section>
+
+<!-- LOVE STORY -->
+
+<div id="story-divider" class="divider"></div>
+
+<section id="love-story-section"
+class="fade-up">
+
+    <h2 class="font-serif text-4xl italic text-center text-theme mb-10">
+        Kisah Kami
+    </h2>
+
+    <div id="love-story"
+    class="space-y-6">
+    </div>
+
+</section>
+
+<!-- EVENT -->
+
+<div class="divider"></div>
+
+<section class="glass rounded-[32px] p-8 fade-up">
+
+    <h2 class="font-serif text-4xl italic text-center text-theme mb-10">
+        Save The Date
+    </h2>
+
+    <div id="event-details"
+    class="space-y-8">
+    </div>
+
+    <!-- COUNTDOWN -->
+
+    <div id="countdown-container" class="mt-14">
+
+        <p class="text-center uppercase tracking-[.3em] text-[10px] opacity-60 mb-5">
+            Countdown
+        </p>
+
+        <div id="countdown"></div>
+
+    </div>
+
+</section>
+
+<!-- GALLERY -->
+
+<div class="divider"></div>
+
+<section id="gallery-section"
+class="fade-up">
+
+    <h2 class="font-serif text-4xl italic text-center text-theme mb-10">
+        Our Moments
+    </h2>
+
+    <div id="gallery-grid"
+    class="grid grid-cols-2 gap-4">
+    </div>
+
+</section>
+
+<!-- GIFT -->
+
+<div class="divider"></div>
+
+<section class="glass rounded-[32px] p-8 text-center fade-up">
+
+    <h2 class="font-serif text-4xl italic text-theme mb-5">
+        Wedding Gift
+    </h2>
+
+    <p class="text-sm leading-relaxed opacity-70 mb-8">
+        Doa restu Anda adalah hadiah terbaik bagi kami.
+    </p>
+
+    <div id="gift-details"
+    class="space-y-4">
+    </div>
+
+</section>
+
+<!-- RSVP -->
+
+<div class="divider"></div>
+
+<section class="text-center fade-up">
+
+    <h2 class="font-serif text-4xl italic text-theme mb-5">
+        RSVP
+    </h2>
+
+    <p id="guest-note"
+    class="text-sm leading-relaxed opacity-70 mb-8">
+    </p>
+
+    <a id="rsvp-link"
+    target="_blank"
+    class="inline-block bg-theme text-white px-10 py-4 rounded-full uppercase tracking-[.25em] text-xs shadow-xl cursor-pointer">
+
+        Konfirmasi Kehadiran
+
+    </a>
+
+</section>
+
+<!-- FOOTER -->
+
+<div class="divider"></div>
+
+<footer class="text-center pb-16 fade-up">
+
+    <p class="font-arab text-3xl text-theme mb-4">
+        بَارَكَ اللهُ لَكُمَا
+    </p>
+
+    <p class="italic text-sm opacity-70 leading-relaxed">
+        Semoga Allah memberkahi pernikahan kami
+    </p>
+
+    <h2 id="footer-names"
+    class="font-serif text-5xl italic text-theme mt-8">
+    </h2>
+
+    <p class="mt-10 text-[10px] uppercase tracking-[.4em] opacity-40">
+        Digital Invitation — Omah Aksara
+    </p>
+
+</footer>
+
+</div>
+
+</main>
+
+<!-- MUSIC -->
+
+<button id="music-toggle"
+class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full z-50 text-sm shadow-xl flex items-center justify-center">
+🔊
+</button>
+
+<audio id="audio" loop></audio>
+
+<!-- ENGINE CORE -->
+<script>
+let D = {};
+let clientSlug = "budi-ani";
+let basePath = `../../public/clients/${clientSlug}/`;
+
+// Pengaman URL & Penentuan Folder Klien Dinamis
+const params = new URLSearchParams(window.location.search);
+const guestName = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+
+const match = window.location.pathname.match(/\/clients\/([^\/]+)/) || window.location.pathname.match(/\/([^\/]+)\/?$/);
+if (params.get('c')) {
+    clientSlug = params.get('c');
+} else if (match && match[1] && !['luxury', 'templates', 'invitation'].includes(match[1])) {
+    clientSlug = match[1];
+}
+basePath = `../../public/clients/${clientSlug}/`;
+
+// Fungsi Normalisasi Jalur Berkas Gambar/Audio
+function fixImagePath(imgName) {
+    if (!imgName || imgName.trim() === "") return "";
+    if (imgName.startsWith('http') || imgName.startsWith('data:')) return imgName;
+    const cleanName = imgName.split('/').pop();
+    return `${basePath}${cleanName}`;
+}
+
+fetch(`${basePath}data.json`)
+.then(res => {
+    if(!res.ok) throw new Error("Gagal mengambil data JSON.");
+    return res.json();
+})
+.then(data => {
+    D = data;
+    const g = D.couple.groom;
+    const b = D.couple.bride;
+    const pair = `${g.nickname} & ${b.nickname}`;
+    const ev = D.events?.[0];
+
+    /* TEMA WARNA DINAMIS */
+    if(D.settings?.themeColor) document.documentElement.style.setProperty('--theme-color', D.settings.themeColor);
+    if(D.settings?.bgColor) document.documentElement.style.setProperty('--bg-color', D.settings.bgColor);
+    if(D.settings?.textColor) document.documentElement.style.setProperty('--text-color', D.settings.textColor);
+
+    /* COVER & HERO */
+    document.getElementById('cover-names').textContent = pair;
+    document.getElementById('guest-name').textContent = guestName;
+    if(D.guest?.group) document.getElementById('guest-group').textContent = D.guest.group;
+    
+    document.getElementById('hero-names').textContent = pair;
+    if(ev) {
+        document.getElementById('hero-date').textContent = new Date(ev.date).toLocaleDateString('id-ID',{
+            weekday:'long', day:'numeric', month:'long', year:'numeric'
+        });
+    }
+
+    /* BERKAS SURAT / HERO IMAGE */
+    const heroImgUrl = fixImagePath(D.gallery?.heroImage || 'foto-sampul.jpg');
+    document.getElementById('cover-image').src = heroImgUrl;
+    document.getElementById('hero-image').src = heroImgUrl;
+
+    /* REKAYASA TAMPILAN QUOTE */
+    if (D.settings?.islami && D.quote) {
+        document.getElementById('quote-arab').textContent = D.quote.arab || '';
+        document.getElementById('quote-text').textContent = D.quote.text ? `"${D.quote.text}"` : '';
+        document.getElementById('quote-source').textContent = D.quote.source || '';
+    } else {
+        document.getElementById('quote-section')?.classList.add('hide');
+    }
+
+    /* DATA MEMPELAI */
+    function renderCouple(person, target, fallbackIG) {
+        const igHandle = person.instagram ? person.instagram.replace('@','') : fallbackIG;
+        document.getElementById(target).innerHTML = `
+            <img src="${fixImagePath(person.image)}" class="w-56 h-56 rounded-full mx-auto object-cover shadow-2xl border-[10px] border-white" alt="Mempelai">
+            <h2 class="font-serif text-5xl italic mt-8 text-theme">${person.name}</h2>
+            <p class="mt-4 text-sm leading-relaxed opacity-70">Putra/i dari ${person.father} & ${person.mother}</p>
+            ${igHandle ? `<a href="https://instagram.com/${igHandle}" target="_blank" class="inline-block mt-3 text-xs opacity-50 hover:underline">@${igHandle}</a>` : ''}
+        `;
+    }
+    renderCouple(g, 'groom-section', 'groom_ig');
+    renderCouple(b, 'bride-section', 'bride_ig');
+
+    /* KISAH CINTA / LOVE STORY SYSTEM LOOP */
+    const storyContainer = document.getElementById('love-story');
+    if (D.settings?.showLoveStory && D.loveStory && storyContainer) {
+        storyContainer.innerHTML = '';
+        D.loveStory.forEach(item => {
+            storyContainer.innerHTML += `
+                <div class="glass rounded-[28px] p-6 text-left">
+                    <p class="uppercase tracking-[.3em] text-[10px] opacity-50">${item.year || item.date}</p>
+                    <h3 class="font-serif text-3xl italic text-theme mt-3">${item.title}</h3>
+                    <p class="mt-4 text-sm leading-relaxed opacity-70">${item.description}</p>
+                </div>
+            `;
+        });
+    } else {
+        document.getElementById('love-story-section')?.classList.add('hide');
+        document.getElementById('story-divider')?.classList.add('hide');
+    }
+
+    /* AGENDA ACARA / EVENTS SYSTEM LOOP */
+    const eventsContainer = document.getElementById('event-details');
+    if (eventsContainer && D.events) {
+        eventsContainer.innerHTML = '';
+        D.events.forEach(event => {
+            eventsContainer.innerHTML += `
+                <div class="text-center border border-white/30 rounded-[28px] p-6">
+                    <p class="uppercase tracking-[.3em] text-[10px] opacity-50">${event.title}</p>
+                    <h3 class="font-serif text-3xl italic text-theme mt-4">
+                        ${new Date(event.date).toLocaleDateString('id-ID',{ day:'numeric', month:'long', year:'numeric' })}
+                    </h3>
+                    <p class="mt-4 text-sm opacity-70">${event.startTime} - ${event.endTime} ${event.timezone}</p>
+                    <p class="mt-4 text-sm leading-relaxed opacity-60 px-2">📍 ${event.address}</p>
+                    <a href="${event.googleMaps}" target="_blank" class="inline-block mt-6 border-b border-theme text-xs uppercase tracking-[.2em] hover:opacity-70">
+                        Google Maps
+                    </a>
+                </div>
+            `;
+        });
+    }
+
+    /* COUNTDOWN SYSTEM */
+    if (D.settings?.showCountdown && ev) {
+        const countdownEl = document.getElementById('countdown');
+        const targetTime = new Date(`${ev.date}T${ev.startTime}:00`).getTime();
+
+        function updateCountdown() {
+            const distance = targetTime - new Date().getTime();
+            if (distance <= 0 || isNaN(distance)) {
+                countdownEl.innerHTML = `<div class="glass rounded-[28px] p-6 text-center text-sm">Hari Bahagia Telah Tiba 💍</div>`;
+                return;
+            }
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((distance / (1000 * 60)) % 60);
+            const s = Math.floor((distance / 1000) % 60);
+
+            countdownEl.innerHTML = `
+                <div class="grid grid-cols-4 gap-3">
+                    <div class="glass rounded-[28px] py-5 text-center">
+                        <div class="font-serif text-3xl text-theme">${d}</div>
+                        <div class="text-[10px] uppercase tracking-[.2em] opacity-50 mt-2">Hari</div>
+                    </div>
+                    <div class="glass rounded-[28px] py-5 text-center">
+                        <div class="font-serif text-3xl text-theme">${h}</div>
+                        <div class="text-[10px] uppercase tracking-[.2em] opacity-50 mt-2">Jam</div>
+                    </div>
+                    <div class="glass rounded-[28px] py-5 text-center">
+                        <div class="font-serif text-3xl text-theme">${m}</div>
+                        <div class="text-[10px] uppercase tracking-[.2em] opacity-50 mt-2">Menit</div>
+                    </div>
+                    <div class="glass rounded-[28px] py-5 text-center">
+                        <div class="font-serif text-3xl text-theme">${s}</div>
+                        <div class="text-[10px] uppercase tracking-[.2em] opacity-50 mt-2">Detik</div>
+                    </div>
+                </div>
+            `;
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    } else {
+        document.getElementById('countdown-container')?.classList.add('hide');
+    }
+
+    /* GALERI FOTO ALBUM SYSTEM LOOP */
+    const galleryContainer = document.getElementById('gallery-grid');
+    if (galleryContainer && D.gallery?.album) {
+        galleryContainer.innerHTML = '';
+        D.gallery.album.forEach(img => {
+            galleryContainer.innerHTML += `
+                <div class="gallery-card">
+                    <img src="${fixImagePath(img)}" class="w-full aspect-square object-cover" alt="Momen" loading="lazy">
+                </div>
+            `;
+        });
+    }
+
+    /* KADO DIGITAL / GIFTS (FLEXIBLE QR CODE ATAU REKENING) */
+    const giftContainer = document.getElementById('gift-details');
+    if (giftContainer && D.digitalGift) {
+        giftContainer.innerHTML = '';
+        D.digitalGift.forEach(gift => {
+            const isQr = gift.accountNumber.toLowerCase().includes('.jpg') || gift.accountNumber.toLowerCase().includes('.png');
+            giftContainer.innerHTML += `
+                <div class="bg-white rounded-[24px] p-5 flex flex-col items-center shadow-sm">
+                    <p class="uppercase tracking-[.3em] text-[10px] opacity-50 mb-2">${gift.provider}</p>
+                    ${isQr ? 
+                        `<img src="${fixImagePath(gift.accountNumber)}" class="w-40 h-40 object-contain mx-auto my-2 bg-stone-50 p-2 border rounded" alt="QR Code">` :
+                        `<h3 class="font-serif text-3xl text-theme tracking-wide my-3 font-semibold">${gift.accountNumber}</h3>`
+                    }
+                    <p class="text-xs opacity-60">a.n ${gift.accountHolder}</p>
+                    ${!isQr ? `
+                        <button onclick="navigator.clipboard.writeText('${gift.accountNumber}'); alert('Nomor rekening berhasil disalin!');"
+                        class="mt-5 px-6 py-2 rounded-full bg-theme text-white text-[10px] uppercase tracking-[.2em] cursor-pointer hover:opacity-90">
+                            Salin Rekening
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        });
+    }
+
+    /* RSVP & LOGISTIK */
+    if (D.logistics) {
+        document.getElementById('guest-note').textContent = D.logistics.guestNote || '';
+        document.getElementById('rsvp-link').onclick = () => {
+            const textWa = `Halo ${g.nickname} & ${b.nickname}, saya *${guestName}* ingin mengonfirmasi kehadiran di acara pernikahan Anda. Terima kasih!`;
+            window.open(`https://wa.me/${D.logistics.rsvpWaNumber}?text=${encodeURIComponent(textWa)}`, '_blank');
+        };
+    }
+
+    /* FOOTER */
+    document.getElementById('footer-names').textContent = pair;
+
+    /* EVENT TOMBOL BUKA UNDANGAN */
+    document.getElementById('openInvitation').onclick = () => {
+        document.getElementById('cover').style.opacity = '0';
+        document.getElementById('app').style.opacity = '1';
+
+        setTimeout(() => {
+            document.getElementById('cover').style.display = 'none';
+        }, 1000);
+
+        /* PENGENDALI ELEMEN MUSIK */
+        if (D.logistics?.music) {
+            const audio = document.getElementById('audio');
+            audio.src = fixImagePath(D.logistics.music);
+            audio.play().catch(e => console.log("Autoplay ditahan sistem browser. Menunggu interaksi pengguna."));
+
+            const btn = document.getElementById('music-toggle');
+            btn.classList.remove('hidden');
+
+            btn.onclick = () => {
+                if (audio.paused) {
+                    audio.play();
+                    btn.innerHTML = '🔊';
+                } else {
+                    audio.pause();
+                    btn.innerHTML = '🔈';
+                }
+            };
+        }
+
+        /* DETEKSI VISUAL ANIMATION (INTERSECTION OBSERVER) */
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.05 });
+
+        document.querySelectorAll('.fade-up').forEach(el => {
+            observer.observe(el);
+        });
+    };
+})
+.catch(err => {
+    console.error("Terjadi kegagalan engine utama:", err);
+    alert("Gagal memuat basis data undangan. Pastikan tautan parameter ?c=nama-klien sudah benar.");
+});
+</script>
+
+</body>
+</html>

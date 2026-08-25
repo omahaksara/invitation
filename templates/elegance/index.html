@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Eterna Romana — Omah Aksara</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marble: #FAF9F6;
+            --ink: #1A1A1A;
+            --bronze: #8C6A4A;
+            --oxblood: #4A0E0E;
+            --paper: #F5F3EE;
+            --line: #D4C8B8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--marble);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            font-size: 15px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+      .font-cinzel { font-family: 'Cinzel', serif; }
+      .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+      .font-script { font-family: 'Pinyon Script', cursive; }
+
+        /* REVEAL RINGAN */
+      .reveal { opacity: 0; transform: translateY(24px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
+      .reveal.in { opacity: 1; transform: translateY(0); }
+
+        /* DIVIDER ROMAN */
+      .divider-roman {
+            text-align: center; position: relative; margin: 60px 0;
+        }
+      .divider-roman::before,.divider-roman::after {
+            content: ''; position: absolute; top: 50%; width: 35%; height: 1px;
+            background: var(--line);
+        }
+      .divider-roman::before { left: 0; }
+      .divider-roman::after { right: 0; }
+      .divider-roman span {
+            font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 4px;
+            color: var(--bronze); background: var(--marble); padding: 0 16px;
+        }
+
+        /* WAX SEAL */
+      .wax-seal {
+            width: 64px; height: 64px;
+            background: radial-gradient(circle at 30% 30%, #6B1A1A, var(--oxblood));
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 4px 10px rgba(74,14,0.3);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* DROP CAP */
+      .dropcap::first-letter {
+            font-family: 'Cinzel', serif; font-size: 3.5rem; line-height: 0.8;
+            float: left; margin: 6px 8px 0 0; color: var(--oxblood); font-weight: 500;
+        }
+
+        /* ENGRAVED BORDER */
+      .engrave-border {
+            border: 1px solid var(--line); position: relative; background: var(--paper);
+        }
+      .engrave-border::before {
+            content: ''; position: absolute; inset: 6px; border: 1px solid var(--line); pointer-events: none;
+        }
+
+        /* BUTTON MOBILE FRIENDLY - MIN 48PX */
+      .btn-imperial {
+            border: 1px solid var(--ink); background: transparent; color: var(--ink);
+            padding: 16px 40px; min-height: 48px; width: 100%;
+            font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+            transition: all 0.4s ease; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        @media (min-width: 430px) {.btn-imperial { width: auto; display: inline-flex; } }
+      .btn-imperial:active { transform: scale(0.98); }
+      .btn-imperial::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--ink); transition: left 0.4s ease; z-index: -1;
+        }
+      .btn-imperial:hover::before { left: 0; }
+      .btn-imperial:hover { color: var(--marble); }
+
+        /* COVER */
+        #cover { transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.2s; }
+        #cover.hidden { transform: translateY(-100%); opacity: 0; visibility: hidden; }
+
+        /* PHONE FRAME */
+      .phone-frame {
+            max-width: 420px; margin: 0 auto; background: var(--paper);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.05); min-height: 100vh;
+        }
+
+        /* MUSIC ORB 48PX MIN */
+        @keyframes orbRotate { to { transform: rotate(360deg); } }
+      .music-orb {
+            position: fixed; bottom: 24px; right: 24px; z-index: 90;
+            width: 56px; height: 56px; cursor: pointer;
+        }
+      .orb-ring {
+            width: 100%; height: 100%; border: 1px solid var(--bronze); border-radius: 50%;
+            animation: orbRotate 12s linear infinite; display: flex; align-items: center; justify-content: center;
+            background: rgba(250,249,246,0.95); backdrop-filter: blur(10px);
+        }
+      .orb-ring.paused { animation-play-state: paused; }
+
+        /* MOBILE FONT FIX */
+        @media (max-width: 400px) {
+            body { font-size: 16px; }
+           .text-\[12px\] { font-size: 13px!important; }
+           .text-\[11px\] { font-size: 13px!important; }
+           .text-\[10px\] { font-size: 13px!important; }
+        }
+    </style>
+</head>
+
+<body oncontextmenu="return false">
+
+<!-- COVER: SIMPEL + LANGSUNG KE POIN -->
+<section id="cover" class="fixed inset-0 z-[100] bg-[var(--ink)]">
+    <div class="grid md:grid-cols-2 h-full">
+        <div class="relative overflow-hidden hidden md:block">
+            <img id="cover-img" class="absolute inset-0 w-full h-full object-cover" src="" loading="eager">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        </div>
+        <div class="flex flex-col items-center justify-center text-center px-8 bg-[var(--marble)] h-full">
+            <p class="font-cormorant italic text-lg text-stone-500 mb-3">Anno Domini MMXXVII</p>
+            <div class="w-12 h-[1px] bg-[var(--bronze)] mb-6"></div>
+            <h1 id="cover-names" class="font-cinzel text-4xl font-normal text-[var(--ink)] tracking-wide leading-tight mb-4"></h1>
+            <p class="font-script text-2xl text-[var(--bronze)] mb-10">in matrimonium</p>
+
+            <div class="mb-10 w-full max-w-xs">
+                <p class="text-[12px] uppercase tracking-[0.5em] text-stone-400 mb-3">Ad Honorem</p>
+                <div class="engrave-border py-3">
+                    <p id="cover-guest" class="font-cormorant text-xl text-[var(--ink)] italic"></p>
+                </div>
+            </div>
+
+            <button onclick="openInvite()" class="btn-imperial" aria-label="Buka Undangan">Aperire</button>
+        </div>
+    </div>
+</section>
+
+<!-- MAIN APP -->
+<main id="app" class="phone-frame opacity-0">
+
+    <!-- HERO -->
+    <section id="hero" class="relative h-[85vh]">
+        <img id="hero-img" class="absolute inset-0 w-full h-full object-cover" src="" loading="eager">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--paper)]"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-8 text-center">
+            <div class="wax-seal mx-auto mb-5">
+                <span id="monogram" class="font-cinzel text-white text-lg"></span>
+            </div>
+            <h2 id="hero-names" class="font-cinzel text-3xl text-[var(--ink)] tracking-wider"></h2>
+            <p class="font-cormorant italic text-sm text-stone-600 mt-2">Die XXII Mensis Maii</p>
+        </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section id="quote-section" class="px-8 py-20 text-center reveal">
+        <p class="font-script text-3xl text-[var(--bronze)] mb-6">Veritas</p>
+        <p id="quote-text" class="font-cormorant text-lg italic leading-relaxed text-stone-700 dropcap"></p>
+        <p id="quote-source" class="font-cinzel text-[12px] uppercase tracking-[0.4em] text-stone-400 mt-6"></p>
+    </section>
+
+    <div class="divider-roman reveal"><span>II</span></div>
+
+    <!-- COUPLE -->
+    <section class="px-6 py-12">
+        <div id="groom-block" class="mb-20 reveal"></div>
+        <div class="text-center my-12">
+            <span class="font-script text-4xl text-[var(--bronze)]/40">et</span>
+        </div>
+        <div id="bride-block" class="reveal"></div>
+    </section>
+
+    <div class="divider-roman reveal"><span>III</span></div>
+
+    <!-- STORY -->
+    <section id="story-wrap" class="px-8 py-12 hidden">
+        <h3 class="font-cinzel text-center text-xl tracking-widest text-[var(--ink)] mb-12">Chronologia Amoris</h3>
+        <div id="story-list" class="space-y-10 border-l border-[var(--line)] pl-6"></div>
+    </section>
+
+    <div class="divider-roman reveal"><span>IV</span></div>
+
+    <!-- EVENTS -->
+    <section id="event-wrap" class="px-6 py-12 hidden">
+        <h3 class="font-cinzel text-center text-xl tracking-widest text-[var(--ink)] mb-12">Tempus et Locus</h3>
+        <div id="event-list" class="space-y-6"></div>
+
+        <div id="countdown-wrap" class="mt-16 pt-12 border-t border-dashed border-[var(--line)] text-center hidden">
+            <p class="font-cinzel text-[12px] uppercase tracking-[0.5em] text-stone-400 mb-6">Ad Diem</p>
+            <div id="countdown" class="flex justify-center gap-6"></div>
+        </div>
+    </section>
+
+    <div class="divider-roman reveal"><span>V</span></div>
+
+    <!-- GALLERY -->
+    <section id="gallery-wrap" class="py-12 hidden">
+        <h3 class="font-cinzel text-center text-xl tracking-widest text-[var(--ink)] mb-12 px-6">Imaginum</h3>
+        <div id="gallery-grid" class="grid grid-cols-2 gap-1 px-1"></div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp-wrap" class="py-20 px-8 bg-[var(--ink)] text-[var(--marble)] text-center hidden">
+        <div class="wax-seal mx-auto mb-6!bg-[var(--bronze)]">
+            <i class="fa-solid fa-feather-pointed text-white text-lg"></i>
+        </div>
+        <h3 class="font-cinzel text-2xl tracking-wider mb-3">Confirmatio</h3>
+        <p id="guest-note" class="font-cormorant text-sm italic text-stone-300 mb-8 max-w-xs mx-auto"></p>
+        <a id="rsvp-link" target="_blank" class="btn-imperial!border-[var(--marble)]!text-[var(--marble)] hover:!bg-[var(--marble)] hover:!text-[var(--ink)] inline-flex">
+            Scribere per WhatsApp
+        </a>
+    </section>
+
+    <!-- WISHES -->
+    <section class="px-8 py-20">
+        <h3 class="font-cinzel text-center text-xl tracking-widest text-[var(--ink)] mb-3">Liber Hospitum</h3>
+        <p class="text-center font-cormorant italic text-sm text-stone-500 mb-10">Scribe benedictionem tuam</p>
+
+        <form id="wish-form" class="engrave-border p-6 mb-10 space-y-5">
+            <input type="text" id="wish-name" required placeholder="Nomen Tuum" class="w-full bg-transparent border-b border-[var(--line)] py-3 text-[15px] font-cormorant focus:outline-none focus:border-[var(--bronze)] transition">
+            <select id="wish-status" class="w-full bg-transparent border-b border-[var(--line)] py-3 text-[15px] font-cormorant focus:outline-none">
+                <option value="Hadir">Adero — Hadir</option>
+                <option value="Tidak Hadir">Non Adero — Berhalangan</option>
+            </select>
+            <textarea id="wish-msg" rows="4" required placeholder="Benedictio..." class="w-full bg-transparent border border-[var(--line)] p-4 text-[15px] font-cormorant focus:outline-none focus:border-[var(--bronze)] transition resize-none"></textarea>
+            <button type="submit" class="btn-imperial w-full">Mittere</button>
+        </form>
+
+        <div id="wish-list" class="space-y-5 max-h-[400px] overflow-y-auto pr-1"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-16 text-center bg-[var(--paper)] border-t border-[var(--line)]">
+        <p class="font-script text-2xl text-[var(--bronze)] mb-4">Gratias</p>
+        <h2 id="footer-names" class="font-cinzel text-2xl text-[var(--ink)] tracking-widest mb-6"></h2>
+        <p class="text-[10px] uppercase tracking-[0.6em] text-stone-400">Omah Aksara Atelier</p>
+    </footer>
+</main>
+
+<!-- MUSIC ORB -->
+<div id="music-btn" class="music-orb hidden" aria-label="Putar Musik">
+    <div id="orb-ring" class="orb-ring">
+        <i id="music-icon" class="fa-solid fa-play text-[10px] text-[var(--ink)]"></i>
+    </div>
+</div>
+<audio id="audio" loop></audio>
+
+<script>
+    const p = new URLSearchParams(location.search);
+    const slug = p.get('c') || 'dion-clara';
+    const guest = p.get('to')?.replace(/\+/g,' ') || 'Hospes Carissime';
+    const path = `../../public/clients/${slug}/`;
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+
+    // REVEAL OBSERVER RINGAN
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    fetch(`${path}data.json`).then(r => r.json()).then(d => {
+        const { couple, events, gallery, loveStory, quote, logistics } = d;
+        const names = `${couple.groom.nickname} & ${couple.bride.nickname}`;
+
+        // COVER + HERO
+        document.getElementById('cover-img').src = path + gallery.heroImage;
+        document.getElementById('hero-img').src = path + gallery.heroImage;
+        document.getElementById('cover-names').textContent = names;
+        document.getElementById('hero-names').textContent = names;
+        document.getElementById('cover-guest').textContent = guest;
+        document.getElementById('monogram').textContent = `${couple.groom.nickname[0]} & ${couple.bride.nickname[0]}`;
+        document.getElementById('footer-names').textContent = names;
+
+        // QUOTE
+        if(quote?.text) {
+            document.getElementById('quote-text').textContent = quote.text;
+            document.getElementById('quote-source').textContent = quote.source || '';
+        }
+
+        // COUPLE
+        const renderPerson = (el, person, align) => {
+            el.innerHTML = `
+                <div class="reveal">
+                    <img src="${path + person.image}" class="w-full aspect-[3/4] object-cover mb-6 shadow-xl" loading="lazy">
+                    <div class="${align === 'right'? 'text-right' : ''}">
+                        <p class="font-cinzel text-[12px] uppercase tracking-[0.5em] text-[var(--bronze)] mb-3">${align === 'left'? 'Sponsus' : 'Sponsa'}</p>
+                        <h4 class="font-cinzel text-2xl text-[var(--ink)] mb-2">${person.name}</h4>
+                        <p class="font-cormorant text-sm italic text-stone-600 leading-relaxed">
+                            Filius ${person.father}<br>et ${person.mother}
+                        </p>
+                        ${person.instagram? `<a href="https://instagram.com/${person.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-[12px] tracking-[0.3em] uppercase text-[var(--bronze)]"><i class="fa-brands fa-instagram mr-1"></i>${person.instagram}</a>` : ''}
+                    </div>
+                </div>`;
+        };
+        renderPerson(document.getElementById('groom-block'), couple.groom, 'left');
+        renderPerson(document.getElementById('bride-block'), couple.bride, 'right');
+
+        // STORY
+        if(loveStory?.length) {
+            document.getElementById('story-wrap').classList.remove('hidden');
+            loveStory.forEach(s => {
+                document.getElementById('story-list').innerHTML += `
+                    <div class="reveal">
+                        <p class="font-cinzel text-[12px] text-[var(--bronze)] tracking-[0.4em] mb-2">${s.date || s.year}</p>
+                        <h6 class="font-cinzel text-lg text-[var(--ink)] mb-2">${s.title}</h6>
+                        <p class="font-cormorant text-[15px] text-stone-600 italic leading-relaxed">${s.description}</p>
+                    </div>`;
+            });
+        }
+
+        // EVENTS
+        if(events?.length) {
+            document.getElementById('event-wrap').classList.remove('hidden');
+            events.forEach(ev => {
+                document.getElementById('event-list').innerHTML += `
+                    <div class="engrave-border p-8 text-center mb-6 reveal">
+                        <p class="font-script text-3xl text-[var(--bronze)] mb-3">${ev.title}</p>
+                        <p class="font-cinzel text-base text-[var(--ink)] mb-2">${new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="font-cormorant text-sm text-stone-600 mb-5">${ev.startTime} — ${ev.endTime} ${ev.timezone || 'WIB'}</p>
+                        <p class="text-[13px] text-stone-500 leading-relaxed mb-6 px-2">${ev.address}</p>
+                        <a href="${ev.googleMaps}" target="_blank" class="btn-imperial text-[11px] inline-flex">Tabula</a>
+                    </div>`;
+            });
+
+            // COUNTDOWN
+            const target = new Date(`${events[0].date}T${events[0].startTime}:00`).getTime();
+            const cd = setInterval(() => {
+                const d = target - Date.now();
+                if(d < 0) { clearInterval(cd); return; }
+                const days = Math.floor(d / 864e5);
+                const hrs = Math.floor((d % 864e5) / 36e5);
+                const min = Math.floor((d % 36e5) / 6e4);
+                const sec = Math.floor((d % 6e4) / 1e3);
+                document.getElementById('countdown').innerHTML = `
+                    <div><span class="font-cinzel text-2xl text-[var(--ink)]">${days}</span><span class="block text-[10px] text-stone-400 uppercase tracking-widest mt-1">Dies</span></div>
+                    <div><span class="font-cinzel text-2xl text-[var(--ink)]">${hrs}</span><span class="block text-[10px] text-stone-400 uppercase tracking-widest mt-1">Horae</span></div>
+                    <div><span class="font-cinzel text-2xl text-[var(--ink)]">${min}</span><span class="block text-[10px] text-stone-400 uppercase tracking-widest mt-1">Minuta</span></div>
+                    <div><span class="font-cinzel text-2xl text-[var(--ink)]">${sec}</span><span class="block text-[10px] text-stone-400 uppercase tracking-widest mt-1">Secunda</span></div>`;
+            }, 1000);
+            document.getElementById('countdown-wrap').classList.remove('hidden');
+        }
+
+        // GALLERY
+        if(gallery?.album?.length) {
+            document.getElementById('gallery-wrap').classList.remove('hidden');
+            gallery.album.forEach(img => {
+                document.getElementById('gallery-grid').innerHTML += `<img src="${path + img}" class="w-full h-full object-cover reveal" loading="lazy">`;
+            });
+        }
+
+        // RSVP
+        if(logistics?.rsvpWaNumber) {
+            document.getElementById('rsvp-wrap').classList.remove('hidden');
+            document.getElementById('guest-note').textContent = logistics.guestNote || '';
+            document.getElementById('rsvp-link').href = `https://wa.me/${logistics.rsvpWaNumber}?text=Salve, ego ${encodeURIComponent(guest)} confirmo praesentiam meam.`;
+        }
+
+        // LOAD WISHES
+        const loadWishes = () => {
+            fetch(`${SCRIPT_URL}?id_klien=${encodeURIComponent(slug)}`)
+          .then(r => r.json())
+          .then(data => {
+                const box = document.getElementById('wish-list');
+                box.innerHTML = '';
+                if(!data?.length) {
+                    box.innerHTML = '<p class="text-center font-cormorant italic text-sm text-stone-400">Nondum sunt benedictiones</p>';
+                    return;
+                }
+                data.forEach(w => {
+                    const badge = w.kehadiran === 'Hadir'? 'bg-[var(--bronze)]/10 text-[var(--bronze)]' : 'bg-stone-100 text-stone-400';
+                    box.innerHTML += `
+                        <div class="engrave-border p-5 text-left reveal">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="font-cinzel text-base text-[var(--ink)]">${w.nama}</p>
+                                <span class="text-[10px] px-3 py-1 ${badge} uppercase tracking-wider">${w.kehadiran}</span>
+                            </div>
+                            <p class="font-cormorant text-[15px] text-stone-600 italic leading-relaxed">${w.ucapan}</p>
+                            <p class="text-[10px] text-stone-400 mt-2 font-mono">${new Date(w.timestamp).toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})}</p>
+                        </div>`;
+                });
+                document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+            });
+        };
+        loadWishes();
+
+        // SUBMIT WISH
+        document.getElementById('wish-form').onsubmit = e => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.disabled = true; btn.textContent = 'Mittitur...';
+
+            fetch(SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id_klien: slug,
+                    nama: document.getElementById('wish-name').value,
+                    ucapan: document.getElementById('wish-msg').value,
+                    kehadiran: document.getElementById('wish-status').value
+                })
+            }).then(() => {
+                e.target.reset();
+                alert('Gratias! Benedictio tua recepta est.');
+                setTimeout(loadWishes, 1500);
+            }).finally(() => {
+                btn.disabled = false; btn.textContent = 'Mittere';
+            });
+        };
+
+        // MUSIC
+        if(logistics?.music) {
+            const audio = document.getElementById('audio');
+            audio.src = path + logistics.music;
+            document.getElementById('music-btn').classList.remove('hidden');
+            document.getElementById('music-btn').onclick = () => {
+                const icon = document.getElementById('music-icon');
+                const ring = document.getElementById('orb-ring');
+                if(audio.paused) {
+                    audio.play();
+                    icon.className = 'fa-solid fa-pause text-[10px] text-[var(--ink)]';
+                    ring.classList.remove('paused');
+                } else {
+                    audio.pause();
+                    icon.className = 'fa-solid fa-play text-[10px] text-[var(--ink)]';
+                    ring.classList.add('paused');
+                }
+            };
+        }
+
+        // INIT REVEAL
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    });
+
+    // OPEN INVITE + AUTO SCROLL
+    function openInvite() {
+        document.getElementById('cover').classList.add('hidden');
+        document.getElementById('app').style.opacity = '1';
+        document.getElementById('audio').play().catch(()=>{});
+
+        // AUTO SCROLL KE QUOTE SETELAH 1.3 DETIK
+        setTimeout(() => {
+            document.getElementById('quote-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 1300);
+
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    }
+</script>
+
+</body>
+</html>

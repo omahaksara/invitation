@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WA LOVE — Digital Invitation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#0b141a;
+    --header:#202c33;
+    --bubble-left:#202c33;
+    --bubble-right:#005c4b;
+    --text:#e9edef;
+    --accent:#25d366;
+    --line:#2a3942;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Poppins',sans-serif;
+    overflow-x:hidden;
+}
+
+/* header */
+.wa-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+
+    background:var(--header);
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+/* bubble */
+.bubble{
+    max-width:85%;
+    padding:12px 14px;
+    border-radius:18px;
+    position:relative;
+    animation:fadeUp .7s ease forwards;
+    opacity:0;
+}
+
+.left{
+    background:var(--bubble-left);
+    border-top-left-radius:6px;
+}
+
+.right{
+    background:var(--bubble-right);
+    border-top-right-radius:6px;
+    margin-left:auto;
+}
+
+.time{
+    font-size:10px;
+    opacity:.5;
+    text-align:right;
+    margin-top:6px;
+}
+
+/* animation */
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* typing */
+.typing{
+    display:flex;
+    gap:4px;
+    align-items:center;
+}
+
+.typing span{
+    width:7px;
+    height:7px;
+    border-radius:999px;
+    background:#aaa;
+
+    animation:typing .8s infinite;
+}
+
+.typing span:nth-child(2){
+    animation-delay:.2s;
+}
+
+.typing span:nth-child(3){
+    animation-delay:.4s;
+}
+
+@keyframes typing{
+    0%,100%{
+        opacity:.3;
+    }
+    50%{
+        opacity:1;
+    }
+}
+
+/* section */
+.section{
+    padding:24px 16px;
+}
+
+/* profile */
+.profile{
+    width:52px;
+    height:52px;
+    border-radius:999px;
+    object-fit:cover;
+}
+
+/* card */
+.card{
+    background:#111b21;
+    border:1px solid rgba(255,255,255,.05);
+    border-radius:24px;
+}
+
+/* countdown */
+.count{
+    width:68px;
+    height:68px;
+    border-radius:20px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    background:#111b21;
+}
+
+/* button */
+.btn{
+    background:var(--accent);
+    color:white;
+
+    padding:14px 24px;
+
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:600;
+
+    display:inline-block;
+}
+
+/* gallery */
+.gallery{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.gallery img{
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    border-radius:20px;
+}
+
+/* audio */
+.voice{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.wave{
+    flex:1;
+    height:4px;
+    border-radius:999px;
+    background:rgba(255,255,255,.15);
+    position:relative;
+    overflow:hidden;
+}
+
+.wave::after{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%;
+    width:40%;
+    background:var(--accent);
+}
+
+/* reveal */
+.reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1s;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* hide scrollbar */
+::-webkit-scrollbar{
+    width:0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="wa-header px-4 py-3 flex items-center gap-3">
+
+    <img id="headerPhoto"
+         class="profile"
+         src="">
+
+    <div>
+
+        <h2 id="headerName"
+            class="font-semibold text-sm">
+        </h2>
+
+        <p class="text-xs opacity-60">
+            online
+        </p>
+
+    </div>
+
+</div>
+
+<!-- CHAT -->
+<div class="max-w-md mx-auto pb-40">
+
+    <!-- typing -->
+    <section class="section">
+
+        <div class="bubble left max-w-[120px]">
+
+            <div class="typing">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- intro -->
+    <section class="section space-y-4">
+
+        <div class="bubble left">
+
+            Assalamu'alaikum 🤍
+
+            <div class="time">
+                08:10 ✓✓
+            </div>
+
+        </div>
+
+        <div class="bubble left">
+
+            Dengan penuh kebahagiaan kami ingin mengundang kamu ke hari spesial kami ✨
+
+            <div class="time">
+                08:11 ✓✓
+            </div>
+
+        </div>
+
+        <div class="bubble right">
+
+            Wahh akhirnya 😭
+
+            <div class="time">
+                08:12 ✓✓
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HERO -->
+    <section class="section reveal">
+
+        <div class="card p-6 text-center">
+
+            <img id="heroImage"
+                 class="w-32 h-32 rounded-full object-cover mx-auto border-4 border-[#25d366]/20">
+
+            <h1 id="heroNames"
+                class="text-4xl font-bold mt-6">
+            </h1>
+
+            <p id="heroDate"
+               class="opacity-60 mt-4">
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- COUPLE -->
+    <section class="section reveal">
+
+        <div class="space-y-5">
+
+            <div class="bubble left">
+
+                <p class="text-xs opacity-50 mb-2">
+                    Groom
+                </p>
+
+                <h3 id="groomName"
+                    class="text-2xl font-semibold">
+                </h3>
+
+                <p id="groomParent"
+                   class="opacity-70 mt-2 text-sm">
+                </p>
+
+                <div class="time">
+                    08:20 ✓✓
+                </div>
+
+            </div>
+
+            <div class="bubble right">
+
+                <p class="text-xs opacity-50 mb-2">
+                    Bride
+                </p>
+
+                <h3 id="brideName"
+                    class="text-2xl font-semibold">
+                </h3>
+
+                <p id="brideParent"
+                   class="opacity-80 mt-2 text-sm">
+                </p>
+
+                <div class="time">
+                    08:21 ✓✓
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- VOICE NOTE -->
+    <section class="section reveal">
+
+        <div class="bubble left">
+
+            <div class="voice">
+
+                <div class="text-xl">
+                    ▶
+                </div>
+
+                <div class="wave"></div>
+
+                <div class="text-xs opacity-60">
+                    0:12
+                </div>
+
+            </div>
+
+            <div class="time">
+                voice message ✓✓
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="section reveal">
+
+        <div class="card p-6 text-center">
+
+            <p class="text-xs uppercase tracking-[.3em] opacity-40 mb-8">
+                countdown
+            </p>
+
+            <div class="flex justify-center gap-3">
+
+                <div class="count">
+                    <span id="days" class="font-bold text-xl">00</span>
+                    <span class="text-[10px] opacity-40">Day</span>
+                </div>
+
+                <div class="count">
+                    <span id="hours" class="font-bold text-xl">00</span>
+                    <span class="text-[10px] opacity-40">Hour</span>
+                </div>
+
+                <div class="count">
+                    <span id="minutes" class="font-bold text-xl">00</span>
+                    <span class="text-[10px] opacity-40">Min</span>
+                </div>
+
+                <div class="count">
+                    <span id="seconds" class="font-bold text-xl">00</span>
+                    <span class="text-[10px] opacity-40">Sec</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- EVENTS -->
+    <section class="section reveal">
+
+        <div id="eventWrapper"
+             class="space-y-5">
+        </div>
+
+    </section>
+
+    <!-- STORY -->
+    <section id="storySection"
+             class="section reveal hidden">
+
+        <div id="storyWrapper"
+             class="space-y-5">
+        </div>
+
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallerySection"
+             class="section reveal hidden">
+
+        <div class="gallery"
+             id="galleryGrid">
+        </div>
+
+    </section>
+
+    <!-- VIDEO -->
+    <section id="videoSection"
+             class="section reveal hidden">
+
+        <div class="card overflow-hidden">
+
+            <div class="aspect-video">
+
+                <iframe id="youtubeFrame"
+                        class="w-full h-full"
+                        frameborder="0"
+                        allowfullscreen>
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- GIFT -->
+    <section id="giftSection"
+             class="section reveal hidden">
+
+        <div id="giftWrapper"
+             class="space-y-5">
+        </div>
+
+    </section>
+
+    <!-- RSVP -->
+    <section class="section reveal">
+
+        <div class="card p-8 text-center">
+
+            <h2 class="text-3xl font-bold leading-tight">
+                Sampai Jumpa
+                <br>
+                Di Hari Bahagia Kami 🤍
+            </h2>
+
+            <p id="guestNote"
+               class="opacity-60 mt-6 leading-relaxed">
+            </p>
+
+            <a id="rsvpBtn"
+               target="_blank"
+               class="btn mt-10 inline-block">
+
+                OPEN CHAT →
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+<audio id="music" loop></audio>
+
+<script>
+
+/* PARAM */
+const params = new URLSearchParams(window.location.search);
+
+const clientSlug = params.get('c');
+
+const guest =
+params.get('to')?.replace(/\+/g,' ')
+|| 'Tamu Undangan';
+
+const basePath =
+`../../public/clients/${clientSlug}/`;
+
+/* FETCH */
+fetch(`${basePath}data.json`)
+
+.then(res => res.json())
+
+.then(data => {
+
+    const groom = data.couple.groom;
+    const bride = data.couple.bride;
+
+    const pair =
+    `${groom.nickname} & ${bride.nickname}`;
+
+    /* header */
+    document.getElementById('headerPhoto')
+    .src =
+    basePath + data.gallery.heroImage;
+
+    document.getElementById('headerName')
+    .textContent =
+    pair;
+
+    /* hero */
+    document.getElementById('heroImage')
+    .src =
+    basePath + data.gallery.heroImage;
+
+    document.getElementById('heroNames')
+    .textContent =
+    pair;
+
+    const eventDate =
+    new Date(data.events[0].date);
+
+    const formattedDate =
+    eventDate.toLocaleDateString(
+    'id-ID',
+    {
+        weekday:'long',
+        day:'numeric',
+        month:'long',
+        year:'numeric'
+    });
+
+    document.getElementById('heroDate')
+    .textContent =
+    formattedDate;
+
+    /* couple */
+    document.getElementById('groomName')
+    .textContent =
+    groom.name;
+
+    document.getElementById('groomParent')
+    .textContent =
+    `Putra dari ${groom.father} & ${groom.mother}`;
+
+    document.getElementById('brideName')
+    .textContent =
+    bride.name;
+
+    document.getElementById('brideParent')
+    .textContent =
+    `Putri dari ${bride.father} & ${bride.mother}`;
+
+    /* events */
+    data.events.forEach(event => {
+
+        document.getElementById('eventWrapper')
+        .innerHTML += `
+
+        <div class="bubble left">
+
+            <p class="text-xs opacity-50 mb-2">
+                ${event.title}
+            </p>
+
+            <h3 class="text-2xl font-semibold">
+                ${event.startTime} ${event.timezone}
+            </h3>
+
+            <p class="mt-3 opacity-70 text-sm">
+                ${event.address}
+            </p>
+
+            ${
+                event.googleMaps
+                ?
+
+                `<a href="${event.googleMaps}"
+                    target="_blank"
+                    class="inline-block mt-4
+                           text-[#25d366] text-sm">
+
+                    Open Maps →
+
+                </a>`
+
+                : ''
+            }
+
+            <div class="time">
+                event info ✓✓
+            </div>
+
+        </div>
+        `;
+    });
+
+    /* story */
+    if(data.loveStory?.length){
+
+        document.getElementById('storySection')
+        .classList.remove('hidden');
+
+        data.loveStory.forEach((story,i)=>{
+
+            document.getElementById('storyWrapper')
+            .innerHTML += `
+
+            <div class="bubble
+                        ${i % 2 ? 'right' : 'left'}">
+
+                <p class="text-xs opacity-50 mb-2">
+                    ${story.date}
+                </p>
+
+                <h3 class="font-semibold mb-2">
+                    ${story.title}
+                </h3>
+
+                <p class="leading-relaxed text-sm">
+                    ${story.description}
+                </p>
+
+                <div class="time">
+                    ✓✓
+                </div>
+
+            </div>
+            `;
+        });
+    }
+
+    /* gallery */
+    if(data.gallery.album?.length){
+
+        document.getElementById('gallerySection')
+        .classList.remove('hidden');
+
+        data.gallery.album.forEach(img => {
+
+            document.getElementById('galleryGrid')
+            .innerHTML += `
+
+            <img src="${basePath + img}"
+                 loading="lazy"
+                 onerror="this.style.display='none'">
+
+            `;
+        });
+    }
+
+    /* youtube */
+    if(data.gallery.videoYoutubeId){
+
+        document.getElementById('videoSection')
+        .classList.remove('hidden');
+
+        document.getElementById('youtubeFrame')
+        .src =
+        `https://www.youtube.com/embed/${data.gallery.videoYoutubeId}`;
+    }
+
+    /* gift */
+    if(data.digitalGift?.length){
+
+        document.getElementById('giftSection')
+        .classList.remove('hidden');
+
+        data.digitalGift.forEach(gift => {
+
+            document.getElementById('giftWrapper')
+            .innerHTML += `
+
+            <div class="bubble right">
+
+                <p class="text-xs opacity-50 mb-2">
+                    ${gift.provider}
+                </p>
+
+                <h3 class="text-2xl font-semibold">
+                    ${gift.accountNumber}
+                </h3>
+
+                <p class="opacity-70 mt-2 text-sm">
+                    a.n ${gift.accountHolder}
+                </p>
+
+                <button
+                    onclick="copyRek('${gift.accountNumber}',this)"
+                    class="btn mt-5">
+
+                    COPY
+
+                </button>
+
+                <div class="time">
+                    payment ✓✓
+                </div>
+
+            </div>
+            `;
+        });
+    }
+
+    /* note */
+    document.getElementById('guestNote')
+    .textContent =
+    data.logistics.guestNote;
+
+    /* rsvp */
+    document.getElementById('rsvpBtn')
+    .href =
+    `https://wa.me/${data.logistics.rsvpWaNumber}?text=Halo saya ${guest} konfirmasi hadir`;
+
+    /* music */
+    if(data.logistics.music){
+
+        const audio =
+        document.getElementById('music');
+
+        audio.src =
+        basePath + data.logistics.music;
+
+        document.body.onclick = () => {
+            audio.play().catch(()=>{});
+        };
+    }
+
+    /* countdown */
+    const target =
+    new Date(
+    `${data.events[0].date}T${data.events[0].startTime}:00`
+    ).getTime();
+
+    setInterval(()=>{
+
+        const now =
+        new Date().getTime();
+
+        const dist =
+        target - now;
+
+        if(dist < 0) return;
+
+        const d =
+        Math.floor(
+        dist / (1000*60*60*24));
+
+        const h =
+        Math.floor(
+        (dist % (1000*60*60*24))
+        / (1000*60*60));
+
+        const m =
+        Math.floor(
+        (dist % (1000*60*60))
+        / (1000*60));
+
+        const s =
+        Math.floor(
+        (dist % (1000*60))
+        / 1000);
+
+        document.getElementById('days')
+        .innerHTML = d;
+
+        document.getElementById('hours')
+        .innerHTML = h;
+
+        document.getElementById('minutes')
+        .innerHTML = m;
+
+        document.getElementById('seconds')
+        .innerHTML = s;
+
+    },1000);
+
+})
+
+.catch(err => {
+
+    console.error(err);
+
+    document.body.innerHTML = `
+    <div class="min-h-screen
+                flex items-center
+                justify-center
+                text-center
+                p-8">
+
+        <div>
+
+            <h2 class="text-3xl font-bold mb-4">
+                DATA NOT FOUND
+            </h2>
+
+            <p class="opacity-50">
+                pastikan slug client benar
+            </p>
+
+        </div>
+
+    </div>
+    `;
+});
+
+/* reveal */
+const observer =
+new IntersectionObserver(entries => {
+
+    entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+
+            entry.target.classList.add('active');
+
+        }
+
+    });
+
+},{threshold:.15});
+
+document.querySelectorAll('.reveal')
+.forEach(el => {
+
+    observer.observe(el);
+
+});
+
+/* copy */
+function copyRek(text,btn){
+
+    navigator.clipboard.writeText(text);
+
+    btn.innerHTML = 'COPIED';
+
+    setTimeout(()=>{
+
+        btn.innerHTML = 'COPY';
+
+    },2000);
+}
+
+</script>
+
+</body>
+</html>

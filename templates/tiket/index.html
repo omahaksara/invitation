@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Entry Pass — Omah Aksara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400;1,700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --card-color: #121212;
+            --theme-color: #d4af37;
+            --text-color: #e5e5e5;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Black_Marble_Texture.jpg');
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-display { font-family: 'Cinzel', serif; }
+        
+        .polaroid { background: white; padding: 10px 10px 35px 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        .reveal { opacity: 0; transform: translateY(30px); }
+        
+        /* Custom Scrollbar untuk Box Ucapan */
+        #ucapan-box::-webkit-scrollbar { width: 4px; }
+        #ucapan-box::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center bg-zinc-950 px-6">
+        <div class="relative border border-zinc-800 bg-zinc-900/30 backdrop-blur-xl w-full max-w-sm rounded-2xl p-8 shadow-2xl overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-500 via-yellow-600 to-amber-700"></div>
+            
+            <p class="text-[9px] tracking-[0.4em] uppercase text-zinc-500 font-bold">Exclusive Entry Pass</p>
+            <h1 id="cover-names" class="font-serif text-4xl italic text-white my-6 tracking-tight">Loading...</h1>
+            
+            <div class="border border-zinc-800/80 bg-black/40 rounded-xl p-5 my-6 text-center">
+                <p class="text-[9px] tracking-widest uppercase text-zinc-600 font-bold mb-2">Admitting Guest</p>
+                <p id="cover-guest" class="text-lg font-medium text-amber-200/90 tracking-wide">Tamu Undangan</p>
+            </div>
+            
+            <button onclick="openInvitation()" class="w-full mt-4 border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500 hover:text-black text-amber-400 font-bold rounded-xl py-3.5 text-xs uppercase tracking-[0.2em] transition-all duration-500">
+                Open Experience
+            </button>
+        </div>
+    </div>
+
+    <main id="app" class="max-w-md mx-auto opacity-0 min-h-screen pb-24">
+        
+        <section class="relative flex flex-col items-center justify-end min-h-[90vh] p-8 text-center border-b-2 border-dashed border-zinc-900">
+            <img id="hero-img" src="" class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale">
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent"></div>
+            
+            <div class="relative z-10 w-full bg-zinc-900/40 border border-zinc-900 p-6 rounded-2xl backdrop-blur-md mb-4">
+                <p class="text-[9px] tracking-[0.5em] uppercase text-zinc-500 font-bold mb-2">VIP Announcement</p>
+                <h2 id="hero-names" class="font-serif text-5xl italic text-white my-4 tracking-tight"></h2>
+                <div class="w-12 h-px bg-zinc-800 mx-auto my-4"></div>
+                <p id="hero-date" class="text-[10px] tracking-widest uppercase text-amber-500/80 font-semibold"></p>
+            </div>
+        </section>
+
+        <section class="px-8 py-20 text-center space-y-16">
+            <div>
+                <p class="text-[9px] tracking-[0.3em] uppercase text-zinc-500 font-bold mb-6">— Admit One: The Groom —</p>
+                <div id="groom-section" class="reveal space-y-4"></div>
+            </div>
+            <div class="text-2xl text-zinc-700 font-serif italic">&</div>
+            <div>
+                <p class="text-[9px] tracking-[0.3em] uppercase text-zinc-500 font-bold mb-6">— Admit One: The Bride —</p>
+                <div id="bride-section" class="reveal space-y-4"></div>
+            </div>
+        </section>
+
+        <section class="px-8 py-20 bg-zinc-900/20 border-y border-dashed border-zinc-900">
+            <h3 class="font-serif text-3xl italic text-center text-white mb-10">The Celebration</h3>
+            <div id="event-details" class="space-y-8"></div>
+            
+            <div class="mt-16 text-center reveal">
+                <p class="text-[9px] tracking-[0.4em] uppercase text-zinc-500 mb-6 font-bold">Time Countdown</p>
+                <div id="countdown" class="flex justify-center space-x-6 bg-zinc-900/30 border border-zinc-900/60 p-4 rounded-xl"></div>
+            </div>
+        </section>
+
+        <section id="gallery-section" class="py-20 px-4 hidden">
+            <h3 class="font-serif text-3xl italic mb-10 text-center text-white">Visual Archive</h3>
+            <div id="gallery-grid" class="grid grid-cols-2 gap-2 rounded-xl overflow-hidden bg-zinc-900/10"></div>
+        </section>
+
+        <section class="px-8 py-20 border-t border-zinc-900 bg-zinc-900/10">
+            <h3 class="font-serif text-3xl italic mb-10 text-center text-white">RSVP & Doa Restu</h3>
+            
+            <form id="form-rsvp" onsubmit="kirimUcapanSheet(event)" class="space-y-4 text-left mb-10">
+                <div class="space-y-1">
+                    <label class="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">Nama Tamu</label>
+                    <input type="text" id="rsvp-nama" class="w-full bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-zinc-700" required />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">Konfirmasi Kehadiran</label>
+                    <select id="rsvp-kehadiran" class="w-full bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-zinc-700" required>
+                        <option value="Hadir" class="bg-zinc-950">Hadir</option>
+                        <option value="Tidak Hadir" class="bg-zinc-950">Berhalangan Hadir</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">Doa Restu</label>
+                    <textarea id="rsvp-ucapan" rows="3" class="w-full bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-zinc-700" placeholder="Tulis ucapan selamat..." required></textarea>
+                </div>
+                <button type="submit" class="w-full text-center bg-zinc-100 hover:bg-white text-black text-[11px] tracking-[.2em] font-bold uppercase py-3.5 rounded-xl transition-all">
+                    Kirim Pass Ucapan
+                </button>
+            </form>
+
+            <div id="ucapan-box" class="space-y-3 max-h-[300px] overflow-y-auto pr-1"></div>
+        </section>
+
+        <section id="gift-section" class="px-8 py-20 border-t border-zinc-900 text-center hidden">
+            <h3 class="font-serif text-3xl italic mb-10 text-white">Digital Gift</h3>
+            <div id="gift-details" class="space-y-4"></div>
+        </section>
+
+        <footer class="py-16 text-center border-t border-zinc-950 bg-black/40">
+            <p class="text-[9px] tracking-[.5em] text-zinc-600 uppercase font-bold">Presented By Omah Aksara</p>
+            <h4 id="footer-names" class="font-serif text-3xl italic text-zinc-400 mt-2"></h4>
+            <p class="text-[7px] tracking-[0.3em] font-mono text-zinc-700 mt-8 uppercase">VIP PASS. ALL RIGHTS RESERVED.</p>
+        </footer>
+    </main>
+
+    <audio id="audio" loop></audio>
+
+    <script>
+        // Konfigurasi API Google Sheets Utama Anda
+        const URL_GOOGLE_SHEETS_API = "https://script.google.com/macros/s/1vaauKIFeh_gK_NDUYLDzdosn05vf1cfNThCypcWvPy0/exec";
+
+        const params = new URLSearchParams(window.location.search);
+        const clientSlug = params.get('c') || 'budi-ani'; 
+        const guestName = params.get('to')?.replace(/\+/g, ' ') || 'Tamu Undangan';
+        
+        // Memastikan Jalur Akses Absolut Terarah Aman dari Domain Utama GitHub Pages
+        const basePath = `/invitation/public/clients/${clientSlug}/`;
+        
+        document.getElementById('rsvp-nama').value = guestName !== 'Tamu Undangan' ? guestName : '';
+
+        fetch(`${basePath}data.json`).then(res => res.json()).then(data => {
+            const g = data.couple.groom;
+            const b = data.couple.bride;
+            const pair = `${g.nickname} & ${b.nickname}`;
+            const tglAcara = new Date(data.events[0].date);
+            const stringTanggal = tglAcara.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+            // 1. INJEKSI DATA ATAS & COVER
+            document.getElementById('cover-names').textContent = pair;
+            document.getElementById('cover-guest').textContent = guestName;
+            document.getElementById('hero-names').textContent = pair;
+            document.getElementById('hero-date').textContent = stringTanggal;
+            document.getElementById('footer-names').textContent = pair;
+            
+            // Atur Foto Sampul Belakang Hero VIP
+            document.getElementById('hero-img').src = basePath + (data.gallery.heroImage || 'foto-sampul.jpg');
+
+            // 2. RENDERING MEMPELAI (DENGAN PENANGANAN NAMA DEFAULT BILA TIDAK DISET)
+            const groomImg = basePath + (g.image || 'foto-pria.jpg');
+            document.getElementById('groom-section').innerHTML = `
+                <div class="polaroid -rotate-2 w-56 mx-auto">
+                    <img src="${groomImg}" class="w-full h-64 object-cover grayscale">
+                    <p class="text-center text-xs font-serif italic text-zinc-900 mt-3">Mr. Groom</p>
+                </div>
+                <h4 class="font-serif text-2xl text-white italic mt-4">${g.name}</h4>
+                <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Putra dari Bapak ${g.father} & Ibu ${g.mother}</p>
+            `;
+
+            const brideImg = basePath + (b.image || 'foto-wanita.jpg');
+            document.getElementById('bride-section').innerHTML = `
+                <div class="polaroid rotate-2 w-56 mx-auto">
+                    <img src="${brideImg}" class="w-full h-64 object-cover grayscale">
+                    <p class="text-center text-xs font-serif italic text-zinc-900 mt-3">Mrs. Bride</p>
+                </div>
+                <h4 class="font-serif text-2xl text-white italic mt-4">${b.name}</h4>
+                <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Putri dari Bapak ${b.father} & Ibu ${b.mother}</p>
+            `;
+
+            // 3. EVENT TICKET LISTING
+            data.events.forEach(e => {
+                const eDate = new Date(e.date);
+                document.getElementById('event-details').innerHTML += `
+                    <div class="border border-zinc-900 bg-zinc-900/30 p-6 rounded-xl text-center relative overflow-hidden">
+                        <p class="text-[9px] tracking-[0.3em] uppercase text-amber-500/80 font-bold mb-3">${e.title}</p>
+                        <p class="font-serif text-2xl text-white italic">${eDate.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</p>
+                        <p class="text-xs text-zinc-400 my-2">${e.startTime} - ${e.endTime} ${e.timezone || 'WIB'}</p>
+                        <p class="text-xs text-zinc-500 max-w-xs mx-auto leading-relaxed">${e.address}</p>
+                        ${e.googleMaps ? `<a href="${e.googleMaps}" target="_blank" class="inline-block mt-4 text-[9px] border border-zinc-800 text-zinc-400 px-4 py-1.5 rounded-full tracking-widest uppercase hover:bg-white hover:text-black transition">Peta Lokasi</a>` : ''}
+                    </div>
+                `;
+            });
+
+            // 4. ARCHIVE ALBUM GALLERY
+            if(data.gallery.album && data.gallery.album.length > 0) {
+                const gallSec = document.getElementById('gallery-section');
+                const gallGrid = document.getElementById('gallery-grid');
+                gallSec.classList.remove('hidden');
+                data.gallery.album.forEach(img => {
+                    gallGrid.innerHTML += `<img src="${basePath}${img}" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition duration-700">`;
+                });
+            }
+
+            // 5. DIGITAL GIFTS TICKET
+            if(data.digitalGift && data.digitalGift.length > 0) {
+                document.getElementById('gift-section').classList.remove('hidden');
+                data.digitalGift.forEach(gift => {
+                    document.getElementById('gift-details').innerHTML += `
+                        <div class="bg-zinc-900/30 border border-zinc-900 p-5 rounded-xl max-w-xs mx-auto">
+                            <p class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1">${gift.provider}</p>
+                            <p class="font-mono text-xl text-white tracking-wider">${gift.accountNumber}</p>
+                            <p class="text-[10px] text-zinc-400 mt-1">a.n ${gift.accountHolder}</p>
+                            <button onclick="navigator.clipboard.writeText('${gift.accountNumber}'); alert('Nomor rekening berhasil disalin!')" class="mt-3 text-[8px] bg-zinc-900 text-zinc-400 border border-zinc-800 px-4 py-1 rounded-md uppercase tracking-wider">Salin No.Rek</button>
+                        </div>
+                    `;
+                });
+            }
+
+            // 6. AUDIO SETTING
+            if(data.logistics && data.logistics.music) {
+                document.getElementById('audio').src = basePath + data.logistics.music;
+            }
+
+            // 7. TICKING COUNTDOWN
+            const targetDate = new Date(`${data.events[0].date}T${data.events[0].startTime}:00`).getTime();
+            setInterval(() => {
+                const dist = targetDate - new Date().getTime();
+                if(dist < 0) return;
+                const d = Math.floor(dist / 864e5), h = Math.floor((dist % 864e5) / 36e5), m = Math.floor((dist % 36e5) / 6e4), s = Math.floor((dist % 6e4) / 1000);
+                document.getElementById('countdown').innerHTML = `
+                    <div class="text-center"><span class="font-serif text-2xl text-white block">${d}</span><span class="text-[8px] uppercase text-zinc-500">Hari</span></div>
+                    <div class="text-center"><span class="font-serif text-2xl text-white block">${h}</span><span class="text-[8px] uppercase text-zinc-500">Jam</span></div>
+                    <div class="text-center"><span class="font-serif text-2xl text-white block">${m}</span><span class="text-[8px] uppercase text-zinc-500">Menit</span></div>
+                    <div class="text-center"><span class="font-serif text-2xl text-white block">${s}</span><span class="text-[8px] uppercase text-zinc-500">Detik</span></div>
+                `;
+            }, 1000);
+
+            // Muat Data Papan Ucapan Live
+            loadUcapanDariSheet();
+
+        }).catch(err => {
+            console.error("Gagal membaca struktur berkas data.json:", err);
+            document.body.innerHTML = `<div class="h-screen flex items-center justify-center text-[10px] text-zinc-600 tracking-widest uppercase">Data Klien Tidak Ditemukan</div>`;
+        });
+
+        // ACTION BUTTON OPEN EXPERIENCE
+        function openInvitation() {
+            const audio = document.getElementById('audio');
+            audio.play().catch(() => console.log("Autoplay musik tertahan kebijakan privasi browser."));
+            
+            gsap.to("#cover", { opacity: 0, duration: 1.2, onComplete: () => {
+                document.getElementById('cover').style.display = 'none';
+                gsap.to("#app", { opacity: 1, duration: 1.5 });
+                gsap.to(".reveal", { opacity: 1, y: 0, stagger: 0.2, duration: 1 });
+            }});
+        }
+
+        // AMBIL DATA DO RE RE-SUBMIT DARI SHEET VIA AJAX GET
+        async function loadUcapanDariSheet() {
+            const box = document.getElementById('ucapan-box');
+            if(!box || !URL_GOOGLE_SHEETS_API) return;
+            box.innerHTML = '<div class="text-[10px] text-zinc-600 uppercase text-center py-4 tracking-wider">Menyinkronkan Ucapan...</div>';
+            
+            try {
+                const res = await fetch(`${URL_GOOGLE_SHEETS_API}?id_klien=${clientSlug}`);
+                const list = await res.json();
+                box.innerHTML = '';
+                
+                if(list.length === 0) {
+                    box.innerHTML = '<div class="text-xs text-zinc-600 italic text-center py-4">Belum ada ucapan doa masuk.</div>';
+                    return;
+                }
+                
+                list.forEach(item => {
+                    const badgeKehadiran = item.kehadiran === "Hadir" 
+                        ? `<span class="text-[8px] bg-zinc-900 text-zinc-400 border border-zinc-800 px-2 py-0.5 rounded-md font-bold">Hadir</span>`
+                        : `<span class="text-[8px] text-zinc-600 border border-zinc-950 px-2 py-0.5 rounded-md">Absen</span>`;
+                        
+                    box.innerHTML += `
+                        <div class="bg-zinc-900/20 border border-zinc-900/60 p-4 rounded-xl space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold text-zinc-300">${escapeHtml(item.nama)}</span>
+                                ${badgeKehadiran}
+                            </div>
+                            <p class="text-xs text-zinc-500 leading-relaxed">${escapeHtml(item.ucapan)}</p>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                box.innerHTML = '<div class="text-[9px] text-zinc-700 text-center py-4">Gagal memuat Board Ucapan.</div>';
+            }
+        }
+
+        // KIRIM DATA KE GOOGLE APPS SCRIPT VIA POST METHOD
+        async function kirimUcapanSheet(event) {
+            event.preventDefault();
+            const btn = event.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerText = "Mengirim...";
+
+            const payload = {
+                id_klien: clientSlug,
+                nama: document.getElementById('rsvp-nama').value,
+                kehadiran: document.getElementById('rsvp-kehadiran').value,
+                ucapan: document.getElementById('rsvp-ucapan').value
+            };
+
+            try {
+                await fetch(URL_GOOGLE_SHEETS_API, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                
+                document.getElementById('rsvp-ucapan').value = '';
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = "Kirim Pass Ucapan";
+                    loadUcapanDariSheet();
+                }, 1500);
+            } catch(e) {
+                alert("Koneksi gagal.");
+                btn.disabled = false;
+                btn.innerText = "Kirim Pass Ucapan";
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>

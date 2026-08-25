@@ -1,0 +1,266 @@
+<!-- ========================= -->
+<!-- OMAH AKSARA — KENZ BLUSH v3.1 -->
+<!-- PINK PARTY • SYARI • GEN Z -->
+<!-- ========================= -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Undangan Pernikahan</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{--pink:#F4C2C2;--pink-dark:#E7A1A1;--bg:#FFF7F7;--text:#5C4B51;--accent:#FBEAEB}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url('https://www.transparenttextures.com/patterns/glitter.png');opacity:.08;pointer-events:none;z-index:1}
+.font-script{font-family:'Great Vibes',cursive}
+.font-serif{font-family:'DM Serif Display',serif}
+.font-arab{font-family:'Scheherazade New',serif}
+.bg-blush{background:linear-gradient(180deg,var(--bg) 0%,var(--accent) 100%)}
+.text-pink{color:var(--pink-dark)}
+.bg-pink{background:var(--pink)}
+.border-pink{border-color:var(--pink)}
+.polaroid{background:#fff;padding:12px 12px 50px;box-shadow:0 8px 25px -5px rgba(231,161,161,.4);transform:rotate(-2deg);transition:all.6s cubic-bezier(.22,1,.36,1)}
+.polaroid:nth-child(even){transform:rotate(2deg)}
+.polaroid:hover{transform:rotate(0) scale(1.03);z-index:10}
+.polaroid p{font-family:'Great Vibes',cursive;color:var(--pink-dark);text-align:center;margin-top:8px;font-size:22px}
+.polaroid a{font-family:'Outfit',sans-serif;font-size:11px;color:var(--pink-dark);text-align:center;display:block;margin-top:2px;opacity:.7}
+.polaroid a:hover{opacity:1;text-decoration:underline}
+.title-script{font-family:'Great Vibes',cursive;color:var(--pink-dark);font-size:3.5rem;line-height:1}
+.count-item{background:rgba(255,255,255,.6);backdrop-filter:blur(10px);border:1px solid rgba(244,194,194,.4)}
+.reveal{opacity:0;transform:translateY(50px)}
+#cover{transition:opacity 1.2s ease,transform 1.2s ease}
+</style>
+</head>
+
+<body>
+<div id="loader" class="fixed inset-0 z-[200] bg-[var(--bg)] flex items-center justify-center"><p class="font-script text-3xl text-pink">Loading...</p></div>
+
+<!-- COVER -->
+<div id="cover" class="fixed inset-0 z-50 flex items-center justify-center text-center overflow-hidden bg-blush">
+  <img id="cover-img" class="absolute inset-0 w-full h-full object-cover opacity-40">
+  <div class="absolute inset-0 bg-gradient-to-t from-white/80 via-pink/20 to-white/60"></div>
+  <div class="relative z-10 px-8">
+    <p class="font-arab text-2xl mb-4 text-pink">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+    <p class="font-script text-6xl text-pink mb-2">it's wedding time!</p>
+    <h1 id="cover-names" class="font-serif text-5xl text-[var(--text)] mt-6"></h1>
+    <div class="mt-10">
+      <p class="text-xs uppercase tracking-[.3em] opacity-60">Dear</p>
+      <p id="guest-name" class="mt-2 text-xl"></p>
+    </div>
+    <button id="openInvitation" class="mt-12 px-10 py-3 rounded-full bg-pink text-white uppercase tracking-[.25em] text-xs shadow-lg shadow-pink/30 hover:scale-105 transition">Open Invitation</button>
+  </div>
+</div>
+
+<main id="app" class="max-w-md mx-auto opacity-0">
+  <!-- HERO -->
+  <section class="relative h-[85vh] flex items-end justify-center text-center overflow-hidden">
+    <img id="hero-img" class="absolute inset-0 w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+    <div class="relative z-10 px-8 pb-20">
+      <p class="font-script text-5xl text-pink">The Wedding Of</p>
+      <h1 id="hero-names" class="font-serif text-6xl mt-4"></h1>
+      <div class="w-20 h-px bg-pink mx-auto my-6"></div>
+      <p id="hero-date" class="tracking-[.2em] uppercase text-xs"></p>
+    </div>
+  </section>
+
+  <div class="px-6 py-16 space-y-20">
+    <!-- HELLO -->
+    <section class="text-center reveal">
+      <h2 class="title-script">hello friends.</h2>
+      <p id="quote-text" class="text-sm leading-relaxed opacity-70 mt-4 px-4"></p>
+      <p id="quote-arab" class="font-arab text-xl text-pink mt-6"></p>
+    </section>
+
+    <!-- COUPLE POLAROID + IG -->
+    <section class="reveal">
+      <div id="groom-card" class="polaroid max-w-[280px] mx-auto"></div>
+      <div class="font-script text-6xl text-pink text-center my-8">&</div>
+      <div id="bride-card" class="polaroid max-w-[280px] mx-auto"></div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="text-center reveal">
+      <h2 class="title-script mb-8">counting days</h2>
+      <div id="countdown" class="grid grid-cols-4 gap-3"></div>
+    </section>
+
+    <!-- LOVE STORY -->
+    <section id="story-sec" class="reveal">
+      <h2 class="title-script text-center mb-10">love story</h2>
+      <div id="love-story" class="space-y-6"></div>
+    </section>
+
+    <!-- EVENT -->
+    <section class="reveal">
+      <h2 id="event-date-big" class="font-serif text-7xl text-center text-pink"></h2>
+      <p id="event-venue" class="text-center text-xs uppercase tracking-[.3em] opacity-60 mt-2"></p>
+      <div id="event-details" class="mt-10 space-y-6"></div>
+    </section>
+
+    <!-- DRESSCODE -->
+    <section class="text-center bg-white rounded-3xl p-8 shadow-lg shadow-pink/10 reveal">
+      <h2 class="title-script mb-6">Dresscode</h2>
+      <div class="flex justify-center gap-4 mb-4">
+        <div class="w-8 h-8 rounded-full bg-pink"></div>
+        <div class="w-8 h-8 rounded-full bg-[var(--text)]"></div>
+        <div class="w-8 h-8 rounded-full bg-white border"></div>
+      </div>
+      <p id="dresscode" class="text-sm opacity-70"></p>
+      <p id="guest-note" class="text-xs opacity-50 mt-4 italic px-4"></p>
+    </section>
+
+    <!-- GALLERY POLAROID -->
+    <section class="reveal">
+      <h2 class="title-script text-center mb-10">our gallery</h2>
+      <div id="gallery" class="grid grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- RSVP QR -->
+    <section class="text-center bg-white rounded-3xl p-8 shadow-lg shadow-pink/10 reveal">
+      <h2 class="title-script mb-6">rsvp</h2>
+      <div id="qrcode" class="flex justify-center mb-4"></div>
+      <p class="text-xs opacity-60">Scan atau klik tombol di bawah</p>
+      <a id="rsvp-link" target="_blank" class="inline-block mt-6 px-8 py-3 rounded-full bg-pink text-white text-xs uppercase tracking-[.2em]">Confirm via WhatsApp</a>
+    </section>
+
+    <!-- GIFT -->
+    <section class="reveal">
+      <h2 class="title-script text-center mb-6">gift ideas</h2>
+      <p class="text-sm text-center opacity-70 mb-8 px-4">Doa restu Anda sudah cukup bagi kami. Namun jika berkenan berbagi, berikut beberapa pilihan:</p>
+      <div id="gifts" class="space-y-4"></div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="text-center reveal">
+      <h2 class="title-script text-6xl text-pink">See you!</h2>
+      <div id="closing-polaroid" class="polaroid max-w-[240px] mx-auto mt-8"></div>
+      <p class="font-script text-3xl text-pink mt-12">with love</p>
+      <h3 id="footer-names" class="font-serif text-4xl mt-2"></h3>
+    </section>
+  </div>
+</main>
+
+<audio id="audio" loop></audio>
+
+<script>
+const params = new URLSearchParams(location.search);
+const slug = params.get('c');
+const guest = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
+const base = `../../public/clients/${slug}/`;
+
+fetch(`${base}data.json`).then(r=>r.json()).then(d=>{
+  gsap.registerPlugin(ScrollTrigger);
+  
+  // THEME
+  if(d.settings?.themeColor) document.documentElement.style.setProperty('--pink-dark', d.settings.themeColor);
+  if(d.settings?.bgColor) document.documentElement.style.setProperty('--bg', d.settings.bgColor);
+  
+  const g = d.couple.groom, b = d.couple.bride, pair = `${g.nickname} & ${b.nickname}`, ev = d.events[0];
+  
+  // COVER + HERO
+  document.getElementById('cover-names').textContent = pair;
+  document.getElementById('guest-name').textContent = guest;
+  document.getElementById('cover-img').src = base + d.gallery.heroImage;
+  document.getElementById('hero-img').src = base + d.gallery.heroImage;
+  document.getElementById('hero-names').textContent = pair;
+  document.getElementById('hero-date').textContent = new Date(ev.date).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+  
+  // QUOTE
+  document.getElementById('quote-text').textContent = `"${d.quote.text}"`;
+  document.getElementById('quote-arab').textContent = d.quote.arab;
+  
+  // COUPLE POLAROID + IG FIX
+  const groomIg = g.instagramUrl || `https://instagram.com/${g.instagram}`;
+  const brideLink = b.lynkUrl || `https://instagram.com/${b.instagram}`;
+  
+  document.getElementById('groom-card').innerHTML = `
+    <img src="${base+g.image}" class="w-full aspect-[3/4] object-cover rounded-lg">
+    <p>${g.nickname}</p>
+    <a href="${groomIg}" target="_blank">@${g.instagram}</a>
+    ${g.phone? `<a href="https://wa.me/62${g.phone.replace(/^0/,'')}" target="_blank" class="text-[10px] opacity-50">Chat WhatsApp</a>` : ''}
+  `;
+  
+  document.getElementById('bride-card').innerHTML = `
+    <img src="${base+b.image}" class="w-full aspect-[3/4] object-cover rounded-lg">
+    <p>${b.nickname}</p>
+    <a href="${brideLink}" target="_blank">${b.lynkUrl? 'lynk.id/ondow' : '@'+b.instagram}</a>
+  `;
+  
+  // COUNTDOWN
+  const target = new Date(`${ev.date}T${ev.startTime}:00+07:00`).getTime();
+  const cd = document.getElementById('countdown');
+  const up = ()=>{
+    const dist = target - Date.now();
+    if(dist<=0){cd.innerHTML=`<div class="col-span-4 text-pink font-script text-3xl">It's Today!</div>`;return}
+    const dd=Math.floor(dist/86400000),hh=Math.floor(dist/3600000%24),mm=Math.floor(dist/60000%60),ss=Math.floor(dist/1000%60);
+    cd.innerHTML = [['Days',dd],['Hours',hh],['Minutes',mm],['Seconds',ss]].map(([l,v])=>`<div class="count-item rounded-2xl py-4"><div class="font-serif text-3xl text-pink">${v}</div><div class="text-[10px] uppercase tracking-[.2em] opacity-50 mt-1">${l}</div></div>`).join('');
+  }; up(); setInterval(up,1000);
+  
+  // LOVE STORY - pakai date & description
+  d.loveStory.forEach(i=>{
+    document.getElementById('love-story').innerHTML += `<div class="bg-white rounded-3xl p-6 shadow-sm"><p class="text-[10px] uppercase tracking-[.3em] opacity-50">${i.date}</p><h3 class="font-serif text-2xl text-pink mt-2">${i.title}</h3><p class="mt-3 text-sm opacity-70 leading-relaxed">${i.description}</p></div>`
+  });
+  
+  // EVENT
+  document.getElementById('event-date-big').textContent = new Date(ev.date).getDate();
+  document.getElementById('event-venue').textContent = ev.address;
+  d.events.forEach(e=>{
+    document.getElementById('event-details').innerHTML += `<div class="text-center bg-white rounded-3xl p-6 shadow-sm"><p class="font-script text-3xl text-pink">${e.title}</p><p class="text-sm mt-2">${e.startTime} - ${e.endTime} ${e.timezone}</p><a href="${e.googleMaps}" target="_blank" class="inline-block mt-4 text-xs underline text-pink">View Location</a></div>`
+  });
+  
+  // DRESSCODE
+  document.getElementById('dresscode').textContent = d.logistics.dressCode;
+  document.getElementById('guest-note').textContent = d.logistics.guestNote;
+  
+  // GALLERY POLAROID
+  const gal = document.getElementById('gallery');
+  d.gallery.album.forEach((img,i)=>{
+    gal.innerHTML += `<div class="polaroid"><img src="${base+img}" class="w-full aspect-square object-cover rounded-md"><p>moment ${i+1}</p></div>`
+  });
+  
+  // RSVP QR
+  const waLink = `https://wa.me/62${d.logistics.rsvpWaNumber.replace(/^0/,'')}?text=Halo, saya ${guest} mau konfirmasi hadir untuk ${pair}`;
+  new QRCode(document.getElementById('qrcode'), {text: waLink, width: 128, height: 128, colorDark: "#E7A1A1", colorLight: "#ffffff"});
+  document.getElementById('rsvp-link').href = waLink;
+  
+  // GIFT
+  d.digitalGift.forEach(gf=>{
+    document.getElementById('gifts').innerHTML += `<div class="bg-white rounded-3xl p-5 text-center shadow-sm"><p class="text-xs uppercase tracking-[.3em] opacity-50">${gf.provider}</p><h3 class="font-serif text-2xl text-pink mt-2">${gf.accountNumber}</h3><p class="text-xs opacity-60 mt-1">a.n ${gf.accountHolder}</p>${gf.qrImage?`<img src="${base+gf.qrImage}" class="w-24 mx-auto mt-3">`:''}</div>`
+  });
+  
+  // CLOSING
+  document.getElementById('closing-polaroid').innerHTML = `<img src="${base+d.gallery.album[0]}" class="w-full aspect-[3/4] object-cover rounded-lg"><p>${b.nickname}</p>`;
+  document.getElementById('footer-names').textContent = pair;
+  
+  // MUSIC
+  if(d.logistics.music) document.getElementById('audio').src = base + d.logistics.music;
+  
+  // LOADER + OPEN
+  document.getElementById('loader').style.display='none';
+  document.getElementById('openInvitation').onclick = ()=>{
+    gsap.to('#cover',{opacity:0,scale:1.1,duration:1.2,ease:'power3.inOut',onComplete:()=>{
+      document.getElementById('cover').style.display='none';
+      gsap.to('#app',{opacity:1,duration:1});
+      if(d.logistics.music) document.getElementById('audio').play();
+      gsap.utils.toArray('.reveal').forEach(el=>{
+        gsap.fromTo(el,{opacity:0,y:60},{opacity:1,y:0,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%'}})
+      });
+    }});
+  };
+});
+</script>
+</body>
+</html>

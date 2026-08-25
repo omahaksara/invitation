@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Undangan Pernikahan</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --marble-dark: #0F0F0F;
+            --gold: #D4AF37;
+            --gold-light: #E8D5A8;
+            --ivory: #F5F2ED;
+            --smoke: #1A1A1A;
+            --ink: #E8E8E8;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--marble-dark);
+            color: var(--ink);
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+    .font-luxury { font-family: 'Cinzel', serif; }
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-aesthetic { font-family: 'Dancing Script', cursive; }
+
+     .grain {
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 99;
+        }
+
+     .polaroid {
+            background: #1E1E; padding: 16px 16px 48px 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(212,175,55,0.1);
+            transform: rotate(var(--rotation));
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid rgba(212, 175, 55, 0.15); position: relative;
+        }
+     .polaroid::after {
+            content: ''; position: absolute; inset: 0;
+            border: 1px solid rgba(212,175,55,0.08); pointer-events: none;
+        }
+     .polaroid:hover { transform: rotate(0deg) scale(1.02); z-index: 10; box-shadow: 0 30px 60px rgba(0, 0, 0.5); }
+     .polaroid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: brightness(0.95) contrast(1.05); }
+     .polaroid-text { font-family: 'Dancing Script', cursive; color: var(--gold); text-align: center; margin-top: 16px; font-size: 1.35rem; }
+
+     .reveal { opacity: 0; transform: translateY(24px); }
+     .reveal.in { opacity: 1; transform: translateY(0); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+
+     .btn-luxury {
+            background: linear-gradient(135deg, #D4AF37, #B8941F);
+            color: #0F0F0F; padding: 16px 44px; border-radius: 2px;
+            font-size: 13px; letter-spacing: 3px; font-weight: 600; text-transform: uppercase;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+            border: 1px solid var(--gold); transition: all 0.4s ease;
+            min-height: 48px; width: 100%; display: flex; align-items: center; justify-content: center;
+        }
+        @media (min-width: 430px) {.btn-luxury { width: auto; display: inline-flex; } }
+     .btn-luxury:active { transform: scale(0.98); }
+     .btn-luxury:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4); }
+
+     .luxury-ticket {
+            background: var(--smoke); border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: inset 0 0 40px rgba(212, 175, 55, 0.03), 0 10px 30px rgba(0,0,0.3);
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+     .spinning { animation: spin 10s linear infinite; }
+     .paused { animation-play-state: paused; }
+
+     .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: var(--gold); color: var(--marble-dark); padding: 12px 24px; border-radius: 8px;
+            font-size: 14px; z-index: 200; transition: transform 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+     .toast.show { transform: translateX(-50%) translateY(0); }
+     .toast.error { background: #991b1b; color: white; }
+    </style>
+</head>
+<body class="antialiased flex justify-center selection:bg-amber-900/30" oncontextmenu="return false">
+    <div class="grain"></div>
+    <div id="toast" class="toast"></div>
+
+    <!-- COVER -->
+    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-center bg-[#0F0F0F] px-6 max-w-md mx-auto border-x border-stone-800/50">
+        <div class="space-y-1 mb-8">
+            <p class="uppercase tracking-[0.4em] text- text-stone-500 font-semibold">Undangan Pernikahan</p>
+            <div class="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
+        </div>
+
+        <div class="polaroid mb-8" style="--rotation: -2deg; width: 270px;">
+            <img id="cover-img" src="" alt="Cover Photo" loading="eager">
+            <div class="polaroid-text">Pernikahan</div>
+        </div>
+
+        <h1 id="cover-names" class="font-luxury text-3xl font-normal text-stone-200 tracking-wide mb-8"></h1>
+
+        <div class="flex justify-center space-x-6 mb-12 border-y border-stone-700/60 py-3 w-full max-w-[280px]">
+            <div class="text-center"><span id="days" class="font-serif text-2xl font-light block text-stone-200">00</span><span class="text- uppercase tracking-widest text-stone-500 font-medium">Hari</span></div>
+            <div class="text-center"><span id="hours" class="font-serif text-2xl font-light block text-stone-200">00</span><span class="text- uppercase tracking-widest text-stone-500 font-medium">Jam</span></div>
+            <div class="text-center"><span id="minutes" class="font-serif text-2xl font-light block text-stone-200">00</span><span class="text- uppercase tracking-widest text-stone-500 font-medium">Menit</span></div>
+        </div>
+
+        <div class="mb-10 space-y-2 w-full">
+            <p class="text- text-stone-500 uppercase tracking-[.3em] font-medium">Kepada Yth:</p>
+            <div class="border border-dashed border-[#D4AF37]/40 bg-stone-900/30 px-6 py-2.5 rounded">
+                <p id="guest-name" class="font-serif text-lg text-stone-200 italic font-medium"></p>
+            </div>
+        </div>
+
+        <button onclick="openInvitation()" class="btn-luxury" aria-label="Buka Undangan">Buka Undangan</button>
+    </div>
+
+    <!-- APP -->
+    <main id="app" class="max-w-md w-full mx-auto opacity-0 bg-[#1A1A] shadow-2xl relative border-x border-stone-800/30 pb-16 space-y-24">
+
+        <section id="quote-section" class="px-8 pt-24 text-center space-y-5">
+            <div id="islamic-greeting" class="text- tracking-widest text-stone-500 mb-5 font-bold uppercase hidden">Assalamu'alaikum Warahmatullahi Wabarakatuh</div>
+            <div class="w-6 h-[1px] bg-[#D4AF37] mx-auto"></div>
+            <p id="quote-text" class="font-serif text-base italic leading-relaxed text-stone-300 font-light px-2"></p>
+            <p id="quote-source" class="text- uppercase tracking-[.3em] font-bold text-[#D4AF37]"></p>
+        </section>
+
+        <section class="px-6 space-y-20">
+            <div class="text-center space-y-2">
+                <p class="text- tracking-[.4em] uppercase text-stone-500 font-bold">Mempelai</p>
+                <h3 class="font-luxury text-2xl font-normal text-stone-200 tracking-wide">Dengan Rahmat Tuhan</h3>
+                <p class="text-sm text-stone-400 font-light leading-relaxed max-w-xs mx-auto italic">Maha Suci Tuhan yang telah menciptakan makhluk-Nya berpasang-pasangan.</p>
+            </div>
+
+            <div id="groom-box" class="reveal flex-col items-center text-center"></div>
+            <div class="text-center font-aesthetic text-4xl text-[#D4AF37]/40 my-4">&</div>
+            <div id="bride-box" class="reveal flex-col items-center text-center"></div>
+        </section>
+
+        <section class="px-5 space-y-10">
+            <div class="text-center space-y-1">
+                <p class="text- tracking-[.4em] uppercase text-stone-500 font-bold">Perjalanan Kami</p>
+                <h3 class="font-luxury text-2xl font-normal text-stone-200 tracking-wide">Kisah Cinta</h3>
+            </div>
+            <div id="gallery-grid" class="grid grid-cols-1 gap-12 place-items-center"></div>
+        </section>
+
+        <section class="py-16 px-5 bg-gradient-to-b from-[#2A1A1A] to-[#1A] text-stone-200 text-center space-y-10 relative">
+            <div class="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain_Noise.png')] opacity-5 pointer-events-none"></div>
+            <div class="space-y-1 relative z-10">
+                <h3 class="text- tracking-[.4em] uppercase text-[#D4AF37] font-bold">Acara Pernikahan</h3>
+                <p class="font-luxury text-xl font-normal tracking-wide">Waktu & Tempat</p>
+            </div>
+            <div id="event-list" class="space-y-12 relative z-10"></div>
+        </section>
+
+        <section id="rsvp-section" class="px-5 space-y-10">
+            <div class="text-center space-y-1">
+                <p class="text- tracking-[.4em] uppercase text-stone-500 font-bold">Buku Tamu</p>
+                <h3 class="font-luxury text-2xl font-normal text-stone-200 tracking-wide">Doa & Ucapan</h3>
+            </div>
+
+            <div class="luxury-ticket border border-[#D4AF37]/30 rounded p-5 text-center shadow-sm space-y-4 relative overflow-hidden">
+                <div class="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#1A1A] rounded-full border-r border-[#D4AF37]/20"></div>
+                <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#1A1A1A] rounded-full border-l border-[#D4AF37]/20"></div>
+
+                <p class="text- font-mono tracking-[0.3em] uppercase text-[#D4AF37] font-bold">Kartu Undangan Digital</p>
+                <div class="py-3 border-y border-dashed border-stone-
