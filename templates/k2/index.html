@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Karsa — Omah Aksara</title>
+    <title>Aci & Jakpar — Omah Aksara</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -291,10 +291,11 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-    const clientSlug = params.get('c') || 'karsa-sample';
+    const clientSlug = 'aci'; // Data diperbarui untuk klien Aci (Khosi Saimima & Muhammad Jakpar)
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
-    const basePath = `./clients/${clientSlug}/`;
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2AOLn6iSQrclehHrEsGMkSwgFqVsU59WIGpFep9lSxYIUXJZR3pXGitAyT21onQdm6g/exec';
+    
+    const basePath = `../../public/clients/${clientSlug}/`;
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
 
     function loadGoogleSheetsWishes() {
         const wishesBox = document.getElementById('wishes-box');
@@ -345,7 +346,10 @@
     }
 
     fetch(`${basePath}data.json`)
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) throw new Error('File data.json tidak ditemukan');
+        return res.json();
+    })
     .then(data => {
         const { couple, settings, events, gallery, loveStory, quote, logistics } = data;
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
@@ -354,9 +358,11 @@
         imgForColor.src = basePath + gallery.heroImage;
         imgForColor.onload = () => {
             if(!settings?.themeColor) {
-                const colorThief = new ColorThief();
-                const color = colorThief.getColor(imgForColor);
-                document.documentElement.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+                try {
+                    const colorThief = new ColorThief();
+                    const color = colorThief.getColor(imgForColor);
+                    document.documentElement.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+                } catch(e) {}
             }
         };
 
@@ -432,7 +438,7 @@
                     <div class="timeline-card reveal">
                         <p class="text-[10px] font-mono tracking-widest text-amber-700/80 mb-1">${ls.date || ls.year}</p>
                         <h6 class="font-serif text-xl font-light text-stone-800 mb-2 tracking-wide">${ls.title}</h6>
-                        <p class="text-xs text-stone-500 font-light leading-relaxed italic">${ls.description}</p>
+                        <p class="text-xs text-stone-500 font-light italic leading-relaxed">${ls.description}</p>
                     </div>`;
             });
         }
@@ -455,7 +461,7 @@
             audio.src = basePath + logistics.music;
         }
     }).catch(err => {
-        console.log('data.json nggak ketemu, pake default', err);
+        console.warn('Gagal memuat data.json klien:', err);
     });
 
     document.getElementById('wishes-form').addEventListener('submit', function(e) {
