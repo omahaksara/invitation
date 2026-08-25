@@ -1,14 +1,14 @@
 {
   "meta": {
-    "slug": "ridwan-nia",
-    "template": "karsa-luxe",
+    "slug": "yaya-oci",
+    "template": "my",
     "status": "published",
     "domain": "",
     "customUrl": ""
   },
   "settings": {
     "islami": true,
-    "themeColor": "#5A6955",
+    "themeColor": "#8B7355",
     "bgColor": "#fdfbf7",
     "coupleFrame": "arch-mask",
     "autoColor": false,
@@ -22,30 +22,30 @@
   },
   "couple": {
     "groom": {
-      "name": "Ridwan, S.Pd",
-      "nickname": "Ridwan",
-      "father": "Suparjo",
-      "mother": "Ratiah",
+      "name": "Muhammad Jakpar",
+      "nickname": "Yaya",
+      "father": "Moh. Aliman (Alm)",
+      "mother": "Siti Kusnah (Almh)",
       "image": "foto-pria.jpg",
-      "instagram": "ridwan_ondow",
+      "instagram": "@muh_djafar27",
       "tiktok": "",
-      "phone": "6280000000000",
-      "bio": "Putra ke-Tiga dari Bapak Suparjo & Ibu Ratiah"
+      "phone": "6282261567928",
+      "bio": "Putra dari Bapak Moh. Aliman (Alm) & Ibu Siti Kusnah (Almh)"
     },
     "bride": {
-      "name": "Nia Novianti, A.Md.Keb",
-      "nickname": "Nia",
-      "father": "Girin",
-      "mother": "Winarti",
+      "name": "Khosi Saimima",
+      "nickname": "Oci",
+      "father": "Maksum",
+      "mother": "Sholihah",
       "image": "foto-wanita.jpg",
-      "instagram": "",
+      "instagram": "@khosisaimima17",
       "tiktok": "",
-      "phone": "6280000000000",
-      "bio": "Putri ke-Tiga dari Bapak Girin & Ibu Winarti"
+      "phone": "6282261567928",
+      "bio": "Putri dari Bapak Maksum & Ibu Sholihah"
     }
   },
   "quote": {
-    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً",
     "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tentram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
     "source": "QS. Ar-Rum: 21",
     "english": ""
@@ -53,68 +53,68 @@
   "events": [
     {
       "title": "Akad Nikah",
-      "date": "2022-09-21",
-      "startTime": "08:00",
-      "endTime": "Selesai",
+      "date": "2026-09-06",
+      "startTime": "09:00",
+      "endTime": "10:00",
       "timezone": "WITA",
-      "address": "Dusun III, Tinombala Induk, Ongka Malino, Parigi Moutong, Sulawesi Tengah",
-      "locationName": "Kediaman Mempelai Wanita",
-      "googleMaps": "https://www.google.com/maps/search/?api=1&query=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong",
-      "embedMaps": "https://www.google.com/maps?q=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong+Sulawesi+Tengah&z=15&output=embed",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "locationName": "Kediaman Mempelai",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "embedMaps": "",
       "liveStreaming": ""
     },
     {
-      "title": "Resepsi Pernikahan",
-      "date": "2022-09-22",
-      "startTime": "10:00",
-      "endTime": "Selesai",
+      "title": "Walimatul 'Ursy",
+      "date": "2026-09-06",
+      "startTime": "11:00",
+      "endTime": "23:59",
       "timezone": "WITA",
-      "address": "Dusun III, Tinombala Induk, Ongka Malino, Parigi Moutong, Sulawesi Tengah",
-      "locationName": "Kediaman Mempelai Wanita",
-      "googleMaps": "https://www.google.com/maps/search/?api=1&query=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong",
-      "embedMaps": "https://www.google.com/maps?q=Dusun+III+Tinombala+Induk+Ongka+Malino+Parigi+Moutong+Sulawesi+Tengah&z=15&output=embed",
+      "address": "Desa Petunasugi (SPD), Dusun 4",
+      "locationName": "Kediaman Mempelai",
+      "googleMaps": "https://maps.google.com/?q=Desa+Petunasugi",
+      "embedMaps": "",
       "liveStreaming": ""
     }
   ],
   "countdown": {
-    "targetDate": "2022-09-21T08:00:00+08:00",
+    "targetDate": "2026-09-06T09:00:00+08:00",
     "backgroundImage": "foto-sampul.jpg"
   },
   "music": {
-    "description": "Playlist musik undangan",
-    "defaultSong": "beautiful-in-white.mp3",
+    "description": "Playlist Yaya & Oci",
+    "defaultSong": "musik.mp3",
     "playlist": [
       {
-        "name": "Beautiful In White - Westlife",
-        "file": "beautiful-in-white.mp3",
-        "url": "https://omahaksara.github.io/lagu/contohlagu%20(6).mp3",
+        "name": "Wedding Song - Yaya & Oci",
+        "file": "musik.mp3",
+        "url": "https://omahaksara.github.io/invitation/public/clients/yaya-oci/musik.mp3",
         "isDefault": true,
-        "note": "Lagu utama Ridwan & Nia"
+        "note": "Lagu utama lokal"
+      },
+      {
+        "name": "love",
+        "file": "contohlagu (7).mp3",
+        "url": "https://omahaksara.github.io/lagu/contohlagu%20(7).mp3",
+        "isDefault": false,
+        "note": "Cadangan kalau lokal gagal"
       }
     ],
     "autoplay": true
   },
   "loveStory": [
     {
-      "date": "Awal Bertemu",
-      "year": "2020",
-      "title": "Awal Kisah",
-      "description": "Tidak ada yang kebetulan di dunia ini. Pertemuan kami adalah takdir yang sudah Allah tuliskan dengan indah.",
-      "image": ""
+      "date": "Juni 2021",
+      "year": "2021",
+      "title": "First Meet",
+      "description": "Berawal dari sebuah tanggapan kecil di story.",
+      "image": "foto1.jpg"
     },
     {
-      "date": "Menuju Halal",
-      "year": "2022",
-      "title": "Lamaran",
-      "description": "Dengan restu kedua orang tua, kami memutuskan untuk melangkah ke jenjang yang lebih serius dan mengikat janji suci.",
-      "image": ""
-    },
-    {
-      "date": "21-22 September 2022",
-      "year": "2022",
-      "title": "Hari Bahagia - Alhamdulillah Telah Terlaksana",
-      "description": "Dengan memohon rahmat Allah SWT, kami mengucapkan terima kasih atas doa restu Bapak/Ibu/Saudara/i.",
-      "image": ""
+      "date": "14 April 2024",
+      "year": "2024",
+      "title": "Khitbah",
+      "description": "Kami memutuskan untuk bersama dalam ridho-Nya.",
+      "image": "foto2.jpg"
     }
   ],
   "gallery": {
@@ -122,67 +122,50 @@
     "coverImage": "foto-sampul.jpg",
     "videoYoutubeId": "",
     "videoFile": "",
-    "album": [
-      "galeri1.jpg",
-      "galeri2.jpg",
-      "galeri3.jpg",
-      "galeri4.jpg",
-      "galeri5.jpg",
-      "galeri6.jpg"
-    ]
-  },
-  "liveDocumentation": {
-    "enabled": true,
-    "driveFolderId": "12wOYg8p1Q-AATNihMK2lHwIacGuEe3LT",
-    "driveFolderLink": "https://drive.google.com/drive/folders/12wOYg8p1Q-AATNihMK2lHwIacGuEe3LT?usp=sharing",
-    "title": "Dokumentasi Pernikahan - Alhamdulillah Telah Selesai",
-    "subtitle": "Terima kasih atas doa restunya pada 2022. Semua foto resepsi bisa langsung dilihat & didownload HD di sini"
+    "album": ["foto1.jpg", "foto2.jpg", "foto-sampul.jpg"]
   },
   "digitalGift": {
-    "description": "Wedding Gift Ridwan & Nia - ARSIP 2022",
+    "description": "Doa restu Anda adalah hadiah terindah.",
     "qris": "",
     "accounts": [
       {
-        "provider": "BRI - ARSIP",
-        "accountNumber": "0000000000000000",
-        "accountHolder": "RIDWAN - ARSIP UNDANGAN LAMA",
+        "provider": "BRI",
+        "accountNumber": "519501024699536",
+        "accountHolder": "Khosi Saimima",
         "logo": "",
-        "note": "Rekening Arsip - Tidak Aktif - 0000"
+        "note": "Rekening Oci"
       },
       {
-        "provider": "BRI - ARSIP",
-        "accountNumber": "0000000000000000",
-        "accountHolder": "NIA NOVIANTI - ARSIP UNDANGAN LAMA",
+        "provider": "Mandiri",
+        "accountNumber": "1510022186495",
+        "accountHolder": "Muhammad Jakpar",
         "logo": "",
-        "note": "Rekening Arsip - Tidak Aktif - 0000"
+        "note": "Rekening Yaya"
       }
     ],
-    "address": "Dusun III, Tinombala Induk",
-    "receiver": "Ridwan & Nia - ARSIP 2022"
+    "address": "",
+    "receiver": "Yaya & Oci"
   },
   "protocols": {
-    "title": "Informasi Arsip",
-    "items": [
-      "Acara telah selesai pada 21-22 September 2022",
-      "Halaman ini adalah arsip kenangan digital"
-    ]
+    "title": "Informasi Tambahan",
+    "items": ["Acara diselenggarakan secara intimate", "Mohon konfirmasi kehadiran H-3"]
   },
   "logistics": {
-    "rsvpWaNumber": "6280000000000",
-    "dressCode": "Bebas Sopan",
+    "rsvpWaNumber": "6282261567928",
+    "dressCode": "",
     "colorCode": "",
-    "guestNote": "Acara ini telah terlaksana pada 21-22 September 2022. Terima kasih atas doa restu yang telah diberikan.",
-    "noteFooter": "Jazakumullah khairan katsiran atas doa restu Anda.",
+    "guestNote": "Tanpa mengurangi rasa hormat, kami mengharapkan kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.",
+    "noteFooter": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
     "filterIG": "",
-    "hashtag": "#RidwanNia2022"
+    "hashtag": "#YayaOciWedding"
   },
   "guest": {
     "defaultName": "Tamu Undangan",
     "defaultGroup": "Keluarga & Sahabat"
   },
   "seo": {
-    "title": "Arsip Wedding of Ridwan & Nia - 21-22 Sept 2022",
-    "description": "Arsip Undangan Pernikahan Ridwan & Nia Novianti - 21-22 September 2022 - Dusun III Tinombala Induk",
+    "title": "Wedding of Yaya & Oci",
+    "description": "Undangan Pernikahan Yaya & Oci - 06 September 2026",
     "image": "foto-sampul.jpg"
   }
 }
