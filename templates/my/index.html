@@ -139,6 +139,7 @@
         <button id="open-btn" class="btn-open">Dengan Bahagia Mengundang</button>
     </div>
 </section>
+
 <!-- MAIN APP -->
 <main id="app" class="phone-wrapper opacity-0 pb-1">
     <section class="relative h-[85vh] flex items-end justify-center px-6 pb-20 overflow-hidden">
@@ -150,22 +151,26 @@
             <h2 id="hero-names" class="font-serif text-5xl font-light tracking-wide text-[var(--text-color)]"></h2>
         </div>
     </section>
+
     <section class="px-10 py-28 text-center reveal">
         <p id="quote-arab" class="font-arab text-3xl mb-10 text-[var(--theme-color)] leading-loose tracking-wide"></p>
         <p id="quote-text" class="font-serif italic text-lg text-stone-700 font-light leading-relaxed"></p>
         <div class="h-px w-8 bg-[var(--theme-color)]/30 mx-auto mt-8 mb-4 line-draw"></div>
         <p id="quote-source" class="text-xs uppercase tracking-[0.35em] font-medium text-stone-400"></p>
     </section>
+
     <section class="py-16 bg-[#F3EFE6]/40">
         <div id="groom-section" class="px-8 mb-20"></div>
         <div class="py-6 text-center reveal"><span class="font-serif font-light text-4xl italic text-stone-300">&</span></div>
         <div id="bride-section" class="px-8"></div>
     </section>
+
     <section id="story-section" class="py-28 bg-white hidden">
         <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Perjalanan Cinta Kami</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-20 tracking-wide">Kisah Kami</h3>
         <div id="story-list" class="px-10 space-y-12"></div>
     </section>
+
     <section id="event-section" class="py-28 px-8 border-t border-stone-200/50 hidden">
         <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Jadwal Acara</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Detail Acara</h3>
@@ -175,16 +180,19 @@
             <div id="countdown" class="flex justify-center gap-6"></div>
         </div>
     </section>
+
     <section id="gallery-section" class="py-28 px-6 bg-[#FBFBFA] border-t border-stone-100 hidden">
         <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Dokumentasi</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Galeri Foto</h3>
         <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
     </section>
+
     <section id="gift-section" class="py-28 px-8 bg-stone-50 border-t border-stone-100 hidden">
         <p class="text-xs uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Wedding Gift</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Kirim Hadiah Digital</h3>
         <div id="gift-container" class="space-y-3"></div>
     </section>
+
     <section id="rsvp-section" class="py-28 px-6 md:px-10 bg-[var(--bg-color)] text-[var(--text-color)]">
         <div class="max-w-2xl mx-auto">
             <p class="text-xs uppercase tracking-[0.4em] text-[var(--theme-color)]/70 mb-3 text-center">Pesan / Doa Restu</p>
@@ -204,6 +212,7 @@
             </div>
         </div>
     </section>
+
     <footer class="py-28 bg-[#111411] text-white text-center px-8">
         <p class="font-serif italic text-lg text-stone-400 mb-6">Terima Kasih,</p>
         <h2 id="footer-names" class="font-serif text-4xl font-light tracking-widest text-stone-200 mb-12"></h2>
@@ -211,6 +220,7 @@
         <p class="text-xs uppercase tracking-[0.6em] text-stone-500 font-mono">Designed by Omah Aksara Digital Studio</p>
     </footer>
 </main>
+
 <!-- MUSIC FLOATER -->
 <div id="music-btn" class="music-disk-box hidden">
     <div id="disk-wrap" class="disk-text-wrap">
@@ -222,6 +232,7 @@
     </div>
 </div>
 <audio id="audio" loop></audio>
+
 <script>
     const params = new URLSearchParams(window.location.search);
     const clientSlug = params.get('c') || 'afif-sindi';
@@ -239,19 +250,23 @@
         const pairNick = `${couple.groom.nickname} & ${couple.bride.nickname}`;
         if(settings?.themeColor) document.documentElement.style.setProperty('--theme-color', settings.themeColor);
         if(settings?.bgColor) document.documentElement.style.setProperty('--bg-color', settings.bgColor);
+        
         document.getElementById('cover-names').innerText = pairNick;
         document.getElementById('hero-names').innerText = pairNick;
         document.getElementById('footer-names').innerText = pairNick;
         document.getElementById('cover-guest').innerText = guestName;
         document.getElementById('hero-image').src = basePath + gallery.heroImage;
         document.getElementById('cover-image').src = basePath + gallery.heroImage;
+        
         document.getElementById('hero-image').onerror = function() { this.src = 'https://placehold.co/600x800/e2e8f0/64748b?text=Foto+Hero'; };
         document.getElementById('cover-image').onerror = function() { this.src = 'https://placehold.co/600x800/1e293b/94a3b8?text=Foto+Cover'; };
+        
         if(quote?.text) {
             document.getElementById('quote-arab').textContent = quote.arab || '';
             document.getElementById('quote-text').innerHTML = `“ ${quote.text} ”`;
             document.getElementById('quote-source').textContent = quote.source || '';
         }
+        
         document.getElementById('groom-section').innerHTML = `
             <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.groom.image}" onerror="this.src='https://placehold.co/400x500?text=Groom'"></div>
             <div class="mt-8 text-left pl-4 reveal">
@@ -260,6 +275,7 @@
                 <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putra dari Bapak ${couple.groom.father} & Ibu ${couple.groom.mother}</p>
                 ${couple.groom.instagram? `<a href="https://instagram.com/${couple.groom.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-xs tracking-[0.3em] uppercase font-medium text-amber-700/80"><i class="fa-brands fa-instagram mr-1"></i>${couple.groom.instagram}</a>` : ''}
             </div>`;
+            
         document.getElementById('bride-section').innerHTML = `
             <div class="editorial-frame arch-mask reveal"><img src="${basePath + couple.bride.image}" onerror="this.src='https://placehold.co/400x500?text=Bride'"></div>
             <div class="mt-8 text-right pr-4 reveal">
@@ -268,6 +284,7 @@
                 <p class="text-xs text-stone-500 font-light italic leading-relaxed">Putri dari Bapak ${couple.bride.father} & Ibu ${couple.bride.mother}</p>
                 ${couple.bride.instagram? `<a href="https://instagram.com/${couple.bride.instagram.replace('@','')}" target="_blank" class="inline-block mt-4 text-xs tracking-[0.3em] uppercase font-medium text-amber-700/80">${couple.bride.instagram} <i class="fa-brands fa-instagram ml-1"></i></a>` : ''}
             </div>`;
+            
         if(events?.length && settings.showCountdown) {
             document.getElementById('event-section').classList.remove('hidden');
             document.getElementById('event-list').innerHTML = '';
@@ -301,6 +318,7 @@
             }, 1000);
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
+        
         if(loveStory?.length && settings.showLoveStory) {
             document.getElementById('story-section').classList.remove('hidden');
             document.getElementById('story-list').innerHTML = '';
@@ -314,6 +332,7 @@
                     </div>`;
             });
         }
+        
         if(gallery?.album?.length && settings.showGallery) {
             document.getElementById('gallery-section').classList.remove('hidden');
             document.getElementById('gallery-grid').innerHTML = '';
@@ -321,6 +340,7 @@
                 document.getElementById('gallery-grid').innerHTML += `<img src="${basePath + img}" class="reveal shadow-sm hover:opacity-95 transition-opacity" loading="lazy" onerror="this.style.display='none'">`;
             });
         }
+        
         if(digitalGift?.accounts?.length && settings.showGift) {
             document.getElementById('gift-section').classList.remove('hidden');
             document.getElementById('gift-container').innerHTML = '';
@@ -328,7 +348,7 @@
                 document.getElementById('gift-container').innerHTML += `
                     <div class="p-4 bg-white border border-stone-200 rounded text-center reveal">
                         <p class="text-xs text-stone-500">${bank.provider}</p>
-                        <p class="font-luxury text-lg text-stone-800 my-1" id="rek-${i}">${bank.accountNumber}</p>
+                        <p class="font-serif text-lg text-stone-800 my-1" id="rek-${i}">${bank.accountNumber}</p>
                         <p class="text-xs text-stone-600 mb-3">a.n ${bank.accountHolder}</p>
                         <button onclick="copyRek('rek-${i}')" class="text-xs bg-[var(--theme-color)] text-white px-4 py-2 rounded uppercase tracking-wider">
                             <i class="fa-regular fa-copy mr-1"></i> Salin No. Rekening
@@ -336,6 +356,7 @@
                     </div>`;
             });
         }
+        
         if(music?.playlist?.length && settings.musicAutoplay) {
             const defaultSong = music.playlist.find(song => song.isDefault) || music.playlist[0];
             const audio = document.getElementById('audio');
@@ -357,7 +378,6 @@
             };
         }
 
-        // LOAD WISHES MENGGUNAKAN JSONP
         function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
             wishesBox.innerHTML = `<p class="text-xs text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa...</p>`;
@@ -399,7 +419,6 @@
             document.body.appendChild(script);
         }
 
-        // KIRIM UCAPAN MENGGUNAKAN FORM URLENCODED + NO-CORS
         document.getElementById('wishes-form').addEventListener('submit', function(e){
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
