@@ -141,7 +141,7 @@
 </section>
 <!-- MAIN APP -->
 <main id="app" class="phone-wrapper opacity-0 pb-1">
-    <section class="relative h- flex items-end justify-center px-6 pb-20 overflow-hidden">
+    <section class="relative h-[85vh] flex items-end justify-center px-6 pb-20 overflow-hidden">
         <img id="hero-image" class="absolute inset-0 w-full h-full object-cover" src="">
         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-black/10"></div>
         <div class="relative z-10 text-center w-full">
@@ -226,7 +226,6 @@
     const params = new URLSearchParams(window.location.search);
     const clientSlug = params.get('c') || 'afif-sindi';
     const guestName = params.get('to')?.replace(/\+/g,' ') || 'Tamu Undangan';
-    console.log('Client Slug:', clientSlug);
     const basePath = `../../public/clients/${clientSlug}/`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzbrMzVWSHCF9u8I1FbY4h4i_GoxL6kvTbFxFrcZ-VG9_qun2wK0c4mIupBKiGk1Yvmw/exec';
 
@@ -295,10 +294,10 @@
                 const m = Math.max(0, Math.floor((diff % (1000*60*60)) / (1000*60)));
                 const s = Math.max(0, Math.floor((diff % (1000*60)) / 1000));
                 document.getElementById('countdown').innerHTML = `
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${d}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Hari</span></div>
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${h}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Jam</span></div>
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${m}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Menit</span></div>
-                    <div class="text-center min-w-"><span class="block font-serif text-3xl font-light text-stone-700">${s}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Detik</span></div>`;
+                    <div class="text-center"><span class="block font-serif text-3xl font-light text-stone-700">${d}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Hari</span></div>
+                    <div class="text-center"><span class="block font-serif text-3xl font-light text-stone-700">${h}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Jam</span></div>
+                    <div class="text-center"><span class="block font-serif text-3xl font-light text-stone-700">${m}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Menit</span></div>
+                    <div class="text-center"><span class="block font-serif text-3xl font-light text-stone-700">${s}</span><span class="text-xs text-stone-400 font-medium uppercase tracking-widest mt-1 block">Detik</span></div>`;
             }, 1000);
             document.getElementById('countdown-wrap').classList.remove('hidden');
         }
@@ -357,14 +356,16 @@
                 }
             };
         }
-        // UCAPAN PAKE JSONP - ANTI CORS
+
+        // LOAD WISHES MENGGUNAKAN JSONP
         function loadGoogleSheetsWishes() {
             const wishesBox = document.getElementById('wishes-box');
             wishesBox.innerHTML = `<p class="text-xs text-stone-400 text-center py-4 font-light italic animate-pulse">Menyelaraskan doa...</p>`;
             const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+            
             window[callbackName] = function(wishes) {
                 delete window[callbackName];
-                document.body.removeChild(script);
+                if(script.parentNode) document.body.removeChild(script);
                 wishesBox.innerHTML = '';
                 if (!wishes || wishes.length === 0) {
                     wishesBox.innerHTML = `<p class="text-xs text-stone-400 text-center py-4 font-light italic">Belum ada ucapan. Jadilah yang pertama.</p>`;
@@ -381,37 +382,44 @@
                             </div>
                             <p class="text-xs text-[var(--text-color)]/80 font-light leading-relaxed whitespace-pre-line">${wish.ucapan}</p>
                             <div class="flex justify-between items-center pt-1">
-                                <p class="text-xs text-[var(--theme-color)]/60">${wish.pax} Orang</p>
+                                <p class="text-xs text-[var(--theme-color)]/60">${wish.pax || wish.jumlah_tamu || 1} Orang</p>
                                 <p class="text-xs text-stone-400 font-mono">${displayTime}</p>
                             </div>
                         </div>`;
                 });
             };
+
             const script = document.createElement('script');
             script.src = `${SCRIPT_URL}?id_klien=${encodeURIComponent(clientSlug)}&callback=${callbackName}`;
             script.onerror = function() {
                 delete window[callbackName];
-                document.body.removeChild(script);
+                if(script.parentNode) document.body.removeChild(script);
                 wishesBox.innerHTML = `<p class="text-xs text-red-500/80 text-center py-4 font-light italic">Gagal memuat ucapan. Cek koneksi.</p>`;
             };
             document.body.appendChild(script);
         }
+
+        // KIRIM UCAPAN MENGGUNAKAN FORM URLENCODED + NO-CORS
         document.getElementById('wishes-form').addEventListener('submit', function(e){
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             btn.innerHTML = 'Mengirim...';
             btn.disabled = true;
-            const payload = {
-                id_klien: clientSlug,
-                nama: document.getElementById('wish-name').value,
-                ucapan: document.getElementById('wish-message').value,
-                kehadiran: document.getElementById('wish-status').value,
-                jumlah_tamu: parseInt(document.getElementById('wish-pax').value)
-            };
+
+            const formData = new URLSearchParams();
+            formData.append('id_klien', clientSlug);
+            formData.append('nama', document.getElementById('wish-name').value);
+            formData.append('ucapan', document.getElementById('wish-message').value);
+            formData.append('kehadiran', document.getElementById('wish-status').value);
+            formData.append('jumlah_tamu', document.getElementById('wish-pax').value);
+
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify(payload)
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData.toString()
             })
            .then(() => {
                 document.getElementById('wishes-form').reset();
@@ -427,7 +435,9 @@
                 btn.disabled = false;
             });
         });
+
         loadGoogleSheetsWishes();
+
         document.getElementById('open-btn').onclick = () => {
             const cover = document.getElementById('cover');
             cover.style.transform = 'translateY(-100%)';
@@ -445,6 +455,7 @@
         console.error('Gagal load data.json:', err);
         document.body.innerHTML = `<div style="padding:40px;text-align:center;font-family:sans-serif;"><h1>Error Load Data</h1><p>${err.message}</p><p>Slug: ${clientSlug}</p><p>Pastikan folder <code>public/clients/${clientSlug}/data.json</code> ada</p></div>`;
     });
+
     function copyRek(id) {
         const text = document.getElementById(id).innerText;
         navigator.clipboard.writeText(text).then(() => {
