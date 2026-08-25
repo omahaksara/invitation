@@ -92,14 +92,14 @@
         "file": "musik.mp3",
         "url": "https://omahaksara.github.io/invitation/public/clients/yaya-oci/musik.mp3",
         "isDefault": true,
-        "note": "Lagu utama lokal"
+        "note": "Lagu utama lokal Yaya & Oci"
       },
       {
         "name": "love",
         "file": "contohlagu (7).mp3",
         "url": "https://omahaksara.github.io/lagu/contohlagu%20(7).mp3",
         "isDefault": false,
-        "note": "Cadangan kalau lokal gagal"
+        "note": "Cadangan"
       }
     ],
     "autoplay": true
@@ -133,7 +133,7 @@
   },
   "digitalGift": {
     "description": "Doa restu Anda adalah hadiah terindah.",
-    "qris": "",
+    "qris": "foto-qr.jpg",
     "accounts": [
       {
         "provider": "BRI",
