@@ -1,7 +1,7 @@
 {
   "meta": {
     "slug": "yaya-oci",
-    "template": "my",
+    "template": "o",
     "status": "published",
     "domain": "",
     "customUrl": ""
@@ -84,7 +84,7 @@
     "backgroundImage": "foto-sampul.jpg"
   },
   "music": {
-    "description": "Playlist Yaya & Oci",
+    "description": "Playlist musik undangan. Yang isDefault: true yang diputar otomatis",
     "defaultSong": "musik.mp3",
     "playlist": [
       {
