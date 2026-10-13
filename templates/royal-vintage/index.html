@@ -1,0 +1,24 @@
+<div class="invitation-container">
+    <header class="hero">
+        <h1 data-bind="groom.nickname">Pria</h1>
+        <span>&</span>
+        <h1 data-bind="bride.nickname">Wanita</h1>
+        <p data-bind="event.date">Tanggal Acara</p>
+    </header>
+
+    <section class="couples">
+        <div class="card">
+            <img data-bind="groom.photo" alt="Mempelai Pria">
+            <h3 data-bind="groom.fullName">Nama Lengkap Pria</h3>
+            <p data-bind="groom.parents">Putra dari...</p>
+        </div>
+        <div class="card">
+            <img data-bind="bride.photo" alt="Mempelai Wanita">
+            <h3 data-bind="bride.fullName">Nama Lengkap Wanita</h3>
+            <p data-bind="bride.parents">Putri dari...</p>
+        </div>
+    </section>
+
+    <!-- Audio Player -->
+    <audio id="bg-music" loop data-bind="media.music"></audio>
+</div>
