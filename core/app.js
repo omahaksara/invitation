@@ -1,71 +1,58 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Ambil nama folder klien (?c=budi-ani) & nama tamu (?to=Bapak+Ahmad) dari URL
     const urlParams = new URLSearchParams(window.location.search);
     const clientFolder = urlParams.get('c');
     const guestName = urlParams.get('to');
 
-    // 2. Jika parameter ?c= tidak ada di URL
+    // 1. Validasi parameter URL ?c=
     if (!clientFolder) {
-        document.getElementById('app').innerHTML = `
-            <div style="text-align:center; padding: 60px 20px; font-family: sans-serif;">
-                <h2 style="color: #e74c3c; margin-bottom: 10px;">Undangan Tidak Ditemukan</h2>
-                <p style="color: #666;">Silakan gunakan tautan lengkap dengan parameter klien.<br>Contoh: <code>?c=budi-ani</code></p>
-            </div>`;
+        renderError("Undangan Tidak Ditemukan", "Parameter klien tidak terdeteksi. Gunakan tautan seperti: ?c=budi-ani");
         return;
     }
 
     try {
         const basePath = `clients/${clientFolder}/`;
 
-        // 3. Ambil data.json milik klien
-        const response = await fetch(`${basePath}data.json`);
-        if (!response.ok) {
-            throw new Error(`File 'data.json' tidak ditemukan di path: ${basePath}data.json`);
-        }
-        const clientData = await response.json();
+        // 2. Fetch data.json
+        const resData = await fetch(`${basePath}data.json`);
+        if (!resData.ok) throw new Error(`File 'data.json' tidak ditemukan pada folder 'clients/${clientFolder}/'`);
+        const clientData = await resData.json();
 
-        // 4. Tentukan tema (default: royal-vintage)
+        // 3. Load Template HTML & CSS
         const theme = clientData.theme || 'royal-vintage';
+        const resTemplate = await fetch(`templates/${theme}/index.html`);
+        if (!resTemplate.ok) throw new Error(`Template '${theme}' tidak ditemukan`);
+        
+        const templateHtml = await resTemplate.text();
 
-        // 5. Load HTML Template Tema
-        const templateResponse = await fetch(`templates/${theme}/index.html`);
-        if (!templateResponse.ok) {
-            throw new Error(`File template 'templates/${theme}/index.html' tidak ditemukan.`);
-        }
-        const templateHtml = await templateResponse.text();
-
-        // 6. Muat CSS Tema secara dinamis
+        // Inject CSS Tema
         const themeCss = document.createElement('link');
         themeCss.rel = 'stylesheet';
         themeCss.href = `templates/${theme}/style.css`;
         document.head.appendChild(themeCss);
 
-        // 7. Inject HTML Template ke dalam container #app
+        // Render HTML ke elemen #app
         document.getElementById('app').innerHTML = templateHtml;
 
-        // 8. Masukkan data dari JSON ke elemen HTML (Data Binding)
-        bindDataToTemplate(clientData, basePath);
+        // 4. Bind Data JSON ke Elemen HTML
+        bindData(clientData, basePath);
 
-        // 9. Jika ada parameter nama tamu (&to=...)
-        if (guestName) {
-            const guestEl = document.getElementById('nama-tamu');
-            if (guestEl) {
-                guestEl.innerText = decodeURIComponent(guestName.replace(/\+/g, ' '));
-            }
-        }
+        // 5. Render Nama Tamu
+        const finalGuestName = guestName 
+            ? decodeURIComponent(guestName.replace(/\+/g, ' ')) 
+            : (clientData.guest ? clientData.guest.defaultName : "Tamu Undangan");
 
-    } catch (error) {
-        console.error("Error App:", error);
-        document.getElementById('app').innerHTML = `
-            <div style="text-align:center; padding: 60px 20px; font-family: sans-serif;">
-                <h2 style="color: #e74c3c; margin-bottom: 10px;">Gagal Memuat Undangan</h2>
-                <p style="color: #666; max-width: 500px; margin: 0 auto; font-size: 0.95rem;">${error.message}</p>
-            </div>`;
+        document.querySelectorAll('#nama-tamu, [data-bind="guest.name"]').forEach(el => {
+            el.innerText = finalGuestName;
+        });
+
+    } catch (err) {
+        console.error(err);
+        renderError("Gagal Memuat Undangan", err.message);
     }
 });
 
-// Fungsi Otomatisasi Mengisi Data dari JSON ke HTML
-function bindDataToTemplate(data, basePath) {
+// Auto Data Binding
+function bindData(data, basePath) {
     document.querySelectorAll('[data-bind]').forEach(el => {
         const keyPath = el.getAttribute('data-bind').split('.');
         let val = data;
@@ -76,7 +63,7 @@ function bindDataToTemplate(data, basePath) {
 
         if (val !== null && val !== undefined) {
             if (el.tagName === 'IMG') {
-                el.src = basePath + val;
+                el.src = (val.startsWith('http://') || val.startsWith('https://')) ? val : basePath + val;
             } else if (el.tagName === 'AUDIO') {
                 el.src = basePath + val;
             } else if (el.tagName === 'A') {
@@ -86,4 +73,12 @@ function bindDataToTemplate(data, basePath) {
             }
         }
     });
+}
+
+function renderError(title, message) {
+    document.getElementById('app').innerHTML = `
+        <div style="text-align:center; padding: 80px 20px; font-family: sans-serif;">
+            <h2 style="color: #e74c3c; margin-bottom: 10px;">${title}</h2>
+            <p style="color: #666; max-width: 480px; margin: 0 auto;">${message}</p>
+        </div>`;
 }
