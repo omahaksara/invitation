@@ -1,0 +1,42 @@
+{
+  "theme": "royal-vintage",
+  "groom": {
+    "nickname": "Budi",
+    "fullName": "Budi Santoso, S.T.",
+    "parents": "Putra dari Bapak Ahmad & Ibu Siti",
+    "photo": "pria.jpg",
+    "instagram": "https://instagram.com/budi_santoso"
+  },
+  "bride": {
+    "nickname": "Ani",
+    "fullName": "Ani Wijaya, S.Ked.",
+    "parents": "Putri dari Bapak Hendra & Ibu Dewi",
+    "photo": "wanita.jpg",
+    "instagram": "https://instagram.com/ani_wijaya"
+  },
+  "event": {
+    "date": "2026-12-25",
+    "akad": {
+      "time": "08.00 - 10.00 WITA",
+      "location": "Masjid Agung Palu",
+      "address": "Jl. Imam Bonjol, Palu, Sulawesi Tengah",
+      "mapsUrl": "https://maps.google.com"
+    },
+    "resepsi": {
+      "time": "11.00 WITA - Selesai",
+      "location": "Gedung Serbaguna Palu",
+      "address": "Jl. Jend. Sudirman, Palu, Sulawesi Tengah",
+      "mapsUrl": "https://maps.google.com"
+    }
+  },
+  "gift": {
+    "bank": "BCA",
+    "accountNumber": "1234567890",
+    "accountName": "Budi Santoso",
+    "qrCode": "qr-bca.jpg"
+  },
+  "media": {
+    "coverPhoto": "sampul.jpg",
+    "music": "musik.mp3"
+  }
+}
