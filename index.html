@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Digital - Omah Aksara</title>
+    <title>Undangan Digital — Omah Aksara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="core/global.css">
 </head>
 <body>
 
-    <!-- Container Utama Tempat Template Dimuat -->
+    <!-- Container Utama Tempat Template & Data Dimuat Dinamis -->
     <div id="app">
-        <div class="loading-state">
-            <p>Memuat Undangan...</p>
+        <div style="font-family: 'Inter', sans-serif; background: #181314; color: #E0A996; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center;">
+            <div style="font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7;">Omah Aksara Studio</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; margin: 0.5rem 0; color: #FCE8E3;">Memuat Undangan</div>
+            <div style="font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7;">menyiapkan halaman...</div>
         </div>
     </div>
 
+    <!-- Script Proteksi & Engine Utama -->
     <script src="core/protection.js"></script>
     <script src="core/app.js"></script>
 </body>
