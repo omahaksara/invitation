@@ -1,0 +1,160 @@
+/* ===================================================
+   SKEMA DATA OTOMATIS: TEMA TIKET VIP MARMER HITAM
+   =================================================== */
+function registerSwipeAnimations(targetKlienId) {
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    const swipeAnimation = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                gsap.to(entry.target, { opacity: 1, x: 0, duration: 1.5, ease: "power3.out", overwrite: "auto" });
+                swipeAnimation.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll(`#quote-section, #groom-box, #bride-box, .event-ticket, #video-section, .rsvp-ticket, #gift-list >, #commentForm, #wishes-feed >`).forEach(el => {
+        gsap.set(el, { opacity: 0, x: -50 }); // Efek muncul geser dari kiri seperti tiket masuk
+        swipeAnimation.observe(el);
+    });
+}
+
+const params = new URLSearchParams(window.location.search);
+const slugKlien = params.get('c') || 'sample-vip'; // Menggunakan nama folder klien sebagai ID unik
+const namaTamuDariUrl = params.get('to')?.replace(/\+/g, ' ');
+
+const pathDataKlien = `../../public/clients/${slugKlien}/`;
+let waKonfirmasiRsvp = "";
+
+fetch(`${pathDataKlien}data.json`).then(res => res.json()).then(data => {
+    // Terapkan Warna Skema Tema Klien
+    if(data.settings) {
+        const root = document.documentElement;
+        if (data.settings.themeColor) root.style.setProperty('--theme-color', data.settings.themeColor);
+        if (data.settings.bgColor) root.style.setProperty('--bg-color', data.settings.bgColor);
+        if (data.settings.textColor) root.style.setProperty('--text-color', data.settings.textColor);
+    }
+
+    const ttdDigitalPria = pathDataKlien + data.couple.groom.signature;
+    const ttdDigitalWanita = pathDataKlien + data.couple.bride.signature;
+    waKonfirmasiRsvp = data.logistics?.rsvpWaNumber || "";
+    
+    // Injeksi Identitas Inti VIP Pass
+    document.getElementById('cover-ticket-names').innerText = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+    if (document.getElementById('ticket-guest-name')) document.getElementById('ticket-guest-name').innerText = namaTamuDariUrl || data.guest?.name || 'V I P GUEST';
+    document.getElementById('footer-names-ticket').innerText = `${data.couple.groom.nickname} & ${data.couple.bride.nickname}`;
+
+    // Muat File Media Gambar & Lagu
+    const coverImage = pathDataKlien + data.gallery.heroImage;
+    if (document.getElementById('cover-ticket-img')) document.getElementById('cover-ticket-img').src = coverImage;
+    if (document.getElementById('audio')) document.getElementById('audio').src = pathDataKlien + data.logistics.music;
+    
+    // Set Tanggal Utama di Tiket
+    if (data.events[0]) {
+        const targetDate = new Date(data.events[0].date);
+        document.getElementById('ticket-day').innerText = targetDate.toLocaleDateString('id-ID', {weekday: 'long'});
+        document.getElementById('ticket-date').innerText = targetDate.getDate();
+        document.getElementById('ticket-month-year').innerText = targetDate.toLocaleDateString('id-ID', {month:'long', year:'numeric'});
+    }
+
+    // Loop Render Komponen UI Berulang Berbasis Skema Tiket
+    renderProfiles(data.couple, pathDataKlien, ttdDigitalPria, ttdDigitalWanita);
+    renderEvents(data.events);
+    renderLiveStreaming(data.liveStreaming);
+    
+    // Setel Countdown Timer
+    if (data.countdown?.targetDate) { initCountdown(data.countdown.targetDate); }
+    loadWishes();
+}).catch(err => console.error("Katalog Studio Gagal Mengambil Data:", err));
+
+// ==========================================
+// 1. SISTEM DYNAMIC RENDERING PROFILE PASANGAN
+// ==========================================
+function renderProfiles(couple, clientPath, signatureGroom, signatureBride) {
+    if (document.getElementById('groom-box')) {
+        document.getElementById('groom-box').innerHTML = `
+            <div class="polaroid-frame -rotate-2 mx-auto mb-6">
+                <img src="${clientPath + couple.groom.image}" class="w-full h-full object-cover">
+                <p class="polaroid-caption">Mr. Groom</p>
+            </div>
+            <p class="text-xl font-bold font-ticket text-white tracking-widest">${couple.groom.name}</p>
+            <p class="text-xs text-stone-400 mt-1">Putra Bapak ${couple.groom.father} & Ibu ${couple.groom.mother}</p>
+            <img src="${signatureGroom}" class="signature-img mx-auto mt-4">
+        `;
+    }
+    if (document.getElementById('bride-box')) {
+        document.getElementById('bride-box').innerHTML = `
+            <div class="polaroid-frame rotate-2 mx-auto mb-6">
+                <img src="${clientPath + couple.bride.image}" class="w-full h-full object-cover">
+                <p class="polaroid-caption">Mrs. Bride</p>
+            </div>
+            <p class="text-xl font-bold font-ticket text-white tracking-widest">${couple.bride.name}</p>
+            <p class="text-xs text-stone-400 mt-1">Putri Bapak ${couple.bride.father} & Ibu ${couple.bride.mother}</p>
+            <img src="${signatureBride}" class="signature-img mx-auto mt-4">
+        `;
+    }
+}
+
+// ==========================================
+// 2. SISTEM RENDERING EVENT & COUNTDOWN
+// ==========================================
+function renderEvents(events) {
+    const container = document.getElementById('event-ticket-list');
+    if (!container || !events) return;
+    events.forEach((e, i) => {
+        const date = new Date(e.date);
+        container.innerHTML += `
+            <div class="event-ticket bg-white border border-stone-200 p-8 flex flex-col items-center justify-center space-y-3 shadow-3xs rounded-xl relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-10">
+                <p class="ticket-status-badge text-[9px] font-bold tracking-widest uppercase text-white bg-stone-900 px-4 py-1.5 rounded-full border border-stone-600">${e.title.toUpperCase()}</p>
+                <div class="ticket-date-box flex items-baseline gap-1 text-center py-2 border-y border-stone-300 w-full justify-center">
+                    <p class="text-5xl font-extrabold text-stone-950 font-ticket">${date.getDate()}</p>
+                    <div>
+                        <p class="text-xs font-bold text-stone-700">${date.toLocaleDateString('id-ID', {month:'long'})}</p>
+                        <p class="text-xs text-stone-500 font-medium">${date.getFullYear()}</p>
+                    </div>
+                </div>
+                <p class="text-lg font-semibold text-stone-950">${date.toLocaleDateString('id-ID', {weekday: 'long'})}</p>
+                <p class="text-xs font-semibold text-stone-600">${e.startTime} - ${e.endTime} ${e.timezone || 'WIB'}</p>
+                <p class="text-xs font-light text-stone-400 leading-relaxed text-center px-4">${e.address}</p>
+                ${e.googleMaps ? `<a href="${e.googleMaps}" target="_blank" class="text-[9px] font-bold tracking-widest uppercase border-b border-stone-400 pb-0.5 text-stone-800">Petunjuk Peta G-Maps</a>` : ''}
+            </div>`;
+    });
+}
+
+function initCountdown(targetDateStr) {
+    const eventDate = new Date(targetDateStr).getTime();
+    setInterval(() => {
+        const now = new Date().getTime();
+        const dist = eventDate - now;
+        if (dist > 0) {
+            document.getElementById('days').innerText = Math.floor(dist / 864e5).toString().padStart(2, '0');
+            document.getElementById('hours').innerText = Math.floor((dist % 864e5) / 36e5).toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = Math.floor((dist % 36e5) / 6e4).toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = Math.floor((dist % 6e4) / 1000).toString().padStart(2, '0');
+        } else {
+            if(document.getElementById('countdown-container')) document.getElementById('countdown-container').style.display = 'none';
+        }
+    }, 1000);
+}
+
+// ==========================================
+// 3. FUNGSI LOGIKA CORE LAINNYA
+// ==========================================
+function openInvitation() {
+    const audio = document.getElementById('audio');
+    const diskWrap = document.getElementById('diskWrap');
+    audio.play().catch(() => console.log("Autoplay dicegah browser"));
+
+    gsap.to("#cover", { y: "-100%", duration: 1.5, ease: "power4.inOut", onComplete: () => {
+        document.getElementById('cover').style.display = 'none';
+        document.getElementById('app').style.opacity = '1';
+        registerSwipeAnimations(slugKlien);
+    }});
+    
+    document.getElementById('musicBtn').onclick = () => {
+        if(audio.paused) { audio.play(); diskWrap.classList.remove('paused'); }
+        else { audio.pause(); diskWrap.classList.add('paused'); }
+    };
+}
+//... (logika RSVP, Ucapan, Salin Gift tetap sama dengan skema umum Anda)
+
