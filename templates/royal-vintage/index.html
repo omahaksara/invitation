@@ -1,44 +1,47 @@
 <div class="invitation-container">
     <!-- Cover / Sampul -->
-    <section class="cover-section">
-        <p class="sub-title" data-bind="cover.title">Undangan Pernikahan</p>
-        <h1 class="names">
-            <span data-bind="couple.groom.nickname">Pria</span> & 
-            <span data-bind="couple.bride.nickname">Wanita</span>
-        </h1>
+    <section class="hero">
+        <p class="date" data-bind="cover.title">Undangan Pernikahan</p>
+        <div class="names">
+            <h1>
+                <span data-bind="couple.groom.nickname">Pria</span> 
+                <span>&amp;</span> 
+                <span data-bind="couple.bride.nickname">Wanita</span>
+            </h1>
+        </div>
         
-        <div class="guest-box">
-            <p>Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-            <h3 id="nama-tamu">Tamu Undangan</h3>
+        <div class="guest-box" style="margin-top: 20px;">
+            <p style="font-size: 0.85rem; color: #7a6a58;">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h3 id="nama-tamu" style="font-size: 1.1rem; color: #333; margin-top: 5px;">Tamu Undangan</h3>
         </div>
     </section>
 
     <!-- Kutipan / Quote -->
-    <section class="quote-section">
-        <p class="arab" data-bind="quote.arab"></p>
-        <p class="text" data-bind="quote.text"></p>
-        <p class="source" data-bind="quote.source"></p>
+    <section class="quote-section" style="padding: 30px 20px; text-align: center; background: #faf7f5;">
+        <p class="arab" data-bind="quote.arab" style="font-size: 1.2rem; margin-bottom: 10px; color: #8b5a2b;"></p>
+        <p class="text" data-bind="quote.text" style="font-size: 0.9rem; color: #666; font-style: italic; margin-bottom: 8px;"></p>
+        <p class="source" data-bind="quote.source" style="font-size: 0.8rem; font-weight: bold; color: #7a6a58;"></p>
     </section>
 
     <!-- Profil Mempelai -->
-    <section class="couple-section">
+    <section class="couples">
         <div class="profile-card">
             <img data-bind="couple.groom.photo" alt="Mempelai Pria">
-            <h2 data-bind="couple.groom.fullName">Nama Pria</h2>
+            <h3 data-bind="couple.groom.fullName">Nama Pria</h3>
             <p data-bind="couple.groom.parents">Orang Tua Pria</p>
         </div>
 
         <div class="profile-card">
             <img data-bind="couple.bride.photo" alt="Mempelai Wanita">
-            <h2 data-bind="couple.bride.fullName">Nama Wanita</h2>
+            <h3 data-bind="couple.bride.fullName">Nama Wanita</h3>
             <p data-bind="couple.bride.parents">Orang Tua Wanita</p>
         </div>
     </section>
 
     <!-- Detail Acara -->
-    <section class="event-section">
+    <section class="events">
         <div class="event-card">
-            <h3 data-bind="events.akad.title">Akad Nikah</h3>
+            <h2 data-bind="events.akad.title">Akad Nikah</h2>
             <p data-bind="events.akad.date">Tanggal</p>
             <p data-bind="events.akad.time">Waktu</p>
             <p data-bind="events.akad.location">Lokasi</p>
@@ -46,7 +49,7 @@
         </div>
 
         <div class="event-card">
-            <h3 data-bind="events.resepsi.title">Resepsi</h3>
+            <h2 data-bind="events.resepsi.title">Resepsi</h2>
             <p data-bind="events.resepsi.date">Tanggal</p>
             <p data-bind="events.resepsi.time">Waktu</p>
             <p data-bind="events.resepsi.location">Lokasi</p>
