@@ -40,7 +40,7 @@
     color: #7a6a58;
 }
 
-/* Bagian Mempelai */
+/* Bagian Mempelai & Acara */
 .couples, .events {
     padding: 40px 20px;
 }
@@ -67,15 +67,24 @@
     font-family: 'Georgia', serif;
     color: #333;
     margin-bottom: 5px;
+    font-size: 1.2rem;
 }
 
 .profile-card p {
     font-size: 0.88rem;
     color: #666;
+    margin: 4px 0;
 }
 
 .event-card h2 {
     color: #8b5a2b;
     margin-bottom: 10px;
     font-family: 'Georgia', serif;
+    font-size: 1.3rem;
+}
+
+.event-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 6px 0;
 }
