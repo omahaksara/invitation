@@ -1,0 +1,81 @@
+/* Container Utama Undangan Mobile-First */
+.invitation-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    color: #4a4a4a;
+}
+
+/* Header / Sampul Depan */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fdf8f5;
+    border-bottom: 2px solid #e8d5c4;
+}
+
+.hero .names {
+    margin: 20px 0;
+}
+
+.hero h1 {
+    font-family: 'Georgia', serif;
+    font-size: 2.2rem;
+    color: #8b5a2b;
+    margin: 5px 0;
+}
+
+.hero span {
+    font-size: 1.5rem;
+    color: #c49a6c;
+}
+
+.hero .date {
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7a6a58;
+}
+
+/* Bagian Mempelai */
+.couples, .events {
+    padding: 40px 20px;
+}
+
+.profile-card, .event-card {
+    text-align: center;
+    margin-bottom: 30px;
+    background: #faf7f5;
+    padding: 25px 15px;
+    border-radius: 12px;
+    border: 1px solid #f0e6df;
+}
+
+.profile-card img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #8b5a2b;
+}
+
+.profile-card h3 {
+    font-family: 'Georgia', serif;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-card p {
+    font-size: 0.88rem;
+    color: #666;
+}
+
+.event-card h2 {
+    color: #8b5a2b;
+    margin-bottom: 10px;
+    font-family: 'Georgia', serif;
+}
