@@ -3,28 +3,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     const clientFolder = urlParams.get('c');
     const guestName = urlParams.get('to');
 
-    // 1. Validasi parameter URL ?c=
     if (!clientFolder) {
-        renderError("Undangan Tidak Ditemukan", "Parameter klien tidak terdeteksi. Gunakan tautan seperti: ?c=budi-ani");
+        renderError("Undangan Tidak Ditemukan", "Parameter klien (?c=nama-klien) tidak terdeteksi pada URL.");
         return;
     }
 
     try {
         const basePath = `clients/${clientFolder}/`;
 
-        // 2. Fetch data.json
+        // 1. Fetch data.json klien
         const resData = await fetch(`${basePath}data.json`);
-        if (!resData.ok) throw new Error(`File 'data.json' tidak ditemukan pada folder 'clients/${clientFolder}/'`);
+        if (!resData.ok) throw new Error(`File 'data.json' tidak ditemukan di folder '${basePath}'`);
         const clientData = await resData.json();
 
-        // 3. Load Template HTML & CSS
+        // 2. Load Template HTML & CSS
         const theme = clientData.theme || 'royal-vintage';
         const resTemplate = await fetch(`templates/${theme}/index.html`);
-        if (!resTemplate.ok) throw new Error(`Template '${theme}' tidak ditemukan`);
+        if (!resTemplate.ok) throw new Error(`Template '${theme}' tidak ditemukan.`);
         
         const templateHtml = await resTemplate.text();
 
-        // Inject CSS Tema
+        // Inject CSS Tema secara dinamis
         const themeCss = document.createElement('link');
         themeCss.rel = 'stylesheet';
         themeCss.href = `templates/${theme}/style.css`;
@@ -33,10 +32,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Render HTML ke elemen #app
         document.getElementById('app').innerHTML = templateHtml;
 
-        // 4. Bind Data JSON ke Elemen HTML
+        // 3. Bind Data JSON ke Elemen HTML
         bindData(clientData, basePath);
 
-        // 5. Render Nama Tamu
+        // 4. Render Nama Tamu
         const finalGuestName = guestName 
             ? decodeURIComponent(guestName.replace(/\+/g, ' ')) 
             : (clientData.guest ? clientData.guest.defaultName : "Tamu Undangan");
@@ -51,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Auto Data Binding
+// Fungsi Auto Data Binding
 function bindData(data, basePath) {
     document.querySelectorAll('[data-bind]').forEach(el => {
         const keyPath = el.getAttribute('data-bind').split('.');
@@ -77,8 +76,8 @@ function bindData(data, basePath) {
 
 function renderError(title, message) {
     document.getElementById('app').innerHTML = `
-        <div style="text-align:center; padding: 80px 20px; font-family: sans-serif;">
-            <h2 style="color: #e74c3c; margin-bottom: 10px;">${title}</h2>
-            <p style="color: #666; max-width: 480px; margin: 0 auto;">${message}</p>
+        <div style="text-align:center; padding: 80px 20px; font-family: sans-serif; background: #181314; color: #E0A996; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h2 style="color: #e74c3c; margin-bottom: 10px; font-size: 1.5rem;">${title}</h2>
+            <p style="color: #FCE8E3; max-width: 480px; margin: 0 auto; font-size: 0.9rem; opacity: 0.8;">${message}</p>
         </div>`;
 }
