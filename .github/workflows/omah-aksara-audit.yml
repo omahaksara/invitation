@@ -71,7 +71,7 @@ jobs:
       - name: Install Playwright browser
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Smoke test all themes in Chromium
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/omah-aksara-http.log 2>&1 &
