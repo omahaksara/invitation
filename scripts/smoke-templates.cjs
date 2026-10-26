@@ -70,6 +70,55 @@ const themes = [
         await page.close();
       }
     }
+
+    // Responsive and demo-interaction pass at a common mobile viewport.
+    for (const theme of themes) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+      const pageErrors = [];
+      page.on("pageerror", error => pageErrors.push(error.message));
+      const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
+      try {
+        const response = await page.goto(url, { waitUntil: "domcontentloaded" });
+        assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
+        await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
+        await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
+        const layout = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          page: document.documentElement.scrollWidth,
+          rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
+          guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
+        }));
+        assert.ok(layout.page <= layout.viewport + 2,
+          theme.slug + ": horizontal overflow di mobile " + JSON.stringify(layout));
+        assert.ok(layout.rsvp > 0 && layout.rsvp <= layout.viewport,
+          theme.slug + ": formulir RSVP tidak responsif " + JSON.stringify(layout));
+        assert.ok(layout.guestbook > 0 && layout.guestbook <= layout.viewport,
+          theme.slug + ": buku tamu tidak responsif " + JSON.stringify(layout));
+
+        const rsvp = page.locator("#rsvp-form");
+        await rsvp.locator('[name="name"]').fill("Tamu Uji");
+        await rsvp.locator('[name="attendance"]').selectOption("hadir");
+        await rsvp.locator('button[type="submit"]').first().click();
+        await page.waitForFunction(() => /Simulasi demo/.test(document.querySelector("#rsvp-status")?.textContent || ""),
+          undefined, { timeout: 5000 });
+
+        const wishes = page.locator("#wishes-form");
+        await wishes.locator('[name="name"]').fill("Tamu Uji");
+        await wishes.locator('[name="message"]').fill("Semoga bahagia selalu.");
+        await wishes.locator('button[type="submit"]').first().click();
+        await page.waitForFunction(() => /Simulasi demo/.test(document.querySelector("#wishes-status")?.textContent || ""),
+          undefined, { timeout: 5000 });
+        assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
+        console.log("PASS mobile + demo forms " + theme.slug);
+      } catch (error) {
+        const message = error && error.message ? error.message : String(error);
+        failures.push(theme.slug + " mobile: " + message);
+        console.error("FAIL mobile " + theme.slug + ": " + message);
+      } finally {
+        await page.close();
+      }
+    }
   } finally {
     await browser.close();
   }
