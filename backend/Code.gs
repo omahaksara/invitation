@@ -19,7 +19,8 @@ const SHEET_RSVP = "RSVP";
 const SHEET_GUESTBOOK = "Guestbook";
 const HEADERS = {
   RSVP: ["timestamp", "slug", "guest_name", "attendance", "guest_count"],
-  Guestbook: ["timestamp", "slug", "guest_name", "message"]
+  Guestbook: ["timestamp", "slug", "guest_name", "message"],
+  Settings: ["slug", "status"]
 };
 
 /**
@@ -41,6 +42,8 @@ function setupDatabase() {
   firstSheet.appendRow(HEADERS.RSVP);
   const guestbook = spreadsheet.insertSheet(SHEET_GUESTBOOK);
   guestbook.appendRow(HEADERS.Guestbook);
+  const settings = spreadsheet.insertSheet("Settings");
+  settings.appendRow(HEADERS.Settings);
   props.setProperty(DATABASE_ID_PROPERTY, spreadsheet.getId());
   Logger.log("Database Omah Aksara dibuat: " + spreadsheet.getUrl());
   return spreadsheet.getUrl();
@@ -67,6 +70,7 @@ function doGet(e) {
 
   const slug = validSlug(params.slug || "");
   if (!slug) return output({ ok: false, message: "Slug tidak valid." });
+  if (!isAllowedSlug_(slug)) return output({ ok: false, message: "Undangan belum aktif pada backend." });
 
   const values = getSheet_(SHEET_GUESTBOOK).getDataRange().getValues();
   if (values.length < 2) return output({ ok: true, items: [] });
@@ -94,6 +98,7 @@ function doPost(e) {
     if (!slug || !name) {
       return output({ ok: false, message: "Slug atau nama tidak valid." });
     }
+    if (!isAllowedSlug_(slug)) return output({ ok: false, message: "Undangan belum aktif pada backend." });
 
     if (payload.action === "rsvp") {
       const attendance = String(payload.attendance || "");
@@ -147,6 +152,14 @@ function getSheet_(name) {
     sheet.appendRow(HEADERS[name]);
   }
   return sheet;
+}
+
+function isAllowedSlug_(slug) {
+  const values = getSheet_("Settings").getDataRange().getValues();
+  return values.slice(1).some(row =>
+    String(row[0] || "").trim() === slug &&
+    String(row[1] || "").trim().toLowerCase() === "published"
+  );
 }
 
 function validSlug(value) {
