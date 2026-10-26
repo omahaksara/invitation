@@ -157,5 +157,5 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Validasi lolos untuk ${clientDirs.length} folder klien: tidak ada error struktural atau aset lokal yang hilang.`);
+console.log(`Pemeriksaan selesai untuk ${clientDirs.length} folder klien. Data V2 yang ditandai schemaVersion: 2 telah diperiksa; data lama yang belum berversi hanya dilaporkan sebagai warning.`);
 if (warnings.length) console.log(`${warnings.length} warning perlu ditinjau sebelum rilis publik.`);
