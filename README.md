@@ -34,7 +34,7 @@ Undangan pelanggan publik memakai tema dari `data.json`. Nilai tema dibatasi ke 
 
 Setiap undangan memakai `clients/<slug>/data.json`. Data baru harus menyertakan `schemaVersion: 2`. Properti `features` dapat mematikan fitur tertentu dengan `false`; jika properti fitur tidak ada, fitur inti aktif secara default.
 
-Endpoint RSVP dan buku tamu harus ditulis secara eksplisit pada konfigurasi integrasi. Tidak ada fallback URL produksi yang boleh ditanam dalam kode. Mode demo hanya simulasi: formulir bisa dicoba, tetapi RSVP tidak dikirim ke database dan ucapan hanya tampil di halaman demo.
+Endpoint RSVP dan buku tamu harus ditulis secara eksplisit pada konfigurasi integrasi. Tidak ada fallback URL produksi yang boleh ditanam dalam kode. Mode demo hanya simulasi: formulir bisa dicoba, tetapi RSVP tidak dikirim ke database dan ucapan hanya tampil di halaman demo. Backend menolak slug yang tidak terdaftar sebagai `published` pada tab `Settings` spreadsheet.
 
 Lihat [docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md) untuk format data dan adaptor migrasi.
 
