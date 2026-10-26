@@ -22,7 +22,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check core/app.js
-          node --check backend/Code.gs
+          node --check < backend/Code.gs
       - name: Check template and API invariants
         run: |
           node <<'NODE'
