@@ -61,10 +61,7 @@
     "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=85",
     "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=900&q=85"
   ],
-  "gifts": [
-    { "bank": "BANK CONTOH", "accountNumber": "0000000000", "accountHolder": "Arkan Pradipta", "qrCode": "" },
-    { "bank": "BANK CONTOH", "accountNumber": "1111111111", "accountHolder": "Sekar Ayuningtyas", "qrCode": "" }
-  ],
+  "gifts": { "message": "Ini adalah contoh tampilan amplop digital. Nomor rekening demo tidak ditampilkan agar tidak disalahgunakan.", "accounts": [] },
   "media": { "music": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3" },
   "rsvp": { "link": "" },
   "integrations": { "apiUrl": "" }
