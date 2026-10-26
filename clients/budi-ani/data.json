@@ -1,10 +1,11 @@
 {
-  "theme": "royal-vintage",
+  "theme": "serein",
   "guest": {
     "defaultName": "Tamu Undangan"
   },
   "cover": {
     "title": "Undangan Pernikahan",
+    "subtitle": "The Wedding of",
     "image": "foto-sampul.jpg"
   },
   "couple": {
@@ -25,7 +26,7 @@
   },
   "quote": {
     "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
-    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri...",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, agar kamu merasa tenang dan tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
     "source": "QS. Ar-Rum: 21"
   },
   "events": {
@@ -49,12 +50,43 @@
   "countdown": {
     "targetDate": "2026-11-12T08:00:00"
   },
-  "gift": {
-    "bank": "Bank BCA",
-    "accountNumber": "1234567890",
-    "accountHolder": "Budi Santoso",
-    "qrCode": "qr-bca.jpg"
-  },
+  "story": [
+    {
+      "year": "2023",
+      "title": "Awal Bertemu",
+      "description": "Kami pertama kali bertemu di sebuah acara seminar di Jakarta."
+    },
+    {
+      "year": "2024",
+      "title": "Komitmen",
+      "description": "Setelah mengenal lebih dekat, kami memutuskan untuk melangkah ke jenjang yang lebih serius."
+    },
+    {
+      "year": "2025",
+      "title": "Lamaran",
+      "description": "Dengan restu kedua orang tua, kami melangsungkan acara pertunangan."
+    }
+  ],
+  "gallery": [
+    "foto1.jpg",
+    "foto2.jpg",
+    "foto3.jpg",
+    "foto4.jpg"
+  ],
+  "gifts": [
+    {
+      "bank": "Bank BCA",
+      "accountNumber": "1234567890",
+      "accountHolder": "Budi Santoso",
+      "qrCode": "qr-bca.jpg"
+    },
+    {
+      "bank": "Bank Mandiri",
+      "accountNumber": "0987654321",
+      "accountHolder": "Ani Wijaya",
+      "qrCode": "qr-mandiri.png"
+    }
+  ],
   "media": {
     "music": "musik.mp3"
   }
