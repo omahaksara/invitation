@@ -263,8 +263,16 @@
       label.append(control);
       return label;
     };
-    const makeSection = (id, title) => {
+    const makeSection = (id, title, formId) => {
       let section = document.getElementById(id);
+      if (!section && formId) {
+        const existingForm = document.getElementById(formId);
+        const existingSection = existingForm && existingForm.closest("section");
+        if (existingSection && !existingSection.id) {
+          existingSection.id = id;
+          section = existingSection;
+        }
+      }
       if (!section) {
         section = document.createElement("section");
         section.id = id;
@@ -307,13 +315,15 @@
       return button;
     };
 
-    const rsvpSection = makeSection("rsvp-section", "Konfirmasi Kehadiran");
+    const rsvpSection = makeSection("rsvp-section", "Konfirmasi Kehadiran", "rsvp-form");
     const rsvpForm = makeForm(rsvpSection, "rsvp-form");
-    if (!rsvpForm.querySelector('[name="name"]')) {
-      const name = document.createElement("input");
-      name.name = "name"; name.id = "rsvp-name"; name.required = true; name.maxLength = 100; name.autocomplete = "name";
-      rsvpForm.prepend(makeField("Nama", name));
+    let rsvpName = rsvpForm.querySelector('[name="name"], #rsvp-name');
+    if (!rsvpName) {
+      rsvpName = document.createElement("input");
+      rsvpName.id = "rsvp-name";
+      rsvpForm.prepend(makeField("Nama", rsvpName));
     }
+    rsvpName.name = "name"; rsvpName.required = true; rsvpName.maxLength = 100; rsvpName.autocomplete = "name";
     if (!rsvpForm.querySelector('[name="attendance"]')) {
       const attendance = document.createElement("select");
       attendance.name = "attendance"; attendance.required = true;
@@ -327,22 +337,29 @@
       [["1", "1 orang"], ["2", "2 orang"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; count.append(option); });
       rsvpForm.append(makeField("Jumlah tamu", count));
     }
-    if (!rsvpForm.querySelector('button[type="submit"]')) rsvpForm.append(makeButton("Kirim Konfirmasi"));
+    let rsvpButton = rsvpForm.querySelector('button[type="submit"]') || rsvpForm.querySelector("button:not([type])");
+    if (rsvpButton) rsvpButton.type = "submit";
+    else rsvpForm.append(makeButton("Kirim Konfirmasi"));
     makeStatus(rsvpForm, "rsvp-status");
 
-    const guestSection = makeSection("guestbook-section", "Ucapan & Doa");
+    const guestSection = makeSection("guestbook-section", "Ucapan & Doa", "wishes-form");
     const wishesForm = makeForm(guestSection, "wishes-form");
-    if (!wishesForm.querySelector('[name="name"]')) {
-      const name = document.createElement("input"); name.name = "name"; name.id = "wishes-name"; name.required = true; name.maxLength = 100; name.autocomplete = "name";
-      wishesForm.prepend(makeField("Nama", name));
+    let wishesName = wishesForm.querySelector('[name="name"], #wishes-name, #wish-name');
+    if (!wishesName) {
+      wishesName = document.createElement("input");
+      wishesName.id = "wishes-name";
+      wishesForm.prepend(makeField("Nama", wishesName));
     }
+    wishesName.name = "name"; wishesName.required = true; wishesName.maxLength = 100; wishesName.autocomplete = "name";
     const message = wishesForm.querySelector('[name="message"]') || wishesForm.querySelector("textarea");
     if (message) { message.name = "message"; message.maxLength = 500; message.required = true; }
     else {
       const textarea = document.createElement("textarea"); textarea.name = "message"; textarea.id = "wish-message"; textarea.rows = 4; textarea.maxLength = 500; textarea.required = true; textarea.placeholder = "Tuliskan doa terbaik...";
       wishesForm.append(makeField("Ucapan", textarea));
     }
-    if (!wishesForm.querySelector('button[type="submit"]')) wishesForm.append(makeButton("Kirim Ucapan"));
+    let wishesButton = wishesForm.querySelector('button[type="submit"]') || wishesForm.querySelector("button:not([type])");
+    if (wishesButton) wishesButton.type = "submit";
+    else wishesForm.append(makeButton("Kirim Ucapan"));
     makeStatus(wishesForm, "wishes-status");
     let list = document.getElementById("wishes-list") || document.getElementById("wishes-container");
     if (!list) { list = document.createElement("div"); guestSection.append(list); }
