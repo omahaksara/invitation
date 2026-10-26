@@ -186,7 +186,7 @@
 
     const mount = section => {
       const footer = target.querySelector("footer");
-      if (footer && footer.parentNode === target) target.insertBefore(section, footer);
+      if (footer && footer.parentNode) footer.parentNode.insertBefore(section, footer);
       else target.append(section);
     };
     const makeSection = (className, title) => {
