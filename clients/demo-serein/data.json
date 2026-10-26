@@ -49,10 +49,8 @@
     { "src": "https://images.unsplash.com/photo-1519225421980-888cb4f0b1a3?w=900&q=85", "alt": "Suasana resepsi" }
   ],
   "gifts": {
-    "message": "Doa restu Anda adalah hadiah terindah bagi kami.",
-    "accounts": [
-      { "bank": "BANK CONTOH", "accountNumber": "0000000000", "accountHolder": "Arkan Pradipta" }
-    ]
+    "message": "Ini adalah contoh tampilan amplop digital. Data rekening demo tidak ditampilkan agar tidak disalahgunakan.",
+    "accounts": []
   },
   "music": {
     "src": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3",
