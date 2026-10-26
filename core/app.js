@@ -43,6 +43,7 @@
       bindGuestName(guestName, data);
       bindMapLinks(data);
       initCoverAndMusic();
+      initKarsaReveal();
     } catch (error) {
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan Tidak Dapat Dimuat", error instanceof Error ? error.message : "Terjadi kesalahan yang tidak diketahui.");
@@ -119,11 +120,13 @@
   }
 
   function initCoverAndMusic() {
-    const cover = document.getElementById("cover-section");
-    const main = document.getElementById("main-content");
-    const openButton = document.getElementById("open-invitation-btn");
+    const cover = document.getElementById("cover-section") || document.getElementById("cover");
+    const main = document.getElementById("main-content") || document.getElementById("app-inner");
+    const openButton = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
     const music = document.getElementById("bg-music");
-    const toggle = document.getElementById("music-toggle");
+    const toggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
+    const disk = document.getElementById("disk-wrap");
+    const musicIcon = document.getElementById("music-icon");
 
     if (openButton) {
       openButton.addEventListener("click", async () => {
@@ -131,7 +134,7 @@
           cover.classList.add("is-opening");
           window.setTimeout(() => {
             cover.style.display = "none";
-          }, 450);
+          }, cover.id === "cover" ? 900 : 450);
         }
         if (main) main.style.display = "block";
         if (toggle) toggle.style.display = "flex";
@@ -154,6 +157,8 @@
             await music.play();
             toggle.setAttribute("aria-pressed", "true");
             toggle.innerHTML = '<i class="fa-solid fa-compact-disc fa-spin" aria-hidden="true"></i>';
+            if (disk) disk.classList.remove("paused");
+            if (musicIcon) musicIcon.className = "fa-solid fa-pause absolute text-[9px] text-stone-600";
           } catch (error) {
             toggle.setAttribute("aria-pressed", "false");
           }
@@ -161,6 +166,8 @@
           music.pause();
           toggle.setAttribute("aria-pressed", "false");
           toggle.innerHTML = '<i class="fa-solid fa-compact-disc" aria-hidden="true"></i>';
+          if (disk) disk.classList.add("paused");
+          if (musicIcon) musicIcon.className = "fa-solid fa-play absolute text-[9px] text-stone-600";
         }
       });
     }
@@ -207,6 +214,47 @@
     app.appendChild(panel);
   }
 
-  // Dipakai oleh tombol salin rekening pada template.
+  function initKarsaReveal() {
+    const elements = document.querySelectorAll(".reveal");
+    if (!elements.length) return;
+    if (!( "IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("active"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+          currentObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    elements.forEach((element) => observer.observe(element));
+  }
+
+  function submitWish(event) {
+    if (event) event.preventDefault();
+    const form = document.getElementById("wishes-form");
+    if (!form) return;
+    let message = document.getElementById("wishes-status");
+    if (!message) {
+      message = document.createElement("p");
+      message.id = "wishes-status";
+      message.setAttribute("role", "status");
+      message.style.cssText = "font-size:.85rem;text-align:center;color:#777;margin-top:12px";
+      form.appendChild(message);
+    }
+    message.textContent = "Fitur ucapan belum aktif. Hubungkan endpoint api.apiUcapan pada data.json terlebih dahulu.";
+  }
+
   window.copyRekening = copyRekening;
+  window.openInvitation = () => {
+    const button = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
+    if (button) button.click();
+  };
+  window.toggleMusic = () => {
+    const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
+    if (button) button.click();
+  };
+  window.submitWish = submitWish;
 })();
