@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
+    <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Placeholder CSS Templat Dinamis -->
     <link id="theme-style" rel="stylesheet" href="">
@@ -23,7 +23,7 @@
 </head>
 <body>
 
-    <!-- Wadah Utama Sistem -->
+    <!-- Wadah Utama Aplikasi -->
     <div id="app">
         <div class="loading-wrap">
             <div class="loading-sub">Omah Aksara Studio</div>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <!-- Skrip Engine Router -->
+    <!-- Skrip Engine Router Utama -->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             try {
@@ -49,27 +49,30 @@
                     return;
                 }
 
-                // 2. Ambil data.json dari folder klien (menggunakan folder 'klien/')
-                const responseJson = await fetch(`klien/${klien}/data.json`);
+                // 2. Deteksi jalur dasar secara otomatis (mendukung repositori /invitation/ di GitHub Pages)
+                const basePath = window.location.pathname.includes('/invitation') ? '/invitation' : '';
+
+                // 3. Ambil file data.json dari folder klien
+                const responseJson = await fetch(`${basePath}/klien/${klien}/data.json`);
                 if (!responseJson.ok) throw new Error("Data klien tidak ditemukan.");
                 const data = await responseJson.json();
 
-                // 3. Ambil tema dari data.json (default: 'sirein')
+                // 4. Deteksi tema yang digunakan dari data.json (default: 'sirein')
                 const tema = data.theme || 'sirein';
+                const themeFolder = `${basePath}/templat/${tema}`;
 
-                // 4. Tarik CSS dan HTML dari folder templat (menggunakan folder 'templat/')
-                const themeFolder = `templat/${tema}`;
+                // 5. Pasang file CSS dan HTML dari folder templat
                 document.getElementById('theme-style').href = `${themeFolder}/style.css`;
                 
                 const responseHtml = await fetch(`${themeFolder}/index.html`);
                 if (!responseHtml.ok) throw new Error("Templat gagal dimuat.");
                 const htmlText = await responseHtml.text();
 
-                // 5. Masukkan HTML templat ke wadah #app
+                // 6. Masukkan kerangka HTML ke dalam wadah #app
                 document.getElementById('app').innerHTML = htmlText;
 
-                // 6. Jalankan pengikatan data (binding)
-                bindDataAndInit(data, klien);
+                // 7. Jalankan fungsi binding data dan interaksi
+                bindDataAndInit(data, klien, basePath);
 
             } catch (error) {
                 console.error("Gagal memuat:", error);
@@ -81,40 +84,64 @@
             }
         });
 
-        function bindDataAndInit(data, klien) {
-            // A. Binding teks dan aset gambar/audio dari folder klien
+        // Fungsi Pencocokan Data JSON ke Elemen HTML & Interaksi Fitur
+        function bindDataAndInit(data, klien, basePath) {
+            // A. Binding teks, gambar, dan audio berdasarkan atribut data-bind
             document.querySelectorAll('[data-bind]').forEach(el => {
                 const path = el.getAttribute('data-bind');
                 const value = getNestedValue(data, path);
                 if (value !== undefined) {
                     if (el.tagName === 'IMG' || el.tagName === 'AUDIO') {
-                        el.src = `klien/${klien}/${value}`;
+                        el.src = `${basePath}/klien/${klien}/${value}`;
                     } else {
                         el.textContent = value;
                     }
                 }
             });
 
-            // B. Ambil nama tamu dari parameter 'to' di URL
+            // B. Ambil nama tamu dari parameter URL (?to=Nama-Tamu)
             const urlParams = new URLSearchParams(window.location.search);
             const guestName = urlParams.get('to');
-            const defaultGuest = data.guest?.defaultName || "Tamu Undangan";
+            const defaultGuest = data.guest && data.guest.defaultName ? data.guest.defaultName : "Tamu Undangan";
             const guestElement = document.getElementById('nama-tamu');
             if (guestElement) {
                 guestElement.textContent = guestName ? decodeURIComponent(guestName.replace(/-/g, ' ')) : defaultGuest;
             }
 
             // C. Tautan Google Maps
-            if (data.events?.akad?.mapsUrl) {
-                const akadMap = document.getElementById('link-akad-maps');
-                if (akadMap) akadMap.href = data.events.akad.mapsUrl;
-            }
-            if (data.events?.resepsi?.mapsUrl) {
-                const resepsiMap = document.getElementById('link-resepsi-maps');
-                if (resepsiMap) resepsiMap.href = data.events.resepsi.mapsUrl;
+            if (data.events) {
+                if (data.events.akad && data.events.akad.mapsUrl) {
+                    const akadMap = document.getElementById('link-akad-maps');
+                    if (akadMap) akadMap.href = data.events.akad.mapsUrl;
+                }
+                if (data.events.resepsi && data.events.resepsi.mapsUrl) {
+                    const resepsiMap = document.getElementById('link-resepsi-maps');
+                    if (resepsiMap) resepsiMap.href = data.events.resepsi.mapsUrl;
+                }
             }
 
-            // D. Tombol Buka Undangan & Musik
+            // D. Hitung Mundur (Countdown Timer)
+            if (data.countdown && data.countdown.targetDate) {
+                const targetTime = new Date(data.countdown.targetDate).getTime();
+                setInterval(() => {
+                    const now = new Date().getTime();
+                    const distance = targetTime - now;
+
+                    if (distance > 0) {
+                        const days = document.getElementById('days');
+                        const hours = document.getElementById('hours');
+                        const minutes = document.getElementById('minutes');
+                        const seconds = document.getElementById('seconds');
+
+                        if (days) days.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        if (hours) hours.innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        if (minutes) minutes.innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        if (seconds) seconds.innerText = Math.floor((distance % (1000 * 60)) / 1000);
+                    }
+                }, 1000);
+            }
+
+            // E. Tombol Buka Undangan & Pemutar Musik Latar
             const coverSection = document.getElementById('cover-section');
             const mainContent = document.getElementById('main-content');
             const musicToggle = document.getElementById('music-toggle');
@@ -131,12 +158,14 @@
                             if (musicToggle) musicToggle.style.display = 'flex';
                         }, 500);
                     }
+
                     if (bgMusic && bgMusic.src) {
-                        bgMusic.play().catch(err => console.log("Audio diblokir browser:", err));
+                        bgMusic.play().catch(err => console.log("Audio diblokir oleh browser:", err));
                     }
                 });
             }
 
+            // F. Kontrol Tombol Musik Melayang (Play / Pause)
             let isPlaying = true;
             if (musicToggle && bgMusic) {
                 musicToggle.addEventListener('click', () => {
@@ -152,15 +181,19 @@
             }
         }
 
+        // Helper untuk membaca objek JSON bersarang
         function getNestedValue(obj, path) {
             return path.split('.').reduce((acc, part) => acc && acc[part], obj);
         }
 
+        // Fungsi Salin Nomor Rekening Kado Digital
         function copyRekening() {
             const numEl = document.getElementById('rekening-num');
             if (numEl) {
                 const num = numEl.innerText;
-                navigator.clipboard.writeText(num).then(() => alert("Nomor rekening disalin: " + num));
+                navigator.clipboard.writeText(num).then(() => {
+                    alert("Nomor rekening berhasil disalin: " + num);
+                });
             }
         }
     </script>
