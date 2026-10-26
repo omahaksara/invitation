@@ -24,7 +24,7 @@ const themes = [
         await page.waitForFunction(() => {
           const el = document.querySelector('[data-bind="couple.groom.nickname"]');
           return el && el.textContent.trim() === "Arkan";
-        }, { timeout: 10000 });
+        }, undefined, { timeout: 10000 });
 
         assert.equal((await page.locator("#nama-tamu").textContent()).trim(), "Nama Tamu",
           theme.slug + ": nama tamu tidak terbaca");
@@ -41,7 +41,7 @@ const themes = [
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
             return !cover || cover.hidden || getComputedStyle(cover).display === "none";
-          }, { timeout: 5000 });
+          }, undefined, { timeout: 5000 });
         }
 
         const musicControl = page.locator("#music-toggle, #music-btn").first();
