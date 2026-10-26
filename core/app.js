@@ -103,6 +103,9 @@
   function renderStory(stories) {
     const root = document.getElementById("story-list");
     if (!root || !Array.isArray(stories)) return;
+    // Legacy themes (for example Sirein) already contain data-bound story cards.
+    // Keep their original markup and styling; only build cards for empty V2 containers.
+    if (root.children.length > 0) return;
     root.replaceChildren();
     stories.forEach((item, index) => {
       const article = document.createElement("article"); article.className = "story-card reveal"; article.style.animationDelay = (index * 100) + "ms";
