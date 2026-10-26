@@ -1,0 +1,84 @@
+<!-- 1. HALAMAN SAMPUL / COVER DEPAN -->
+<div id="cover-section" class="cover-overlay">
+    <div class="cover-content">
+        <p style="letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem;">The Wedding of</p>
+        <h1 class="cover-names">
+            <span data-bind="couple.groom.nickname">Pria</span> &amp; <span data-bind="couple.bride.nickname">Wanita</span>
+        </h1>
+        <div style="margin: 25px 0; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+            <p style="font-size: 0.85rem; color: #ccc; margin: 0;">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h3 id="nama-tamu" style="font-size: 1.1rem; color: #d4af37; margin: 5px 0 0 0;">Tamu Undangan</h3>
+        </div>
+        <button id="open-invitation-btn" class="btn-open">
+            <i class="fa-solid fa-envelope-open"></i> Buka Undangan
+        </button>
+    </div>
+</div>
+
+<!-- 2. KONTEN UTAMA UNDANGAN -->
+<div class="invitation-container" id="main-content" style="display: none;">
+    
+    <!-- Hero Header -->
+    <section class="hero">
+        <p style="letter-spacing: 2px; text-transform: uppercase; color: #888;" data-bind="cover.title">Undangan Pernikahan</p>
+        <h1 style="font-family: Georgia, serif; color: #333; font-size: 2rem;">
+            <span data-bind="couple.groom.nickname">Pria</span> &amp; <span data-bind="couple.bride.nickname">Wanita</span>
+        </h1>
+    </section>
+
+    <!-- Quote -->
+    <section style="background: #faf8f5; padding: 30px 20px; text-align: center;">
+        <p style="font-size: 1.1rem; color: #555;" data-bind="quote.arab"></p>
+        <p style="font-size: 0.9rem; font-style: italic; color: #666;" data-bind="quote.text"></p>
+        <p style="font-size: 0.8rem; font-weight: bold; color: #888;" data-bind="quote.source"></p>
+    </section>
+
+    <!-- Mempelai -->
+    <section class="couples">
+        <div class="profile-card" style="margin-bottom: 30px;">
+            <img data-bind="couple.groom.photo" alt="Mempelai Pria">
+            <h3 data-bind="couple.groom.fullName" style="margin: 10px 0 5px 0; color: #333;">Nama Pria</h3>
+            <p style="font-size: 0.85rem; color: #666;" data-bind="couple.groom.parents">Orang Tua Pria</p>
+        </div>
+        <div class="profile-card">
+            <img data-bind="couple.bride.photo" alt="Mempelai Wanita">
+            <h3 data-bind="couple.bride.fullName" style="margin: 10px 0 5px 0; color: #333;">Nama Wanita</h3>
+            <p style="font-size: 0.85rem; color: #666;" data-bind="couple.bride.parents">Orang Tua Wanita</p>
+        </div>
+    </section>
+
+    <!-- Detail Acara -->
+    <section class="events" style="background: #faf8f5; padding: 30px 20px;">
+        <div style="margin-bottom: 25px;">
+            <h2 style="color: #d4af37; font-size: 1.2rem;" data-bind="events.akad.title">Akad Nikah</h2>
+            <p data-bind="events.akad.date">Tanggal</p>
+            <p data-bind="events.akad.time">Waktu</p>
+            <p data-bind="events.akad.location">Lokasi</p>
+            <a id="link-akad-maps" href="#" target="_blank" style="color: #d4af37; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📍 Lihat Lokasi Google Maps</a>
+        </div>
+        <div>
+            <h2 style="color: #d4af37; font-size: 1.2rem;" data-bind="events.resepsi.title">Resepsi</h2>
+            <p data-bind="events.resepsi.date">Tanggal</p>
+            <p data-bind="events.resepsi.time">Waktu</p>
+            <p data-bind="events.resepsi.location">Lokasi</p>
+            <a id="link-resepsi-maps" href="#" target="_blank" style="color: #d4af37; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📍 Lihat Lokasi Google Maps</a>
+        </div>
+    </section>
+
+    <!-- Kado Digital -->
+    <section class="gift-section">
+        <h2>Kado Digital</h2>
+        <div style="background: #f7f4ef; padding: 15px; border-radius: 8px; display: inline-block; margin-top: 10px;">
+            <h3 data-bind="gift.bank" style="margin: 0 0 5px 0;">Bank</h3>
+            <p id="rekening-num" data-bind="gift.accountNumber" style="font-weight: bold; font-size: 1.1rem; margin: 5px 0;">No Rekening</p>
+            <p style="font-size: 0.85rem; margin: 0;">a.n <span data-bind="gift.accountHolder">Nama</span></p>
+            <button onclick="copyRekening()" style="background: #333; color: white; border: none; padding: 5px 15px; border-radius: 5px; margin-top: 10px; cursor: pointer;">Salin Rekening</button>
+        </div>
+    </section>
+
+    <!-- Audio & Tombol Musik -->
+    <audio id="bg-music" loop></audio>
+    <div id="music-toggle" class="music-float-btn" style="display: none;">
+        <i class="fa-solid fa-compact-disc fa-spin"></i>
+    </div>
+</div>
