@@ -181,7 +181,7 @@
     const gifts = Array.isArray(data.gifts) ? data.gifts : (data.gifts && Array.isArray(data.gifts.accounts) ? data.gifts.accounts : []);
     const quote = data.quote || {};
     const video = data.video || {};
-    const target = document.querySelector("#main-content, #app-inner, .invitation-container, .invite-shell") || document.getElementById("app");
+    const target = document.getElementById("main-content") || document.getElementById("app-inner") || document.querySelector(".invitation-container") || document.querySelector(".invite-shell") || document.getElementById("app");
     if (!target) return;
 
     const mount = section => {
