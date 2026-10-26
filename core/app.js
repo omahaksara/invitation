@@ -275,7 +275,7 @@
 
   function downloadCalendarEvent(event, data, slug) {
     const date = String(event.date || "");
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) return;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
     const timezone = event.timezone || (data.site && data.site.timezone) || "Asia/Makassar";
     const startTime = event.startTime || "00:00";
     const endTime = event.endTime || (startTime === "00:00" ? "01:00" : startTime);
@@ -296,7 +296,7 @@
       }
       return new Date(timestamp);
     };
-    const formatUtc = value => value.toISOString().replace(/[-:]/g, "").replace(/\\.\\d{3}Z$/, "Z");
+    const formatUtc = value => value.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
     let start;
     let end;
     try {
@@ -306,7 +306,29 @@
       return;
     }
     if (end <= start) end = new Date(start.getTime() + 60 * 60 * 1000);
-    const escapeIcs = value => String(value || "").replace(/\\\\/g, "\\\\\\").replace(/\\n/g, "\\\\n").replace(/[,;]/g, "\\\\  function renderStory(stories) {");
+    const escapeIcs = value => String(value || "")
+      .replace(/\\/g, "\\\\")
+      .replace(/\r?\n/g, "\\n")
+      .replace(/([,;])/g, "\\$1");
+    const uid = (slug || "undangan") + "-" + date.replace(/-/g, "") + "-" + (event.id || "event") + "@omahaksara";
+    const lines = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Omah Aksara//Undangan Digital//ID",
+      "CALSCALE:GREGORIAN", "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + formatUtc(new Date()),
+      "DTSTART:" + formatUtc(start), "DTEND:" + formatUtc(end),
+      "SUMMARY:" + escapeIcs(event.title || "Acara Pernikahan"),
+      "LOCATION:" + escapeIcs([event.location || event.venue, event.address].filter(Boolean).join(", ")),
+      "DESCRIPTION:" + escapeIcs("Undangan digital Omah Aksara"),
+      "END:VEVENT", "END:VCALENDAR"
+    ];
+    const blob = new Blob([lines.join("\r\n") + "\r\n"], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url; anchor.download = (slug || "undangan") + "-" + date + ".ics";
+    document.body.append(anchor); anchor.click(); anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function renderStory(stories) {");
     const uid = (slug || "undangan") + "-" + date.replace(/-/g, "") + "-" + (event.id || "event") + "@omahaksara";
     const lines = [
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Omah Aksara//Undangan Digital//ID",
