@@ -23,7 +23,15 @@ Fungsi setup bersifat idempoten: jika sudah pernah berhasil, pemanggilan berikut
 5. Deploy dan salin URL yang berakhiran `/exec`.
 
 ## 4. URL deployment aktif dan uji kesehatan endpoint
-URL deployment yang telah diberikan dan lulus health check pada 27 Oktober 2026:\n\n```text\nhttps://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec\n```\n\nPemeriksaan `?action=health` telah mengembalikan `ok: true`, `version: 3`, dan `databaseConfigured: true`. Ini mengonfirmasi endpoint dan konfigurasi database dapat dibaca, tetapi bukan bukti uji tulis RSVP/ucapan berhasil.\n\nBuka URL Web App dengan parameter `?action=health`, misalnya:
+URL deployment yang telah diberikan dan lulus health check pada 27 Oktober 2026:
+
+```text
+https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec
+```
+
+Pemeriksaan `?action=health` telah mengembalikan `ok: true`, `version: 3`, dan `databaseConfigured: true`. Ini mengonfirmasi endpoint dan konfigurasi database dapat dibaca, tetapi bukan bukti uji tulis RSVP/ucapan berhasil.
+
+Buka URL Web App dengan parameter `?action=health`, misalnya:
 
 ```text
 URL_WEB_APP?action=health
