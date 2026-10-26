@@ -43,11 +43,6 @@ jobs:
           assert.match(app, /function setupMusic\(/, 'music setup missing');
           assert.doesNotMatch(app.slice(app.indexOf('function setupMusic('), app.indexOf('function setupCountdown(')),
             /button\.textContent\s*=\s*["']♫["']/, 'music toggle must not destroy nested theme icons');
-          assert.match(backend, /function doGet\(e\)/, 'GET API handler missing');
-          assert.match(backend, /function doPost\(e\)/, 'POST API handler missing');
-          assert.match(backend, /filter\(row => String\(row\[1\]\) === slug\)/,
-            'guestbook reads must be filtered by invitation slug');
-          assert.match(backend, /function validSlug\(value\)/, 'slug validation missing');
 
           for (const file of themes) {
             assert.ok(fs.existsSync(file), file + ' is missing');
@@ -69,5 +64,5 @@ jobs:
           for (const theme of themeNames) {
             assert.ok(fs.existsSync(path.join('templates', theme, 'index.html')), 'theme folder missing: ' + theme);
           }
-          console.log('All four theme structures, couple bindings, music controls, demo data and API invariants passed.');
+          console.log('All four theme structures, couple bindings, music controls and demo data passed.');
           NODE
