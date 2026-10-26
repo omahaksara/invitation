@@ -81,6 +81,13 @@ const themes = [
         const response = await page.goto(url, { waitUntil: "domcontentloaded" });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        if (theme.open) {
+          await page.locator(theme.open).click();
+          await page.waitForFunction(() => {
+            const cover = document.getElementById("cover") || document.getElementById("cover-section");
+            return !cover || cover.hidden || getComputedStyle(cover).display === "none";
+          }, undefined, { timeout: 5000 });
+        }
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
         const layout = await page.evaluate(() => ({
