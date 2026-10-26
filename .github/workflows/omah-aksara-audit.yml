@@ -69,3 +69,18 @@ jobs:
           }
           console.log('All four theme structures, couple bindings, music controls and demo data passed.');
           NODE
+
+      - name: Install Playwright browser
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Smoke test all themes in Chromium
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/omah-aksara-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/smoke-templates.cjs
