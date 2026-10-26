@@ -250,7 +250,108 @@
     tick(); window.setInterval(tick,1000);
   }
 
+  // Keep RSVP and guestbook available even in legacy themes that predate the API forms.
+  function ensureApiForms() {
+    const app = document.getElementById("app");
+    if (!app) return;
+    const makeField = (labelText, control) => {
+      const label = document.createElement("label");
+      label.textContent = labelText;
+      label.style.cssText = "display:grid;gap:7px;margin:12px 0;font-size:14px";
+      control.style.cssText = "box-sizing:border-box;width:100%;padding:12px;border:1px solid #cfc7b8;background:#fffdf8;color:#343a32;font:inherit";
+      label.append(control);
+      return label;
+    };
+    const makeSection = (id, title) => {
+      let section = document.getElementById(id);
+      if (!section) {
+        section = document.createElement("section");
+        section.id = id;
+        section.style.cssText = "padding:48px 20px;max-width:680px;margin:0 auto;color:inherit";
+        const heading = document.createElement("h2");
+        heading.textContent = title;
+        heading.style.cssText = "text-align:center;font-family:Georgia,serif;font-weight:400";
+        section.append(heading);
+        const footer = app.querySelector("footer");
+        if (footer) app.insertBefore(section, footer); else app.append(section);
+      }
+      return section;
+    };
+    const makeForm = (section, id) => {
+      let form = document.getElementById(id);
+      if (!form) {
+        form = document.createElement("form");
+        form.id = id;
+        form.style.cssText = "max-width:520px;margin:0 auto;padding:20px;border:1px solid #d8cbbb;background:#fffdf8";
+        section.append(form);
+      }
+      return form;
+    };
+    const makeStatus = (form, id) => {
+      let status = document.getElementById(id);
+      if (!status) {
+        status = document.createElement("p");
+        status.id = id;
+        status.setAttribute("role", "status");
+        status.style.cssText = "font-size:13px;line-height:1.6;text-align:center";
+        form.append(status);
+      }
+      return status;
+    };
+    const makeButton = text => {
+      const button = document.createElement("button");
+      button.type = "submit";
+      button.textContent = text;
+      button.style.cssText = "width:100%;padding:13px;border:0;background:#485445;color:white;cursor:pointer;font:inherit;margin-top:8px";
+      return button;
+    };
+
+    const rsvpSection = makeSection("rsvp-section", "Konfirmasi Kehadiran");
+    const rsvpForm = makeForm(rsvpSection, "rsvp-form");
+    if (!rsvpForm.querySelector('[name="name"]')) {
+      const name = document.createElement("input");
+      name.name = "name"; name.id = "rsvp-name"; name.required = true; name.maxLength = 100; name.autocomplete = "name";
+      rsvpForm.prepend(makeField("Nama", name));
+    }
+    if (!rsvpForm.querySelector('[name="attendance"]')) {
+      const attendance = document.createElement("select");
+      attendance.name = "attendance"; attendance.required = true;
+      [["", "Pilih jawaban"], ["hadir", "Insyaallah hadir"], ["tidak_hadir", "Mohon maaf, belum bisa hadir"]].forEach(([value, text]) => {
+        const option = document.createElement("option"); option.value = value; option.textContent = text; attendance.append(option);
+      });
+      rsvpForm.append(makeField("Konfirmasi", attendance));
+    }
+    if (!rsvpForm.querySelector('[name="guestCount"]')) {
+      const count = document.createElement("select"); count.name = "guestCount";
+      [["1", "1 orang"], ["2", "2 orang"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; count.append(option); });
+      rsvpForm.append(makeField("Jumlah tamu", count));
+    }
+    if (!rsvpForm.querySelector('button[type="submit"]')) rsvpForm.append(makeButton("Kirim Konfirmasi"));
+    makeStatus(rsvpForm, "rsvp-status");
+
+    const guestSection = makeSection("guestbook-section", "Ucapan & Doa");
+    const wishesForm = makeForm(guestSection, "wishes-form");
+    if (!wishesForm.querySelector('[name="name"]')) {
+      const name = document.createElement("input"); name.name = "name"; name.id = "wishes-name"; name.required = true; name.maxLength = 100; name.autocomplete = "name";
+      wishesForm.prepend(makeField("Nama", name));
+    }
+    const message = wishesForm.querySelector('[name="message"]') || wishesForm.querySelector("textarea");
+    if (message) { message.name = "message"; message.maxLength = 500; message.required = true; }
+    else {
+      const textarea = document.createElement("textarea"); textarea.name = "message"; textarea.id = "wish-message"; textarea.rows = 4; textarea.maxLength = 500; textarea.required = true; textarea.placeholder = "Tuliskan doa terbaik...";
+      wishesForm.append(makeField("Ucapan", textarea));
+    }
+    if (!wishesForm.querySelector('button[type="submit"]')) wishesForm.append(makeButton("Kirim Ucapan"));
+    makeStatus(wishesForm, "wishes-status");
+    let list = document.getElementById("wishes-list") || document.getElementById("wishes-container");
+    if (!list) { list = document.createElement("div"); guestSection.append(list); }
+    list.id = "wishes-list";
+    list.setAttribute("aria-live", "polite");
+    list.style.cssText += ";display:grid;gap:12px;margin:24px auto;max-width:620px";
+  }
+
   function setupForms(data, slug) {
+    ensureApiForms();
     const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && data.api.apiUcapan) || "https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec";
     const rsvp = document.getElementById("rsvp-form");
     const wishes = document.getElementById("wishes-form");
