@@ -1,6 +1,10 @@
 name: Omah Aksara template and API audit
 
 on:
+  push:
+    branches:
+      - release/all-themes-sync
+      - rebuild/public-ready-v2
   pull_request:
     branches:
       - main
