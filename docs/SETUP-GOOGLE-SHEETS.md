@@ -1,8 +1,9 @@
 # Menyambungkan RSVP dan buku tamu ke satu Google Sheet
 
-## 1. Buat spreadsheet
-1. Buat satu Google Spreadsheet khusus Omah Aksara, misalnya **Database Undangan Omah Aksara**.
-2. Buka menu **Ekstensi → Apps Script**.
+## 1. Pilih spreadsheet dengan aman
+1. Jika data RSVP/ucapan sudah tersimpan di spreadsheet lama, **jangan buat spreadsheet baru atau mengubah header sebelum mencadangkan dan memeriksa skema data lama**. Migrasi data lama belum otomatis.
+2. Jika belum ada database, buat satu Google Spreadsheet khusus Omah Aksara, misalnya **Database Undangan Omah Aksara**.
+3. Buka menu **Ekstensi → Apps Script** pada spreadsheet yang memang akan digunakan.
 3. Ganti kode awal dengan seluruh isi file `backend/Code.gs` dari repo ini.
 4. Simpan proyek.
 
@@ -24,7 +25,7 @@ Buka `clients/<slug>/data.json`, lalu isi:
   "apiUrl": "URL_WEB_APP_APPS_SCRIPT/exec"
 }
 ```
-Gunakan URL deployment yang sebenarnya, bukan URL contoh di atas. Semua pasangan dapat memakai endpoint yang sama karena setiap kiriman menyertakan `slug`.
+Gunakan URL deployment yang sebenarnya, bukan URL contoh di atas. Semua pasangan dapat memakai endpoint yang sama karena setiap kiriman menyertakan `slug`. Endpoint belum dianggap aktif sampai uji `doGet`, RSVP, dan buku tamu berhasil dari undangan. Data klien lama yang memakai `api.apiUcapan` tetap didukung oleh mesin.
 
 ## 4. Bentuk data
 - `RSVP`: waktu, slug, nama tamu, status hadir, jumlah tamu.
