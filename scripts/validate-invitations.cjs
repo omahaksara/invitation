@@ -82,8 +82,18 @@ function validateClient(slug, file) {
     return;
   }
 
+  const looksLikeV2 = data.schemaVersion === 2 || (typeof data.theme === 'string' && ALLOWED_THEMES.has(data.theme) && isObject(data.couple));
+  if (!looksLikeV2) {
+    warnings.push(`${slug}: format data lama belum mengikuti skema V2; perlu migrasi sebelum rilis publik.`);
+    return;
+  }
+
   if (typeof data.theme !== 'string' || !ALLOWED_THEMES.has(data.theme)) {
     errors.push(`${slug}: theme harus salah satu dari: ${[...ALLOWED_THEMES].join(', ')}.`);
+  }
+
+  if (data.schemaVersion !== 2) {
+    warnings.push(`${slug}: data masih kompatibel dengan engine lama; tambahkan schemaVersion: 2 setelah migrasi diverifikasi.`);
   }
 
   if (!isObject(data.couple)) {
