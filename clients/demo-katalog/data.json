@@ -1,0 +1,107 @@
+{
+  "slug": "demo-katalog",
+  "demoMode": true,
+  "status": "published",
+  "theme": "sirein",
+  "guest": {
+    "defaultName": "Tamu Undangan"
+  },
+  "cover": {
+    "title": "Undangan Pernikahan",
+    "subtitle": "The Wedding of",
+    "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=85",
+    "heroImage": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=85"
+  },
+  "couple": {
+    "groom": {
+      "nickname": "Arkan",
+      "fullName": "Arkan Pradipta",
+      "parents": "Putra dari Bapak dan Ibu Pradipta",
+      "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=85",
+      "instagram": ""
+    },
+    "bride": {
+      "nickname": "Sekar",
+      "fullName": "Sekar Ayuningtyas",
+      "parents": "Putri dari Bapak dan Ibu Ayuningtyas",
+      "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85",
+      "instagram": ""
+    }
+  },
+  "quote": {
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا",
+    "text": "Dan Dia menjadikan di antara kamu rasa kasih dan sayang.",
+    "source": "QS. Ar-Rum: 21"
+  },
+  "events": {
+    "akad": {
+      "title": "Akad Nikah",
+      "date": "12 Juni 2027",
+      "time": "08:00 - 10:00 WITA",
+      "location": "Taman Seruni",
+      "address": "Alamat contoh untuk pratinjau",
+      "mapsUrl": "https://maps.google.com/?q=Makassar"
+    },
+    "resepsi": {
+      "title": "Resepsi Pernikahan",
+      "date": "12 Juni 2027",
+      "time": "11:00 - 14:00 WITA",
+      "location": "Taman Seruni",
+      "address": "Alamat contoh untuk pratinjau",
+      "mapsUrl": "https://maps.google.com/?q=Makassar"
+    }
+  },
+  "countdown": {
+    "targetDate": "2027-06-12T08:00:00+08:00"
+  },
+  "story": [
+    {
+      "year": "2022",
+      "title": "Awal Bertemu",
+      "description": "Pertemuan sederhana menjadi awal dari kisah yang berarti."
+    },
+    {
+      "year": "2024",
+      "title": "Memantapkan Hati",
+      "description": "Kami belajar tumbuh, memahami, dan menerima satu sama lain."
+    },
+    {
+      "year": "2026",
+      "title": "Menuju Hari Bahagia",
+      "description": "Dengan restu keluarga, kami bersiap memulai babak baru."
+    }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=85",
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=900&q=85",
+    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=85",
+    "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=900&q=85"
+  ],
+  "gifts": {
+    "message": "Ini adalah contoh tampilan amplop digital. Nomor rekening demo tidak ditampilkan agar tidak disalahgunakan.",
+    "accounts": []
+  },
+  "media": {
+    "music": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3"
+  },
+  "rsvp": {
+    "link": ""
+  },
+  "integrations": {
+    "apiUrl": ""
+  },
+  "demoGreetings": [
+    {
+      "name": "Keluarga Pratama",
+      "message": "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin."
+    },
+    {
+      "name": "Sahabat Mempelai",
+      "message": "Selamat menempuh perjalanan baru. Semoga selalu saling menguatkan dan berbahagia."
+    },
+    {
+      "name": "Rekan Kerja",
+      "message": "Semoga acara berjalan lancar dan rumah tangga dipenuhi keberkahan."
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+name: Omah Aksara template and API audit
+
+on:
+  pull_request:
+    branches:
+      - main
+      - rebuild/omah-aksara-v2
+  workflow_dispatch:
+
+concurrency:
+  group: template-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  static-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: |
+          node --check core/app.js
+      - name: Verify all themes and demo data
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const assert = require('node:assert/strict');
+          const app = fs.readFileSync('core/app.js', 'utf8');
+          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature'];
+          const themes = themeNames.map(name => 'templates/' + name + '/index.html');
+
+          assert.match(app, /allowedThemes\s*=\s*new Set\(\[\s*"karsa",\s*"royal-vintage",\s*"sirein",\s*"aksara-signature"/,
+            'loader must allow every published theme');
+          assert.match(app, /data\.demoMode\s*===\s*true/, 'theme override must be limited to demo invitations');
+          assert.match(app, /requestedAlias/, 'legacy theme alias handling missing');
+          assert.match(app, /function setupCover\(\)/, 'cover initialization missing');
+          assert.ok(app.includes("footer.parentNode.insertBefore(section, footer)"), 'legacy forms must handle nested footers safely');
+          assert.match(app, /else\s*\{[\s\S]*musicToggle\.style\.display = "flex"/,
+            'themes without an opening-cover button must still show music controls');
+          assert.match(app, /function setupMusic\(/, 'music setup missing');
+          assert.ok(app.includes('parsedTemplate.head.querySelectorAll("style")'), 'full-document theme CSS must be mounted');
+          assert.doesNotMatch(app.slice(app.indexOf('function setupMusic('), app.indexOf('function setupCountdown(')),
+            /button\.textContent\s*=\s*["']♫["']/, 'music toggle must not destroy nested theme icons');
+
+          for (const file of themes) {
+            assert.ok(fs.existsSync(file), file + ' is missing');
+            const html = fs.readFileSync(file, 'utf8');
+            const styleCount = (html.match(/<style\b/gi) || []).length;
+            assert.equal(styleCount, 1, file + ' must contain exactly one embedded style block');
+            assert.match(html, /<\/style\s*>/i, file + ' style block must be closed');
+            for (const binding of ['couple.groom.nickname', 'couple.bride.nickname',
+              'couple.groom.fullName', 'couple.bride.fullName']) {
+              assert.ok(html.includes('data-bind="' + binding + '"'), file + ' missing ' + binding);
+            }
+            assert.match(html, /id=["']bg-music["']/, file + ' missing background audio element');
+            assert.match(html, /id=["']music-(?:toggle|btn)["']/, file + ' missing music control');
+          }
+
+          const demo = JSON.parse(fs.readFileSync('clients/demo-katalog/data.json', 'utf8'));
+          assert.equal(demo.demoMode, true, 'catalog demo must explicitly enable safe theme switching');
+          assert.equal(demo.status, 'published', 'catalog demo must be publishable');
+          for (const theme of themeNames) {
+            assert.ok(fs.existsSync(path.join('templates', theme, 'index.html')), 'theme folder missing: ' + theme);
+          }
+          console.log('All four theme structures, couple bindings, music controls and demo data passed.');
+          NODE
+
+      - name: Install Playwright browser
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+      - name: Smoke test all themes in Chromium
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/omah-aksara-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/smoke-templates.cjs
