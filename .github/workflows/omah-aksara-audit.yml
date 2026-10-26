@@ -1,0 +1,57 @@
+name: Omah Aksara audit checks
+
+on:
+  pull_request:
+    branches:
+      - rebuild/omah-aksara-v2
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: |
+          node --check core/app.js
+          node --check backend/Code.gs
+      - name: Check template and API invariants
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const app = fs.readFileSync('core/app.js', 'utf8');
+          const backend = fs.readFileSync('backend/Code.gs', 'utf8');
+          const themes = [
+            'templates/karsa/index.html',
+            'templates/royal-vintage/index.html',
+            'templates/sirein/index.html',
+            'templates/aksara-signature/index.html'
+          ];
+
+          assert.match(app, /<html[\s>]/i, 'loader must detect full HTML documents');
+          assert.match(app, /makeSection\("guestbook-section", "Ucapan & Doa", "wishes-form"\)/,
+            'legacy guestbook section should be reused');
+          assert.match(app, /"wish-name"/, 'legacy Karsa guest name should be supported');
+          assert.match(backend, /function doGet\(e\)/, 'GET API handler missing');
+          assert.match(backend, /function doPost\(e\)/, 'POST API handler missing');
+          assert.match(backend, /filter\(row => String\(row\[1\]\) === slug\)/,
+            'guestbook reads must be filtered by slug');
+          assert.match(backend, /function validSlug\(value\)/, 'slug validation missing');
+
+          for (const file of themes) {
+            const html = fs.readFileSync(file, 'utf8');
+            const styleCount = (html.match(/<style\b/gi) || []).length;
+            assert.equal(styleCount, 1, file + ' must contain exactly one embedded style block');
+            assert.match(html, /<\/style\s*>/i, file + ' style block must be closed');
+          }
+          console.log('Static template/API checks passed.');
+          NODE
