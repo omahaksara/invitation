@@ -1,0 +1,14 @@
+{
+  "name": "omah-aksara-invitation",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Mesin undangan digital Omah Aksara",
+  "scripts": {
+    "validate:data": "node scripts/validate-invitations.cjs",
+    "test:smoke": "node scripts/smoke-templates.cjs",
+    "test": "npm run validate:data && npm run test:smoke"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
