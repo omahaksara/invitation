@@ -1,0 +1,53 @@
+name: Validate Omah Aksara V2
+
+on:
+  push:
+    branches:
+      - "rebuild/**"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install browser test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Validate invitation data and local assets
+        run: npm run validate:data
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check core/app.js
+          node --check scripts/validate-invitations.cjs
+          node --check backend/Code.gs
+
+      - name: Start local preview server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/omah-aksara-server.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl --silent --fail http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/omah-aksara-server.log
+          exit 1
+
+      - name: Smoke-test all four themes
+        run: npm run test:smoke
