@@ -91,6 +91,9 @@ jobs:
           console.log('All four theme structures, couple bindings, music controls and demo data passed.');
           NODE
 
+      - name: Unit-test RSVP and guestbook backend
+        run: node scripts/test-backend.cjs
+
       - name: Install Playwright browser
         run: |
           npm install --no-save playwright
