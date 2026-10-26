@@ -251,7 +251,7 @@
   }
 
   function setupForms(data, slug) {
-    const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && data.api.apiUcapan) || "";
+    const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && data.api.apiUcapan) || "https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec";
     const rsvp = document.getElementById("rsvp-form");
     const wishes = document.getElementById("wishes-form");
     if (data.rsvp && data.rsvp.enabled === false) { const section=document.getElementById("rsvp-section"); if(section) section.hidden=true; }
