@@ -46,7 +46,7 @@ Mengganti mesin undangan lama dengan satu engine yang ringan, konsisten, dan mud
 
 ## Backend dan keamanan
 
-Satu kontrak API melayani RSVP dan buku tamu. Deployment uji dan produksi menggunakan konfigurasi serta penyimpanan terpisah. URL backend tidak boleh di-hardcode di engine. Server memvalidasi aksi, slug, nama, pesan, jumlah tamu, dan input lain. Slug bukan otorisasi admin. Jangan masukkan rahasia atau kredensial ke JSON publik.
+Satu kontrak API melayani RSVP dan buku tamu. Deployment uji dan produksi menggunakan konfigurasi serta penyimpanan terpisah. URL backend tidak boleh di-hardcode di engine. Server memvalidasi aksi, slug, nama, pesan, jumlah tamu, dan input lain. RSVP/buku tamu hanya menerima slug yang terdaftar dengan status `published` pada tab `Settings`; slug bukan otorisasi admin. Jangan masukkan rahasia atau kredensial ke JSON publik.
 
 ## Migrasi dan pembersihan
 
