@@ -331,38 +331,29 @@
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function renderStory(stories) {");
-    const uid = (slug || "undangan") + "-" + date.replace(/-/g, "") + "-" + (event.id || "event") + "@omahaksara";
-    const lines = [
-      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Omah Aksara//Undangan Digital//ID",
-      "CALSCALE:GREGORIAN", "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + formatUtc(new Date()),
-      "DTSTART:" + formatUtc(start), "DTEND:" + formatUtc(end),
-      "SUMMARY:" + escapeIcs(event.title || "Acara Pernikahan"),
-      "LOCATION:" + escapeIcs([event.location || event.venue, event.address].filter(Boolean).join(", ")),
-      "DESCRIPTION:" + escapeIcs("Undangan digital Omah Aksara"),
-      "END:VEVENT", "END:VCALENDAR"
-    ];
-    const blob = new Blob([lines.join("\\r\\n") + "\\r\\n"], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url; anchor.download = (slug || "undangan") + "-" + date + ".ics";
-    document.body.append(anchor); anchor.click(); anchor.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
   function renderStory(stories) {
-    const root = document.getElementById("story-list");
+    const root = document.getElementById("story-list") || document.querySelector(".story-list");
     if (!root || !Array.isArray(stories)) return;
-    // Legacy themes (for example Sirein) already contain data-bound story cards.
-    // Keep their original markup and styling; only build cards for empty V2 containers.
-    if (root.children.length > 0) return;
+    const isSirein = !!document.querySelector(".sirein-page") || !!root.querySelector(".story-item");
     root.replaceChildren();
     stories.forEach((item, index) => {
-      const article = document.createElement("article"); article.className = "story-card reveal"; article.style.animationDelay = (index * 100) + "ms";
-      const date = document.createElement("time"); date.textContent = item.year || item.date || "";
-      const title = document.createElement("h3"); title.textContent = item.title || "Cerita kami";
-      const desc = document.createElement("p"); desc.textContent = item.description || "";
-      article.append(date, title, desc); root.append(article);
+      const article = document.createElement("article");
+      if (isSirein) {
+        article.className = "story-item";
+        const year = document.createElement("div"); year.className = "story-year"; year.textContent = item.year || item.date || "";
+        const content = document.createElement("div");
+        const title = document.createElement("h3"); title.textContent = item.title || "Cerita kami";
+        const desc = document.createElement("p"); desc.textContent = item.description || "";
+        content.append(title, desc); article.append(year, content);
+      } else {
+        article.className = "story-card reveal";
+        article.style.animationDelay = (index * 100) + "ms";
+        const date = document.createElement("time"); date.textContent = item.year || item.date || "";
+        const title = document.createElement("h3"); title.textContent = item.title || "Cerita kami";
+        const desc = document.createElement("p"); desc.textContent = item.description || "";
+        article.append(date, title, desc);
+      }
+      root.append(article);
     });
   }
 
@@ -392,7 +383,7 @@
   }
 
   function renderGallery(gallery, clientBase) {
-    const root = document.getElementById("gallery-grid");
+    const root = document.getElementById("gallery-grid") || document.querySelector(".gallery-grid");
     if (!root) return;
     const items = Array.isArray(gallery) ? gallery : (gallery && Array.isArray(gallery.items) ? gallery.items : []);
     root.replaceChildren();
