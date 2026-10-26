@@ -205,15 +205,33 @@
     const main = document.getElementById("main-content") || document.getElementById("app-inner");
     const open = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
     const musicToggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
-    if (open) open.addEventListener("click", async () => {
-      if (cover) cover.classList.add("is-opening");
+
+    if (open) {
+      open.addEventListener("click", async () => {
+        if (cover) cover.classList.add("is-opening");
+        if (main) { main.hidden = false; main.style.display = "block"; }
+        if (musicToggle) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+        window.setTimeout(() => {
+          if (cover) { cover.hidden = true; cover.style.display = "none"; }
+        }, cover && cover.id === "cover" ? 1800 : 850);
+        const audio = document.getElementById("bg-music");
+        if (audio && audio.getAttribute("src")) {
+          try {
+            await audio.play();
+            musicToggle?.classList.add("playing");
+            musicToggle?.setAttribute("aria-pressed", "true");
+            musicToggle?.setAttribute("aria-label", "Jeda musik");
+          } catch {
+            musicToggle?.setAttribute("aria-pressed", "false");
+          }
+        }
+        setupReveal();
+      });
+    } else {
+      // Tema tanpa sampul pembuka (mis. Royal Vintage) harus tetap bisa memakai musik.
       if (main) { main.hidden = false; main.style.display = "block"; }
       if (musicToggle) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
-      window.setTimeout(() => { if (cover) { cover.hidden = true; cover.style.display = "none"; } }, cover && cover.id === "cover" ? 1800 : 850);
-      const audio = document.getElementById("bg-music");
-      if (audio && audio.src) { try { await audio.play(); musicToggle?.classList.add("playing"); musicToggle?.setAttribute("aria-pressed", "true"); } catch {} }
-      setupReveal();
-    });
+    }
   }
 
   function setupMusic(music, clientBase) {
@@ -221,13 +239,46 @@
     const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
     const actualMusic = music || (window.__invitationData && window.__invitationData.media && window.__invitationData.media.music);
     if (!audio || !button || !actualMusic || !(actualMusic.src || typeof actualMusic === "string")) return;
+
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
-    button.addEventListener("click", async () => {
+    if (button.tagName !== "BUTTON") {
+      button.setAttribute("role", "button");
+      if (!button.hasAttribute("tabindex")) button.tabIndex = 0;
+    }
+    button.setAttribute("aria-label", "Putar musik");
+    button.setAttribute("aria-pressed", "false");
+
+    const syncMusicState = (playing) => {
+      button.classList.toggle("playing", playing);
+      button.setAttribute("aria-pressed", String(playing));
+      button.setAttribute("aria-label", playing ? "Jeda musik" : "Putar musik");
+      const icon = button.querySelector("#music-icon");
+      if (icon) icon.className = playing
+        ? "fa-solid fa-pause absolute text-[9px] text-stone-600"
+        : "fa-solid fa-play absolute text-[9px] text-stone-600";
+      button.querySelectorAll(".fa-compact-disc").forEach(disc => disc.classList.toggle("fa-spin", playing));
+    };
+
+    const toggle = async () => {
       if (audio.paused) {
-        try { await audio.play(); button.classList.add("playing"); button.setAttribute("aria-pressed", "true"); button.textContent = "♫"; }
-        catch { button.setAttribute("aria-pressed", "false"); }
-      } else { audio.pause(); button.classList.remove("playing"); button.setAttribute("aria-pressed", "false"); button.textContent = "♫"; }
-    });
+        try { await audio.play(); syncMusicState(true); }
+        catch { syncMusicState(false); }
+      } else {
+        audio.pause();
+        syncMusicState(false);
+      }
+    };
+    button.addEventListener("click", toggle);
+    if (button.tagName !== "BUTTON" && button.getAttribute("role") === "button") {
+      button.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggle();
+        }
+      });
+    }
+    audio.addEventListener("play", () => syncMusicState(true));
+    audio.addEventListener("pause", () => syncMusicState(false));
   }
 
   function setupCountdown(data) {
