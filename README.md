@@ -47,7 +47,7 @@ Ganti `budi-ani` dengan nama folder klien. Parameter `to` opsional untuk nama ta
 1. Salin folder `clients/budi-ani/` menjadi folder baru, misalnya `clients/andi-sari/`.
 2. Ganti isi `data.json` dengan nama, tanggal, lokasi, tautan peta, cerita, galeri, rekening, dan musik pasangan baru.
 3. Letakkan aset yang dipakai `data.json` di folder klien yang sama.
-4. Pilih `theme` yang cocok: `karsa`, `royal-vintage`, atau `sirein`.
+4. Pilih `theme` yang cocok: `karsa`, `royal-vintage`, `sirein`, atau `aksara-signature`.
 5. Uji tautan `?c=andi-sari` di browser ponsel dan desktop sebelum dibagikan.
 
 **Penting:** `data.json` contoh berisi nama, tanggal, alamat, akun media sosial, dan rekening dummy. Ganti semuanya sebelum dipakai untuk undangan nyata. Jangan menaruh data sensitif yang tidak perlu di repositori publik.
@@ -60,6 +60,13 @@ Ganti `budi-ani` dengan nama folder klien. Parameter `to` opsional untuk nama ta
 - Gunakan `data-bind="jalur.data"` agar teks atau aset diisi dari `data.json`.
 - Jika menambah ID tombol atau fitur baru, periksa apakah perlu ditangani di `core/app.js`.
 - Jangan menghapus nama folder template selama masih dipilih oleh data klien.
+
+## Standar fitur dan mode demo
+
+- Empat tema yang tersedia: Karsa, Royal Vintage, Sirein, dan Aksara Signature. Struktur dan CSS khusus tema tetap berada di `templates/<nama-template>/index.html`.
+- `clients/demo-katalog/` dan `clients/demo-serein/` adalah data contoh. Data demo wajib menggunakan `demoMode: true`.
+- Dalam `demoMode`, RSVP hanya menampilkan status simulasi dan tidak mengirim data ke Apps Script. Ucapan contoh ditampilkan dengan label demo; ucapan baru hanya muncul sementara di halaman dan tidak masuk Google Sheets.
+- Jangan menggunakan data pribadi atau nomor rekening asli di undangan demo.
 
 ## Batasan fitur saat ini
 
