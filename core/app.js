@@ -76,8 +76,19 @@
   function bindData(data, clientBase) {
     document.querySelectorAll("[data-bind]").forEach((element) => {
       const path = element.getAttribute("data-bind");
-      const value = getNestedValue(data, path);
-      if (value === null || value === undefined || typeof value === "object") return;
+      let value = getNestedValue(data, path);
+      if ((value === null || value === undefined) && path === "cover.heroImage") {
+        value = getNestedValue(data, "cover.image");
+      }
+      if (value === null || value === undefined) {
+        if (element.tagName === "A" && path.startsWith("rsvp.")) {
+          const section = element.closest("section");
+          if (section) section.hidden = true;
+          else element.hidden = true;
+        }
+        return;
+      }
+      if (typeof value === "object") return;
 
       if (element.tagName === "IMG" || element.tagName === "AUDIO" || element.tagName === "VIDEO") {
         if (String(value).trim() === "") return;
