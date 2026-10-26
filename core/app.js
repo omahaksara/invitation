@@ -45,6 +45,14 @@
             document.head.append(copy);
           }
         });
+        // A complete HTML template's <style> lives in its head; preserve it when mounting the body.
+        document.head.querySelectorAll("style[data-invitation-theme]").forEach(style => style.remove());
+        parsedTemplate.head.querySelectorAll("style").forEach(style => {
+          const copy = document.createElement("style");
+          copy.setAttribute("data-invitation-theme", theme);
+          copy.textContent = style.textContent;
+          document.head.append(copy);
+        });
         app.innerHTML = parsedTemplate.body.innerHTML;
       } else {
         app.innerHTML = templateHtml;
