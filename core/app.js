@@ -341,7 +341,7 @@
         heading.style.cssText = "text-align:center;font-family:Georgia,serif;font-weight:400";
         section.append(heading);
         const footer = app.querySelector("footer");
-        if (footer) app.insertBefore(section, footer); else app.append(section);
+        if (footer && footer.parentNode) footer.parentNode.insertBefore(section, footer); else app.append(section);
       }
       return section;
     };
