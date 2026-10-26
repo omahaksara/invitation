@@ -10,13 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Placeholder CSS Templat -->
+    <!-- CSS Tema Dinamis -->
     <link id="theme-style" rel="stylesheet" href="">
     <style>
         body { margin: 0; padding: 0; background-color: #181314; color: #E0A996; font-family: 'Inter', sans-serif; }
-        .loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-        .loading-names { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin: 0.5rem 0; color: #FCE8E3; }
+        .loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
+        .loading-names { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0.5rem 0; color: #FCE8E3; }
         .loading-sub { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; }
+        .error-desc { font-size: 0.8rem; opacity: 0.6; margin-top: 10px; word-break: break-all; }
         .dots::after { content: ''; animation: dots 1.5s infinite; }
         @keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
     </style>
@@ -27,12 +28,12 @@
     <div id="app">
         <div class="loading-wrap">
             <div class="loading-sub">Omah Aksara Studio</div>
-            <div id="names" class="loading-names">Memuat Undangan</div>
+            <div class="loading-names">Memuat Undangan</div>
             <div class="loading-sub">menyiapkan halaman<span class="dots"></span></div>
         </div>
     </div>
 
-    <!-- Skrip Engine Router -->
+    <!-- Skrip Router Engine -->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             try {
@@ -41,61 +42,59 @@
                 const klien = urlParams.get('c');
 
                 if (!klien) {
-                    document.getElementById('app').innerHTML = `
-                        <div class="loading-wrap">
-                            <h3 style="color: #FCE8E3; font-family: 'Playfair Display', serif;">Tautan Undangan Tidak Valid</h3>
-                            <p style="font-size: 0.85rem; opacity: 0.7;">Pastikan tautan menyertakan nama klien (?c=nama-klien).</p>
-                        </div>`;
-                    return;
+                    throw new Error("Parameter klien (?c=nama-klien) tidak ditemukan di URL.");
                 }
 
-                // 2. Deteksi otomatis jalur direktori repositori di GitHub Pages
+                // 2. Tentukan jalur dasar secara pasti berdasarkan GitHub Pages
+                const isGitHubPages = window.location.hostname.includes('github.io');
                 const pathSegments = window.location.pathname.split('/').filter(Boolean);
-                const basePath = pathSegments.length > 0 ? '/' + pathSegments[0] : '';
+                const basePath = (isGitHubPages && pathSegments.length > 0) ? '/' + pathSegments[0] : '';
 
-                // 3. Ambil data.json dari folder klien
-                const jsonUrl = `${basePath}/klien/${klien}/data.json`;
+                // 3. Ambil file data.json dari folder 'clients'
+                const jsonUrl = `${basePath}/clients/${klien}/data.json`;
                 const responseJson = await fetch(jsonUrl);
-                if (!responseJson.ok) throw new Error("Data klien tidak ditemukan di: " + jsonUrl);
+                if (!responseJson.ok) throw new Error(`Gagal memuat data.json dari: ${jsonUrl}`);
                 const data = await responseJson.json();
 
-                // 4. Ambil nama tema dari data.json (misal: "sirein")
-                const tema = data.theme || 'sirein';
-                const themeFolder = `${basePath}/templat/${tema}`;
+                // 4. Ambil tema dari data.json (misal: 'serein')
+                const tema = data.theme || 'serein';
+                const themeFolder = `${basePath}/templates/${tema}`;
 
-                // 5. Tarik file CSS templat
+                // 5. Pasang file CSS tema
                 document.getElementById('theme-style').href = `${themeFolder}/style.css`;
                 
-                // 6. Tarik file HTML templat
+                // 6. Tarik file HTML tema dari folder 'templates'
                 const htmlUrl = `${themeFolder}/index.html`;
                 const responseHtml = await fetch(htmlUrl);
-                if (!responseHtml.ok) throw new Error("File templat gagal dimuat dari: " + htmlUrl);
+                if (!responseHtml.ok) throw new Error(`Gagal memuat templat dari: ${htmlUrl}`);
                 const htmlText = await responseHtml.text();
 
-                // 7. Masukkan HTML templat ke wadah #app
+                // 7. Masukkan HTML ke dalam wadah aplikasi
                 document.getElementById('app').innerHTML = htmlText;
 
-                // 8. Jalankan binding data
+                // 8. Jalankan pengikatan data & interaksi
                 bindDataAndInit(data, klien, basePath);
 
             } catch (error) {
-                console.error("Gagal memuat:", error);
+                console.error("Kesalahan Sistem:", error);
                 document.getElementById('app').innerHTML = `
                     <div class="loading-wrap">
-                        <h3 style="color: #FCE8E3; font-family: 'Playfair Display', serif;">Maaf, Undangan Tidak Ditemukan</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.7; max-width: 400px; padding: 0 20px;">${error.message}</p>
+                        <div class="loading-sub">Omah Aksara Studio</div>
+                        <h3 class="loading-names">Undangan Tidak Ditemukan</h3>
+                        <p class="loading-sub">Gagal memuat sistem undangan.</p>
+                        <div class="error-desc">${error.message}</div>
                     </div>`;
             }
         });
 
         function bindDataAndInit(data, klien, basePath) {
-            // A. Binding teks & aset media (foto/audio)
+            // A. Binding teks dan aset media (foto/audio) mengarah ke folder 'clients'
             document.querySelectorAll('[data-bind]').forEach(el => {
                 const path = el.getAttribute('data-bind');
                 const value = getNestedValue(data, path);
                 if (value !== undefined) {
                     if (el.tagName === 'IMG' || el.tagName === 'AUDIO') {
-                        el.src = `${basePath}/klien/${klien}/${value}`;
+                        el.src = `${basePath}/clients/${klien}/${value}`;
                     } else {
                         el.textContent = value;
                     }
@@ -121,7 +120,7 @@
                 if (resepsiMap) resepsiMap.href = data.events.resepsi.mapsUrl;
             }
 
-            // D. Tombol Buka Undangan & Musik
+            // D. Tombol Buka Undangan & Pemutar Musik
             const coverSection = document.getElementById('cover-section');
             const mainContent = document.getElementById('main-content');
             const musicToggle = document.getElementById('music-toggle');
