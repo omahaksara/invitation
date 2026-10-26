@@ -88,3 +88,7 @@
     color: #555;
     margin: 6px 0;
 }
+
+
+/* Accessible floating music control */
+.royal-music-toggle{position:fixed;right:18px;bottom:18px;z-index:1000;width:46px;height:46px;display:none;align-items:center;justify-content:center;border:1px solid #c49a6c;border-radius:50%;background:#fffdf8;color:#8b5a2b;box-shadow:0 5px 18px rgba(0,0,0,.12);cursor:pointer}.royal-music-toggle i{font-size:1.1rem}.royal-music-toggle:focus-visible{outline:2px solid #8b5a2b;outline-offset:3px}
