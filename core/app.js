@@ -526,15 +526,39 @@
     audio.addEventListener("pause", () => syncMusicState(false));
   }
 
+  function zonedDateTimeToUtc(dateValue, timeValue, zone) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(dateValue)) || !/^\d{2}:\d{2}$/.test(String(timeValue))) {
+      throw new Error("Tanggal atau jam acara tidak valid.");
+    }
+    const [year, month, day] = dateValue.split("-").map(Number);
+    const [hour, minute] = timeValue.split(":").map(Number);
+    let timestamp = Date.UTC(year, month - 1, day, hour, minute, 0);
+    for (let i = 0; i < 3; i++) {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+      }).formatToParts(new Date(timestamp));
+      const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+      const represented = Date.UTC(Number(values.year), Number(values.month) - 1, Number(values.day),
+        Number(values.hour), Number(values.minute), Number(values.second));
+      timestamp += Date.UTC(year, month - 1, day, hour, minute, 0) - represented;
+    }
+    return new Date(timestamp);
+  }
+
   function setupCountdown(data) {
     const target = (Array.isArray(data.events) ? data.events : Object.values(data.events || {})).find(e => e && e.date);
     let targetDate;
     if (data.countdown && data.countdown.targetDate) {
       targetDate = new Date(data.countdown.targetDate);
     } else if (target) {
-      const date = target.date;
+      const date = target.dateISO || target.date;
       const time = target.startTime || "00:00";
-      targetDate = new Date(date + "T" + time + ":00" + (target.timezone === "Asia/Makassar" ? "+08:00" : target.timezone === "Asia/Jakarta" ? "+07:00" : target.timezone === "Asia/Jayapura" ? "+09:00" : ""));
+      try {
+        targetDate = /^\d{4}-\d{2}-\d{2}$/.test(date)
+          ? zonedDateTimeToUtc(date, time, target.timezone || "Asia/Makassar")
+          : new Date(date + "T" + time + ":00");
+      } catch { targetDate = null; }
     }
     if (!targetDate || Number.isNaN(targetDate.getTime())) return;
     const tick = () => {
