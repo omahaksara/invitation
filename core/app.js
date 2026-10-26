@@ -160,6 +160,8 @@
       });
     }
 
+    if (!openButton && toggle) toggle.style.display = "flex";
+
     if (toggle && music) {
       toggle.addEventListener("click", async () => {
         if (music.paused) {
