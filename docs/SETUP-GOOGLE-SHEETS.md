@@ -1,66 +1,87 @@
-# Menyiapkan Google Apps Script Omah Aksara
+# Menyiapkan backend RSVP dan buku tamu Omah Aksara
 
-Script ini menyiapkan **database baru** bernama **Omah Aksara — Database RSVP & Buku Tamu**. Database lama tidak disentuh atau dipindahkan.
+Backend ini memakai Google Apps Script dan Google Sheets. Lingkungan uji dan produksi harus dibuat sebagai proyek Apps Script terpisah, masing-masing dengan spreadsheet dan Script Properties sendiri.
 
 ## 1. Buat proyek Apps Script
-1. Buka https://script.google.com/ dan buat proyek baru.
-2. Buka file `Code.gs`, hapus kode contoh, lalu salin seluruh isi [backend/Code.gs](../backend/Code.gs) dari cabang pengembangan.
-3. Simpan proyek dengan nama misalnya **Omah Aksara RSVP API**.
 
-## 2. Buat spreadsheet baru
-1. Di dropdown pemilih fungsi, pilih `setupDatabase`.
+1. Buka https://script.google.com/ lalu buat proyek baru.
+2. Salin seluruh isi `backend/Code.gs` ke file `Code.gs`.
+3. Beri nama yang jelas, misalnya `Omah Aksara API — TEST` atau `Omah Aksara API — PROD`.
+
+Jangan menggunakan satu proyek/database yang sama untuk data uji dan pelanggan.
+
+## 2. Buat database
+
+1. Pilih fungsi `setupDatabase` di editor Apps Script.
 2. Tekan **Run/Jalankan** dan selesaikan permintaan izin Google.
-3. Buka **Execution log/Log eksekusi**. URL spreadsheet baru dicatat di sana.
-4. Pastikan spreadsheet berisi dua tab: `RSVP` dan `Guestbook`, dengan header pada baris pertama.
+3. Buka Execution log untuk melihat URL spreadsheet yang dibuat.
+4. Pastikan ada tiga tab: `RSVP`, `Guestbook`, dan `Settings`.
 
-Fungsi setup bersifat idempoten: jika sudah pernah berhasil, pemanggilan berikutnya menggunakan database yang sama, bukan membuat salinan baru.
+Fungsi setup bersifat idempoten: jika database sudah pernah dibuat, fungsi memakai spreadsheet yang sama. Database RSVP lama tidak dipindahkan atau dihapus.
 
-## 3. Deploy sebagai Web App
-1. Tekan **Deploy → New deployment**.
+## 3. Daftarkan slug yang diizinkan
+
+Tab `Settings` adalah allowlist undangan yang boleh menggunakan backend. Masukkan satu baris per slug:
+
+| slug | status |
+|---|---|
+| uji-omah-aksara | published |
+
+- Gunakan slug folder yang persis sama dengan `clients/<slug>/`.
+- `published` mengizinkan RSVP dan buku tamu untuk slug tersebut.
+- `draft` atau status lain menolak permintaan.
+- Untuk lingkungan uji, gunakan slug uji; jangan daftarkan slug pelanggan produksi.
+- Untuk produksi, daftarkan slug pelanggan hanya setelah undangan disetujui untuk publikasi.
+
+Permintaan baca maupun tulis yang slug-nya tidak ada pada allowlist akan ditolak.
+
+## 4. Deploy sebagai Web App
+
+1. Pilih **Deploy → New deployment**.
 2. Pilih **Web app**.
 3. Atur **Execute as: Me**.
-4. Pilih akses yang mengizinkan tamu mengirim RSVP/ucapan (biasanya **Anyone**, jika tersedia dan sesuai kebijakan akun).
-5. Deploy dan salin URL yang berakhiran `/exec`.
+4. Pilih akses yang memungkinkan tamu mengirim data sesuai kebijakan akun dan organisasi.
+5. Deploy dan simpan URL yang berakhiran `/exec` di konfigurasi lingkungan yang sesuai.
 
-## 4. URL deployment aktif dan uji kesehatan endpoint
-URL deployment yang telah diberikan dan lulus health check pada 27 Oktober 2026:
+Setiap lingkungan mempunyai URL deployment sendiri. URL tersebut tidak boleh ditanam sebagai fallback di kode engine.
 
-```text
-https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec
-```
+## 5. Uji endpoint
 
-Pemeriksaan `?action=health` telah mengembalikan `ok: true`, `version: 3`, dan `databaseConfigured: true`. Ini mengonfirmasi endpoint dan konfigurasi database dapat dibaca, tetapi bukan bukti uji tulis RSVP/ucapan berhasil.
-
-Buka URL Web App dengan parameter `?action=health`, misalnya:
+Buka:
 
 ```text
 URL_WEB_APP?action=health
 ```
 
-Respons yang diharapkan berupa JSON dengan `"ok": true`, `"service": "Omah Aksara RSVP & Guestbook"`, dan `"databaseConfigured": true`. Ini membuktikan endpoint hidup dan dapat membuka spreadsheet; belum membuktikan penulisan data berhasil.
+Respons yang diharapkan mencakup `ok: true`, nama layanan, versi, dan `databaseConfigured: true`.
 
-## 5. Uji tulis dan baca
-- Kirim RSVP uji dengan `action: "rsvp"`, slug khusus seperti `uji-omah-aksara`, nama `Tamu Uji`, status `hadir`, jumlah tamu `1`.
-- Kirim ucapan uji dengan `action: "guestbook"`, slug yang sama, nama `Tamu Uji`, pesan `Uji koneksi Omah Aksara`.
-- Pastikan masing-masing baris benar-benar masuk ke tab yang sesuai.
-- Buka `?action=guestbook&slug=uji-omah-aksara` dan pastikan ucapan tadi muncul.
-- Uji slug lain dan pastikan ucapan uji tidak muncul.
-- Hapus baris uji setelah semua pemeriksaan selesai, bila diinginkan.
+Lalu uji alur lengkap dengan slug yang sudah didaftarkan pada tab `Settings`:
 
-Jangan menandai koneksi aktif hanya karena URL terbuka. Pengujian kirim dan baca harus benar-benar berhasil dari undangan atau permintaan HTTP yang sesuai.
+- Kirim RSVP dengan `action: "rsvp"`, nama uji, status hadir/tidak hadir, dan jumlah tamu.
+- Kirim ucapan dengan `action: "guestbook"`, nama uji, dan pesan.
+- Pastikan data masuk ke tab yang sesuai.
+- Buka `URL_WEB_APP?action=guestbook&slug=uji-omah-aksara` dan pastikan ucapan muncul.
+- Uji slug yang tidak terdaftar; backend harus menolak.
+- Bersihkan data uji setelah pemeriksaan selesai.
 
-## 6. Hubungkan ke undangan
-Pada `clients/<slug>/data.json`, tambahkan URL deployment yang nyata:
+Health check saja tidak membuktikan penulisan data berhasil. RSVP dan buku tamu harus benar-benar diuji sampai barisnya muncul di spreadsheet.
+
+## 6. Hubungkan undangan ke backend yang benar
+
+Pada `clients/<slug>/data.json`, isi:
 
 ```json
 "integrations": {
-  "apiUrl": "https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec"
+  "apiUrl": "URL_WEB_APP_DARI_LINGKUNGAN_YANG_SESUAI"
 }
 ```
 
-Klien lama dengan `api.apiUcapan` tetap didukung. Jangan memasukkan password atau rahasia akun ke repo.
+Ganti placeholder dengan URL HTTPS deployment yang benar. Jangan pernah memasukkan password, token privat, atau kredensial ke JSON publik.
 
 ## Perlindungan data
-- Database ini terpisah dari RSVP lama. Jangan menghapus atau memindahkan data lama tanpa backup dan persetujuan.
-- Endpoint bersifat publik, bukan sistem login. Validasi dasar dan pemisahan berdasarkan slug tersedia; proteksi spam lanjutan masih perlu dipertimbangkan sebelum trafik besar.
-- Jangan sambungkan URL ke undangan pelanggan sebelum tes HP/desktop, RSVP, buku tamu, dan isolasi slug berhasil.
+
+- Backend memvalidasi slug, aksi, nama, pesan, status kehadiran, dan jumlah tamu.
+- Data buku tamu dipisahkan berdasarkan slug dan hanya dikembalikan untuk slug tersebut.
+- Allowlist `Settings` mencegah siapa pun menulis ke slug yang belum diaktifkan.
+- Endpoint tetap bersifat publik, bukan sistem login. Pembatasan spam dan pemantauan trafik tambahan perlu dipertimbangkan sebelum penggunaan skala besar.
+- Jangan menghubungkan produksi sebelum uji browser, isolasi slug, dan penulisan/bacaan data lulus.
