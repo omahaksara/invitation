@@ -1,84 +1,130 @@
-<!-- 1. HALAMAN SAMPUL / COVER DEPAN -->
-<div id="cover-section" class="cover-overlay">
-    <div class="cover-content">
-        <p style="letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem;">The Wedding of</p>
-        <h1 class="cover-names">
-            <span data-bind="couple.groom.nickname">Pria</span> &amp; <span data-bind="couple.bride.nickname">Wanita</span>
-        </h1>
-        <div style="margin: 25px 0; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
-            <p style="font-size: 0.85rem; color: #ccc; margin: 0;">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-            <h3 id="nama-tamu" style="font-size: 1.1rem; color: #d4af37; margin: 5px 0 0 0;">Tamu Undangan</h3>
-        </div>
-        <button id="open-invitation-btn" class="btn-open">
-            <i class="fa-solid fa-envelope-open"></i> Buka Undangan
-        </button>
-    </div>
+<!-- Template Sirein — adaptasi desain editorial lembut untuk sistem Omah Aksara -->
+<div id="cover-section" class="sirein-cover">
+  <img class="sirein-cover__image" data-bind="cover.image" alt="Sampul undangan">
+  <div class="sirein-cover__veil"></div>
+  <div class="sirein-cover__content">
+    <p class="eyebrow">The Wedding Of</p>
+    <h1 class="script-title"><span data-bind="couple.groom.nickname">Budi</span><span class="ampersand">&amp;</span><span data-bind="couple.bride.nickname">Ani</span></h1>
+    <div class="cover-rule"></div>
+    <p class="cover-to">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+    <h2 id="nama-tamu" class="guest-name">Tamu Undangan</h2>
+    <p class="cover-note">Dengan penuh sukacita, kami mengundang Anda untuk hadir di hari bahagia kami.</p>
+    <button id="open-invitation-btn" class="sirein-button"><i class="fa-solid fa-envelope-open"></i> Buka Undangan</button>
+  </div>
 </div>
 
-<!-- 2. KONTEN UTAMA UNDANGAN -->
-<div class="invitation-container" id="main-content" style="display: none;">
-    
-    <!-- Hero Header -->
-    <section class="hero">
-        <p style="letter-spacing: 2px; text-transform: uppercase; color: #888;" data-bind="cover.title">Undangan Pernikahan</p>
-        <h1 style="font-family: Georgia, serif; color: #333; font-size: 2rem;">
-            <span data-bind="couple.groom.nickname">Pria</span> &amp; <span data-bind="couple.bride.nickname">Wanita</span>
-        </h1>
-    </section>
+<main id="main-content" class="sirein-page" style="display:none">
+  <section class="sirein-hero">
+    <p class="eyebrow" data-bind="cover.title">Undangan Pernikahan</p>
+    <div class="hero-photo-wrap"><img class="hero-photo" data-bind="cover.image" alt="Foto sampul pengantin"></div>
+    <p class="hero-kicker">A celebration of love</p>
+    <h1 class="hero-names"><span data-bind="couple.groom.nickname">Budi</span><span class="ampersand">&amp;</span><span data-bind="couple.bride.nickname">Ani</span></h1>
+    <p class="hero-date" data-bind="events.akad.date">Tanggal acara</p>
+    <div class="ornament">✦</div>
+  </section>
 
-    <!-- Quote -->
-    <section style="background: #faf8f5; padding: 30px 20px; text-align: center;">
-        <p style="font-size: 1.1rem; color: #555;" data-bind="quote.arab"></p>
-        <p style="font-size: 0.9rem; font-style: italic; color: #666;" data-bind="quote.text"></p>
-        <p style="font-size: 0.8rem; font-weight: bold; color: #888;" data-bind="quote.source"></p>
-    </section>
+  <section class="sirein-section quote-section">
+    <p class="eyebrow">A Note From Our Hearts</p>
+    <p class="arabic-quote" data-bind="quote.arab"></p>
+    <p class="quote-text" data-bind="quote.text"></p>
+    <p class="quote-source" data-bind="quote.source"></p>
+  </section>
 
-    <!-- Mempelai -->
-    <section class="couples">
-        <div class="profile-card" style="margin-bottom: 30px;">
-            <img data-bind="couple.groom.photo" alt="Mempelai Pria">
-            <h3 data-bind="couple.groom.fullName" style="margin: 10px 0 5px 0; color: #333;">Nama Pria</h3>
-            <p style="font-size: 0.85rem; color: #666;" data-bind="couple.groom.parents">Orang Tua Pria</p>
-        </div>
-        <div class="profile-card">
-            <img data-bind="couple.bride.photo" alt="Mempelai Wanita">
-            <h3 data-bind="couple.bride.fullName" style="margin: 10px 0 5px 0; color: #333;">Nama Wanita</h3>
-            <p style="font-size: 0.85rem; color: #666;" data-bind="couple.bride.parents">Orang Tua Wanita</p>
-        </div>
-    </section>
-
-    <!-- Detail Acara -->
-    <section class="events" style="background: #faf8f5; padding: 30px 20px;">
-        <div style="margin-bottom: 25px;">
-            <h2 style="color: #d4af37; font-size: 1.2rem;" data-bind="events.akad.title">Akad Nikah</h2>
-            <p data-bind="events.akad.date">Tanggal</p>
-            <p data-bind="events.akad.time">Waktu</p>
-            <p data-bind="events.akad.location">Lokasi</p>
-            <a id="link-akad-maps" href="#" target="_blank" style="color: #d4af37; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📍 Lihat Lokasi Google Maps</a>
-        </div>
-        <div>
-            <h2 style="color: #d4af37; font-size: 1.2rem;" data-bind="events.resepsi.title">Resepsi</h2>
-            <p data-bind="events.resepsi.date">Tanggal</p>
-            <p data-bind="events.resepsi.time">Waktu</p>
-            <p data-bind="events.resepsi.location">Lokasi</p>
-            <a id="link-resepsi-maps" href="#" target="_blank" style="color: #d4af37; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📍 Lihat Lokasi Google Maps</a>
-        </div>
-    </section>
-
-    <!-- Kado Digital -->
-    <section class="gift-section">
-        <h2>Kado Digital</h2>
-        <div style="background: #f7f4ef; padding: 15px; border-radius: 8px; display: inline-block; margin-top: 10px;">
-            <h3 data-bind="gift.bank" style="margin: 0 0 5px 0;">Bank</h3>
-            <p id="rekening-num" data-bind="gift.accountNumber" style="font-weight: bold; font-size: 1.1rem; margin: 5px 0;">No Rekening</p>
-            <p style="font-size: 0.85rem; margin: 0;">a.n <span data-bind="gift.accountHolder">Nama</span></p>
-            <button onclick="copyRekening()" style="background: #333; color: white; border: none; padding: 5px 15px; border-radius: 5px; margin-top: 10px; cursor: pointer;">Salin Rekening</button>
-        </div>
-    </section>
-
-    <!-- Audio & Tombol Musik -->
-    <audio id="bg-music" loop></audio>
-    <div id="music-toggle" class="music-float-btn" style="display: none;">
-        <i class="fa-solid fa-compact-disc fa-spin"></i>
+  <section class="sirein-section couple-section">
+    <p class="eyebrow">The Happy Couple</p>
+    <h2 class="section-title">Dua hati, satu tujuan</h2>
+    <div class="couple-grid">
+      <article class="person-card">
+        <div class="person-photo-frame"><img data-bind="couple.groom.photo" alt="Mempelai pria"></div>
+        <p class="person-role">The Groom</p>
+        <h3 data-bind="couple.groom.fullName">Nama Mempelai Pria</h3>
+        <p class="person-parents" data-bind="couple.groom.parents">Putra dari</p>
+      </article>
+      <div class="couple-and">&amp;</div>
+      <article class="person-card">
+        <div class="person-photo-frame"><img data-bind="couple.bride.photo" alt="Mempelai wanita"></div>
+        <p class="person-role">The Bride</p>
+        <h3 data-bind="couple.bride.fullName">Nama Mempelai Wanita</h3>
+        <p class="person-parents" data-bind="couple.bride.parents">Putri dari</p>
+      </article>
     </div>
-</div>
+  </section>
+
+  <section class="sirein-section story-section">
+    <p class="eyebrow">Our Little Journey</p>
+    <h2 class="section-title">Cerita kami</h2>
+    <div class="story-list">
+      <article class="story-item"><span class="story-year" data-bind="story.0.year">2023</span><div><h3 data-bind="story.0.title">Awal Bertemu</h3><p data-bind="story.0.description">Sebuah pertemuan yang berarti.</p></div></article>
+      <article class="story-item"><span class="story-year" data-bind="story.1.year">2024</span><div><h3 data-bind="story.1.title">Komitmen</h3><p data-bind="story.1.description">Memilih untuk berjalan bersama.</p></div></article>
+      <article class="story-item"><span class="story-year" data-bind="story.2.year">2025</span><div><h3 data-bind="story.2.title">Lamaran</h3><p data-bind="story.2.description">Melangkah ke babak baru.</p></div></article>
+    </div>
+  </section>
+
+  <section class="sirein-section event-section">
+    <p class="eyebrow">Save The Date</p>
+    <h2 class="section-title">Hari istimewa kami</h2>
+    <div class="event-card">
+      <div class="event-mark">I</div>
+      <p class="event-label">The Ceremony</p>
+      <h3 data-bind="events.akad.title">Akad Nikah</h3>
+      <p class="event-date" data-bind="events.akad.date">Tanggal</p>
+      <p class="event-time" data-bind="events.akad.time">Waktu</p>
+      <div class="event-divider"></div>
+      <p class="event-location" data-bind="events.akad.location">Lokasi acara</p>
+      <p class="event-address" data-bind="events.akad.address">Alamat acara</p>
+      <a id="link-akad-maps" class="text-link" href="#" target="_blank" rel="noopener">Lihat lokasi di Google Maps ↗</a>
+    </div>
+    <div class="event-card">
+      <div class="event-mark">II</div>
+      <p class="event-label">The Celebration</p>
+      <h3 data-bind="events.resepsi.title">Resepsi Pernikahan</h3>
+      <p class="event-date" data-bind="events.resepsi.date">Tanggal</p>
+      <p class="event-time" data-bind="events.resepsi.time">Waktu</p>
+      <div class="event-divider"></div>
+      <p class="event-location" data-bind="events.resepsi.location">Lokasi acara</p>
+      <p class="event-address" data-bind="events.resepsi.address">Alamat acara</p>
+      <a id="link-resepsi-maps" class="text-link" href="#" target="_blank" rel="noopener">Lihat lokasi di Google Maps ↗</a>
+    </div>
+  </section>
+
+  <section class="sirein-section gallery-section">
+    <p class="eyebrow">Moments To Remember</p>
+    <h2 class="section-title">Potongan cerita</h2>
+    <div class="gallery-grid">
+      <img data-bind="gallery.0" alt="Foto kenangan 1" loading="lazy">
+      <img data-bind="gallery.1" alt="Foto kenangan 2" loading="lazy">
+      <img data-bind="gallery.2" alt="Foto kenangan 3" loading="lazy">
+      <img data-bind="gallery.3" alt="Foto kenangan 4" loading="lazy">
+    </div>
+  </section>
+
+  <section class="sirein-section gift-section">
+    <p class="eyebrow">A Little Gift</p>
+    <h2 class="section-title">Tanda kasih</h2>
+    <p class="gift-intro">Doa restu Anda adalah hadiah terindah bagi kami. Namun, jika ingin berbagi tanda kasih, dapat melalui detail berikut.</p>
+    <div class="gift-card">
+      <p class="gift-bank" data-bind="gifts.0.bank">Bank</p>
+      <p class="gift-number" id="rekening-num" data-bind="gifts.0.accountNumber">Nomor rekening</p>
+      <p class="gift-holder">a.n. <span data-bind="gifts.0.accountHolder">Nama pemilik rekening</span></p>
+      <img class="gift-qr" data-bind="gifts.0.qrCode" alt="QR code hadiah" loading="lazy">
+      <button class="sirein-button sirein-button--dark" onclick="copyRekening()">Salin Nomor Rekening</button>
+    </div>
+    <div class="gift-card gift-card--secondary">
+      <p class="gift-bank" data-bind="gifts.1.bank">Bank kedua</p>
+      <p class="gift-number" data-bind="gifts.1.accountNumber">Nomor rekening</p>
+      <p class="gift-holder">a.n. <span data-bind="gifts.1.accountHolder">Nama pemilik rekening</span></p>
+      <img class="gift-qr" data-bind="gifts.1.qrCode" alt="QR code hadiah alternatif" loading="lazy">
+    </div>
+  </section>
+
+  <section class="sirein-footer">
+    <p class="eyebrow">With Love</p>
+    <h2><span data-bind="couple.groom.nickname">Budi</span> <span class="ampersand">&amp;</span> <span data-bind="couple.bride.nickname">Ani</span></h2>
+    <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Anda berkenan hadir dan memberikan doa restu.</p>
+    <p class="footer-thanks">Terima kasih atas doa dan kasih sayang Anda.</p>
+    <span class="footer-ornament">✦</span>
+  </section>
+
+  <audio id="bg-music" data-bind="media.music" loop></audio>
+  <button id="music-toggle" class="music-float-btn" type="button" aria-label="Putar atau jeda musik" style="display:none"><i class="fa-solid fa-compact-disc fa-spin"></i></button>
+</main>

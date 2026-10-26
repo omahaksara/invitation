@@ -1,174 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Pernikahan — Omah Aksara</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS Tema Dinamis -->
-    <link id="theme-style" rel="stylesheet" href="">
-    <style>
-        body { margin: 0; padding: 0; background-color: #181314; color: #E0A996; font-family: 'Inter', sans-serif; }
-        .loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
-        .loading-names { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0.5rem 0; color: #FCE8E3; }
-        .loading-sub { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; }
-        .error-desc { font-size: 0.8rem; opacity: 0.6; margin-top: 10px; word-break: break-all; }
-        .dots::after { content: ''; animation: dots 1.5s infinite; }
-        @keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f6f0">
+  <meta name="description" content="Undangan pernikahan digital dari Omah Aksara.">
+  <title>Undangan Pernikahan — Omah Aksara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&family=Scheherazade+New:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="core/global.css">
+  <link id="theme-style" rel="stylesheet" href="">
+  <style>
+    body { margin:0; min-height:100vh; background:#f8f6f0; color:#343a32; font-family:'Inter',sans-serif; }
+    .loading-wrap { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:12px; text-align:center; padding:24px; box-sizing:border-box; }
+    .loading-names { margin:0; color:#343a32; font-family:'Playfair Display',serif; font-size:clamp(1.8rem,6vw,2.5rem); font-weight:400; }
+    .loading-sub { margin:0; color:#77796f; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; }
+    .error-desc { max-width:520px; color:#77796f; font-size:.9rem; line-height:1.7; overflow-wrap:anywhere; }
+    .dots::after { content:''; animation:dots 1.5s infinite; }
+    @keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
+    @media(prefers-reduced-motion:reduce){.dots::after{animation:none}}
+  </style>
 </head>
 <body>
-
-    <!-- Wadah Utama Aplikasi -->
-    <div id="app">
-        <div class="loading-wrap">
-            <div class="loading-sub">Omah Aksara Studio</div>
-            <div class="loading-names">Memuat Undangan</div>
-            <div class="loading-sub">menyiapkan halaman<span class="dots"></span></div>
-        </div>
+  <div id="app" aria-live="polite">
+    <div class="loading-wrap">
+      <p class="loading-sub">Omah Aksara Studio</p>
+      <h1 class="loading-names">Memuat Undangan</h1>
+      <p class="loading-sub">Menyiapkan halaman<span class="dots"></span></p>
     </div>
-
-    <!-- Skrip Router Engine -->
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            try {
-                // 1. Tangkap parameter 'c' (klien) dari URL
-                const urlParams = new URLSearchParams(window.location.search);
-                const klien = urlParams.get('c');
-
-                if (!klien) {
-                    throw new Error("Parameter klien (?c=nama-klien) tidak ditemukan di URL.");
-                }
-
-                // 2. Tentukan jalur dasar secara pasti berdasarkan GitHub Pages
-                const isGitHubPages = window.location.hostname.includes('github.io');
-                const pathSegments = window.location.pathname.split('/').filter(Boolean);
-                const basePath = (isGitHubPages && pathSegments.length > 0) ? '/' + pathSegments[0] : '';
-
-                // 3. Ambil file data.json dari folder 'clients'
-                const jsonUrl = `${basePath}/clients/${klien}/data.json`;
-                const responseJson = await fetch(jsonUrl);
-                if (!responseJson.ok) throw new Error(`Gagal memuat data.json dari: ${jsonUrl}`);
-                const data = await responseJson.json();
-
-                // 4. Ambil tema dari data.json (misal: 'serein')
-                const tema = data.theme || 'serein';
-                const themeFolder = `${basePath}/templates/${tema}`;
-
-                // 5. Pasang file CSS tema
-                document.getElementById('theme-style').href = `${themeFolder}/style.css`;
-                
-                // 6. Tarik file HTML tema dari folder 'templates'
-                const htmlUrl = `${themeFolder}/index.html`;
-                const responseHtml = await fetch(htmlUrl);
-                if (!responseHtml.ok) throw new Error(`Gagal memuat templat dari: ${htmlUrl}`);
-                const htmlText = await responseHtml.text();
-
-                // 7. Masukkan HTML ke dalam wadah aplikasi
-                document.getElementById('app').innerHTML = htmlText;
-
-                // 8. Jalankan pengikatan data & interaksi
-                bindDataAndInit(data, klien, basePath);
-
-            } catch (error) {
-                console.error("Kesalahan Sistem:", error);
-                document.getElementById('app').innerHTML = `
-                    <div class="loading-wrap">
-                        <div class="loading-sub">Omah Aksara Studio</div>
-                        <h3 class="loading-names">Undangan Tidak Ditemukan</h3>
-                        <p class="loading-sub">Gagal memuat sistem undangan.</p>
-                        <div class="error-desc">${error.message}</div>
-                    </div>`;
-            }
-        });
-
-        function bindDataAndInit(data, klien, basePath) {
-            // A. Binding teks dan aset media (foto/audio) mengarah ke folder 'clients'
-            document.querySelectorAll('[data-bind]').forEach(el => {
-                const path = el.getAttribute('data-bind');
-                const value = getNestedValue(data, path);
-                if (value !== undefined) {
-                    if (el.tagName === 'IMG' || el.tagName === 'AUDIO') {
-                        el.src = `${basePath}/clients/${klien}/${value}`;
-                    } else {
-                        el.textContent = value;
-                    }
-                }
-            });
-
-            // B. Tangkap nama tamu dari parameter 'to' di URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const guestName = urlParams.get('to');
-            const defaultGuest = data.guest?.defaultName || "Tamu Undangan";
-            const guestElement = document.getElementById('nama-tamu');
-            if (guestElement) {
-                guestElement.textContent = guestName ? decodeURIComponent(guestName.replace(/-/g, ' ')) : defaultGuest;
-            }
-
-            // C. Tautan Google Maps
-            if (data.events?.akad?.mapsUrl) {
-                const akadMap = document.getElementById('link-akad-maps');
-                if (akadMap) akadMap.href = data.events.akad.mapsUrl;
-            }
-            if (data.events?.resepsi?.mapsUrl) {
-                const resepsiMap = document.getElementById('link-resepsi-maps');
-                if (resepsiMap) resepsiMap.href = data.events.resepsi.mapsUrl;
-            }
-
-            // D. Tombol Buka Undangan & Pemutar Musik
-            const coverSection = document.getElementById('cover-section');
-            const mainContent = document.getElementById('main-content');
-            const musicToggle = document.getElementById('music-toggle');
-            const bgMusic = document.getElementById('bg-music');
-            const openBtn = document.getElementById('open-invitation-btn');
-
-            if (openBtn) {
-                openBtn.addEventListener('click', () => {
-                    if (coverSection) {
-                        coverSection.style.opacity = '0';
-                        setTimeout(() => {
-                            coverSection.style.display = 'none';
-                            if (mainContent) mainContent.style.display = 'block';
-                            if (musicToggle) musicToggle.style.display = 'flex';
-                        }, 500);
-                    }
-                    if (bgMusic && bgMusic.src) {
-                        bgMusic.play().catch(err => console.log("Audio diblokir browser:", err));
-                    }
-                });
-            }
-
-            let isPlaying = true;
-            if (musicToggle && bgMusic) {
-                musicToggle.addEventListener('click', () => {
-                    if (isPlaying) {
-                        bgMusic.pause();
-                        musicToggle.innerHTML = '<i class="fa-solid fa-compact-disc"></i>';
-                    } else {
-                        bgMusic.play();
-                        musicToggle.innerHTML = '<i class="fa-solid fa-compact-disc fa-spin"></i>';
-                    }
-                    isPlaying = !isPlaying;
-                });
-            }
-        }
-
-        function getNestedValue(obj, path) {
-            return path.split('.').reduce((acc, part) => acc && acc[part], obj);
-        }
-
-        function copyRekening() {
-            const numEl = document.getElementById('rekening-num');
-            if (numEl) {
-                const num = numEl.innerText;
-                navigator.clipboard.writeText(num).then(() => alert("Nomor rekening disalin: " + num));
-            }
-        }
-    </script>
+  </div>
+  <script src="core/app.js" defer></script>
 </body>
 </html>

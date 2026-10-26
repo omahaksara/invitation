@@ -24,6 +24,7 @@ body {
 .reveal.active .line-draw { width: 100%; }
 
 #cover { transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.8s; }
+#cover.is-opening { opacity: 0; transform: translateY(-100%); pointer-events: none; }
 .cover-gradient { background: linear-gradient(to top, rgba(15,18,15,0.9) 0%, rgba(15,18,15,0.4) 50%, rgba(0,0,0,0) 100%); }
 
 .btn-open {
