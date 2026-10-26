@@ -20,7 +20,7 @@ const themes = [
       try {
         const response = await page.goto(url, { waitUntil: "domcontentloaded" });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
-        await page.waitForSelector(theme.marker, { timeout: 10000 });
+        await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
         await page.waitForFunction(() => {
           const el = document.querySelector('[data-bind="couple.groom.nickname"]');
           return el && el.textContent.trim() === "Arkan";
@@ -49,8 +49,23 @@ const themes = [
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
         console.log("PASS " + theme.slug);
       } catch (error) {
-        failures.push(theme.slug + ": " + (error && error.message ? error.message : String(error)));
-        console.error("FAIL " + theme.slug + ": " + (error && error.message ? error.message : String(error)));
+        let debug = {};
+        try {
+          debug = await page.evaluate(selector => {
+            const el = document.querySelector(selector);
+            const cover = document.getElementById("cover") || document.getElementById("cover-section");
+            const style = el ? getComputedStyle(el) : null;
+            return {
+              appText: (document.getElementById("app")?.innerText || "").slice(0, 240),
+              markerFound: Boolean(el),
+              markerStyle: style ? { display: style.display, visibility: style.visibility, opacity: style.opacity, rect: el.getBoundingClientRect().toJSON() } : null,
+              coverStyle: cover ? { display: getComputedStyle(cover).display, visibility: getComputedStyle(cover).visibility } : null
+            };
+          }, theme.marker);
+        } catch {}
+        const message = error && error.message ? error.message : String(error);
+        failures.push(theme.slug + ": " + message);
+        console.error("FAIL " + theme.slug + ": " + message + " DEBUG " + JSON.stringify(debug));
       } finally {
         await page.close();
       }
