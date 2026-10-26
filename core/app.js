@@ -144,7 +144,7 @@
           cover.classList.add("is-opening");
           window.setTimeout(() => {
             cover.style.display = "none";
-          }, cover.id === "cover" ? 900 : 450);
+          }, cover.id === "cover" ? 1800 : 450);
         }
         if (main) main.style.display = "block";
         if (toggle) toggle.style.display = "flex";
