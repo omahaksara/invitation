@@ -82,6 +82,7 @@
   }
 
   function renderInvitation(data, clientBase, slug, guestName) {
+    ensureFeatureSections(data, clientBase, slug);
     window.__invitationData = data;
     document.querySelectorAll("[data-bind]").forEach(el => {
       const path = el.getAttribute("data-bind");
@@ -165,6 +166,163 @@
     const eventValues = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
     if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) hide("#link-akad-maps, #link-resepsi-maps, [data-bind='rsvp.link']");
     if (!data.countdown?.targetDate && !eventValues.some(item => item && item.date)) hide("#countdown, .countdown");
+  }
+
+
+  function ensureFeatureSections(data, clientBase, slug) {
+    const eventItems = Array.isArray(data.events)
+      ? data.events
+      : Object.entries(data.events || {}).map(([id, item]) => ({ id, ...item }));
+    const stories = Array.isArray(data.story) ? data.story : [];
+    const gallery = Array.isArray(data.gallery) ? data.gallery : (data.gallery && Array.isArray(data.gallery.items) ? data.gallery.items : []);
+    const gifts = Array.isArray(data.gifts) ? data.gifts : (data.gifts && Array.isArray(data.gifts.accounts) ? data.gifts.accounts : []);
+    const quote = data.quote || {};
+    const video = data.video || {};
+    const target = document.querySelector("#main-content, #app-inner, .invitation-container, .invite-shell") || document.getElementById("app");
+    if (!target) return;
+
+    const mount = section => {
+      const footer = target.querySelector("footer");
+      if (footer && footer.parentNode === target) target.insertBefore(section, footer);
+      else target.append(section);
+    };
+    const makeSection = (className, title) => {
+      const section = document.createElement("section");
+      section.className = "oa-shared-section " + className;
+      const heading = document.createElement("h2");
+      heading.textContent = title;
+      section.append(heading);
+      mount(section);
+      return section;
+    };
+    const makeContainer = (section, id, className) => {
+      const root = document.createElement("div");
+      root.id = id;
+      root.className = className || "";
+      section.append(root);
+      return root;
+    };
+
+    if (stories.length && !document.getElementById("story-list") && !document.querySelector(".story-list")) {
+      const section = makeSection("story-section", "Cerita Kami");
+      makeContainer(section, "story-list", "story-list");
+    }
+    if (gallery.length && !document.getElementById("gallery-grid") && !document.querySelector(".gallery-grid")) {
+      const section = makeSection("gallery-section", "Galeri Kenangan");
+      makeContainer(section, "gallery-grid", "gallery-grid");
+    }
+    if (gifts.length && !document.getElementById("gift-list") && !document.querySelector(".gift-section, [data-bind^='gifts.']")) {
+      const section = makeSection("gift-section", "Hadiah Digital");
+      if (data.gifts && data.gifts.message) {
+        const message = document.createElement("p");
+        message.textContent = data.gifts.message;
+        section.append(message);
+      }
+      makeContainer(section, "gift-list", "gift-grid");
+    }
+    if ((data.countdown?.targetDate || eventItems.some(item => item && item.date)) &&
+        !document.getElementById("countdown") && !document.querySelector(".countdown")) {
+      const section = makeSection("countdown-section", "Menuju Hari Bahagia");
+      const root = makeContainer(section, "countdown", "countdown");
+      [["cd-days","Hari"],["cd-hours","Jam"],["cd-minutes","Menit"],["cd-seconds","Detik"]].forEach(([id,label]) => {
+        const item = document.createElement("div");
+        const value = document.createElement("b"); value.id = id; value.textContent = "00";
+        const caption = document.createElement("span"); caption.textContent = label;
+        item.append(value, caption); root.append(item);
+      });
+    }
+    if ((quote.text || quote.arab) && !document.querySelector(".quote-section, [data-bind='quote.text'], [data-bind='quote.arab']")) {
+      const section = makeSection("quote-section", "Kutipan");
+      if (quote.arab) { const arab = document.createElement("p"); arab.setAttribute("data-bind", "quote.arab"); section.append(arab); }
+      const text = document.createElement("p"); text.setAttribute("data-bind", "quote.text"); section.append(text);
+      const source = document.createElement("small"); source.setAttribute("data-bind", "quote.source"); section.append(source);
+    }
+    if ((video.src || video.url) && !document.querySelector(".video-section, #video-section")) {
+      const section = makeSection("video-section", "Video Kenangan");
+      const player = document.createElement("video");
+      player.controls = true; player.preload = "metadata"; player.playsInline = true;
+      player.setAttribute("data-bind", video.src ? "video.src" : "video.url");
+      if (video.poster) player.poster = assetUrl(video.poster, clientBase);
+      player.style.cssText = "display:block;width:100%;max-width:900px;margin:0 auto";
+      section.append(player);
+    }
+    if (data.hashtag && !document.querySelector(".hashtag-section, #hashtag-section")) {
+      const section = makeSection("hashtag-section", "Hashtag Pernikahan");
+      const hashtag = document.createElement("p"); hashtag.textContent = data.hashtag; section.append(hashtag);
+    }
+    if (eventItems.some(item => item && item.mapsUrl) &&
+        !document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, [data-bind='rsvp.link']")) {
+      const section = makeSection("maps-section", "Lokasi Acara");
+      eventItems.filter(item => item && item.mapsUrl).forEach(item => {
+        const link = document.createElement("a");
+        link.href = item.mapsUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
+        link.textContent = (item.title || item.id || "Buka Lokasi") + " ↗";
+        section.append(link);
+      });
+    }
+    if (eventItems.length && !document.querySelector(".calendar-section, #calendar-section")) {
+      const section = makeSection("calendar-section", "Simpan Tanggal");
+      eventItems.forEach((item, index) => {
+        if (!item || !item.date) return;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "Tambahkan " + (item.title || item.id || ("Acara " + (index + 1))) + " ke kalender";
+        button.addEventListener("click", () => downloadCalendarEvent(item, data, slug));
+        section.append(button);
+      });
+    }
+  }
+
+  function downloadCalendarEvent(event, data, slug) {
+    const date = String(event.date || "");
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) return;
+    const timezone = event.timezone || (data.site && data.site.timezone) || "Asia/Makassar";
+    const startTime = event.startTime || "00:00";
+    const endTime = event.endTime || (startTime === "00:00" ? "01:00" : startTime);
+    const toUtc = (dateValue, timeValue, zone) => {
+      const [year, month, day] = dateValue.split("-").map(Number);
+      const [hour, minute] = timeValue.split(":").map(Number);
+      let timestamp = Date.UTC(year, month - 1, day, hour, minute, 0);
+      for (let i = 0; i < 3; i++) {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+          timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit",
+          hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+        }).formatToParts(new Date(timestamp));
+        const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+        const represented = Date.UTC(Number(values.year), Number(values.month) - 1, Number(values.day),
+          Number(values.hour), Number(values.minute), Number(values.second));
+        const desired = Date.UTC(year, month - 1, day, hour, minute, 0);
+        timestamp += desired - represented;
+      }
+      return new Date(timestamp);
+    };
+    const formatUtc = value => value.toISOString().replace(/[-:]/g, "").replace(/\\.\\d{3}Z$/, "Z");
+    let start;
+    let end;
+    try {
+      start = toUtc(date, startTime, timezone);
+      end = toUtc(date, endTime, timezone);
+    } catch {
+      return;
+    }
+    if (end <= start) end = new Date(start.getTime() + 60 * 60 * 1000);
+    const escapeIcs = value => String(value || "").replace(/\\\\/g, "\\\\\\").replace(/\\n/g, "\\\\n").replace(/[,;]/g, "\\\\  function renderStory(stories) {");
+    const uid = (slug || "undangan") + "-" + date.replace(/-/g, "") + "-" + (event.id || "event") + "@omahaksara";
+    const lines = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Omah Aksara//Undangan Digital//ID",
+      "CALSCALE:GREGORIAN", "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + formatUtc(new Date()),
+      "DTSTART:" + formatUtc(start), "DTEND:" + formatUtc(end),
+      "SUMMARY:" + escapeIcs(event.title || "Acara Pernikahan"),
+      "LOCATION:" + escapeIcs([event.location || event.venue, event.address].filter(Boolean).join(", ")),
+      "DESCRIPTION:" + escapeIcs("Undangan digital Omah Aksara"),
+      "END:VEVENT", "END:VCALENDAR"
+    ];
+    const blob = new Blob([lines.join("\\r\\n") + "\\r\\n"], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url; anchor.download = (slug || "undangan") + "-" + date + ".ics";
+    document.body.append(anchor); anchor.click(); anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   function renderStory(stories) {
