@@ -3,7 +3,9 @@
   "demoMode": true,
   "status": "published",
   "theme": "sirein",
-  "guest": { "defaultName": "Tamu Undangan" },
+  "guest": {
+    "defaultName": "Tamu Undangan"
+  },
   "cover": {
     "title": "Undangan Pernikahan",
     "subtitle": "The Wedding of",
@@ -49,11 +51,25 @@
       "mapsUrl": "https://maps.google.com/?q=Makassar"
     }
   },
-  "countdown": { "targetDate": "2027-06-12T08:00:00+08:00" },
+  "countdown": {
+    "targetDate": "2027-06-12T08:00:00+08:00"
+  },
   "story": [
-    { "year": "2022", "title": "Awal Bertemu", "description": "Pertemuan sederhana menjadi awal dari kisah yang berarti." },
-    { "year": "2024", "title": "Memantapkan Hati", "description": "Kami belajar tumbuh, memahami, dan menerima satu sama lain." },
-    { "year": "2026", "title": "Menuju Hari Bahagia", "description": "Dengan restu keluarga, kami bersiap memulai babak baru." }
+    {
+      "year": "2022",
+      "title": "Awal Bertemu",
+      "description": "Pertemuan sederhana menjadi awal dari kisah yang berarti."
+    },
+    {
+      "year": "2024",
+      "title": "Memantapkan Hati",
+      "description": "Kami belajar tumbuh, memahami, dan menerima satu sama lain."
+    },
+    {
+      "year": "2026",
+      "title": "Menuju Hari Bahagia",
+      "description": "Dengan restu keluarga, kami bersiap memulai babak baru."
+    }
   ],
   "gallery": [
     "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=85",
@@ -61,8 +77,31 @@
     "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=85",
     "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=900&q=85"
   ],
-  "gifts": { "message": "Ini adalah contoh tampilan amplop digital. Nomor rekening demo tidak ditampilkan agar tidak disalahgunakan.", "accounts": [] },
-  "media": { "music": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3" },
-  "rsvp": { "link": "" },
-  "integrations": { "apiUrl": "" }
+  "gifts": {
+    "message": "Ini adalah contoh tampilan amplop digital. Nomor rekening demo tidak ditampilkan agar tidak disalahgunakan.",
+    "accounts": []
+  },
+  "media": {
+    "music": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3"
+  },
+  "rsvp": {
+    "link": ""
+  },
+  "integrations": {
+    "apiUrl": ""
+  },
+  "demoGreetings": [
+    {
+      "name": "Keluarga Pratama",
+      "message": "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin."
+    },
+    {
+      "name": "Sahabat Mempelai",
+      "message": "Selamat menempuh perjalanan baru. Semoga selalu saling menguatkan dan berbahagia."
+    },
+    {
+      "name": "Rekan Kerja",
+      "message": "Semoga acara berjalan lancar dan rumah tangga dipenuhi keberkahan."
+    }
+  ]
 }
