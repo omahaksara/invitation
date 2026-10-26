@@ -44,6 +44,7 @@ jobs:
           assert.match(app, /else\s*\{[\s\S]*musicToggle\.style\.display = "flex"/,
             'themes without an opening-cover button must still show music controls');
           assert.match(app, /function setupMusic\(/, 'music setup missing');
+          assert.ok(app.includes('parsedTemplate.head.querySelectorAll("style")'), 'full-document theme CSS must be mounted');
           assert.doesNotMatch(app.slice(app.indexOf('function setupMusic('), app.indexOf('function setupCountdown(')),
             /button\.textContent\s*=\s*["']♫["']/, 'music toggle must not destroy nested theme icons');
 
