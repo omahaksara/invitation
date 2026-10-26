@@ -302,6 +302,23 @@
     const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && (data.api.apiUcapan || data.api.apiUrl)) || "";
     const rsvp = document.getElementById("rsvp-form");
     const wishes = document.getElementById("wishes-form");
+    if (!apiUrl) {
+      const message = data.demoMode === true
+        ? "Mode demo: formulir dapat dicoba, tetapi data tidak dikirim atau disimpan."
+        : "Formulir belum aktif karena endpoint backend belum dikonfigurasi.";
+      if (rsvp) {
+        let status = document.getElementById("rsvp-status");
+        if (!status) { status = document.createElement("p"); status.id = "rsvp-status"; status.setAttribute("role", "status"); rsvp.append(status); }
+        status.textContent = message;
+        if (data.demoMode !== true) { const submit = rsvp.querySelector("button[type=submit]"); if (submit) submit.disabled = true; }
+      }
+      if (wishes) {
+        let status = document.getElementById("wishes-status");
+        if (!status) { status = document.createElement("p"); status.id = "wishes-status"; status.setAttribute("role", "status"); wishes.append(status); }
+        status.textContent = message;
+        if (data.demoMode !== true) { const submit = wishes.querySelector("button[type=submit]"); if (submit) submit.disabled = true; }
+      }
+    }
     if (data.rsvp && data.rsvp.enabled === false) { const section=document.getElementById("rsvp-section"); if(section) section.hidden=true; }
     if (data.guestbook && data.guestbook.enabled === false) { const section=document.getElementById("guestbook-section"); if(section) section.hidden=true; }
     if (rsvp) rsvp.addEventListener("submit", async event => {
@@ -309,7 +326,7 @@
       let status = document.getElementById("rsvp-status");
       if (!status) { status = document.createElement("p"); status.id = "rsvp-status"; status.setAttribute("role", "status"); rsvp.append(status); }
       const button = rsvp.querySelector("button[type=submit]");
-      if (!apiUrl) { status.textContent = "RSVP belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
+      if (!apiUrl) { status.textContent = data.demoMode === true ? "Simulasi demo: RSVP tidak dikirim atau disimpan." : "RSVP belum aktif karena endpoint backend belum dikonfigurasi."; return; }
       const form = new FormData(rsvp);
       const payload = { action:"rsvp", slug, name:String(form.get("name")||"").trim(), attendance:form.get("attendance"), guestCount:Number(form.get("guestCount")||1) };
       if (!payload.name || !payload.attendance) { status.textContent="Mohon lengkapi nama dan konfirmasi."; return; }
@@ -321,7 +338,7 @@
       let status = document.getElementById("wishes-status");
       if (!status) { status = document.createElement("p"); status.id = "wishes-status"; status.setAttribute("role", "status"); wishes.append(status); }
       const button = wishes.querySelector("button[type=submit]");
-      if (!apiUrl) { status.textContent = "Buku tamu belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
+      if (!apiUrl) { status.textContent = data.demoMode === true ? "Simulasi demo: ucapan tidak dikirim atau disimpan." : "Buku tamu belum aktif karena endpoint backend belum dikonfigurasi."; return; }
       const form = new FormData(wishes);
       const payload = { action:"guestbook", slug, name:String(form.get("name") || document.getElementById("wish-name")?.value || "").trim(), message:String(form.get("message") || document.getElementById("wish-message")?.value || "").trim() };
       if (!payload.name || !payload.message || payload.message.length > (data.guestbook?.maxMessageLength || 500)) { status.textContent="Mohon isi nama dan ucapan (maksimal 500 karakter)."; return; }
