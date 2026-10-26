@@ -30,6 +30,9 @@ const themes = [
           theme.slug + ": nama tamu tidak terbaca");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
+        if (theme.slug === "aksara-signature") {
+          await page.waitForSelector('style[data-invitation-theme="aksara-signature"]', { timeout: 5000 });
+        }
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
 
