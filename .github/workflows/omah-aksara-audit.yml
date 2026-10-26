@@ -38,6 +38,7 @@ jobs:
           assert.match(app, /data\.demoMode\s*===\s*true/, 'theme override must be limited to demo invitations');
           assert.match(app, /requestedAlias/, 'legacy theme alias handling missing');
           assert.match(app, /function setupCover\(\)/, 'cover initialization missing');
+          assert.ok(app.includes("footer.parentNode.insertBefore(section, footer)"), 'legacy forms must handle nested footers safely');
           assert.match(app, /else\s*\{[\s\S]*musicToggle\.style\.display = "flex"/,
             'themes without an opening-cover button must still show music controls');
           assert.match(app, /function setupMusic\(/, 'music setup missing');
