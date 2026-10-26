@@ -82,7 +82,7 @@ function validateClient(slug, file) {
     return;
   }
 
-  const looksLikeV2 = data.schemaVersion === 2 || (typeof data.theme === 'string' && ALLOWED_THEMES.has(data.theme) && isObject(data.couple));
+  const looksLikeV2 = data.schemaVersion === 2;
   if (!looksLikeV2) {
     warnings.push(`${slug}: format data lama belum mengikuti skema V2; perlu migrasi sebelum rilis publik.`);
     return;
