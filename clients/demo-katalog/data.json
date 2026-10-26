@@ -40,7 +40,11 @@
       "time": "08:00 - 10:00 WITA",
       "location": "Taman Seruni",
       "address": "Alamat contoh untuk pratinjau",
-      "mapsUrl": "https://maps.google.com/?q=Makassar"
+      "mapsUrl": "https://maps.google.com/?q=Makassar",
+      "dateISO": "2027-06-12",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "timezone": "Asia/Makassar"
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
@@ -48,7 +52,11 @@
       "time": "11:00 - 14:00 WITA",
       "location": "Taman Seruni",
       "address": "Alamat contoh untuk pratinjau",
-      "mapsUrl": "https://maps.google.com/?q=Makassar"
+      "mapsUrl": "https://maps.google.com/?q=Makassar",
+      "dateISO": "2027-06-12",
+      "startTime": "11:00",
+      "endTime": "14:00",
+      "timezone": "Asia/Makassar"
     }
   },
   "countdown": {
@@ -79,7 +87,13 @@
   ],
   "gifts": {
     "message": "Ini adalah contoh tampilan amplop digital. Nomor rekening demo tidak ditampilkan agar tidak disalahgunakan.",
-    "accounts": []
+    "accounts": [
+      {
+        "bank": "REKENING CONTOH (DEMO)",
+        "accountNumber": "0000000000",
+        "accountHolder": "Nama Contoh — JANGAN TRANSFER"
+      }
+    ]
   },
   "media": {
     "music": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3"
@@ -92,16 +106,29 @@
   },
   "demoGreetings": [
     {
-      "name": "Keluarga Pratama",
-      "message": "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin."
+      "name": "Keluarga Contoh",
+      "message": "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah."
     },
     {
-      "name": "Sahabat Mempelai",
-      "message": "Selamat menempuh perjalanan baru. Semoga selalu saling menguatkan dan berbahagia."
-    },
-    {
-      "name": "Rekan Kerja",
-      "message": "Semoga acara berjalan lancar dan rumah tangga dipenuhi keberkahan."
+      "name": "Sahabat Demo",
+      "message": "Selamat menempuh hidup baru. Bahagia selalu!"
     }
-  ]
+  ],
+  "schemaVersion": 2,
+  "features": {
+    "countdown": true,
+    "calendar": true,
+    "loveStory": true,
+    "gallery": true,
+    "video": false,
+    "maps": true,
+    "music": true,
+    "gifts": true,
+    "rsvp": true,
+    "guestbook": true,
+    "guestName": true,
+    "hashtag": true,
+    "quotes": true
+  },
+  "hashtag": "#ArkanSekarStory"
 }
