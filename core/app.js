@@ -384,6 +384,7 @@
       const payload = { action:"rsvp", slug, name:String(form.get("name")||"").trim(), attendance:form.get("attendance"), guestCount:Number(form.get("guestCount")||1) };
       if (!payload.name || !payload.attendance) { status.textContent="Mohon lengkapi nama dan konfirmasi."; return; }
       if (data.rsvp?.maxGuestCount && payload.guestCount > data.rsvp.maxGuestCount) { status.textContent="Jumlah tamu melebihi batas undangan."; return; }
+      if (data.demoMode === true) { status.textContent="Simulasi demo: konfirmasi tidak dikirim ke database."; return; }
       await sendPayload(apiUrl,payload,status,button,"Konfirmasi berhasil dikirim.");
     });
     if (wishes) wishes.addEventListener("submit", async event => {
@@ -395,10 +396,17 @@
       const form = new FormData(wishes);
       const payload = { action:"guestbook", slug, name:String(form.get("name")||"").trim(), message:String(form.get("message")||"").trim() };
       if (!payload.name || !payload.message || payload.message.length > (data.guestbook?.maxMessageLength || 500)) { status.textContent="Mohon isi nama dan ucapan (maksimal 500 karakter)."; return; }
+      if (data.demoMode === true) {
+        appendDemoWish(payload.name, payload.message);
+        status.textContent="Simulasi demo: ucapan hanya tampil di halaman ini dan tidak disimpan ke database.";
+        wishes.reset();
+        return;
+      }
       const ok = await sendPayload(apiUrl,payload,status,button,"Ucapan berhasil dikirim.");
       if (ok) { wishes.reset(); loadWishes(apiUrl,slug); }
     });
-    if (apiUrl && wishes) loadWishes(apiUrl,slug);
+    if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
+    else if (apiUrl && wishes) loadWishes(apiUrl,slug);
   }
 
   async function sendPayload(apiUrl,payload,status,button,successText) {
@@ -417,6 +425,36 @@
     } finally { if (button) button.disabled=false; }
   }
 
+  function makeWishCard(item) {
+    const card = document.createElement("article"); card.className = "wish-card";
+    const name = document.createElement("h3"); name.textContent = item.name || "Tamu";
+    const message = document.createElement("p"); message.textContent = item.message || "";
+    card.append(name, message);
+    return card;
+  }
+
+  function renderDemoWishes(items) {
+    const root = document.getElementById("wishes-list"); if (!root) return;
+    root.replaceChildren();
+    const label = document.createElement("p");
+    label.className = "demo-wishes-label";
+    label.textContent = "CONTOH UCAPAN — MODE DEMO (bukan data tamu sungguhan)";
+    label.style.cssText = "font-size:11px;letter-spacing:.08em;text-align:center;color:#8a7253;padding:10px;border:1px dashed #cfc7b8";
+    root.append(label);
+    if (!items.length) {
+      const empty = document.createElement("p"); empty.textContent = "Jadilah yang pertama mencoba menulis ucapan demo."; root.append(empty); return;
+    }
+    items.forEach(item => root.append(makeWishCard(item)));
+  }
+
+  function appendDemoWish(name, message) {
+    const root = document.getElementById("wishes-list"); if (!root) return;
+    const card = makeWishCard({name, message});
+    const label = root.querySelector(".demo-wishes-label");
+    if (label && label.nextSibling) root.insertBefore(card, label.nextSibling);
+    else root.append(card);
+  }
+
   async function loadWishes(apiUrl,slug) {
     const root=document.getElementById("wishes-list"); if(!root) return;
     try {
@@ -425,7 +463,7 @@
       const result=await response.json(); if(!result.ok || !Array.isArray(result.items)) return;
       root.replaceChildren();
       if(!result.items.length){const empty=document.createElement("p");empty.className="empty-wishes";empty.textContent="Jadilah yang pertama mengirim doa.";root.append(empty);return;}
-      result.items.forEach(item=>{const card=document.createElement("article");card.className="wish-card";const name=document.createElement("h3");name.textContent=item.name||"Tamu";const message=document.createElement("p");message.textContent=item.message||"";card.append(name,message);root.append(card);});
+      result.items.forEach(item=>root.append(makeWishCard(item)));
     } catch(error) { console.warn("Buku tamu belum dapat dimuat:",error); }
   }
 
