@@ -116,7 +116,55 @@
     setupReveal();
     setupCountdown(data);
     setupForms(data, slug);
+    applyFeatureFlags(data);
+    hideEmptyOptionalSections(data);
     setupLightbox();
+  }
+
+
+  function applyFeatureFlags(data) {
+    const flags = data && data.features && typeof data.features === "object" ? data.features : {};
+    const disabled = key => flags[key] === false;
+    const hide = selectors => document.querySelectorAll(selectors).forEach(element => {
+      const section = element.matches("section") ? element : element.closest("section");
+      if (section) section.hidden = true;
+      else element.hidden = true;
+    });
+    if (disabled("loveStory") || disabled("story")) hide(".story-section, #story-list");
+    if (disabled("gallery")) hide(".gallery-section, #gallery-grid, .gallery-grid");
+    if (disabled("video")) hide(".video-section, #video-section");
+    if (disabled("maps")) hide("#link-akad-maps, #link-resepsi-maps, [data-bind='rsvp.link']");
+    if (disabled("countdown")) hide("#countdown, .countdown");
+    if (disabled("calendar")) hide(".calendar-section, #calendar-section");
+    if (disabled("quotes") || disabled("quote")) hide(".quote-section, .quote");
+    if (disabled("gifts")) hide(".gift-section, #gift-section, #gift-list");
+    if (disabled("rsvp")) hide("#rsvp-section, .rsvp-section, #rsvp-form, [data-bind='rsvp.link']");
+    if (disabled("guestbook")) hide("#guestbook-section, .guestbook-section, #wishes-form");
+    if (disabled("hashtag")) hide(".hashtag-section, #hashtag-section");
+    if (disabled("guestName")) {
+      const guest = document.getElementById("nama-tamu");
+      if (guest) { guest.hidden = true; const label = guest.previousElementSibling; if (label && /kepada|tamu/i.test(label.textContent || "")) label.hidden = true; }
+    }
+    if (disabled("music")) document.querySelectorAll("#music-toggle, #music-btn, #bg-music").forEach(el => { el.hidden = true; el.style.display = "none"; });
+  }
+
+  function hideEmptyOptionalSections(data) {
+    const hide = selectors => document.querySelectorAll(selectors).forEach(element => {
+      const section = element.matches("section") ? element : element.closest("section");
+      if (section) section.hidden = true;
+      else element.hidden = true;
+    });
+    const stories = Array.isArray(data.story) ? data.story : [];
+    const gallery = Array.isArray(data.gallery) ? data.gallery : (data.gallery && Array.isArray(data.gallery.items) ? data.gallery.items : []);
+    const gifts = Array.isArray(data.gifts) ? data.gifts : (data.gifts && Array.isArray(data.gifts.accounts) ? data.gifts.accounts : []);
+    if (!stories.length) hide(".story-section, #story-list");
+    if (!gallery.length) hide(".gallery-section, #gallery-grid, .gallery-grid");
+    if (!gifts.length && !(data.gifts && data.gifts.message)) hide(".gift-section, #gift-section, #gift-list");
+    if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
+    if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
+    const eventValues = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+    if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) hide("#link-akad-maps, #link-resepsi-maps, [data-bind='rsvp.link']");
+    if (!data.countdown?.targetDate && !eventValues.some(item => item && item.date)) hide("#countdown, .countdown");
   }
 
   function renderStory(stories) {
@@ -213,17 +261,18 @@
     const main = document.getElementById("main-content") || document.getElementById("app-inner");
     const open = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
     const musicToggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
+    const audio = document.getElementById("bg-music");
+    const hasMusic = !!(audio && audio.getAttribute("src"));
 
     if (open) {
       open.addEventListener("click", async () => {
         if (cover) cover.classList.add("is-opening");
         if (main) { main.hidden = false; main.style.display = "block"; }
-        if (musicToggle) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+        if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
         }, cover && cover.id === "cover" ? 1800 : 850);
-        const audio = document.getElementById("bg-music");
-        if (audio && audio.getAttribute("src")) {
+        if (audio && hasMusic) {
           try {
             await audio.play();
             musicToggle?.classList.add("playing");
@@ -238,7 +287,7 @@
     } else {
       // Tema tanpa sampul pembuka (mis. Royal Vintage) harus tetap bisa memakai musik.
       if (main) { main.hidden = false; main.style.display = "block"; }
-      if (musicToggle) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+      if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
     }
   }
 
@@ -246,7 +295,12 @@
     const audio = document.getElementById("bg-music");
     const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
     const actualMusic = music || (window.__invitationData && window.__invitationData.media && window.__invitationData.media.music);
-    if (!audio || !button || !actualMusic || !(actualMusic.src || typeof actualMusic === "string")) return;
+    if (!audio || !button) return;
+    if (!actualMusic || !(actualMusic.src || typeof actualMusic === "string")) {
+      button.hidden = true;
+      button.style.display = "none";
+      return;
+    }
 
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
     if (button.tagName !== "BUTTON") {
@@ -429,16 +483,26 @@
 
   function setupForms(data, slug) {
     ensureApiForms();
-    const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && data.api.apiUcapan) || "https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec";
+    const configuredApiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && (data.api.apiUcapan || data.api.apiUrl)) || "";
+    const apiUrl = /^https:\/\//i.test(configuredApiUrl) ? configuredApiUrl : "";
     const rsvp = document.getElementById("rsvp-form");
     const wishes = document.getElementById("wishes-form");
     if (data.rsvp && data.rsvp.enabled === false) { const section=document.getElementById("rsvp-section"); if(section) section.hidden=true; }
     if (data.guestbook && data.guestbook.enabled === false) { const section=document.getElementById("guestbook-section"); if(section) section.hidden=true; }
+    if (!apiUrl && data.demoMode !== true) {
+      const message = "Formulir belum aktif karena endpoint backend belum dikonfigurasi.";
+      [["rsvp-status", rsvp], ["wishes-status", wishes]].forEach(([id, form]) => {
+        const status = document.getElementById(id);
+        if (status) status.textContent = message;
+        const button = form && form.querySelector("button[type=submit]");
+        if (button) button.disabled = true;
+      });
+    }
     if (rsvp) rsvp.addEventListener("submit", async event => {
       event.preventDefault();
       const status = document.getElementById("rsvp-status");
       const button = rsvp.querySelector("button[type=submit]");
-      if (!apiUrl) { status.textContent = "RSVP belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
+      if (!apiUrl && data.demoMode !== true) { status.textContent = "RSVP belum aktif karena endpoint backend belum dikonfigurasi."; return; }
       const form = new FormData(rsvp);
       const payload = { action:"rsvp", slug, name:String(form.get("name")||"").trim(), attendance:form.get("attendance"), guestCount:Number(form.get("guestCount")||1) };
       if (!payload.name || !payload.attendance) { status.textContent="Mohon lengkapi nama dan konfirmasi."; return; }
@@ -451,7 +515,7 @@
       let status = document.getElementById("wishes-status");
       if (!status) { status = document.createElement("p"); status.id = "wishes-status"; status.setAttribute("role", "status"); wishes.append(status); }
       const button = wishes.querySelector("button[type=submit]");
-      if (!apiUrl) { status.textContent = "Buku tamu belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
+      if (!apiUrl && data.demoMode !== true) { status.textContent = "Buku tamu belum aktif karena endpoint backend belum dikonfigurasi."; return; }
       const form = new FormData(wishes);
       const payload = { action:"guestbook", slug, name:String(form.get("name")||"").trim(), message:String(form.get("message")||"").trim() };
       if (!payload.name || !payload.message || payload.message.length > (data.guestbook?.maxMessageLength || 500)) { status.textContent="Mohon isi nama dan ucapan (maksimal 500 karakter)."; return; }
