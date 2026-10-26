@@ -28,11 +28,12 @@
       const configured = /^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa";
       const configuredAlias = configured === "royal" ? "royal-vintage" : configured;
       const theme = allowedThemes.has(requestedAlias) ? requestedAlias : (allowedThemes.has(configuredAlias) ? configuredAlias : "karsa");
-      const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);const templateResponse = await fetch(new URL("index.html", themeBase));
+      const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
+      const templateResponse = await fetch(new URL("index.html", themeBase));
       if (!templateResponse.ok) throw new Error("Tema undangan tidak ditemukan: " + theme);
       const templateHtml = await templateResponse.text();
       // Support both legacy HTML fragments and complete HTML documents.
-      if (/<html[\\s>]/i.test(templateHtml)) {
+      if (/<html[\s>]/i.test(templateHtml)) {
         const parsedTemplate = new DOMParser().parseFromString(templateHtml, "text/html");
         parsedTemplate.head.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis.com"], link[rel="preconnect"][href*="fonts"]').forEach(link => {
           const href = link.href;
