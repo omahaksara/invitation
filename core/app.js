@@ -218,11 +218,15 @@
 
   function setupCountdown(data) {
     const target = (Array.isArray(data.events) ? data.events : Object.values(data.events || {})).find(e => e && e.date);
-    if (!target) return;
-    const date = target.date;
-    const time = target.startTime || "00:00";
-    const targetDate = new Date(date + "T" + time + ":00" + (target.timezone === "Asia/Makassar" ? "+08:00" : target.timezone === "Asia/Jakarta" ? "+07:00" : target.timezone === "Asia/Jayapura" ? "+09:00" : ""));
-    if (Number.isNaN(targetDate.getTime())) return;
+    let targetDate;
+    if (data.countdown && data.countdown.targetDate) {
+      targetDate = new Date(data.countdown.targetDate);
+    } else if (target) {
+      const date = target.date;
+      const time = target.startTime || "00:00";
+      targetDate = new Date(date + "T" + time + ":00" + (target.timezone === "Asia/Makassar" ? "+08:00" : target.timezone === "Asia/Jakarta" ? "+07:00" : target.timezone === "Asia/Jayapura" ? "+09:00" : ""));
+    }
+    if (!targetDate || Number.isNaN(targetDate.getTime())) return;
     const tick = () => {
       let diff = Math.max(0, targetDate.getTime() - Date.now());
       const days = Math.floor(diff / 86400000); diff %= 86400000;
@@ -329,14 +333,8 @@
     catch { window.alert("Silakan salin nomor rekening secara manual: " + value); }
   };
   window.submitWish = event => { if (event) event.preventDefault(); };
-  window.openInvitation = () => {
-    const button = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
-    if (button) button.click();
-  };
-  window.toggleMusic = () => {
-    const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
-    if (button) button.click();
-  };
+  window.openInvitation = () => {};
+  window.toggleMusic = () => {};
 
   function showError(app,title,message) {
     app.replaceChildren(); const panel=document.createElement("div");panel.className="loading-wrap";panel.style.cssText="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;background:#f7f2e9;color:#423b32";
