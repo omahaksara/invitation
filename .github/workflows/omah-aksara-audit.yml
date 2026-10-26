@@ -37,7 +37,7 @@ jobs:
             'templates/aksara-signature/index.html'
           ];
 
-          assert.match(app, /<html[\\s>]/i, 'loader must detect full HTML documents');
+          assert.match(app, /<html[\s>]/i, 'loader must detect full HTML documents');
           assert.match(app, /makeSection\("guestbook-section", "Ucapan & Doa", "wishes-form"\)/,
             'legacy guestbook section should be reused');
           assert.match(app, /"wish-name"/, 'legacy Karsa guest name should be supported');
@@ -49,9 +49,9 @@ jobs:
 
           for (const file of themes) {
             const html = fs.readFileSync(file, 'utf8');
-            const styleCount = (html.match(/<style\\b/gi) || []).length;
+            const styleCount = (html.match(/<style\b/gi) || []).length;
             assert.equal(styleCount, 1, file + ' must contain exactly one embedded style block');
-            assert.match(html, /<\\/style\\s*>/i, file + ' style block must be closed');
+            assert.match(html, /<\/style\s*>/i, file + ' style block must be closed');
           }
           console.log('Static template/API checks passed.');
           NODE
