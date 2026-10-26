@@ -21,13 +21,36 @@
       if (data.slug && data.slug !== slug) throw new Error("Slug pada data tidak cocok dengan alamat undangan.");
       if (data.status === "draft") throw new Error("Undangan ini belum dipublikasikan.");
       const requestedTheme = params.get("theme");
-      const theme = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : (/^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa");
+      const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature"]);
+      const requested = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : "";
+      // Keep "royal" as a backwards-compatible alias for the actual template folder.
+      const requestedAlias = requested === "royal" ? "royal-vintage" : requested;
+      const configured = /^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa";
+      const configuredAlias = configured === "royal" ? "royal-vintage" : configured;
+      const theme = allowedThemes.has(requestedAlias) ? requestedAlias : (allowedThemes.has(configuredAlias) ? configuredAlias : "karsa");
       const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
       const css = document.getElementById("theme-style");
       if (css) await loadStylesheet(css, new URL("style.css", themeBase).href);
       const templateResponse = await fetch(new URL("index.html", themeBase));
       if (!templateResponse.ok) throw new Error("Tema undangan tidak ditemukan: " + theme);
-      app.innerHTML = await templateResponse.text();
+      const templateHtml = await templateResponse.text();
+      // Support both legacy HTML fragments and complete HTML documents.
+      if (/<html[\\s>]/i.test(templateHtml)) {
+        const parsedTemplate = new DOMParser().parseFromString(templateHtml, "text/html");
+        parsedTemplate.head.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis.com"], link[rel="preconnect"][href*="fonts"]').forEach(link => {
+          const href = link.href;
+          if (href && !Array.from(document.head.querySelectorAll("link")).some(existing => existing.href === href)) {
+            const copy = document.createElement("link");
+            copy.rel = link.rel;
+            copy.href = href;
+            if (link.crossOrigin) copy.crossOrigin = link.crossOrigin;
+            document.head.append(copy);
+          }
+        });
+        app.innerHTML = parsedTemplate.body.innerHTML;
+      } else {
+        app.innerHTML = templateHtml;
+      }
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
       renderInvitation(data, clientBase, slug, guestName);
     } catch (error) {
