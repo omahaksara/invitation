@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Placeholder CSS Templat yang akan disuntikkan dinamis -->
+    <!-- Placeholder CSS Templat -->
     <link id="theme-style" rel="stylesheet" href="">
     <style>
         body { margin: 0; padding: 0; background-color: #181314; color: #E0A996; font-family: 'Inter', sans-serif; }
@@ -23,7 +23,7 @@
 </head>
 <body>
 
-    <!-- Wadah Utama Aplikasi (Template & Data akan dimuat di sini) -->
+    <!-- Wadah Utama Aplikasi -->
     <div id="app">
         <div class="loading-wrap">
             <div class="loading-sub">Omah Aksara Studio</div>
@@ -32,11 +32,11 @@
         </div>
     </div>
 
-    <!-- Skrip Utama Penggerak Sistem Single Entry -->
+    <!-- Skrip Engine Utama -->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // 1. Tangkap parameter 'c' (klien) dari URL, contoh: ?c=budi-ani
+                // 1. Tangkap parameter 'c' dari URL (contoh: ?c=budi-ani)
                 const urlParams = new URLSearchParams(window.location.search);
                 const klien = urlParams.get('c');
 
@@ -44,29 +44,31 @@
                     document.getElementById('app').innerHTML = `
                         <div class="loading-wrap">
                             <h3 style="color: #FCE8E3; font-family: 'Playfair Display', serif;">Tautan Undangan Tidak Valid</h3>
-                            <p style="font-size: 0.85rem; opacity: 0.7;">Pastikan Anda mengakses tautan undangan yang benar.</p>
+                            <p style="font-size: 0.85rem; opacity: 0.7;">Pastikan tautan menyertakan nama klien.</p>
                         </div>`;
                     return;
                 }
 
-                // 2. Ambil file data.json dari folder klien yang sesuai
-                const responseJson = await fetch(`klien/${klien}/data.json`);
-                if (!responseJson.ok) throw new Error("Data klien tidak ditemukan di server.");
+                // 2. Ambil data.json dari folder clients/ [SESUAI STRUKTUR BARU]
+                const responseJson = await fetch(`clients/${klien}/data.json`);
+                if (!responseJson.ok) throw new Error("Data klien tidak ditemukan.");
                 const data = await responseJson.json();
 
-                // 3. Deteksi tema yang digunakan dari data.json (misal: "serein")
-                const tema = data.theme || 'royal-vintage';
+                // 3. Ambil nama tema dari data.json (misal: "o" atau "serein")
+                const tema = data.theme || 'o';
 
-                // 4. Tarik file CSS dan HTML dari folder templat pusat
-                document.getElementById('theme-style').href = `templat/${tema}/style.css`;
-                const responseHtml = await fetch(`templat/${tema}/index.html`);
-                if (!responseHtml.ok) throw new Error("Struktur templat gagal dimuat.");
+                // 4. Tarik CSS dan HTML dari folder templates/ [SESUAI STRUKTUR BARU]
+                const themeFolder = `templates/${tema}`;
+                document.getElementById('theme-style').href = `${themeFolder}/style.css`;
+                
+                const responseHtml = await fetch(`${themeFolder}/index.html`);
+                if (!responseHtml.ok) throw new Error("Templat gagal dimuat.");
                 const htmlText = await responseHtml.text();
 
-                // 5. Masukkan kerangka HTML templat ke dalam wadah #app
+                // 5. Masukkan HTML templat ke wadah #app
                 document.getElementById('app').innerHTML = htmlText;
 
-                // 6. Jalankan fungsi binding data, gambar, musik, dan interaksi tombol
+                // 6. Jalankan binding data
                 bindDataAndInit(data, klien);
 
             } catch (error) {
@@ -74,72 +76,45 @@
                 document.getElementById('app').innerHTML = `
                     <div class="loading-wrap">
                         <h3 style="color: #FCE8E3; font-family: 'Playfair Display', serif;">Maaf, Undangan Tidak Ditemukan</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.7;">Periksa kembali parameter tautan atau struktur folder di GitHub.</p>
+                        <p style="font-size: 0.85rem; opacity: 0.7;">Periksa kembali nama folder klien di GitHub.</p>
                     </div>`;
             }
         });
 
-        // Fungsi Pencocokan Data JSON ke Elemen HTML & Interaksi Fitur
         function bindDataAndInit(data, klien) {
-            // A. Binding teks, gambar, dan audio berdasarkan atribut data-bind
+            // A. Binding teks dan aset gambar/audio dari folder clients/
             document.querySelectorAll('[data-bind]').forEach(el => {
                 const path = el.getAttribute('data-bind');
                 const value = getNestedValue(data, path);
                 if (value !== undefined) {
-                    if (el.tagName === 'IMG') {
-                        // Jalur aset gambar otomatis mengarah ke folder klien
-                        el.src = `klien/${klien}/${value}`;
-                    } else if (el.tagName === 'AUDIO') {
-                        el.src = `klien/${klien}/${value}`;
+                    if (el.tagName === 'IMG' || el.tagName === 'AUDIO') {
+                        el.src = `clients/${klien}/${value}`;
                     } else {
                         el.textContent = value;
                     }
                 }
             });
 
-            // B. Ambil nama tamu dari parameter URL (?to=Nama+Tamu)
+            // B. Ambil nama tamu dari parameter 'to' di URL
             const urlParams = new URLSearchParams(window.location.search);
             const guestName = urlParams.get('to');
-            const defaultGuest = data.guest && data.guest.defaultName ? data.guest.defaultName : "Tamu Undangan";
+            const defaultGuest = data.guest?.defaultName || "Tamu Undangan";
             const guestElement = document.getElementById('nama-tamu');
             if (guestElement) {
-                guestElement.textContent = guestName ? decodeURIComponent(guestName) : defaultGuest;
+                guestElement.textContent = guestName ? decodeURIComponent(guestName.replace(/-/g, ' ')) : defaultGuest;
             }
 
             // C. Tautan Google Maps
-            if (data.events) {
-                if (data.events.akad && data.events.akad.mapsUrl) {
-                    const akadMap = document.getElementById('link-akad-maps');
-                    if (akadMap) akadMap.href = data.events.akad.mapsUrl;
-                }
-                if (data.events.resepsi && data.events.resepsi.mapsUrl) {
-                    const resepsiMap = document.getElementById('link-resepsi-maps');
-                    if (resepsiMap) resepsiMap.href = data.events.resepsi.mapsUrl;
-                }
+            if (data.events?.akad?.mapsUrl) {
+                const akadMap = document.getElementById('link-akad-maps');
+                if (akadMap) akadMap.href = data.events.akad.mapsUrl;
+            }
+            if (data.events?.resepsi?.mapsUrl) {
+                const resepsiMap = document.getElementById('link-resepsi-maps');
+                if (resepsiMap) resepsiMap.href = data.events.resepsi.mapsUrl;
             }
 
-            // D. Hitung Mundur (Countdown Timer)
-            if (data.countdown && data.countdown.targetDate) {
-                const targetTime = new Date(data.countdown.targetDate).getTime();
-                setInterval(() => {
-                    const now = new Date().getTime();
-                    const distance = targetTime - now;
-
-                    if (distance > 0) {
-                        const days = document.getElementById('days');
-                        const hours = document.getElementById('hours');
-                        const minutes = document.getElementById('minutes');
-                        const seconds = document.getElementById('seconds');
-
-                        if (days) days.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        if (hours) hours.innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        if (minutes) minutes.innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        if (seconds) seconds.innerText = Math.floor((distance % (1000 * 60)) / 1000);
-                    }
-                }, 1000);
-            }
-
-            // E. Tombol Buka Undangan & Pemutar Musik Latar
+            // D. Tombol Buka Undangan & Musik
             const coverSection = document.getElementById('cover-section');
             const mainContent = document.getElementById('main-content');
             const musicToggle = document.getElementById('music-toggle');
@@ -156,15 +131,12 @@
                             if (musicToggle) musicToggle.style.display = 'flex';
                         }, 500);
                     }
-
-                    // Putar musik saat undangan dibuka
                     if (bgMusic && bgMusic.src) {
-                        bgMusic.play().catch(err => console.log("Audio diblokir oleh browser:", err));
+                        bgMusic.play().catch(err => console.log("Audio diblokir browser:", err));
                     }
                 });
             }
 
-            // F. Kontrol Tombol Musik Melayang (Play / Pause)
             let isPlaying = true;
             if (musicToggle && bgMusic) {
                 musicToggle.addEventListener('click', () => {
@@ -180,19 +152,15 @@
             }
         }
 
-        // Helper untuk membaca objek JSON bersarang
         function getNestedValue(obj, path) {
             return path.split('.').reduce((acc, part) => acc && acc[part], obj);
         }
 
-        // Fungsi Salin Nomor Rekening Kado Digital
         function copyRekening() {
             const numEl = document.getElementById('rekening-num');
             if (numEl) {
                 const num = numEl.innerText;
-                navigator.clipboard.writeText(num).then(() => {
-                    alert("Nomor rekening berhasil disalin: " + num);
-                });
+                navigator.clipboard.writeText(num).then(() => alert("Nomor rekening disalin: " + num));
             }
         }
     </script>
