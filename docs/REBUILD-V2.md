@@ -15,6 +15,6 @@ Versi baru dikembangkan pada branch `rebuild/omah-aksara-v2`. Branch `main` tida
 
 ## Peringatan
 1. Demo JSON memakai nama, rekening, tanggal, dan lokasi contoh. Jangan gunakan sebagai data pelanggan.
-2. Aset demo belum disertakan dalam commit awal tema; sebelum visual diuji, tambahkan aset foto/musik demo yang berlisensi atau memang milik Omah Aksara.
+2. Demo memakai gambar eksternal Unsplash sementara. Sebelum rilis, ganti dengan foto yang berlisensi atau memang milik Omah Aksara. Musik demo mengambil file dari repo katalog; pastikan hak penggunaan musik tersebut sebelum dipakai publik.
 3. Integrasi RSVP/buku tamu belum aktif sampai URL Google Apps Script yang sudah dideploy diisi ke `integrations.apiUrl` dan diuji.
 4. Jangan gabungkan branch ini ke `main` sebelum pengujian di HP/desktop, uji endpoint, dan pemeriksaan link selesai.
