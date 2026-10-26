@@ -22,11 +22,11 @@ Fungsi setup bersifat idempoten: jika sudah pernah berhasil, pemanggilan berikut
 4. Pilih akses yang mengizinkan tamu mengirim RSVP/ucapan (biasanya **Anyone**, jika tersedia dan sesuai kebijakan akun).
 5. Deploy dan salin URL yang berakhiran `/exec`.
 
-## 4. Uji kesehatan endpoint
-Buka URL Web App dengan parameter `?action=health`, misalnya:
+## 4. URL deployment aktif dan uji kesehatan endpoint
+URL deployment yang telah diberikan dan lulus health check pada 27 Oktober 2026:\n\n```text\nhttps://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec\n```\n\nPemeriksaan `?action=health` telah mengembalikan `ok: true`, `version: 3`, dan `databaseConfigured: true`. Ini mengonfirmasi endpoint dan konfigurasi database dapat dibaca, tetapi bukan bukti uji tulis RSVP/ucapan berhasil.\n\nBuka URL Web App dengan parameter `?action=health`, misalnya:
 
 ```text
-URL_WEB_APP/exec?action=health
+URL_WEB_APP?action=health
 ```
 
 Respons yang diharapkan berupa JSON dengan `"ok": true`, `"service": "Omah Aksara RSVP & Guestbook"`, dan `"databaseConfigured": true`. Ini membuktikan endpoint hidup dan dapat membuka spreadsheet; belum membuktikan penulisan data berhasil.
@@ -46,7 +46,7 @@ Pada `clients/<slug>/data.json`, tambahkan URL deployment yang nyata:
 
 ```json
 "integrations": {
-  "apiUrl": "TEMPEL_URL_WEB_APP_YANG_BERAKHIRAN_EXEC"
+  "apiUrl": "https://script.google.com/macros/s/AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/exec"
 }
 ```
 
