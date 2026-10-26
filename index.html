@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Font Awesome untuk Ikon -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Placeholder CSS Templat -->
+    <!-- Placeholder CSS Templat Dinamis -->
     <link id="theme-style" rel="stylesheet" href="">
     <style>
         body { margin: 0; padding: 0; background-color: #181314; color: #E0A996; font-family: 'Inter', sans-serif; }
@@ -23,7 +23,7 @@
 </head>
 <body>
 
-    <!-- Wadah Utama Aplikasi -->
+    <!-- Wadah Utama Sistem -->
     <div id="app">
         <div class="loading-wrap">
             <div class="loading-sub">Omah Aksara Studio</div>
@@ -32,11 +32,11 @@
         </div>
     </div>
 
-    <!-- Skrip Engine Utama -->
+    <!-- Skrip Engine Router -->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // 1. Tangkap parameter 'c' dari URL (contoh: ?c=budi-ani)
+                // 1. Tangkap parameter 'c' (klien) dari URL
                 const urlParams = new URLSearchParams(window.location.search);
                 const klien = urlParams.get('c');
 
@@ -49,16 +49,16 @@
                     return;
                 }
 
-                // 2. Ambil data.json dari folder clients/ [SESUAI STRUKTUR BARU]
-                const responseJson = await fetch(`clients/${klien}/data.json`);
+                // 2. Ambil data.json dari folder klien (menggunakan folder 'klien/')
+                const responseJson = await fetch(`klien/${klien}/data.json`);
                 if (!responseJson.ok) throw new Error("Data klien tidak ditemukan.");
                 const data = await responseJson.json();
 
-                // 3. Ambil nama tema dari data.json (misal: "o" atau "serein")
-                const tema = data.theme || 'o';
+                // 3. Ambil tema dari data.json (default: 'sirein')
+                const tema = data.theme || 'sirein';
 
-                // 4. Tarik CSS dan HTML dari folder templates/ [SESUAI STRUKTUR BARU]
-                const themeFolder = `templates/${tema}`;
+                // 4. Tarik CSS dan HTML dari folder templat (menggunakan folder 'templat/')
+                const themeFolder = `templat/${tema}`;
                 document.getElementById('theme-style').href = `${themeFolder}/style.css`;
                 
                 const responseHtml = await fetch(`${themeFolder}/index.html`);
@@ -68,7 +68,7 @@
                 // 5. Masukkan HTML templat ke wadah #app
                 document.getElementById('app').innerHTML = htmlText;
 
-                // 6. Jalankan binding data
+                // 6. Jalankan pengikatan data (binding)
                 bindDataAndInit(data, klien);
 
             } catch (error) {
@@ -76,19 +76,19 @@
                 document.getElementById('app').innerHTML = `
                     <div class="loading-wrap">
                         <h3 style="color: #FCE8E3; font-family: 'Playfair Display', serif;">Maaf, Undangan Tidak Ditemukan</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.7;">Periksa kembali nama folder klien di GitHub.</p>
+                        <p style="font-size: 0.85rem; opacity: 0.7;">Periksa kembali nama folder klien atau konfigurasi templat.</p>
                     </div>`;
             }
         });
 
         function bindDataAndInit(data, klien) {
-            // A. Binding teks dan aset gambar/audio dari folder clients/
+            // A. Binding teks dan aset gambar/audio dari folder klien
             document.querySelectorAll('[data-bind]').forEach(el => {
                 const path = el.getAttribute('data-bind');
                 const value = getNestedValue(data, path);
                 if (value !== undefined) {
                     if (el.tagName === 'IMG' || el.tagName === 'AUDIO') {
-                        el.src = `clients/${klien}/${value}`;
+                        el.src = `klien/${klien}/${value}`;
                     } else {
                         el.textContent = value;
                     }
