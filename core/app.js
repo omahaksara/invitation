@@ -31,8 +31,7 @@
 
       const cssLink = document.getElementById("theme-style");
       if (cssLink) {
-        cssLink.href = new URL("style.css", themeBase).href;
-        await waitForStylesheet(cssLink);
+        await waitForStylesheet(cssLink, new URL("style.css", themeBase).href);
       }
 
       const templateResponse = await fetch(new URL("index.html", themeBase));
@@ -56,14 +55,14 @@
     return segments.length ? `/${segments[0]}` : "";
   }
 
-  function waitForStylesheet(link) {
+  function waitForStylesheet(link, href) {
     return new Promise((resolve) => {
       if (!link) return resolve();
-      if (link.sheet) return resolve();
       const done = () => resolve();
       link.addEventListener("load", done, { once: true });
       link.addEventListener("error", done, { once: true });
-      window.setTimeout(done, 2500);
+      link.href = href;
+      window.setTimeout(done, 3000);
     });
   }
 
