@@ -20,7 +20,8 @@
       const data = await response.json();
       if (data.slug && data.slug !== slug) throw new Error("Slug pada data tidak cocok dengan alamat undangan.");
       if (data.status === "draft") throw new Error("Undangan ini belum dipublikasikan.");
-      const theme = /^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa";
+      const requestedTheme = params.get("theme");
+      const theme = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : (/^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa");
       const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
       const css = document.getElementById("theme-style");
       if (css) await loadStylesheet(css, new URL("style.css", themeBase).href);
@@ -62,6 +63,7 @@
   }
 
   function renderInvitation(data, clientBase, slug, guestName) {
+    window.__invitationData = data;
     document.querySelectorAll("[data-bind]").forEach(el => {
       const path = el.getAttribute("data-bind");
       const value = valueAt(data, path);
@@ -87,6 +89,7 @@
 
     renderStory(data.story);
     renderEvents(data.events, data, clientBase);
+    bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
     renderGifts(data.gifts, clientBase);
     setupMusic(data.music, clientBase);
@@ -184,15 +187,15 @@
   }
 
   function setupCover() {
-    const cover = document.getElementById("cover-section");
-    const main = document.getElementById("main-content");
-    const open = document.getElementById("open-invitation-btn");
-    const musicToggle = document.getElementById("music-toggle");
+    const cover = document.getElementById("cover-section") || document.getElementById("cover");
+    const main = document.getElementById("main-content") || document.getElementById("app-inner");
+    const open = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
+    const musicToggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
     if (open) open.addEventListener("click", async () => {
       if (cover) cover.classList.add("is-opening");
       if (main) { main.hidden = false; main.style.display = "block"; }
-      if (musicToggle) musicToggle.hidden = false;
-      window.setTimeout(() => { if (cover) cover.hidden = true; }, 850);
+      if (musicToggle) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+      window.setTimeout(() => { if (cover) { cover.hidden = true; cover.style.display = "none"; } }, cover && cover.id === "cover" ? 1800 : 850);
       const audio = document.getElementById("bg-music");
       if (audio && audio.src) { try { await audio.play(); musicToggle?.classList.add("playing"); musicToggle?.setAttribute("aria-pressed", "true"); } catch {} }
       setupReveal();
@@ -201,9 +204,10 @@
 
   function setupMusic(music, clientBase) {
     const audio = document.getElementById("bg-music");
-    const button = document.getElementById("music-toggle");
-    if (!audio || !button || !music || !(music.src || typeof music === "string")) return;
-    audio.src = assetUrl(typeof music === "string" ? music : music.src, clientBase);
+    const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
+    const actualMusic = music || (window.__invitationData && window.__invitationData.media && window.__invitationData.media.music);
+    if (!audio || !button || !actualMusic || !(actualMusic.src || typeof actualMusic === "string")) return;
+    audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
     button.addEventListener("click", async () => {
       if (audio.paused) {
         try { await audio.play(); button.classList.add("playing"); button.setAttribute("aria-pressed", "true"); button.textContent = "♫"; }
@@ -248,7 +252,8 @@
     });
     if (wishes) wishes.addEventListener("submit", async event => {
       event.preventDefault();
-      const status = document.getElementById("wishes-status");
+      let status = document.getElementById("wishes-status");
+      if (!status) { status = document.createElement("p"); status.id = "wishes-status"; status.setAttribute("role", "status"); wishes.append(status); }
       const button = wishes.querySelector("button[type=submit]");
       if (!apiUrl) { status.textContent = "Buku tamu belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
       const form = new FormData(wishes);
@@ -288,6 +293,15 @@
     } catch(error) { console.warn("Buku tamu belum dapat dimuat:",error); }
   }
 
+  function bindMapLinks(data) {
+    const akad = document.getElementById("link-akad-maps");
+    const resepsi = document.getElementById("link-resepsi-maps");
+    const akadUrl = data.events && !Array.isArray(data.events) && data.events.akad && data.events.akad.mapsUrl;
+    const resepsiUrl = data.events && !Array.isArray(data.events) && data.events.resepsi && data.events.resepsi.mapsUrl;
+    if (akad && akadUrl) { akad.href = akadUrl; akad.target = "_blank"; akad.rel = "noopener noreferrer"; }
+    if (resepsi && resepsiUrl) { resepsi.href = resepsiUrl; resepsi.target = "_blank"; resepsi.rel = "noopener noreferrer"; }
+  }
+
   function setupReveal() {
     const elements=document.querySelectorAll(".reveal:not(.active)");
     if(!elements.length) return;
@@ -306,6 +320,23 @@
       overlay.append(full);overlay.addEventListener("click",()=>overlay.remove());document.body.append(overlay);
     });
   }
+
+  window.copyRekening = async () => {
+    const element = document.getElementById("rekening-num");
+    if (!element) return;
+    const value = element.textContent.trim();
+    try { await navigator.clipboard.writeText(value); window.alert("Nomor rekening berhasil disalin."); }
+    catch { window.alert("Silakan salin nomor rekening secara manual: " + value); }
+  };
+  window.submitWish = event => { if (event) event.preventDefault(); };
+  window.openInvitation = () => {
+    const button = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
+    if (button) button.click();
+  };
+  window.toggleMusic = () => {
+    const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
+    if (button) button.click();
+  };
 
   function showError(app,title,message) {
     app.replaceChildren(); const panel=document.createElement("div");panel.className="loading-wrap";panel.style.cssText="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;background:#f7f2e9;color:#423b32";
