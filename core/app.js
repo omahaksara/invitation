@@ -445,7 +445,7 @@
     const open = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
     const musicToggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
     const audio = document.getElementById("bg-music");
-    const hasMusic = !!(audio && audio.getAttribute("src"));
+    const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
       open.addEventListener("click", async () => {
