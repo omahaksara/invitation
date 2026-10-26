@@ -35,7 +35,7 @@
       if (!templateResponse.ok) throw new Error("Tema undangan tidak ditemukan: " + theme);
       const templateHtml = await templateResponse.text();
       // Support both legacy HTML fragments and complete HTML documents.
-      if (/<html[\\s>]/i.test(templateHtml)) {
+      if (/<html[\s>]/i.test(templateHtml)) {
         const parsedTemplate = new DOMParser().parseFromString(templateHtml, "text/html");
         parsedTemplate.head.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis.com"], link[rel="preconnect"][href*="fonts"]').forEach(link => {
           const href = link.href;
@@ -110,6 +110,7 @@
       if (el && guestName) el.value = guestName;
     });
 
+    applyFeatureFlags(data);
     renderStory(data.story);
     renderEvents(data.events, data, clientBase);
     bindMapLinks(data);
@@ -123,8 +124,39 @@
     setupLightbox();
   }
 
+
+  function applyFeatureFlags(data) {
+    const flags = data && data.features && typeof data.features === "object" ? data.features : {};
+    const disabled = key => flags[key] === false;
+    const hide = selectors => {
+      document.querySelectorAll(selectors).forEach(element => {
+        const section = element.matches("section") ? element : element.closest("section");
+        if (section) section.hidden = true;
+        else element.hidden = true;
+      });
+    };
+    if (disabled("loveStory") || disabled("story")) hide(".story-section, #story-list");
+    if (disabled("gallery")) hide(".gallery-section, #gallery-grid, .gallery-grid");
+    if (disabled("video")) hide(".video-section, #video-section");
+    if (disabled("maps")) document.querySelectorAll("#link-akad-maps, #link-resepsi-maps, .event-card a[href*='maps']").forEach(el => { el.hidden = true; });
+    if (disabled("countdown")) hide("#countdown, .countdown");
+    if (disabled("calendar")) hide(".calendar-section, #calendar-section");
+    if (disabled("quotes") || disabled("quote")) hide(".quote-section, .quote");
+    if (disabled("gifts")) hide(".gift-section, #gift-section, #gift-list");
+    if (disabled("rsvp")) hide("#rsvp-section, .rsvp-section, #rsvp-form");
+    if (disabled("guestbook")) hide("#guestbook-section, .guestbook-section, #wishes-form");
+    if (disabled("hashtag")) hide(".hashtag-section, #hashtag-section");
+    if (disabled("guestName")) {
+      const guest = document.getElementById("nama-tamu");
+      if (guest) { guest.hidden = true; const label = guest.previousElementSibling; if (label && /kepada|tamu/i.test(label.textContent || "")) label.hidden = true; }
+    }
+    if (disabled("music")) {
+      document.querySelectorAll("#music-toggle, #music-btn, #bg-music").forEach(el => { el.hidden = true; el.style.display = "none"; });
+    }
+  }
+
   function renderStory(stories) {
-    const root = document.getElementById("story-list");
+    const root = document.getElementById("story-list") || document.querySelector(".story-list");
     if (!root || !Array.isArray(stories)) return;
     // Legacy themes (for example Sirein) already contain data-bound story cards.
     // Keep their original markup and styling; only build cards for empty V2 containers.
@@ -165,7 +197,7 @@
   }
 
   function renderGallery(gallery, clientBase) {
-    const root = document.getElementById("gallery-grid");
+    const root = document.getElementById("gallery-grid") || document.querySelector(".gallery-grid");
     if (!root) return;
     const items = Array.isArray(gallery) ? gallery : (gallery && Array.isArray(gallery.items) ? gallery.items : []);
     root.replaceChildren();
@@ -220,9 +252,9 @@
     if (open) open.addEventListener("click", async () => {
       if (cover) cover.classList.add("is-opening");
       if (main) { main.hidden = false; main.style.display = "block"; }
-      if (musicToggle) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
-      window.setTimeout(() => { if (cover) { cover.hidden = true; cover.style.display = "none"; } }, cover && cover.id === "cover" ? 1800 : 850);
       const audio = document.getElementById("bg-music");
+      if (musicToggle && audio && audio.src) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+      window.setTimeout(() => { if (cover) { cover.hidden = true; cover.style.display = "none"; } }, cover && cover.id === "cover" ? 1800 : 850);
       if (audio && audio.src) { try { await audio.play(); musicToggle?.classList.add("playing"); musicToggle?.setAttribute("aria-pressed", "true"); } catch {} }
       setupReveal();
     });
@@ -232,13 +264,16 @@
     const audio = document.getElementById("bg-music");
     const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
     const actualMusic = music || (window.__invitationData && window.__invitationData.media && window.__invitationData.media.music);
-    if (!audio || !button || !actualMusic || !(actualMusic.src || typeof actualMusic === "string")) return;
+    if (!audio || !button) return;
+    if (!actualMusic || !(actualMusic.src || typeof actualMusic === "string")) { button.hidden = true; button.style.display = "none"; return; }
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
+    button.hidden = false;
+    if (button.id === "music-toggle" && getComputedStyle(button).display === "none") button.style.display = "flex";
     button.addEventListener("click", async () => {
       if (audio.paused) {
-        try { await audio.play(); button.classList.add("playing"); button.setAttribute("aria-pressed", "true"); button.textContent = "♫"; }
+        try { await audio.play(); button.classList.add("playing"); button.setAttribute("aria-pressed", "true"); }
         catch { button.setAttribute("aria-pressed", "false"); }
-      } else { audio.pause(); button.classList.remove("playing"); button.setAttribute("aria-pressed", "false"); button.textContent = "♫"; }
+      } else { audio.pause(); button.classList.remove("playing"); button.setAttribute("aria-pressed", "false"); }
     });
   }
 
@@ -264,14 +299,15 @@
   }
 
   function setupForms(data, slug) {
-    const apiUrl = data.integrations && data.integrations.apiUrl;
+    const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && (data.api.apiUcapan || data.api.apiUrl)) || "";
     const rsvp = document.getElementById("rsvp-form");
     const wishes = document.getElementById("wishes-form");
     if (data.rsvp && data.rsvp.enabled === false) { const section=document.getElementById("rsvp-section"); if(section) section.hidden=true; }
     if (data.guestbook && data.guestbook.enabled === false) { const section=document.getElementById("guestbook-section"); if(section) section.hidden=true; }
     if (rsvp) rsvp.addEventListener("submit", async event => {
       event.preventDefault();
-      const status = document.getElementById("rsvp-status");
+      let status = document.getElementById("rsvp-status");
+      if (!status) { status = document.createElement("p"); status.id = "rsvp-status"; status.setAttribute("role", "status"); rsvp.append(status); }
       const button = rsvp.querySelector("button[type=submit]");
       if (!apiUrl) { status.textContent = "RSVP belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
       const form = new FormData(rsvp);
@@ -287,7 +323,7 @@
       const button = wishes.querySelector("button[type=submit]");
       if (!apiUrl) { status.textContent = "Buku tamu belum diaktifkan. Endpoint Google Apps Script perlu dipasang terlebih dahulu."; return; }
       const form = new FormData(wishes);
-      const payload = { action:"guestbook", slug, name:String(form.get("name")||"").trim(), message:String(form.get("message")||"").trim() };
+      const payload = { action:"guestbook", slug, name:String(form.get("name") || document.getElementById("wish-name")?.value || "").trim(), message:String(form.get("message") || document.getElementById("wish-message")?.value || "").trim() };
       if (!payload.name || !payload.message || payload.message.length > (data.guestbook?.maxMessageLength || 500)) { status.textContent="Mohon isi nama dan ucapan (maksimal 500 karakter)."; return; }
       const ok = await sendPayload(apiUrl,payload,status,button,"Ucapan berhasil dikirim.");
       if (ok) { wishes.reset(); loadWishes(apiUrl,slug); }
@@ -312,7 +348,7 @@
   }
 
   async function loadWishes(apiUrl,slug) {
-    const root=document.getElementById("wishes-list"); if(!root) return;
+    const root=document.getElementById("wishes-list") || document.getElementById("wishes-container"); if(!root) return;
     try {
       const url=new URL(apiUrl); url.searchParams.set("action","guestbook"); url.searchParams.set("slug",slug);
       const response=await fetch(url); if(!response.ok) throw new Error("Gagal membaca buku tamu");
