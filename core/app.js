@@ -254,7 +254,7 @@
       const hashtag = document.createElement("p"); hashtag.textContent = data.hashtag; section.append(hashtag);
     }
     if (eventItems.some(item => item && item.mapsUrl) &&
-        !document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section")) {
+        !document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section, #event-list")) {
       const section = makeSection("maps-section", "Lokasi Acara");
       eventItems.filter(item => item && item.mapsUrl).forEach(item => {
         const link = document.createElement("a");
