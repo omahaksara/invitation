@@ -28,10 +28,7 @@
       const configured = /^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa";
       const configuredAlias = configured === "royal" ? "royal-vintage" : configured;
       const theme = allowedThemes.has(requestedAlias) ? requestedAlias : (allowedThemes.has(configuredAlias) ? configuredAlias : "karsa");
-      const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
-      const css = document.getElementById("theme-style");
-      if (css) await loadStylesheet(css, new URL("style.css", themeBase).href);
-      const templateResponse = await fetch(new URL("index.html", themeBase));
+      const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);const templateResponse = await fetch(new URL("index.html", themeBase));
       if (!templateResponse.ok) throw new Error("Tema undangan tidak ditemukan: " + theme);
       const templateHtml = await templateResponse.text();
       // Support both legacy HTML fragments and complete HTML documents.
@@ -63,16 +60,6 @@
     if (!location.hostname.endsWith(".github.io")) return "";
     const segments = location.pathname.split("/").filter(Boolean);
     return segments.length ? "/" + segments[0] : "";
-  }
-
-  function loadStylesheet(link, href) {
-    return new Promise(resolve => {
-      const finish = () => resolve();
-      link.addEventListener("load", finish, { once: true });
-      link.addEventListener("error", finish, { once: true });
-      link.href = href;
-      window.setTimeout(finish, 2500);
-    });
   }
 
   function valueAt(obj, path) {
@@ -264,7 +251,7 @@
   }
 
   function setupForms(data, slug) {
-    const apiUrl = data.integrations && data.integrations.apiUrl;
+    const apiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && data.api.apiUcapan) || "";
     const rsvp = document.getElementById("rsvp-form");
     const wishes = document.getElementById("wishes-form");
     if (data.rsvp && data.rsvp.enabled === false) { const section=document.getElementById("rsvp-section"); if(section) section.hidden=true; }
