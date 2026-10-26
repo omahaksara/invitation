@@ -93,7 +93,7 @@
     const safeGuest = guestName || valueAt(data, "guest.defaultName") || "Tamu Undangan";
     const guestEl = document.getElementById("nama-tamu");
     if (guestEl) guestEl.textContent = safeGuest;
-    ["rsvp-name", "wishes-name"].forEach(id => {
+    ["rsvp-name", "wishes-name", "wish-name"].forEach(id => {
       const el = document.getElementById(id);
       if (el && guestName) el.value = guestName;
     });
