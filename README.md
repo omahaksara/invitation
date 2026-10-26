@@ -29,14 +29,13 @@ Ganti `budi-ani` dengan nama folder klien. Parameter `to` opsional untuk nama ta
 │   └── global.css             # Gaya dasar yang dipakai bersama
 ├── templates/
 │   ├── karsa/
-│   │   ├── index.html         # Struktur tampilan Karsa
-│   │   └── style.css          # Gaya Karsa
+│   │   └── index.html         # Struktur + CSS Karsa di dalam <style>
 │   ├── royal-vintage/
-│   │   ├── index.html         # Struktur tampilan Royal Vintage
-│   │   └── style.css          # Gaya Royal Vintage
-│   └── sirein/
-│       ├── index.html         # Struktur tampilan Sirein
-│       └── style.css          # Gaya Sirein
+│   │   └── index.html         # Struktur + CSS Royal Vintage di dalam <style>
+│   ├── sirein/
+│   │   └── index.html         # Struktur + CSS Sirein di dalam <style>
+│   └── aksara-signature/
+│       └── index.html         # Struktur + CSS Aksara Signature di dalam <style>
 └── clients/
     └── budi-ani/
         ├── data.json          # Seluruh data undangan contoh
@@ -55,16 +54,18 @@ Ganti `budi-ani` dengan nama folder klien. Parameter `to` opsional untuk nama ta
 
 ## Mengubah template
 
-- Edit `templates/<nama-template>/index.html` untuk struktur dan konten tampilan.
-- Edit `templates/<nama-template>/style.css` untuk desain.
+- Setiap tema memiliki satu file `templates/<nama-template>/index.html`.
+- Struktur HTML dan CSS tema berada dalam file yang sama; CSS ditulis di tag `<style>`.
+- `core/global.css` tetap untuk gaya umum lintas tema, bukan untuk desain khusus tema.
 - Gunakan `data-bind="jalur.data"` agar teks atau aset diisi dari `data.json`.
 - Jika menambah ID tombol atau fitur baru, periksa apakah perlu ditangani di `core/app.js`.
 - Jangan menghapus nama folder template selama masih dipilih oleh data klien.
 
 ## Batasan fitur saat ini
 
-- Fitur buku tamu/ucapan memerlukan endpoint API yang dikonfigurasi. Template Karsa saat ini memberi tahu jika endpoint belum aktif.
-- Tautan RSVP hanya berfungsi jika URL RSVP diisi dan dihubungkan pada template.
+- RSVP dan buku tamu tidak mengirim atau membaca data jika URL Google Apps Script belum dikonfigurasi.
+- URL harus berasal dari deployment Web App Google Apps Script yang benar-benar aktif; URL terisi saja belum membuktikan koneksi berhasil.
+- Pengiriman baru dianggap berhasil jika endpoint mengembalikan respons JSON `ok: true`.
 - Setelah mengubah mesin atau template, uji semua template dan tautan di browser; pemeriksaan sintaks saja tidak menjamin tampilan visual benar.
 
 ## Prinsip merawat repositori
