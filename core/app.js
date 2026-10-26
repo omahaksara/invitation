@@ -134,7 +134,10 @@
     if (disabled("loveStory") || disabled("story")) hide(".story-section, #story-list");
     if (disabled("gallery")) hide(".gallery-section, #gallery-grid, .gallery-grid");
     if (disabled("video")) hide(".video-section, #video-section");
-    if (disabled("maps")) hide("#link-akad-maps, #link-resepsi-maps, [data-bind='rsvp.link']");
+    if (disabled("maps")) {
+      document.querySelectorAll("#link-akad-maps, #link-resepsi-maps, .event-card a[href*='maps']").forEach(el => { el.hidden = true; });
+      hide(".maps-section, #maps-section");
+    }
     if (disabled("countdown")) hide("#countdown, .countdown");
     if (disabled("calendar")) hide(".calendar-section, #calendar-section");
     if (disabled("quotes") || disabled("quote")) hide(".quote-section, .quote");
@@ -164,7 +167,7 @@
     if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
     if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
     const eventValues = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
-    if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) hide("#link-akad-maps, #link-resepsi-maps, [data-bind='rsvp.link']");
+    if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) document.querySelectorAll("#link-akad-maps, #link-resepsi-maps").forEach(el => { el.hidden = true; });
     if (!data.countdown?.targetDate && !eventValues.some(item => item && item.date)) hide("#countdown, .countdown");
   }
 
@@ -251,7 +254,7 @@
       const hashtag = document.createElement("p"); hashtag.textContent = data.hashtag; section.append(hashtag);
     }
     if (eventItems.some(item => item && item.mapsUrl) &&
-        !document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, [data-bind='rsvp.link']")) {
+        !document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section")) {
       const section = makeSection("maps-section", "Lokasi Acara");
       eventItems.filter(item => item && item.mapsUrl).forEach(item => {
         const link = document.createElement("a");
@@ -788,7 +791,7 @@
   }
 
   function setupLightbox() {
-    const gallery=document.getElementById("gallery-grid"); if(!gallery) return;
+    const gallery=document.getElementById("gallery-grid") || document.querySelector(".gallery-grid"); if(!gallery) return;
     gallery.addEventListener("click",event=>{
       const img=event.target.closest("img"); if(!img) return;
       const overlay=document.createElement("div"); overlay.className="lightbox-overlay";
