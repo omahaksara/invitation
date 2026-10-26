@@ -1,75 +1,90 @@
-# Omah Aksara — Undangan Digital
+# Omah Aksara V2 — Mesin Undangan Digital
 
-Repositori ini khusus untuk website undangan pernikahan digital Omah Aksara. Tidak memakai proses build: file HTML, CSS, JavaScript, dan JSON dilayani langsung oleh GitHub Pages.
+Repositori ini khusus untuk mesin undangan pernikahan digital Omah Aksara. Mesin menggunakan HTML, CSS, JavaScript, dan JSON statis sehingga tidak memerlukan proses build atau framework berat.
 
-## Cara kerja singkat
+## Arsitektur
 
-1. Tamu membuka tautan dengan parameter `?c=slug-klien`.
-2. `core/app.js` membaca `clients/<slug-klien>/data.json`.
-3. Nilai `theme` di `data.json` menentukan template di `templates/<theme>/`.
-4. Mesin mengisi elemen template yang memiliki atribut `data-bind` dengan data undangan.
-5. Foto, musik, dan QR milik klien disimpan di folder klien itu sendiri.
+- `core/`: engine bersama, validasi runtime, fitur, dan integrasi.
+- `templates/`: empat tema resmi: `karsa`, `royal-vintage`, `sirein`, `aksara-signature`.
+- `clients/<slug>/data.json`: sumber data undangan.
+- `clients/<slug>/`: aset yang dipakai pasangan tersebut.
+- `backend/Code.gs`: backend Google Apps Script untuk RSVP dan buku tamu.
+- `scripts/`: validasi data dan smoke test statis.
+- `docs/`: kontrak arsitektur dan skema data.
 
-Contoh tautan:
+Katalog dan halaman pemesanan dikelola terpisah di repositori `omahaksara/omahaksara.github.io`. Jangan menduplikasi mesin undangan ke repo katalog.
 
-```text
-https://omahaksara.github.io/invitation/?c=budi-ani&to=Keluarga%20Bapak
-```
+## URL undangan
 
-Ganti `budi-ani` dengan nama folder klien. Parameter `to` opsional untuk nama tamu.
-
-## Struktur folder
+Contoh undangan demo:
 
 ```text
-/
-├── index.html                 # Halaman pemuat aplikasi
-├── README.md                  # Panduan repositori
-├── core/
-│   ├── app.js                 # Mesin pemuat, pengikat data, musik, dan interaksi umum
-│   └── global.css             # Gaya dasar yang dipakai bersama
-├── templates/
-│   ├── karsa/
-│   │   ├── index.html         # Struktur tampilan Karsa
-│   │   └── style.css          # Gaya Karsa
-│   ├── royal-vintage/
-│   │   ├── index.html         # Struktur tampilan Royal Vintage
-│   │   └── style.css          # Gaya Royal Vintage
-│   └── sirein/
-│       ├── index.html         # Struktur tampilan Sirein
-│       └── style.css          # Gaya Sirein
-└── clients/
-    └── budi-ani/
-        ├── data.json          # Seluruh data undangan contoh
-        └── aset foto, musik, dan QR
+https://omahaksara.github.io/invitation/?c=demo-katalog&to=Nama+Tamu
 ```
 
-## Menambah undangan baru
+Parameter:
+- `c`: slug folder di `clients/`.
+- `to`: nama tamu opsional, diisi ke cover dan formulir yang mendukung personalisasi.
+- `theme`: hanya untuk pratinjau data yang memiliki `demoMode: true`. Parameter ini tidak mengubah tema permanen. Undangan publik memakai `theme` yang tersimpan di `data.json`.
 
-1. Salin folder `clients/budi-ani/` menjadi folder baru, misalnya `clients/andi-sari/`.
-2. Ganti isi `data.json` dengan nama, tanggal, lokasi, tautan peta, cerita, galeri, rekening, dan musik pasangan baru.
-3. Letakkan aset yang dipakai `data.json` di folder klien yang sama.
-4. Pilih `theme` yang cocok: `karsa`, `royal-vintage`, atau `sirein`.
-5. Uji tautan `?c=andi-sari` di browser ponsel dan desktop sebelum dibagikan.
+Tema yang diterima engine: `karsa`, `royal-vintage`, `sirein`, `aksara-signature`. Nilai tema tidak dikenal tidak boleh menentukan path file bebas.
 
-**Penting:** `data.json` contoh berisi nama, tanggal, alamat, akun media sosial, dan rekening dummy. Ganti semuanya sebelum dipakai untuk undangan nyata. Jangan menaruh data sensitif yang tidak perlu di repositori publik.
+## Pengaturan fitur
 
-## Mengubah template
+Properti `features` pada `data.json` memakai nilai boolean. Semua fitur inti aktif secara default jika tidak ditulis. Setel nilai `false` untuk menonaktifkan fitur yang tidak digunakan, misalnya:
 
-- Edit `templates/<nama-template>/index.html` untuk struktur dan konten tampilan.
-- Edit `templates/<nama-template>/style.css` untuk desain.
-- Gunakan `data-bind="jalur.data"` agar teks atau aset diisi dari `data.json`.
-- Jika menambah ID tombol atau fitur baru, periksa apakah perlu ditangani di `core/app.js`.
-- Jangan menghapus nama folder template selama masih dipilih oleh data klien.
+```json
+{
+  "schemaVersion": 2,
+  "theme": "karsa",
+  "features": {
+    "gallery": true,
+    "video": false,
+    "maps": true,
+    "music": true,
+    "gifts": true,
+    "rsvp": true,
+    "guestbook": true,
+    "guestName": true
+  }
+}
+```
 
-## Batasan fitur saat ini
+Jika fitur membutuhkan endpoint yang belum dikonfigurasi, engine harus menjelaskan statusnya dengan jujur. Demo tanpa endpoint memakai mode simulasi yang tidak mengirim atau menyimpan data; undangan produksi tidak boleh mengaku sukses tanpa respons sukses dari backend.
 
-- Fitur buku tamu/ucapan memerlukan endpoint API yang dikonfigurasi. Template Karsa saat ini memberi tahu jika endpoint belum aktif.
-- Tautan RSVP hanya berfungsi jika URL RSVP diisi dan dihubungkan pada template.
-- Setelah mengubah mesin atau template, uji semua template dan tautan di browser; pemeriksaan sintaks saja tidak menjamin tampilan visual benar.
+## Menambah undangan
 
-## Prinsip merawat repositori
+1. Buat folder dengan slug unik di `clients/<slug>/`.
+2. Buat `data.json` sesuai kontrak di [docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md).
+3. Simpan foto, musik, dan QR lokal di folder slug yang sama.
+4. Pilih salah satu dari empat tema resmi.
+5. Jalankan pemeriksaan data dan smoke test.
+6. Periksa pratinjau di desktop dan ponsel sebelum mengubah status menjadi `published`.
 
-- Simpan hanya aset yang benar-benar dipakai data undangan.
-- Jangan menaruh aset satu klien di folder template.
-- Pertahankan satu mesin umum di `core/app.js`; hindari membuat mesin berbeda untuk setiap klien.
-- Tidak perlu menambah framework atau proses build untuk perubahan konten sederhana.
+Jangan menyimpan kata sandi, token privat, atau kredensial backend dalam JSON publik. Gunakan data dummy pada demo katalog.
+
+## Pemeriksaan lokal
+
+Membutuhkan Node.js 20 atau lebih baru. Tidak ada dependensi npm eksternal.
+
+```bash
+npm run validate:data
+npm run test:smoke
+npm test
+```
+
+Pemeriksaan ini mencakup struktur JSON, referensi aset lokal, keberadaan empat template, dan pemeriksaan sintaks engine. Ini adalah tes statis; bukan pengganti tes browser, perangkat mobile, atau uji kirim-terima RSVP/buku tamu pada deployment backend nyata.
+
+GitHub Actions menjalankan pemeriksaan yang sama pada push ke branch V2 dan pull request menuju `main`.
+
+## Status rilis
+
+Jangan menganggap sistem siap publik hanya karena tes statis lulus. Sebelum rilis, pastikan:
+- seluruh fitur inti punya perilaku konsisten di empat tema;
+- tema Royal Vintage, Sirein, Karsa, dan Aksara Signature sudah diperiksa di browser;
+- RSVP dan buku tamu teruji pada backend uji yang terpisah dari produksi;
+- validasi data, aset, timezone, personalisasi tamu, dan error jaringan lulus;
+- endpoint produksi sudah dikonfigurasi dengan aman;
+- halaman katalog menunjuk ke demo yang benar.
+
+Lihat [docs/ARSITEKTUR-V2.md](docs/ARSITEKTUR-V2.md), [docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md), dan [docs/RELEASE-CHECKLIST.md](docs/RELEASE-CHECKLIST.md).
