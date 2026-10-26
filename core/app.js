@@ -274,7 +274,7 @@
   }
 
   function downloadCalendarEvent(event, data, slug) {
-    const date = String(event.date || "");
+    const date = String(event.dateISO || event.date || "");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
     const timezone = event.timezone || (data.site && data.site.timezone) || "Asia/Makassar";
     const startTime = event.startTime || "00:00";
