@@ -55,7 +55,7 @@ function doGet(e) {
     return output({
       ok: true,
       service: "Omah Aksara RSVP & Guestbook",
-      version: 2,
+      version: 3,
       databaseConfigured: true,
       databaseName: database.getName()
     });
