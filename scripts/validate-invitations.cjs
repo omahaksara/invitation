@@ -92,6 +92,35 @@ function validateClient(slug, file) {
     errors.push(`${slug}: theme harus salah satu dari: ${[...ALLOWED_THEMES].join(', ')}.`);
   }
 
+  if (data.slug !== undefined && data.slug !== slug) {
+    errors.push(`${slug}: properti slug tidak cocok dengan nama folder.`);
+  }
+  if (data.status !== undefined && !['draft', 'published'].includes(data.status)) {
+    errors.push(`${slug}: status harus draft atau published.`);
+  }
+  if (data.features !== undefined) {
+    if (!isObject(data.features)) {
+      errors.push(`${slug}: features harus berupa objek boolean.`);
+    } else {
+      for (const [feature, enabled] of Object.entries(data.features)) {
+        if (typeof enabled !== 'boolean') errors.push(`${slug}: features.${feature} harus bernilai boolean.`);
+      }
+    }
+  }
+  if (data.integrations && data.integrations.apiUrl && !/^https:\/\//i.test(data.integrations.apiUrl)) {
+    errors.push(`${slug}: integrations.apiUrl harus menggunakan HTTPS.`);
+  }
+  const events = Array.isArray(data.events) ? data.events : (isObject(data.events) ? Object.values(data.events) : []);
+  events.forEach((event, index) => {
+    if (!isObject(event)) { errors.push(`${slug}: data.events[${index}] harus berupa objek.`); return; }
+    if (event.dateISO && !/^\d{4}-\d{2}-\d{2}$/.test(event.dateISO)) {
+      errors.push(`${slug}: tanggal ISO acara ke-${index + 1} harus berformat YYYY-MM-DD.`);
+    }
+    for (const key of ['startTime', 'endTime']) {
+      if (event[key] && !/^\d{2}:\d{2}$/.test(event[key])) errors.push(`${slug}: ${key} acara ke-${index + 1} harus berformat HH:mm.`);
+    }
+  });
+
   if (data.schemaVersion !== 2) {
     warnings.push(`${slug}: data masih kompatibel dengan engine lama; tambahkan schemaVersion: 2 setelah migrasi diverifikasi.`);
   }
