@@ -4,10 +4,11 @@
   "private": true,
   "description": "Mesin undangan digital Omah Aksara",
   "scripts": {
-    "check:syntax": "node --check core/app.js",
+    "check:syntax": "node --check core/app.js && cp backend/Code.gs /tmp/omah-aksara-backend.js && node --check /tmp/omah-aksara-backend.js",
     "validate:data": "node scripts/validate-invitations.cjs",
     "test:static": "npm run check:syntax && npm run validate:data",
-    "test:browser": "node scripts/smoke-templates.cjs"
+    "test:browser": "node scripts/smoke-templates.cjs",
+    "test": "npm run test:static && npm run test:browser"
   },
   "engines": {
     "node": ">=20"
