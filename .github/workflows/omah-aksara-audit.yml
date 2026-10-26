@@ -37,7 +37,7 @@ jobs:
             'templates/aksara-signature/index.html'
           ];
 
-          assert.match(app, /<html[\s>]/i, 'loader must detect full HTML documents');
+          assert.match(app, /<html\[/i, 'loader must detect full HTML documents');
           assert.match(app, /makeSection\("guestbook-section", "Ucapan & Doa", "wishes-form"\)/,
             'legacy guestbook section should be reused');
           assert.match(app, /"wish-name"/, 'legacy Karsa guest name should be supported');
