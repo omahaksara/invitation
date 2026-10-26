@@ -1,0 +1,87 @@
+/* Styling khusus tema Serein (Gaya Elegan & Minimalis) */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7f4ef;
+    color: #4a4a4a;
+    font-family: 'Georgia', serif;
+}
+
+.invitation-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cover / Halaman Sampul */
+.cover-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #2b2b2b;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.cover-content h1 {
+    font-size: 2.5rem;
+    color: #d4af37;
+    margin: 10px 0;
+}
+
+.btn-open {
+    background: #d4af37;
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Bagian Konten Lainnya */
+.hero, .couples, .events, .gift-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.profile-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #d4af37;
+}
+
+/* Tombol Musik Melayang */
+.music-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: #d4af37;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
