@@ -67,29 +67,22 @@
   },
   "story": [
     {
-      "year": "2022",
-      "title": "Pertemuan yang Sederhana",
-      "description": "Kami dipertemukan dalam sebuah kesempatan yang tidak pernah kami rencanakan. Percakapan sederhana menjadi awal dari rasa ingin mengenal, menghargai, dan memahami satu sama lain."
+      "judul": "Perkenalan",
+      "tanggal": "2022",
+      "cerita": "Di tahun 2022 pertama kali kami dipertemukan di PT. LONGRICH. Tidak menyangka pertemuan singkat itu menjadi awal cerita panjang kami.",
+      "foto": "foto1.jpg"
     },
     {
-      "year": "2023",
-      "title": "Mengenal dan Bertumbuh",
-      "description": "Waktu mengajarkan kami bahwa kedekatan dibangun melalui kejujuran, kesediaan untuk mendengarkan, serta perhatian pada hal-hal kecil yang kerap luput dari pandangan."
+      "judul": "Awal Hubungan",
+      "tanggal": "16 Desember 2022",
+      "cerita": "Setelah melewati banyak cerita dan pendekatan, pada tanggal 16 Desember 2022 kami memulai hubungan.",
+      "foto": "foto2.jpg"
     },
     {
-      "year": "2025",
-      "title": "Satu Niat, Dua Keluarga",
-      "description": "Dengan kesungguhan hati, kami menyampaikan niat baik kepada keluarga. Doa, restu, dan kehangatan kedua keluarga menguatkan langkah kami menuju komitmen yang lebih berarti."
-    },
-    {
-      "year": "2026",
-      "title": "Memantapkan Langkah",
-      "description": "Kami belajar bahwa pernikahan bukan sekadar tentang merayakan hari bahagia, melainkan kesediaan untuk terus bertumbuh, saling menjaga, dan pulang kepada satu sama lain."
-    },
-    {
-      "year": "2027",
-      "title": "Mengikat Janji",
-      "description": "Insyaallah, di hadapan Allah SWT dan orang-orang terkasih, kami akan memulai babak baru sebagai keluarga. Semoga langkah ini senantiasa dinaungi keberkahan, kesabaran, dan kasih sayang."
+      "judul": "Melamar",
+      "tanggal": "23 Februari 2023",
+      "cerita": "Pada tanggal 23 Februari 2023, saya datang menemui orang tuanya untuk menyampaikan niat melamar dan melangkah menuju pernikahan.",
+      "foto": "foto3.jpg"
     }
   ],
   "gallery": [
