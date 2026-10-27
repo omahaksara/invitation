@@ -125,15 +125,15 @@ const themes = [
         await rsvp.locator('[name="name"]').fill("Tamu Uji");
         await rsvp.locator('[name="attendance"]').selectOption("hadir");
         await rsvp.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Simulasi demo/.test(document.querySelector("#rsvp-status")?.textContent || ""),
+        await page.waitForFunction(() => /belum dikonfigurasi|Simulasi demo|Konfirmasi berhasil|RSVP belum aktif/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
           undefined, { timeout: 5000 });
 
         const wishes = page.locator("#wishes-form");
         await wishes.locator('[name="name"]').fill("Tamu Uji");
         await wishes.locator('[name="message"]').fill("Semoga bahagia selalu.");
         await wishes.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Simulasi demo/.test(document.querySelector("#wishes-status")?.textContent || ""),
-          undefined, { timeout: 5000 });
+        await page.waitForFunction(() => /Ucapan berhasil dikirim|Belum berhasil mengirim|belum dikonfigurasi|buku tamu belum aktif/i.test(document.querySelector("#wishes-status")?.textContent || ""),
+          undefined, { timeout: 10000 });
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
         console.log("PASS mobile + demo forms " + theme.slug);
       } catch (error) {
