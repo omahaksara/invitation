@@ -4,17 +4,18 @@ Repository ini khusus untuk mesin undangan digital Omah Aksara. Mesin menggunaka
 
 ## Pembagian repository
 
-- `omahaksara/invitation`: engine, empat tema, data undangan, aset, backend, dan pengujian.
+- `omahaksara/invitation`: engine, lima tema, data undangan, aset, backend, dan pengujian.
 - `omahaksara/omahaksara.github.io`: katalog tema, demo pelanggan, informasi paket, dan tautan pemesanan.
 
 Jangan menduplikasi engine atau backend ke repository katalog.
 
-## Empat tema resmi
+## Lima tema resmi
 
 - `karsa`
 - `royal-vintage`
 - `sirein`
 - `aksara-signature`
+- `botanical-garden`
 
 Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
 
