@@ -44,7 +44,7 @@ jobs:
           const path = require('node:path');
           const assert = require('node:assert/strict');
           const app = fs.readFileSync('core/app.js', 'utf8');
-          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature'];
+          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden'];
           const themes = themeNames.map(name => 'templates/' + name + '/index.html');
 
           assert.match(app, /allowedThemes\s*=\s*new Set\(\[\s*"karsa",\s*"royal-vintage",\s*"sirein",\s*"aksara-signature"/,
@@ -89,7 +89,7 @@ jobs:
           for (const theme of themeNames) {
             assert.ok(fs.existsSync(path.join('templates', theme, 'index.html')), 'theme folder missing: ' + theme);
           }
-          console.log('All four theme structures, couple bindings, music controls and demo data passed.');
+          console.log('All five theme structures, couple bindings, music controls and demo data passed.');
           NODE
 
       - name: Unit-test RSVP and guestbook backend
