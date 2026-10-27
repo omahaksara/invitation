@@ -71,3 +71,17 @@ Parameter `to` bersifat opsional. Mesin membaca `clients/afif-sindi/data.json`; 
 ## Data klien lama
 
 Jangan menghapus atau mengubah struktur data lama hanya karena skema V2 sudah tersedia. Audit file dan aset terlebih dahulu, migrasikan satu klien pada satu waktu, dan pertahankan URL slug lama selama masih digunakan.
+
+
+## Demo katalog sebagai patokan
+
+Gunakan `clients/demo-katalog/data.json` sebagai contoh paling mudah untuk memperbarui tampilan demo. Demo harus selalu memakai nama rekaan, jadwal contoh, dan rekening yang jelas bertanda **JANGAN TRANSFER**.
+
+Untuk foto demo, gunakan URL gambar langsung dari web, misalnya Unsplash CDN (`https://images.unsplash.com/...`), seperti yang sudah dipakai pada sampul, foto mempelai, dan galeri di `demo-katalog/data.json`.
+
+- Jangan menyalin foto pasangan klien dari folder GitHub ke demo.
+- Jangan memakai path relatif seperti `foto-pria.jpg` untuk foto demo katalog.
+- Jangan memakai URL `github.com` atau `raw.githubusercontent.com` sebagai sumber foto demo.
+- Gunakan URL gambar spesifik yang stabil, bukan URL random yang berubah tiap kunjungan.
+- Uji semua URL foto di browser sebelum merilis; gambar dari layanan eksternal bisa berubah atau dihapus.
+- Untuk klien sungguhan, gunakan foto yang memang diberikan atau diizinkan klien, dan tetap simpan di folder slug klien sesuai aturan di atas.
