@@ -23,3 +23,80 @@ body {
     text-align: center;
     padding: 20px;
 }
+
+
+/* Shared feature fallback: used only when a theme does not provide its own section. */
+[hidden] { display: none !important; }
+.oa-shared-section {
+  padding: clamp(48px, 8vw, 88px) 22px;
+  text-align: center;
+  color: #423b32;
+  background: #f7f2e9;
+}
+.oa-shared-section > h2 {
+  margin: 0 auto 26px;
+  font: 500 clamp(1.8rem, 5vw, 2.8rem)/1.1 Georgia, serif;
+}
+.oa-shared-section > p {
+  max-width: 680px;
+  margin: 14px auto;
+  line-height: 1.8;
+}
+.oa-shared-section .story-list,
+.oa-shared-section .gallery-grid,
+.oa-shared-section .gift-grid,
+.oa-shared-section .countdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.oa-shared-section .story-card,
+.oa-shared-section .gift-card,
+.oa-shared-section .gallery-item,
+.oa-shared-section .countdown > div {
+  padding: 18px;
+  background: #fffdf8;
+  border: 1px solid #ded5c8;
+  min-width: 0;
+}
+.oa-shared-section .gallery-item { padding: 0; overflow: hidden; aspect-ratio: 3 / 4; }
+.oa-shared-section .gallery-item img,
+.oa-shared-section video {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.oa-shared-section a,
+.oa-shared-section button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px;
+  padding: 11px 16px;
+  border: 1px solid #8b7355;
+  background: #fffdf8;
+  color: #423b32;
+  font: inherit;
+  font-size: .85rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.oa-shared-section a:focus-visible,
+.oa-shared-section button:focus-visible {
+  outline: 2px solid #8b7355;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .oa-shared-section { padding: 48px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oa-shared-section *, .oa-shared-section *::before, .oa-shared-section *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
