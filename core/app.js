@@ -15,7 +15,9 @@
     const basePath = getBasePath();
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
-      const response = await fetch(new URL("data.json", clientBase));
+      const dataUrl = new URL("data.json", clientBase);
+      dataUrl.searchParams.set("_v", "20261027b");
+      const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
       if (data.slug && data.slug !== slug) throw new Error("Slug pada data tidak cocok dengan alamat undangan.");
