@@ -335,6 +335,49 @@
         section.append(link);
       });
     }
+    if (!document.getElementById("oa-share-invitation")) {
+      const section = makeSection("share-invitation-section", "Bagikan Undangan");
+      const description = document.createElement("p");
+      description.textContent = "Bagikan kabar bahagia ini kepada keluarga dan sahabat.";
+      section.append(description);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.id = "oa-share-invitation";
+      button.textContent = "Bagikan tautan undangan";
+      button.setAttribute("aria-describedby", "oa-share-status");
+      const status = document.createElement("p");
+      status.id = "oa-share-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      section.append(button, status);
+      button.addEventListener("click", async () => {
+        const shareData = {
+          title: document.title || "Undangan Pernikahan",
+          text: "Anda diundang ke hari bahagia kami.",
+          url: window.location.href
+        };
+        button.disabled = true;
+        status.textContent = "";
+        try {
+          if (navigator.share) {
+            await navigator.share(shareData);
+            status.textContent = "Menu berbagi dibuka.";
+          } else if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(shareData.url);
+            status.textContent = "Tautan undangan berhasil disalin.";
+          } else {
+            status.textContent = "Salin tautan dari bilah alamat browser untuk membagikan undangan.";
+          }
+        } catch (error) {
+          if (error && error.name !== "AbortError") {
+            status.textContent = "Tautan belum bisa dibagikan. Silakan salin alamat halaman ini.";
+          }
+        } finally {
+          button.disabled = false;
+        }
+      });
+    }
+
     if (eventItems.length && !document.querySelector(".calendar-section, #calendar-section")) {
       const section = makeSection("calendar-section", "Simpan Tanggal");
       eventItems.forEach((item, index) => {

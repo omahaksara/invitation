@@ -100,3 +100,14 @@ body {
     transition-duration: .01ms !important;
   }
 }
+
+.oa-shared-section #oa-share-status {
+  min-height: 1.5em;
+  margin: 12px auto 0;
+  color: #6d755f;
+  font-size: .85rem;
+}
+.oa-shared-section button:disabled {
+  opacity: .65;
+  cursor: wait;
+}
