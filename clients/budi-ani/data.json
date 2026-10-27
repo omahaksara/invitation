@@ -89,5 +89,19 @@
   ],
   "media": {
     "music": "musik.mp3"
+  },
+  "slug": "budi-ani",
+  "demoMode": false,
+  "status": "published",
+  "integrations": {
+    "apiUrl": "https://script.google.com/macros/s/AKfycbxTtUh596hMTnZOboQWgFgRzXveS9H_crcGlaYc6hXJPzV_S5jTCQuuLTzd9jFg69Z_Aw/exec"
+  },
+  "rsvp": {
+    "enabled": true,
+    "maxGuestCount": 2
+  },
+  "guestbook": {
+    "enabled": true,
+    "maxMessageLength": 500
   }
 }
