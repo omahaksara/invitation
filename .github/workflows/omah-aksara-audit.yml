@@ -44,7 +44,8 @@ jobs:
           const path = require('node:path');
           const assert = require('node:assert/strict');
           const app = fs.readFileSync('core/app.js', 'utf8');
-          const themeNames = ['aksara-nocturne', 'aksara-signature', 'aurelia-noir', 'botanical-garden', 'elegance', 'karsa', 'lumiere-bloom', 'romantic-floral', 'royal-vintage', 'sirein', 'velvet-romance'];
+          const registry = JSON.parse(fs.readFileSync('templates/registry.json', 'utf8'));
+          const themeNames = registry.themes.filter(theme => theme.status === 'active').map(theme => theme.slug);
           const themes = themeNames.map(name => 'templates/' + name + '/index.html');
 
           assert.match(app, /const isThemeSlug = value =>/,
