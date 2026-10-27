@@ -4,20 +4,14 @@ Repository ini khusus untuk mesin undangan digital Omah Aksara. Mesin menggunaka
 
 ## Pembagian repository
 
-- `omahaksara/invitation`: engine, lima tema, data undangan, aset, backend, dan pengujian.
+- `omahaksara/invitation`: engine, seluruh tema aktif, data undangan, aset, backend, dan pengujian.
 - `omahaksara/omahaksara.github.io`: katalog tema, demo pelanggan, informasi paket, dan tautan pemesanan.
 
 Jangan menduplikasi engine atau backend ke repository katalog.
 
-## Lima tema resmi
+## Daftar tema resmi
 
-- `karsa`
-- `royal-vintage`
-- `sirein`
-- `aksara-signature`
-- `botanical-garden`
-- `velvet-romance`
-- `romantic-floral`
+Daftar tema aktif disimpan di [`templates/registry.json`](templates/registry.json). Katalog, validator data, dan pengujian harus membaca daftar yang sama. Saat menambah tema, tambahkan folder `templates/<slug>/index.html` lalu daftarkan satu kali di registry.
 
 Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
 
@@ -31,7 +25,7 @@ https://omahaksara.github.io/invitation/?c=demo-katalog&theme=karsa&to=Nama+Tamu
 - `to`: nama tamu opsional.
 - `theme`: hanya berlaku untuk data dengan `demoMode: true`; hanya untuk pratinjau dan tidak mengubah tema tersimpan.
 
-Undangan pelanggan publik memakai tema dari `data.json`. Nilai tema dibatasi ke daftar resmi.
+Undangan pelanggan publik memakai tema dari `data.json`. Nilai tema dibatasi ke tema berstatus `active` pada `templates/registry.json`.
 
 ## Data dan fitur
 
@@ -55,7 +49,7 @@ Untuk tes browser lokal, jalankan server statis di port 4173, pastikan Playwrigh
 node scripts/smoke-templates.cjs
 ```
 
-GitHub Actions memeriksa sintaks JavaScript, data V2, empat template, binding pasangan, musik, nama tamu, dan alur pembukaan. Tes otomatis tetap harus dilengkapi uji RSVP/buku tamu end-to-end pada deployment backend uji dan pemeriksaan visual di ponsel/desktop.
+GitHub Actions memeriksa sintaks JavaScript, data V2, seluruh tema aktif pada registry, binding pasangan, musik, nama tamu, dan alur pembukaan. Tes otomatis tetap harus dilengkapi uji RSVP/buku tamu end-to-end pada deployment backend uji dan pemeriksaan visual di ponsel/desktop.
 
 ## Data lama
 
