@@ -34,7 +34,7 @@ function collectAssetCandidates(data, prefix = '') {
 
   for (const [key, value] of Object.entries(data)) {
     const current = prefix ? prefix + '.' + key : key;
-    const assetKey = /^(?:image|photo|src|music|audio|qr|qrCode|coverImage|backgroundImage)$/i.test(key);
+    const assetKey = /^(?:image|photo|foto|src|music|audio|qr|qrCode|coverImage|backgroundImage)$/i.test(key);
     if (typeof value === 'string' && assetKey && value.trim()) {
       out.push({ key: current, value });
     } else if (typeof value === 'string' && key === 'gallery' && /\.(?:avif|gif|jpe?g|png|webp)$/i.test(value)) {
