@@ -25,7 +25,7 @@
       normalizeDemoAssets(data, slug);
       normalizeTemplateData(data);
       const requestedTheme = params.get("theme");
-      const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature", "botanical-garden"]);
+      const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature", "botanical-garden", "velvet-romance"]);
       const requested = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : "";
       // Keep "royal" as a backwards-compatible alias for the actual template folder.
       const requestedAlias = requested === "royal" ? "royal-vintage" : requested;
