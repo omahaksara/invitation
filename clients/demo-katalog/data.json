@@ -14,16 +14,16 @@
   },
   "couple": {
     "groom": {
-      "nickname": "Budi",
-      "fullName": "Budi Santoso, S.T.",
-      "parents": "Putra dari Bapak Ahmad Santoso & Ibu Siti Aminah",
+      "nickname": "Arkan",
+      "fullName": "Arkan Pradipta",
+      "parents": "Putra dari keluarga Pradipta",
       "photo": "foto-pria.jpg",
       "instagram": ""
     },
     "bride": {
-      "nickname": "Ani",
-      "fullName": "Ani Wijaya, S.E.",
-      "parents": "Putri dari Bapak Heru Wijaya & Ibu Ratna Wijaya",
+      "nickname": "Sekar",
+      "fullName": "Sekar Ayuningtyas",
+      "parents": "Putri dari keluarga Ayuningtyas",
       "photo": "foto-wanita.jpg",
       "instagram": ""
     }
@@ -92,7 +92,7 @@
         "bank": "Bank BCA",
         "logo": "bank/logo-bca.svg",
         "accountNumber": "0000000000",
-        "accountHolder": "Budi Santoso — CONTOH DEMO"
+        "accountHolder": "Arkan Pradipta — CONTOH DEMO"
       },
       {
         "bank": "Bank BRI",
@@ -104,7 +104,7 @@
         "bank": "Bank Mandiri",
         "logo": "bank/logo-mandiri.svg",
         "accountNumber": "0000000000",
-        "accountHolder": "Ani Wijaya — CONTOH DEMO"
+        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO"
       }
     ]
   },
@@ -143,9 +143,9 @@
     "hashtag": true,
     "quotes": true
   },
-  "hashtag": "#BudiAniDemo",
+  "hashtag": #ArkanSekarStory,
   "seo": {
-    "title": "Demo Undangan Pernikahan Budi & Ani | Omah Aksara",
+    "title": "Demo Undangan Pernikahan Arkan & Sekar | Omah Aksara",
     "description": "Contoh undangan digital Omah Aksara. Seluruh data acara dan rekening pada demo ini hanya contoh."
   }
 }
