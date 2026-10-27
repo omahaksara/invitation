@@ -750,7 +750,18 @@
         return;
       }
       const ok = await sendPayload(apiUrl,payload,status,button,"Ucapan berhasil dikirim.");
-      if (ok) { wishes.reset(); loadWishes(apiUrl,slug); }
+      if (ok) {
+        wishes.reset();
+        const root = document.getElementById("wishes-list");
+        if (root) {
+          const empty = root.querySelector(".empty-wishes");
+          if (empty) empty.remove();
+          root.prepend(makeWishCard(payload));
+        }
+        const refreshed = await loadWishes(apiUrl, slug, payload);
+        if (!refreshed) status.textContent = "Ucapan tersimpan dan ditampilkan, tetapi daftar dari server belum bisa disegarkan.";
+        else status.textContent = "Ucapan berhasil dikirim.";
+      }
     });
     if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
     else if (apiUrl && wishes) loadWishes(apiUrl,slug);
@@ -802,16 +813,38 @@
     else root.append(card);
   }
 
-  async function loadWishes(apiUrl,slug) {
-    const root=document.getElementById("wishes-list"); if(!root) return;
+  async function loadWishes(apiUrl, slug, pendingItem) {
+    const root = document.getElementById("wishes-list");
+    if (!root) return false;
     try {
-      const url=new URL(apiUrl); url.searchParams.set("action","guestbook"); url.searchParams.set("slug",slug);
-      const response=await fetch(url); if(!response.ok) throw new Error("Gagal membaca buku tamu");
-      const result=await response.json(); if(!result.ok || !Array.isArray(result.items)) return;
+      const url = new URL(apiUrl);
+      url.searchParams.set("action", "guestbook");
+      url.searchParams.set("slug", slug);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Gagal membaca buku tamu");
+      const result = await response.json();
+      if (!result.ok || !Array.isArray(result.items)) throw new Error("Format daftar ucapan tidak valid");
+
+      const items = result.items.slice();
+      if (pendingItem && !items.some(item =>
+        String(item.name || "").trim() === String(pendingItem.name || "").trim() &&
+        String(item.message || "").trim() === String(pendingItem.message || "").trim()
+      )) items.unshift(pendingItem);
+
       root.replaceChildren();
-      if(!result.items.length){const empty=document.createElement("p");empty.className="empty-wishes";empty.textContent="Jadilah yang pertama mengirim doa.";root.append(empty);return;}
-      result.items.forEach(item=>root.append(makeWishCard(item)));
-    } catch(error) { console.warn("Buku tamu belum dapat dimuat:",error); }
+      if (!items.length) {
+        const empty = document.createElement("p");
+        empty.className = "empty-wishes";
+        empty.textContent = "Jadilah yang pertama mengirim doa.";
+        root.append(empty);
+        return true;
+      }
+      items.forEach(item => root.append(makeWishCard(item)));
+      return true;
+    } catch (error) {
+      console.warn("Buku tamu belum dapat dimuat:", error);
+      return false;
+    }
   }
 
   function bindMapLinks(data) {
