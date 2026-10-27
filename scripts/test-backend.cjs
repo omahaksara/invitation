@@ -43,6 +43,7 @@ const properties = new Map();
 const cacheValues = new Map();
 const clientConfigs = new Map([
   ['uji-omah-aksara', { slug: 'uji-omah-aksara', status: 'published', demoMode: false }],
+  ['auto-registered-client', { slug: 'auto-registered-client', status: 'published', demoMode: false }],
   ['draft-omah-aksara', { slug: 'draft-omah-aksara', status: 'draft', demoMode: false }],
   ['demo-katalog', { slug: 'demo-katalog', status: 'published', demoMode: true }],
   ['qa-test-oma', { slug: 'qa-test-oma', status: 'published', demoMode: true }]
@@ -110,6 +111,13 @@ assert.equal(health.version, 4);
 const rsvp = post({ action: 'rsvp', slug: 'uji-omah-aksara', name: 'Tamu Uji', attendance: 'hadir', guestCount: 2 });
 assert.equal(rsvp.ok, true);
 assert.equal(db.getSheetByName('RSVP').getLastRow(), 2);
+
+const autoRegistered = post({ action: 'rsvp', slug: 'auto-registered-client', name: 'Tamu Baru', attendance: 'hadir', guestCount: 1 });
+assert.equal(autoRegistered.ok, true, 'published production slug is automatically registered on first valid submission');
+assert.ok(settings.rows.some(row => row[0] === 'auto-registered-client' && row[1] === 'published'),
+  'automatic registration adds the published slug to Settings');
+assert.ok(db.getSheetByName('RSVP').rows.some(row => row[2] === 'auto-registered-client'),
+  'auto-registered RSVP is stored under its own slug');
 
 const guestbook = post({ action: 'guestbook', slug: 'uji-omah-aksara', name: 'Tamu Uji', message: 'Semoga bahagia selalu.' });
 assert.equal(guestbook.ok, true);
