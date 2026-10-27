@@ -6,7 +6,8 @@
   "cover": {
     "title": "Undangan Pernikahan",
     "subtitle": "The Wedding of",
-    "image": "foto-sampul.jpg"
+    "image": "foto-sampul.jpg",
+    "heroImage": "foto-sampul.jpg"
   },
   "couple": {
     "groom": {
@@ -36,7 +37,11 @@
       "time": "08:00 - 10:00 WIB",
       "location": "Rumah Mempelai Wanita",
       "address": "Jl. Mawar No. 123, Jakarta Selatan",
-      "mapsUrl": "https://maps.google.com"
+      "mapsUrl": "https://maps.google.com",
+      "dateISO": "2026-11-12",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "timezone": "Asia/Jakarta"
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
@@ -44,11 +49,15 @@
       "time": "11:00 - 14:00 WIB",
       "location": "Graha Saba Ballroom",
       "address": "Jl. Mawar No. 124, Jakarta Selatan",
-      "mapsUrl": "https://maps.google.com"
+      "mapsUrl": "https://maps.google.com",
+      "dateISO": "2026-11-12",
+      "startTime": "11:00",
+      "endTime": "14:00",
+      "timezone": "Asia/Jakarta"
     }
   },
   "countdown": {
-    "targetDate": "2026-11-12T08:00:00"
+    "targetDate": "2026-11-12T08:00:00+07:00"
   },
   "story": [
     {
@@ -103,5 +112,9 @@
   "guestbook": {
     "enabled": true,
     "maxMessageLength": 500
+  },
+  "schemaVersion": 2,
+  "site": {
+    "timezone": "Asia/Jakarta"
   }
 }
