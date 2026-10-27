@@ -198,6 +198,10 @@ function doPost(e) {
  * Slug yang sudah ada dengan status non-published tidak otomatis diaktifkan.
  */
 function registerPublishedSlugIfMissing_(slug) {
+  // Slug hanya boleh menulis bila konfigurasi GitHub berstatus published
+  // dan bukan demo. Ini juga memblokir slug lama yang masih ada di Settings.
+  if (!getProductionClientConfig_(slug)) return false;
+
   const settings = getSheet_(SHEET_SETTINGS);
   const rows = settings.getDataRange().getValues();
 
@@ -244,11 +248,55 @@ function registerPublishedSlugIfMissing_(slug) {
 }
 
 function isAllowedSlug_(slug) {
+  // Settings saja tidak cukup: slug demo/yang sudah dinonaktifkan di GitHub
+  // tidak boleh terus menulis hanya karena baris lama masih ada.
+  if (!getProductionClientConfig_(slug)) return false;
+
   const settings = getSheet_(SHEET_SETTINGS).getDataRange().getValues();
   return settings.slice(1).some(function(row) {
     return String(row[0] || "").trim().toLowerCase() === slug &&
       String(row[1] || "").trim().toLowerCase() === "published";
   });
+}
+
+function getProductionClientConfig_(slug) {
+  const cache = CacheService.getScriptCache();
+  const cacheKey = "OA_PRODUCTION_CLIENT_" + slug;
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    try {
+      const parsed = JSON.parse(cached);
+      return parsed && parsed.__invalid === true ? null : parsed;
+    } catch (ignored) {
+      // Abaikan cache rusak dan ambil konfigurasi baru dari GitHub.
+    }
+  }
+
+  let config = null;
+  try {
+    const url = "https://raw.githubusercontent.com/omahaksara/invitation/main/clients/" +
+      encodeURIComponent(slug) + "/data.json";
+    const response = UrlFetchApp.fetch(url, {
+      muteHttpExceptions: true,
+      followRedirects: true
+    });
+    if (response.getResponseCode() === 200) {
+      const data = JSON.parse(response.getContentText());
+      if (
+        String(data.slug || "").trim().toLowerCase() === slug &&
+        String(data.status || "").trim().toLowerCase() === "published" &&
+        data.demoMode !== true
+      ) {
+        config = data;
+      }
+    }
+  } catch (error) {
+    console.error("Gagal memverifikasi konfigurasi klien " + slug, error);
+  }
+
+  // Cache 60 detik mengurangi permintaan GitHub; konfigurasi invalid juga dicache.
+  cache.put(cacheKey, JSON.stringify(config || {__invalid: true}), 60);
+  return config;
 }
 
 function validSlug(value) {

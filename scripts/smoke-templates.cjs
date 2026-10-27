@@ -94,6 +94,7 @@ const themes = [
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
       const pageErrors = [];
       const mockGuestbook = [];
+      const mockApiPosts = [];
       page.on("pageerror", error => pageErrors.push(error.message));
       // Isolate CI from the live spreadsheet while testing the real two-way API flow.
       await page.route("**/macros/s/**", async route => {
@@ -105,6 +106,7 @@ const themes = [
         if (request.method() === "POST") {
           let payload = {};
           try { payload = JSON.parse(request.postData() || "{}"); } catch {}
+          mockApiPosts.push(payload);
           if (payload.action === "guestbook" && payload.name && payload.message) {
             mockGuestbook.unshift({ name: payload.name, message: payload.message });
           }
@@ -151,12 +153,12 @@ const themes = [
         await wishes.locator('[name="name"]').fill("Tamu Uji");
         await wishes.locator('[name="message"]').fill("Semoga bahagia selalu.");
         await wishes.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Ucapan berhasil dikirim/.test(document.querySelector("#wishes-status")?.textContent || ""),
+        await page.waitForFunction(() => /Simulasi demo: ucapan ini hanya tampil sementara dan tidak disimpan\./.test(document.querySelector("#wishes-status")?.textContent || ""),
           undefined, { timeout: 10000 });
         await page.waitForFunction(() => Array.from(document.querySelectorAll("#wishes-list .wish-card")).some(card => card.innerText.includes("Semoga bahagia selalu.")),
           undefined, { timeout: 5000 });
-        assert.equal(mockGuestbook.length, 1, theme.slug + ": ucapan tidak masuk ke mock database");
-        assert.equal(mockGuestbook[0].message, "Semoga bahagia selalu.");
+        assert.equal(mockGuestbook.length, 0, theme.slug + ": demo tidak boleh menulis ke mock database");
+        assert.equal(mockApiPosts.length, 0, theme.slug + ": demo tidak boleh mengirim RSVP/ucapan ke API");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
         console.log("PASS mobile + demo forms " + theme.slug);
       } catch (error) {

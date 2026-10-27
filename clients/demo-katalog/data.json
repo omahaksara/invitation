@@ -114,9 +114,6 @@
   "rsvp": {
     "link": ""
   },
-  "integrations": {
-    "apiUrl": "https://script.google.com/macros/s/AKfycbxTtUh596hMTnZOboQWgFgRzXveS9H_crcGlaYc6hXJPzV_S5jTCQuuLTzd9jFg69Z_Aw/exec"
-  },
   "demoGreetings": [
     {
       "name": "Keluarga Contoh",
