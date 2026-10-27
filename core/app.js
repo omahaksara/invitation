@@ -20,6 +20,7 @@
       const data = await response.json();
       if (data.slug && data.slug !== slug) throw new Error("Slug pada data tidak cocok dengan alamat undangan.");
       if (data.status === "draft") throw new Error("Undangan ini belum dipublikasikan.");
+      normalizeDemoAssets(data, slug);
       const requestedTheme = params.get("theme");
       const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature"]);
       const requested = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : "";
@@ -63,6 +64,26 @@
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan tidak dapat dimuat", error instanceof Error ? error.message : "Periksa koneksi internet lalu coba lagi.");
     }
+  }
+
+  // Keep the public demo independent from external/legacy image URLs.
+  // This normalization is deliberately scoped to demo-katalog only; client data is untouched.
+  function normalizeDemoAssets(data, slug) {
+    if (slug !== "demo-katalog" || !data || data.demoMode !== true) return;
+    data.cover = data.cover && typeof data.cover === "object" ? data.cover : {};
+    data.cover.image = "foto-sampul.jpg";
+    data.cover.heroImage = "foto-sampul.jpg";
+
+    data.couple = data.couple && typeof data.couple === "object" ? data.couple : {};
+    data.couple.groom = data.couple.groom && typeof data.couple.groom === "object" ? data.couple.groom : {};
+    data.couple.bride = data.couple.bride && typeof data.couple.bride === "object" ? data.couple.bride : {};
+    data.couple.groom.photo = "foto-pria.jpg";
+    data.couple.bride.photo = "foto-wanita.jpg";
+
+    data.gallery = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg"];
+    data.media = data.media && typeof data.media === "object" ? data.media : {};
+    data.media.music = "musik.mp3";
+    if (data.music) data.music = "musik.mp3";
   }
 
   function getBasePath() {
