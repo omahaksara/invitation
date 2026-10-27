@@ -19,7 +19,7 @@ Mengganti mesin undangan lama dengan satu engine yang ringan, konsisten, dan mud
 
 - `core/app.js`: loader, binding data, validasi tema, fitur bersama, formulir, media, dan status error.
 - `core/global.css`: reset dan gaya fallback lintas tema.
-- `templates/`: empat tema resmi dengan identitas visual masing-masing.
+- `templates/`: tujuh tema dengan identitas visual masing-masing.
 - `clients/<slug>/data.json`: sumber data tunggal per pasangan.
 - `clients/<slug>/`: aset pasangan.
 - `backend/Code.gs`: backend RSVP dan buku tamu.
@@ -58,4 +58,4 @@ Satu kontrak API melayani RSVP dan buku tamu. Deployment uji dan produksi menggu
 
 ## Rilis
 
-GitHub Actions menjalankan pemeriksaan sintaks, validasi data V2, dan smoke test Chromium untuk empat tema. Tes otomatis tidak menggantikan tes manual. Sebelum merge, selesaikan [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md), termasuk tes RSVP/buku tamu terhadap backend uji dan pemeriksaan desktop/ponsel.
+GitHub Actions menjalankan pemeriksaan sintaks, validasi data V2, dan smoke test Chromium untuk semua tujuh tema. Tes otomatis tidak menggantikan tes manual. Sebelum merge, selesaikan [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md), termasuk tes RSVP/buku tamu terhadap backend uji dan pemeriksaan desktop/ponsel.
