@@ -2,7 +2,7 @@
 
 ## Tujuan
 
-Mengganti mesin undangan lama dengan satu engine yang ringan, konsisten, dan mudah dirawat. V2 adalah sistem utama setelah seluruh pemeriksaan rilis lulus. Kode tema yang tidak termasuk empat tema resmi tidak perlu dipertahankan; data dan aset pasangan tetap diaudit sebelum dihapus.
+Mengganti mesin undangan lama dengan satu engine yang ringan, konsisten, dan mudah dirawat. V2 adalah sistem utama setelah seluruh pemeriksaan rilis lulus. Daftar tema aktif ditetapkan satu kali di `templates/registry.json`; katalog, validator, dan pengujian wajib mengacu pada daftar tersebut. Tema lama tidak boleh dihapus sebelum data, aset, dan URL aktif diaudit.
 
 ## Keputusan yang disepakati
 
@@ -19,7 +19,7 @@ Mengganti mesin undangan lama dengan satu engine yang ringan, konsisten, dan mud
 
 - `core/app.js`: loader, binding data, validasi tema, fitur bersama, formulir, media, dan status error.
 - `core/global.css`: reset dan gaya fallback lintas tema.
-- `templates/`: empat tema resmi dengan identitas visual masing-masing.
+- `templates/`: seluruh tema dengan identitas visual masing-masing; `templates/registry.json` adalah sumber daftar tema aktif.
 - `clients/<slug>/data.json`: sumber data tunggal per pasangan.
 - `clients/<slug>/`: aset pasangan.
 - `backend/Code.gs`: backend RSVP dan buku tamu.
@@ -51,11 +51,11 @@ Satu kontrak API melayani RSVP dan buku tamu. Deployment uji dan produksi menggu
 ## Migrasi dan pembersihan
 
 1. Inventarisasi semua template, data, aset, URL, dan referensi katalog.
-2. Pertahankan empat tema resmi; hapus hanya kode template lama yang tidak dirujuk.
+2. Pertahankan tema yang berstatus `active` pada registry; hapus hanya kode template lama yang tidak dirujuk.
 3. Tandai data lama lewat validator, lalu petakan ke [DATA-SCHEMA.md](DATA-SCHEMA.md).
 4. Jangan menghapus data/aset pasangan sebelum memastikan tidak digunakan oleh URL aktif.
 5. Hapus dependensi atau file yang tidak dibutuhkan setelah smoke test membuktikan penggantinya.
 
 ## Rilis
 
-GitHub Actions menjalankan pemeriksaan sintaks, validasi data V2, dan smoke test Chromium untuk empat tema. Tes otomatis tidak menggantikan tes manual. Sebelum merge, selesaikan [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md), termasuk tes RSVP/buku tamu terhadap backend uji dan pemeriksaan desktop/ponsel.
+GitHub Actions menjalankan pemeriksaan sintaks, validasi data V2, dan smoke test Chromium untuk semua tema aktif di registry. Tes otomatis tidak menggantikan tes manual. Sebelum merge, selesaikan [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md), termasuk tes RSVP/buku tamu terhadap backend uji dan pemeriksaan desktop/ponsel.
