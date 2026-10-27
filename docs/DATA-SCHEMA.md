@@ -7,7 +7,7 @@ Semua undangan baru menggunakan satu skema. Engine membaca format ini sebagai mo
 - `schemaVersion`: angka versi skema; data baru memakai `2`.
 - `slug`: identitas unik yang sama dengan folder `clients/<slug>/`.
 - `status`: `draft` atau `published`.
-- `theme`: salah satu `karsa`, `royal-vintage`, `sirein`, `aksara-signature`, `botanical-garden`, `velvet-romance`.
+- `theme`: salah satu `karsa`, `royal-vintage`, `sirein`, `aksara-signature`, `botanical-garden`, `velvet-romance`, `romantic-floral`.
 - `demoMode`: hanya untuk demo katalog; mengizinkan `?theme=` memilih pratinjau tanpa mengubah tema tersimpan.
 
 ## Pasangan dan konten
