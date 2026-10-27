@@ -7,13 +7,11 @@ const path = require('node:path');
 const ROOT = path.resolve(__dirname, '..');
 const CLIENTS = path.join(ROOT, 'clients');
 const TEMPLATES = path.join(ROOT, 'templates');
-// Derive valid theme slugs from the templates that the engine can actually load.
-// This prevents the JSON validator from drifting behind newly added themes.
-const ALLOWED_THEMES = new Set(fs.existsSync(TEMPLATES)
-  ? fs.readdirSync(TEMPLATES, { withFileTypes: true })
-      .filter(entry => entry.isDirectory() && fs.existsSync(path.join(TEMPLATES, entry.name, 'index.html')))
-      .map(entry => entry.name)
-  : []);
+const THEME_REGISTRY_PATH = path.join(TEMPLATES, 'registry.json');
+const THEME_REGISTRY = JSON.parse(fs.readFileSync(THEME_REGISTRY_PATH, 'utf8'));
+const ALLOWED_THEMES = new Set((THEME_REGISTRY.themes || [])
+  .filter(theme => theme && theme.status === 'active')
+  .map(theme => theme.slug));
 const errors = [];
 const warnings = [];
 
@@ -41,7 +39,7 @@ function collectAssetCandidates(data, prefix = '') {
 
   for (const [key, value] of Object.entries(data)) {
     const current = prefix ? prefix + '.' + key : key;
-    const assetKey = /^(?:image|photo|src|music|audio|qr|qrCode|coverImage|backgroundImage)$/i.test(key);
+    const assetKey = /^(?:image|photo|foto|src|music|audio|qr|qrCode|coverImage|backgroundImage)$/i.test(key);
     if (typeof value === 'string' && assetKey && value.trim()) {
       out.push({ key: current, value });
     } else if (typeof value === 'string' && key === 'gallery' && /\.(?:avif|gif|jpe?g|png|webp)$/i.test(value)) {
@@ -164,6 +162,21 @@ function validateClient(slug, file) {
 
   for (const asset of collectAssetCandidates(data)) {
     validateAsset(slug, file, asset.key, asset.value);
+  }
+}
+
+for (const theme of THEME_REGISTRY.themes || []) {
+  if (!theme || typeof theme.slug !== 'string' || !/^[a-z0-9][a-z0-9-]*$/.test(theme.slug)) {
+    errors.push('templates/registry.json: setiap tema harus memiliki slug yang valid.');
+    continue;
+  }
+  if (theme.status === 'active' && !fs.existsSync(path.join(TEMPLATES, theme.slug, 'index.html'))) {
+    errors.push('Tema aktif ' + theme.slug + ' tercatat di registry tetapi templates/' + theme.slug + '/index.html tidak ditemukan.');
+  }
+}
+for (const entry of fs.readdirSync(TEMPLATES, { withFileTypes: true }).filter(entry => entry.isDirectory() && fs.existsSync(path.join(TEMPLATES, entry.name, 'index.html')))) {
+  if (!THEME_REGISTRY.themes.some(theme => theme && theme.slug === entry.name)) {
+    errors.push('Tema templates/' + entry.name + ' memiliki index.html tetapi belum terdaftar di templates/registry.json.');
   }
 }
 

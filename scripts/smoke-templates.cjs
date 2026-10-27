@@ -45,6 +45,16 @@ const themes = [
           theme.slug + ": animasi saat scroll belum dipasang");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
+        const storyAudit = await page.evaluate(() => ({
+          total: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.length : 0,
+          photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0
+        }));
+        assert.equal(await page.locator("#story-list article, .story-list article").count(), storyAudit.total,
+          theme.slug + ": jumlah Love Story tidak sesuai data.json");
+        assert.equal(await page.locator("#story-list .oa-story-photo, .story-list .oa-story-photo").count(), storyAudit.photos,
+          theme.slug + ": foto Love Story tidak sesuai data.json");
+        assert.equal((await page.locator("#story-list article, .story-list article").first().textContent()).includes("Pertemuan yang Sederhana"), true,
+          theme.slug + ": judul Love Story tidak terbaca");
         if (theme.slug === "aksara-signature") {
           await page.waitForFunction(() => Boolean(document.querySelector("#app style")), undefined, { timeout: 5000 });
         }
