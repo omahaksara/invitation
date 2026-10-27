@@ -109,6 +109,15 @@ html{scroll-behavior:smooth;scroll-padding-top:18px}
 @media(max-width:600px){.cover-orbit{width:78vw}.cover:before,.cover:after{width:68vw;height:68vw}.reveal{transform:translateY(22px) scale(.99)}.gallery-item:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){.cover:before,.cover:after,.cover-orbit,.orbit-two,.cover-kicker,.cover .eyebrow,.cover-line,.cover h1,.cover-date,.guest-label,.guest-name,.open-button,.cover-foot,.cover-monogram,.main-content,.quote-section .quote-mark,.countdown b,.closing-flower,.open-button:before{animation:none!important}.cover.is-opening{animation:coverOut .01ms forwards}.reveal,.reveal.active{opacity:1;transform:none;transition:none;will-change:auto}.event-card:hover,.gift-card:hover,.gallery-item:hover{transform:none;box-shadow:none}}
 
+
+/* Opening transition refinement: lighter, quicker, no heavy blur/zoom. */
+.cover.is-opening{animation:coverOpenSoft .68s cubic-bezier(.22,.7,.25,1) forwards!important}
+@keyframes coverOpenSoft{0%{opacity:1;transform:translateY(0) scale(1);filter:none;visibility:visible}100%{opacity:0;transform:translateY(-10px) scale(1.012);filter:none;visibility:hidden}}
+.cover-kicker,.cover .eyebrow,.cover-line,.cover h1,.cover-date,.guest-label,.guest-name,.open-button,.cover-foot{animation-duration:.65s;filter:none}
+.cover-monogram{animation-duration:.8s}
+.main-content{animation-duration:.65s;filter:none}
+@media(prefers-reduced-motion:reduce){.cover.is-opening{animation:coverOut .01ms forwards!important}}
+
 </style>
 
 <div class="invite-shell">
