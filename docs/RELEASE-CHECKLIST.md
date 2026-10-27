@@ -4,12 +4,12 @@ Jangan menandai rilis siap sebelum semua poin wajib memiliki bukti pengujian.
 
 ## Data dan aset
 - [ ] Data produksi valid JSON dan mengikuti `schemaVersion: 2`.
-- [ ] Tema menggunakan allowlist empat tema resmi.
+- [ ] Tema menggunakan daftar tema resmi yang sama di validator, demo, dan katalog.
 - [ ] Semua aset lokal ada dan berada di folder slug yang tepat.
 - [ ] Tanggal ISO, zona waktu, dan URL peta sudah diverifikasi.
 - [ ] Data demo memakai konten dummy yang jelas; tidak ada kredensial rahasia.
 
-## Empat tema
+## Semua tema (7 tema)
 - [ ] Cover dan tombol buka bekerja, termasuk tema tanpa cover khusus.
 - [ ] Identitas pasangan, orang tua, cerita, dan kutipan tampil benar.
 - [ ] Countdown dan tombol ekspor kalender menghasilkan tanggal/jam yang benar.
@@ -30,7 +30,7 @@ Jangan menandai rilis siap sebelum semua poin wajib memiliki bukti pengujian.
 ## Kualitas dan publikasi
 - [ ] Pemeriksaan sintaks dan validasi data lulus.
 - [ ] Smoke test Chromium lulus untuk semua tema.
-- [ ] Desktop dan ponsel diperiksa secara visual.
+- [ ] Desktop dan ponsel diperiksa secara visual untuk ketujuh tema: Karsa, Royal Vintage, Sirein, Aksara Signature, Botanical Garden, Velvet Romance, dan Aksara Nocturne.
 - [ ] Keyboard, kontras, label formulir, reduced motion, dan error state diperiksa.
 - [ ] Semua tautan demo katalog dan pemesanan diuji.
 - [ ] PR ditinjau sebelum merge; tidak ada merge otomatis ke `main`.
