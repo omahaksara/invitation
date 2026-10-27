@@ -177,7 +177,7 @@
       if (el && guestName) el.value = guestName;
     });
 
-    renderStory(data.story);
+    renderStory(data.story, clientBase);
     renderEvents(data.events, data, clientBase);
     bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
@@ -446,28 +446,48 @@
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function renderStory(stories) {
+  function renderStory(stories, clientBase) {
     const root = document.getElementById("story-list") || document.querySelector(".story-list");
     if (!root || !Array.isArray(stories)) return;
     const isSirein = !!document.querySelector(".sirein-page") || !!root.querySelector(".story-item");
     root.replaceChildren();
+
     stories.forEach((item, index) => {
+      if (!item || typeof item !== "object") return;
+
+      // Indonesian fields are canonical; English aliases preserve existing client data.
+      const dateText = item.tanggal ?? item.year ?? item.date ?? "";
+      const titleText = item.judul ?? item.title ?? "Cerita kami";
+      const storyText = item.cerita ?? item.description ?? "";
+      const photoPath = item.foto ?? item.photo ?? item.image ?? "";
       const article = document.createElement("article");
-      if (isSirein) {
-        article.className = "story-item";
-        const year = document.createElement("div"); year.className = "story-year"; year.textContent = item.year || item.date || "";
-        const content = document.createElement("div");
-        const title = document.createElement("h3"); title.textContent = item.title || "Cerita kami";
-        const desc = document.createElement("p"); desc.textContent = item.description || "";
-        content.append(title, desc); article.append(year, content);
-      } else {
-        article.className = "story-card reveal";
-        article.style.animationDelay = (index * 100) + "ms";
-        const date = document.createElement("time"); date.textContent = item.year || item.date || "";
-        const title = document.createElement("h3"); title.textContent = item.title || "Cerita kami";
-        const desc = document.createElement("p"); desc.textContent = item.description || "";
-        article.append(date, title, desc);
+      article.className = isSirein ? "story-item" : "story-card reveal";
+      article.style.animationDelay = (index * 100) + "ms";
+
+      const date = document.createElement(isSirein ? "div" : "time");
+      date.className = isSirein ? "story-year" : "story-date";
+      date.textContent = String(dateText);
+
+      const content = document.createElement("div");
+      content.className = "story-content";
+      const title = document.createElement("h3");
+      title.textContent = String(titleText);
+      const desc = document.createElement("p");
+      desc.textContent = String(storyText);
+
+      if (photoPath && String(photoPath).trim()) {
+        const image = document.createElement("img");
+        image.className = "oa-story-photo";
+        image.src = assetUrl(String(photoPath), clientBase);
+        image.alt = String(titleText || "Foto cerita perjalanan pasangan");
+        image.loading = "lazy";
+        image.decoding = "async";
+        image.onerror = () => { image.hidden = true; };
+        content.append(image);
       }
+
+      content.append(title, desc);
+      article.append(date, content);
       root.append(article);
     });
   }
@@ -972,6 +992,10 @@
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
         .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
+        .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
+        .story-content { min-width:0; }
+        .story-date { display:block; margin-bottom:6px; }
+        @media (max-width:600px) { .oa-story-photo { max-height:320px; } }
         @media (prefers-reduced-motion: reduce) {
           html { scroll-behavior: auto !important; }
           .oa-scroll-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
