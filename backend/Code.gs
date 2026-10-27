@@ -31,6 +31,14 @@ const HEADERS = {
   Settings: ["slug", "status"]
 };
 
+// Jalankan sekali dari editor Apps Script untuk memberi izin UrlFetchApp.
+function authorizeExternalFetch() {
+  const response = UrlFetchApp.fetch(
+    "https://raw.githubusercontent.com/omahaksara/invitation/main/clients/demo-katalog/data.json"
+  );
+  Logger.log("GitHub fetch authorized; HTTP " + response.getResponseCode());
+}
+
 function setupDatabase() {
   const ss = SpreadsheetApp.openById(DATABASE_ID);
   [SHEET_RSVP, SHEET_GUESTBOOK].forEach(function(name) {
