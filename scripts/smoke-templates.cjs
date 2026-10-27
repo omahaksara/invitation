@@ -44,7 +44,7 @@ const themes = [
           gallery: Array.from(document.querySelectorAll(".gallery-grid img")).map(img => img.src),
           images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
         }));
-        const localPrefix = new URL("/clients/demo-katalog/", location.origin).href;
+        const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
         assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
         assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
         assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
