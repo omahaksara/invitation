@@ -28,6 +28,14 @@ const themes = [
 
         assert.equal((await page.locator("#nama-tamu").textContent()).trim(), "Nama Tamu",
           theme.slug + ": nama tamu tidak terbaca");
+        assert.equal(await page.locator("#rsvp-form").count(), 1,
+          theme.slug + ": formulir RSVP bersama tidak tersedia");
+        assert.equal(await page.locator("#wishes-form").count(), 1,
+          theme.slug + ": formulir buku tamu bersama tidak tersedia");
+        assert.ok(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior === "smooth"),
+          theme.slug + ": smooth scrolling belum aktif");
+        assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
+          theme.slug + ": animasi saat scroll belum dipasang");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
         if (theme.slug === "aksara-signature") {
