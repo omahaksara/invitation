@@ -4,12 +4,12 @@ Jangan menandai rilis siap sebelum semua poin wajib memiliki bukti pengujian.
 
 ## Data dan aset
 - [ ] Data produksi valid JSON dan mengikuti `schemaVersion: 2`.
-- [ ] Tema menggunakan allowlist empat tema resmi.
+- [ ] Tema menggunakan daftar tema aktif dari `templates/registry.json`.
 - [ ] Semua aset lokal ada dan berada di folder slug yang tepat.
 - [ ] Tanggal ISO, zona waktu, dan URL peta sudah diverifikasi.
 - [ ] Data demo memakai konten dummy yang jelas; tidak ada kredensial rahasia.
 
-## Empat tema
+## Semua tema aktif
 - [ ] Cover dan tombol buka bekerja, termasuk tema tanpa cover khusus.
 - [ ] Identitas pasangan, orang tua, cerita, dan kutipan tampil benar.
 - [ ] Countdown dan tombol ekspor kalender menghasilkan tanggal/jam yang benar.
