@@ -33,6 +33,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check core/app.js
+          node --check scripts/smoke-production.cjs
           cp backend/Code.gs /tmp/omah-aksara-backend.js
           node --check /tmp/omah-aksara-backend.js
       - name: Validate V2 data and local assets
