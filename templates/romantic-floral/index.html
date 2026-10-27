@@ -118,6 +118,38 @@ html{scroll-behavior:smooth;scroll-padding-top:18px}
 .main-content{animation-duration:.65s;filter:none}
 @media(prefers-reduced-motion:reduce){.cover.is-opening{animation:coverOut .01ms forwards!important}}
 
+
+/* FINAL POLISH — light motion + refined type hierarchy for Romantic Floral */
+body{font-size:16px;line-height:1.65}
+.cover{contain:paint}
+.cover-orbit,.orbit-two{animation:none!important;opacity:.72}
+.cover:before,.cover:after{animation:none!important}
+.cover-grain{mix-blend-mode:normal}
+.cover-kicker,.cover .eyebrow,.cover-line,.cover h1,.cover-date,.guest-label,.guest-name,.open-button,.cover-foot{animation:softEntry .62s ease-out both;filter:none}
+.cover-kicker{animation-delay:.06s}.cover h1{animation-delay:.12s}.cover-date{animation-delay:.18s}.guest-label{animation-delay:.22s}.guest-name{animation-delay:.26s}.open-button{animation-delay:.3s}
+.cover-monogram{animation:softEntry .72s ease-out both}
+.open-button:before{animation:none!important;display:none}
+.open-button{transition:background-color .22s ease,border-color .22s ease,transform .22s ease}
+.open-button:active{transform:scale(.985)}
+.main-content{animation:softEntry .42s ease-out both;filter:none}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .48s ease,transform .48s ease;will-change:auto}
+.reveal.active{opacity:1;transform:none;transition-delay:0ms}
+.intro h2,.section-heading h2{font-weight:500;letter-spacing:-.025em;line-height:1.08;text-wrap:balance}
+.body-copy{font-size:.9rem;line-height:1.9;max-width:540px}
+.cover h1{font-weight:400;letter-spacing:-.025em;line-height:1.02}
+.cover .eyebrow,.cover-kicker,.cover-date,.person-role,.section-heading .eyebrow{letter-spacing:.16em}
+.guest-name{font-size:1.45rem;line-height:1.25}
+.story-card,.event-card,.gift-card,.form-card,.gallery-item{transition:box-shadow .25s ease,border-color .25s ease}
+.portrait img,.gallery-item img{transition:transform .45s ease,filter .45s ease}
+.gallery-item:hover{transform:none}
+.event-card:hover,.gift-card:hover{transform:none;box-shadow:0 8px 22px rgba(25,18,12,.08)}
+.countdown b,.quote-section .quote-mark,.closing-flower,.music-toggle{animation:none!important}
+.cover.is-opening{animation:coverOpenSoft .58s ease-in forwards!important}
+@keyframes softEntry{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes coverOpenSoft{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-8px)}}
+@media(max-width:600px){.section-pad{padding:64px 20px}.cover h1{font-size:clamp(2.3rem,10vw,3.4rem)}.cover-orbit{opacity:.5}.reveal{transform:translateY(10px)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
+
 </style>
 
 <div class="invite-shell">
