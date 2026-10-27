@@ -17,6 +17,7 @@ Jangan menduplikasi engine atau backend ke repository katalog.
 - `aksara-signature`
 - `botanical-garden`
 - `velvet-romance`
+- `romantic-floral`
 
 Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
 
