@@ -110,6 +110,11 @@ function validateClient(slug, file) {
   if (data.integrations && data.integrations.apiUrl && !/^https:\/\//i.test(data.integrations.apiUrl)) {
     errors.push(`${slug}: integrations.apiUrl harus menggunakan HTTPS.`);
   }
+  const configuredApiUrl = (data.integrations && data.integrations.apiUrl) ||
+    (data.api && (data.api.apiUcapan || data.api.apiUrl)) || '';
+  if (data.demoMode === true && configuredApiUrl) {
+    errors.push(`${slug}: undangan demo tidak boleh menunjuk ke API RSVP/buku tamu produksi.`);
+  }
   const events = Array.isArray(data.events) ? data.events : (isObject(data.events) ? Object.values(data.events) : []);
   events.forEach((event, index) => {
     if (!isObject(event)) { errors.push(`${slug}: data.events[${index}] harus berupa objek.`); return; }
