@@ -430,6 +430,15 @@
       const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
       const button = document.createElement("button"); button.type = "button"; button.textContent = "Salin Nomor Rekening";
       button.addEventListener("click", () => copyText(item.accountNumber || "", button));
+      const logoSrc = item.logo || item.bankLogo || "";
+      if (logoSrc) {
+        const logo = document.createElement("img");
+        logo.src = assetUrl(logoSrc, clientBase);
+        logo.alt = (item.bank || "Bank") + " — logo";
+        logo.loading = "lazy";
+        logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
+        card.append(logo);
+      }
       card.append(bank, holder, number, button);
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;

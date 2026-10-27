@@ -9,22 +9,22 @@
   "cover": {
     "title": "Undangan Pernikahan",
     "subtitle": "The Wedding of",
-    "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=85",
-    "heroImage": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=85"
+    "image": "foto-sampul.jpg",
+    "heroImage": "foto-sampul.jpg"
   },
   "couple": {
     "groom": {
-      "nickname": "Arkan",
-      "fullName": "Arkan Pradipta",
-      "parents": "Putra dari Bapak dan Ibu Pradipta",
-      "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=85",
+      "nickname": "Budi",
+      "fullName": "Budi Santoso, S.T.",
+      "parents": "Putra dari Bapak Ahmad Santoso & Ibu Siti Aminah",
+      "photo": "foto-pria.jpg",
       "instagram": ""
     },
     "bride": {
-      "nickname": "Sekar",
-      "fullName": "Sekar Ayuningtyas",
-      "parents": "Putri dari Bapak dan Ibu Ayuningtyas",
-      "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85",
+      "nickname": "Ani",
+      "fullName": "Ani Wijaya, S.E.",
+      "parents": "Putri dari Bapak Heru Wijaya & Ibu Ratna Wijaya",
+      "photo": "foto-wanita.jpg",
       "instagram": ""
     }
   },
@@ -80,23 +80,36 @@
     }
   ],
   "gallery": [
-    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=900&q=85",
-    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=85",
-    "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=900&q=85",
-    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=85"
+    "foto1.jpg",
+    "foto2.jpg",
+    "foto3.jpg",
+    "foto4.jpg"
   ],
   "gifts": {
-    "message": "Mode demo: rekening contoh ini hanya untuk menguji tampilan. JANGAN melakukan transfer.",
+    "message": "CONTOH DEMO — data rekening ini fiktif. JANGAN MELAKUKAN TRANSFER.",
     "accounts": [
       {
-        "bank": "REKENING CONTOH (DEMO)",
+        "bank": "Bank BCA",
+        "logo": "bank/logo-bca.svg",
         "accountNumber": "0000000000",
-        "accountHolder": "Nama Contoh — JANGAN TRANSFER"
+        "accountHolder": "Budi Santoso — CONTOH DEMO"
+      },
+      {
+        "bank": "Bank BRI",
+        "logo": "bank/logo-bri.svg",
+        "accountNumber": "0000000000",
+        "accountHolder": "Contoh Rekening — JANGAN TRANSFER"
+      },
+      {
+        "bank": "Bank Mandiri",
+        "logo": "bank/logo-mandiri.svg",
+        "accountNumber": "0000000000",
+        "accountHolder": "Ani Wijaya — CONTOH DEMO"
       }
     ]
   },
   "media": {
-    "music": "https://raw.githubusercontent.com/omahaksara/omahaksara.github.io/main/lagu/contohlagu%20(5).mp3"
+    "music": "musik.mp3"
   },
   "rsvp": {
     "link": ""
@@ -130,5 +143,9 @@
     "hashtag": true,
     "quotes": true
   },
-  "hashtag": "#ArkanSekarStory"
+  "hashtag": "#BudiAniDemo",
+  "seo": {
+    "title": "Demo Undangan Pernikahan Budi & Ani | Omah Aksara",
+    "description": "Contoh undangan digital Omah Aksara. Seluruh data acara dan rekening pada demo ini hanya contoh."
+  }
 }

@@ -75,13 +75,32 @@ Jangan menghapus atau mengubah struktur data lama hanya karena skema V2 sudah te
 
 ## Demo katalog sebagai patokan
 
-Gunakan `clients/demo-katalog/data.json` sebagai contoh paling mudah untuk memperbarui tampilan demo. Demo harus selalu memakai nama rekaan, jadwal contoh, dan rekening yang jelas bertanda **JANGAN TRANSFER**.
+Folder `clients/demo-katalog/` adalah master contoh untuk membuat undangan baru. Isinya memakai pasangan fiktif Budi–Ani dan aset contoh yang disalin dari berkas demo lama yang tersedia di riwayat Git. Folder klien asli tidak diubah oleh demo ini.
 
-Untuk foto demo, gunakan URL gambar langsung dari web, misalnya Unsplash CDN (`https://images.unsplash.com/...`), seperti yang sudah dipakai pada sampul, foto mempelai, dan galeri di `demo-katalog/data.json`.
+Susunan aset standar:
 
-- Jangan menyalin foto pasangan klien dari folder GitHub ke demo.
-- Jangan memakai path relatif seperti `foto-pria.jpg` untuk foto demo katalog.
-- Jangan memakai URL `github.com` atau `raw.githubusercontent.com` sebagai sumber foto demo.
-- Gunakan URL gambar spesifik yang stabil, bukan URL random yang berubah tiap kunjungan.
-- Uji semua URL foto di browser sebelum merilis; gambar dari layanan eksternal bisa berubah atau dihapus.
-- Untuk klien sungguhan, gunakan foto yang memang diberikan atau diizinkan klien, dan tetap simpan di folder slug klien sesuai aturan di atas.
+```text
+clients/demo-katalog/
+├── data.json
+├── foto-pria.jpg
+├── foto-sampul.jpg
+├── foto-wanita.jpg
+├── foto1.jpg
+├── foto2.jpg
+├── foto3.jpg
+├── foto4.jpg
+├── musik.mp3
+└── bank/
+    ├── README.md
+    ├── logo-bca.svg
+    ├── logo-bri.svg
+    └── logo-mandiri.svg
+```
+
+- `data.json` adalah pusat pengaturan nama, tanggal, lokasi, fitur, dan nama aset.
+- Foto dan musik memakai path relatif dari folder demo. Saat membuat folder klien baru, salin struktur ini lalu ganti aset dengan nama file yang sama agar tidak perlu mengubah kode.
+- Bagian hadiah demo menampilkan logo bank, bukan gambar QR. Nomor rekening di demo hanya angka contoh dan diberi label **JANGAN TRANSFER**.
+- Properti `logo` pada setiap item `gifts.accounts` menunjuk ke file logo relatif, misalnya `bank/logo-bca.svg`. Bank lain bisa ditambahkan dengan menaruh file logo sendiri di folder `bank/` lalu mengisi properti `logo` pada akun terkait.
+- QR hanya boleh ditampilkan jika pemilik undangan memberikan QR valid dan memang ingin menggunakannya. Jangan pernah membuat QR palsu untuk rekening demo.
+- Demo harus tetap menggunakan identitas, jadwal, alamat, dan rekening fiktif. Jangan menyalin data pribadi atau rekening klien sungguhan ke demo.
+- Sebelum rilis, validasi JSON dan semua referensi aset, uji empat tema, RSVP dan buku tamu dalam mode simulasi, serta periksa tampilan ponsel dan desktop.
