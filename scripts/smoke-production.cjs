@@ -2,7 +2,8 @@
 'use strict';
 
 // Production browser smoke: reads the live catalogue and guestbook only.
-// Never submits RSVP or guestbook forms.
+// Never submits RSVP or guestbook forms. A guestbook GET may auto-register
+// an already-published slug in Settings if it is missing, as designed by the backend.
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 
@@ -125,7 +126,7 @@ async function main() {
     assert.ok(layout.page <= layout.viewport + 2, 'Published invitation overflows mobile width: ' + JSON.stringify(layout));
     assert.equal(pageErrors.length, 0, 'Published invitation JavaScript errors: ' + pageErrors.join('; '));
     console.log('PASS live Budi–Ani invitation: couple data, RSVP, guestbook GET (' + guestbook.count +
-      ' entries), music source, and mobile width. No production forms were submitted.');
+      ' entries), music source, and mobile width. No production forms were submitted; a published slug may auto-register in Settings if missing.');
     await catalogue.close();
     await invitation.close();
   } finally {
