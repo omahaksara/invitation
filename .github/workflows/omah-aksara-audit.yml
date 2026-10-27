@@ -110,3 +110,16 @@ jobs:
             sleep 1
           done
           node scripts/smoke-templates.cjs
+
+  live-api-readiness:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify live Apps Script health (read-only)
+        run: node scripts/check-live-api.cjs
