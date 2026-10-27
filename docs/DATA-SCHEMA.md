@@ -15,7 +15,7 @@ Semua undangan baru menggunakan satu skema. Engine membaca format ini sebagai mo
 - `couple.groom` dan `couple.bride`: `nickname`, `fullName`, `parents`, `photo`, `instagram`.
 - `cover`: judul, teks pembuka, foto, dan label tanggal untuk cover.
 - `quote`: `arab`, `text`, dan `source`.
-- `story`: daftar objek `year`, `title`, `description`.
+- `story`: daftar cerita berjumlah fleksibel. Bentuk baku berbahasa Indonesia: `judul`, `tanggal`, `cerita`, `foto`. Engine juga membaca alias lama `title`, `year`/`date`, `description`, `photo`/`image` agar data lama tetap kompatibel. Path `foto` relatif terhadap `clients/<slug>/` dan diperiksa oleh validator aset.
 - `gallery`: daftar URL aset atau objek `src` dan `alt`.
 - `hashtag`: string hashtag.
 - `video`: objek opsional dengan `src` atau `url`, serta `poster`.
@@ -59,5 +59,5 @@ Satu kontrak API melayani RSVP dan buku tamu. Lingkungan uji dan produksi harus 
 1. Inventarisasi bentuk data lama dan aset yang dirujuk.
 2. Petakan format lama ke skema ini tanpa menimpa sumber.
 3. Validasi slug, tema, tanggal, URL, fitur, dan aset lokal.
-4. Periksa hasil migrasi pada empat tema.
+4. Periksa hasil migrasi pada semua tema aktif.
 5. Baru tandai data sebagai V2 setelah validasi dan pemeriksaan visual lulus.
