@@ -5,17 +5,17 @@
 <title>Lumière Bloom — Omah Aksara</title>
 <meta name="description" content="Undangan pernikahan Lumière Bloom: warna ivory, blush pink, peach, dan butter gold dengan ornamen floral serta lengkungan lembut.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Cinzel:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 <style>
 
-/* AURELIA NOIR — isolated theme styles. No shared/global theme files are modified. */
+/* LUMIÈRE BLOOM — isolated theme styles. No shared/global theme files are modified. */
 :root{
  --an-obsidian:#101713;--an-forest:#17382d;--an-emerald:#245b47;--an-ivory:#f6f0e4;
  --an-paper:#fbf8f1;--an-gold:#c9a86a;--an-gold-light:#ead7a8;--an-muted:#77786e;
  --an-line:rgba(201,168,106,.38);--an-serif:"Cormorant Garamond",Georgia,serif;
- --an-display:"Cinzel",Georgia,serif;--an-sans:"DM Sans",Arial,sans-serif;
+ --an-display:"Cormorant Garamond",Georgia,serif;--an-script:"Allura",cursive;--an-sans:"DM Sans",Arial,sans-serif;
  color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -141,9 +141,6 @@ img{display:block;max-width:100%}
  .gallery-grid>*:first-child{grid-row:span 2}
  .gallery-grid>*:first-child img{aspect-ratio:3/5}
 }
-@media(prefers-reduced-motion:reduce){
- html{scroll-behavior:auto}
- *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms
 /* LUMIÈRE BLOOM — bright, airy palette; isolated to this theme only. */
 :root{
  --an-obsidian:#493b42;--an-forest:#754a5c;--an-emerald:#b76e83;--an-ivory:#fffaf5;
@@ -225,9 +222,33 @@ body,.invite-shell,.main-content{background:var(--an-paper);color:var(--an-obsid
 }
 @media(prefers-reduced-motion:reduce){.cover,.open-button,.open-button b,.gallery-grid img{transition:none!important}}
 
-!important}
-}
-
+/* Typography & motion polish — Lumière Bloom only. */
+.cover .eyebrow,.cover-kicker,.cover-date,.cover-foot,.open-button,.person-role,.quote-section small,.footer{font-family:var(--an-sans);letter-spacing:.16em}
+.cover h1{font-family:var(--an-serif);font-weight:500;letter-spacing:-.035em}
+.cover h1 i,.closing-amp{font-family:var(--an-script);font-size:clamp(2.7rem,10vw,4.2rem);font-weight:400;line-height:.8;letter-spacing:0}
+.cover h1 i{margin:.12em 0 .04em;color:#c18a49}
+.cover h1>span{animation:lb-name-in .9s cubic-bezier(.2,.75,.25,1) both}
+.cover h1>span:last-child{animation-delay:.22s}
+.cover-monogram{animation:lb-soft-pop 1s .12s both}
+.cover .eyebrow{animation:lb-fade-up .75s .08s both}
+.cover-kicker{animation:lb-fade-up .75s .16s both}
+.cover-line{animation:lb-line-grow .8s .35s both;transform-origin:center}
+.cover-date{animation:lb-fade-up .75s .4s both}
+.guest-label,.guest-name,.open-button{animation:lb-fade-up .75s .48s both}
+.cover-orbit{animation:lb-orbit-drift 18s ease-in-out infinite alternate}
+.orbit-two{animation-delay:-8s}
+.open-button{font-weight:600}
+.eyebrow{font-weight:600}
+.person-card h3,.intro h2,.section-heading h2,.closing h2,.event-grid h3,.event-grid h4{font-family:var(--an-serif);font-weight:500;letter-spacing:-.02em}
+.quote-section p{font-family:var(--an-serif);font-weight:400}
+.story-list>*,.event-grid>*,.gift-grid>*,.form-card,.gallery-grid>*{transition:transform .4s cubic-bezier(.2,.75,.25,1),box-shadow .4s ease,border-color .4s ease}
+@keyframes lb-fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lb-name-in{from{opacity:0;transform:translateY(18px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes lb-soft-pop{from{opacity:0;transform:scale(.88) rotate(-5deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes lb-line-grow{from{transform:scaleX(.15);opacity:.3}to{transform:scaleX(1);opacity:1}}
+@keyframes lb-orbit-drift{from{rotate:-3deg;scale:.98}to{rotate:3deg;scale:1.02}}
+@media(hover:hover){.story-list>*:hover,.event-grid>*:hover,.gift-grid>*:hover,.form-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(154,94,112,.1);border-color:rgba(190,126,139,.5)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.cover-orbit{animation:none!important}}
 </style>
 
 <div class="invite-shell">
