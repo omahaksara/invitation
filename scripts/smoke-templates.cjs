@@ -99,7 +99,7 @@ const themes = [
       await page.route("https://script.google.com/macros/s/**", async route => {
         const request = route.request();
         if (request.method() === "GET") {
-          await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, items: mockGuestbook.slice() }) });
+          await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true, items: mockGuestbook.slice() }) });
           return;
         }
         if (request.method() === "POST") {
@@ -108,10 +108,10 @@ const themes = [
           if (payload.action === "guestbook" && payload.name && payload.message) {
             mockGuestbook.unshift({ name: payload.name, message: payload.message });
           }
-          await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+          await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true }) });
           return;
         }
-        await route.fulfill({ status: 405, contentType: "application/json", body: JSON.stringify({ ok: false }) });
+        await route.fulfill({ status: 405, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: false }) });
       });
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
