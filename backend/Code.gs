@@ -96,7 +96,7 @@ function doGet(e) {
     if (action === "guestbook") {
       const slug = validSlug(params.slug || "");
       if (!slug) return output({ok: false, message: "Slug tidak valid."});
-      if (!isAllowedSlug_(slug)) {
+      if (!isAllowedSlug_(slug) && !registerPublishedSlugIfMissing_(slug)) {
         return output({ok: false, message: "Undangan belum aktif pada backend."});
       }
 
@@ -135,7 +135,7 @@ function doPost(e) {
     const slug = validSlug(payload.slug || "");
     const name = cleanText(payload.name, 100);
     if (!slug || !name) return output({ok: false, message: "Slug atau nama tidak valid."});
-    if (!isAllowedSlug_(slug)) {
+    if (!isAllowedSlug_(slug) && !registerPublishedSlugIfMissing_(slug)) {
       return output({ok: false, message: "Undangan belum aktif pada backend."});
     }
 
@@ -182,6 +182,57 @@ function doPost(e) {
       try { lock.releaseLock(); } catch (ignored) {}
     }
   }
+}
+
+/**
+ * Daftarkan otomatis slug baru hanya jika data.json publik di GitHub
+ * benar-benar ada, slug cocok, dan status undangan = published.
+ * Slug yang sudah ada dengan status non-published tidak otomatis diaktifkan.
+ */
+function registerPublishedSlugIfMissing_(slug) {
+  const settings = getSheet_(SHEET_SETTINGS);
+  const rows = settings.getDataRange().getValues();
+
+  // Jika slug sudah tercatat, hormati status yang ditetapkan pengelola.
+  const existing = rows.slice(1).find(function(row) {
+    return String(row[0] || "").trim().toLowerCase() === slug;
+  });
+  if (existing) {
+    return String(existing[1] || "").trim().toLowerCase() === "published";
+  }
+
+  const url = "https://raw.githubusercontent.com/omahaksara/invitation/main/clients/" +
+    encodeURIComponent(slug) + "/data.json";
+  const response = UrlFetchApp.fetch(url, {
+    muteHttpExceptions: true,
+    followRedirects: true
+  });
+  if (response.getResponseCode() !== 200) return false;
+
+  let data;
+  try {
+    data = JSON.parse(response.getContentText());
+  } catch (error) {
+    return false;
+  }
+  if (
+    String(data.slug || "").trim().toLowerCase() !== slug ||
+    String(data.status || "").trim().toLowerCase() !== "published"
+  ) {
+    return false;
+  }
+
+  // Cek ulang sebelum menulis agar tidak menggandakan slug pada pengiriman bersamaan.
+  const latest = settings.getDataRange().getValues();
+  const found = latest.slice(1).find(function(row) {
+    return String(row[0] || "").trim().toLowerCase() === slug;
+  });
+  if (found) {
+    return String(found[1] || "").trim().toLowerCase() === "published";
+  }
+
+  settings.appendRow([slug, "published"]);
+  return true;
 }
 
 function isAllowedSlug_(slug) {
