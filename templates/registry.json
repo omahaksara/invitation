@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "description": "Daftar resmi tema Omah Aksara. Katalog, validator, dan pengujian menggunakan daftar ini.",
+  "themes": [
+    {
+      "slug": "karsa",
+      "name": "Karsa",
+      "status": "active"
+    },
+    {
+      "slug": "royal-vintage",
+      "name": "Royal Vintage",
+      "status": "active"
+    },
+    {
+      "slug": "sirein",
+      "name": "Sirein",
+      "status": "active"
+    },
+    {
+      "slug": "aksara-signature",
+      "name": "Aksara Signature",
+      "status": "active"
+    },
+    {
+      "slug": "botanical-garden",
+      "name": "Botanical Garden",
+      "status": "active"
+    },
+    {
+      "slug": "velvet-romance",
+      "name": "Velvet Romance",
+      "status": "active"
+    },
+    {
+      "slug": "romantic-floral",
+      "name": "Romantic Floral",
+      "status": "active"
+    },
+    {
+      "slug": "aksara-nocturne",
+      "name": "Aksara Nocturne",
+      "status": "active"
+    },
+    {
+      "slug": "aurelia-noir",
+      "name": "Aurelia Noir",
+      "status": "active"
+    },
+    {
+      "slug": "lumiere-bloom",
+      "name": "Lumière Bloom",
+      "status": "active"
+    }
+  ]
+}
