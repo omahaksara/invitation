@@ -756,6 +756,13 @@
       const form = new FormData(wishes);
       const payload = { action:"guestbook", slug, name:String(form.get("name")||"").trim(), message:String(form.get("message")||"").trim() };
       if (!payload.name || !payload.message || payload.message.length > (data.guestbook?.maxMessageLength || 500)) { status.textContent="Mohon isi nama dan ucapan (maksimal 500 karakter)."; return; }
+      // Demo harus terisolasi: jangan membaca atau menulis ucapan ke database klien.
+      if (data.demoMode === true) {
+        wishes.reset();
+        appendDemoWish(payload.name, payload.message);
+        status.textContent = "Simulasi demo: ucapan ini hanya tampil sementara dan tidak disimpan.";
+        return;
+      }
       const ok = await sendPayload(apiUrl,payload,status,button,"Ucapan berhasil dikirim.");
       if (ok) {
         wishes.reset();
@@ -770,8 +777,8 @@
         else status.textContent = "Ucapan berhasil dikirim.";
       }
     });
-    if (apiUrl && wishes) loadWishes(apiUrl,slug);
-    else if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
+    if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
+    else if (apiUrl && wishes) loadWishes(apiUrl,slug);
   }
 
   async function sendPayload(apiUrl,payload,status,button,successText) {
