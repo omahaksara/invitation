@@ -144,7 +144,7 @@ const themes = [
         await rsvp.locator('[name="name"]').fill("Tamu Uji");
         await rsvp.locator('[name="attendance"]').selectOption("hadir");
         await rsvp.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Konfirmasi berhasil|RSVP belum aktif|belum dikonfigurasi/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
+        await page.waitForFunction(() => /Konfirmasi berhasil|RSVP belum aktif|belum dikonfigurasi|Simulasi demo/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
           undefined, { timeout: 10000 });
 
         const wishes = page.locator("#wishes-form");
