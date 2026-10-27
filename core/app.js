@@ -23,6 +23,7 @@
       if (data.slug && data.slug !== slug) throw new Error("Slug pada data tidak cocok dengan alamat undangan.");
       if (data.status === "draft") throw new Error("Undangan ini belum dipublikasikan.");
       normalizeDemoAssets(data, slug);
+      normalizeTemplateData(data);
       const requestedTheme = params.get("theme");
       const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature"]);
       const requested = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : "";
@@ -88,6 +89,50 @@
     if (data.music) data.music = "musik.mp3";
   }
 
+  // Normalize common data differences before binding them to any theme.
+  // This keeps older and newer client JSON files usable without changing their source files.
+  function normalizeTemplateData(data) {
+    if (!data || typeof data !== "object") return;
+    data.cover = data.cover && typeof data.cover === "object" ? data.cover : {};
+    if (!data.cover.heroImage) data.cover.heroImage = data.cover.image || "";
+    if (!data.cover.eyebrow) data.cover.eyebrow = data.cover.title || "The Wedding Of";
+    if (!data.cover.buttonText) data.cover.buttonText = "Buka Undangan";
+
+    const eventEntries = Array.isArray(data.events)
+      ? data.events.map((event, index) => [event && event.id ? String(event.id).toLowerCase() :
+          (/akad/i.test(String(event && event.title || "")) ? "akad" :
+          (/resepsi|reseption/i.test(String(event && event.title || "")) ? "resepsi" : (index === 0 ? "akad" : index === 1 ? "resepsi" : "acara-" + (index + 1)))), event])
+      : Object.entries(data.events || {});
+    if (Array.isArray(data.events)) {
+      const normalizedEvents = {};
+      eventEntries.forEach(([key, event]) => {
+        if (!event || typeof event !== "object") return;
+        const safeKey = key || "acara";
+        normalizedEvents[safeKey] = { ...event };
+        if (!normalizedEvents[safeKey].date && normalizedEvents[safeKey].dateISO) {
+          normalizedEvents[safeKey].date = formatEventDate(normalizedEvents[safeKey].dateISO, normalizedEvents[safeKey].timezone || data.site?.timezone);
+        }
+        if (!normalizedEvents[safeKey].time && normalizedEvents[safeKey].startTime) {
+          normalizedEvents[safeKey].time = normalizedEvents[safeKey].startTime +
+            (normalizedEvents[safeKey].endTime ? "–" + normalizedEvents[safeKey].endTime : "");
+        }
+        if (!normalizedEvents[safeKey].location && normalizedEvents[safeKey].venue) {
+          normalizedEvents[safeKey].location = normalizedEvents[safeKey].venue;
+        }
+      });
+      data.events = normalizedEvents;
+    }
+
+    const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+    const firstEvent = events.find(event => event && (event.date || event.dateISO));
+    if (!data.cover.dateLabel && firstEvent) data.cover.dateLabel = firstEvent.date || firstEvent.dateISO || "";
+    data.opening = data.opening && typeof data.opening === "object" ? data.opening : {};
+    if (!data.opening.text) data.opening.text = "Dengan penuh sukacita, kami mengundang Anda untuk hadir di hari bahagia kami.";
+    if (data.gifts && !data.gifts.message) {
+      data.gifts.message = "Doa restu Anda merupakan hadiah terindah bagi kami.";
+    }
+  }
+
   function getBasePath() {
     if (!location.hostname.endsWith(".github.io")) return "";
     const segments = location.pathname.split("/").filter(Boolean);
@@ -143,6 +188,8 @@
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
+    // Forms and fallback sections are created above; observe them too.
+    setupReveal();
   }
 
 
@@ -871,11 +918,53 @@
   }
 
   function setupReveal() {
-    const elements=document.querySelectorAll(".reveal:not(.active)");
-    if(!elements.length) return;
-    if(!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) { elements.forEach(el=>el.classList.add("active")); return; }
-    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("active");observer.unobserve(entry.target);}}),{threshold:.12});
-    elements.forEach(el=>observer.observe(el));
+    const styleId = "oa-scroll-experience-style";
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        html { scroll-behavior: smooth; }
+        section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
+        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+        .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+          html { scroll-behavior: auto !important; }
+          .oa-scroll-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+        }
+      `;
+      document.head.append(style);
+    }
+
+    const candidates = document.querySelectorAll(
+      "#app-inner > section:not(#cover), .invitation-container > section, .sirein-page > section, .invite-shell > section, " +
+      ".oa-shared-section, #rsvp-section, #guestbook-section, .event-card, .profile-card, .person-card, .story-item, .gift-card, .gallery-item"
+    );
+    candidates.forEach(element => {
+      if (element.closest("#cover, #cover-section, .sirein-cover")) return;
+      if (!element.classList.contains("reveal")) element.classList.add("oa-scroll-reveal");
+    });
+
+    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible)");
+    if (!elements.length) return;
+    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      elements.forEach(el => {
+        if (el.classList.contains("reveal")) el.classList.add("active");
+        if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+      });
+      return;
+    }
+
+    let observer = window.__oaScrollRevealObserver;
+    if (!observer) {
+      observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        if (entry.target.classList.contains("reveal")) entry.target.classList.add("active");
+        if (entry.target.classList.contains("oa-scroll-reveal")) entry.target.classList.add("oa-visible");
+        observer.unobserve(entry.target);
+      }), { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
+      window.__oaScrollRevealObserver = observer;
+    }
+    elements.forEach(element => observer.observe(element));
   }
 
   function setupLightbox() {
