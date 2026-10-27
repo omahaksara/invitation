@@ -44,7 +44,7 @@ jobs:
           const path = require('node:path');
           const assert = require('node:assert/strict');
           const app = fs.readFileSync('core/app.js', 'utf8');
-          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden'];
+          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance'];
           const themes = themeNames.map(name => 'templates/' + name + '/index.html');
 
           assert.match(app, /allowedThemes\s*=\s*new Set\(\[\s*"karsa",\s*"royal-vintage",\s*"sirein",\s*"aksara-signature"/,
