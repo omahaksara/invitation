@@ -67,29 +67,33 @@
   },
   "story": [
     {
-      "year": "2022",
-      "title": "Pertemuan yang Sederhana",
-      "description": "Kami dipertemukan dalam sebuah kesempatan yang tidak pernah kami rencanakan. Percakapan sederhana menjadi awal dari rasa ingin mengenal, menghargai, dan memahami satu sama lain."
+      "judul": "Pertemuan yang Sederhana",
+      "tanggal": "2022",
+      "cerita": "Kami dipertemukan dalam sebuah kesempatan yang tidak pernah kami rencanakan. Percakapan sederhana menjadi awal dari rasa ingin mengenal, menghargai, dan memahami satu sama lain.",
+      "foto": "foto1.jpg"
     },
     {
-      "year": "2023",
-      "title": "Mengenal dan Bertumbuh",
-      "description": "Waktu mengajarkan kami bahwa kedekatan dibangun melalui kejujuran, kesediaan untuk mendengarkan, serta perhatian pada hal-hal kecil yang kerap luput dari pandangan."
+      "judul": "Mengenal dan Bertumbuh",
+      "tanggal": "2023",
+      "cerita": "Waktu mengajarkan kami bahwa kedekatan dibangun melalui kejujuran, kesediaan untuk mendengarkan, serta perhatian pada hal-hal kecil yang kerap luput dari pandangan.",
+      "foto": "foto2.jpg"
     },
     {
-      "year": "2025",
-      "title": "Satu Niat, Dua Keluarga",
-      "description": "Dengan kesungguhan hati, kami menyampaikan niat baik kepada keluarga. Doa, restu, dan kehangatan kedua keluarga menguatkan langkah kami menuju komitmen yang lebih berarti."
+      "judul": "Satu Niat, Dua Keluarga",
+      "tanggal": "2025",
+      "cerita": "Dengan kesungguhan hati, kami menyampaikan niat baik kepada keluarga. Doa, restu, dan kehangatan kedua keluarga menguatkan langkah kami menuju komitmen yang lebih berarti.",
+      "foto": "foto3.jpg"
     },
     {
-      "year": "2026",
-      "title": "Memantapkan Langkah",
-      "description": "Kami belajar bahwa pernikahan bukan sekadar tentang merayakan hari bahagia, melainkan kesediaan untuk terus bertumbuh, saling menjaga, dan pulang kepada satu sama lain."
+      "judul": "Memantapkan Langkah",
+      "tanggal": "2026",
+      "cerita": "Kami belajar bahwa pernikahan bukan sekadar tentang merayakan hari bahagia, melainkan kesediaan untuk terus bertumbuh, saling menjaga, dan pulang kepada satu sama lain.",
+      "foto": "foto4.jpg"
     },
     {
-      "year": "2027",
-      "title": "Mengikat Janji",
-      "description": "Insyaallah, di hadapan Allah SWT dan orang-orang terkasih, kami akan memulai babak baru sebagai keluarga. Semoga langkah ini senantiasa dinaungi keberkahan, kesabaran, dan kasih sayang."
+      "judul": "Mengikat Janji",
+      "tanggal": "2027",
+      "cerita": "Insyaallah, di hadapan Allah SWT dan orang-orang terkasih, kami akan memulai babak baru sebagai keluarga. Semoga langkah ini senantiasa dinaungi keberkahan, kesabaran, dan kasih sayang."
     }
   ],
   "gallery": [
