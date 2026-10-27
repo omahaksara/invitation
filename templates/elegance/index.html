@@ -115,7 +115,7 @@
       <div class="section-heading reveal"><p class="eyebrow">FRAGMENTS OF FOREVER</p><h2>Galeri Kenangan</h2><p>Potongan momen yang akan selalu kami simpan sebagai bagian dari cerita.</p></div>
       <div class="gallery-grid" id="gallery-grid"></div>
     </section>
-    <section class="video-section section-pad" id="video-section" hidden>
+    <section class="video-section section-pad" id="video-section">
       <div class="section-heading"><p class="eyebrow">MOVING MEMORIES</p><h2>Video Kenangan</h2></div>
       <video id="wedding-video" controls playsinline preload="metadata" data-bind="video.src"></video>
     </section>
@@ -127,7 +127,7 @@
       <div class="section-heading reveal"><p class="eyebrow">KINDLY RESPOND</p><h2>Konfirmasi Kehadiran</h2><p>Bantu kami mempersiapkan acara dengan mengisi konfirmasi kehadiran berikut.</p></div>
       <form id="rsvp-form" class="form-card">
         <label>Nama lengkap<input name="name" id="rsvp-name" required maxlength="100" autocomplete="name" placeholder="Nama Anda"></label>
-        <label>Konfirmasi kehadiran<select name="attendance" required><option value="">Pilih jawaban</option><option value="hadir">Insyaallah hadir</option><option value="tidak_hadir">Mohon maaf, belum bisa hadir</option><option value="ragu">Masih belum pasti</option></select></label>
+        <label>Konfirmasi kehadiran<select name="attendance" required><option value="">Pilih jawaban</option><option value="hadir">Insyaallah hadir</option><option value="tidak_hadir">Mohon maaf, belum bisa hadir</option></select></label>
         <label>Jumlah tamu<select name="guestCount"><option value="1">1 orang</option><option value="2">2 orang</option><option value="3">3 orang</option></select></label>
         <button class="solid-button" type="submit">Kirim Konfirmasi</button>
         <p id="rsvp-status" class="form-status" role="status" aria-live="polite"></p>
