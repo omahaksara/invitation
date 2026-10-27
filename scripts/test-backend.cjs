@@ -40,6 +40,13 @@ const db = new Spreadsheet('Omah Aksara — Database RSVP & Buku Tamu', DATABASE
   new Sheet('Guestbook', [GUESTBOOK_HEADERS])
 ]);
 const properties = new Map();
+const cacheValues = new Map();
+const clientConfigs = new Map([
+  ['uji-omah-aksara', { slug: 'uji-omah-aksara', status: 'published', demoMode: false }],
+  ['draft-omah-aksara', { slug: 'draft-omah-aksara', status: 'draft', demoMode: false }],
+  ['demo-katalog', { slug: 'demo-katalog', status: 'published', demoMode: true }],
+  ['qa-test-oma', { slug: 'qa-test-oma', status: 'published', demoMode: true }]
+]);
 const spreadsheetApp = { openById(id) { if (id !== DATABASE_ID) throw new Error('Spreadsheet not found: ' + id); return db; } };
 const context = {
   console,
@@ -48,6 +55,19 @@ const context = {
     setProperty: (key, value) => properties.set(key, value)
   }) },
   SpreadsheetApp: spreadsheetApp,
+  CacheService: { getScriptCache: () => ({
+    get: key => cacheValues.get(key) || null,
+    put: (key, value) => cacheValues.set(key, value)
+  }) },
+  UrlFetchApp: { fetch: url => {
+    const match = url.match(/\/clients\/([^/]+)\/data\.json/);
+    const slug = match ? decodeURIComponent(match[1]) : '';
+    const config = clientConfigs.get(slug);
+    return {
+      getResponseCode: () => config ? 200 : 404,
+      getContentText: () => config ? JSON.stringify(config) : ''
+    };
+  } },
   LockService: { getScriptLock: () => ({ waitLock: () => {}, releaseLock: () => {} }) },
   Utilities: { getUuid: () => 'test-uuid-' + Math.random().toString(36).slice(2) },
   ContentService: {
@@ -103,9 +123,12 @@ assert.equal(listed.items.length, 1);
 assert.equal(listed.items[0].name, 'Tamu Uji');
 assert.equal(listed.items[0].message, 'Semoga bahagia selalu.');
 
-const otherSlug = response(context.doGet({ parameter: { action: 'guestbook', slug: 'demo-katalog' } }));
-assert.equal(otherSlug.ok, true);
-assert.equal(otherSlug.items.length, 0, 'guestbook rows are isolated by slug');
+const demoSlug = response(context.doGet({ parameter: { action: 'guestbook', slug: 'demo-katalog' } }));
+assert.equal(demoSlug.ok, false, 'demo slug cannot read the production guestbook');
+assert.equal(post({ action: 'rsvp', slug: 'demo-katalog', name: 'Demo', attendance: 'hadir', guestCount: 1 }).ok, false,
+  'demo slug cannot write RSVP even if an old Settings row exists');
+assert.equal(post({ action: 'guestbook', slug: 'qa-test-oma', name: 'Demo', message: 'Not production' }).ok, false,
+  'QA demo slug cannot write to the production guestbook');
 
 assert.equal(response(context.doGet({ parameter: { action: 'guestbook', slug: 'draft-omah-aksara' } })).ok, false, 'draft slug cannot read guestbook');
 assert.equal(post({ action: 'rsvp', slug: 'draft-omah-aksara', name: 'Tamu Uji', attendance: 'hadir', guestCount: 1 }).ok, false, 'draft slug cannot submit RSVP');
