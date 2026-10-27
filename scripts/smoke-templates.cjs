@@ -36,6 +36,24 @@ const themes = [
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
 
+        // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
+        const imageAudit = await page.evaluate(() => ({
+          cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
+          groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
+          bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
+          gallery: Array.from(document.querySelectorAll(".gallery-grid img")).map(img => img.src),
+          images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
+        }));
+        const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
+        assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
+        assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
+        assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
+        assert.equal(imageAudit.gallery.length, 4, theme.slug + ": galeri demo harus berisi 4 foto");
+        assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
+          theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
+        assert.ok(imageAudit.images.every(src => src.startsWith(localPrefix)),
+          theme.slug + ": ditemukan gambar eksternal pada demo " + JSON.stringify(imageAudit.images));
+
         if (theme.open) {
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
@@ -75,7 +93,26 @@ const themes = [
     for (const theme of themes) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
       const pageErrors = [];
+      const mockGuestbook = [];
       page.on("pageerror", error => pageErrors.push(error.message));
+      // Isolate CI from the live spreadsheet while testing the real two-way API flow.
+      await page.route("**/macros/s/**", async route => {
+        const request = route.request();
+        if (request.method() === "GET") {
+          await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true, items: mockGuestbook.slice() }) });
+          return;
+        }
+        if (request.method() === "POST") {
+          let payload = {};
+          try { payload = JSON.parse(request.postData() || "{}"); } catch {}
+          if (payload.action === "guestbook" && payload.name && payload.message) {
+            mockGuestbook.unshift({ name: payload.name, message: payload.message });
+          }
+          await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true }) });
+          return;
+        }
+        await route.fulfill({ status: 405, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: false }) });
+      });
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "domcontentloaded" });
@@ -107,15 +144,19 @@ const themes = [
         await rsvp.locator('[name="name"]').fill("Tamu Uji");
         await rsvp.locator('[name="attendance"]').selectOption("hadir");
         await rsvp.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Simulasi demo/.test(document.querySelector("#rsvp-status")?.textContent || ""),
-          undefined, { timeout: 5000 });
+        await page.waitForFunction(() => /Konfirmasi berhasil|RSVP belum aktif|belum dikonfigurasi|Simulasi demo/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
+          undefined, { timeout: 10000 });
 
         const wishes = page.locator("#wishes-form");
         await wishes.locator('[name="name"]').fill("Tamu Uji");
         await wishes.locator('[name="message"]').fill("Semoga bahagia selalu.");
         await wishes.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Simulasi demo/.test(document.querySelector("#wishes-status")?.textContent || ""),
+        await page.waitForFunction(() => /Ucapan berhasil dikirim/.test(document.querySelector("#wishes-status")?.textContent || ""),
+          undefined, { timeout: 10000 });
+        await page.waitForFunction(() => Array.from(document.querySelectorAll("#wishes-list .wish-card")).some(card => card.innerText.includes("Semoga bahagia selalu.")),
           undefined, { timeout: 5000 });
+        assert.equal(mockGuestbook.length, 1, theme.slug + ": ucapan tidak masuk ke mock database");
+        assert.equal(mockGuestbook[0].message, "Semoga bahagia selalu.");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
         console.log("PASS mobile + demo forms " + theme.slug);
       } catch (error) {

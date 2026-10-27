@@ -1,91 +1,130 @@
 /**
- * Omah Aksara — Backend RSVP & Buku Tamu.
+ * OMAH AKSARA — API RSVP & BUKU TAMU
+ * Kompatibel dengan spreadsheet yang sudah ada.
  *
- * Database baru: "Omah Aksara — Database RSVP & Buku Tamu"
- * Cara pakai:
- * 1. Buat proyek Apps Script baru di script.google.com.
- * 2. Tempel kode ini, lalu simpan.
- * 3. Pilih fungsi setupDatabase lalu tekan Run dan berikan izin Google.
- * 4. Buka Execution log untuk mendapatkan URL spreadsheet baru.
- * 5. Deploy > New deployment > Web app; Execute as: Me.
- * 6. Pilih akses yang memungkinkan tamu undangan mengirim data, lalu Deploy.
- * 7. Uji URL /exec dengan ?action=health sebelum dipakai.
+ * Tab wajib:
+ * - RSVP: Timestamp, ID, Slug Klien, Nama Tamu, Jumlah Hadir,
+ *   Status Kehadiran, Pesan/Doa, Kontak, Sumber, User Agent
+ * - Guestbook: Timestamp, ID, Slug Klien, Nama Pengirim, Ucapan,
+ *   Status Moderasi, Sumber
+ * - Settings: slug, status (dibuat otomatis bila belum ada)
  *
- * Script ini membuat spreadsheet BARU. Tidak menyentuh database RSVP lama.
+ * Isi Settings dengan slug undangan dan status "published".
+ * Ucapan buku tamu langsung disetujui setelah berhasil disimpan.
  */
-const DATABASE_NAME = "Omah Aksara — Database RSVP & Buku Tamu";
+const DATABASE_ID = "1V37A5smUiF5Ld4uTj7I0kh019QwsWi5gIll1xGKdSVI";
 const DATABASE_ID_PROPERTY = "OMAH_AKSARA_DATABASE_ID";
 const SHEET_RSVP = "RSVP";
 const SHEET_GUESTBOOK = "Guestbook";
+const SHEET_SETTINGS = "Settings";
+
 const HEADERS = {
-  RSVP: ["timestamp", "slug", "guest_name", "attendance", "guest_count"],
-  Guestbook: ["timestamp", "slug", "guest_name", "message"],
+  RSVP: [
+    "Timestamp", "ID", "Slug Klien", "Nama Tamu",
+    "Jumlah Hadir", "Status Kehadiran", "Pesan/Doa",
+    "Kontak", "Sumber", "User Agent"
+  ],
+  Guestbook: [
+    "Timestamp", "ID", "Slug Klien", "Nama Pengirim",
+    "Ucapan", "Status Moderasi", "Sumber"
+  ],
   Settings: ["slug", "status"]
 };
 
-/**
- * Jalankan SATU KALI secara manual dari editor Apps Script.
- * Membuat spreadsheet baru dan menyimpan ID-nya di Script Properties.
- */
 function setupDatabase() {
-  const props = PropertiesService.getScriptProperties();
-  const existingId = props.getProperty(DATABASE_ID_PROPERTY);
-  if (existingId) {
-    const existing = SpreadsheetApp.openById(existingId);
-    Logger.log("Database sudah disiapkan: " + existing.getUrl());
-    return existing.getUrl();
+  const ss = SpreadsheetApp.openById(DATABASE_ID);
+  [SHEET_RSVP, SHEET_GUESTBOOK].forEach(function(name) {
+    const sheet = ss.getSheetByName(name);
+    if (!sheet) throw new Error("Tab " + name + " tidak ditemukan.");
+    const expected = HEADERS[name];
+    const actual = sheet.getRange(1, 1, 1, expected.length).getDisplayValues()[0];
+    if (actual.some(function(value, i) {
+      return String(value).trim() !== expected[i];
+    })) {
+      throw new Error("Judul kolom tab " + name + " tidak sesuai. Periksa baris pertama sebelum melanjutkan.");
+    }
+  });
+
+  let settings = ss.getSheetByName(SHEET_SETTINGS);
+  if (!settings) {
+    settings = ss.insertSheet(SHEET_SETTINGS);
+    settings.appendRow(HEADERS.Settings);
+    // Aktifkan slug demo saja. Slug klien lain harus ditambahkan oleh pengelola.
+    settings.appendRow(["demo-katalog", "published"]);
+  } else if (settings.getLastRow() === 0) {
+    settings.appendRow(HEADERS.Settings);
+    settings.appendRow(["demo-katalog", "published"]);
+  } else {
+    const headers = settings.getRange(1, 1, 1, 2).getDisplayValues()[0];
+    if (String(headers[0]).trim() !== "slug" || String(headers[1]).trim() !== "status") {
+      throw new Error("Judul kolom tab Settings harus: slug, status.");
+    }
   }
 
-  const spreadsheet = SpreadsheetApp.create(DATABASE_NAME);
-  const firstSheet = spreadsheet.getSheets()[0];
-  firstSheet.setName(SHEET_RSVP);
-  firstSheet.appendRow(HEADERS.RSVP);
-  const guestbook = spreadsheet.insertSheet(SHEET_GUESTBOOK);
-  guestbook.appendRow(HEADERS.Guestbook);
-  const settings = spreadsheet.insertSheet("Settings");
-  settings.appendRow(HEADERS.Settings);
-  props.setProperty(DATABASE_ID_PROPERTY, spreadsheet.getId());
-  Logger.log("Database Omah Aksara dibuat: " + spreadsheet.getUrl());
-  return spreadsheet.getUrl();
+  PropertiesService.getScriptProperties().setProperty(DATABASE_ID_PROPERTY, DATABASE_ID);
+  Logger.log("Koneksi database berhasil: " + ss.getUrl());
+  return ss.getUrl();
+}
+
+function getDatabase_() {
+  const id = PropertiesService.getScriptProperties().getProperty(DATABASE_ID_PROPERTY) || DATABASE_ID;
+  return SpreadsheetApp.openById(id);
+}
+
+function getSheet_(name) {
+  const sheet = getDatabase_().getSheetByName(name);
+  if (!sheet) throw new Error("Tab " + name + " tidak ditemukan.");
+  return sheet;
 }
 
 function doGet(e) {
-  const params = (e && e.parameter) || {};
-  const action = String(params.action || "health");
+  try {
+    const params = (e && e.parameter) || {};
+    const action = String(params.action || "health");
 
-  if (action === "health") {
-    const database = getDatabase_();
-    return output({
-      ok: true,
-      service: "Omah Aksara RSVP & Guestbook",
-      version: 3,
-      databaseConfigured: true,
-      databaseName: database.getName()
-    });
+    if (action === "health") {
+      const ss = getDatabase_();
+      return output({
+        ok: true,
+        service: "Omah Aksara RSVP & Guestbook",
+        version: 4,
+        databaseConfigured: true,
+        databaseName: ss.getName()
+      });
+    }
+
+    if (action === "guestbook") {
+      const slug = validSlug(params.slug || "");
+      if (!slug) return output({ok: false, message: "Slug tidak valid."});
+      if (!isAllowedSlug_(slug)) {
+        return output({ok: false, message: "Undangan belum aktif pada backend."});
+      }
+
+      const values = getSheet_(SHEET_GUESTBOOK).getDataRange().getValues();
+      const items = values.slice(1)
+        .filter(function(row) {
+          return String(row[2] || "").trim() === slug &&
+            String(row[5] || "").trim().toLowerCase() === "disetujui";
+        })
+        .sort(function(a, b) {
+          return new Date(b[0]).getTime() - new Date(a[0]).getTime();
+        })
+        .slice(0, 30)
+        .map(function(row) {
+          return {
+            name: String(row[3] || ""),
+            message: String(row[4] || ""),
+            timestamp: row[0] instanceof Date ? row[0].toISOString() : String(row[0] || "")
+          };
+        });
+      return output({ok: true, items: items});
+    }
+
+    return output({ok: false, message: "Aksi tidak dikenal."});
+  } catch (error) {
+    console.error(error);
+    return output({ok: false, message: "Terjadi kesalahan saat membaca database."});
   }
-
-  if (action !== "guestbook") {
-    return output({ ok: false, message: "Aksi tidak dikenal." });
-  }
-
-  const slug = validSlug(params.slug || "");
-  if (!slug) return output({ ok: false, message: "Slug tidak valid." });
-  if (!isAllowedSlug_(slug)) return output({ ok: false, message: "Undangan belum aktif pada backend." });
-
-  const values = getSheet_(SHEET_GUESTBOOK).getDataRange().getValues();
-  if (values.length < 2) return output({ ok: true, items: [] });
-
-  const rows = values.slice(1)
-    .filter(row => String(row[1]) === slug)
-    .sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
-    .slice(0, 30)
-    .map(row => ({
-      name: String(row[2] || ""),
-      message: String(row[3] || ""),
-      timestamp: row[0] instanceof Date ? row[0].toISOString() : String(row[0] || "")
-    }));
-
-  return output({ ok: true, items: rows });
 }
 
 function doPost(e) {
@@ -95,40 +134,49 @@ function doPost(e) {
     const payload = JSON.parse((e && e.postData && e.postData.contents) || "{}");
     const slug = validSlug(payload.slug || "");
     const name = cleanText(payload.name, 100);
-    if (!slug || !name) {
-      return output({ ok: false, message: "Slug atau nama tidak valid." });
+    if (!slug || !name) return output({ok: false, message: "Slug atau nama tidak valid."});
+    if (!isAllowedSlug_(slug)) {
+      return output({ok: false, message: "Undangan belum aktif pada backend."});
     }
-    if (!isAllowedSlug_(slug)) return output({ ok: false, message: "Undangan belum aktif pada backend." });
 
-    if (payload.action === "rsvp") {
+    const action = String(payload.action || "");
+    if (action === "rsvp") {
       const attendance = String(payload.attendance || "");
-      const guestCountRaw = Number(payload.guestCount);
-      const guestCount = Number.isFinite(guestCountRaw) ? Math.floor(guestCountRaw) : 1;
+      const count = Number(payload.guestCount);
+      const guestCount = Number.isFinite(count) ? Math.floor(count) : 1;
       if (["hadir", "tidak_hadir"].indexOf(attendance) < 0) {
-        return output({ ok: false, message: "Pilihan kehadiran tidak valid." });
+        return output({ok: false, message: "Status kehadiran tidak valid."});
       }
       if (guestCount < 1 || guestCount > 10) {
-        return output({ ok: false, message: "Jumlah tamu harus 1–10." });
+        return output({ok: false, message: "Jumlah tamu harus 1–10."});
       }
+
       lock.waitLock(10000);
       locked = true;
-      getSheet_(SHEET_RSVP).appendRow([new Date(), slug, name, attendance, guestCount]);
-      return output({ ok: true, message: "RSVP tersimpan." });
+      getSheet_(SHEET_RSVP).appendRow([
+        new Date(), Utilities.getUuid(), slug, name, guestCount, attendance,
+        cleanText(payload.message, 500), cleanText(payload.contact, 100),
+        "Website", cleanText(payload.userAgent, 300)
+      ]);
+      return output({ok: true, message: "RSVP tersimpan."});
     }
 
-    if (payload.action === "guestbook") {
+    if (action === "guestbook") {
       const message = cleanText(payload.message, 500);
-      if (!message) return output({ ok: false, message: "Ucapan tidak boleh kosong." });
+      if (!message) return output({ok: false, message: "Ucapan tidak boleh kosong."});
+
       lock.waitLock(10000);
       locked = true;
-      getSheet_(SHEET_GUESTBOOK).appendRow([new Date(), slug, name, message]);
-      return output({ ok: true, message: "Ucapan tersimpan." });
+      getSheet_(SHEET_GUESTBOOK).appendRow([
+        new Date(), Utilities.getUuid(), slug, name, message, "Disetujui", "Website"
+      ]);
+      return output({ok: true, message: "Ucapan tersimpan dan langsung ditampilkan."});
     }
 
-    return output({ ok: false, message: "Aksi tidak dikenal." });
+    return output({ok: false, message: "Aksi tidak dikenal."});
   } catch (error) {
     console.error(error);
-    return output({ ok: false, message: "Permintaan gagal diproses. Periksa deployment dan izin spreadsheet." });
+    return output({ok: false, message: "Permintaan gagal diproses. Periksa izin dan konfigurasi."});
   } finally {
     if (locked) {
       try { lock.releaseLock(); } catch (ignored) {}
@@ -136,34 +184,16 @@ function doPost(e) {
   }
 }
 
-function getDatabase_() {
-  const id = PropertiesService.getScriptProperties().getProperty(DATABASE_ID_PROPERTY);
-  if (!id) throw new Error("Database belum disiapkan. Jalankan setupDatabase() dari editor Apps Script.");
-  return SpreadsheetApp.openById(id);
-}
-
-function getSheet_(name) {
-  const spreadsheet = getDatabase_();
-  let sheet = spreadsheet.getSheetByName(name);
-  if (!sheet) {
-    sheet = spreadsheet.insertSheet(name);
-    sheet.appendRow(HEADERS[name]);
-  } else if (sheet.getLastRow() === 0) {
-    sheet.appendRow(HEADERS[name]);
-  }
-  return sheet;
-}
-
 function isAllowedSlug_(slug) {
-  const values = getSheet_("Settings").getDataRange().getValues();
-  return values.slice(1).some(row =>
-    String(row[0] || "").trim() === slug &&
-    String(row[1] || "").trim().toLowerCase() === "published"
-  );
+  const settings = getSheet_(SHEET_SETTINGS).getDataRange().getValues();
+  return settings.slice(1).some(function(row) {
+    return String(row[0] || "").trim().toLowerCase() === slug &&
+      String(row[1] || "").trim().toLowerCase() === "published";
+  });
 }
 
 function validSlug(value) {
-  const slug = String(value || "");
+  const slug = String(value || "").trim().toLowerCase();
   return /^[a-z0-9][a-z0-9-]{0,79}$/.test(slug) ? slug : "";
 }
 

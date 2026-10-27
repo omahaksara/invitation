@@ -20,6 +20,7 @@
       const data = await response.json();
       if (data.slug && data.slug !== slug) throw new Error("Slug pada data tidak cocok dengan alamat undangan.");
       if (data.status === "draft") throw new Error("Undangan ini belum dipublikasikan.");
+      normalizeDemoAssets(data, slug);
       const requestedTheme = params.get("theme");
       const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature"]);
       const requested = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : "";
@@ -63,6 +64,26 @@
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan tidak dapat dimuat", error instanceof Error ? error.message : "Periksa koneksi internet lalu coba lagi.");
     }
+  }
+
+  // Keep the public demo independent from external/legacy image URLs.
+  // This normalization is deliberately scoped to demo-katalog only; client data is untouched.
+  function normalizeDemoAssets(data, slug) {
+    if (slug !== "demo-katalog" || !data || data.demoMode !== true) return;
+    data.cover = data.cover && typeof data.cover === "object" ? data.cover : {};
+    data.cover.image = "foto-sampul.jpg";
+    data.cover.heroImage = "foto-sampul.jpg";
+
+    data.couple = data.couple && typeof data.couple === "object" ? data.couple : {};
+    data.couple.groom = data.couple.groom && typeof data.couple.groom === "object" ? data.couple.groom : {};
+    data.couple.bride = data.couple.bride && typeof data.couple.bride === "object" ? data.couple.bride : {};
+    data.couple.groom.photo = "foto-pria.jpg";
+    data.couple.bride.photo = "foto-wanita.jpg";
+
+    data.gallery = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg"];
+    data.media = data.media && typeof data.media === "object" ? data.media : {};
+    data.media.music = "musik.mp3";
+    if (data.music) data.music = "musik.mp3";
   }
 
   function getBasePath() {
@@ -399,12 +420,10 @@
   function renderGifts(gifts, clientBase) {
     const accounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
     let root = document.getElementById("gift-list");
-    let skipFirstAccount = false;
 
     if (!root) {
       const section = document.querySelector(".gift-section");
       if (section) {
-        skipFirstAccount = section.querySelectorAll(".gift-card").length > 0;
         root = document.createElement("div");
         root.id = "gift-list";
         root.className = "gift-grid";
@@ -412,19 +431,25 @@
       }
     }
 
+    // V2 data is the source of truth. Hide legacy hard-coded cards so they
+    // cannot show placeholder bank details or QR images beside the V2 cards.
     const staticCards = document.querySelectorAll(".gift-section .gift-card");
-    if (!accounts.length) {
-      staticCards.forEach(card => { card.hidden = true; });
-      if (root) root.replaceChildren();
-      return;
-    }
-    staticCards.forEach(card => { card.hidden = false; });
-    if (!root) return;
+    staticCards.forEach(card => { card.hidden = true; });
 
-    root.replaceChildren();
-    const items = skipFirstAccount ? accounts.slice(1) : accounts;
-    items.forEach(item => {
+    if (root) root.replaceChildren();
+    if (!accounts.length || !root) return;
+
+    accounts.forEach(item => {
       const card = document.createElement("article"); card.className = "gift-card reveal";
+      const logoSrc = item.logo || item.bankLogo || "";
+      if (logoSrc) {
+        const logo = document.createElement("img");
+        logo.src = assetUrl(logoSrc, clientBase);
+        logo.alt = (item.bank || "Bank") + " — logo";
+        logo.loading = "lazy";
+        logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
+        card.append(logo);
+      }
       const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
       const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
       const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
@@ -440,20 +465,6 @@
       }
       root.append(card);
     });
-  }
-
-  async function copyText(text, button) {
-    if (!text) return;
-    const original = button.textContent;
-    try {
-      await navigator.clipboard.writeText(String(text));
-      button.textContent = "Berhasil disalin ✓";
-    } catch {
-      const helper = document.createElement("textarea"); helper.value = String(text); document.body.append(helper); helper.select();
-      const ok = document.execCommand("copy"); helper.remove();
-      button.textContent = ok ? "Berhasil disalin ✓" : "Salin manual";
-    }
-    window.setTimeout(() => button.textContent = original, 1800);
   }
 
   function setupCover() {
@@ -743,17 +754,22 @@
       const form = new FormData(wishes);
       const payload = { action:"guestbook", slug, name:String(form.get("name")||"").trim(), message:String(form.get("message")||"").trim() };
       if (!payload.name || !payload.message || payload.message.length > (data.guestbook?.maxMessageLength || 500)) { status.textContent="Mohon isi nama dan ucapan (maksimal 500 karakter)."; return; }
-      if (data.demoMode === true) {
-        appendDemoWish(payload.name, payload.message);
-        status.textContent="Simulasi demo: ucapan hanya tampil di halaman ini dan tidak disimpan ke database.";
-        wishes.reset();
-        return;
-      }
       const ok = await sendPayload(apiUrl,payload,status,button,"Ucapan berhasil dikirim.");
-      if (ok) { wishes.reset(); loadWishes(apiUrl,slug); }
+      if (ok) {
+        wishes.reset();
+        const root = document.getElementById("wishes-list");
+        if (root) {
+          const empty = root.querySelector(".empty-wishes");
+          if (empty) empty.remove();
+          root.prepend(makeWishCard(payload));
+        }
+        const refreshed = await loadWishes(apiUrl, slug, payload);
+        if (!refreshed) status.textContent = "Ucapan tersimpan dan ditampilkan, tetapi daftar dari server belum bisa disegarkan.";
+        else status.textContent = "Ucapan berhasil dikirim.";
+      }
     });
-    if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
-    else if (apiUrl && wishes) loadWishes(apiUrl,slug);
+    if (apiUrl && wishes) loadWishes(apiUrl,slug);
+    else if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
   }
 
   async function sendPayload(apiUrl,payload,status,button,successText) {
@@ -802,16 +818,38 @@
     else root.append(card);
   }
 
-  async function loadWishes(apiUrl,slug) {
-    const root=document.getElementById("wishes-list"); if(!root) return;
+  async function loadWishes(apiUrl, slug, pendingItem) {
+    const root = document.getElementById("wishes-list");
+    if (!root) return false;
     try {
-      const url=new URL(apiUrl); url.searchParams.set("action","guestbook"); url.searchParams.set("slug",slug);
-      const response=await fetch(url); if(!response.ok) throw new Error("Gagal membaca buku tamu");
-      const result=await response.json(); if(!result.ok || !Array.isArray(result.items)) return;
+      const url = new URL(apiUrl);
+      url.searchParams.set("action", "guestbook");
+      url.searchParams.set("slug", slug);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Gagal membaca buku tamu");
+      const result = await response.json();
+      if (!result.ok || !Array.isArray(result.items)) throw new Error("Format daftar ucapan tidak valid");
+
+      const items = result.items.slice();
+      if (pendingItem && !items.some(item =>
+        String(item.name || "").trim() === String(pendingItem.name || "").trim() &&
+        String(item.message || "").trim() === String(pendingItem.message || "").trim()
+      )) items.unshift(pendingItem);
+
       root.replaceChildren();
-      if(!result.items.length){const empty=document.createElement("p");empty.className="empty-wishes";empty.textContent="Jadilah yang pertama mengirim doa.";root.append(empty);return;}
-      result.items.forEach(item=>root.append(makeWishCard(item)));
-    } catch(error) { console.warn("Buku tamu belum dapat dimuat:",error); }
+      if (!items.length) {
+        const empty = document.createElement("p");
+        empty.className = "empty-wishes";
+        empty.textContent = "Jadilah yang pertama mengirim doa.";
+        root.append(empty);
+        return true;
+      }
+      items.forEach(item => root.append(makeWishCard(item)));
+      return true;
+    } catch (error) {
+      console.warn("Buku tamu belum dapat dimuat:", error);
+      return false;
+    }
   }
 
   function bindMapLinks(data) {

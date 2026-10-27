@@ -43,7 +43,7 @@ Jika fitur memerlukan data atau layanan yang belum siap, engine harus menyembuny
 
 ## Hadiah, media, dan integrasi
 
-- `gifts`: `message` dan daftar `accounts` berisi `bank`, `accountNumber`, `accountHolder`, serta `qrCode` bila tersedia.
+- `gifts`: `message` dan daftar `accounts` berisi `bank`, `accountNumber`, `accountHolder`, `logo` opsional untuk logo bank (path relatif dari folder klien atau URL), serta `qrCode` opsional bila pemilik memberi QR valid.
 - `media.music`: URL atau path relatif untuk musik.
 - `integrations.apiUrl`: URL HTTPS deployment backend yang dipilih untuk undangan tersebut.
 - `api.apiUcapan` atau `api.apiUrl`: nama properti lama yang dibaca adaptor saat migrasi.

@@ -1,0 +1,93 @@
+{
+  "theme": "sirein",
+  "guest": {
+    "defaultName": "Tamu Undangan"
+  },
+  "cover": {
+    "title": "Undangan Pernikahan",
+    "subtitle": "The Wedding of",
+    "image": "foto-sampul.jpg"
+  },
+  "couple": {
+    "groom": {
+      "nickname": "Budi",
+      "fullName": "Budi Santoso, S.T.",
+      "parents": "Putra dari Bapak Ahmad Santoso & Ibu Siti Aminah",
+      "photo": "foto-pria.jpg",
+      "instagram": "https://instagram.com/budi_santoso"
+    },
+    "bride": {
+      "nickname": "Ani",
+      "fullName": "Ani Wijaya, S.E.",
+      "parents": "Putri dari Bapak Heru Wijaya & Ibu Ratna Wijaya",
+      "photo": "foto-wanita.jpg",
+      "instagram": "https://instagram.com/ani_wijaya"
+    }
+  },
+  "quote": {
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, agar kamu merasa tenang dan tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
+    "source": "QS. Ar-Rum: 21"
+  },
+  "events": {
+    "akad": {
+      "title": "Akad Nikah",
+      "date": "12 November 2026",
+      "time": "08:00 - 10:00 WIB",
+      "location": "Rumah Mempelai Wanita",
+      "address": "Jl. Mawar No. 123, Jakarta Selatan",
+      "mapsUrl": "https://maps.google.com"
+    },
+    "resepsi": {
+      "title": "Resepsi Pernikahan",
+      "date": "12 November 2026",
+      "time": "11:00 - 14:00 WIB",
+      "location": "Graha Saba Ballroom",
+      "address": "Jl. Mawar No. 124, Jakarta Selatan",
+      "mapsUrl": "https://maps.google.com"
+    }
+  },
+  "countdown": {
+    "targetDate": "2026-11-12T08:00:00"
+  },
+  "story": [
+    {
+      "year": "2023",
+      "title": "Awal Bertemu",
+      "description": "Kami pertama kali bertemu di sebuah acara seminar di Jakarta."
+    },
+    {
+      "year": "2024",
+      "title": "Komitmen",
+      "description": "Setelah mengenal lebih dekat, kami memutuskan untuk melangkah ke jenjang yang lebih serius."
+    },
+    {
+      "year": "2025",
+      "title": "Lamaran",
+      "description": "Dengan restu kedua orang tua, kami melangsungkan acara pertunangan."
+    }
+  ],
+  "gallery": [
+    "foto1.jpg",
+    "foto2.jpg",
+    "foto3.jpg",
+    "foto4.jpg"
+  ],
+  "gifts": [
+    {
+      "bank": "Bank BCA",
+      "accountNumber": "1234567890",
+      "accountHolder": "Budi Santoso",
+      "qrCode": "qr-bca.jpg"
+    },
+    {
+      "bank": "Bank Mandiri",
+      "accountNumber": "0987654321",
+      "accountHolder": "Ani Wijaya",
+      "qrCode": "qr-mandiri.png"
+    }
+  ],
+  "media": {
+    "music": "musik.mp3"
+  }
+}
