@@ -1,6 +1,6 @@
 {
   "slug": "qa-test-oma",
-  "demoMode": false,
+  "demoMode": true,
   "status": "published",
   "theme": "sirein",
   "guest": {
@@ -101,9 +101,6 @@
   "rsvp": {
     "enabled": true,
     "maxGuestCount": 2
-  },
-  "integrations": {
-    "apiUrl": "https://script.google.com/macros/s/AKfycbxTtUh596hMTnZOboQWgFgRzXveS9H_crcGlaYc6hXJPzV_S5jTCQuuLTzd9jFg69Z_Aw/exec"
   },
   "schemaVersion": 2,
   "features": {
