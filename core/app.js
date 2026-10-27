@@ -399,12 +399,10 @@
   function renderGifts(gifts, clientBase) {
     const accounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
     let root = document.getElementById("gift-list");
-    let skipFirstAccount = false;
 
     if (!root) {
       const section = document.querySelector(".gift-section");
       if (section) {
-        skipFirstAccount = section.querySelectorAll(".gift-card").length > 0;
         root = document.createElement("div");
         root.id = "gift-list";
         root.className = "gift-grid";
@@ -412,24 +410,16 @@
       }
     }
 
+    // V2 data is the source of truth. Hide legacy hard-coded cards so they
+    // cannot show placeholder bank details or QR images beside the V2 cards.
     const staticCards = document.querySelectorAll(".gift-section .gift-card");
-    if (!accounts.length) {
-      staticCards.forEach(card => { card.hidden = true; });
-      if (root) root.replaceChildren();
-      return;
-    }
-    staticCards.forEach(card => { card.hidden = false; });
-    if (!root) return;
+    staticCards.forEach(card => { card.hidden = true; });
 
-    root.replaceChildren();
-    const items = skipFirstAccount ? accounts.slice(1) : accounts;
-    items.forEach(item => {
+    if (root) root.replaceChildren();
+    if (!accounts.length || !root) return;
+
+    accounts.forEach(item => {
       const card = document.createElement("article"); card.className = "gift-card reveal";
-      const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
-      const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
-      const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
-      const button = document.createElement("button"); button.type = "button"; button.textContent = "Salin Nomor Rekening";
-      button.addEventListener("click", () => copyText(item.accountNumber || "", button));
       const logoSrc = item.logo || item.bankLogo || "";
       if (logoSrc) {
         const logo = document.createElement("img");
@@ -439,6 +429,11 @@
         logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
         card.append(logo);
       }
+      const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
+      const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
+      const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
+      const button = document.createElement("button"); button.type = "button"; button.textContent = "Salin Nomor Rekening";
+      button.addEventListener("click", () => copyText(item.accountNumber || "", button));
       card.append(bank, holder, number, button);
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
@@ -449,20 +444,6 @@
       }
       root.append(card);
     });
-  }
-
-  async function copyText(text, button) {
-    if (!text) return;
-    const original = button.textContent;
-    try {
-      await navigator.clipboard.writeText(String(text));
-      button.textContent = "Berhasil disalin ✓";
-    } catch {
-      const helper = document.createElement("textarea"); helper.value = String(text); document.body.append(helper); helper.select();
-      const ok = document.execCommand("copy"); helper.remove();
-      button.textContent = ok ? "Berhasil disalin ✓" : "Salin manual";
-    }
-    window.setTimeout(() => button.textContent = original, 1800);
   }
 
   function setupCover() {
