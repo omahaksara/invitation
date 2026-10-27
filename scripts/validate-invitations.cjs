@@ -6,7 +6,14 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const CLIENTS = path.join(ROOT, 'clients');
-const ALLOWED_THEMES = new Set(['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance', 'romantic-floral']);
+const TEMPLATES = path.join(ROOT, 'templates');
+// Derive valid theme slugs from the templates that the engine can actually load.
+// This prevents the JSON validator from drifting behind newly added themes.
+const ALLOWED_THEMES = new Set(fs.existsSync(TEMPLATES)
+  ? fs.readdirSync(TEMPLATES, { withFileTypes: true })
+      .filter(entry => entry.isDirectory() && fs.existsSync(path.join(TEMPLATES, entry.name, 'index.html')))
+      .map(entry => entry.name)
+  : []);
 const errors = [];
 const warnings = [];
 
