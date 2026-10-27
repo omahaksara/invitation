@@ -78,40 +78,6 @@ async function main() {
     const pageErrors = [];
     invitation.on('pageerror', error => pageErrors.push(error.message));
 
-    let resolveGuestbook;
-    let rejectGuestbook;
-    const guestbookPromise = new Promise((resolve, reject) => {
-      resolveGuestbook = resolve;
-      rejectGuestbook = reject;
-    });
-    const guestbookTimer = setTimeout(() => rejectGuestbook(new Error('Live guestbook GET did not complete within 25 seconds.')), 25000);
-    let guestbookSettled = false;
-    const settleGuestbook = (error, value) => {
-      if (guestbookSettled) return;
-      guestbookSettled = true;
-      clearTimeout(guestbookTimer);
-      if (error) rejectGuestbook(error);
-      else resolveGuestbook(value);
-    };
-
-    invitation.on('response', async response => {
-      let original = response.request();
-      while (original.redirectedFrom()) original = original.redirectedFrom();
-      let url;
-      try { url = new URL(original.url()); } catch { return; }
-      if (url.searchParams.get('action') !== 'guestbook' || response.status() < 200 || response.status() >= 300) return;
-      try {
-        const result = await response.json();
-        if (!result || result.ok !== true || !Array.isArray(result.items)) {
-          settleGuestbook(new Error('Live guestbook API returned an invalid response.'));
-          return;
-        }
-        settleGuestbook(null, { count: result.items.length });
-      } catch (error) {
-        settleGuestbook(new Error('Live guestbook response was not readable JSON: ' + error.message));
-      }
-    });
-
     const invitationResponse = await invitation.goto(
       INVITATION_URL + '?c=budi-ani&to=Tamu%20Audit',
       { waitUntil: 'domcontentloaded', timeout: 45000 }
@@ -128,7 +94,22 @@ async function main() {
       'Ani', 'Published bride data must load.');
     assert.ok(await invitation.locator('#bg-music').getAttribute('src'), 'Invitation music source must be bound.');
 
-    const guestbook = await guestbookPromise;
+    // Execute the same cross-origin GET in the real browser context used by guests.
+    // This is read-only and does not submit any form.
+    const guestbook = await invitation.evaluate(async () => {
+      const apiUrl = window.__invitationData?.integrations?.apiUrl;
+      if (!apiUrl) throw new Error('Published invitation has no configured API URL.');
+      const url = new URL(apiUrl);
+      url.searchParams.set('action', 'guestbook');
+      url.searchParams.set('slug', 'budi-ani');
+      const response = await fetch(url, { cache: 'no-store', redirect: 'follow' });
+      if (!response.ok) throw new Error('Guestbook GET returned HTTP ' + response.status + '.');
+      const result = await response.json();
+      if (!result || result.ok !== true || !Array.isArray(result.items)) {
+        throw new Error('Guestbook GET returned an invalid API response.');
+      }
+      return { count: result.items.length };
+    });
     await invitation.waitForFunction(count => {
       const root = document.getElementById('wishes-list');
       if (!root) return false;
