@@ -6,7 +6,7 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const CLIENTS = path.join(ROOT, 'clients');
-const ALLOWED_THEMES = new Set(['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance']);
+const ALLOWED_THEMES = new Set(['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance', 'aksara-nocturne']);
 const errors = [];
 const warnings = [];
 
