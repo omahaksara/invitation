@@ -25,13 +25,15 @@
       normalizeDemoAssets(data, slug);
       normalizeTemplateData(data);
       const requestedTheme = params.get("theme");
-      const allowedThemes = new Set(["karsa", "royal-vintage", "sirein", "aksara-signature", "botanical-garden", "velvet-romance"]);
-      const requested = data.demoMode === true && /^[a-z0-9-]+$/i.test(requestedTheme || "") ? requestedTheme : "";
+      // Demo theme discovery is folder-based: a new templates/<slug>/index.html
+      // can be previewed without maintaining a second hard-coded theme registry.
+      const isThemeSlug = value => /^[a-z0-9][a-z0-9-]*$/i.test(value || "");
+      const requested = data.demoMode === true && isThemeSlug(requestedTheme) ? requestedTheme : "";
       // Keep "royal" as a backwards-compatible alias for the actual template folder.
       const requestedAlias = requested === "royal" ? "royal-vintage" : requested;
-      const configured = /^[a-z0-9-]+$/i.test(data.theme || "") ? data.theme : "karsa";
+      const configured = isThemeSlug(data.theme) ? data.theme : "karsa";
       const configuredAlias = configured === "royal" ? "royal-vintage" : configured;
-      const theme = allowedThemes.has(requestedAlias) ? requestedAlias : (allowedThemes.has(configuredAlias) ? configuredAlias : "karsa");
+      const theme = requestedAlias || configuredAlias || "karsa";
       const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
       const templateResponse = await fetch(new URL("index.html", themeBase));
       if (!templateResponse.ok) throw new Error("Tema undangan tidak ditemukan: " + theme);

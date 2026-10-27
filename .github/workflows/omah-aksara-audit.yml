@@ -44,11 +44,11 @@ jobs:
           const path = require('node:path');
           const assert = require('node:assert/strict');
           const app = fs.readFileSync('core/app.js', 'utf8');
-          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance'];
+          const themeNames = ['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance', 'aksara-nocturne'];
           const themes = themeNames.map(name => 'templates/' + name + '/index.html');
 
-          assert.match(app, /allowedThemes\s*=\s*new Set\(\[\s*"karsa",\s*"royal-vintage",\s*"sirein",\s*"aksara-signature"/,
-            'loader must allow every published theme');
+          assert.match(app, /const isThemeSlug = value =>/,
+            'demo theme selection must support newly added template slugs automatically');
           assert.match(app, /data\.demoMode\s*===\s*true/, 'theme override must be limited to demo invitations');
           assert.match(app, /requestedAlias/, 'legacy theme alias handling missing');
           assert.match(app, /function setupCover\(\)/, 'cover initialization missing');
