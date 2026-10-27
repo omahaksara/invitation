@@ -36,6 +36,24 @@ const themes = [
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
 
+        // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
+        const imageAudit = await page.evaluate(() => ({
+          cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
+          groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
+          bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
+          gallery: Array.from(document.querySelectorAll(".gallery-grid img")).map(img => img.src),
+          images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
+        }));
+        const localPrefix = new URL("/clients/demo-katalog/", location.origin).href;
+        assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
+        assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
+        assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
+        assert.equal(imageAudit.gallery.length, 4, theme.slug + ": galeri demo harus berisi 4 foto");
+        assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
+          theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
+        assert.ok(imageAudit.images.every(src => src.startsWith(localPrefix)),
+          theme.slug + ": ditemukan gambar eksternal pada demo " + JSON.stringify(imageAudit.images));
+
         if (theme.open) {
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
