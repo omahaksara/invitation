@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f8f6f0">
+<meta name="description" content="Jelajahi tema undangan pernikahan digital Omah Aksara. Tema baru otomatis muncul dari folder templates.">
+<title>Katalog Tema — Omah Aksara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f8f6f0;--ink:#282b27;--muted:#77796f;--gold:#b49a67;--line:#e6e0d4;--card:#fffdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+header{padding:64px 22px 38px;text-align:center;background:radial-gradient(ellipse at 50% 0,#eee4d2 0,transparent 66%)}
+.eyebrow{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:#8c754c}
+h1{font:500 clamp(42px,7vw,72px)/1.05 'Cormorant Garamond',serif;margin:14px 0}
+header p{max-width:560px;margin:0 auto;color:var(--muted);line-height:1.8;font-size:14px}
+.wrap{max-width:1180px;margin:auto;padding:20px 22px 72px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 22px;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px}
+.card{overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:0 12px 32px #45361b0a;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 38px #45361b15}
+.preview{height:370px;background:#e9e2d5;position:relative;overflow:hidden}
+.preview iframe{width:150%;height:150%;border:0;transform:scale(.6667);transform-origin:top left;pointer-events:none;background:white}
+.preview:after{content:"";position:absolute;inset:0;background:transparent}
+.info{padding:20px 20px 22px}
+.name{font:500 30px/1.1 'Cormorant Garamond',serif;margin:0 0 7px}
+.slug{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.actions{display:flex;gap:10px;margin-top:18px}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:11px 15px;font-size:12px;font-weight:600}
+.primary{background:var(--ink);color:white}.secondary{border:1px solid var(--line);color:var(--ink)}
+.status{padding:44px 18px;text-align:center;color:var(--muted);line-height:1.8}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:22px;border-top:1px solid var(--line)}
+@media(max-width:480px){header{padding-top:46px}.preview{height:330px}.toolbar{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Omah Aksara Studio</div><h1>Katalog Tema</h1><p>Temukan desain yang terasa paling dekat dengan kisah kalian. Setiap tema memakai data demo yang sama agar mudah dibandingkan.</p></header>
+<main class="wrap"><div class="toolbar"><span id="count">Menyiapkan koleksi tema…</span><span>Desain undangan digital · Preview interaktif</span></div><section id="themes" class="grid" aria-live="polite"><div class="status">Menghubungkan katalog dengan koleksi tema…</div></section><div id="note" class="status" hidden></div></main>
+<footer>OMAH AKSARA · Dibuat dengan hati, untuk cerita yang tak sama.</footer>
+<script>
+(function(){
+  const owner='omahaksara', repo='invitation';
+  const root='../';
+  const grid=document.getElementById('themes'), count=document.getElementById('count'), note=document.getElementById('note');
+  const pretty=s=>s.split('-').map(w=>w==='aksara'?'Aksara':w==='vintage'?'Vintage':w==='romance'?'Romance':w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function card(slug){
+    const name=pretty(slug), demo=root+'?c=demo-katalog&theme='+encodeURIComponent(slug);
+    return '<article class="card"><div class="preview"><iframe title="Pratinjau '+esc(name)+'" loading="lazy" src="'+demo+'" tabindex="-1"></iframe></div><div class="info"><h2 class="name">'+esc(name)+'</h2><div class="slug">'+esc(slug)+'</div><div class="actions"><a class="btn primary" href="'+demo+'" target="_blank" rel="noopener">Lihat Demo ↗</a><a class="btn secondary" href="'+root+'?c=demo-katalog&theme='+encodeURIComponent(slug)+'" target="_blank" rel="noopener">Buka tema</a></div></div></article>';
+  }
+  async function load(){
+    try{
+      const response=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/templates?ref=main',{headers:{Accept:'application/vnd.github+json'}});
+      if(!response.ok) throw new Error('Daftar tema belum dapat diakses ('+response.status+').');
+      const entries=await response.json();
+      const folders=entries.filter(x=>x.type==='dir'&&/^[a-z0-9][a-z0-9-]*$/.test(x.name));
+      const checks=await Promise.all(folders.map(async f=>{
+        try{const r=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/templates/'+f.name+'/index.html?ref=main',{headers:{Accept:'application/vnd.github+json'}});return r.ok?f.name:null}catch(_){return null}
+      }));
+      const themes=checks.filter(Boolean).sort((a,b)=>a.localeCompare(b));
+      if(!themes.length) throw new Error('Belum ada tema yang bisa ditampilkan.');
+      grid.innerHTML=themes.map(card).join('');
+      count.textContent=themes.length+' tema tersedia · otomatis mengikuti folder templates di branch main';
+      note.hidden=true;
+    }catch(err){
+      grid.innerHTML='<div class="status">Katalog belum berhasil memuat tema otomatis.<br>'+esc(err.message)+'<br><a href="https://github.com/omahaksara/invitation/tree/main/templates">Lihat folder tema di GitHub</a></div>';
+      count.textContent='Katalog belum tersambung';
+    }
+  }
+  load();
+})();
+</script>
+</body>
+</html>
