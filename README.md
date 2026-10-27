@@ -9,7 +9,7 @@ Repository ini khusus untuk mesin undangan digital Omah Aksara. Mesin menggunaka
 
 Jangan menduplikasi engine atau backend ke repository katalog.
 
-## Lima tema resmi
+## Tema yang tersedia
 
 - `karsa`
 - `royal-vintage`
@@ -17,8 +17,10 @@ Jangan menduplikasi engine atau backend ke repository katalog.
 - `aksara-signature`
 - `botanical-garden`
 - `velvet-romance`
+- `aksara-nocturne`
+- `velvet-romance`
 
-Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
+Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Smoke test Chromium memeriksa semua tujuh tema. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
 
 ## URL demo
 
