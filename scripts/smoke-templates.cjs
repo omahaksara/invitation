@@ -41,6 +41,12 @@ const themes = [
           theme.slug + ": animasi saat scroll belum dipasang");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
+        assert.equal(await page.locator(".story-list article").count(), 3,
+          theme.slug + ": jumlah cerita demo harus mengikuti data.json");
+        assert.equal(await page.locator(".story-list .oa-story-photo").count(), 3,
+          theme.slug + ": foto story demo tidak terbaca dari data.json");
+        assert.equal((await page.locator(".story-list article").first().textContent()).includes("Perkenalan"), true,
+          theme.slug + ": judul story berbahasa Indonesia tidak terbaca");
         if (theme.slug === "aksara-signature") {
           await page.waitForFunction(() => Boolean(document.querySelector("#app style")), undefined, { timeout: 5000 });
         }
