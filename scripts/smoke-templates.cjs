@@ -7,7 +7,8 @@ const themes = [
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }
+  { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }
 ];
 
 (async () => {
