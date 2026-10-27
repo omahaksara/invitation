@@ -33,6 +33,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check core/app.js
+          node --check scripts/smoke-production.cjs
           cp backend/Code.gs /tmp/omah-aksara-backend.js
           node --check /tmp/omah-aksara-backend.js
       - name: Validate V2 data and local assets
@@ -130,3 +131,21 @@ jobs:
           node-version: 20
       - name: Verify live Apps Script health (read-only)
         run: node scripts/check-live-api.cjs
+
+  production-browser-smoke:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [static-audit, live-api-readiness]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright browser
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+      - name: Smoke test public catalogue and live invitation (read-only)
+        run: node scripts/smoke-production.cjs
