@@ -2,7 +2,7 @@
   "slug": "demo-katalog",
   "demoMode": true,
   "status": "published",
-  "theme": "sirein",
+  "theme": "lumiere-bloom",
   "guest": {
     "defaultName": "Tamu Undangan"
   },
@@ -11,29 +11,29 @@
     "subtitle": "The Wedding of",
     "image": "foto-sampul.jpg",
     "heroImage": "foto-sampul.jpg",
-    "eyebrow": "DENGAN PENUH CINTA & DOA",
-    "dateLabel": "12 Juni 2027",
-    "buttonText": "Buka Kisah Kami"
+    "eyebrow": "BISMILLĀHIRRAḤMĀNIRRAḤĪM",
+    "dateLabel": "Sabtu, 12 Juni 2027",
+    "buttonText": "Buka Undangan"
   },
   "couple": {
     "groom": {
       "nickname": "Arkan",
       "fullName": "Arkan Pradipta",
-      "parents": "Putra pertama dari Bapak Aditya Pradipta & Ibu Larasati",
+      "parents": "Putra pertama dari Bapak Aditya Pradipta dan Ibu Larasati",
       "photo": "foto-pria.jpg",
       "instagram": ""
     },
     "bride": {
       "nickname": "Sekar",
       "fullName": "Sekar Ayuningtyas",
-      "parents": "Putri kedua dari Bapak Wiratama Ayuningtyas & Ibu Ratih Puspitasari",
+      "parents": "Putri kedua dari Bapak Wiratama Ayuningtyas dan Ibu Ratih Puspitasari",
       "photo": "foto-wanita.jpg",
       "instagram": ""
     }
   },
   "quote": {
     "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا",
-    "text": "Dan Dia menjadikan di antara kamu rasa kasih dan sayang.",
+    "text": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
     "source": "QS. Ar-Rum: 21"
   },
   "events": {
@@ -41,8 +41,8 @@
       "title": "Akad Nikah",
       "date": "12 Juni 2027",
       "time": "08:00 - 10:00 WITA",
-      "location": "Taman Seruni — Garden Pavilion",
-      "address": "Lokasi contoh untuk pratinjau demo, Makassar",
+      "location": "Taman Seruni — Grand Garden Pavilion",
+      "address": "Alamat simulasi untuk pratinjau katalog, Makassar",
       "mapsUrl": "https://maps.google.com/?q=Taman+Seruni+Makassar",
       "dateISO": "2027-06-12",
       "startTime": "08:00",
@@ -53,8 +53,8 @@
       "title": "Resepsi Pernikahan",
       "date": "12 Juni 2027",
       "time": "11:00 - 14:00 WITA",
-      "location": "Taman Seruni — Glasshouse",
-      "address": "Lokasi contoh untuk pratinjau demo, Makassar",
+      "location": "Taman Seruni — The Glasshouse",
+      "address": "Alamat simulasi untuk pratinjau katalog, Makassar",
       "mapsUrl": "https://maps.google.com/?q=Taman+Seruni+Makassar",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
@@ -68,23 +68,28 @@
   "story": [
     {
       "year": "2022",
-      "title": "Sebuah Pertemuan",
-      "description": "Di antara banyak wajah dan cerita, semesta mempertemukan kami dalam percakapan sederhana. Tak ada yang istimewa saat itu—sampai kami sadar ingin mengenal lebih jauh."
+      "title": "Pertemuan yang Sederhana",
+      "description": "Kami dipertemukan dalam sebuah kesempatan yang tidak pernah kami rencanakan. Percakapan sederhana menjadi awal dari rasa ingin mengenal, menghargai, dan memahami satu sama lain."
     },
     {
-      "year": "2024",
-      "title": "Memilih untuk Bertumbuh",
-      "description": "Kami belajar bahwa cinta bukan tentang selalu sepakat, melainkan tentang saling mendengar, memberi ruang, dan tetap memilih berjalan bersama."
+      "year": "2023",
+      "title": "Mengenal dan Bertumbuh",
+      "description": "Waktu mengajarkan kami bahwa kedekatan dibangun melalui kejujuran, kesediaan untuk mendengarkan, serta perhatian pada hal-hal kecil yang kerap luput dari pandangan."
+    },
+    {
+      "year": "2025",
+      "title": "Satu Niat, Dua Keluarga",
+      "description": "Dengan kesungguhan hati, kami menyampaikan niat baik kepada keluarga. Doa, restu, dan kehangatan kedua keluarga menguatkan langkah kami menuju komitmen yang lebih berarti."
     },
     {
       "year": "2026",
-      "title": "Restu yang Menguatkan",
-      "description": "Dengan doa keluarga dan hati yang mantap, kami menyampaikan niat untuk melangkah lebih jauh. Kini, kami bersiap menulis bab baru."
+      "title": "Memantapkan Langkah",
+      "description": "Kami belajar bahwa pernikahan bukan sekadar tentang merayakan hari bahagia, melainkan kesediaan untuk terus bertumbuh, saling menjaga, dan pulang kepada satu sama lain."
     },
     {
       "year": "2027",
-      "title": "Selamanya Dimulai",
-      "description": "Di hadapan keluarga dan sahabat, kami ingin merayakan janji sederhana: pulang, tumbuh, dan menua bersama."
+      "title": "Mengikat Janji",
+      "description": "Insyaallah, di hadapan Allah SWT dan orang-orang terkasih, kami akan memulai babak baru sebagai keluarga. Semoga langkah ini senantiasa dinaungi keberkahan, kesabaran, dan kasih sayang."
     }
   ],
   "gallery": [
@@ -94,25 +99,19 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Kehadiran dan doa restu Anda adalah hadiah paling berarti. Informasi rekening di bawah hanya simulasi untuk demo dan tidak dapat digunakan untuk transfer.",
+    "message": "Doa restu dan kehadiran Bapak/Ibu/Saudara/i merupakan kehormatan serta hadiah terindah bagi kami. Informasi rekening berikut semata-mata contoh tampilan untuk demo katalog dan tidak dapat digunakan untuk transaksi. Mohon tidak melakukan transfer.",
     "accounts": [
       {
         "bank": "Bank BCA",
         "logo": "bank/logo-bca.svg",
         "accountNumber": "0000000000",
-        "accountHolder": "Arkan Pradipta — CONTOH DEMO"
-      },
-      {
-        "bank": "Bank BRI",
-        "logo": "bank/logo-bri.svg",
-        "accountNumber": "0000000000",
-        "accountHolder": "Contoh Rekening — JANGAN TRANSFER"
+        "accountHolder": "Arkan Pradipta — REKENING DEMO"
       },
       {
         "bank": "Bank Mandiri",
         "logo": "bank/logo-mandiri.svg",
         "accountNumber": "0000000000",
-        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO"
+        "accountHolder": "Sekar Ayuningtyas — REKENING DEMO"
       }
     ]
   },
@@ -125,15 +124,19 @@
   "demoGreetings": [
     {
       "name": "Keluarga Pradipta",
-      "message": "Semoga perjalanan kalian selalu dipenuhi ketenangan, kasih sayang, dan keberanian untuk saling memahami."
+      "message": "Selamat menempuh kehidupan baru. Semoga Allah SWT senantiasa melimpahkan keberkahan, menghadirkan sakinah, mawaddah, dan rahmah, serta menguatkan dalam setiap langkah kehidupan."
     },
     {
       "name": "Sahabat Sekar",
-      "message": "Untuk dua hati yang saling memilih, semoga rumah kalian selalu menjadi tempat paling hangat untuk pulang."
+      "message": "Semoga ikatan suci ini menjadi awal perjalanan yang penuh ketulusan. Saling menguatkan dalam suka dan duka, serta selalu menemukan alasan untuk bersyukur dan bertumbuh bersama."
     },
     {
-      "name": "Teman Perjalanan",
-      "message": "Selamat memulai bab baru. Semoga hal-hal kecil selalu menjadi alasan untuk jatuh cinta lagi."
+      "name": "Sahabat Arkan",
+      "message": "Barakallahu laka wa baraka ‘alaika wa jama‘a bainakuma fii khair. Semoga menjadi keluarga yang harmonis, penuh kasih sayang, dan senantiasa dalam lindungan-Nya."
+    },
+    {
+      "name": "Keluarga Besar",
+      "message": "Dengan doa terbaik, semoga rumah tangga yang dibangun menjadi tempat pulang yang menenteramkan, dipenuhi rasa hormat, kesabaran, dan kebahagiaan yang sederhana namun bermakna."
     }
   ],
   "schemaVersion": 2,
@@ -152,12 +155,12 @@
     "hashtag": true,
     "quotes": true
   },
-  "hashtag": "#ArkanSekarInBloom",
+  "hashtag": "#ArkanSekarWedding",
   "seo": {
-    "title": "Arkan & Sekar — Demo Undangan Velvet Romance | Omah Aksara",
-    "description": "Pratinjau undangan pernikahan digital Omah Aksara. Data acara dan rekening hanya contoh."
+    "title": "Arkan & Sekar | Undangan Pernikahan — Omah Aksara",
+    "description": "Demo undangan pernikahan digital premium Omah Aksara dengan desain Lumière Bloom. Nama, jadwal, lokasi, galeri, dan rekening merupakan simulasi untuk pratinjau katalog."
   },
   "opening": {
-    "text": "Dengan segala kerendahan hati dan penuh rasa syukur, kami mengundang Bapak/Ibu, keluarga, serta sahabat untuk menjadi bagian dari hari ketika dua cerita menyatu dalam satu perjalanan."
+    "text": "Assalamu’alaikum warahmatullahi wabarakatuh. Dengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami. Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, memberikan doa restu, dan menjadi bagian dari awal perjalanan baru kami."
   }
 }
