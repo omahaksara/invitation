@@ -6,7 +6,9 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const CLIENTS = path.join(ROOT, 'clients');
-const ALLOWED_THEMES = new Set(['karsa', 'royal-vintage', 'sirein', 'aksara-signature', 'botanical-garden', 'velvet-romance', 'romantic-floral']);
+const THEME_REGISTRY_PATH = path.join(ROOT, 'templates', 'registry.json');
+const THEME_REGISTRY = JSON.parse(fs.readFileSync(THEME_REGISTRY_PATH, 'utf8'));
+const ALLOWED_THEMES = new Set((THEME_REGISTRY.themes || []).filter(theme => theme && theme.status === 'active').map(theme => theme.slug));
 const errors = [];
 const warnings = [];
 
@@ -157,6 +159,16 @@ function validateClient(slug, file) {
 
   for (const asset of collectAssetCandidates(data)) {
     validateAsset(slug, file, asset.key, asset.value);
+  }
+}
+
+for (const theme of THEME_REGISTRY.themes || []) {
+  if (!theme || typeof theme.slug !== 'string' || !/^[a-z0-9][a-z0-9-]*$/.test(theme.slug)) {
+    errors.push('templates/registry.json: setiap tema harus memiliki slug yang valid.');
+    continue;
+  }
+  if (theme.status === 'active' && !fs.existsSync(path.join(ROOT, 'templates', theme.slug, 'index.html'))) {
+    errors.push('Tema aktif ' + theme.slug + ' tercatat di registry tetapi templates/' + theme.slug + '/index.html tidak ditemukan.');
   }
 }
 
