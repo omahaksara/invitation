@@ -48,7 +48,7 @@ jobs:
           const themeNames = registry.themes.filter(theme => theme.status === 'active').map(theme => theme.slug);
           const themes = themeNames.map(name => 'templates/' + name + '/index.html');
           const indexHtml = fs.readFileSync('index.html', 'utf8');
-          const engineVersion = indexHtml.match(/core\\/app\\.js\\?v=([^"']+)/)?.[1];
+          const engineVersion = indexHtml.match(/core\/app\.js\?v=([^"']+)/)?.[1];
           assert.ok(engineVersion, 'index.html must version the shared engine script');
           assert.ok(indexHtml.includes('core/global.css?v=' + engineVersion), 'shared CSS cache version must match engine version');
           assert.ok(app.includes('dataUrl.searchParams.set("_v", "' + engineVersion + '");'), 'client data cache version must match engine version');
