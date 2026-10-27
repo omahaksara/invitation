@@ -10,20 +10,23 @@
     "title": "Undangan Pernikahan",
     "subtitle": "The Wedding of",
     "image": "foto-sampul.jpg",
-    "heroImage": "foto-sampul.jpg"
+    "heroImage": "foto-sampul.jpg",
+    "eyebrow": "DENGAN PENUH CINTA & DOA",
+    "dateLabel": "12 Juni 2027",
+    "buttonText": "Buka Kisah Kami"
   },
   "couple": {
     "groom": {
       "nickname": "Arkan",
       "fullName": "Arkan Pradipta",
-      "parents": "Putra dari keluarga Pradipta",
+      "parents": "Putra pertama dari Bapak Aditya Pradipta & Ibu Larasati",
       "photo": "foto-pria.jpg",
       "instagram": ""
     },
     "bride": {
       "nickname": "Sekar",
       "fullName": "Sekar Ayuningtyas",
-      "parents": "Putri dari keluarga Ayuningtyas",
+      "parents": "Putri kedua dari Bapak Wiratama Ayuningtyas & Ibu Ratih Puspitasari",
       "photo": "foto-wanita.jpg",
       "instagram": ""
     }
@@ -38,9 +41,9 @@
       "title": "Akad Nikah",
       "date": "12 Juni 2027",
       "time": "08:00 - 10:00 WITA",
-      "location": "Taman Seruni",
-      "address": "Alamat contoh untuk pratinjau",
-      "mapsUrl": "https://maps.google.com/?q=Makassar",
+      "location": "Taman Seruni — Garden Pavilion",
+      "address": "Lokasi contoh untuk pratinjau demo, Makassar",
+      "mapsUrl": "https://maps.google.com/?q=Taman+Seruni+Makassar",
       "dateISO": "2027-06-12",
       "startTime": "08:00",
       "endTime": "10:00",
@@ -50,9 +53,9 @@
       "title": "Resepsi Pernikahan",
       "date": "12 Juni 2027",
       "time": "11:00 - 14:00 WITA",
-      "location": "Taman Seruni",
-      "address": "Alamat contoh untuk pratinjau",
-      "mapsUrl": "https://maps.google.com/?q=Makassar",
+      "location": "Taman Seruni — Glasshouse",
+      "address": "Lokasi contoh untuk pratinjau demo, Makassar",
+      "mapsUrl": "https://maps.google.com/?q=Taman+Seruni+Makassar",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
       "endTime": "14:00",
@@ -65,18 +68,23 @@
   "story": [
     {
       "year": "2022",
-      "title": "Awal Bertemu",
-      "description": "Pertemuan sederhana menjadi awal dari kisah yang berarti."
+      "title": "Sebuah Pertemuan",
+      "description": "Di antara banyak wajah dan cerita, semesta mempertemukan kami dalam percakapan sederhana. Tak ada yang istimewa saat itu—sampai kami sadar ingin mengenal lebih jauh."
     },
     {
       "year": "2024",
-      "title": "Memantapkan Hati",
-      "description": "Kami belajar tumbuh, memahami, dan menerima satu sama lain."
+      "title": "Memilih untuk Bertumbuh",
+      "description": "Kami belajar bahwa cinta bukan tentang selalu sepakat, melainkan tentang saling mendengar, memberi ruang, dan tetap memilih berjalan bersama."
     },
     {
       "year": "2026",
-      "title": "Menuju Hari Bahagia",
-      "description": "Dengan restu keluarga, kami bersiap memulai babak baru."
+      "title": "Restu yang Menguatkan",
+      "description": "Dengan doa keluarga dan hati yang mantap, kami menyampaikan niat untuk melangkah lebih jauh. Kini, kami bersiap menulis bab baru."
+    },
+    {
+      "year": "2027",
+      "title": "Selamanya Dimulai",
+      "description": "Di hadapan keluarga dan sahabat, kami ingin merayakan janji sederhana: pulang, tumbuh, dan menua bersama."
     }
   ],
   "gallery": [
@@ -86,7 +94,7 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "CONTOH DEMO — data rekening ini fiktif. JANGAN MELAKUKAN TRANSFER.",
+    "message": "Kehadiran dan doa restu Anda adalah hadiah paling berarti. Informasi rekening di bawah hanya simulasi untuk demo dan tidak dapat digunakan untuk transfer.",
     "accounts": [
       {
         "bank": "Bank BCA",
@@ -116,12 +124,16 @@
   },
   "demoGreetings": [
     {
-      "name": "Keluarga Contoh",
-      "message": "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah."
+      "name": "Keluarga Pradipta",
+      "message": "Semoga perjalanan kalian selalu dipenuhi ketenangan, kasih sayang, dan keberanian untuk saling memahami."
     },
     {
-      "name": "Sahabat Demo",
-      "message": "Selamat menempuh hidup baru. Bahagia selalu!"
+      "name": "Sahabat Sekar",
+      "message": "Untuk dua hati yang saling memilih, semoga rumah kalian selalu menjadi tempat paling hangat untuk pulang."
+    },
+    {
+      "name": "Teman Perjalanan",
+      "message": "Selamat memulai bab baru. Semoga hal-hal kecil selalu menjadi alasan untuk jatuh cinta lagi."
     }
   ],
   "schemaVersion": 2,
@@ -140,9 +152,12 @@
     "hashtag": true,
     "quotes": true
   },
-  "hashtag": "#ArkanSekarStory",
+  "hashtag": "#ArkanSekarInBloom",
   "seo": {
-    "title": "Demo Undangan Pernikahan Arkan & Sekar | Omah Aksara",
-    "description": "Contoh undangan digital Omah Aksara. Seluruh data acara dan rekening pada demo ini hanya contoh."
+    "title": "Arkan & Sekar — Demo Undangan Velvet Romance | Omah Aksara",
+    "description": "Pratinjau undangan pernikahan digital Omah Aksara. Data acara dan rekening hanya contoh."
+  },
+  "opening": {
+    "text": "Dengan segala kerendahan hati dan penuh rasa syukur, kami mengundang Bapak/Ibu, keluarga, serta sahabat untuk menjadi bagian dari hari ketika dua cerita menyatu dalam satu perjalanan."
   }
 }
