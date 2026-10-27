@@ -9,7 +9,10 @@ const themes = [
   { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "romantic-floral", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }
+  { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }
 ];
 
 (async () => {
