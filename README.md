@@ -15,6 +15,30 @@ Daftar tema aktif disimpan di [`templates/registry.json`](templates/registry.jso
 
 Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
 
+## Standar penambahan tema baru
+
+Tema baru harus berbeda secara visual, tetapi tetap memakai kontrak fitur engine yang sama. Jangan menyalin satu tema lalu hanya mengganti warna dan nama.
+
+### Alur kerja tema
+1. Tentukan konsep visual terlebih dahulu: target suasana, palet warna, pasangan font, pola layout, bentuk ornamen, gaya galeri, cover, dan animasi. Catat pembeda tema agar tidak menjadi variasi kosmetik dari tema yang sudah ada.
+2. Buat `templates/<slug>/index.html`. Gunakan HTML/CSS tema untuk presentasi; jangan menanam ulang logika RSVP, buku tamu, data pasangan, atau pemilihan tema yang sudah menjadi tugas `core/app.js`.
+3. Pertahankan binding dan selector kontrak yang dipakai engine serta smoke test. Jika struktur DOM memang berbeda, tambahkan kontrak tema secara eksplisit di `scripts/smoke-templates.cjs`.
+4. Daftarkan tema satu kali di `templates/registry.json` dengan slug unik dan status yang benar. Jangan mengaktifkan tema sebelum aset, data, dan tesnya siap.
+5. Uji tema pada data demo dan sekurangnya viewport ponsel 390px serta desktop. Pastikan tidak ada horizontal overflow, teks terpotong, tombol tertutup, atau section kosong ketika fitur dimatikan.
+6. Jalankan `npm run test:static` dan seluruh smoke test Chromium sebelum meminta review. Periksa juga keyboard, kontras, reduced motion, status formulir, gambar gagal dimuat, dan jaringan lambat secara manual.
+
+### Batas performa dan anti-lag
+- Utamakan HTML/CSS/JavaScript biasa; jangan menambah framework atau pustaka besar hanya untuk efek dekoratif.
+- Gunakan aset lokal yang dioptimalkan dan ukuran gambar yang wajar. Hindari gambar latar raksasa, video autoplay, GIF berat, serta permintaan font atau library eksternal yang tidak perlu.
+- Animasi hanya untuk properti ringan seperti `transform` dan `opacity`; hindari animasi terus-menerus, layout thrashing, dan listener scroll yang berat.
+- Hormati `prefers-reduced-motion`; konten inti harus tetap terbaca tanpa animasi.
+- Jangan membuat fetch duplikat untuk data atau tema, jangan menambahkan polling tanpa kebutuhan, dan jangan memblokir interaksi utama saat efek dekoratif dimuat.
+- Jaga konsol bersih dari error, cek gambar/font gagal dimuat, dan ukur hasil pada ponsel kelas menengah—bukan hanya desktop pengembang.
+- Jangan menurunkan standar tema lain untuk meloloskan tes tema baru. Perbaiki akar masalah bersama bila regresi menyentuh engine.
+
+### Gerbang aktivasi tema
+Tema baru berstatus belum aktif sampai: kontrak fitur lengkap, aset demo aman, seluruh smoke test lulus, pemeriksaan ponsel/desktop selesai, dan review visual dilakukan. Setelah siap, ubah status registry menjadi `active`. Tema yang gagal atau belum lengkap tetap nonaktif agar tidak muncul di katalog maupun dipilih sebagai tema undangan.
+
 ## URL demo
 
 ```text
