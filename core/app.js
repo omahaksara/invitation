@@ -35,8 +35,9 @@
       if (!activeThemes.size) throw new Error("Daftar tema resmi belum memiliki tema aktif.");
       const isThemeSlug = value => /^[a-z0-9][a-z0-9-]*$/i.test(value || "");
       const resolveThemeAlias = value => value === "royal" ? "royal-vintage" : value;
-      const requested = data.demoMode === true && isThemeSlug(params.get("theme"))
+      const requestedAlias = data.demoMode === true && isThemeSlug(params.get("theme"))
         ? resolveThemeAlias(params.get("theme")) : "";
+      const requested = requestedAlias;
       const configured = isThemeSlug(data.theme) ? resolveThemeAlias(data.theme) : "";
       const fallbackTheme = activeThemes.has("karsa") ? "karsa" : activeThemes.values().next().value;
       const theme = (requested && activeThemes.has(requested) ? requested : "")
