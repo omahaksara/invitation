@@ -9,7 +9,7 @@ assert.ok(groomTemplate.includes('data-bind="couple.bride.nickname"'), "Groom: m
 assert.ok(groomTemplate.includes('id="rsvp-form"'), "Groom: shared RSVP form missing");
 assert.ok(groomTemplate.includes('id="wishes-form"'), "Groom: shared guestbook form missing");
 assert.ok(groomTemplate.includes('id="bg-music"'), "Groom: shared music control missing");
-assert.ok(!/ReactDOM\\.createRoot|createRoot\\(document\\.getElementById/.test(groomTemplate), "Groom: standalone React mount must not return");
+assert.ok(!groomTemplate.includes("ReactDOM.createRoot") && !groomTemplate.includes("createRoot(document.getElementById"), "Groom: standalone React mount must not return");
 assert.ok(!/Alfia|Fikri/.test(groomTemplate), "Groom: hardcoded legacy demo couple names must not return");
 
 const themes = [
