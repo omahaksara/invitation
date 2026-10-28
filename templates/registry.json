@@ -61,6 +61,11 @@
       "slug": "kinze",
       "name": "Kinze",
       "status": "draft"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom",
+      "status": "draft"
     }
   ]
 }
