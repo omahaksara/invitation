@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-// Production browser smoke: reads the live catalogue and guestbook only.
-// Never submits RSVP or guestbook forms. A guestbook GET may auto-register
-// an already-published slug in Settings if it is missing, as designed by the backend.
+// Production browser smoke: checks the public catalogue and published invitation.
+// It never reads or writes the live RSVP/guestbook API: even a guestbook GET
+// can auto-register a slug in Settings, so Apps Script requests are blocked.
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 
