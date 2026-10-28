@@ -1,5 +1,16 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const groomTemplate = fs.readFileSync("templates/groom/index.html", "utf8");
+
+// Groom must remain a fragment consumed by the shared V2 engine, not a standalone app.
+assert.ok(groomTemplate.includes('data-bind="couple.groom.nickname"'), "Groom: missing V2 groom binding");
+assert.ok(groomTemplate.includes('data-bind="couple.bride.nickname"'), "Groom: missing V2 bride binding");
+assert.ok(groomTemplate.includes('id="rsvp-form"'), "Groom: shared RSVP form missing");
+assert.ok(groomTemplate.includes('id="wishes-form"'), "Groom: shared guestbook form missing");
+assert.ok(groomTemplate.includes('id="bg-music"'), "Groom: shared music control missing");
+assert.ok(!/ReactDOM\\.createRoot|createRoot\\(document\\.getElementById/.test(groomTemplate), "Groom: standalone React mount must not return");
+assert.ok(!/Alfia|Fikri/.test(groomTemplate), "Groom: hardcoded legacy demo couple names must not return");
 
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
