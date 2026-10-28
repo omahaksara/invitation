@@ -148,7 +148,8 @@ jobs:
         run: node scripts/check-live-api.cjs
 
   production-browser-smoke:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Public pages are checked on PRs too; the script blocks Apps Script calls.
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request'
     needs: [static-audit, live-api-readiness]
     runs-on: ubuntu-latest
     steps:
