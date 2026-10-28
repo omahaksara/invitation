@@ -39,6 +39,80 @@ Tema baru harus berbeda secara visual, tetapi tetap memakai kontrak fitur engine
 ### Gerbang aktivasi tema
 Tema baru berstatus belum aktif sampai: kontrak fitur lengkap, aset demo aman, seluruh smoke test lulus, pemeriksaan ponsel/desktop selesai, dan review visual dilakukan. Setelah siap, ubah status registry menjadi `active`. Tema yang gagal atau belum lengkap tetap nonaktif agar tidak muncul di katalog maupun dipilih sebagai tema undangan.
 
+## Portofolio gaya tema dan standar diferensiasi
+
+Tujuan katalog bukan sekadar banyak pilihan warna. Setiap tema baru harus menawarkan **bahasa visual dan pengalaman membuka undangan yang berbeda**. Referensi tren adalah bahan riset, bukan jaminan bahwa semua gaya sedang paling laku; evaluasi minat pelanggan dari klik demo, pertanyaan calon klien, dan pesanan nyata.
+
+### Keluarga gaya yang layak dikembangkan
+
+| Keluarga gaya | Ciri identitas yang harus terlihat |
+| --- | --- |
+| Editorial / fashion magazine | Tipografi display besar, grid editorial, foto full-bleed, ruang kosong, susunan seperti majalah |
+| Cinematic / film wedding | Cover seperti poster film, foto atmosferik, transisi adegan yang terukur, narasi visual |
+| Royal Nusantara / adat | Ornamen dan motif budaya yang spesifik, komposisi seremonial, detail tradisi yang diteliti—bukan ornamen acak |
+| Javanese / Sundanese heritage | Motif, aksara, simbol, dan palet yang sesuai tradisi yang dipilih; validasi istilah dan makna |
+| Botanical / garden | Ilustrasi flora, komposisi organik, garis lembut, nuansa taman |
+| Vintage / archival | Tekstur kertas, bingkai foto arsip, cap atau segel ilustratif, warna sepia yang terkontrol |
+| Contemporary minimal | Tipografi dan proporsi sebagai fokus, ruang kosong, elemen sedikit namun presisi |
+| Romantic / fine-art floral | Ilustrasi bunga, komposisi lembut, detail dekoratif dan galeri romantis |
+| Dark luxury / noir | Kontras gelap, cahaya dramatis, detail metalik secukupnya, keterbacaan tinggi |
+| Art Deco / geometric | Geometri simetris, garis arsitektural, pola dan tipografi era yang konsisten |
+| Coastal / tropical destination | Bentuk organik, ilustrasi lokasi, suasana pesisir atau tropis yang khas |
+| Whimsical / illustrated storybook | Ilustrasi khusus, babak cerita, karakter atau lanskap visual yang konsisten |
+| Modern playful / retro | Tipografi ekspresif, bentuk grafis berani, komposisi dinamis, warna yang terarah |
+| Architecture / venue-led | Ilustrasi venue, siluet bangunan, peta atau garis arsitektural sebagai identitas |
+| Photo-journal / documentary | Foto candid, caption editorial, urutan cerita seperti album dokumenter |
+| Interactive paper / scrapbook | Lapisan kertas, amplop, surat, stempel dan reveal interaktif yang ringan |
+
+Daftar ini adalah portofolio arah kreatif, bukan pernyataan bahwa semua tema tersebut sudah tersedia. Prioritaskan pengembangan bertahap berdasarkan celah nyata di katalog, bukan membuat banyak tema sekaligus tanpa pemeriksaan mutu.
+
+### Transisi dan interaksi: pilih sesuai karakter tema
+
+Transisi bukan hanya fade yang sama pada semua tema. Tiap tema boleh memilih satu pola utama yang sesuai identitasnya:
+- **Envelope / letter reveal:** amplop terbuka atau surat muncul untuk gaya klasik dan scrapbook.
+- **Editorial scene transition:** bagian cerita berganti seperti spread majalah atau potongan film.
+- **Curtain / arch reveal:** tirai atau bentuk lengkung membuka cover dengan gerakan singkat.
+- **Photo-led parallax:** foto bergerak sangat halus terhadap latar; matikan atau sederhanakan pada perangkat lemah.
+- **Paper-layer reveal:** lapisan kertas atau kartu tersingkap, tanpa simulasi 3D berat.
+- **Kinetic typography:** nama atau tanggal muncul bertahap; tetap sediakan teks lengkap langsung di DOM.
+- **Illustration bloom:** ornamen ilustrasi muncul perlahan untuk botanical atau floral.
+- **Scroll storytelling:** bagian tampil saat masuk viewport, tanpa mengunci scroll atau menyembunyikan isi penting.
+- **Traditional motif reveal:** pola atau ilustrasi adat tampil dengan hormat dan tidak mengubah simbol budaya menjadi dekorasi sembarang.
+
+Batasi setiap halaman pada satu transisi pembuka dan beberapa micro-interaction. Jangan menumpuk partikel, parallax, video latar, animasi teks, dan scroll effects sekaligus. Semua konten inti harus bisa dibaca jika animasi gagal, JavaScript terbatas, atau `prefers-reduced-motion: reduce` aktif. Hindari audio otomatis yang mengganggu; musik harus punya kontrol yang jelas.
+
+### Syarat agar tema benar-benar berbeda
+
+Sebelum implementasi, isi catatan desain singkat:
+1. Nama tema, keluarga gaya, dan target pasangan.
+2. Moodboard atau referensi visual dengan sumber yang dicatat.
+3. Layout cover dan susunan section, bukan hanya palet.
+4. Tipografi, bentuk ornamen, gaya foto/ilustrasi, dan treatment galeri.
+5. Pola transisi utama dan cara fallback tanpa animasi.
+6. Perbedaan yang bisa dijelaskan dibanding minimal dua tema terdekat di katalog.
+
+Jika satu-satunya perbedaan adalah warna, font, atau dekorasi kecil, tema itu belum layak dianggap tema baru. Buat perubahan layout dan karakter interaksi yang nyata.
+
+### Performa dan kualitas yang wajib dijaga
+
+- Mobile-first: mulai desain dari layar sempit; tombol nyaman disentuh, isi tidak melebar horizontal, dan RSVP mudah diisi dengan satu tangan.
+- Optimalkan gambar ke ukuran tampilan, gunakan format modern jika kompatibel, lazy-load gambar di bawah fold, dan jangan lazy-load elemen cover utama yang diperlukan untuk kesan awal.
+- Hindari video latar sebagai default, library animasi besar, efek blur berlapis, filter mahal, canvas/particle terus berjalan, dan scroll handler berat.
+- Animasi utamakan `transform` dan `opacity`, durasi singkat, serta hentikan animasi yang tidak terlihat bila memungkinkan.
+- Hormati `prefers-reduced-motion`; jangan menyembunyikan konten sampai animasi berjalan.
+- Tetapkan anggaran performa untuk setiap tema: ukuran transfer awal, jumlah request, dan hasil pengukuran Core Web Vitals/lighthouse pada perangkat simulasi. Catat hasil aktual; jangan mengklaim "anti-lag" hanya karena smoke test lulus.
+- Uji jaringan lambat, gambar gagal, font eksternal tidak tersedia, tombol keyboard, kontras, label formulir, dan error state.
+- Pertahankan fitur dan keamanan engine bersama; jangan menduplikasi API atau menyentuh data pelanggan untuk membuat efek tema.
+
+### Prioritas portofolio dan pembelajaran dari pelanggan
+
+1. Petakan 11 tema aktif ke keluarga gaya di atas untuk menemukan kemiripan dan celah; jangan langsung menambah tema yang tumpang tindih.
+2. Buat kandidat tema dalam status nonaktif/draft sampai aset, kontrak smoke test, dan review visual selesai.
+3. Tampilkan preview yang mewakili gaya, bukan hanya thumbnail warna. Jika memungkinkan, sediakan preview cover, tampilan saat scroll, dan bagian RSVP.
+4. Catat minat calon klien per gaya dan tema yang mereka buka atau tanyakan. Gunakan data agregat secukupnya; jangan mengumpulkan informasi pribadi yang tidak diperlukan.
+5. Kembangkan tema berikutnya berdasarkan kombinasi permintaan pelanggan, keunikan visual, kemudahan pemeliharaan, dan hasil uji performa.
+6. Jangan aktifkan tema atau ubah katalog publik sampai PR ditinjau dan semua gerbang rilis dipenuhi.
+
 ## URL demo
 
 ```text
