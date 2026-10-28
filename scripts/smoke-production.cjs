@@ -95,38 +95,30 @@ async function main() {
       'Ani', 'Published bride data must load.');
     assert.ok(await invitation.locator('#bg-music').getAttribute('src'), 'Invitation music source must be bound.');
 
-    // Execute the same cross-origin GET in the real browser context used by guests.
-    // This is read-only and does not submit any form.
-    const guestbook = await invitation.evaluate(async () => {
-      const apiUrl = window.__invitationData?.integrations?.apiUrl;
-      if (!apiUrl) throw new Error('Published invitation has no configured API URL.');
-      const url = new URL(apiUrl);
-      url.searchParams.set('action', 'guestbook');
-      url.searchParams.set('slug', 'budi-ani');
-      const response = await fetch(url, { cache: 'no-store', redirect: 'follow' });
-      if (!response.ok) throw new Error('Guestbook GET returned HTTP ' + response.status + '.');
-      const result = await response.json();
-      if (!result || result.ok !== true || !Array.isArray(result.items)) {
-        throw new Error('Guestbook GET returned an invalid API response.');
+    // Keep this production smoke strictly non-mutating: block Apps Script API
+    // calls in the browser. Even a guestbook GET can auto-register a slug in
+    // Settings when missing, so production smoke must not call the live API.
+    await invitation.route('**/*', async route => {
+      const requestUrl = route.request().url();
+      if (requestUrl.includes('script.google.com/macros/s/')) {
+        await route.abort();
+      } else {
+        await route.continue();
       }
-      return { count: result.items.length };
     });
-    await invitation.waitForFunction(count => {
-      const root = document.getElementById('wishes-list');
-      if (!root) return false;
-      const cards = root.querySelectorAll('.wish-card').length;
-      const empty = Boolean(root.querySelector('.empty-wishes'));
-      return count === 0 ? empty : cards === count;
-    }, guestbook.count, { timeout: 10000 });
 
+    assert.ok(await invitation.locator('#wishes-list').count(),
+      'Published invitation must include the guestbook display container.');
+    assert.ok(await invitation.locator('#wishes-form').count(),
+      'Published invitation must include the guestbook form.');
+    assert.ok(await invitation.locator('#rsvp-form').count(),
+      'Published invitation must include the RSVP form.');
     const layout = await invitation.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       page: document.documentElement.scrollWidth
     }));
     assert.ok(layout.page <= layout.viewport + 2, 'Published invitation overflows mobile width: ' + JSON.stringify(layout));
     assert.equal(pageErrors.length, 0, 'Published invitation JavaScript errors: ' + pageErrors.join('; '));
-    console.log('PASS live Budi–Ani invitation: couple data, RSVP, guestbook GET (' + guestbook.count +
-      ' entries), music source, and mobile width. No production forms were submitted; a published slug may auto-register in Settings if missing.');
     await catalogue.close();
     await invitation.close();
   } finally {
