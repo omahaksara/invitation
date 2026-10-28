@@ -56,6 +56,11 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom — Serenade Taupe",
+      "status": "draft"
     }
   ]
 }
