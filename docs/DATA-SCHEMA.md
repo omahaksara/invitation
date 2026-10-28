@@ -43,7 +43,7 @@ Jika fitur memerlukan data atau layanan yang belum siap, engine harus menyembuny
 
 ## Hadiah, media, dan integrasi
 
-- `gifts`: `message` dan daftar `accounts` berisi `bank`, `accountNumber`, `accountHolder`, `logo` opsional untuk logo bank (path relatif dari folder klien atau URL), serta `qrCode` opsional bila pemilik memberi QR valid.
+- `gifts`: objek dengan `message`, opsional `enabled` (boolean untuk seluruh bagian hadiah), dan daftar `accounts`. Setiap metode dapat memakai `type` (`bank`, `ewallet`, atau `qris`), `enabled` (boolean; `false` menyembunyikan metode itu saja), `provider`/`bank`, `accountHolder`, `logo`, `accountNumber` atau `phoneNumber`, serta `qrCode`/`qr.src` opsional. `type` yang tidak ditulis dianggap `bank` agar data lama tetap kompatibel. Untuk `qris`, jangan tampilkan tombol salin nomor jika tidak ada nomor tujuan. QR pembayaran demo wajib berupa gambar simulasi yang jelas berlabel DEMO dan tidak dapat digunakan untuk transaksi; jangan memakai QR asli milik siapa pun.
 - `media.music`: URL atau path relatif untuk musik.
 - `integrations.apiUrl`: URL HTTPS deployment backend yang dipilih untuk undangan tersebut.
 - `api.apiUcapan` atau `api.apiUrl`: nama properti lama yang dibaca adaptor saat migrasi.
