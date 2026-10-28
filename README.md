@@ -23,9 +23,9 @@ https://omahaksara.github.io/invitation/?c=demo-katalog&theme=karsa&to=Nama+Tamu
 
 - `c`: slug folder undangan di `clients/`.
 - `to`: nama tamu opsional.
-- `theme`: hanya berlaku untuk data dengan `demoMode: true`; hanya untuk pratinjau dan tidak mengubah tema tersimpan.
+- `theme`: hanya berlaku untuk data dengan `demoMode: true`; hanya untuk pratinjau dan tidak mengubah tema tersimpan. Tema yang diminta harus berstatus `active` di registry resmi.
 
-Undangan pelanggan publik memakai tema dari `data.json`. Nilai tema dibatasi ke daftar resmi.
+Undangan pelanggan publik memakai tema dari `data.json`. Engine dan smoke test membaca `templates/registry.json` sebagai daftar tema aktif tunggal. Setiap tema aktif wajib memiliki kontrak smoke test; tema baru yang belum memiliki kontrak akan menggagalkan pemeriksaan.
 
 ## Data dan fitur
 
