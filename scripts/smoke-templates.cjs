@@ -61,6 +61,20 @@ const themes = [
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
 
+        // JSON-driven gift methods must render consistently in every theme.
+        const giftAudit = await page.evaluate(() => ({
+          cards: document.querySelectorAll("#gift-list .gift-card").length,
+          ewallet: Array.from(document.querySelectorAll("#gift-list .gift-bank")).some(el => el.textContent.includes("Dompet Digital")),
+          qris: Array.from(document.querySelectorAll("#gift-list .gift-bank")).some(el => el.textContent.includes("QRIS")),
+          demoQr: Array.from(document.querySelectorAll("#gift-list img")).some(img =>
+            img.getAttribute("src")?.endsWith("/clients/demo-katalog/qr-demo.svg") &&
+            img.getAttribute("alt") === "Kode QR pembayaran")
+        }));
+        assert.equal(giftAudit.cards, 4, theme.slug + ": jumlah metode hadiah demo tidak sesuai data.json " + JSON.stringify(giftAudit));
+        assert.equal(giftAudit.ewallet, true, theme.slug + ": metode dompet digital tidak dirender");
+        assert.equal(giftAudit.qris, true, theme.slug + ": metode QRIS tidak dirender");
+        assert.equal(giftAudit.demoQr, true, theme.slug + ": aset QR simulasi tidak dirender");
+
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
           cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
