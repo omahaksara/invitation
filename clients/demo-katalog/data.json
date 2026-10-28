@@ -103,19 +103,40 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Doa restu dan kehadiran Bapak/Ibu/Saudara/i merupakan kehormatan serta hadiah terindah bagi kami. Informasi rekening berikut semata-mata contoh tampilan untuk demo katalog dan tidak dapat digunakan untuk transaksi. Mohon tidak melakukan transfer.",
+    "enabled": true,
+    "message": "Doa restu dan kehadiran Bapak/Ibu/Saudara/i merupakan kehormatan serta hadiah terindah bagi kami. Semua nama, nomor tujuan, dan QR pada bagian ini hanyalah simulasi tampilan katalog, tidak terhubung ke rekening atau dompet digital mana pun, dan tidak dapat digunakan untuk transaksi. Mohon tidak melakukan transfer.",
     "accounts": [
       {
+        "type": "bank",
+        "enabled": true,
+        "provider": "Bank BCA",
         "bank": "Bank BCA",
         "logo": "bank/logo-bca.svg",
         "accountNumber": "0000000000",
         "accountHolder": "Arkan Pradipta — REKENING DEMO"
       },
       {
+        "type": "bank",
+        "enabled": true,
+        "provider": "Bank Mandiri",
         "bank": "Bank Mandiri",
         "logo": "bank/logo-mandiri.svg",
         "accountNumber": "0000000000",
         "accountHolder": "Sekar Ayuningtyas — REKENING DEMO"
+      },
+      {
+        "type": "ewallet",
+        "enabled": true,
+        "provider": "Dompet Digital — Simulasi",
+        "phoneNumber": "0000000000",
+        "accountHolder": "Tujuan Dompet Digital Demo"
+      },
+      {
+        "type": "qris",
+        "enabled": true,
+        "provider": "QRIS — Simulasi",
+        "accountHolder": "QR demo tidak dapat dipindai untuk pembayaran",
+        "qrCode": "qr-demo.svg"
       }
     ]
   },

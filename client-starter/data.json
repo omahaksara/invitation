@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 2,
+  "slug": "ganti-dengan-slug-mempelai",
+  "status": "draft",
+  "demoMode": false,
+  "theme": "karsa",
+  "guest": {
+    "defaultName": "Tamu Undangan"
+  },
+  "seo": {
+    "title": "Undangan Pernikahan | Omah Aksara",
+    "description": "Undangan pernikahan digital."
+  },
+  "cover": {
+    "title": "Undangan Pernikahan",
+    "subtitle": "The Wedding of",
+    "image": "",
+    "heroImage": "",
+    "eyebrow": "BISMILLĀHIRRAḤMĀNIRRAḤĪM",
+    "dateLabel": "",
+    "buttonText": "Buka Undangan"
+  },
+  "couple": {
+    "groom": {
+      "nickname": "",
+      "fullName": "",
+      "parents": "",
+      "photo": "",
+      "instagram": ""
+    },
+    "bride": {
+      "nickname": "",
+      "fullName": "",
+      "parents": "",
+      "photo": "",
+      "instagram": ""
+    }
+  },
+  "quote": {
+    "arab": "",
+    "text": "",
+    "source": ""
+  },
+  "opening": {
+    "text": "Dengan memohon rahmat dan ridha Tuhan Yang Maha Esa, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu."
+  },
+  "events": {
+    "akad": {
+      "title": "Akad Nikah",
+      "date": "",
+      "dateISO": "",
+      "startTime": "",
+      "endTime": "",
+      "timezone": "Asia/Makassar",
+      "location": "",
+      "address": "",
+      "mapsUrl": ""
+    },
+    "resepsi": {
+      "title": "Resepsi Pernikahan",
+      "date": "",
+      "dateISO": "",
+      "startTime": "",
+      "endTime": "",
+      "timezone": "Asia/Makassar",
+      "location": "",
+      "address": "",
+      "mapsUrl": ""
+    }
+  },
+  "countdown": {
+    "targetDate": ""
+  },
+  "story": [],
+  "gallery": [],
+  "video": {
+    "src": "",
+    "poster": ""
+  },
+  "gifts": {
+    "enabled": true,
+    "message": "Doa restu dan kehadiran merupakan hadiah terindah bagi kami.",
+    "accounts": []
+  },
+  "media": {
+    "music": ""
+  },
+  "rsvp": {
+    "enabled": true,
+    "maxGuestCount": 2
+  },
+  "guestbook": {
+    "enabled": true,
+    "maxMessageLength": 500
+  },
+  "features": {
+    "countdown": true,
+    "calendar": true,
+    "loveStory": true,
+    "gallery": true,
+    "video": false,
+    "maps": true,
+    "music": false,
+    "gifts": true,
+    "rsvp": true,
+    "guestbook": true,
+    "guestName": true,
+    "hashtag": true,
+    "quotes": true
+  },
+  "hashtag": "",
+  "integrations": {
+    "apiUrl": ""
+  }
+}
