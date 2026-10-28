@@ -23,9 +23,11 @@ https://omahaksara.github.io/invitation/?c=demo-katalog&theme=karsa&to=Nama+Tamu
 
 - `c`: slug folder undangan di `clients/`.
 - `to`: nama tamu opsional.
-- `theme`: hanya berlaku untuk data dengan `demoMode: true`; hanya untuk pratinjau dan tidak mengubah tema tersimpan.
+- `theme`: untuk demo (`demoMode: true`), tema boleh dipilih untuk pratinjau berdasarkan slug tema yang aman. Untuk undangan pelanggan berstatus `published`, tema dari URL hanya menjadi override jika slug terdaftar dengan status `active` di `templates/registry.json`.
+- Jika tema override tidak valid, tidak aktif, atau registry tidak dapat diakses, engine kembali ke tema yang dikonfigurasi pada `data.json`.
+- Alias lama `royal` dinormalisasi menjadi `royal-vintage`.
 
-Undangan pelanggan publik memakai tema dari `data.json`. Nilai tema dibatasi ke daftar resmi.
+Tema override hanya berlaku untuk tampilan pada URL itu; nilai `theme` di `data.json` tidak ditulis ulang. Nilai tema default tetap harus termasuk daftar tema resmi yang aktif.
 
 ## Data dan fitur
 
