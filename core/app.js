@@ -215,7 +215,7 @@
     if (disabled("countdown")) hide("#countdown, .countdown");
     if (disabled("calendar")) hide(".calendar-section, #calendar-section");
     if (disabled("quotes") || disabled("quote")) hide(".quote-section, .quote");
-    if (disabled("gifts")) hide(".gift-section, #gift-section, #gift-list");
+    if (disabled("gifts") || (data.gifts && !Array.isArray(data.gifts) && data.gifts.enabled === false)) hide(".gift-section, #gift-section, #gift-list");
     if (disabled("rsvp")) hide("#rsvp-section, .rsvp-section, #rsvp-form, [data-bind='rsvp.link']");
     if (disabled("guestbook")) hide("#guestbook-section, .guestbook-section, #wishes-form");
     if (disabled("hashtag")) hide(".hashtag-section, #hashtag-section");
@@ -534,7 +534,8 @@
   }
 
   function renderGifts(gifts, clientBase) {
-    const accounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
+    const legacyAccounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
+    const accounts = legacyAccounts.filter(item => item && item.enabled !== false);
     let root = document.getElementById("gift-list");
 
     if (!root) {
@@ -553,30 +554,52 @@
     staticCards.forEach(card => { card.hidden = true; });
 
     if (root) root.replaceChildren();
-    if (!accounts.length || !root) return;
+    if (!accounts.length || !root || (gifts && !Array.isArray(gifts) && gifts.enabled === false)) return;
 
     accounts.forEach(item => {
-      const card = document.createElement("article"); card.className = "gift-card reveal";
+      const card = document.createElement("article");
+      card.className = "gift-card reveal";
+      const type = String(item.type || "bank").toLowerCase();
+      const provider = item.provider || item.bank || item.name || (type === "qris" ? "QRIS" : type === "ewallet" ? "Dompet Digital" : "HADIAH DIGITAL");
       const logoSrc = item.logo || item.bankLogo || "";
       if (logoSrc) {
         const logo = document.createElement("img");
         logo.src = assetUrl(logoSrc, clientBase);
-        logo.alt = (item.bank || "Bank") + " — logo";
+        logo.alt = provider + " — logo";
         logo.loading = "lazy";
         logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
         card.append(logo);
       }
-      const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
-      const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
-      const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
-      const button = document.createElement("button"); button.type = "button"; button.textContent = "Salin Nomor Rekening";
-      button.addEventListener("click", () => copyText(item.accountNumber || "", button));
-      card.append(bank, holder, number, button);
+
+      const label = document.createElement("p");
+      label.className = "gift-bank";
+      label.textContent = provider;
+      const holderText = item.accountHolder || item.accountName || item.holder || "";
+      const holder = document.createElement("h3");
+      holder.textContent = holderText || (type === "qris" ? "Pembayaran melalui QR" : "Penerima");
+      card.append(label, holder);
+
+      const destination = item.accountNumber || item.phoneNumber || item.destinationNumber || "";
+      if (destination) {
+        const number = document.createElement("p");
+        number.className = "gift-number";
+        number.textContent = destination;
+        card.append(number);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = type === "ewallet" ? "Salin Nomor Dompet Digital" : "Salin Nomor Rekening";
+        button.addEventListener("click", () => copyText(destination, button));
+        card.append(button);
+      }
+
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
       if (qrSrc) {
-        const img = document.createElement("img"); img.src = assetUrl(qrSrc, clientBase);
-        img.alt = "QR hadiah"; img.loading = "lazy"; img.style.cssText = "display:block;max-width:140px;width:100%;margin:18px auto 0";
+        const img = document.createElement("img");
+        img.src = assetUrl(qrSrc, clientBase);
+        img.alt = type === "qris" ? "Kode QR pembayaran" : "QR hadiah";
+        img.loading = "lazy";
+        img.style.cssText = "display:block;max-width:180px;width:100%;margin:18px auto 0";
         card.append(img);
       }
       root.append(card);
