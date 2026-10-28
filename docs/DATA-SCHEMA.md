@@ -7,8 +7,10 @@ Semua undangan baru menggunakan satu skema. Engine membaca format ini sebagai mo
 - `schemaVersion`: angka versi skema; data baru memakai `2`.
 - `slug`: identitas unik yang sama dengan folder `clients/<slug>/`.
 - `status`: `draft` atau `published`.
-- `theme`: slug tema yang berstatus `active` pada `templates/registry.json`. Jangan memelihara allowlist terpisah di katalog, validator, atau dokumentasi.
-- `demoMode`: hanya untuk demo katalog; mengizinkan `?theme=` memilih pratinjau tanpa mengubah tema tersimpan.
+- `theme`: slug tema default yang berstatus `active` pada `templates/registry.json`. Jangan memelihara allowlist terpisah di katalog, validator, atau dokumentasi.
+- Pada undangan `published`, parameter URL `?theme=` hanya boleh mengganti tampilan jika slug valid dan tercatat `active` pada registry. Jika registry gagal dibaca atau tema tidak valid/tidak aktif, engine harus memakai tema default dari data.
+- Alias `royal` dinormalisasi menjadi `royal-vintage`. Override URL tidak menulis ulang `data.json`.
+- `demoMode`: `true` hanya untuk demo katalog. Demo boleh memilih tema pratinjau melalui `?theme=` tanpa mengubah tema tersimpan.
 
 ## Pasangan dan konten
 
