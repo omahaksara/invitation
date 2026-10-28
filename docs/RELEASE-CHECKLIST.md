@@ -14,7 +14,9 @@ Jangan menandai rilis siap sebelum semua poin wajib memiliki bukti pengujian.
 - [ ] Identitas pasangan, orang tua, cerita, dan kutipan tampil benar.
 - [ ] Countdown dan tombol ekspor kalender menghasilkan tanggal/jam yang benar.
 - [ ] Galeri, lightbox, video opsional, dan peta bekerja.
-- [ ] Amplop digital, salin rekening, dan QR ditampilkan sesuai konfigurasi.
+- [ ] Amplop digital, transfer bank, GoPay/e-wallet, dan QRIS ditampilkan sesuai konfigurasi; nomor dan gambar QR mengikuti data pasangan yang benar.
+- [ ] Kartu hadiah digital, section fallback, tombol, dan status formulir mengikuti warna, tipografi, radius, dan kontras tema aktif (tidak terlihat seperti komponen tempelan).
+- [ ] Metode hadiah dengan `enabled: false` tidak dirender; data demo tidak memakai rekening/QR aktif atau mengklaim transaksi sungguhan.
 - [ ] Kontrol musik tidak menghilangkan ikon dan bisa diakses keyboard.
 - [ ] RSVP dan buku tamu ada di semua tema dengan validasi dan status jelas.
 - [ ] Nama tamu terpersonalisasi dengan aman.
@@ -29,7 +31,8 @@ Jangan menandai rilis siap sebelum semua poin wajib memiliki bukti pengujian.
 
 ## Kualitas dan publikasi
 - [ ] Pemeriksaan sintaks dan validasi data lulus.
-- [ ] Smoke test Chromium lulus untuk semua tema.
+- [ ] Smoke test Chromium membaca tema aktif dari `templates/registry.json` dan lulus untuk seluruh tema terdaftar.
+- [ ] Setiap tema aktif memiliki kontrak selector smoke test dan gagal cepat bila kontrak belum tersedia.
 - [ ] Desktop dan ponsel diperiksa secara visual.
 - [ ] Keyboard, kontras, label formulir, reduced motion, dan error state diperiksa.
 - [ ] Semua tautan demo katalog dan pemesanan diuji.
