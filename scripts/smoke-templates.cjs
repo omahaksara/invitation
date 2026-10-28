@@ -25,7 +25,7 @@ const themes = [
       page.on("pageerror", error => pageErrors.push(error.message));
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
-        const response = await page.goto(url, { waitUntil: "domcontentloaded" });
+        const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
         await page.waitForFunction(() => {
@@ -142,7 +142,7 @@ const themes = [
       });
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
-        const response = await page.goto(url, { waitUntil: "domcontentloaded" });
+        const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
         if (theme.open) {
