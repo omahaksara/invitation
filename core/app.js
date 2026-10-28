@@ -53,13 +53,35 @@
           console.warn("Tema dari link diabaikan; memakai tema bawaan undangan.", themeError);
         }
       }
-      const theme = requestedAlias || configuredAlias || "karsa";
-      const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
-      const templateUrl = new URL("index.html", themeBase);
-      templateUrl.searchParams.set("_v", "20261027c");
-      const templateResponse = await fetch(templateUrl, { cache: "no-store" });
-      if (!templateResponse.ok) throw new Error("Tema undangan tidak ditemukan: " + theme);
-      const templateHtml = await templateResponse.text();
+      // Never let a stale or mistyped theme slug turn the whole invitation into a blank/error page.
+      // Try the requested theme first, then the configured theme, then the known base theme.
+      const themeCandidates = [...new Set([requestedAlias, configuredAlias, "karsa"].filter(Boolean))];
+      let theme = "";
+      let templateHtml = "";
+      let templateError = null;
+      for (const candidateTheme of themeCandidates) {
+        try {
+          const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
+          const templateUrl = new URL("index.html", themeBase);
+          templateUrl.searchParams.set("_v", "20261028b");
+          const templateResponse = await fetch(templateUrl, { cache: "no-store" });
+          if (!templateResponse.ok) {
+            templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
+            continue;
+          }
+          templateHtml = await templateResponse.text();
+          theme = candidateTheme;
+          break;
+        } catch (error) {
+          templateError = error;
+        }
+      }
+      if (!theme || !templateHtml) {
+        throw templateError || new Error("Tema undangan tidak dapat dimuat.");
+      }
+      if (theme !== (requestedAlias || configuredAlias)) {
+        console.warn("Tema pilihan tidak tersedia; memakai tema cadangan:", theme);
+      }
       // Support both legacy HTML fragments and complete HTML documents.
       if (/<html[\s>]/i.test(templateHtml)) {
         const parsedTemplate = new DOMParser().parseFromString(templateHtml, "text/html");
