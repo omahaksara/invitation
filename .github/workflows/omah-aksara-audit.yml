@@ -103,10 +103,25 @@ jobs:
       - name: Unit-test RSVP and guestbook backend
         run: node scripts/test-backend.cjs
 
-      - name: Install Playwright browser
-        run: |
-          npm install --no-save playwright
-          npx playwright install chromium
+      - name: Cache npm downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-node20-playwright-v1
+          restore-keys: |
+            npm-${{ runner.os }}-node20-
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Read Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium
       - name: Smoke test all themes in Chromium
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/omah-aksara-http.log 2>&1 &
@@ -143,9 +158,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Playwright browser
-        run: |
-          npm install --no-save playwright
-          npx playwright install chromium
+      - name: Cache npm downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-node20-playwright-v1
+          restore-keys: |
+            npm-${{ runner.os }}-node20-
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Read Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium
       - name: Smoke test public catalogue and live invitation (read-only)
         run: node scripts/smoke-production.cjs
