@@ -28,7 +28,7 @@ async function waitForCurrentDeployments() {
         fetchText(CATALOGUE_URL)
       ]);
       invitationReady = invitationHtml.includes('core/app.js?v=20261028b');
-      catalogueReady = catalogueHtml.includes('preview-guest-name') && /frame\\.src\\s*=\\s*demo\\b/.test(catalogueHtml);
+      catalogueReady = catalogueHtml.includes('preview-guest-name') && /frame\.src\s*=\s*demo\b/.test(catalogueHtml);
       if (invitationReady && catalogueReady) return;
     } catch (error) {
       // GitHub Pages may still be propagating the latest deployment; retry briefly.
