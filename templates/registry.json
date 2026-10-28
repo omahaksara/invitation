@@ -56,6 +56,16 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "kinze",
+      "name": "Kinze",
+      "status": "draft"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom",
+      "status": "draft"
     }
   ]
 }
