@@ -25,14 +25,34 @@
       normalizeDemoAssets(data, slug);
       normalizeTemplateData(data);
       const requestedTheme = params.get("theme");
-      // Demo theme discovery is folder-based: a new templates/<slug>/index.html
-      // can be previewed without maintaining a second hard-coded theme registry.
+      // Theme slugs are validated before they can override a published invitation.
+      // Demo previews retain folder-based discovery; published invitations only accept
+      // themes explicitly marked active in templates/registry.json.
       const isThemeSlug = value => /^[a-z0-9][a-z0-9-]*$/i.test(value || "");
-      const requested = data.demoMode === true && isThemeSlug(requestedTheme) ? requestedTheme : "";
-      // Keep "royal" as a backwards-compatible alias for the actual template folder.
-      const requestedAlias = requested === "royal" ? "royal-vintage" : requested;
+      const canonicalTheme = value => value === "royal" ? "royal-vintage" : value;
       const configured = isThemeSlug(data.theme) ? data.theme : "karsa";
-      const configuredAlias = configured === "royal" ? "royal-vintage" : configured;
+      const configuredAlias = canonicalTheme(configured);
+      let requestedAlias = "";
+      if (data.demoMode === true && isThemeSlug(requestedTheme)) {
+        requestedAlias = canonicalTheme(requestedTheme);
+      } else if (data.status === "published" && isThemeSlug(requestedTheme)) {
+        const candidate = canonicalTheme(requestedTheme);
+        try {
+          const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
+          registryUrl.searchParams.set("_v", "20261028a");
+          const registryResponse = await fetch(registryUrl, { cache: "no-store" });
+          if (registryResponse.ok) {
+            const registry = await registryResponse.json();
+            const activeThemes = Array.isArray(registry.themes)
+              ? registry.themes.filter(item => item && item.status === "active").map(item => item.slug)
+              : [];
+            if (activeThemes.includes(candidate)) requestedAlias = candidate;
+          }
+        } catch (themeError) {
+          // Fail safely: a registry/network problem keeps the configured theme.
+          console.warn("Tema dari link diabaikan; memakai tema bawaan undangan.", themeError);
+        }
+      }
       const theme = requestedAlias || configuredAlias || "karsa";
       const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
       const templateUrl = new URL("index.html", themeBase);
