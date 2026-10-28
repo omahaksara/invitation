@@ -57,7 +57,15 @@ jobs:
 
           assert.match(app, /const isThemeSlug = value =>/,
             'demo theme selection must support newly added template slugs automatically');
-          assert.match(app, /data\.demoMode\s*===\s*true/, 'theme override must be limited to demo invitations');
+          assert.match(app, /data\.demoMode\s*===\s*true/, 'demo previews must support safe theme selection');
+          assert.match(app, /data\.status\s*===\s*['"]published['"]\s*&&\s*isThemeSlug\(requestedTheme\)/,
+            'published theme overrides must be explicitly gated on published status and a valid slug');
+          assert.match(app, /activeThemes\.includes\(candidate\)/,
+            'published theme overrides must be checked against the active theme registry');
+          assert.match(app, /requestedAlias\s*\|\|\s*configuredAlias/,
+            'invalid or unavailable theme overrides must fall back to the configured theme');
+          assert.match(app, /catch\s*\(themeError\)/,
+            'theme registry errors must be handled without crashing invitation initialization');
           assert.match(app, /requestedAlias/, 'legacy theme alias handling missing');
           assert.match(app, /function setupCover\(\)/, 'cover initialization missing');
           assert.ok(app.includes("footer.parentNode.insertBefore(section, footer)"), 'legacy forms must handle nested footers safely');
