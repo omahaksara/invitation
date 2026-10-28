@@ -79,6 +79,18 @@ async function main() {
     const pageErrors = [];
     invitation.on('pageerror', error => pageErrors.push(error.message));
 
+    // Keep this production smoke strictly non-mutating: block Apps Script API
+    // calls in the browser. Even a guestbook GET can auto-register a slug in
+    // Settings when missing, so production smoke must not call the live API.
+    await invitation.route('**/*', async route => {
+      const requestUrl = route.request().url();
+      if (requestUrl.includes('script.google.com/macros/s/')) {
+        await route.abort();
+      } else {
+        await route.continue();
+      }
+    });
+
     const invitationResponse = await invitation.goto(
       INVITATION_URL + '?c=budi-ani&to=Tamu%20Audit',
       { waitUntil: 'domcontentloaded', timeout: 45000 }
@@ -94,18 +106,6 @@ async function main() {
     assert.equal(await invitation.locator('[data-bind="couple.bride.nickname"]').first().textContent().then(x => x.trim()),
       'Ani', 'Published bride data must load.');
     assert.ok(await invitation.locator('#bg-music').getAttribute('src'), 'Invitation music source must be bound.');
-
-    // Keep this production smoke strictly non-mutating: block Apps Script API
-    // calls in the browser. Even a guestbook GET can auto-register a slug in
-    // Settings when missing, so production smoke must not call the live API.
-    await invitation.route('**/*', async route => {
-      const requestUrl = route.request().url();
-      if (requestUrl.includes('script.google.com/macros/s/')) {
-        await route.abort();
-      } else {
-        await route.continue();
-      }
-    });
 
     assert.ok(await invitation.locator('#wishes-list').count(),
       'Published invitation must include the guestbook display container.');
