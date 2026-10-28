@@ -1,19 +1,30 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 
-const themes = [
-  { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
-  { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
-  { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "romantic-floral", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }
-];
+// Select active themes from the official registry; keep only DOM-specific selectors here.
+const registry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
+const themeContracts = {
+  "karsa": { marker: "#open-btn", open: "#open-btn", cover: "#cover" },
+  "royal-vintage": { marker: ".invitation-container", open: null, cover: null },
+  "sirein": { marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  "aksara-signature": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "botanical-garden": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "velvet-romance": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "romantic-floral": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "elegance": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "aurelia-noir": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "lumiere-bloom": { marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  "aksara-nocturne": { marker: ".nocturne", open: "#open-btn", cover: "#cover" }
+};
+const activeThemeSlugs = (Array.isArray(registry.themes) ? registry.themes : [])
+  .filter(item => item && item.status === "active")
+  .map(item => item.slug);
+const missingContracts = activeThemeSlugs.filter(slug => !themeContracts[slug]);
+assert.equal(missingContracts.length, 0,
+  "Tema aktif belum memiliki kontrak smoke test: " + missingContracts.join(", "));
+const themes = activeThemeSlugs.map(slug => ({ slug, ...themeContracts[slug] }));
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
