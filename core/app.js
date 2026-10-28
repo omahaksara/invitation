@@ -24,16 +24,24 @@
       if (data.status === "draft") throw new Error("Undangan ini belum dipublikasikan.");
       normalizeDemoAssets(data, slug);
       normalizeTemplateData(data);
-      const requestedTheme = params.get("theme");
-      // Demo theme discovery is folder-based: a new templates/<slug>/index.html
-      // can be previewed without maintaining a second hard-coded theme registry.
+      // The registry is the single source of truth for active themes.
+      const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
+      const registryResponse = await fetch(registryUrl, { cache: "no-store" });
+      if (!registryResponse.ok) throw new Error("Daftar tema resmi tidak dapat dimuat.");
+      const registry = await registryResponse.json();
+      const activeThemes = new Set((Array.isArray(registry.themes) ? registry.themes : [])
+        .filter(item => item && item.status === "active" && /^[a-z0-9][a-z0-9-]*$/i.test(item.slug || ""))
+        .map(item => item.slug));
+      if (!activeThemes.size) throw new Error("Daftar tema resmi belum memiliki tema aktif.");
       const isThemeSlug = value => /^[a-z0-9][a-z0-9-]*$/i.test(value || "");
-      const requested = data.demoMode === true && isThemeSlug(requestedTheme) ? requestedTheme : "";
-      // Keep "royal" as a backwards-compatible alias for the actual template folder.
-      const requestedAlias = requested === "royal" ? "royal-vintage" : requested;
-      const configured = isThemeSlug(data.theme) ? data.theme : "karsa";
-      const configuredAlias = configured === "royal" ? "royal-vintage" : configured;
-      const theme = requestedAlias || configuredAlias || "karsa";
+      const resolveThemeAlias = value => value === "royal" ? "royal-vintage" : value;
+      const requested = data.demoMode === true && isThemeSlug(params.get("theme"))
+        ? resolveThemeAlias(params.get("theme")) : "";
+      const configured = isThemeSlug(data.theme) ? resolveThemeAlias(data.theme) : "";
+      const fallbackTheme = activeThemes.has("karsa") ? "karsa" : activeThemes.values().next().value;
+      const theme = (requested && activeThemes.has(requested) ? requested : "")
+        || (configured && activeThemes.has(configured) ? configured : "")
+        || fallbackTheme;
       const themeBase = new URL(`${basePath}/templates/${theme}/`, location.origin);
       const templateUrl = new URL("index.html", themeBase);
       templateUrl.searchParams.set("_v", "20261027c");
