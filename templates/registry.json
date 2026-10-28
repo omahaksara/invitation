@@ -56,6 +56,11 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "editorial-rouge",
+      "name": "Éditorial Rouge",
+      "status": "draft"
     }
   ]
 }
