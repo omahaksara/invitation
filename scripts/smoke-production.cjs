@@ -27,7 +27,7 @@ async function waitForCurrentDeployments() {
         fetchText(INVITATION_URL),
         fetchText(CATALOGUE_URL)
       ]);
-      invitationReady = invitationHtml.includes('core/app.js?v=20261027c');
+      invitationReady = invitationHtml.includes('core/app.js?v=20261028b');
       catalogueReady = catalogueHtml.includes('preview-guest-name') && catalogueHtml.includes('frame.src = demo');
       if (invitationReady && catalogueReady) return;
     } catch (error) {
