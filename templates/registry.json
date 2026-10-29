@@ -56,6 +56,41 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "calestial",
+      "name": "Calestial (uji kompatibilitas)",
+      "status": "draft"
+    },
+    {
+      "slug": "earty",
+      "name": "Earty (uji kompatibilitas)",
+      "status": "draft"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom (uji kompatibilitas)",
+      "status": "draft"
+    },
+    {
+      "slug": "kinze",
+      "name": "Kinze (uji kompatibilitas)",
+      "status": "draft"
+    },
+    {
+      "slug": "nox",
+      "name": "Nox (uji kompatibilitas)",
+      "status": "draft"
+    },
+    {
+      "slug": "lume",
+      "name": "Lume (perlu konversi entry point)",
+      "status": "draft"
+    },
+    {
+      "slug": "taupe",
+      "name": "Taupe (perlu konversi entry point)",
+      "status": "draft"
     }
   ]
 }

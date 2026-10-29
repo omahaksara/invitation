@@ -174,9 +174,25 @@ for (const theme of THEME_REGISTRY.themes || []) {
     errors.push('Tema aktif ' + theme.slug + ' tercatat di registry tetapi templates/' + theme.slug + '/index.html tidak ditemukan.');
   }
 }
-for (const entry of fs.readdirSync(TEMPLATES, { withFileTypes: true }).filter(entry => entry.isDirectory() && fs.existsSync(path.join(TEMPLATES, entry.name, 'index.html')))) {
-  if (!THEME_REGISTRY.themes.some(theme => theme && theme.slug === entry.name)) {
+for (const entry of fs.readdirSync(TEMPLATES, { withFileTypes: true }).filter(entry => entry.isDirectory())) {
+  const themeDir = path.join(TEMPLATES, entry.name);
+  const lowerIndex = path.join(themeDir, 'index.html');
+  const caseVariant = fs.readdirSync(themeDir).find(name => name.toLowerCase() === 'index.html');
+  const hasIndex = fs.existsSync(lowerIndex);
+  const registered = THEME_REGISTRY.themes.find(theme => theme && theme.slug === entry.name);
+  if (hasIndex && !registered) {
     errors.push('Tema templates/' + entry.name + ' memiliki index.html tetapi belum terdaftar di templates/registry.json.');
+  }
+  if (registered && !hasIndex && caseVariant) {
+    const message = 'Tema ' + entry.name + ' memakai nama berkas ' + caseVariant + '; engine mengharapkan index.html huruf kecil.';
+    if (registered.status === 'active') errors.push(message);
+    else warnings.push(message + ' Tema tetap draft sampai dikonversi dan diuji.');
+  }
+  if (registered && registered.status === 'draft' && hasIndex) {
+    const source = fs.readFileSync(lowerIndex, 'utf8');
+    if (/^\\s*```(?:html)?\\s*$/i.test(source.split(/\\r?\\n/, 1)[0])) {
+      warnings.push('Tema draft ' + entry.name + ' masih dibungkus markdown code fence; perlu dibersihkan sebelum integrasi.');
+    }
   }
 }
 
