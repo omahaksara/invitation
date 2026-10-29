@@ -81,6 +81,16 @@
       "slug": "nox",
       "name": "Nox (uji kompatibilitas)",
       "status": "draft"
+    },
+    {
+      "slug": "lume",
+      "name": "Lume (perlu konversi entry point)",
+      "status": "draft"
+    },
+    {
+      "slug": "taupe",
+      "name": "Taupe (perlu konversi entry point)",
+      "status": "draft"
     }
   ]
 }
