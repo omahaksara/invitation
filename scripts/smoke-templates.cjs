@@ -2,6 +2,7 @@ const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
 
 const themes = [
+  { slug: "serena-ivory", marker: ".serena-ivory-page", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
   { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },

@@ -56,6 +56,11 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "serena-ivory",
+      "name": "Serena Ivory",
+      "status": "draft"
     }
   ]
 }
