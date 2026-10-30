@@ -64,7 +64,7 @@ Pemeriksaan lanjutan pada branch integrasi menemukan:
 ### Urutan migrasi yang disarankan
 
 1. **Earty** — migrasi awal selesai pada branch ini: 20 jalur binding unik sudah cocok dengan JSON demo; CSS global dipindahkan ke root tema; quote, jadwal, galeri, musik, hadiah, RSVP, dan buku tamu memakai binding/renderer engine. Browser smoke desktop dan mobile ditambahkan untuk draft preview; status tetap draft sampai CI lulus dan pemeriksaan visual selesai.
-2. **Calestial** — kandidat kedua. Selain scope CSS, animasi starfield dan reveal harus diinisialisasi melalui lifecycle tema yang dipanggil engine setelah fragmen terpasang; jangan mengandalkan `DOMContentLoaded` kedua.
+2. **Calestial** — migrasi awal selesai pada branch ini: 20 jalur binding unik cocok dengan JSON demo; selector global dibatasi ke root tema; starfield dibuat CSS-only dan skrip `DOMContentLoaded` dihapus; quote, jadwal, kalender, galeri, musik, RSVP, dan buku tamu memakai engine bersama. Browser smoke draft preview ditambahkan; status tetap draft sampai CI dan pemeriksaan visual selesai.
 3. **Kinze** — migrasi struktural. Ambil komposisi visual yang relevan, buang data pasangan contoh, lalu bangun ulang sebagai fragmen presentasional dengan binding JSON. Jangan mengeksekusi konfigurasi Tailwind atau skrip ekspor di engine.
 4. **Lume, Groom, Nox, Taupe** — audit dan migrasi bertahap setelah tiga kandidat di atas; semua tetap draft sampai lulus tes.
 
@@ -88,3 +88,12 @@ Catatan: audit ini tidak mengubah data klien, endpoint Apps Script, maupun backe
 - Tidak ada skrip tema yang bergantung pada `DOMContentLoaded`; seluruh inisialisasi fitur bersama ditangani oleh `core/app.js`.
 - Placeholder video kosong dan tautan kalender `href="#"` dihapus agar engine membuat komponen sesuai data dan fitur.
 - Earty ditambahkan ke browser smoke suite sebagai draft preview eksplisit, tanpa mengubah status registry menjadi `active`.
+
+
+### Hasil validasi statis Calestial (branch integrasi)
+
+- 20 jalur `data-bind` unik ditemukan dan semuanya memiliki nilai pada `clients/demo-katalog/data.json`.
+- Selector CSS global `body`, `#app`, `:root`, `.starfield`, `.star`, dan `.celestial-nav` tidak lagi berdiri di luar root tema.
+- Skrip tema yang menunggu `DOMContentLoaded` dihapus; starfield dekoratif diganti dengan lapisan radial-gradient CSS sehingga aman saat fragmen dimuat dinamis.
+- Kutipan dan sumbernya kini memakai `quote.arab`, `quote.text`, dan `quote.source`; tautan kalender kosong dan placeholder video dihapus agar engine membuat komponen sesuai data.
+- Calestial ditambahkan ke browser smoke suite sebagai draft preview eksplisit; status registry tetap `draft`.
