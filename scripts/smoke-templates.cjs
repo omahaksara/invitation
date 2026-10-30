@@ -1,7 +1,11 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 
-const themes = [
+const registryPath = path.join(__dirname, "..", "templates", "registry.json");
+const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+const themeChecks = new Map([
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
   { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -13,7 +17,14 @@ const themes = [
   { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }
-];
+]);
+
+const activeSlugs = (registry.themes || [])
+  .filter(theme => theme && theme.status === "active")
+  .map(theme => theme.slug);
+const missingChecks = activeSlugs.filter(slug => !themeChecks.has(slug));
+assert.deepEqual(missingChecks, [], "Tema aktif belum memiliki konfigurasi browser smoke test");
+const themes = activeSlugs.map(slug => themeChecks.get(slug));
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
