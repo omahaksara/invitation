@@ -13,17 +13,25 @@ Dokumen ini mencatat seluruh direktori tema yang ditemukan pada repository saat 
 | calestial | draft | Fragmen tema; perlu pemeriksaan CSS global dan inisialisasi JS |
 | earty | draft | Fragmen tema; perlu pemeriksaan kontrak binding |
 | elegance | active | Terdaftar |
-| groom | draft | Dokumen HTML mandiri; perlu audit binding dan aset eksternal |
+| groom | draft | Dokumen HTML mandiri; tidak memakai kontrak binding engine dan membawa skrip ekspor yang tidak boleh dijalankan begitu saja |
 | karsa | active | Terdaftar |
 | kinze | draft | File diawali/diakhiri pagar Markdown; dibersihkan agar menjadi HTML valid |
-| lume | draft | File bernama `Index.html`; engine mencari `index.html` |
+| lume | draft | File bernama `Index.html`; React/Babel dan data mempelai masih tertanam, sehingga perlu migrasi ke JSON bersama |
 | lumiere-bloom | active | Terdaftar |
-| nox | draft | Dokumen HTML mandiri; perlu audit binding dan aset eksternal |
+| nox | draft | Dokumen HTML mandiri; tidak memakai kontrak binding engine dan membawa skrip ekspor yang tidak boleh dijalankan begitu saja |
 | romantic-floral | active | Terdaftar |
 | royal-vintage | active | Terdaftar |
 | sirein | active | Terdaftar |
-| taupe | draft | File bernama `Index.html`; engine mencari `index.html` |
+| taupe | draft | File bernama `Index.html`; dokumen ekspor mandiri, belum memakai kontrak binding engine |
 | velvet-romance | active | Terdaftar |
+
+## Temuan teknis penting
+
+- `core/app.js` memuat dokumen HTML lengkap dengan mengambil isi `body` dan menyalin stylesheet dari `head`. Skrip yang berada di dalam body tidak otomatis dijalankan saat dipasang melalui `innerHTML`. Karena itu, menjalankan ulang semua skrip template secara otomatis bukan solusi aman: beberapa file memuat skrip ekspor besar atau dependensi React/Babel yang tidak menjadi bagian dari engine.
+- Lume masih memuat data pasangan Alfia dan Fikri secara hard-coded serta bergantung pada React/Babel CDN. Tema ini harus dimigrasikan menjadi HTML/CSS presentasional yang membaca `window.__invitationData` atau atribut `data-bind`, bukan langsung dipromosikan.
+- Groom, Nox, dan Taupe terlihat sebagai dokumen ekspor mandiri dengan skrip tambahan yang tidak relevan dengan fungsi undangan. Skrip tersebut tidak boleh dieksekusi di dalam aplikasi tanpa audit dan pembersihan.
+- Lume dan Taupe memakai kapitalisasi `Index.html`; engine saat ini meminta `index.html` secara persis. Normalisasi nama file dilakukan setelah migrasi, bukan dengan menampilkan tema yang masih belum kompatibel.
+- Kinze kini sudah dibersihkan dari pagar Markdown yang sebelumnya membungkus seluruh dokumen HTML. Namun, ia belum memiliki atribut `data-bind`, sehingga belum dianggap terintegrasi dengan data mempelai.
 
 ## Kontrak integrasi sebelum promosi
 
