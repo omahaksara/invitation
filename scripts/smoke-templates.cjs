@@ -6,17 +6,17 @@ const path = require("node:path");
 const registryPath = path.join(__dirname, "..", "templates", "registry.json");
 const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
 const themeChecks = new Map([
-  { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
-  { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
-  { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "romantic-floral", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }
+  ["karsa", { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" }],
+  ["royal-vintage", { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null }],
+  ["sirein", { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["aksara-signature", { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["botanical-garden", { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["velvet-romance", { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["romantic-floral", { slug: "romantic-floral", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["elegance", { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["aurelia-noir", { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["lumiere-bloom", { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["aksara-nocturne", { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }]
 ]);
 
 const activeSlugs = (registry.themes || [])
