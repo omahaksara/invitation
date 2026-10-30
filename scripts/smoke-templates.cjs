@@ -16,15 +16,19 @@ const themeChecks = new Map([
   ["elegance", { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
   ["aurelia-noir", { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
   ["lumiere-bloom", { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
-  ["aksara-nocturne", { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }]
+  ["aksara-nocturne", { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
+  ["earty", { slug: "earty", marker: ".nocturne", open: "#open-btn", cover: "#cover" }]
 ]);
 
 const activeSlugs = (registry.themes || [])
   .filter(theme => theme && theme.status === "active")
   .map(theme => theme.slug);
-const missingChecks = activeSlugs.filter(slug => !themeChecks.has(slug));
-assert.deepEqual(missingChecks, [], "Tema aktif belum memiliki konfigurasi browser smoke test");
-const themes = activeSlugs.map(slug => themeChecks.get(slug));
+// Draft previews listed here are tested in isolation without making them selectable for clients.
+const draftPreviewSlugs = ["earty"];
+const smokeSlugs = [...new Set([...activeSlugs, ...draftPreviewSlugs])];
+const missingChecks = smokeSlugs.filter(slug => !themeChecks.has(slug));
+assert.deepEqual(missingChecks, [], "Tema aktif/draft preview belum memiliki konfigurasi browser smoke test");
+const themes = smokeSlugs.map(slug => themeChecks.get(slug));
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -54,6 +58,19 @@ const themes = activeSlugs.map(slug => themeChecks.get(slug));
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
+        if (theme.slug === "earty") {
+          assert.ok(await page.locator(".nocturne #event-list .event-card").count() >= 2,
+            "earty: data jadwal belum dirender");
+          assert.ok((await page.locator('[data-bind="quote.text"]').textContent()).includes("tenteram"),
+            "earty: kutipan belum terikat ke JSON");
+          assert.ok((await page.locator('[data-bind="quote.source"]').textContent()).includes("Ar-Rum"),
+            "earty: sumber kutipan belum terikat ke JSON");
+          assert.ok(await page.locator(".calendar-section button").count() >= 1,
+            "earty: tombol kalender engine tidak dibuat");
+          const cssAudit = await page.locator("#app style").allTextContents();
+          assert.ok(cssAudit.every(css => !/(^|[},])\\s*(body|#app|:root)\\s*[{,]/m.test(css)),
+            "earty: ditemukan selector CSS global yang bocor");
+        }
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
         const storyAudit = await page.evaluate(() => ({
