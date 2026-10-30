@@ -17,14 +17,15 @@ const themeChecks = new Map([
   ["aurelia-noir", { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
   ["lumiere-bloom", { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
   ["aksara-nocturne", { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
-  ["earty", { slug: "earty", marker: ".nocturne", open: "#open-btn", cover: "#cover" }]
+  ["earty", { slug: "earty", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
+  ["calestial", { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" }]
 ]);
 
 const activeSlugs = (registry.themes || [])
   .filter(theme => theme && theme.status === "active")
   .map(theme => theme.slug);
 // Draft previews listed here are tested in isolation without making them selectable for clients.
-const draftPreviewSlugs = ["earty"];
+const draftPreviewSlugs = ["earty", "calestial"];
 const smokeSlugs = [...new Set([...activeSlugs, ...draftPreviewSlugs])];
 const missingChecks = smokeSlugs.filter(slug => !themeChecks.has(slug));
 assert.deepEqual(missingChecks, [], "Tema aktif/draft preview belum memiliki konfigurasi browser smoke test");
@@ -58,6 +59,19 @@ const themes = smokeSlugs.map(slug => themeChecks.get(slug));
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
+        if (theme.slug === "calestial") {
+          assert.ok(await page.locator(".celestial-royale #event-list .event-card").count() >= 2,
+            "calestial: data jadwal belum dirender");
+          assert.ok((await page.locator('[data-bind="quote.text"]').textContent()).includes("tenteram"),
+            "calestial: kutipan belum terikat ke JSON");
+          assert.ok((await page.locator('[data-bind="quote.source"]').textContent()).includes("Ar-Rum"),
+            "calestial: sumber kutipan belum terikat ke JSON");
+          assert.ok(await page.locator(".calendar-section button").count() >= 1,
+            "calestial: tombol kalender engine tidak dibuat");
+          const cssAudit = await page.locator("#app style").allTextContents();
+          assert.ok(cssAudit.every(css => !/(^|[},])\\s*(body|#app|:root|\\.starfield|\\.star|\\.celestial-nav)\\s*[{,]/m.test(css)),
+            "calestial: ditemukan selector CSS global yang bocor");
+        }
         if (theme.slug === "earty") {
           assert.ok(await page.locator(".nocturne #event-list .event-card").count() >= 2,
             "earty: data jadwal belum dirender");
