@@ -49,3 +49,33 @@ Setiap tema harus:
 - Jangan mengubah data klien terbit atau konfigurasi API saat mengintegrasikan tema.
 - Demo publik harus memakai slug demo dan data contoh, serta tidak boleh mengirim RSVP/ucapan demo ke database produksi.
 - Promosi tema dilakukan satu per satu setelah seluruh kriteria lulus. Status `draft` bukan tanda tema ditolak; status ini menjaga tema tetap tersimpan tanpa mengeksposnya sebagai pilihan produksi.
+
+
+## Audit lanjutan: Calestial, Earty, dan Kinze
+
+Pemeriksaan lanjutan pada branch integrasi menemukan:
+
+| Tema | Binding data | Risiko saat dimuat engine | Keputusan |
+|---|---:|---|---|
+| Calestial | 19 atribut | CSS masih menargetkan `body` dan `#app`; skrip starfield/reveal menunggu `DOMContentLoaded`, padahal fragmen tema dipasang setelah event tersebut | Draft; perlu scope CSS dan lifecycle init yang eksplisit |
+| Earty | 19 atribut | CSS masih menargetkan `body` dan `#app`; belum ada skrip tema | Draft; perlu scope CSS dan uji semua binding terhadap data nyata |
+| Kinze | 0 atribut | HTML mandiri, hard-coded, membawa Tailwind CDN dan beberapa skrip; tidak memakai kontrak binding engine | Draft; perlu migrasi presentasi dari awal |
+
+### Urutan migrasi yang disarankan
+
+1. **Earty** — kandidat migrasi pertama karena sudah memakai 19 binding data dan tidak membawa skrip inisialisasi. Pekerjaan utama: scope CSS ke root tema, verifikasi binding pada data demo, dan uji aset/media.
+2. **Calestial** — kandidat kedua. Selain scope CSS, animasi starfield dan reveal harus diinisialisasi melalui lifecycle tema yang dipanggil engine setelah fragmen terpasang; jangan mengandalkan `DOMContentLoaded` kedua.
+3. **Kinze** — migrasi struktural. Ambil komposisi visual yang relevan, buang data pasangan contoh, lalu bangun ulang sebagai fragmen presentasional dengan binding JSON. Jangan mengeksekusi konfigurasi Tailwind atau skrip ekspor di engine.
+4. **Lume, Groom, Nox, Taupe** — audit dan migrasi bertahap setelah tiga kandidat di atas; semua tetap draft sampai lulus tes.
+
+### Gerbang promosi tema
+
+Tema baru boleh diubah menjadi `active` hanya jika:
+- tidak memiliki data mempelai hard-coded;
+- semua field wajib berasal dari kontrak data klien;
+- CSS tidak mengubah elemen global di luar root tema;
+- lifecycle tema berjalan saat fragmen dipasang (tanpa ketergantungan pada `DOMContentLoaded` ulang);
+- foto, font, musik, galeri, jadwal, hadiah, RSVP, dan buku tamu tervalidasi;
+- lolos smoke test browser dan pemeriksaan tampilan ponsel/desktop.
+
+Catatan: audit ini tidak mengubah data klien, endpoint Apps Script, maupun backend RSVP/buku tamu.
