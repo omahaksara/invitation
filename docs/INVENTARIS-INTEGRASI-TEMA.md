@@ -11,7 +11,7 @@ Dokumen ini mencatat seluruh direktori tema yang ditemukan pada repository saat 
 | aurelia-noir | active | Terdaftar |
 | botanical-garden | active | Terdaftar |
 | calestial | draft | Fragmen tema; perlu pemeriksaan CSS global dan inisialisasi JS |
-| earty | draft | Fragmen tema; perlu pemeriksaan kontrak binding |
+| earty | draft | Migrasi awal selesai: 20 jalur binding unik cocok dengan JSON demo; CSS global sudah di-scope, kontrol kalender/video diserahkan ke engine; menunggu browser CI |
 | elegance | active | Terdaftar |
 | groom | draft | Dokumen HTML mandiri; tidak memakai kontrak binding engine dan membawa skrip ekspor yang tidak boleh dijalankan begitu saja |
 | karsa | active | Terdaftar |
@@ -63,7 +63,7 @@ Pemeriksaan lanjutan pada branch integrasi menemukan:
 
 ### Urutan migrasi yang disarankan
 
-1. **Earty** — kandidat migrasi pertama karena sudah memakai 19 binding data dan tidak membawa skrip inisialisasi. Pekerjaan utama: scope CSS ke root tema, verifikasi binding pada data demo, dan uji aset/media.
+1. **Earty** — migrasi awal selesai pada branch ini: 20 jalur binding unik sudah cocok dengan JSON demo; CSS global dipindahkan ke root tema; quote, jadwal, galeri, musik, hadiah, RSVP, dan buku tamu memakai binding/renderer engine. Browser smoke desktop dan mobile ditambahkan untuk draft preview; status tetap draft sampai CI lulus dan pemeriksaan visual selesai.
 2. **Calestial** — kandidat kedua. Selain scope CSS, animasi starfield dan reveal harus diinisialisasi melalui lifecycle tema yang dipanggil engine setelah fragmen terpasang; jangan mengandalkan `DOMContentLoaded` kedua.
 3. **Kinze** — migrasi struktural. Ambil komposisi visual yang relevan, buang data pasangan contoh, lalu bangun ulang sebagai fragmen presentasional dengan binding JSON. Jangan mengeksekusi konfigurasi Tailwind atau skrip ekspor di engine.
 4. **Lume, Groom, Nox, Taupe** — audit dan migrasi bertahap setelah tiga kandidat di atas; semua tetap draft sampai lulus tes.
@@ -79,3 +79,12 @@ Tema baru boleh diubah menjadi `active` hanya jika:
 - lolos smoke test browser dan pemeriksaan tampilan ponsel/desktop.
 
 Catatan: audit ini tidak mengubah data klien, endpoint Apps Script, maupun backend RSVP/buku tamu.
+
+
+### Hasil validasi statis Earty (branch integrasi)
+
+- 20 jalur `data-bind` unik ditemukan dan semuanya memiliki nilai pada `clients/demo-katalog/data.json`.
+- Tidak ditemukan selector CSS global `body`, `#app`, atau `:root` pada stylesheet tema.
+- Tidak ada skrip tema yang bergantung pada `DOMContentLoaded`; seluruh inisialisasi fitur bersama ditangani oleh `core/app.js`.
+- Placeholder video kosong dan tautan kalender `href="#"` dihapus agar engine membuat komponen sesuai data dan fitur.
+- Earty ditambahkan ke browser smoke suite sebagai draft preview eksplisit, tanpa mengubah status registry menjadi `active`.
