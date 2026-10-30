@@ -1,19 +1,35 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 
-const themes = [
-  { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
-  { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
-  { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "romantic-floral", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }
-];
+const registryPath = path.join(__dirname, "..", "templates", "registry.json");
+const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+const themeChecks = new Map([
+  ["karsa", { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" }],
+  ["royal-vintage", { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null }],
+  ["sirein", { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["aksara-signature", { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["botanical-garden", { slug: "botanical-garden", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["velvet-romance", { slug: "velvet-romance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["romantic-floral", { slug: "romantic-floral", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["elegance", { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["aurelia-noir", { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["lumiere-bloom", { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
+  ["aksara-nocturne", { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
+  ["earty", { slug: "earty", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
+  ["calestial", { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" }]
+]);
+
+const activeSlugs = (registry.themes || [])
+  .filter(theme => theme && theme.status === "active")
+  .map(theme => theme.slug);
+// Draft previews listed here are tested in isolation without making them selectable for clients.
+const draftPreviewSlugs = ["earty", "calestial"];
+const smokeSlugs = [...new Set([...activeSlugs, ...draftPreviewSlugs])];
+const missingChecks = smokeSlugs.filter(slug => !themeChecks.has(slug));
+assert.deepEqual(missingChecks, [], "Tema aktif/draft preview belum memiliki konfigurasi browser smoke test");
+const themes = smokeSlugs.map(slug => themeChecks.get(slug));
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -43,6 +59,32 @@ const themes = [
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
+        if (theme.slug === "calestial") {
+          assert.ok(await page.locator(".celestial-royale #event-list .event-card").count() >= 2,
+            "calestial: data jadwal belum dirender");
+          assert.ok((await page.locator('[data-bind="quote.text"]').textContent()).includes("tenteram"),
+            "calestial: kutipan belum terikat ke JSON");
+          assert.ok((await page.locator('[data-bind="quote.source"]').textContent()).includes("Ar-Rum"),
+            "calestial: sumber kutipan belum terikat ke JSON");
+          assert.ok(await page.locator(".calendar-section button").count() >= 1,
+            "calestial: tombol kalender engine tidak dibuat");
+          const cssAudit = await page.locator("#app style").allTextContents();
+          assert.ok(cssAudit.every(css => !/(^|[},])\\s*(body|#app|:root|\\.starfield|\\.star|\\.celestial-nav)\\s*[{,]/m.test(css)),
+            "calestial: ditemukan selector CSS global yang bocor");
+        }
+        if (theme.slug === "earty") {
+          assert.ok(await page.locator(".nocturne #event-list .event-card").count() >= 2,
+            "earty: data jadwal belum dirender");
+          assert.ok((await page.locator('[data-bind="quote.text"]').textContent()).includes("tenteram"),
+            "earty: kutipan belum terikat ke JSON");
+          assert.ok((await page.locator('[data-bind="quote.source"]').textContent()).includes("Ar-Rum"),
+            "earty: sumber kutipan belum terikat ke JSON");
+          assert.ok(await page.locator(".calendar-section button").count() >= 1,
+            "earty: tombol kalender engine tidak dibuat");
+          const cssAudit = await page.locator("#app style").allTextContents();
+          assert.ok(cssAudit.every(css => !/(^|[},])\\s*(body|#app|:root)\\s*[{,]/m.test(css)),
+            "earty: ditemukan selector CSS global yang bocor");
+        }
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
         const storyAudit = await page.evaluate(() => ({
