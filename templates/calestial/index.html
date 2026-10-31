@@ -1,5 +1,5 @@
 <style>
-:root{
+.celestial-royale{
   --royal-deep:#0a0e27;
   --royal-midnight:#0f1535;
   --royal-navy:#1a2150;
@@ -13,7 +13,7 @@
   --glass:rgba(15,21,53,.65);
 }
 
-body{
+.celestial-royale{
   background:var(--royal-deep);
   color:var(--pearl);
   font-family:'Cormorant Garamond',serif;
@@ -22,11 +22,7 @@ body{
   overflow-x:hidden;
 }
 
-#app{
-  max-width:100%;
-  background:var(--royal-deep);
-  position:relative;
-}
+/* App shell styles are scoped to this theme root. */
 
 .celestial-royale{
   overflow:hidden;
@@ -40,7 +36,9 @@ body{
 }
 
 /* Starfield Background */
-.starfield{
+.celestial-royale .starfield{
+  background-image:radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.85) 50%,transparent 100%),radial-gradient(1.5px 1.5px at 78% 24%,rgba(244,229,176,.8) 50%,transparent 100%),radial-gradient(1px 1px at 42% 72%,rgba(255,255,255,.7) 50%,transparent 100%),radial-gradient(2px 2px at 90% 82%,rgba(255,255,255,.7) 50%,transparent 100%);
+  background-size:280px 240px;
   position:fixed;
   top:0;
   left:0;
@@ -50,7 +48,7 @@ body{
   z-index:0;
 }
 
-.star{
+.celestial-royale .star{
   position:absolute;
   background:radial-gradient(circle,#fff 0%,transparent 70%);
   border-radius:50%;
@@ -576,8 +574,8 @@ body{
   max-width:calc(100vw - 30px);
 }
 
-.celestial-nav a,
-.celestial-nav button{
+.celestial-royale .celestial-nav a,
+.celestial-royale .celestial-nav button{
   min-width:55px;
   padding:8px 10px;
   color:var(--gold-primary);
@@ -592,15 +590,15 @@ body{
   border-radius:25px;
 }
 
-.celestial-nav a:hover,
-.celestial-nav button:hover{
+.celestial-royale .celestial-nav a:hover,
+.celestial-royale .celestial-nav button:hover{
   background:rgba(212,175,55,.15);
   color:var(--gold-light);
   transform:translateY(-2px);
 }
 
-.celestial-nav a span,
-.celestial-nav button span{
+.celestial-royale .celestial-nav a span,
+.celestial-royale .celestial-nav button span{
   display:block;
   font-size:1.3rem;
   margin-bottom:3px;
@@ -664,15 +662,15 @@ body{
     bottom:15px;
   }
   
-  .celestial-nav a,
-  .celestial-nav button{
+  .celestial-royale .celestial-nav a,
+  .celestial-royale .celestial-nav button{
     min-width:45px;
     font-size:.58rem;
     padding:6px 5px;
   }
   
-  .celestial-nav a span,
-  .celestial-nav button span{
+  .celestial-royale .celestial-nav a span,
+  .celestial-royale .celestial-nav button span{
     font-size:1.1rem;
   }
   
@@ -701,7 +699,7 @@ body{
   <section id="cover" class="cover">
     <img data-bind="cover.image" src="" alt="Foto sampul" fetchpriority="high">
     <div class="royal-arch">
-      <p class="eyebrow">Celestial Royale · Premium Invitation</p>
+      <p class="eyebrow" data-bind="cover.eyebrow">Celestial Royale · Premium Invitation</p>
       <p class="serif gold" data-bind="cover.subtitle">The Wedding Of</p>
       <h1 class="serif">
         <span data-bind="couple.groom.nickname">Mempelai Pria</span>
@@ -722,10 +720,9 @@ body{
   <section class="panel quote-section reveal" id="blessing">
     <p class="eyebrow">Dengan penuh rasa syukur</p>
     <div class="ornament">❖</div>
-    <p class="serif" style="font-size:1.5rem;color:var(--pearl)">
-      "Dan di antara tanda-tanda kekuasaan-Nya, Dia menciptakan pasangan agar kamu merasa tenteram."
-    </p>
-    <p class="detail" style="margin-top:15px">QS. Ar-Rum: 21</p>
+    <p class="serif" data-bind="quote.arab" style="font-size:1.5rem;color:var(--gold-primary);line-height:2"></p>
+    <p class="intro" data-bind="quote.text"></p>
+    <p class="detail" data-bind="quote.source" style="margin-top:15px"></p>
     <p class="intro" data-bind="opening.text" style="margin-top:25px"></p>
   </section>
 
@@ -766,9 +763,6 @@ body{
       <div><b id="cd-minutes">00</b><span>Menit</span></div>
       <div><b id="cd-seconds">00</b><span>Detik</span></div>
     </div>
-    <div style="text-align:center;margin-top:30px">
-      <a class="btn" href="#" id="calendar-link">▦ Simpan Tanggal</a>
-    </div>
   </section>
 
   <!-- Gallery Section -->
@@ -777,12 +771,6 @@ body{
     <h2 class="section-title serif">Galeri Kenangan</h2>
     <p class="intro" style="margin-bottom:30px">Potongan momen indah perjalanan kami.</p>
     <div id="gallery-grid" class="gallery-grid"></div>
-  </section>
-
-  <!-- Video Section -->
-  <section class="panel video-section reveal" id="video-section">
-    <p class="eyebrow" style="text-align:center">Moving Memories</p>
-    <h2 class="section-title serif">Video Kenangan</h2>
   </section>
 
   <!-- RSVP Section -->
@@ -837,44 +825,3 @@ body{
 
   <audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
-
-<script>
-// Generate Starfield
-function createStarfield() {
-  const starfield = document.getElementById('starfield');
-  const starCount = 150;
-  
-  for (let i = 0; i < starCount; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.width = Math.random() * 3 + 'px';
-    star.style.height = star.style.width;
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = Math.random() * 3 + 's';
-    star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-    starfield.appendChild(star);
-  }
-}
-
-// Scroll Reveal Animation
-function initScrollReveal() {
-  const reveals = document.querySelectorAll('.reveal');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-      }
-    });
-  }, { threshold: 0.15 });
-  
-  reveals.forEach(reveal => observer.observe(reveal));
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-  createStarfield();
-  initScrollReveal();
-});
-</script>

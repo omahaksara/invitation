@@ -56,6 +56,41 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "calestial",
+      "name": "Calestial Royale",
+      "status": "draft"
+    },
+    {
+      "slug": "earty",
+      "name": "Earty",
+      "status": "draft"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom",
+      "status": "draft"
+    },
+    {
+      "slug": "kinze",
+      "name": "Kinze",
+      "status": "draft"
+    },
+    {
+      "slug": "lume",
+      "name": "Lume",
+      "status": "draft"
+    },
+    {
+      "slug": "nox",
+      "name": "Nox",
+      "status": "draft"
+    },
+    {
+      "slug": "taupe",
+      "name": "Taupe",
+      "status": "draft"
     }
   ]
 }
