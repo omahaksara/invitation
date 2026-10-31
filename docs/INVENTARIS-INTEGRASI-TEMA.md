@@ -97,3 +97,12 @@ Catatan: audit ini tidak mengubah data klien, endpoint Apps Script, maupun backe
 - Skrip tema yang menunggu `DOMContentLoaded` dihapus; starfield dekoratif diganti dengan lapisan radial-gradient CSS sehingga aman saat fragmen dimuat dinamis.
 - Kutipan dan sumbernya kini memakai `quote.arab`, `quote.text`, dan `quote.source`; tautan kalender kosong dan placeholder video dihapus agar engine membuat komponen sesuai data.
 - Calestial ditambahkan ke browser smoke suite sebagai draft preview eksplisit; status registry tetap `draft`.
+
+
+### Hasil migrasi awal Kinze (branch integrasi)
+
+- Dokumen ekspor mandiri 40 KB dibangun ulang menjadi fragmen presentasional yang dibaca engine bersama; konfigurasi Tailwind CDN, tiga tema switcher internal, fungsi musik/formulir mandiri, dan data pasangan contoh tidak lagi dijalankan.
+- Nama pasangan, foto, kutipan, pembukaan, jadwal, galeri, hadiah, hashtag, dan musik menggunakan binding dari `clients/demo-katalog/data.json`.
+- Renderer engine tetap menangani Love Story, kalender, RSVP, buku tamu, galeri, hadiah, countdown, navigasi fitur bersama, dan simulasi demo.
+- Seluruh CSS tema berada di bawah root `.kinze`; tidak ada selector global `body`, `html`, `:root`, atau `#app`.
+- Kinze masuk browser smoke suite sebagai draft preview eksplisit. Status registry tetap `draft` sampai CI terbaru dan pemeriksaan visual desktop/mobile selesai.
