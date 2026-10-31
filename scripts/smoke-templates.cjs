@@ -18,14 +18,15 @@ const themeChecks = new Map([
   ["lumiere-bloom", { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" }],
   ["aksara-nocturne", { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
   ["earty", { slug: "earty", marker: ".nocturne", open: "#open-btn", cover: "#cover" }],
-  ["calestial", { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" }]
+  ["calestial", { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" }],
+  ["kinze", { slug: "kinze", marker: ".kinze", open: "#open-btn", cover: "#cover" }]
 ]);
 
 const activeSlugs = (registry.themes || [])
   .filter(theme => theme && theme.status === "active")
   .map(theme => theme.slug);
 // Draft previews listed here are tested in isolation without making them selectable for clients.
-const draftPreviewSlugs = ["earty", "calestial"];
+const draftPreviewSlugs = ["earty", "calestial", "kinze"];
 const smokeSlugs = [...new Set([...activeSlugs, ...draftPreviewSlugs])];
 const missingChecks = smokeSlugs.filter(slug => !themeChecks.has(slug));
 assert.deepEqual(missingChecks, [], "Tema aktif/draft preview belum memiliki konfigurasi browser smoke test");
@@ -69,7 +70,7 @@ const themes = smokeSlugs.map(slug => themeChecks.get(slug));
           assert.ok(await page.locator(".calendar-section button").count() >= 1,
             "calestial: tombol kalender engine tidak dibuat");
           const cssAudit = await page.locator("#app style").allTextContents();
-          assert.ok(cssAudit.every(css => !/(^|[},])\\s*(body|#app|:root|\\.starfield|\\.star|\\.celestial-nav)\\s*[{,]/m.test(css)),
+          assert.ok(cssAudit.every(css => !/(^|[},])\s*(body|#app|:root|\.starfield|\.star|\.celestial-nav)\s*[{,]/m.test(css)),
             "calestial: ditemukan selector CSS global yang bocor");
         }
         if (theme.slug === "earty") {
@@ -82,8 +83,23 @@ const themes = smokeSlugs.map(slug => themeChecks.get(slug));
           assert.ok(await page.locator(".calendar-section button").count() >= 1,
             "earty: tombol kalender engine tidak dibuat");
           const cssAudit = await page.locator("#app style").allTextContents();
-          assert.ok(cssAudit.every(css => !/(^|[},])\\s*(body|#app|:root)\\s*[{,]/m.test(css)),
+          assert.ok(cssAudit.every(css => !/(^|[},])\s*(body|#app|:root)\s*[{,]/m.test(css)),
             "earty: ditemukan selector CSS global yang bocor");
+        }
+        if (theme.slug === "kinze") {
+          assert.ok(await page.locator(".kinze #event-list .event-card").count() >= 2,
+            "kinze: data jadwal belum dirender");
+          assert.ok((await page.locator('[data-bind="quote.text"]').textContent()).includes("tenteram"),
+            "kinze: kutipan belum terikat ke JSON");
+          assert.ok((await page.locator('[data-bind="quote.source"]').textContent()).includes("Ar-Rum"),
+            "kinze: sumber kutipan belum terikat ke JSON");
+          assert.ok(await page.locator(".calendar-section button").count() >= 1,
+            "kinze: tombol kalender engine tidak dibuat");
+          const cssAudit = await page.locator("#app style").allTextContents();
+          assert.ok(cssAudit.every(css => !/(^|[},])\s*(body|#app|:root)\s*[{,]/m.test(css)),
+            "kinze: ditemukan selector CSS global yang bocor");
+          assert.equal(await page.locator("#themeSwitcher").count(), 0,
+            "kinze: switcher multi-gaya lama masih tertinggal");
         }
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
