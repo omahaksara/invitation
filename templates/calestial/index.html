@@ -42,24 +42,23 @@ body{
 /* Starfield Background */
 .starfield{
   position:fixed;
-  top:0;
-  left:0;
+  inset:0;
   width:100%;
   height:100%;
   pointer-events:none;
   z-index:0;
+  opacity:.42;
+  background-image:
+    radial-gradient(1px 1px at 18px 26px,#fff 98%,transparent),
+    radial-gradient(1px 1px at 86px 74px,rgba(244,229,176,.9) 98%,transparent),
+    radial-gradient(2px 2px at 148px 118px,rgba(255,255,255,.85) 98%,transparent);
+  background-size:190px 170px,270px 230px,340px 290px;
+  animation:celestialStarDrift 90s linear infinite;
 }
 
-.star{
-  position:absolute;
-  background:radial-gradient(circle,#fff 0%,transparent 70%);
-  border-radius:50%;
-  animation:twinkle 3s infinite;
-}
-
-@keyframes twinkle{
-  0%,100%{opacity:0.3;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.2)}
+@keyframes celestialStarDrift{
+  from{background-position:0 0,0 0,0 0}
+  to{background-position:-38px 24px,34px -28px,-26px 32px}
 }
 
 /* Typography */
@@ -622,8 +621,8 @@ body{
   transition:opacity 1s ease,transform 1s cubic-bezier(.4,0,.2,1);
 }
 
-.celestial-royale .reveal.is-visible,
-.celestial-royale .oa-scroll-reveal.is-visible{
+.celestial-royale .reveal.active,
+.celestial-royale .oa-scroll-reveal.oa-visible{
   opacity:1;
   transform:translateY(0);
 }
@@ -838,43 +837,3 @@ body{
   <audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
 
-<script>
-// Generate Starfield
-function createStarfield() {
-  const starfield = document.getElementById('starfield');
-  const starCount = 150;
-  
-  for (let i = 0; i < starCount; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.width = Math.random() * 3 + 'px';
-    star.style.height = star.style.width;
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = Math.random() * 3 + 's';
-    star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-    starfield.appendChild(star);
-  }
-}
-
-// Scroll Reveal Animation
-function initScrollReveal() {
-  const reveals = document.querySelectorAll('.reveal');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-      }
-    });
-  }, { threshold: 0.15 });
-  
-  reveals.forEach(reveal => observer.observe(reveal));
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-  createStarfield();
-  initScrollReveal();
-});
-</script>
