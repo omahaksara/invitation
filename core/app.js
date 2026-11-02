@@ -234,7 +234,8 @@
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
-    // Forms and fallback sections are created above; observe them too.
+    ensureFloatingControls(data);
+    // Forms, navigation, and fallback sections are created above; observe them too.
     setupReveal();
   }
 
@@ -1024,6 +1025,93 @@
     const resepsiUrl = data.events && !Array.isArray(data.events) && data.events.resepsi && data.events.resepsi.mapsUrl;
     if (akad && akadUrl) { akad.href = akadUrl; akad.target = "_blank"; akad.rel = "noopener noreferrer"; }
     if (resepsi && resepsiUrl) { resepsi.href = resepsiUrl; resepsi.target = "_blank"; resepsi.rel = "noopener noreferrer"; }
+  }
+
+  // Shared navigation controls are mounted by the engine, so every active theme
+  // receives the same working controls without duplicating theme-specific markup.
+  function ensureFloatingControls(data) {
+    if (document.getElementById("oa-floating-controls")) return;
+    const features = data && data.features && typeof data.features === "object" ? data.features : {};
+    const nav = document.createElement("nav");
+    nav.id = "oa-floating-controls";
+    nav.className = "oa-floating-controls";
+    nav.setAttribute("aria-label", "Navigasi undangan");
+
+    const makeButton = (action, label, ariaLabel) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.oaAction = action;
+      button.textContent = label;
+      button.setAttribute("aria-label", ariaLabel);
+      return button;
+    };
+
+    const topButton = makeButton("top", "↑ Atas", "Kembali ke bagian atas");
+    const nextButton = makeButton("next", "↓ Lanjut", "Gulir ke bagian berikutnya");
+    const autoButton = makeButton("auto", "▶ Auto", "Mulai gulir otomatis");
+    autoButton.setAttribute("aria-pressed", "false");
+    nav.append(topButton, nextButton, autoButton);
+    document.body.append(nav);
+
+    const visibleSections = () => Array.from(document.querySelectorAll(
+      "#app-inner > section, #main-content > section, .invitation-container > section, " +
+      ".invite-shell > section, .sirein-page > section, .oa-shared-section"
+    )).filter(section => {
+      if (section.hidden || section.closest("[hidden]")) return false;
+      const style = window.getComputedStyle(section);
+      return style.display !== "none" && style.visibility !== "hidden" && section.getBoundingClientRect().height > 0;
+    });
+
+    topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    nextButton.addEventListener("click", () => {
+      const current = window.scrollY + 90;
+      const next = visibleSections()
+        .map(section => ({ section, top: section.getBoundingClientRect().top + window.scrollY }))
+        .filter(item => item.top > current + 8)
+        .sort((a, b) => a.top - b.top)[0];
+      if (next) window.scrollTo({ top: Math.max(0, next.top - 12), behavior: "smooth" });
+      else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+    });
+
+    let autoTimer = null;
+    const stopAutoScroll = () => {
+      if (autoTimer !== null) window.clearInterval(autoTimer);
+      autoTimer = null;
+      autoButton.textContent = "▶ Auto";
+      autoButton.setAttribute("aria-pressed", "false");
+      autoButton.setAttribute("aria-label", "Mulai gulir otomatis");
+    };
+    const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      autoButton.disabled = true;
+      autoButton.title = "Gulir otomatis dinonaktifkan sesuai pengaturan aksesibilitas perangkat.";
+      autoButton.textContent = "Auto off";
+    } else {
+      autoButton.addEventListener("click", () => {
+        if (autoTimer !== null) {
+          stopAutoScroll();
+          return;
+        }
+        autoButton.textContent = "Ⅱ Jeda";
+        autoButton.setAttribute("aria-pressed", "true");
+        autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
+        autoTimer = window.setInterval(() => {
+          const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3;
+          if (atBottom) {
+            stopAutoScroll();
+            return;
+          }
+          window.scrollBy(0, 1.35);
+        }, 30);
+      });
+      // Manual gestures always take priority over the optional auto-scroll.
+      ["wheel", "touchstart"].forEach(type => window.addEventListener(type, stopAutoScroll, { passive: true }));
+      window.addEventListener("keydown", event => {
+        if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) stopAutoScroll();
+      });
+    }
+
+    if (features.navigation === false) nav.hidden = true;
   }
 
   function setupReveal() {
