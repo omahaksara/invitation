@@ -23,9 +23,24 @@
       "status": "active"
     },
     {
+      "slug": "calestial",
+      "name": "Calestial Royale",
+      "status": "active"
+    },
+    {
+      "slug": "earty",
+      "name": "Earty",
+      "status": "archived"
+    },
+    {
       "slug": "elegance",
       "name": "Elegance",
       "status": "active"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom",
+      "status": "prototype"
     },
     {
       "slug": "karsa",
@@ -33,9 +48,24 @@
       "status": "active"
     },
     {
+      "slug": "kinze",
+      "name": "Kinze",
+      "status": "prototype"
+    },
+    {
+      "slug": "lume",
+      "name": "Lume",
+      "status": "prototype"
+    },
+    {
       "slug": "lumiere-bloom",
       "name": "Lumière Bloom",
       "status": "active"
+    },
+    {
+      "slug": "nox",
+      "name": "Nox",
+      "status": "prototype"
     },
     {
       "slug": "romantic-floral",
@@ -51,6 +81,11 @@
       "slug": "sirein",
       "name": "Sirein",
       "status": "active"
+    },
+    {
+      "slug": "taupe",
+      "name": "Taupe",
+      "status": "prototype"
     },
     {
       "slug": "velvet-romance",
