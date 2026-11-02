@@ -11,7 +11,7 @@ Jangan menduplikasi engine atau backend ke repository katalog.
 
 ## Daftar tema resmi
 
-Daftar tema aktif disimpan di [`templates/registry.json`](templates/registry.json). Katalog, validator data, dan pengujian harus membaca daftar yang sama. Saat menambah tema, tambahkan folder `templates/<slug>/index.html` lalu daftarkan satu kali di registry.
+Daftar tema dan statusnya disimpan di [`templates/registry.json`](templates/registry.json). Hanya tema berstatus `active` yang boleh dipilih untuk undangan terbit dan ditampilkan di katalog. Status `prototype` menandai desain yang belum memenuhi kontrak V2; `archived` menyimpan desain lama yang tidak ditawarkan. Katalog, validator data, dan pengujian harus membaca daftar yang sama. Saat menambah tema, tambahkan folder `templates/<slug>/index.html` lalu daftarkan satu kali di registry.
 
 Logika fitur berada di `core/app.js`; tema mengatur presentasi. Semua tema harus menyediakan kontrak fitur yang sama. Jika suatu tema belum memiliki bagian visual tertentu, engine dapat menyediakan bagian bersama bila datanya tersedia.
 
