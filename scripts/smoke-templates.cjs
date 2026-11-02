@@ -91,6 +91,24 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
 
+        const navigation = page.locator("#oa-floating-controls");
+        assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
+        const autoScroll = navigation.locator('[data-oa-action="auto"]');
+        assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+          theme.slug + ": auto-scroll harus nonaktif saat halaman pertama dibuka");
+        if (await autoScroll.isEnabled()) {
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": tombol auto-scroll tidak mulai");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": tombol auto-scroll tidak berhenti");
+        }
+        assert.equal(await navigation.locator('[data-oa-action="top"]').count(), 1,
+          theme.slug + ": tombol kembali ke atas tidak tersedia");
+        assert.equal(await navigation.locator('[data-oa-action="next"]').count(), 1,
+          theme.slug + ": tombol bagian berikutnya tidak tersedia");
+
         const musicControl = page.locator("#music-toggle, #music-btn").first();
         await musicControl.waitFor({ state: "visible", timeout: 5000 });
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
