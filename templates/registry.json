@@ -23,8 +23,23 @@
       "status": "active"
     },
     {
+      "slug": "calestial",
+      "name": "Calestial Royale",
+      "status": "active"
+    },
+    {
+      "slug": "earty",
+      "name": "Earty",
+      "status": "archived"
+    },
+    {
       "slug": "elegance",
       "name": "Elegance",
+      "status": "active"
+    },
+    {
+      "slug": "groom",
+      "name": "Groom — Serenade Taupe",
       "status": "active"
     },
     {
@@ -33,9 +48,24 @@
       "status": "active"
     },
     {
+      "slug": "kinze",
+      "name": "Kinze",
+      "status": "active"
+    },
+    {
+      "slug": "lume",
+      "name": "Lume",
+      "status": "prototype"
+    },
+    {
       "slug": "lumiere-bloom",
       "name": "Lumière Bloom",
       "status": "active"
+    },
+    {
+      "slug": "nox",
+      "name": "Nox",
+      "status": "prototype"
     },
     {
       "slug": "romantic-floral",
@@ -48,9 +78,19 @@
       "status": "active"
     },
     {
+      "slug": "serena-ivory",
+      "name": "Serena Ivory",
+      "status": "active"
+    },
+    {
       "slug": "sirein",
       "name": "Sirein",
       "status": "active"
+    },
+    {
+      "slug": "taupe",
+      "name": "Taupe",
+      "status": "prototype"
     },
     {
       "slug": "velvet-romance",
