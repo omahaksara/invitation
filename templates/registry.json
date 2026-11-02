@@ -39,8 +39,8 @@
     },
     {
       "slug": "groom",
-      "name": "Groom",
-      "status": "prototype"
+      "name": "Groom — Serenade Taupe",
+      "status": "active"
     },
     {
       "slug": "karsa",
@@ -50,7 +50,7 @@
     {
       "slug": "kinze",
       "name": "Kinze",
-      "status": "prototype"
+      "status": "active"
     },
     {
       "slug": "lume",
@@ -75,6 +75,11 @@
     {
       "slug": "royal-vintage",
       "name": "Royal Vintage",
+      "status": "active"
+    },
+    {
+      "slug": "serena-ivory",
+      "name": "Serena Ivory",
       "status": "active"
     },
     {
