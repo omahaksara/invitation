@@ -216,3 +216,14 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .oa-floating-controls button { transition: none !important; }
 }
+
+
+/* Floating controls: thumb-friendly navigation on small screens. */
+.oa-floating-controls { overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none; }
+.oa-floating-controls::-webkit-scrollbar { display:none; }
+.oa-floating-controls button { flex:0 0 auto; }
+.oa-floating-controls button[aria-pressed="true"] { background:#514735; color:#fff; border-color:#514735; }
+@media (max-width:480px) {
+  .oa-floating-controls { left:9px; right:9px; width:auto; max-width:none; transform:none; justify-content:flex-start; overflow-x:auto; padding:6px; }
+  .oa-floating-controls button { flex:0 0 auto; min-width:62px; padding-inline:10px; }
+}
