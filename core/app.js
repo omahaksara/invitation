@@ -16,7 +16,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261103a");
+      dataUrl.searchParams.set("_v", "20261103b");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -39,7 +39,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261103a");
+          registryUrl.searchParams.set("_v", "20261103b");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -63,7 +63,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261103a");
+          templateUrl.searchParams.set("_v", "20261103b");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -638,6 +638,7 @@
       open.addEventListener("click", async () => {
         if (cover) cover.classList.add("is-opening");
         if (main) { main.hidden = false; main.style.display = "block"; }
+        document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
@@ -1036,11 +1037,17 @@
     nav.id = "oa-floating-controls";
     nav.className = "oa-floating-controls";
     nav.setAttribute("aria-label", "Navigasi undangan");
-    const makeButton = (action, label, ariaLabel) => {
+
+    const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
-      button.type = "button"; button.dataset.oaAction = action; button.textContent = label;
-      button.setAttribute("aria-label", ariaLabel); return button;
+      button.type = "button";
+      button.dataset.oaAction = action;
+      if (feature) button.dataset.oaFeature = feature;
+      button.textContent = label;
+      button.setAttribute("aria-label", ariaLabel);
+      return button;
     };
+
     const topButton = makeButton("top", "↑ Atas", "Kembali ke bagian atas");
     const nextButton = makeButton("next", "↓ Lanjut", "Gulir ke bagian berikutnya");
     const autoButton = makeButton("auto", "▶ Auto", "Mulai gulir otomatis");
@@ -1048,49 +1055,94 @@
     const shareButton = makeButton("share", "↗ Bagikan", "Bagikan tautan undangan");
     autoButton.setAttribute("aria-pressed", "false");
     nav.append(topButton, nextButton);
+
     const sectionOptions = [
-      ["events", "Acara", "#event-list, .event-section, #events-section, section:has(#link-akad-maps)"],
-      ["gallery", "Galeri", "#gallery-grid, .gallery-grid"],
-      ["rsvp", "RSVP", "#rsvp-section, .rsvp-section, #rsvp-form"],
-      ["guestbook", "Ucapan", "#guestbook-section, .guestbook-section, #wishes-form"],
-      ["gifts", "Hadiah", "#gift-list, .gift-section, #gift-section"]
+      { feature: "loveStory", aliases: ["story"], label: "Cerita", selectors: ["#story", "#story-list", ".story-section", ".story-list"] },
+      { feature: "events", aliases: [], label: "Acara", selectors: ["#event-list", ".event-section", ".events", "#events", "#events-section", "section:has(#link-akad-maps)"] },
+      { feature: "maps", aliases: [], label: "Lokasi", selectors: [".maps-section", "#maps-section", "#link-akad-maps", "#link-resepsi-maps"] },
+      { feature: "calendar", aliases: [], label: "Kalender", selectors: [".calendar-section", "#calendar-section", "#calendar-link"] },
+      { feature: "countdown", aliases: [], label: "Hitung", selectors: ["#countdown", ".countdown-section", ".countdown"] },
+      { feature: "gallery", aliases: [], label: "Galeri", selectors: ["#gallery", "#gallery-grid", ".gallery-section", ".gallery-grid"] },
+      { feature: "video", aliases: [], label: "Video", selectors: ["#video-section", ".video-section", "#wedding-video"] },
+      { feature: "rsvp", aliases: [], label: "RSVP", selectors: ["#rsvp-section", ".rsvp-section", "#rsvp-form"] },
+      { feature: "guestbook", aliases: [], label: "Ucapan", selectors: ["#guestbook-section", ".guestbook-section", "#wishes-form"] },
+      { feature: "gifts", aliases: [], label: "Hadiah", selectors: ["#gift-list", ".gift-section", "#gift-section"] },
+      { feature: "quotes", aliases: ["quote"], label: "Kutipan", selectors: ["#quote-section", ".quote-section", ".quote"] },
+      { feature: "hashtag", aliases: [], label: "Hashtag", selectors: ["#hashtag-section", ".hashtag-section"] }
     ];
-    const quickButtons = [];
-    sectionOptions.forEach(([feature, label, selector]) => {
-      if (features[feature] === false) return;
-      const target = document.querySelector(selector);
-      if (!target) return;
-      const section = target.matches("section") ? target : target.closest("section") || target;
-      if (section.hidden || section.closest("[hidden]")) return;
-      const style = getComputedStyle(section);
-      if (style.display === "none" || style.visibility === "hidden") return;
-      if (!section.id) section.id = "oa-nav-" + feature;
-      const button = makeButton("jump", label, "Buka bagian " + label);
-      button.dataset.target = section.id; nav.append(button); quickButtons.push(button);
-    });
-    const audio = document.getElementById("bg-music");
-    const hasMusic = !!(audio && audio.getAttribute("src") && features.music !== false);
-    if (hasMusic) nav.append(musicButton);
-    nav.append(autoButton, shareButton); document.body.append(nav);
-    const visibleSections = () => Array.from(document.querySelectorAll(
-      "#app-inner > section, #main-content > section, .invitation-container > section, .invite-shell > section, .sirein-page > section, .oa-shared-section, #rsvp-section, #guestbook-section"
-    )).filter(section => {
-      if (section.hidden || section.closest("[hidden]")) return false;
-      const style = getComputedStyle(section);
-      return style.display !== "none" && style.visibility !== "hidden" && section.getBoundingClientRect().height > 0;
-    });
-    const scrollToSection = section => {
-      if (section) window.scrollTo({ top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 14), behavior: "smooth" });
+
+    const isVisible = element => {
+      if (!element || element.hidden) return false;
+      for (let node = element; node && node !== document.body; node = node.parentElement) {
+        if (node.hidden) return false;
+        const style = getComputedStyle(node);
+        if (style.display === "none" || style.visibility === "hidden") return false;
+      }
+      return element.getBoundingClientRect().height > 0;
     };
+
+    const refreshQuickButtons = () => {
+      nav.querySelectorAll('[data-oa-action="jump"]').forEach(button => button.remove());
+      const registeredSections = new Set();
+      sectionOptions.forEach(option => {
+        const enabled = features[option.feature] !== false && option.aliases.every(key => features[key] !== false);
+        if (!enabled) return;
+        let target = null;
+        for (const selector of option.selectors) {
+          const candidate = document.querySelector(selector);
+          if (candidate && isVisible(candidate)) {
+            target = candidate;
+            break;
+          }
+        }
+        if (!target || registeredSections.has(target)) return;
+        registeredSections.add(target);
+        if (!target.id) target.id = "oa-nav-" + option.feature;
+        const button = makeButton("jump", option.label, "Buka bagian " + option.label, option.feature);
+        button.dataset.target = target.id;
+        button.addEventListener("click", () => scrollToSection(document.getElementById(button.dataset.target)));
+        const before = autoButton.parentNode === nav ? autoButton : null;
+        nav.insertBefore(button, before);
+      });
+    };
+    document.addEventListener("oa:invitation-opened", refreshQuickButtons);
+    refreshQuickButtons();
+
+    const audio = document.getElementById("bg-music");
+    const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
+    if (hasMusic) nav.append(musicButton);
+    nav.append(autoButton, shareButton);
+    document.body.append(nav);
+
+    const visibleSections = () => {
+      const candidates = document.querySelectorAll(
+        "main > section, #main-content > section, #app-inner > section, .invitation-container > section, .invite-shell > section, .sirein-page > section, .oa-shared-section, " +
+        ".story-section, .event-section, .gallery-section, .video-section, .rsvp-section, .guestbook-section, .gift-section, .quote-section"
+      );
+      const seen = new Set();
+      return Array.from(candidates).filter(section => {
+        if (seen.has(section) || !isVisible(section)) return false;
+        seen.add(section);
+        return true;
+      });
+    };
+
+    const scrollToSection = section => {
+      if (!section || !isVisible(section)) return;
+      const top = Math.max(0, section.getBoundingClientRect().top + window.scrollY - 16);
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+
     topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     nextButton.addEventListener("click", () => {
       const current = window.scrollY + 90;
-      const next = visibleSections().map(section => ({ section, top: section.getBoundingClientRect().top + window.scrollY }))
-        .filter(item => item.top > current + 8).sort((a, b) => a.top - b.top)[0];
+      const next = visibleSections()
+        .map(section => ({ section, top: section.getBoundingClientRect().top + window.scrollY }))
+        .filter(item => item.top > current + 8)
+        .sort((a, b) => a.top - b.top)[0];
       if (next) scrollToSection(next.section);
       else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
     });
-    quickButtons.forEach(button => button.addEventListener("click", () => scrollToSection(document.getElementById(button.dataset.target))));
     if (hasMusic) {
       const syncMusic = () => {
         const playing = !audio.paused;
@@ -1099,35 +1151,55 @@
         musicButton.setAttribute("aria-label", playing ? "Jeda musik" : "Putar musik");
       };
       musicButton.addEventListener("click", async () => {
-        if (audio.paused) { try { await audio.play(); } catch { musicButton.title = "Musik belum dapat diputar. Coba lagi setelah membuka undangan."; } }
-        else audio.pause();
+        if (audio.paused) {
+          try {
+            await audio.play();
+          } catch {
+            musicButton.title = "Musik belum dapat diputar. Coba lagi setelah membuka undangan.";
+          }
+        } else {
+          audio.pause();
+        }
         syncMusic();
       });
-      audio.addEventListener("play", syncMusic); audio.addEventListener("pause", syncMusic); syncMusic();
+      audio.addEventListener("play", syncMusic);
+      audio.addEventListener("pause", syncMusic);
+      syncMusic();
     }
+
     shareButton.addEventListener("click", async () => {
       const shareData = { title: document.title, text: "Undangan pernikahan digital", url: location.href };
       try {
-        if (navigator.share) await navigator.share(shareData);
-        else if (navigator.clipboard && navigator.clipboard.writeText) {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(location.href);
           shareButton.textContent = "✓ Tersalin";
           shareButton.setAttribute("aria-label", "Tautan undangan berhasil disalin");
         } else {
-          const helper = document.createElement("textarea"); helper.value = location.href;
-          helper.setAttribute("readonly", ""); helper.style.position = "fixed"; helper.style.opacity = "0";
-          document.body.append(helper); helper.select();
-          const copied = document.execCommand("copy"); helper.remove();
+          const helper = document.createElement("textarea");
+          helper.value = location.href;
+          helper.setAttribute("readonly", "");
+          helper.style.position = "fixed";
+          helper.style.opacity = "0";
+          document.body.append(helper);
+          helper.select();
+          const copied = document.execCommand("copy");
+          helper.remove();
           shareButton.textContent = copied ? "✓ Tersalin" : "↗ Bagikan";
         }
       } catch (error) {
         if (error && error.name !== "AbortError") shareButton.title = "Tautan belum dapat dibagikan dari perangkat ini.";
       }
     });
+
     let autoTimer = null;
+    const originalScrollBehavior = document.documentElement.style.scrollBehavior;
     const stopAutoScroll = () => {
       if (autoTimer !== null) window.clearInterval(autoTimer);
-      autoTimer = null; autoButton.textContent = "▶ Auto";
+      autoTimer = null;
+      document.documentElement.style.scrollBehavior = originalScrollBehavior;
+      autoButton.textContent = "▶ Auto";
       autoButton.setAttribute("aria-pressed", "false");
       autoButton.setAttribute("aria-label", "Mulai gulir otomatis");
     };
@@ -1137,19 +1209,34 @@
       autoButton.textContent = "Auto off";
     } else {
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null) { stopAutoScroll(); return; }
-        autoButton.textContent = "Ⅱ Jeda"; autoButton.setAttribute("aria-pressed", "true");
+        if (autoTimer !== null) {
+          stopAutoScroll();
+          return;
+        }
+        document.documentElement.style.scrollBehavior = "auto";
+        autoButton.textContent = "Ⅱ Jeda";
+        autoButton.setAttribute("aria-pressed", "true");
         autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
         autoTimer = window.setInterval(() => {
-          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) { stopAutoScroll(); return; }
-          window.scrollBy(0, 1.25);
-        }, 30);
+          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
+            stopAutoScroll();
+            return;
+          }
+          window.scrollBy(0, 1);
+        }, 24);
       });
       ["wheel", "touchstart"].forEach(type => window.addEventListener(type, stopAutoScroll, { passive: true }));
+      window.addEventListener("pointerdown", event => {
+        if (!nav.contains(event.target)) stopAutoScroll();
+      }, { passive: true });
       window.addEventListener("keydown", event => {
         if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) stopAutoScroll();
       });
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stopAutoScroll();
+      });
     }
+
     if (features.navigation === false) nav.hidden = true;
   }
 

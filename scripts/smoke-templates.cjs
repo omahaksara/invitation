@@ -101,7 +101,53 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
 
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="loveStory"]').count(),
+          theme.slug + ": pintasan cerita tidak tersedia");
+        for (const feature of ["events", "countdown", "gallery", "rsvp", "guestbook", "gifts"]) {
+          assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="' + feature + '"]').count(),
+            theme.slug + ": pintasan " + feature + " tidak tersedia");
+        }
+        const quoteData = await page.evaluate(() => window.__invitationData?.quote || {});
+        const quoteEnabled = await page.evaluate(() => {
+          const flags = window.__invitationData?.features || {};
+          return flags.quotes !== false && flags.quote !== false;
+        });
+        if (quoteEnabled && (quoteData.text || quoteData.arab)) {
+          const quoteButton = page.locator('#oa-floating-controls [data-oa-feature="quotes"]');
+          assert.equal(await quoteButton.count(), 1, theme.slug + ": pintasan quotes tidak tersedia");
+        }
         const navigation = page.locator("#oa-floating-controls");
+        const shortcutAudit = await navigation.locator('[data-oa-action="jump"]').evaluateAll(buttons => buttons.map(button => {
+          const targetId = button.dataset.target || "";
+          const targets = targetId ? Array.from(document.querySelectorAll("[id]")).filter(element => element.id === targetId) : [];
+          const target = targets[0] || null;
+          const style = target ? getComputedStyle(target) : null;
+          const rect = target ? target.getBoundingClientRect() : null;
+          return {
+            feature: button.dataset.oaFeature,
+            targetId,
+            targetCount: targets.length,
+            visible: Boolean(target && !target.hidden && style.display !== "none" && style.visibility !== "hidden" && rect.height > 0)
+          };
+        }));
+        assert.ok(shortcutAudit.length > 0, theme.slug + ": tidak ada pintasan bagian");
+        for (const shortcut of shortcutAudit) {
+          assert.ok(shortcut.targetId, theme.slug + ": pintasan " + shortcut.feature + " tidak memiliki target");
+          assert.equal(shortcut.targetCount, 1, theme.slug + ": target pintasan " + shortcut.feature + " tidak unik/ada");
+          assert.equal(shortcut.visible, true, theme.slug + ": target pintasan " + shortcut.feature + " tidak terlihat");
+        }
+        if (quoteEnabled && (quoteData.text || quoteData.arab)) {
+          const quoteButton = navigation.locator('[data-oa-feature="quotes"]');
+          const quoteTargetId = await quoteButton.getAttribute("data-target");
+          if (theme.slug === "karsa") {
+            assert.equal(quoteTargetId, "quote-section", theme.slug + ": pintasan kutipan tidak mengarah ke section kutipan");
+          }
+          await quoteButton.click();
+          await page.waitForFunction(id => {
+            const target = document.getElementById(id);
+            return Boolean(target && Math.abs(target.getBoundingClientRect().top) < window.innerHeight);
+          }, quoteTargetId, { timeout: 5000 });
+        }
         assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
         const autoScroll = navigation.locator('[data-oa-action="auto"]');
         assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
@@ -110,6 +156,9 @@ const themes = [
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": tombol auto-scroll tidak mulai");
+          await page.waitForTimeout(120);
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
             theme.slug + ": tombol auto-scroll tidak berhenti");
