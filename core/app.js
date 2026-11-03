@@ -1196,9 +1196,11 @@
     });
 
     let autoTimer = null;
+    const originalScrollBehavior = document.documentElement.style.scrollBehavior;
     const stopAutoScroll = () => {
       if (autoTimer !== null) window.clearInterval(autoTimer);
       autoTimer = null;
+      document.documentElement.style.scrollBehavior = originalScrollBehavior;
       autoButton.textContent = "▶ Auto";
       autoButton.setAttribute("aria-pressed", "false");
       autoButton.setAttribute("aria-label", "Mulai gulir otomatis");
@@ -1213,6 +1215,7 @@
           stopAutoScroll();
           return;
         }
+        document.documentElement.style.scrollBehavior = "auto";
         autoButton.textContent = "Ⅱ Jeda";
         autoButton.setAttribute("aria-pressed", "true");
         autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
