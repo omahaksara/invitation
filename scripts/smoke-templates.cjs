@@ -64,6 +64,24 @@ const themes = [
         }
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
+        await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(),
+          theme.slug + ": tombol kembali ke atas tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(),
+          theme.slug + ": tombol lanjut tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="auto"]').count(),
+          theme.slug + ": tombol auto-scroll tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="music"]').count(),
+          theme.slug + ": tombol musik universal tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(),
+          theme.slug + ": tombol bagikan tidak tersedia");
+        await page.locator('#oa-floating-controls [data-oa-action="auto"]').click();
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').getAttribute("aria-pressed"), "true",
+          theme.slug + ": auto-scroll tidak mulai");
+        await page.locator('#oa-floating-controls [data-oa-action="auto"]').click();
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').getAttribute("aria-pressed"), "false",
+          theme.slug + ": auto-scroll tidak berhenti");
+
 
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
