@@ -1081,10 +1081,6 @@
       return element.getBoundingClientRect().height > 0;
     };
 
-    const sectionFor = element => element.closest(
-      "section, .story-section, .event-section, .countdown-section, .gallery-section, .video-section, .rsvp-section, .guestbook-section, .gift-section, .quote-section, .hashtag-section, .oa-shared-section"
-    ) || element;
-
     const refreshQuickButtons = () => {
       nav.querySelectorAll('[data-oa-action="jump"]').forEach(button => button.remove());
       const registeredSections = new Set();
@@ -1094,8 +1090,8 @@
         let target = null;
         for (const selector of option.selectors) {
           const candidate = document.querySelector(selector);
-          if (candidate && isVisible(sectionFor(candidate))) {
-            target = sectionFor(candidate);
+          if (candidate && isVisible(candidate)) {
+            target = candidate;
             break;
           }
         }
