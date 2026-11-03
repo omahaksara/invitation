@@ -1180,7 +1180,8 @@
         .oa-floating-controls button { flex:0 0 auto; }
         @media (max-width:600px) { .oa-floating-controls { overflow-x:auto; justify-content:flex-start; max-width:calc(100vw - 18px); } }
         @media (max-width:600px) { .oa-story-photo { max-height:320px; } }
-        @media (prefers-reduced-motion: reduce) {\n          #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
+        @media (prefers-reduced-motion: reduce) {
+          #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
           html { scroll-behavior: auto !important; }
           .oa-scroll-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
         }
