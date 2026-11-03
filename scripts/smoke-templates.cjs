@@ -75,6 +75,12 @@ const themes = [
           theme.slug + ": tombol musik universal tidak tersedia");
         assert.ok(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(),
           theme.slug + ": tombol bagikan tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="loveStory"]').count(),
+          theme.slug + ": pintasan cerita tidak tersedia");
+        for (const feature of ["events", "countdown", "gallery", "rsvp", "guestbook", "gifts", "quotes"]) {
+          assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="' + feature + '"]').count(),
+            theme.slug + ": pintasan " + feature + " tidak tersedia");
+        }
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
           cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
