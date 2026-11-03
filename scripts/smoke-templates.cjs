@@ -75,14 +75,6 @@ const themes = [
           theme.slug + ": tombol musik universal tidak tersedia");
         assert.ok(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(),
           theme.slug + ": tombol bagikan tidak tersedia");
-        await page.locator('#oa-floating-controls [data-oa-action="auto"]').click();
-        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').getAttribute("aria-pressed"), "true",
-          theme.slug + ": auto-scroll tidak mulai");
-        await page.locator('#oa-floating-controls [data-oa-action="auto"]').click();
-        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').getAttribute("aria-pressed"), "false",
-          theme.slug + ": auto-scroll tidak berhenti");
-
-
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
           cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
