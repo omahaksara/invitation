@@ -1058,6 +1058,8 @@
     const sectionOptions = [
       { feature: "loveStory", aliases: ["story"], label: "Cerita", selectors: ["#story", "#story-list", ".story-section", ".story-list"] },
       { feature: "events", aliases: [], label: "Acara", selectors: ["#event-list", ".event-section", ".events", "#events", "#events-section", "section:has(#link-akad-maps)"] },
+      { feature: "maps", aliases: [], label: "Lokasi", selectors: [".maps-section", "#maps-section", "#link-akad-maps", "#link-resepsi-maps"] },
+      { feature: "calendar", aliases: [], label: "Kalender", selectors: [".calendar-section", "#calendar-section", "#calendar-link"] },
       { feature: "countdown", aliases: [], label: "Hitung", selectors: ["#countdown", ".countdown-section", ".countdown"] },
       { feature: "gallery", aliases: [], label: "Galeri", selectors: ["#gallery", "#gallery-grid", ".gallery-section", ".gallery-grid"] },
       { feature: "video", aliases: [], label: "Video", selectors: ["#video-section", ".video-section", "#wedding-video"] },
@@ -1085,7 +1087,7 @@
     const quickButtons = [];
     const registeredSections = new Set();
     sectionOptions.forEach(option => {
-      const enabled = [option.feature, ...option.aliases].some(key => features[key] !== false);
+      const enabled = features[option.feature] !== false && option.aliases.every(key => features[key] !== false);
       if (!enabled) return;
       let target = null;
       for (const selector of option.selectors) {
