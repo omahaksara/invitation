@@ -64,7 +64,17 @@ const themes = [
         }
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
-
+        await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(),
+          theme.slug + ": tombol kembali ke atas tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(),
+          theme.slug + ": tombol lanjut tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="auto"]').count(),
+          theme.slug + ": tombol auto-scroll tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="music"]').count(),
+          theme.slug + ": tombol musik universal tidak tersedia");
+        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(),
+          theme.slug + ": tombol bagikan tidak tersedia");
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
           cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
@@ -90,6 +100,24 @@ const themes = [
             return !cover || cover.hidden || getComputedStyle(cover).display === "none";
           }, undefined, { timeout: 5000 });
         }
+
+        const navigation = page.locator("#oa-floating-controls");
+        assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
+        const autoScroll = navigation.locator('[data-oa-action="auto"]');
+        assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+          theme.slug + ": auto-scroll harus nonaktif saat halaman pertama dibuka");
+        if (await autoScroll.isEnabled()) {
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": tombol auto-scroll tidak mulai");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": tombol auto-scroll tidak berhenti");
+        }
+        assert.equal(await navigation.locator('[data-oa-action="top"]').count(), 1,
+          theme.slug + ": tombol kembali ke atas tidak tersedia");
+        assert.equal(await navigation.locator('[data-oa-action="next"]').count(), 1,
+          theme.slug + ": tombol bagian berikutnya tidak tersedia");
 
         const musicControl = page.locator("#music-toggle, #music-btn").first();
         await musicControl.waitFor({ state: "visible", timeout: 5000 });
