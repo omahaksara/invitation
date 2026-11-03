@@ -653,6 +653,7 @@
           }
         }
         setupReveal();
+        document.dispatchEvent(new Event("oa:invitation-opened"));
       });
     } else {
       // Tema tanpa sampul pembuka (mis. Royal Vintage) harus tetap bisa memakai musik.
@@ -1084,27 +1085,32 @@
       "section, .story-section, .event-section, .countdown-section, .gallery-section, .video-section, .rsvp-section, .guestbook-section, .gift-section, .quote-section, .hashtag-section, .oa-shared-section"
     ) || element;
 
-    const quickButtons = [];
-    const registeredSections = new Set();
-    sectionOptions.forEach(option => {
-      const enabled = features[option.feature] !== false && option.aliases.every(key => features[key] !== false);
-      if (!enabled) return;
-      let target = null;
-      for (const selector of option.selectors) {
-        const candidate = document.querySelector(selector);
-        if (candidate && isVisible(sectionFor(candidate))) {
-          target = sectionFor(candidate);
-          break;
+    const refreshQuickButtons = () => {
+      nav.querySelectorAll('[data-oa-action="jump"]').forEach(button => button.remove());
+      const registeredSections = new Set();
+      sectionOptions.forEach(option => {
+        const enabled = features[option.feature] !== false && option.aliases.every(key => features[key] !== false);
+        if (!enabled) return;
+        let target = null;
+        for (const selector of option.selectors) {
+          const candidate = document.querySelector(selector);
+          if (candidate && isVisible(sectionFor(candidate))) {
+            target = sectionFor(candidate);
+            break;
+          }
         }
-      }
-      if (!target || registeredSections.has(target)) return;
-      registeredSections.add(target);
-      if (!target.id) target.id = "oa-nav-" + option.feature;
-      const button = makeButton("jump", option.label, "Buka bagian " + option.label, option.feature);
-      button.dataset.target = target.id;
-      nav.append(button);
-      quickButtons.push(button);
-    });
+        if (!target || registeredSections.has(target)) return;
+        registeredSections.add(target);
+        if (!target.id) target.id = "oa-nav-" + option.feature;
+        const button = makeButton("jump", option.label, "Buka bagian " + option.label, option.feature);
+        button.dataset.target = target.id;
+        button.addEventListener("click", () => scrollToSection(document.getElementById(button.dataset.target)));
+        const before = autoButton.parentNode === nav ? autoButton : null;
+        nav.insertBefore(button, before);
+      });
+    };
+    document.addEventListener("oa:invitation-opened", refreshQuickButtons);
+    refreshQuickButtons();
 
     const audio = document.getElementById("bg-music");
     const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
@@ -1141,10 +1147,6 @@
       if (next) scrollToSection(next.section);
       else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
     });
-    quickButtons.forEach(button => button.addEventListener("click", () => {
-      scrollToSection(document.getElementById(button.dataset.target));
-    }));
-
     if (hasMusic) {
       const syncMusic = () => {
         const playing = !audio.paused;
