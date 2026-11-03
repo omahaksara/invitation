@@ -113,9 +113,11 @@ const themes = [
         assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
           theme.slug + ": auto-scroll harus nonaktif saat halaman pertama dibuka");
         if (await autoScroll.isEnabled()) {
+          const scrollBeforeAuto = await page.evaluate(() => window.scrollY);
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": tombol auto-scroll tidak mulai");
+          await page.waitForFunction(previous => window.scrollY > previous, scrollBeforeAuto, { timeout: 3000 });
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
             theme.slug + ": tombol auto-scroll tidak berhenti");
