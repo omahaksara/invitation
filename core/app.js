@@ -638,6 +638,7 @@
       open.addEventListener("click", async () => {
         if (cover) cover.classList.add("is-opening");
         if (main) { main.hidden = false; main.style.display = "block"; }
+        document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
@@ -653,7 +654,6 @@
           }
         }
         setupReveal();
-        document.dispatchEvent(new Event("oa:invitation-opened"));
       });
     } else {
       // Tema tanpa sampul pembuka (mis. Royal Vintage) harus tetap bisa memakai musik.
