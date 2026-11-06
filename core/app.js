@@ -1173,11 +1173,11 @@
     const hasMusic = !!((audio && (audio.getAttribute("src") || audio.src) || configuredMusicSrc) && features.music !== false);
 
     // Playback and auto-scroll live inside the shared "Lainnya" dock menu.
-    const autoButton = makeButton("auto", "↧ Gulir", "Mulai gulir otomatis");
+    const autoButton = makeButton("auto", "↧", "Mulai gulir otomatis");
     autoButton.className = "oa-dock-action oa-auto-scroll";
     let musicButton = null;
     if (hasMusic) {
-      musicButton = makeButton("music", "♫ Musik", "Putar musik");
+      musicButton = makeButton("music", "♫", "Putar musik");
       musicButton.className = "oa-dock-action oa-music-control";
     }
 
@@ -1214,7 +1214,7 @@
         item.button = button;
       });
 
-      const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
+      // Compact media controls sit horizontally in the dock, not in a vertical floating stack.\n      nav.append(autoButton);\n      if (musicButton) nav.append(musicButton);\n\n      const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
       {
         const moreWrap = document.createElement("div");
         moreWrap.className = "oa-nav-more-wrap";
@@ -1264,8 +1264,7 @@
           panel.hidden = true;
           moreButton.setAttribute("aria-expanded", "false");
         });
-        panel.append(topButton, nextButton, shareButton, autoButton);
-        if (musicButton) panel.append(musicButton);
+        panel.append(topButton, nextButton, shareButton);
         moreButton.addEventListener("click", () => {
           panel.hidden = !panel.hidden;
           moreButton.setAttribute("aria-expanded", String(!panel.hidden));
