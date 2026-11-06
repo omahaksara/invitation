@@ -67,7 +67,7 @@ function validateAsset(slug, file, key, value) {
   const sharedMusicRoot = path.resolve(ROOT, 'assets', 'music', 'library') + path.sep;
   const isClientAsset = resolved.startsWith(clientRoot);
   const isSharedMusicAsset = resolved.startsWith(sharedMusicRoot) &&
-    /^(?:media|music|audio)(?:\\.|$)/i.test(key);
+    /^(?:media|music|audio)(?:\.|$)/i.test(key);
   if (!isClientAsset && !isSharedMusicAsset) {
     errors.push(`${slug}: path aset ${key} keluar dari folder klien dan pustaka musik bersama yang diizinkan: "${clean}".`);
     return;
