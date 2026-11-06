@@ -96,13 +96,23 @@
 .royal-music-toggle{position:fixed;right:18px;bottom:18px;z-index:1000;width:46px;height:46px;display:none;align-items:center;justify-content:center;border:1px solid #c49a6c;border-radius:50%;background:#fffdf8;color:#8b5a2b;box-shadow:0 5px 18px rgba(0,0,0,.12);cursor:pointer}.royal-music-toggle i{font-size:1.1rem}.royal-music-toggle:focus-visible{outline:2px solid #8b5a2b;outline-offset:3px}
 
 /* Data-driven cover photo; relative paths resolve against the active client folder. */
-.hero{position:relative;overflow:hidden}
-.hero .hero-cover-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.24;z-index:0}
-.hero>:not(.hero-cover-image){position:relative;z-index:1}
+.hero{position:relative;overflow:hidden;display:flex;min-height:100svh;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box;background:#37080d;color:#f4e7ce;padding:72px 24px}
+.hero .hero-cover-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.28;z-index:0}
+.hero::after{content:"";position:absolute;inset:14px;border:1px solid rgba(208,173,102,.72);pointer-events:none;z-index:1}
+.hero>:not(.hero-cover-image){position:relative;z-index:2}
+.hero .date{color:#e7c98c;letter-spacing:.18em}
+.hero h1,.hero h1 span{color:#f3dfb2}
+.hero .guest-box p,.hero .guest-box h3{color:#f6e9d1!important}
+#open-invitation-btn{margin-top:30px;padding:13px 26px;border:1px solid #d0ad66;border-radius:999px;background:linear-gradient(135deg,#f0dba9,#c49a6c);color:#37080d;font:600 .82rem Georgia,serif;letter-spacing:.08em;cursor:pointer;box-shadow:0 8px 24px #17030755}
+#open-invitation-btn:focus-visible{outline:2px solid #fff;outline-offset:4px}
+#main-content[hidden]{display:none!important}
+#main-content{padding-bottom:90px}
+#couple-section,#events-section{scroll-margin-top:18px}
+@media(prefers-reduced-motion:no-preference){#open-invitation-btn{transition:transform .25s ease,box-shadow .25s ease}#open-invitation-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px #17030766}}
 </style>
 <div class="invitation-container">
     <!-- Cover / Sampul -->
-    <section class="hero">
+    <section class="hero" id="cover-section" aria-label="Sampul undangan">
         <img class="hero-cover-image" data-bind="cover.image" alt="Foto sampul undangan">
         <p class="date" data-bind="cover.title">Undangan Pernikahan</p>
         <div class="names">
@@ -117,8 +127,10 @@
             <p style="font-size: 0.85rem; color: #7a6a58;">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
             <h3 id="nama-tamu" style="font-size: 1.1rem; color: #333; margin-top: 5px;">Tamu Undangan</h3>
         </div>
+        <button id="open-invitation-btn" type="button">Buka Undangan</button>
     </section>
 
+    <main id="main-content" hidden>
     <!-- Kutipan / Quote -->
     <section class="quote-section" style="padding: 30px 20px; text-align: center; background: #faf7f5;">
         <p class="arab" data-bind="quote.arab" style="font-size: 1.2rem; margin-bottom: 10px; color: #8b5a2b;"></p>
@@ -127,7 +139,7 @@
     </section>
 
     <!-- Profil Mempelai -->
-    <section class="couples">
+    <section class="couples" id="couple-section">
         <div class="profile-card">
             <img data-bind="couple.groom.photo" alt="Mempelai Pria">
             <h3 data-bind="couple.groom.fullName">Nama Pria</h3>
@@ -142,7 +154,7 @@
     </section>
 
     <!-- Detail Acara -->
-    <section class="events">
+    <section class="events" id="events-section">
         <div class="event-card">
             <h2 data-bind="events.akad.title">Akad Nikah</h2>
             <p data-bind="events.akad.date">Tanggal</p>
@@ -163,4 +175,5 @@
     <!-- Audio Player -->
     <audio id="bg-music" loop data-bind="media.music"></audio>
     <button id="music-toggle" class="royal-music-toggle" type="button" aria-label="Putar atau jeda musik" aria-pressed="false"><i class="fa-solid fa-compact-disc" aria-hidden="true"></i></button>
+    </main>
 </div>
