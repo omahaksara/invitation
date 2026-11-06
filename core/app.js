@@ -1177,7 +1177,8 @@
       musicButton.className = "oa-quick-button oa-music-control";
       quick.append(musicButton);
     }
-    document.body.append(quick);
+    // Mount outside the theme body so transformed/isolated theme wrappers cannot cover controls.
+    document.documentElement.append(quick);
 
     const isInvitationField = element => element && element.matches &&
       element.matches("input, textarea, select, [contenteditable='true']") &&
@@ -1276,7 +1277,8 @@
           }
         });
       }
-      document.body.append(nav);
+      // Keep the shared dock in the root stacking context, above every theme canvas.
+      document.documentElement.append(nav);
 
       const updateActive = () => {
         const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
