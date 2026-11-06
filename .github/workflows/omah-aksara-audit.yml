@@ -120,6 +120,14 @@ jobs:
             sleep 1
           done
           node scripts/smoke-templates.cjs
+      - name: Upload visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omah-aksara-visual-review
+          path: artifacts/visual/*.png
+          if-no-files-found: warn
+          retention-days: 7
 
   live-api-readiness:
     # Read-only GET health probe is safe to run on PRs as well as main pushes.
