@@ -339,3 +339,17 @@ body:not(.oa-invitation-opened) .royal-music-toggle {
 @media(prefers-reduced-motion:reduce) {
   .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {transition:none!important}
 }
+
+
+/* Context-aware controls: keep the dock clear of active forms and gallery previews. */
+body.oa-form-focus .oa-floating-controls,
+body.oa-form-focus .oa-quick-controls,
+body.oa-form-focus [data-oa-native-navigation],
+body.oa-lightbox-open .oa-floating-controls,
+body.oa-lightbox-open .oa-quick-controls,
+body.oa-lightbox-open [data-oa-native-navigation],
+body.oa-lightbox-open .oa-native-music-control {
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
