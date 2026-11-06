@@ -91,6 +91,11 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const visibleLegacyControls = await page.locator(
+          "#app .oa-legacy-navigation:visible, #app .oa-legacy-music-control:visible"
+        ).count();
+        assert.equal(visibleLegacyControls, 0,
+          theme.slug + ": kontrol navigasi/musik bawaan tema masih tampil dan berpotensi dobel");
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(), 1,
