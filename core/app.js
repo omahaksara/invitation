@@ -1191,6 +1191,36 @@
           panel.append(button);
           item.button = button;
         });
+        const topButton = makeButton("top", "Ke atas", "Kembali ke bagian atas");
+        topButton.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          panel.hidden = true;
+          moreButton.setAttribute("aria-expanded", "false");
+        });
+        const nextButton = makeButton("next", "Bagian berikutnya", "Lanjut ke bagian berikutnya");
+        nextButton.addEventListener("click", () => {
+          const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
+          const next = menu.find(item => item.target.getBoundingClientRect().top + window.scrollY > marker + 8);
+          if (next) scrollToSection(next.target);
+          panel.hidden = true;
+          moreButton.setAttribute("aria-expanded", "false");
+        });
+        const shareButton = makeButton("share", "Bagikan", "Bagikan undangan");
+        shareButton.addEventListener("click", async () => {
+          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: location.href };
+          try {
+            if (navigator.share) await navigator.share(shareData);
+            else if (navigator.clipboard?.writeText) {
+              await navigator.clipboard.writeText(shareData.url);
+              shareButton.textContent = "Tautan disalin";
+            } else shareButton.title = "Salin tautan dari bilah alamat browser.";
+          } catch (error) {
+            if (error && error.name !== "AbortError") shareButton.title = "Tautan belum dapat dibagikan.";
+          }
+          panel.hidden = true;
+          moreButton.setAttribute("aria-expanded", "false");
+        });
+        panel.append(topButton, nextButton, shareButton);
         moreButton.addEventListener("click", () => {
           panel.hidden = !panel.hidden;
           moreButton.setAttribute("aria-expanded", String(!panel.hidden));
