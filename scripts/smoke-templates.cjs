@@ -110,6 +110,28 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
+        if (await autoScroll.isEnabled()) {
+          // The invitation should begin scrolling automatically after it is opened.
+          await page.waitForFunction(() => {
+            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
+            return button?.getAttribute("aria-pressed") === "true";
+          }, undefined, { timeout: 3500 });
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
+          await page.waitForTimeout(120);
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": tombol auto-scroll tidak berhenti");
+        }
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-desktop.png`));
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
@@ -212,28 +234,7 @@ const themes = [
           }, quoteTargetId, { timeout: 5000 });
         }
         assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
-        const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
-        if (await autoScroll.isEnabled()) {
-          // The invitation should begin scrolling automatically after it is opened.
-          await page.waitForFunction(() => {
-            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
-            return button?.getAttribute("aria-pressed") === "true";
-          }, undefined, { timeout: 3500 });
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-            theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
-          await page.waitForTimeout(120);
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-            theme.slug + ": tombol auto-scroll tidak berhenti");
-        }
+
         assert.equal(await navigation.locator('[data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
         assert.equal(await navigation.locator('[data-oa-action="next"]').count(), 1,
