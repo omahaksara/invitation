@@ -531,3 +531,59 @@ body.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
     transform: none !important;
   }
 }
+
+
+/* Distinct editorial typography for every active invitation theme.
+   Shared structure stays consistent; type personality remains theme-owned. */
+html[data-oa-theme="karsa"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="royal-vintage"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="serena-ivory"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="sirein"] { --oa-font-display:"EB Garamond",Georgia,serif; --oa-font-body:"Lato",Arial,sans-serif; }
+html[data-oa-theme="groom"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="kinze"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="aksara-signature"] { --oa-font-display:"EB Garamond",Georgia,serif; --oa-font-body:"Lato",Arial,sans-serif; }
+html[data-oa-theme="botanical-garden"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="velvet-romance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="romantic-floral"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="elegance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="aurelia-noir"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="lumiere-bloom"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="aksara-nocturne"] { --oa-font-display:"Marcellus",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="calestial"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Cormorant Garamond",Georgia,serif; }
+
+html[data-oa-theme] body,
+html[data-oa-theme] #app,
+html[data-oa-theme] #app-inner {
+  font-family:var(--oa-font-body,Inter,sans-serif);
+}
+html[data-oa-theme] h1,
+html[data-oa-theme] h2,
+html[data-oa-theme] h3,
+html[data-oa-theme] h4,
+html[data-oa-theme] .font-serif,
+html[data-oa-theme] .section-title,
+html[data-oa-theme] .person-card h3,
+html[data-oa-theme] .event-card h2,
+html[data-oa-theme] .event-card h3 {
+  font-family:var(--oa-font-display,Georgia,serif);
+}
+html[data-oa-theme] button,
+html[data-oa-theme] input,
+html[data-oa-theme] textarea,
+html[data-oa-theme] select {
+  font-family:var(--oa-font-body,Inter,sans-serif);
+}
+
+/* Motion tokens: subtle, quick to render, and reduced-motion aware. */
+html[data-oa-theme="aksara-nocturne"] { --oa-reveal-time:.95s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="royal-vintage"] { --oa-reveal-time:.85s; --oa-reveal-ease:cubic-bezier(.22,.68,.2,1); }
+html[data-oa-theme="botanical-garden"] { --oa-reveal-time:1.05s; --oa-reveal-ease:cubic-bezier(.16,1,.3,1); }
+html[data-oa-theme="romantic-floral"] { --oa-reveal-time:1s; --oa-reveal-ease:cubic-bezier(.2,.8,.2,1); }
+html[data-oa-theme="velvet-romance"] { --oa-reveal-time:.9s; --oa-reveal-ease:cubic-bezier(.25,.7,.25,1); }
+html[data-oa-theme="calestial"] { --oa-reveal-time:1.1s; --oa-reveal-ease:cubic-bezier(.18,.72,.25,1); }
+html[data-oa-theme="elegance"] { --oa-reveal-time:.9s; --oa-reveal-ease:cubic-bezier(.2,.65,.25,1); }
+html[data-oa-theme] .oa-scroll-reveal {
+  transition:opacity var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1)),
+             transform var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1));
+}
+html[data-oa-theme] .oa-scroll-reveal.oa-visible { opacity:1; transform:none; }
