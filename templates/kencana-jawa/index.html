@@ -1,0 +1,161 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+:root{--kj-ink:#0e0d0b;--kj-ink2:#1a1814;--kj-gold:#c6a15b;--kj-gold2:#ecd9a8;--kj-paper:#f6efe2;--kj-muted:#cfc7b8;--kj-line:rgba(198,161,91,.38)}
+#app{min-height:100vh;background:var(--kj-ink);color:var(--kj-paper);font-family:Manrope,system-ui,sans-serif;overflow:hidden}
+#app *{box-sizing:border-box}
+#main-content{display:none;background:var(--kj-ink);color:var(--kj-paper);opacity:0;transition:opacity .55s ease}
+#main-content[style*="display: block"]{opacity:1}
+.kj-cover{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center;min-height:100svh;overflow:hidden;background:var(--kj-ink);color:var(--kj-paper);text-align:center;padding:28px 20px calc(30px + env(safe-area-inset-bottom))}
+.kj-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,13,11,.04) 15%,rgba(14,13,11,.28) 43%,rgba(14,13,11,.96) 100%)}
+.kj-cover__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.76}
+.kj-cover__pattern{position:absolute;inset:0;opacity:.22;background-image:radial-gradient(ellipse at 50% 50%,transparent 0 28%,rgba(198,161,91,.5) 29% 30%,transparent 31%),radial-gradient(ellipse at 0 0,transparent 0 28%,rgba(198,161,91,.35) 29% 30%,transparent 31%);background-size:54px 54px}
+.kj-cover__content{position:relative;z-index:2;width:min(100%,560px);padding:30px 22px;border:1px solid var(--kj-line);outline:1px solid rgba(198,161,91,.16);outline-offset:7px;background:linear-gradient(180deg,rgba(14,13,11,.12),rgba(14,13,11,.5));backdrop-filter:blur(2px)}
+.kj-eyebrow,.kj-kicker{margin:0 0 14px;color:var(--kj-gold2);font-size:.66rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase}
+.kj-script,.kj-heading,.kj-couple-name,#event-list .event-card h3,.kj-story-card h3,.kj-gift-card h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500}
+.kj-cover__names{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(3.4rem,14vw,6.2rem);line-height:.9;font-weight:500;margin:14px 0;color:var(--kj-paper)}
+.kj-cover__names em{display:block;font-size:.55em;color:var(--kj-gold2);font-weight:400;margin:8px 0}
+.kj-rule{height:1px;width:min(70%,260px);margin:20px auto;background:linear-gradient(90deg,transparent,var(--kj-gold),transparent)}
+.kj-cover-date{margin:0 0 18px;color:var(--kj-gold2);font-size:.72rem;letter-spacing:.08em;line-height:1.7}.kj-guest{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;color:var(--kj-gold2);margin:8px 0}
+.kj-open{margin-top:18px;padding:13px 25px;border:1px solid var(--kj-gold);background:var(--kj-gold);color:#17130c;font:700 .7rem Manrope,sans-serif;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:transform .25s,background .25s}
+.kj-open:hover{transform:translateY(-2px);background:var(--kj-gold2)}
+.kj-cover.is-opening{opacity:0;pointer-events:none;transition:opacity .8s ease}
+.kj-page{max-width:900px;margin:0 auto;padding:0 20px 120px;background:var(--kj-ink)}
+.kj-section{position:relative;padding:66px 8px 20px;text-align:center}
+.kj-section:before{content:"✦";display:block;color:var(--kj-gold);font-size:1.1rem;margin:0 auto 20px}
+.kj-heading{font-size:clamp(2.35rem,8vw,3.7rem);line-height:1.02;margin:8px 0 18px;color:var(--kj-paper)}
+.kj-lead{max-width:620px;margin:0 auto;color:var(--kj-muted);font-size:.92rem;line-height:1.9}
+.kj-kawung{background-image:radial-gradient(ellipse at 50% 50%,rgba(198,161,91,.09) 0 17%,transparent 18%),radial-gradient(ellipse at 0 0,rgba(198,161,91,.07) 0 17%,transparent 18%);background-size:52px 52px}
+.kj-gunungan{width:112px;height:auto;display:block;margin:16px auto 0;color:var(--kj-gold)}
+.kj-gunungan path,.kj-gunungan circle{stroke:currentColor;fill:none;stroke-width:1.3}
+.kj-couple-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:700px;margin:28px auto 0}
+.kj-person{min-width:0}
+.kj-photo-frame{padding:7px;border:1px solid var(--kj-line);outline:1px solid rgba(198,161,91,.13);outline-offset:4px;background:var(--kj-ink2)}
+.kj-person img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.kj-couple-name{font-size:clamp(1.45rem,4vw,2.1rem);line-height:1.05;color:var(--kj-gold2);margin:17px 0 8px;overflow-wrap:anywhere}
+.kj-parents{font-size:.75rem;line-height:1.7;color:var(--kj-muted)}
+.kj-section--light{margin:44px -20px 0;padding:58px 22px 52px;background:var(--kj-paper);color:#241f18;border-radius:28px 28px 8px 8px}
+.kj-section--light .kj-heading{color:#241f18}.kj-section--light .kj-kicker{color:#98732d}
+.kj-countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;max-width:620px;margin:25px auto 0}
+.kj-countdown>div{padding:16px 5px;border:1px solid var(--kj-line);border-radius:14px;background:#171510}
+.kj-countdown b{display:block;font:500 clamp(1.6rem,6vw,2.4rem) "Cormorant Garamond",serif;color:var(--kj-gold2)}
+.kj-countdown span{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--kj-muted)}
+.kj-event-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:760px;margin:24px auto 0}
+#event-list .event-card{padding:27px 18px;border:1px solid rgba(160,124,46,.35);border-radius:16px;background:#fffaf0;color:#332a1b;text-align:center}
+#event-list .event-card h3{font-size:1.8rem;line-height:1.1;color:#7a5c1e;margin:0 0 13px}
+#event-list .event-card p{font-size:.8rem;line-height:1.7;color:#5a5144;margin:7px 0}
+#event-list .event-card a{display:inline-block;margin-top:12px;color:#7a5c1e;font-size:.75rem;font-weight:700}
+.kj-story-list{max-width:680px;margin:28px auto 0;text-align:left;border-left:1px solid var(--kj-gold);padding-left:22px;display:grid;gap:22px}
+.kj-story-card{position:relative;padding:0 0 4px}
+.kj-story-card:before{content:"";position:absolute;left:-28px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--kj-gold);box-shadow:0 0 0 5px var(--kj-ink)}
+.kj-story-card .story-date{font-size:.7rem;letter-spacing:.14em;color:var(--kj-gold);font-weight:700}
+.kj-story-card .story-content h3{font-size:1.65rem;color:var(--kj-gold2);margin:7px 0}
+.kj-story-card .story-content p{font-size:.85rem;line-height:1.8;color:var(--kj-muted);margin:0}
+.kj-story-card .oa-story-photo{width:min(100%,360px);max-height:280px;object-fit:cover;margin:15px 0 0;border:1px solid var(--kj-line);border-radius:12px}
+.kj-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;max-width:800px;margin:25px auto 0;align-items:start}
+.kj-gallery .gallery-item{margin:0;overflow:hidden;border:1px solid var(--kj-line);border-radius:13px;background:var(--kj-ink2)}
+.kj-gallery img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .7s ease}
+.kj-gallery .gallery-item:nth-child(3n+1){grid-row:span 2}.kj-gallery .gallery-item:hover img{transform:scale(1.035)}
+.kj-section--light .kj-gift-list,.kj-gift-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;max-width:720px;margin:22px auto 0}
+.kj-gift-card,.kj-section--light .gift-card{padding:22px 15px;border:1px solid rgba(160,124,46,.35);border-radius:14px;background:#fffaf0;color:#332a1b;text-align:center}
+.kj-gift-card .gift-bank,.kj-gift-card p{color:#6c592f}.kj-gift-card button{padding:10px 14px;border:1px solid #9a762e;background:#9a762e;color:#fff;font:600 .72rem Manrope,sans-serif}
+.kj-page .quote-section{background:transparent}
+.kj-quote{max-width:700px;margin:0 auto;color:var(--kj-gold2);font:italic 1.65rem/1.45 "Cormorant Garamond",serif}
+#rsvp-section,#guestbook-section{max-width:760px;margin:30px auto 0;padding:48px 20px;border:1px solid var(--kj-line);border-radius:20px;background:var(--kj-ink2);color:var(--kj-paper)}
+#rsvp-section h2,#guestbook-section h2{font:500 clamp(2rem,7vw,3rem) "Cormorant Garamond",serif;color:var(--kj-gold2);text-align:center}
+#rsvp-form,#wishes-form{max-width:560px;margin:20px auto 0;padding:18px;border:1px solid var(--kj-line);border-radius:14px;background:#f9f2e6;color:#251f16}
+#rsvp-form input,#rsvp-form select,#wishes-form input,#wishes-form textarea{width:100%;padding:12px;border:1px solid #c8b995;background:#fffdf8;color:#241f18;font:inherit}
+#rsvp-form button,#wishes-form button{padding:12px 18px;border:1px solid var(--kj-gold);background:var(--kj-gold);color:#17130c;font-weight:700}
+#wishes-list .wish-card{margin:10px 0;padding:14px;border:1px solid var(--kj-line);border-radius:10px;background:#211e18;color:var(--kj-paper)}
+.kj-footer{padding:60px 10px 25px;text-align:center;color:var(--kj-muted);font-size:.75rem;line-height:1.8}
+.kj-footer strong{display:block;color:var(--kj-gold2);font:500 clamp(2rem,8vw,3.5rem) "Cormorant Garamond",serif}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.active{opacity:1;transform:none}
+.kj-section .reveal:nth-child(even){transition-delay:.08s}
+@media(min-width:760px){.kj-page{padding-left:34px;padding-right:34px}.kj-section{padding-top:82px}.kj-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.kj-gallery .gallery-item:nth-child(3n+1){grid-row:span 1}.kj-gallery .gallery-item:nth-child(4n+1){grid-row:span 2}}
+@media(max-width:520px){.kj-cover__content{padding:25px 16px}.kj-page{padding-left:17px;padding-right:17px}.kj-section{padding-top:55px}.kj-couple-grid{gap:12px}.kj-parents{font-size:.68rem}.kj-event-list,.kj-section--light .kj-gift-list,.kj-gift-list{grid-template-columns:1fr}.kj-section--light{margin-left:-17px;margin-right:-17px;padding-left:17px;padding-right:17px}.kj-countdown{gap:6px}.kj-countdown>div{padding:13px 2px}.kj-countdown span{font-size:.52rem}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.kj-gunungan{animation:none}}
+</style>
+
+<div id="cover-section" class="kj-cover">
+  <img class="kj-cover__image" data-bind="cover.image" alt="Sampul undangan" fetchpriority="high">
+  <div class="kj-cover__pattern" aria-hidden="true"></div>
+  <div class="kj-cover__content reveal">
+    <p class="kj-eyebrow" data-bind="cover.eyebrow">Sugeng Rawuh · Sugeng Rawuh</p>
+    <h1 class="kj-cover__names"><span data-bind="couple.groom.nickname">Mempelai Pria</span><em>&amp;</em><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
+    <div class="kj-rule"></div>
+    <p class="kj-cover-date"><span data-bind="events.akad.date">Tanggal acara</span> · <span data-bind="events.akad.location">Lokasi acara</span></p>
+    <p class="kj-eyebrow" style="letter-spacing:.13em">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+    <h2 id="nama-tamu" class="kj-guest">Tamu Undangan</h2>
+    <p class="kj-lead" data-bind="opening.text">Dengan penuh syukur, kami mengundang Anda.</p>
+    <button id="open-invitation-btn" class="kj-open" type="button">✦ Buka Undangan ✦</button>
+  </div>
+</div>
+
+<main id="main-content" class="kj-page kj-kawung" style="display:none">
+  <section class="kj-section quote-section">
+    <p class="kj-kicker">Atas Izin dan Rahmat Tuhan</p>
+    <h2 class="kj-heading">Dengan Penuh Syukur</h2>
+    <p class="kj-quote" data-bind="quote.text"></p>
+    <p class="kj-lead" data-bind="quote.source"></p>
+  </section>
+
+  <section id="couple-section" class="kj-section">
+    <p class="kj-kicker">Mempelai</p>
+    <h2 class="kj-heading">Dua Hati, Satu Tujuan</h2>
+    <div class="kj-couple-grid">
+      <article class="kj-person reveal">
+        <div class="kj-photo-frame"><img data-bind="couple.groom.photo" alt="Foto mempelai pria" loading="lazy" decoding="async"></div>
+        <h3 class="kj-couple-name" data-bind="couple.groom.fullName">Nama Mempelai Pria</h3>
+        <p class="kj-parents">Putra dari <span data-bind="couple.groom.parents"></span></p>
+      </article>
+      <article class="kj-person reveal">
+        <div class="kj-photo-frame"><img data-bind="couple.bride.photo" alt="Foto mempelai wanita" loading="lazy" decoding="async"></div>
+        <h3 class="kj-couple-name" data-bind="couple.bride.fullName">Nama Mempelai Wanita</h3>
+        <p class="kj-parents">Putri dari <span data-bind="couple.bride.parents"></span></p>
+      </article>
+    </div>
+    <svg class="kj-gunungan" viewBox="0 0 120 78" role="img" aria-label="Ornamen gunungan Jawa"><path d="M60 4C34 24 22 44 22 66H98C98 44 86 24 60 4Z"/><path d="M60 18C46 32 40 48 40 64M60 18C74 32 80 48 80 64M30 66H90M38 58H82"/><circle cx="60" cy="38" r="6"/></svg>
+  </section>
+
+  <section id="countdown-section" class="kj-section">
+    <p class="kj-kicker">Menuju Hari Bahagia</p>
+    <h2 class="kj-heading">Save The Date</h2>
+    <div id="countdown" class="kj-countdown countdown">
+      <div><b id="cd-days">00</b><span>Hari</span></div><div><b id="cd-hours">00</b><span>Jam</span></div><div><b id="cd-minutes">00</b><span>Menit</span></div><div><b id="cd-seconds">00</b><span>Detik</span></div>
+    </div>
+  </section>
+
+  <section class="kj-section kj-section--light event-section">
+    <p class="kj-kicker">Rangkaian Acara</p>
+    <h2 class="kj-heading">Hari Istimewa Kami</h2>
+    <div id="event-list" class="kj-event-list"></div>
+  </section>
+
+  <section class="kj-section story-section">
+    <p class="kj-kicker">Jejak Perjalanan</p>
+    <h2 class="kj-heading">Kisah Kami</h2>
+    <div id="story-list" class="kj-story-list story-list"></div>
+  </section>
+
+  <section class="kj-section kj-section--light gallery-section">
+    <p class="kj-kicker">Potret Kenangan</p>
+    <h2 class="kj-heading">Momen yang Kami Jaga</h2>
+    <div id="gallery-grid" class="kj-gallery gallery-grid"></div>
+  </section>
+
+  <section class="kj-section kj-section--light gift-section" id="gift-section">
+    <p class="kj-kicker">Tanda Kasih</p>
+    <h2 class="kj-heading">Hadiah Digital</h2>
+    <p class="kj-lead" data-bind="gifts.message"></p>
+    <div id="gift-list" class="kj-gift-list gift-grid"></div>
+  </section>
+
+  <footer class="kj-footer">
+    <p class="kj-kicker">Matur Nuwun</p>
+    <strong><span data-bind="couple.groom.nickname">Mempelai Pria</span> &amp; <span data-bind="couple.bride.nickname">Mempelai Wanita</span></strong>
+    <p>Merupakan kehormatan bagi kami atas doa dan kehadiran Anda.</p>
+    <span>✦ Omah Aksara · Undangan Digital ✦</span>
+  </footer>
+</main>
+<button id="music-toggle" class="oa-legacy-music-control" type="button" hidden aria-label="Kontrol musik bersama">Musik</button>
+<audio id="bg-music" loop></audio>
