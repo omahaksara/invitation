@@ -1073,9 +1073,13 @@
       const used = new Set();
       sectionOptions.forEach(option => {
         if (option.feature && features[option.feature] === false) return;
-        const target = option.selectors.map(selector => {
+        let target = option.selectors.map(selector => {
           try { return document.querySelector(selector); } catch { return null; }
         }).find(candidate => candidate && isVisible(candidate) && !used.has(candidate));
+        if (!target && option.id === "couple") {
+          const photo = document.querySelector('[data-bind="couple.groom.photo"], [data-bind="couple.bride.photo"]');
+          target = photo && photo.closest("section");
+        }
         if (!target) return;
         used.add(target);
         if (!target.id) target.id = "oa-section-" + option.id;
@@ -1190,6 +1194,21 @@
         const targetId = (link.getAttribute("href") || "").replace(/^#/,"") || link.dataset.target;
         if (targetId) link.dataset.oaTarget = targetId;
       });
+      const syncNativeActive = () => {
+        const marker = window.scrollY + Math.min(window.innerHeight * .34,260);
+        let activeId = "";
+        links.forEach(link => {
+          const target = document.getElementById(link.dataset.oaTarget);
+          if (target && target.getBoundingClientRect().top + window.scrollY <= marker) activeId = link.dataset.oaTarget;
+        });
+        links.forEach(link => {
+          const active = !!activeId && link.dataset.oaTarget === activeId;
+          link.classList.toggle("is-active",active);
+          link.setAttribute("aria-current",active ? "location" : "false");
+        });
+      };
+      window.addEventListener("scroll",syncNativeActive,{passive:true});
+      syncNativeActive();
     }
 
     let autoTimer = null;
@@ -1218,7 +1237,10 @@
           window.scrollBy(0,1);
         },24);
       });
-      ["wheel","touchstart"].forEach(type => window.addEventListener(type,stopAutoScroll,{passive:true}));
+      window.addEventListener("wheel",stopAutoScroll,{passive:true});
+      window.addEventListener("touchstart",event => {
+        if (!quick.contains(event.target)) stopAutoScroll();
+      },{passive:true});
       window.addEventListener("pointerdown",event => {
         if (!quick.contains(event.target)) stopAutoScroll();
       },{passive:true});
