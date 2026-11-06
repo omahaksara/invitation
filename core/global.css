@@ -316,6 +316,8 @@ body:not(.oa-invitation-opened) .royal-music-toggle {
   backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
 }
 .oa-nav-overflow button {width:100%;text-align:left;justify-content:flex-start}
+.oa-nav-overflow button.oa-dock-action { border-top:1px solid var(--oa-dock-border,rgba(115,96,68,.16)); margin-top:3px; padding-top:10px; padding-bottom:10px; }
+.oa-nav-overflow button.oa-dock-action.is-running,.oa-nav-overflow button.oa-dock-action.is-playing { background:var(--oa-dock-active,var(--oa-dock-ink,#514735)); color:var(--oa-dock-active-ink,#fff); }
 .oa-quick-controls {
   position:fixed; z-index:92; right:max(14px,env(safe-area-inset-right));
   bottom:calc(max(14px,env(safe-area-inset-bottom)) + 74px); display:flex; flex-direction:column; gap:10px;
