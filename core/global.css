@@ -354,3 +354,102 @@ body.oa-lightbox-open .oa-native-music-control {
   visibility:hidden!important;
   pointer-events:none!important;
 }
+
+
+/* Omah Aksara unified navigation layer.
+   Same interaction model on every theme; palettes and silhouettes stay theme-aware. */
+.oa-legacy-navigation,
+.oa-legacy-music-control {
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.oa-floating-controls {
+  gap:clamp(3px,.8vw,8px);
+  padding:7px 9px;
+  border-width:1px;
+  isolation:isolate;
+}
+.oa-floating-controls button {
+  min-width:clamp(48px,7vw,66px);
+  min-height:43px;
+  padding:0 12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:clamp(10px,.78rem,12px);
+  letter-spacing:.015em;
+}
+.oa-floating-controls button.is-active {
+  background:var(--oa-dock-accent,var(--oa-dock-ink));
+  color:var(--oa-dock-active-ink,#fff);
+  box-shadow:0 3px 10px color-mix(in srgb,var(--oa-dock-accent,#8a7656) 28%,transparent);
+}
+.oa-floating-controls .oa-nav-more {
+  min-width:72px;
+  font-weight:700;
+}
+.oa-nav-overflow {
+  min-width:164px;
+  padding:9px;
+  gap:3px;
+}
+.oa-nav-overflow button {
+  min-height:40px;
+  justify-content:flex-start;
+  padding-inline:12px;
+}
+.oa-quick-controls {
+  right:max(14px,env(safe-area-inset-right));
+  bottom:calc(max(14px,env(safe-area-inset-bottom)) + 78px);
+}
+.oa-quick-button {
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--oa-dock-border,rgba(255,255,255,.7));
+  background:var(--oa-dock-bg,rgba(248,246,240,.94));
+  color:var(--oa-dock-ink,#514735);
+}
+.oa-quick-button:focus-visible {
+  outline:2px solid var(--oa-dock-accent,#9a8057);
+  outline-offset:3px;
+}
+.oa-quick-button.is-running,.oa-quick-button.is-playing {
+  background:var(--oa-dock-accent,#514735);
+  color:var(--oa-dock-active-ink,#fff);
+}
+@media(max-width:600px) {
+  .oa-floating-controls {
+    left:8px;
+    right:8px;
+    bottom:max(8px,env(safe-area-inset-bottom));
+    width:auto;
+    max-width:none;
+    transform:none;
+    justify-content:space-around;
+    gap:2px;
+    padding:5px;
+  }
+  .oa-floating-controls button {
+    flex:1 1 0;
+    min-width:0;
+    min-height:42px;
+    padding:0 5px;
+    font-size:10px;
+  }
+  .oa-floating-controls .oa-nav-more { min-width:0; }
+  .oa-nav-overflow { right:0; bottom:calc(100% + 10px); }
+  .oa-quick-controls {
+    right:max(10px,env(safe-area-inset-right));
+    bottom:calc(max(10px,env(safe-area-inset-bottom)) + 64px);
+    gap:8px;
+  }
+  .oa-quick-button { width:40px;height:40px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {
+    transition:none!important;
+  }
+}
