@@ -453,3 +453,13 @@ body.oa-lightbox-open .oa-native-music-control {
     transition:none!important;
   }
 }
+
+/* Keep the shared controls above theme sections and their reveal layers. */
+body.oa-invitation-opened #oa-floating-controls,
+body.oa-invitation-opened #oa-quick-controls {
+  z-index: 9999 !important;
+  isolation: isolate;
+}
+body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
+  z-index: 10000 !important;
+}
