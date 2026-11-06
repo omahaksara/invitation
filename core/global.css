@@ -627,3 +627,30 @@ html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
 html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow[hidden] {
   display: none !important;
 }
+
+
+/* Theme typography tokens for shared UI and engine-generated fallback sections.
+   Native template typography remains authoritative for each theme's own artwork. */
+html[data-oa-theme="aksara-nocturne"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Montserrat",sans-serif; }
+html[data-oa-theme="aksara-signature"] { --oa-theme-display:"EB Garamond",serif; --oa-theme-body:"DM Sans",sans-serif; }
+html[data-oa-theme="aurelia-noir"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; }
+html[data-oa-theme="botanical-garden"] { --oa-theme-display:"Lora",serif; --oa-theme-body:"Lato",sans-serif; }
+html[data-oa-theme="calestial"] { --oa-theme-display:"Playfair Display",serif; --oa-theme-body:"Montserrat",sans-serif; }
+html[data-oa-theme="elegance"] { --oa-theme-display:"Cinzel",serif; --oa-theme-body:"Lato",sans-serif; }
+html[data-oa-theme="groom"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"DM Sans",sans-serif; }
+html[data-oa-theme="kinze"] { --oa-theme-display:"EB Garamond",serif; --oa-theme-body:"Inter",sans-serif; }
+html[data-oa-theme="karsa"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Montserrat",sans-serif; }
+html[data-oa-theme="lumiere-bloom"] { --oa-theme-display:"Playfair Display",serif; --oa-theme-body:"Lato",sans-serif; }
+html[data-oa-theme="romantic-floral"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Lora",serif; }
+html[data-oa-theme="royal-vintage"] { --oa-theme-display:"Cinzel",serif; --oa-theme-body:"Lora",serif; }
+html[data-oa-theme="serena-ivory"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Inter",sans-serif; }
+html[data-oa-theme="sirein"] { --oa-theme-display:"Lora",serif; --oa-theme-body:"Inter",sans-serif; }
+html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; }
+
+.oa-floating-controls,
+.oa-quick-controls { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-floating-controls button,
+.oa-quick-controls button { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-shared-section { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-shared-section > h2,
+.oa-shared-section h3 { font-family:var(--oa-theme-display,var(--oa-font-display)); }
