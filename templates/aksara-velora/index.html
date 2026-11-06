@@ -1,4 +1,5 @@
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 :root{--velora-bg:#FDFBF7;--velora-surface:#F4EFEA;--velora-primary:#3A3532;--velora-accent:#A3705C;--velora-accent-light:#D4B5A7;--velora-text:#2C2623;--velora-muted:#786F69;--velora-border:#E6DFD5}
 .velora-page{min-height:100vh;background:var(--velora-bg);color:var(--velora-text);font-family:'Plus Jakarta Sans',sans-serif;overflow:clip}
 .velora-page *{box-sizing:border-box}
@@ -47,10 +48,12 @@
 .velora-countdown__item span{font-size:.62rem;letter-spacing:.1em;color:#E8D9D0}
 .velora-story{background:#F8F3EE}
 .velora-story #story-list{max-width:620px;margin:auto;text-align:left}
-.velora-story .story-item{padding:22px 0;border-bottom:1px solid var(--velora-border)}
-.velora-story .story-year{color:var(--velora-accent)}
-.velora-story .story-content h3{font:1.5rem 'Cormorant Garamond',serif}
-.velora-story .story-content p{color:var(--velora-muted);font-size:.88rem;line-height:1.8}
+.velora-story .story-item,.velora-story .story-card{display:grid;grid-template-columns:76px minmax(0,1fr);gap:22px;padding:24px 0;border-bottom:1px solid var(--velora-border);text-align:left}
+.velora-story .story-year,.velora-story .story-date{color:var(--velora-accent);font-size:.78rem;letter-spacing:.08em;padding-top:4px}
+.velora-story .story-content h3{font:1.5rem 'Cormorant Garamond',serif;margin:0 0 8px}
+.velora-story .story-content p{color:var(--velora-muted);font-size:.88rem;line-height:1.8;margin:0}
+.velora-story .oa-story-photo{display:block;width:100%;max-height:260px;aspect-ratio:16/9;object-fit:cover;border-radius:12px;margin:0 0 16px}
+@media(max-width:560px){.velora-story .story-item,.velora-story .story-card{grid-template-columns:56px minmax(0,1fr);gap:13px}}
 .velora-events #event-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:850px;margin:auto}
 .velora-events .event-card{padding:30px 20px;border:1px solid var(--velora-border);border-radius:18px;background:#fff;box-shadow:0 8px 28px rgba(58,53,50,.04)}
 .velora-events .event-card h3{font:1.6rem 'Cormorant Garamond',serif}
