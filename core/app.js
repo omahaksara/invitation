@@ -1318,30 +1318,47 @@
     }
 
     let autoTimer = null;
+    let autoStartDelay = null;
     const stopAutoScroll = () => {
       if (autoTimer !== null) window.clearInterval(autoTimer);
+      if (autoStartDelay !== null) window.clearTimeout(autoStartDelay);
       autoTimer = null;
+      autoStartDelay = null;
       autoButton.textContent = "↧";
       autoButton.setAttribute("aria-pressed", "false");
       autoButton.setAttribute("aria-label", "Mulai gulir otomatis");
       autoButton.classList.remove("is-running");
     };
+    const startAutoScroll = () => {
+      if (autoTimer !== null || autoButton.hidden || autoButton.disabled) return;
+      autoButton.textContent = "Ⅱ";
+      autoButton.classList.add("is-running");
+      autoButton.setAttribute("aria-pressed", "true");
+      autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
+      autoTimer = window.setInterval(() => {
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
+          stopAutoScroll(); return;
+        }
+        window.scrollBy(0, 1);
+      }, 24);
+    };
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       autoButton.disabled = true;
       autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
     } else {
+      // Mulai setelah sampul dibuka; jeda singkat memberi waktu menikmati transisi pembuka.
+      const scheduleAutoScroll = () => {
+        if (autoStartDelay !== null || autoTimer !== null) return;
+        autoStartDelay = window.setTimeout(() => {
+          autoStartDelay = null;
+          startAutoScroll();
+        }, 1800);
+      };
+      document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
+      if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null) { stopAutoScroll(); return; }
-        autoButton.textContent = "Ⅱ";
-        autoButton.classList.add("is-running");
-        autoButton.setAttribute("aria-pressed", "true");
-        autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
-        autoTimer = window.setInterval(() => {
-          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
-            stopAutoScroll(); return;
-          }
-          window.scrollBy(0, 1);
-        }, 24);
+        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
+        startAutoScroll();
       });
       window.addEventListener("wheel", stopAutoScroll, { passive: true });
       window.addEventListener("touchstart", event => {
@@ -1390,8 +1407,12 @@
       style.textContent = `
         html { scroll-behavior: smooth; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
-        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .85s cubic-bezier(.2,.72,.18,1); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,20px,0); transition: opacity .8s ease, transform .9s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity, transform; }
+        .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); filter: saturate(.88); transition: opacity 1s ease, transform 1.15s cubic-bezier(.2,.72,.18,1), filter 1.1s ease; }
+        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: scale(1); filter: saturate(1); }
         .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
         .story-content { min-width:0; }
         .story-date { display:block; margin-bottom:6px; }
@@ -1412,7 +1433,7 @@
         @media (prefers-reduced-motion: reduce) {
           #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
           html { scroll-behavior: auto !important; }
-          .oa-scroll-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+          .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
         }
       `;
       document.head.append(style);
@@ -1427,12 +1448,35 @@
       if (!element.classList.contains("reveal")) element.classList.add("oa-scroll-reveal");
     });
 
-    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible)");
+    // Arah gerak dibedakan: foto hadir dengan zoom lembut, teks/kartu naik perlahan.
+    // Hindari elemen kecil, ikon, foto di dalam tombol, dan elemen yang sudah menjadi satu animasi kartu.
+    const motionTargets = new Set();
+    document.querySelectorAll(
+      "#app h1, #app h2, #app h3, #app p, #app blockquote, #app .story-content, #app .event-card, #app .profile-card, #app .person-card, #app .gift-card, #app .gallery-item"
+    ).forEach(element => {
+      if (element.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      if (element.matches("p") && element.closest(".story-content, .event-card, .profile-card, .person-card, .gift-card, .gallery-item")) return;
+      motionTargets.add(element);
+    });
+    document.querySelectorAll("#app img").forEach(image => {
+      if (image.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      if (image.naturalWidth === 0 && !image.complete) {
+        image.addEventListener("load", () => image.classList.add("oa-motion-photo"), { once: true });
+      } else image.classList.add("oa-motion-photo");
+    });
+    let motionIndex = 0;
+    motionTargets.forEach(element => {
+      element.classList.add("oa-motion-item");
+      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 85 + "ms");
+    });
+
+    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible), .oa-motion-item:not(.oa-motion-visible), img.oa-motion-photo:not(.oa-motion-visible)");
     if (!elements.length) return;
-    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!( "IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
       elements.forEach(el => {
         if (el.classList.contains("reveal")) el.classList.add("active");
         if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        el.classList.add("oa-motion-visible");
       });
       return;
     }
@@ -1441,10 +1485,12 @@
     if (!observer) {
       observer = new IntersectionObserver(entries => entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-        if (entry.target.classList.contains("reveal")) entry.target.classList.add("active");
-        if (entry.target.classList.contains("oa-scroll-reveal")) entry.target.classList.add("oa-visible");
-        observer.unobserve(entry.target);
-      }), { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
+        const el = entry.target;
+        if (el.classList.contains("reveal")) el.classList.add("active");
+        if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        el.classList.add("oa-motion-visible");
+        observer.unobserve(el);
+      }), { threshold: 0.08, rootMargin: "0px 0px -5% 0px" });
       window.__oaScrollRevealObserver = observer;
     }
     elements.forEach(element => observer.observe(element));
