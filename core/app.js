@@ -1119,8 +1119,11 @@
     refreshQuickButtons();
 
     const audio = document.getElementById("bg-music");
+    const nativeMusicControl = document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle");
     const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
-    if (hasMusic) nav.append(musicButton);
+    // Template-owned music buttons are authoritative; never add a second music control.
+    const engineOwnsMusic = hasMusic && !nativeMusicControl;
+    if (engineOwnsMusic) nav.append(musicButton);
     nav.append(autoButton, shareButton);
     document.body.append(nav);
 
@@ -1153,7 +1156,7 @@
       if (next) scrollToSection(next.section);
       else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
     });
-    if (hasMusic) {
+    if (engineOwnsMusic) {
       const syncMusic = () => {
         const playing = !audio.paused;
         musicButton.textContent = playing ? "Ⅱ Musik" : "♫ Musik";
