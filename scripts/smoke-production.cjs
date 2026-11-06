@@ -70,8 +70,12 @@ async function main() {
 
     await catalogue.locator('#preview-guest-name').fill('Tamu Audit');
     const firstDemoHref = await catalogue.locator('.catalog-demo-link').first().getAttribute('href');
-    assert.equal(new URL(firstDemoHref).searchParams.get('to'), 'Tamu Audit',
-      'Demo link must carry the personalized guest name.');
+    const firstDemoUrl = new URL(firstDemoHref);
+    const firstDemoPath = firstDemoUrl.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+    assert.deepEqual(firstDemoPath.slice(0, 3), ['i', 'demo-katalog', 'Tamu Audit'],
+      'Demo link must use the canonical personalized short path.');
+    assert.ok(firstDemoUrl.searchParams.get('theme'),
+      'Demo link must preserve the selected theme.');
     assert.equal(catalogueErrors.length, 0, 'Catalogue JavaScript errors: ' + catalogueErrors.join('; '));
     console.log('PASS public catalogue: ' + expectedThemes.length + ' live theme previews and personalized demo links.');
 
