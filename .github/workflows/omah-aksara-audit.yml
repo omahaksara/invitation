@@ -11,6 +11,7 @@ on:
     branches:
       - main
       - rebuild/omah-aksara-v2
+      - fix/theme-native-navigation-and-distinct-docks
   workflow_dispatch:
 
 concurrency:
