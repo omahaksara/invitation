@@ -12,6 +12,9 @@ const THEME_REGISTRY = JSON.parse(fs.readFileSync(THEME_REGISTRY_PATH, 'utf8'));
 const ALLOWED_THEMES = new Set((THEME_REGISTRY.themes || [])
   .filter(theme => theme && theme.status === 'active')
   .map(theme => theme.slug));
+const ALLOWED_DEMO_THEMES = new Set((THEME_REGISTRY.themes || [])
+  .filter(theme => theme && theme.status === 'prototype')
+  .map(theme => theme.slug));
 const errors = [];
 const warnings = [];
 
@@ -51,7 +54,7 @@ function collectAssetCandidates(data, prefix = '') {
   return out;
 }
 
-function validateAsset(slug, file, key, value) {
+function validateAsset(slug, file, key, value, isDemo) {
   const clean = value.trim();
   if (!clean || isRemote(clean) || clean.startsWith('#')) return;
   if (/^[a-z][a-z0-9+.-]*:/i.test(clean)) return;
@@ -65,10 +68,14 @@ function validateAsset(slug, file, key, value) {
   const resolved = path.resolve(CLIENTS, slug, normalized);
   const clientRoot = path.resolve(CLIENTS, slug) + path.sep;
   const sharedMusicRoot = path.resolve(ROOT, 'assets', 'music', 'library') + path.sep;
+  const sharedDemoRoot = path.resolve(CLIENTS, 'demo-katalog') + path.sep;
   const isClientAsset = resolved.startsWith(clientRoot);
   const isSharedMusicAsset = resolved.startsWith(sharedMusicRoot) &&
     /^(?:media|music|audio)(?:\.|$)/i.test(key);
-  if (!isClientAsset && !isSharedMusicAsset) {
+  // Demo-only themes may reuse the catalogue's clearly fictional image set.
+  // Real client data remains confined to its own folder (plus shared music).
+  const isSharedDemoAsset = isDemo === true && resolved.startsWith(sharedDemoRoot);
+  if (!isClientAsset && !isSharedMusicAsset && !isSharedDemoAsset) {
     errors.push(`${slug}: path aset ${key} keluar dari folder klien dan pustaka musik bersama yang diizinkan: "${clean}".`);
     return;
   }
@@ -97,8 +104,11 @@ function validateClient(slug, file) {
     return;
   }
 
-  if (typeof data.theme !== 'string' || !ALLOWED_THEMES.has(data.theme)) {
-    errors.push(`${slug}: theme harus salah satu dari: ${[...ALLOWED_THEMES].join(', ')}.`);
+  const allowedThemes = data.demoMode === true
+    ? new Set([...ALLOWED_THEMES, ...ALLOWED_DEMO_THEMES])
+    : ALLOWED_THEMES;
+  if (typeof data.theme !== 'string' || !allowedThemes.has(data.theme)) {
+    errors.push(`${slug}: theme harus salah satu dari: ${[...allowedThemes].join(', ')}.`);
   }
 
   if (data.slug !== undefined && data.slug !== slug) {
@@ -165,7 +175,7 @@ function validateClient(slug, file) {
   }
 
   for (const asset of collectAssetCandidates(data)) {
-    validateAsset(slug, file, asset.key, asset.value);
+    validateAsset(slug, file, asset.key, asset.value, data.demoMode === true);
   }
 }
 
