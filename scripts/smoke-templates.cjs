@@ -114,7 +114,12 @@ const themes = [
           });
           const sharedButtons = Array.from(document.querySelectorAll(
             "#oa-floating-controls button, #oa-quick-controls button"
-          ));
+          )).filter(button => {
+            const style = getComputedStyle(button);
+            const rect = button.getBoundingClientRect();
+            return style.display !== "none" && style.visibility !== "hidden" &&
+              style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
+          });
           const blockedShared = sharedButtons.filter(button => {
             const rect = button.getBoundingClientRect();
             const x = Math.min(window.innerWidth - 1, Math.max(0, rect.left + rect.width / 2));
