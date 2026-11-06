@@ -1084,6 +1084,21 @@
         let target = option.selectors.map(selector => {
           try { return document.querySelector(selector); } catch { return null; }
         }).find(candidate => candidate && isVisible(candidate) && !used.has(candidate));
+        // Some legacy themes keep the story list collapsed until their own
+        // animation runs. If the client enabled and supplied stories, expose
+        // the existing story section instead of silently omitting navigation.
+        if (!target && option.id === "story" && Array.isArray(data.story) && data.story.length) {
+          const storyRoot = document.querySelector(".story-list, #story-list");
+          const storySection = storyRoot?.closest("section") ||
+            document.querySelector(".story-section, #story-section, #story");
+          if (storySection && !used.has(storySection)) {
+            storySection.hidden = false;
+            storySection.removeAttribute("hidden");
+            storySection.style.removeProperty("display");
+            if (getComputedStyle(storySection).display === "none") storySection.style.display = "block";
+            if (isVisible(storySection)) target = storySection;
+          }
+        }
         if (!target && option.id === "couple") {
           const photo = document.querySelector('[data-bind="couple.groom.photo"], [data-bind="couple.bride.photo"]');
           target = photo && photo.closest("section");
