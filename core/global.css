@@ -602,3 +602,28 @@ html.oa-invitation-opened > #oa-quick-controls {
   visibility: visible !important;
   pointer-events: auto !important;
 }
+
+
+/* Overflow menu: anchor it to the dock, not fixed to a backdrop-filter containing block.
+   This keeps the menu clickable above theme sections on desktop and mobile. */
+html.oa-invitation-opened > #oa-floating-controls {
+  overflow: visible !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-more-wrap {
+  position: relative !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  position: absolute !important;
+  right: 0 !important;
+  left: auto !important;
+  bottom: calc(100% + 10px) !important;
+  top: auto !important;
+  z-index: 2147483001 !important;
+  max-width: min(82vw, 280px);
+  max-height: min(55vh, 360px);
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow[hidden] {
+  display: none !important;
+}
