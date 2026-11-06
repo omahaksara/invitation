@@ -1264,7 +1264,8 @@
           panel.hidden = true;
           moreButton.setAttribute("aria-expanded", "false");
         });
-        panel.append(topButton, nextButton, shareButton, autoButton);\n        if (musicButton) panel.append(musicButton);
+        panel.append(topButton, nextButton, shareButton, autoButton);
+        if (musicButton) panel.append(musicButton);
         moreButton.addEventListener("click", () => {
           panel.hidden = !panel.hidden;
           moreButton.setAttribute("aria-expanded", String(!panel.hidden));
