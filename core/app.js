@@ -1140,14 +1140,14 @@
     // Some older themes use fixed button groups instead of a <nav>. Retire only
     // floating/sticky controls with navigation-like names, never ordinary content.
     document.querySelectorAll("#app [class], #app [id]").forEach(element => {
-      if (element.id === "oa-floating-controls" || element.id === "oa-quick-controls") return;
+      if (element.id === "oa-floating-controls") return;
       const identity = ((element.id || "") + " " + (typeof element.className === "string" ? element.className : "")).toLowerCase();
       if (!/(nav|dock|bottom|float|control)/.test(identity)) return;
       const position = getComputedStyle(element).position;
       if ((position === "fixed" || position === "sticky") && element.querySelector("button, a, [role='button']")) legacyNavs.add(element);
     });
     legacyNavs.forEach(nav => {
-      if (nav.id === "oa-floating-controls" || nav.id === "oa-quick-controls") return;
+      if (nav.id === "oa-floating-controls") return;
       nav.classList.add("oa-legacy-navigation");
       nav.setAttribute("aria-hidden", "true");
       nav.setAttribute("inert", "");
@@ -1172,22 +1172,14 @@
     const configuredMusicSrc = typeof configuredMusic === "string" ? configuredMusic : configuredMusic && configuredMusic.src;
     const hasMusic = !!((audio && (audio.getAttribute("src") || audio.src) || configuredMusicSrc) && features.music !== false);
 
-    const quick = document.createElement("div");
-    quick.id = "oa-quick-controls";
-    quick.className = "oa-quick-controls";
-    quick.setAttribute("aria-label", "Kontrol cepat undangan");
-    const autoButton = makeButton("auto", "↧", "Mulai gulir otomatis");
-    autoButton.className = "oa-quick-button oa-auto-scroll";
-    quick.append(autoButton);
-
+    // Playback and auto-scroll live inside the shared "Lainnya" dock menu.
+    const autoButton = makeButton("auto", "↧ Gulir", "Mulai gulir otomatis");
+    autoButton.className = "oa-dock-action oa-auto-scroll";
     let musicButton = null;
     if (hasMusic) {
-      musicButton = makeButton("music", "♫", "Putar musik");
-      musicButton.className = "oa-quick-button oa-music-control";
-      quick.append(musicButton);
+      musicButton = makeButton("music", "♫ Musik", "Putar musik");
+      musicButton.className = "oa-dock-action oa-music-control";
     }
-    // Mount outside the theme body so transformed/isolated theme wrappers cannot cover controls.
-    document.documentElement.append(quick);
 
     const isInvitationField = element => element && element.matches &&
       element.matches("input, textarea, select, [contenteditable='true']") &&
@@ -1272,7 +1264,7 @@
           panel.hidden = true;
           moreButton.setAttribute("aria-expanded", "false");
         });
-        panel.append(topButton, nextButton, shareButton);
+        panel.append(topButton, nextButton, shareButton, autoButton);\n        if (musicButton) panel.append(musicButton);
         moreButton.addEventListener("click", () => {
           panel.hidden = !panel.hidden;
           moreButton.setAttribute("aria-expanded", String(!panel.hidden));
@@ -1339,7 +1331,7 @@
       });
       window.addEventListener("wheel", stopAutoScroll, { passive: true });
       window.addEventListener("touchstart", event => {
-        if (!quick.contains(event.target)) stopAutoScroll();
+        if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
       }, { passive: true });
       window.addEventListener("pointerdown", event => {
         if (!quick.contains(event.target)) stopAutoScroll();
