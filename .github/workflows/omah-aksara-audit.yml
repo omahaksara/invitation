@@ -11,6 +11,7 @@ on:
     branches:
       - main
       - rebuild/omah-aksara-v2
+      - feat/smart-invitation-controls
   workflow_dispatch:
 
 concurrency:

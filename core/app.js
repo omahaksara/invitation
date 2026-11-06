@@ -1053,6 +1053,12 @@
       return style.display !== "none" && style.visibility !== "hidden" &&
         element.getBoundingClientRect().height > 0;
     };
+    // Sections inside a hidden main-content wrapper are still valid navigation
+    // targets before the visitor opens the cover. Resolve by their own state,
+    // then use isVisible only when a visitor actually activates a shortcut.
+    const isAvailable = element => !!element && !element.hidden &&
+      element.getAttribute("aria-hidden") !== "true" &&
+      element.style.display !== "none";
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
       window.scrollTo({
@@ -1083,7 +1089,7 @@
         if (option.feature && features[option.feature] === false) return;
         let target = option.selectors.map(selector => {
           try { return document.querySelector(selector); } catch { return null; }
-        }).find(candidate => candidate && isVisible(candidate) && !used.has(candidate));
+        }).find(candidate => candidate && isAvailable(candidate) && !used.has(candidate));
         // Some legacy themes keep the story list collapsed until their own
         // animation runs. If the client enabled and supplied stories, expose
         // the existing story section instead of silently omitting navigation.
@@ -1096,7 +1102,7 @@
             storySection.removeAttribute("hidden");
             storySection.style.removeProperty("display");
             if (getComputedStyle(storySection).display === "none") storySection.style.display = "block";
-            if (isVisible(storySection)) target = storySection;
+            if (isAvailable(storySection)) target = storySection;
           }
         }
         if (!target && option.id === "couple") {
@@ -1113,7 +1119,11 @@
 
     // Retire theme-specific docks/music buttons so visitors get the same controls
     // everywhere. Keep the original theme markup in place but out of the layout.
-    const legacyNavs = document.querySelectorAll("#app nav, #main-content nav, .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
+    const legacyNavs = document.querySelectorAll(
+      "#app nav, #main-content nav, .nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
+      "#app [class*='bottom-nav'], #app [id*='bottom-nav'], #app [class*='floating-nav'], #app [id*='floating-nav'], " +
+      "#app [class*='nav-dock'], #app [id*='nav-dock'], #app .mobile-menu, #app .bottom-menu, #app .floating-menu"
+    );
     legacyNavs.forEach(nav => {
       if (nav.id === "oa-floating-controls") return;
       nav.classList.add("oa-legacy-navigation");
