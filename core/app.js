@@ -1460,9 +1460,7 @@
     });
     document.querySelectorAll("#app img").forEach(image => {
       if (image.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
-      if (image.naturalWidth === 0 && !image.complete) {
-        image.addEventListener("load", () => image.classList.add("oa-motion-photo"), { once: true });
-      } else image.classList.add("oa-motion-photo");
+      image.classList.add("oa-motion-photo");
     });
     let motionIndex = 0;
     motionTargets.forEach(element => {
