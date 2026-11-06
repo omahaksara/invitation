@@ -641,6 +641,7 @@
         if (cover) cover.classList.add("is-opening");
         if (main) { main.hidden = false; main.style.display = "block"; }
         document.body.classList.add("oa-invitation-opened");
+        document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         window.setTimeout(() => {
@@ -661,6 +662,7 @@
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
       document.body.classList.add("oa-invitation-opened");
+        document.documentElement.classList.add("oa-invitation-opened");
       if (main) { main.hidden = false; main.style.display = "block"; }
       if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
     }
@@ -1161,7 +1163,9 @@
       control.setAttribute("aria-hidden", "true");
       control.setAttribute("inert", "");
     });
-    const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
+    const configuredMusic = data && data.media && data.media.music;
+    const configuredMusicSrc = typeof configuredMusic === "string" ? configuredMusic : configuredMusic && configuredMusic.src;
+    const hasMusic = !!((audio && (audio.getAttribute("src") || audio.src) || configuredMusicSrc) && features.music !== false);
 
     const quick = document.createElement("div");
     quick.id = "oa-quick-controls";
