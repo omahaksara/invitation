@@ -34,8 +34,7 @@ const themes = [
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
 { slug: "sagara", marker: ".sg-cover-photo", open: "#open-btn", cover: "#cover" },
-  { slug: "kencana-jawa", marker: ".kj-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
 ];
 
 (async () => {
