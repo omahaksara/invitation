@@ -494,3 +494,40 @@ body.oa-invitation-opened #oa-floating-controls button,
 body.oa-invitation-opened #oa-quick-controls button {
   pointer-events: auto !important;
 }
+
+
+/* Final control layer: the shared dock must win against transformed theme sections. */
+body.oa-invitation-opened > #oa-floating-controls,
+body.oa-invitation-opened > #oa-quick-controls {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  pointer-events: auto !important;
+  isolation: isolate !important;
+  transform: none !important;
+}
+body.oa-invitation-opened > #oa-floating-controls {
+  left: 50% !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+}
+body.oa-invitation-opened > #oa-quick-controls {
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px) !important;
+  top: auto !important;
+}
+body.oa-invitation-opened > #oa-floating-controls button,
+body.oa-invitation-opened > #oa-quick-controls button {
+  pointer-events: auto !important;
+}
+body.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  z-index: 2147483001 !important;
+}
+@media (max-width: 600px) {
+  body.oa-invitation-opened > #oa-floating-controls {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    transform: none !important;
+  }
+}
