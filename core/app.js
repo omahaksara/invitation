@@ -1089,7 +1089,7 @@
     };
 
     const nativeNavigation = document.querySelector("#app nav:not(#oa-floating-controls), #main-content nav:not(#oa-floating-controls), .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
-    const nativeMusic = document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle");
+    const nativeMusic = document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box");
     const audio = document.getElementById("bg-music");
     const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
     if (nativeNavigation) {
