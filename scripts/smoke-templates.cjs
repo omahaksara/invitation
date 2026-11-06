@@ -110,6 +110,14 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const motionAudit = await page.evaluate(() => ({
+          left: document.querySelectorAll('#app [data-oa-motion="left"]').length,
+          right: document.querySelectorAll('#app [data-oa-motion="right"]').length,
+          up: document.querySelectorAll('#app [data-oa-motion="up"]').length,
+          photos: document.querySelectorAll('#app img.oa-motion-photo').length
+        }));
+        assert.ok(motionAudit.left > 0 && motionAudit.right > 0 && motionAudit.up > 0,
+          theme.slug + ": animasi arah kiri/kanan/naik belum diterapkan merata");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
           // The invitation should begin scrolling automatically after it is opened.
