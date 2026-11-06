@@ -227,3 +227,438 @@ body {
   .oa-floating-controls { left:9px; right:9px; width:auto; max-width:none; transform:none; justify-content:flex-start; overflow-x:auto; padding:6px; }
   .oa-floating-controls button { flex:0 0 auto; min-width:62px; padding-inline:10px; }
 }
+
+
+/* Theme-specific fallback docks: one visual signature per registered theme.
+   The engine shares behavior only; each theme owns its own palette, silhouette and interaction finish. */
+.oa-floating-controls { --oa-dock-bg:rgba(250,248,242,.94); --oa-dock-border:rgba(115,96,68,.24); --oa-dock-ink:#514735; --oa-dock-accent:#9a8057; background:var(--oa-dock-bg);border-color:var(--oa-dock-border); }
+.oa-floating-controls button { color:var(--oa-dock-ink);border-color:transparent;background:transparent; }
+.oa-floating-controls button:hover,.oa-floating-controls button[aria-pressed="true"] { color:var(--oa-dock-ink);background:var(--oa-dock-accent);border-color:var(--oa-dock-accent); }
+
+/* Aksara Nocturne: native .nocturne-nav is intentionally left to its template CSS. */
+.oa-floating-controls[data-theme="aksara-nocturne"] { --oa-dock-bg:#071827f5;--oa-dock-border:#d6bc87;--oa-dock-ink:#ead8ad;--oa-dock-accent:#765d35;border-radius:28px;box-shadow:0 12px 36px #0008,inset 0 1px #fff2; }
+.oa-floating-controls[data-theme="aksara-signature"] { --oa-dock-bg:#201d1af5;--oa-dock-border:#bea06c;--oa-dock-ink:#f0dfc2;--oa-dock-accent:#59452e;border-radius:10px;box-shadow:0 12px 30px #17110d35; }
+.oa-floating-controls[data-theme="aurelia-noir"] { --oa-dock-bg:#10251ff5;--oa-dock-border:#c9a86a;--oa-dock-ink:#f3e7ca;--oa-dock-accent:#315c4b;border-radius:3px 18px 3px 18px;box-shadow:0 12px 32px #07140f66; }
+.oa-floating-controls[data-theme="botanical-garden"] { --oa-dock-bg:#ebefe0f7;--oa-dock-border:#82977a;--oa-dock-ink:#405541;--oa-dock-accent:#cbd8bd;border-radius:24px 24px 8px 8px;box-shadow:0 10px 28px #344b3525; }
+.oa-floating-controls[data-theme="calestial"] { --oa-dock-bg:#0a0e27f5;--oa-dock-border:#d4af37;--oa-dock-ink:#f5e7ae;--oa-dock-accent:#493b78;border-radius:50px;box-shadow:0 0 26px #d4af3730; }
+.oa-floating-controls[data-theme="earty"] { --oa-dock-bg:#172a30f5;--oa-dock-border:#b7a27a;--oa-dock-ink:#e9dfc8;--oa-dock-accent:#52645c;border-radius:7px;box-shadow:0 8px 24px #101c20aa; }
+.oa-floating-controls[data-theme="elegance"] { --oa-dock-bg:#faf7f0f7;--oa-dock-border:#b49a72;--oa-dock-ink:#665844;--oa-dock-accent:#e8ddc8;border-radius:5px;box-shadow:0 8px 26px #5a49301c; }
+.oa-floating-controls[data-theme="groom"] { --oa-dock-bg:#302b29f7;--oa-dock-border:#c9a98f;--oa-dock-ink:#f4e8dc;--oa-dock-accent:#795d4e;border-radius:18px 4px 18px 4px;box-shadow:0 10px 26px #20171355; }
+.oa-floating-controls[data-theme="karsa"] { --oa-dock-bg:#171b18f5;--oa-dock-border:#a58a61;--oa-dock-ink:#f4eee3;--oa-dock-accent:#6e6048;border-radius:999px;box-shadow:0 8px 28px #090c0a88; }
+.oa-floating-controls[data-theme="kinze"] { --oa-dock-bg:#101b2bf5;--oa-dock-border:#d8b76a;--oa-dock-ink:#f2e7ce;--oa-dock-accent:#3c526c;border-radius:8px 8px 22px 22px;box-shadow:0 10px 30px #080f1b88; }
+.oa-floating-controls[data-theme="lume"] { --oa-dock-bg:#faf8eff5;--oa-dock-border:#b7a77b;--oa-dock-ink:#655d49;--oa-dock-accent:#e8dfc5;border-radius:2px;box-shadow:0 6px 20px #5d52301c; }
+.oa-floating-controls[data-theme="lumiere-bloom"] { --oa-dock-bg:#fff8f3f7;--oa-dock-border:#d7a85e;--oa-dock-ink:#704859;--oa-dock-accent:#f0d8d7;border-radius:30px 30px 12px 12px;box-shadow:0 10px 28px #8e5d6b22; }
+.oa-floating-controls[data-theme="nox"] { --oa-dock-bg:#171717f7;--oa-dock-border:#b85d38;--oa-dock-ink:#f4e8df;--oa-dock-accent:#6f3327;border-radius:0;border-width:1px 0 0;box-shadow:0 -8px 30px #0008; }
+.oa-floating-controls[data-theme="romantic-floral"] { --oa-dock-bg:#fbf4efF7;--oa-dock-border:#e5cca0;--oa-dock-ink:#755b43;--oa-dock-accent:#ead7c9;border-radius:2px 2px 24px 24px;box-shadow:0 9px 26px #8e725322; }
+.oa-floating-controls[data-theme="royal-vintage"] { --oa-dock-bg:#37080df7;--oa-dock-border:#d0ad66;--oa-dock-ink:#f0dba9;--oa-dock-accent:#6c2630;border-radius:12px;border-width:2px;box-shadow:0 10px 30px #21060977,inset 0 0 0 2px #d0ad6622; }
+.oa-floating-controls[data-theme="serena-ivory"] { --oa-dock-bg:#f8f3eaf7;--oa-dock-border:#c5a77d;--oa-dock-ink:#34313d;--oa-dock-accent:#e7d8c1;border-radius:14px 14px 4px 4px;box-shadow:0 8px 24px #4b3d3222; }
+.oa-floating-controls[data-theme="sirein"] { --oa-dock-bg:#24312cf7;--oa-dock-border:#c9a98f;--oa-dock-ink:#f0e8dd;--oa-dock-accent:#56685b;border-radius:20px 6px 20px 6px;box-shadow:0 10px 26px #17211c66; }
+.oa-floating-controls[data-theme="taupe"] { --oa-dock-bg:#493e38f7;--oa-dock-border:#d2bda6;--oa-dock-ink:#f5eadc;--oa-dock-accent:#806d5e;border-radius:6px 18px 6px 18px;box-shadow:0 10px 24px #211a1666; }
+.oa-floating-controls[data-theme="velvet-romance"] { --oa-dock-bg:#3a101df7;--oa-dock-border:#e8b9a6;--oa-dock-ink:#fff0e8;--oa-dock-accent:#7d3044;border-radius:26px 26px 6px 6px;box-shadow:0 10px 32px #22081166; }
+
+/* Per-theme button geometry: preserve each dock's silhouette and tap feedback. */
+.oa-floating-controls[data-theme="aksara-nocturne"] button { border-radius:50%; }
+.oa-floating-controls[data-theme="aksara-signature"] button { border-radius:4px;letter-spacing:.04em; }
+.oa-floating-controls[data-theme="aurelia-noir"] button { border-radius:2px 10px 2px 10px; }
+.oa-floating-controls[data-theme="botanical-garden"] button { border-radius:18px 18px 5px 5px; }
+.oa-floating-controls[data-theme="calestial"] button { border-radius:50%; }
+.oa-floating-controls[data-theme="earty"] button { border-radius:3px; }
+.oa-floating-controls[data-theme="elegance"] button { border-radius:2px;letter-spacing:.08em; }
+.oa-floating-controls[data-theme="groom"] button { border-radius:3px 12px 3px 12px; }
+.oa-floating-controls[data-theme="karsa"] button { border-radius:999px;letter-spacing:.08em; }
+.oa-floating-controls[data-theme="kinze"] button { border-radius:6px 6px 16px 16px; }
+.oa-floating-controls[data-theme="lume"] button { border-radius:0; }
+.oa-floating-controls[data-theme="lumiere-bloom"] button { border-radius:22px; }
+.oa-floating-controls[data-theme="nox"] button { border-radius:0; }
+.oa-floating-controls[data-theme="romantic-floral"] button { border-radius:2px 2px 18px 18px; }
+.oa-floating-controls[data-theme="royal-vintage"] button { border-radius:5px; }
+.oa-floating-controls[data-theme="serena-ivory"] button { border-radius:10px 10px 2px 2px; }
+.oa-floating-controls[data-theme="sirein"] button { border-radius:16px 4px 16px 4px; }
+.oa-floating-controls[data-theme="taupe"] button { border-radius:3px 10px 3px 10px; }
+.oa-floating-controls[data-theme="velvet-romance"] button { border-radius:20px 20px 4px 4px; }
+
+
+/* Smart interaction layer: controls remain hidden until the invitation is opened. */
+body:not(.oa-invitation-opened) .oa-floating-controls,
+body:not(.oa-invitation-opened) .oa-quick-controls,
+body:not(.oa-invitation-opened) [data-oa-native-navigation],
+body:not(.oa-invitation-opened) #music-toggle,
+body:not(.oa-invitation-opened) #music-btn,
+body:not(.oa-invitation-opened) .music-toggle,
+body:not(.oa-invitation-opened) .music-float-btn,
+body:not(.oa-invitation-opened) .royal-music-toggle {
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+.oa-floating-controls {
+  position:fixed; z-index:89; left:50%; bottom:max(12px,env(safe-area-inset-bottom));
+  transform:translateX(-50%); display:flex; align-items:center; justify-content:center; gap:5px;
+  width:max-content; max-width:calc(100vw - 28px); padding:6px;
+  border:1px solid var(--oa-dock-border,rgba(255,255,255,.55));
+  border-radius:999px; background:var(--oa-dock-bg,rgba(248,246,240,.88));
+  box-shadow:0 9px 30px rgba(20,18,16,.16); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  transition:opacity .28s ease, transform .28s ease;
+}
+.oa-floating-controls[hidden],.oa-nav-overflow[hidden],.oa-quick-controls[hidden] {display:none!important}
+.oa-floating-controls button {
+  appearance:none; border:0; min-width:42px; min-height:42px; padding:0 12px; border-radius:999px;
+  background:transparent; color:var(--oa-dock-ink,#514735); font:600 11px/1 var(--oa-font-body,Arial,sans-serif);
+  cursor:pointer; white-space:nowrap; transition:background .2s ease,color .2s ease,transform .2s ease;
+}
+.oa-floating-controls button:active,.oa-quick-button:active {transform:scale(.94)}
+.oa-floating-controls button.is-active {background:var(--oa-dock-active,var(--oa-dock-ink,#514735));color:var(--oa-dock-active-ink,#fff)}
+.oa-nav-more-wrap {position:relative}
+.oa-nav-overflow {
+  position:absolute; right:0; bottom:calc(100% + 12px); min-width:142px; max-height:min(55vh,360px); overflow:auto;
+  display:grid; gap:4px; padding:8px; border:1px solid var(--oa-dock-border,rgba(255,255,255,.5));
+  border-radius:18px; background:var(--oa-dock-bg,rgba(248,246,240,.96)); box-shadow:0 12px 36px rgba(0,0,0,.18);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+}
+.oa-nav-overflow button {width:100%;text-align:left;justify-content:flex-start}
+.oa-quick-controls {
+  position:fixed; z-index:92; right:max(14px,env(safe-area-inset-right));
+  bottom:calc(max(14px,env(safe-area-inset-bottom)) + 74px); display:flex; flex-direction:column; gap:10px;
+  align-items:center; transition:opacity .28s ease,transform .28s ease;
+}
+.oa-quick-button {
+  width:44px; height:44px; border-radius:50%; border:1px solid var(--oa-quick-border,rgba(255,255,255,.7));
+  display:grid; place-items:center; background:var(--oa-quick-bg,rgba(248,246,240,.92));
+  color:var(--oa-quick-ink,#514735); box-shadow:0 6px 20px rgba(0,0,0,.16);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); font-size:17px; cursor:pointer;
+  transition:transform .2s ease,background .2s ease;
+}
+.oa-quick-button.is-running,.oa-quick-button.is-playing {background:var(--oa-dock-active,#514735);color:var(--oa-dock-active-ink,#fff)}
+.oa-native-music-control {z-index:92!important}
+@media(max-width:480px) {
+  .oa-floating-controls {left:10px;right:10px;bottom:max(9px,env(safe-area-inset-bottom));width:auto;max-width:none;transform:none;justify-content:space-around;gap:2px}
+  .oa-floating-controls button {min-width:0;min-height:40px;padding:0 9px;font-size:10px;flex:1 1 0}
+  .oa-quick-controls {right:max(12px,env(safe-area-inset-right));bottom:calc(max(12px,env(safe-area-inset-bottom)) + 66px)}
+  .oa-quick-button {width:42px;height:42px}
+}
+@media(prefers-reduced-motion:reduce) {
+  .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {transition:none!important}
+}
+
+
+/* Context-aware controls: keep the dock clear of active forms and gallery previews. */
+body.oa-form-focus .oa-floating-controls,
+body.oa-form-focus .oa-quick-controls,
+body.oa-form-focus [data-oa-native-navigation],
+body.oa-form-focus .oa-native-music-control,
+body.oa-lightbox-open .oa-floating-controls,
+body.oa-lightbox-open .oa-quick-controls,
+body.oa-lightbox-open [data-oa-native-navigation],
+body.oa-lightbox-open .oa-native-music-control {
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+
+/* Omah Aksara unified navigation layer.
+   Same interaction model on every theme; palettes and silhouettes stay theme-aware. */
+.oa-legacy-navigation,
+.oa-legacy-music-control {
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.oa-floating-controls {
+  gap:clamp(3px,.8vw,8px);
+  padding:7px 9px;
+  border-width:1px;
+  isolation:isolate;
+}
+.oa-floating-controls button {
+  min-width:clamp(48px,7vw,66px);
+  min-height:43px;
+  padding:0 12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:clamp(10px,.78rem,12px);
+  letter-spacing:.015em;
+}
+.oa-floating-controls button.is-active {
+  background:var(--oa-dock-accent,var(--oa-dock-ink));
+  color:var(--oa-dock-active-ink,#fff);
+  box-shadow:0 3px 10px color-mix(in srgb,var(--oa-dock-accent,#8a7656) 28%,transparent);
+}
+.oa-floating-controls .oa-nav-more {
+  min-width:72px;
+  font-weight:700;
+}
+.oa-nav-overflow {
+  min-width:164px;
+  padding:9px;
+  gap:3px;
+}
+.oa-nav-overflow button {
+  min-height:40px;
+  justify-content:flex-start;
+  padding-inline:12px;
+}
+.oa-quick-controls {
+  right:max(14px,env(safe-area-inset-right));
+  bottom:calc(max(14px,env(safe-area-inset-bottom)) + 78px);
+}
+.oa-quick-button {
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--oa-dock-border,rgba(255,255,255,.7));
+  background:var(--oa-dock-bg,rgba(248,246,240,.94));
+  color:var(--oa-dock-ink,#514735);
+}
+.oa-quick-button:focus-visible {
+  outline:2px solid var(--oa-dock-accent,#9a8057);
+  outline-offset:3px;
+}
+.oa-quick-button.is-running,.oa-quick-button.is-playing {
+  background:var(--oa-dock-accent,#514735);
+  color:var(--oa-dock-active-ink,#fff);
+}
+@media(max-width:600px) {
+  .oa-floating-controls {
+    left:8px;
+    right:8px;
+    bottom:max(8px,env(safe-area-inset-bottom));
+    width:auto;
+    max-width:none;
+    transform:none;
+    justify-content:space-around;
+    gap:2px;
+    padding:5px;
+  }
+  .oa-floating-controls button {
+    flex:1 1 0;
+    min-width:0;
+    min-height:42px;
+    padding:0 5px;
+    font-size:10px;
+  }
+  .oa-floating-controls .oa-nav-more { min-width:0; }
+  .oa-nav-overflow { right:0; bottom:calc(100% + 10px); }
+  .oa-quick-controls {
+    right:max(10px,env(safe-area-inset-right));
+    bottom:calc(max(10px,env(safe-area-inset-bottom)) + 64px);
+    gap:8px;
+  }
+  .oa-quick-button { width:40px;height:40px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {
+    transition:none!important;
+  }
+}
+
+/* Keep the shared controls above theme sections and their reveal layers. */
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
+  z-index: 9999 !important;
+  isolation: isolate;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  z-index: 10000 !important;
+}
+
+
+/* Final stacking contract: the theme canvas is its own lower layer.
+   Shared navigation and its overflow menu must stay above every legacy theme section. */
+body #app {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  isolation: isolate !important;
+  pointer-events: auto !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-more-wrap {
+  position: static !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  position: fixed !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 62px) !important;
+  z-index: 2147483001 !important;
+  max-height: min(55vh, 360px);
+  overflow-y: auto;
+}
+html.oa-invitation-opened > #oa-floating-controls button,
+html.oa-invitation-opened > #oa-quick-controls button {
+  pointer-events: auto !important;
+}
+
+
+/* Final control layer: the shared dock must win against transformed theme sections. */
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  pointer-events: auto !important;
+  isolation: isolate !important;
+  transform: none !important;
+}
+html.oa-invitation-opened > #oa-floating-controls {
+  left: 50% !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+}
+html.oa-invitation-opened > #oa-quick-controls {
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px) !important;
+  top: auto !important;
+}
+html.oa-invitation-opened > #oa-floating-controls button,
+html.oa-invitation-opened > #oa-quick-controls button {
+  pointer-events: auto !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  z-index: 2147483001 !important;
+}
+@media (max-width: 600px) {
+  html.oa-invitation-opened > #oa-floating-controls {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    transform: none !important;
+  }
+}
+
+
+/* Distinct editorial typography for every active invitation theme.
+   Shared structure stays consistent; type personality remains theme-owned. */
+html[data-oa-theme="karsa"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="royal-vintage"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="serena-ivory"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="sirein"] { --oa-font-display:"EB Garamond",Georgia,serif; --oa-font-body:"Lato",Arial,sans-serif; }
+html[data-oa-theme="groom"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="kinze"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="aksara-signature"] { --oa-font-display:"EB Garamond",Georgia,serif; --oa-font-body:"Lato",Arial,sans-serif; }
+html[data-oa-theme="botanical-garden"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="velvet-romance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="romantic-floral"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="elegance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="aurelia-noir"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="lumiere-bloom"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="aksara-nocturne"] { --oa-font-display:"Marcellus",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
+html[data-oa-theme="calestial"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Cormorant Garamond",Georgia,serif; }
+
+html[data-oa-theme] body,
+html[data-oa-theme] #app,
+html[data-oa-theme] #app-inner {
+  font-family:var(--oa-font-body,Inter,sans-serif);
+}
+html[data-oa-theme] h1,
+html[data-oa-theme] h2,
+html[data-oa-theme] h3,
+html[data-oa-theme] h4,
+html[data-oa-theme] .font-serif,
+html[data-oa-theme] .section-title,
+html[data-oa-theme] .person-card h3,
+html[data-oa-theme] .event-card h2,
+html[data-oa-theme] .event-card h3 {
+  font-family:var(--oa-font-display,Georgia,serif);
+}
+html[data-oa-theme] button,
+html[data-oa-theme] input,
+html[data-oa-theme] textarea,
+html[data-oa-theme] select {
+  font-family:var(--oa-font-body,Inter,sans-serif);
+}
+
+/* Theme motion tokens: each visual identity gets its own reveal rhythm. */
+html[data-oa-theme="aksara-nocturne"] { --oa-reveal-time:1.05s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="aksara-signature"] { --oa-reveal-time:.92s; --oa-reveal-ease:cubic-bezier(.22,.7,.25,1); }
+html[data-oa-theme="aurelia-noir"] { --oa-reveal-time:1.12s; --oa-reveal-ease:cubic-bezier(.16,.84,.24,1); }
+html[data-oa-theme="botanical-garden"] { --oa-reveal-time:1.08s; --oa-reveal-ease:cubic-bezier(.16,1,.3,1); }
+html[data-oa-theme="calestial"] { --oa-reveal-time:1.14s; --oa-reveal-ease:cubic-bezier(.18,.72,.25,1); }
+html[data-oa-theme="elegance"] { --oa-reveal-time:.88s; --oa-reveal-ease:cubic-bezier(.2,.65,.25,1); }
+html[data-oa-theme="groom"] { --oa-reveal-time:.82s; --oa-reveal-ease:cubic-bezier(.25,.65,.3,1); }
+html[data-oa-theme="kinze"] { --oa-reveal-time:.96s; --oa-reveal-ease:cubic-bezier(.2,.8,.2,1); }
+html[data-oa-theme="karsa"] { --oa-reveal-time:.9s; --oa-reveal-ease:cubic-bezier(.22,.68,.2,1); }
+html[data-oa-theme="lumiere-bloom"] { --oa-reveal-time:1.02s; --oa-reveal-ease:cubic-bezier(.17,.78,.22,1); }
+html[data-oa-theme="romantic-floral"] { --oa-reveal-time:1s; --oa-reveal-ease:cubic-bezier(.2,.8,.2,1); }
+html[data-oa-theme="royal-vintage"] { --oa-reveal-time:.86s; --oa-reveal-ease:cubic-bezier(.22,.68,.2,1); }
+html[data-oa-theme="serena-ivory"] { --oa-reveal-time:.94s; --oa-reveal-ease:cubic-bezier(.2,.72,.25,1); }
+html[data-oa-theme="sirein"] { --oa-reveal-time:.98s; --oa-reveal-ease:cubic-bezier(.18,.76,.25,1); }
+html[data-oa-theme="velvet-romance"] { --oa-reveal-time:.9s; --oa-reveal-ease:cubic-bezier(.25,.7,.25,1); }
+html[data-oa-theme] .oa-scroll-reveal {
+  transition:opacity var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1)),
+             transform var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1));
+}
+html[data-oa-theme] .oa-scroll-reveal.oa-visible { opacity:1; transform:none; }
+
+
+/* Root-mounted shared controls: reveal only after the invitation is opened. */
+html:not(.oa-invitation-opened) > #oa-floating-controls,
+html:not(.oa-invitation-opened) > #oa-quick-controls {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+
+/* Overflow menu: anchor it to the dock, not fixed to a backdrop-filter containing block.
+   This keeps the menu clickable above theme sections on desktop and mobile. */
+html.oa-invitation-opened > #oa-floating-controls {
+  overflow: visible !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-more-wrap {
+  position: relative !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  position: absolute !important;
+  right: 0 !important;
+  left: auto !important;
+  bottom: calc(100% + 10px) !important;
+  top: auto !important;
+  z-index: 2147483001 !important;
+  max-width: min(82vw, 280px);
+  max-height: min(55vh, 360px);
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow[hidden] {
+  display: none !important;
+}
+
+
+/* Theme typography tokens for shared UI and engine-generated fallback sections.
+   Native template typography remains authoritative for each theme's own artwork. */
+html[data-oa-theme="aksara-nocturne"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Montserrat",sans-serif; }
+html[data-oa-theme="aksara-signature"] { --oa-theme-display:"EB Garamond",serif; --oa-theme-body:"DM Sans",sans-serif; }
+html[data-oa-theme="aurelia-noir"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; }
+html[data-oa-theme="botanical-garden"] { --oa-theme-display:"Lora",serif; --oa-theme-body:"Lato",sans-serif; }
+html[data-oa-theme="calestial"] { --oa-theme-display:"Playfair Display",serif; --oa-theme-body:"Montserrat",sans-serif; }
+html[data-oa-theme="elegance"] { --oa-theme-display:"Cinzel",serif; --oa-theme-body:"Lato",sans-serif; }
+html[data-oa-theme="groom"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"DM Sans",sans-serif; }
+html[data-oa-theme="kinze"] { --oa-theme-display:"EB Garamond",serif; --oa-theme-body:"Inter",sans-serif; }
+html[data-oa-theme="karsa"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Montserrat",sans-serif; }
+html[data-oa-theme="lumiere-bloom"] { --oa-theme-display:"Playfair Display",serif; --oa-theme-body:"Lato",sans-serif; }
+html[data-oa-theme="romantic-floral"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Lora",serif; }
+html[data-oa-theme="royal-vintage"] { --oa-theme-display:"Cinzel",serif; --oa-theme-body:"Lora",serif; }
+html[data-oa-theme="serena-ivory"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Inter",sans-serif; }
+html[data-oa-theme="sirein"] { --oa-theme-display:"Lora",serif; --oa-theme-body:"Inter",sans-serif; }
+html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; }
+
+.oa-floating-controls,
+.oa-quick-controls { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-floating-controls button,
+.oa-quick-controls button { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-shared-section { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-shared-section > h2,
+.oa-shared-section h3 { font-family:var(--oa-theme-display,var(--oa-font-display)); }

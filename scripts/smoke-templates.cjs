@@ -1,5 +1,17 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const screenshotDir = "artifacts/visual";
+fs.mkdirSync(screenshotDir, { recursive: true });
+
+async function captureScreenshot(page, file) {
+  try {
+    await page.screenshot({ path: file, fullPage: false, animations: "disabled", timeout: 5000 });
+  } catch (error) {
+    console.warn("WARN screenshot skipped " + file + ": " + (error?.message || error));
+  }
+}
 
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
@@ -64,17 +76,7 @@ const themes = [
         }
         assert.ok(await page.locator("#bg-music").getAttribute("src"),
           theme.slug + ": sumber musik tidak terisi");
-        await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
-        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(),
-          theme.slug + ": tombol kembali ke atas tidak tersedia");
-        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(),
-          theme.slug + ": tombol lanjut tidak tersedia");
-        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="auto"]').count(),
-          theme.slug + ": tombol auto-scroll tidak tersedia");
-        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="music"]').count(),
-          theme.slug + ": tombol musik universal tidak tersedia");
-        assert.ok(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(),
-          theme.slug + ": tombol bagikan tidak tersedia");
+        // The shared controls appear only after the invitation is opened.
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
           cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
@@ -94,12 +96,69 @@ const themes = [
           theme.slug + ": ditemukan gambar eksternal pada demo " + JSON.stringify(imageAudit.images));
 
         if (theme.open) {
+          // Shared navigation and quick controls must remain hidden behind the cover.
+          assert.equal(await page.locator("#oa-floating-controls").count(), 1,
+            theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
+          assert.equal(await page.locator("#oa-floating-controls").isVisible(), false,
+            theme.slug + ": navigasi muncul sebelum cover dibuka");
+          assert.equal(await page.locator("#oa-quick-controls").isVisible(), false,
+            theme.slug + ": kontrol cepat muncul sebelum cover dibuka");
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
             return !cover || cover.hidden || getComputedStyle(cover).display === "none";
           }, undefined, { timeout: 5000 });
         }
+        await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-desktop.png`));
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
+          theme.slug + ": tombol kembali ke atas tidak tersedia");
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(), 1,
+          theme.slug + ": tombol lanjut tidak tersedia");
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(), 1,
+          theme.slug + ": tombol bagikan tidak tersedia");
+        assert.equal(await page.locator('#oa-quick-controls [data-oa-action="auto"]').count(), 1,
+          theme.slug + ": tombol auto-scroll tidak tersedia");
+        assert.equal(await page.locator('#oa-quick-controls [data-oa-action="music"]').count(), 1,
+          theme.slug + ": tombol musik universal tidak tersedia");
+
+        // A shared dock is only valid when the theme's former floating controls
+        // are actually retired, not merely covered by the new controls.
+        const legacyAudit = await page.evaluate(() => {
+          const legacy = Array.from(document.querySelectorAll(".oa-legacy-navigation, .oa-legacy-music-control"));
+          const visibleLegacy = legacy.filter(element => {
+            const style = getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            return !element.closest("[hidden], [aria-hidden='true'], [inert]") &&
+              style.display !== "none" && style.visibility !== "hidden" &&
+              style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
+          });
+          const sharedButtons = Array.from(document.querySelectorAll(
+            "#oa-floating-controls button, #oa-quick-controls button"
+          )).filter(button => {
+            const style = getComputedStyle(button);
+            const rect = button.getBoundingClientRect();
+            return !button.closest("[hidden], [aria-hidden='true'], [inert]") &&
+              style.display !== "none" && style.visibility !== "hidden" &&
+              style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
+          });
+          const blockedShared = sharedButtons.filter(button => {
+            const rect = button.getBoundingClientRect();
+            const x = Math.min(window.innerWidth - 1, Math.max(0, rect.left + rect.width / 2));
+            const y = Math.min(window.innerHeight - 1, Math.max(0, rect.top + rect.height / 2));
+            const top = document.elementFromPoint(x, y);
+            return !top || (top !== button && !button.contains(top));
+          }).map(button => button.getAttribute("aria-label") || button.textContent.trim());
+          return {
+            legacyCount: legacy.length,
+            visibleLegacy: visibleLegacy.map(element => element.id || element.className),
+            blockedShared
+          };
+        });
+        assert.equal(legacyAudit.visibleLegacy.length, 0,
+          theme.slug + ": kontrol tema lama masih terlihat " + JSON.stringify(legacyAudit.visibleLegacy));
+        assert.equal(legacyAudit.blockedShared.length, 0,
+          theme.slug + ": tombol navigasi bersama tertutup elemen lain " + JSON.stringify(legacyAudit.blockedShared));
 
         assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="loveStory"]').count(),
           theme.slug + ": pintasan cerita tidak tersedia");
@@ -113,6 +172,8 @@ const themes = [
           return flags.quotes !== false && flags.quote !== false;
         });
         if (quoteEnabled && (quoteData.text || quoteData.arab)) {
+          const moreButton = page.locator('#oa-floating-controls [data-oa-action="more"]');
+          if (await moreButton.count()) await moreButton.click();
           const quoteButton = page.locator('#oa-floating-controls [data-oa-feature="quotes"]');
           assert.equal(await quoteButton.count(), 1, theme.slug + ": pintasan quotes tidak tersedia");
         }
@@ -137,6 +198,8 @@ const themes = [
           assert.equal(shortcut.visible, true, theme.slug + ": target pintasan " + shortcut.feature + " tidak terlihat");
         }
         if (quoteEnabled && (quoteData.text || quoteData.arab)) {
+          const moreButton = navigation.locator('[data-oa-action="more"]');
+          if (await moreButton.count() && await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
           const quoteButton = navigation.locator('[data-oa-feature="quotes"]');
           const quoteTargetId = await quoteButton.getAttribute("data-target");
           if (theme.slug === "karsa") {
@@ -149,7 +212,7 @@ const themes = [
           }, quoteTargetId, { timeout: 5000 });
         }
         assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
-        const autoScroll = navigation.locator('[data-oa-action="auto"]');
+        const autoScroll = page.locator('#oa-quick-controls [data-oa-action="auto"]');
         assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
           theme.slug + ": auto-scroll harus nonaktif saat halaman pertama dibuka");
         if (await autoScroll.isEnabled()) {
@@ -168,7 +231,7 @@ const themes = [
         assert.equal(await navigation.locator('[data-oa-action="next"]').count(), 1,
           theme.slug + ": tombol bagian berikutnya tidak tersedia");
 
-        const musicControl = page.locator("#music-toggle, #music-btn").first();
+        const musicControl = page.locator('#oa-quick-controls [data-oa-action="music"]').first();
         await musicControl.waitFor({ state: "visible", timeout: 5000 });
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
         console.log("PASS " + theme.slug);
@@ -235,6 +298,7 @@ const themes = [
         }
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
         const layout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           page: document.documentElement.scrollWidth,

@@ -11,6 +11,7 @@ on:
     branches:
       - main
       - rebuild/omah-aksara-v2
+      - fix/theme-native-navigation-and-distinct-docks
   workflow_dispatch:
 
 concurrency:
@@ -23,6 +24,7 @@ permissions:
 jobs:
   static-audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -108,6 +110,7 @@ jobs:
           npm install --no-save playwright
           npx playwright install chromium
       - name: Smoke test all themes in Chromium
+        timeout-minutes: 15
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/omah-aksara-http.log 2>&1 &
           SERVER_PID=$!
@@ -117,6 +120,14 @@ jobs:
             sleep 1
           done
           node scripts/smoke-templates.cjs
+      - name: Upload visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omah-aksara-visual-review
+          path: artifacts/visual/*.png
+          if-no-files-found: warn
+          retention-days: 7
 
   live-api-readiness:
     # Read-only GET health probe is safe to run on PRs as well as main pushes.
