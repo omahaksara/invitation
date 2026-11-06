@@ -8,9 +8,9 @@
       "category": "instrumental",
       "file": "wedding-demo-existing.mp3",
       "src": "../../assets/music/library/wedding-demo-existing.mp3",
-      "licenseStatus": "review-required",
-      "customerUse": false,
-      "notes": "Aset lama dari folder klien demo; identitas lagu dan hak penggunaan belum diverifikasi."
+      "licenseStatus": "user-confirmed",
+      "customerUse": true,
+      "notes": "Pemilik proyek mengonfirmasi bahwa musik aman digunakan untuk kebutuhan undangan pelanggan. Simpan bukti izin/lisensi bersama arsip aset untuk audit."
     }
   ]
 }
