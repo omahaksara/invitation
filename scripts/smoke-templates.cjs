@@ -18,6 +18,7 @@ const themes = [
   { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
   { slug: "serena-ivory", marker: ".serena-ivory-page", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "atelier-editorial", client: "atelier-editorial-demo", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "groom", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "kinze", marker: ".kinze-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -39,7 +40,7 @@ const themes = [
       const page = await browser.newPage();
       const pageErrors = [];
       page.on("pageerror", error => pageErrors.push(error.message));
-      const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
+      const url = `http://127.0.0.1:4173/?c=${theme.client || "demo-katalog"}&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
