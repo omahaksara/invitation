@@ -455,12 +455,12 @@ body.oa-lightbox-open .oa-native-music-control {
 }
 
 /* Keep the shared controls above theme sections and their reveal layers. */
-body.oa-invitation-opened #oa-floating-controls,
-body.oa-invitation-opened #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
   z-index: 9999 !important;
   isolation: isolate;
 }
-body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
   z-index: 10000 !important;
 }
 
@@ -472,17 +472,17 @@ body #app {
   z-index: 0;
   isolation: isolate;
 }
-body.oa-invitation-opened #oa-floating-controls,
-body.oa-invitation-opened #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
   position: fixed !important;
   z-index: 2147483000 !important;
   isolation: isolate !important;
   pointer-events: auto !important;
 }
-body.oa-invitation-opened #oa-floating-controls .oa-nav-more-wrap {
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-more-wrap {
   position: static !important;
 }
-body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
   position: fixed !important;
   right: max(12px, env(safe-area-inset-right)) !important;
   bottom: calc(max(12px, env(safe-area-inset-bottom)) + 62px) !important;
@@ -490,41 +490,41 @@ body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
   max-height: min(55vh, 360px);
   overflow-y: auto;
 }
-body.oa-invitation-opened #oa-floating-controls button,
-body.oa-invitation-opened #oa-quick-controls button {
+html.oa-invitation-opened > #oa-floating-controls button,
+html.oa-invitation-opened > #oa-quick-controls button {
   pointer-events: auto !important;
 }
 
 
 /* Final control layer: the shared dock must win against transformed theme sections. */
-body.oa-invitation-opened #oa-floating-controls,
-body.oa-invitation-opened #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
   position: fixed !important;
   z-index: 2147483000 !important;
   pointer-events: auto !important;
   isolation: isolate !important;
   transform: none !important;
 }
-body.oa-invitation-opened #oa-floating-controls {
+html.oa-invitation-opened > #oa-floating-controls {
   left: 50% !important;
   bottom: max(12px, env(safe-area-inset-bottom)) !important;
   top: auto !important;
   transform: translateX(-50%) !important;
 }
-body.oa-invitation-opened #oa-quick-controls {
+html.oa-invitation-opened > #oa-quick-controls {
   right: max(12px, env(safe-area-inset-right)) !important;
   bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px) !important;
   top: auto !important;
 }
-body.oa-invitation-opened #oa-floating-controls button,
-body.oa-invitation-opened #oa-quick-controls button {
+html.oa-invitation-opened > #oa-floating-controls button,
+html.oa-invitation-opened > #oa-quick-controls button {
   pointer-events: auto !important;
 }
-body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
   z-index: 2147483001 !important;
 }
 @media (max-width: 600px) {
-  body.oa-invitation-opened #oa-floating-controls {
+  html.oa-invitation-opened > #oa-floating-controls {
     left: 8px !important;
     right: 8px !important;
     width: auto !important;
@@ -587,3 +587,18 @@ html[data-oa-theme] .oa-scroll-reveal {
              transform var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1));
 }
 html[data-oa-theme] .oa-scroll-reveal.oa-visible { opacity:1; transform:none; }
+
+
+/* Root-mounted shared controls: reveal only after the invitation is opened. */
+html:not(.oa-invitation-opened) > #oa-floating-controls,
+html:not(.oa-invitation-opened) > #oa-quick-controls {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.oa-invitation-opened > #oa-floating-controls,
+html.oa-invitation-opened > #oa-quick-controls {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
