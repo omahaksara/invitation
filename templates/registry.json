@@ -96,6 +96,11 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "atelier-editorial",
+      "name": "Atelier Editorial",
+      "status": "prototype"
     }
   ]
 }
