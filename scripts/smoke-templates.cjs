@@ -114,6 +114,8 @@ const themes = [
           return flags.quotes !== false && flags.quote !== false;
         });
         if (quoteEnabled && (quoteData.text || quoteData.arab)) {
+          const moreButton = page.locator('#oa-floating-controls [data-oa-action="more"]');
+          if (await moreButton.count()) await moreButton.click();
           const quoteButton = page.locator('#oa-floating-controls [data-oa-feature="quotes"]');
           assert.equal(await quoteButton.count(), 1, theme.slug + ": pintasan quotes tidak tersedia");
         }
@@ -138,6 +140,8 @@ const themes = [
           assert.equal(shortcut.visible, true, theme.slug + ": target pintasan " + shortcut.feature + " tidak terlihat");
         }
         if (quoteEnabled && (quoteData.text || quoteData.arab)) {
+          const moreButton = navigation.locator('[data-oa-action="more"]');
+          if (await moreButton.count() && await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
           const quoteButton = navigation.locator('[data-oa-feature="quotes"]');
           const quoteTargetId = await quoteButton.getAttribute("data-target");
           if (theme.slug === "karsa") {
