@@ -463,3 +463,34 @@ body.oa-invitation-opened #oa-quick-controls {
 body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
   z-index: 10000 !important;
 }
+
+
+/* Final stacking contract: the theme canvas is its own lower layer.
+   Shared navigation and its overflow menu must stay above every legacy theme section. */
+body #app {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+body.oa-invitation-opened #oa-floating-controls,
+body.oa-invitation-opened #oa-quick-controls {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  isolation: isolate !important;
+  pointer-events: auto !important;
+}
+body.oa-invitation-opened #oa-floating-controls .oa-nav-more-wrap {
+  position: static !important;
+}
+body.oa-invitation-opened #oa-floating-controls .oa-nav-overflow {
+  position: fixed !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 62px) !important;
+  z-index: 2147483001 !important;
+  max-height: min(55vh, 360px);
+  overflow-y: auto;
+}
+body.oa-invitation-opened #oa-floating-controls button,
+body.oa-invitation-opened #oa-quick-controls button {
+  pointer-events: auto !important;
+}
