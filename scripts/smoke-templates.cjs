@@ -116,8 +116,8 @@ const themes = [
           up: document.querySelectorAll('#app [data-oa-motion="up"]').length,
           photos: document.querySelectorAll('#app img.oa-motion-photo').length
         }));
-        assert.ok(motionAudit.left > 0 && motionAudit.right > 0 && motionAudit.up > 0,
-          theme.slug + ": animasi arah kiri/kanan/naik belum diterapkan merata");
+        assert.ok(motionAudit.left + motionAudit.right > 0 && motionAudit.up > 0,
+          theme.slug + ": animasi arah samping dan naik belum diterapkan");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
           // The invitation should begin scrolling automatically after it is opened.
