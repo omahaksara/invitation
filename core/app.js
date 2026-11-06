@@ -1130,6 +1130,19 @@
 
     // Retire theme-specific docks/music buttons so visitors get the same controls
     // everywhere. Keep the original theme markup in place but out of the layout.
+    const nativeNavCandidates = [...document.querySelectorAll(
+      "nav:not(#oa-floating-controls), [role='navigation']:not(#oa-floating-controls), [data-oa-native-navigation]"
+    )].filter(element => {
+      const identity = ((element.id || "") + " " + (typeof element.className === "string" ? element.className : "")).toLowerCase();
+      const hasSectionLinks = !!element.querySelector("a[href^='#'], button[data-target], [data-scroll-to]");
+      const position = getComputedStyle(element).position;
+      return hasSectionLinks && (
+        position === "fixed" || position === "sticky" ||
+        /(nav|dock|bottom|menu)/.test(identity) ||
+        element.hasAttribute("data-oa-native-navigation")
+      );
+    });
+    const hasNativeNavigation = nativeNavCandidates.length > 0;
     const legacyNavs = new Set(document.querySelectorAll(
       "nav:not(#oa-floating-controls), [role='navigation']:not(#oa-floating-controls), " +
       ".nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
@@ -1137,6 +1150,9 @@
       "[class*='navigation-dock'], [id*='navigation-dock'], [class*='nav-dock'], [id*='nav-dock'], " +
       "[class*='bottom-menu'], [id*='bottom-menu'], [class*='floating-nav'], [id*='floating-nav']"
     ));
+    // A theme's own navigation is part of its visual identity. Keep it and
+    // suppress only the generated fallback dock to prevent duplicate controls.
+    nativeNavCandidates.forEach(nav => legacyNavs.delete(nav));
     // Some older themes use fixed button groups instead of a <nav>. Retire only
     // floating/sticky controls with navigation-like names, never ordinary content.
     document.querySelectorAll("#app [class], #app [id]").forEach(element => {
@@ -1147,7 +1163,7 @@
       if ((position === "fixed" || position === "sticky") && element.querySelector("button, a, [role='button']")) legacyNavs.add(element);
     });
     legacyNavs.forEach(nav => {
-      if (nav.id === "oa-floating-controls" || nav.id === "oa-quick-controls") return;
+      if (nav.id === "oa-floating-controls" || nav.id === "oa-quick-controls" || nativeNavCandidates.includes(nav)) return;
       nav.classList.add("oa-legacy-navigation");
       nav.setAttribute("aria-hidden", "true");
       nav.setAttribute("inert", "");
@@ -1158,8 +1174,15 @@
       nav.style.setProperty("pointer-events", "none", "important");
     });
     const audio = document.getElementById("bg-music");
-    const legacyMusic = document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']");
+    const legacyMusic = [...document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']")].filter(control => control.id !== "bg-music");
+    const hasNativeMusicControl = legacyMusic.length > 0;
     legacyMusic.forEach(control => {
+      if (hasNativeMusicControl) {
+        control.classList.add("oa-native-music-control");
+        control.removeAttribute("aria-hidden");
+        control.removeAttribute("inert");
+        return;
+      }
       if (control.id === "bg-music") return;
       // Karsa nests its audio element inside the rotating disk; detach audio first
       // so the shared music button can still control the same track.
@@ -1181,7 +1204,7 @@
     quick.append(autoButton);
 
     let musicButton = null;
-    if (hasMusic) {
+    if (hasMusic && !hasNativeMusicControl) {
       musicButton = makeButton("music", "♫", "Putar musik");
       musicButton.className = "oa-quick-button oa-music-control";
       quick.append(musicButton);
@@ -1203,7 +1226,7 @@
     });
 
     let menu = [];
-    if (features.navigation !== false) {
+    if (features.navigation !== false && !hasNativeNavigation) {
       menu = resolveSections();
       const nav = document.createElement("nav");
       nav.id = "oa-floating-controls";
