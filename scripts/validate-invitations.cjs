@@ -64,8 +64,12 @@ function validateAsset(slug, file, key, value) {
 
   const resolved = path.resolve(CLIENTS, slug, normalized);
   const clientRoot = path.resolve(CLIENTS, slug) + path.sep;
-  if (!resolved.startsWith(clientRoot)) {
-    errors.push(`${slug}: path aset ${key} keluar dari folder klien: "${clean}".`);
+  const sharedMusicRoot = path.resolve(ROOT, 'assets', 'music', 'library') + path.sep;
+  const isClientAsset = resolved.startsWith(clientRoot);
+  const isSharedMusicAsset = resolved.startsWith(sharedMusicRoot) &&
+    /^(?:media|music|audio)(?:\.|$)/i.test(key);
+  if (!isClientAsset && !isSharedMusicAsset) {
+    errors.push(`${slug}: path aset ${key} keluar dari folder klien dan pustaka musik bersama yang diizinkan: "${clean}".`);
     return;
   }
   if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
