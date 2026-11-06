@@ -18,7 +18,7 @@ const themes = [
   { slug: "royal-vintage", marker: ".invitation-container", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "serena-ivory", marker: ".serena-ivory-page", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "atelier-editorial", client: "atelier-editorial-demo", marker: ".atelier-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "atelier-editorial", marker: ".atelier-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "groom", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "kinze", marker: ".kinze-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
