@@ -18,7 +18,7 @@ const themes = [
   { slug: "royal-vintage", marker: ".invitation-container", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "serena-ivory", marker: ".serena-ivory-page", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "atelier-editorial", client: "atelier-editorial-demo", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "atelier-editorial", client: "atelier-editorial-demo", marker: ".atelier-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "groom", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "kinze", marker: ".kinze-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-signature", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -45,6 +45,14 @@ const themes = [
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        if (theme.slug === "atelier-editorial") {
+          assert.equal(await page.locator(".atelier-page").count(), 1,
+            "atelier-editorial: namespace halaman mandiri tidak ditemukan");
+          assert.equal(await page.locator(".sirein-page, .sirein-cover, .sirein-button").count(), 0,
+            "atelier-editorial: masih memakai namespace CSS Sirein");
+          assert.ok(await page.locator(".atelier-cover .atelier-button").count() > 0,
+            "atelier-editorial: tombol cover dengan namespace mandiri tidak ditemukan");
+        }
         await page.waitForFunction(() => {
           const el = document.querySelector('[data-bind="couple.groom.nickname"]');
           return el && el.textContent.trim() === "Arkan";
