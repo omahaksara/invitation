@@ -102,6 +102,37 @@ const themes = [
         assert.equal(await page.locator('#oa-quick-controls [data-oa-action="music"]').count(), 1,
           theme.slug + ": tombol musik universal tidak tersedia");
 
+        // A shared dock is only valid when the theme's former floating controls
+        // are actually retired, not merely covered by the new controls.
+        const legacyAudit = await page.evaluate(() => {
+          const legacy = Array.from(document.querySelectorAll(".oa-legacy-navigation, .oa-legacy-music-control"));
+          const visibleLegacy = legacy.filter(element => {
+            const style = getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            return style.display !== "none" && style.visibility !== "hidden" &&
+              style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
+          });
+          const sharedButtons = Array.from(document.querySelectorAll(
+            "#oa-floating-controls button, #oa-quick-controls button"
+          ));
+          const blockedShared = sharedButtons.filter(button => {
+            const rect = button.getBoundingClientRect();
+            const x = Math.min(window.innerWidth - 1, Math.max(0, rect.left + rect.width / 2));
+            const y = Math.min(window.innerHeight - 1, Math.max(0, rect.top + rect.height / 2));
+            const top = document.elementFromPoint(x, y);
+            return !top || (top !== button && !button.contains(top));
+          }).map(button => button.getAttribute("aria-label") || button.textContent.trim());
+          return {
+            legacyCount: legacy.length,
+            visibleLegacy: visibleLegacy.map(element => element.id || element.className),
+            blockedShared
+          };
+        });
+        assert.equal(legacyAudit.visibleLegacy.length, 0,
+          theme.slug + ": kontrol tema lama masih terlihat " + JSON.stringify(legacyAudit.visibleLegacy));
+        assert.equal(legacyAudit.blockedShared.length, 0,
+          theme.slug + ": tombol navigasi bersama tertutup elemen lain " + JSON.stringify(legacyAudit.blockedShared));
+
         assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="loveStory"]').count(),
           theme.slug + ": pintasan cerita tidak tersedia");
         for (const feature of ["events", "countdown", "gallery", "rsvp", "guestbook", "gifts"]) {
