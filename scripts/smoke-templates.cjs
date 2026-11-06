@@ -84,6 +84,13 @@ const themes = [
           theme.slug + ": ditemukan gambar eksternal pada demo " + JSON.stringify(imageAudit.images));
 
         if (theme.open) {
+          // Shared navigation and quick controls must remain hidden behind the cover.
+          assert.equal(await page.locator("#oa-floating-controls").count(), 1,
+            theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
+          assert.equal(await page.locator("#oa-floating-controls").isVisible(), false,
+            theme.slug + ": navigasi muncul sebelum cover dibuka");
+          assert.equal(await page.locator("#oa-quick-controls").isVisible(), false,
+            theme.slug + ": kontrol cepat muncul sebelum cover dibuka");
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
