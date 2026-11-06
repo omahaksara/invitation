@@ -1405,14 +1405,20 @@
       const style = document.createElement("style");
       style.id = styleId;
       style.textContent = `
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: clip; }
+        body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
         .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .85s cubic-bezier(.2,.72,.18,1); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,20px,0); transition: opacity .8s ease, transform .9s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity, transform; }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,22px,0); transition: opacity .82s ease, transform 1s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity, transform; }
+        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-30px,0,0); }
+        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(30px,0,0); }
+        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,24px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
         img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); filter: saturate(.88); transition: opacity 1s ease, transform 1.15s cubic-bezier(.2,.72,.18,1), filter 1.1s ease; }
-        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: scale(1); filter: saturate(1); }
+        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-34px,0,0) scale(.975); }
+        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(34px,0,0) scale(.975); }
+        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: saturate(1); }
         .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
         .story-content { min-width:0; }
         .story-date { display:block; margin-bottom:6px; }
@@ -1464,8 +1470,15 @@
     });
     let motionIndex = 0;
     motionTargets.forEach(element => {
+      const direction = element.matches("blockquote") ? "right" :
+        element.matches("h1, h2, h3") ? (motionIndex % 2 ? "right" : "left") : "up";
       element.classList.add("oa-motion-item");
+      element.dataset.oaMotion = direction;
       element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 85 + "ms");
+    });
+    let photoIndex = 0;
+    document.querySelectorAll("#app img.oa-motion-photo").forEach(image => {
+      image.dataset.oaMotion = photoIndex++ % 2 ? "right" : "left";
     });
 
     const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible), .oa-motion-item:not(.oa-motion-visible), img.oa-motion-photo:not(.oa-motion-visible)");
