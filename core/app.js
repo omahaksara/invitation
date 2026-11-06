@@ -1050,7 +1050,15 @@
       button.type = "button";
       button.dataset.oaAction = action;
       if (feature) button.dataset.oaFeature = feature;
-      button.textContent = label;
+      const icons = { top: "⌂", next: "⌄", auto: "▷", music: "♫", share: "↗", loveStory: "♡", events: "♧", maps: "⌖", calendar: "▦", countdown: "◷", gallery: "▧", video: "▷", rsvp: "✉", guestbook: "❧", gifts: "♢", quotes: "❝", hashtag: "#" };
+      const icon = document.createElement("span");
+      icon.className = "oa-control-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = icons[feature || action] || "✧";
+      const caption = document.createElement("span");
+      caption.className = "oa-control-label";
+      caption.textContent = label;
+      button.append(icon, caption);
       button.setAttribute("aria-label", ariaLabel);
       return button;
     };
