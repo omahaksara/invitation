@@ -640,6 +640,7 @@
       open.addEventListener("click", async () => {
         if (cover) cover.classList.add("is-opening");
         if (main) { main.hidden = false; main.style.display = "block"; }
+        document.body.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         window.setTimeout(() => {
@@ -658,7 +659,8 @@
         setupReveal();
       });
     } else {
-      // Tema tanpa sampul pembuka (mis. Royal Vintage) harus tetap bisa memakai musik.
+      // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
+      document.body.classList.add("oa-invitation-opened");
       if (main) { main.hidden = false; main.style.display = "block"; }
       if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
     }
@@ -1034,20 +1036,7 @@
   // receives the same working controls without duplicating theme-specific markup.
   function ensureFloatingControls(data) {
     if (document.getElementById("oa-floating-controls")) return;
-    // A template-authored navigation dock always wins. Do not stack engine controls over it.
-    const nativeNavigation = document.querySelector("#app nav:not(#oa-floating-controls), #main-content nav:not(#oa-floating-controls), .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
-    if (nativeNavigation) {
-      nativeNavigation.dataset.oaNativeNavigation = "true";
-      nativeNavigation.setAttribute("aria-label", "Navigasi utama undangan");
-      return;
-    }
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
-    const nav = document.createElement("nav");
-    nav.id = "oa-floating-controls";
-    nav.className = "oa-floating-controls";
-    nav.dataset.theme = document.documentElement.dataset.oaTheme || (data && data.theme) || "karsa";
-    nav.setAttribute("aria-label", "Navigasi undangan");
-
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -1057,200 +1046,210 @@
       button.setAttribute("aria-label", ariaLabel);
       return button;
     };
-
-    const topButton = makeButton("top", "↑ Atas", "Kembali ke bagian atas");
-    const nextButton = makeButton("next", "↓ Lanjut", "Gulir ke bagian berikutnya");
-    const autoButton = makeButton("auto", "▶ Auto", "Mulai gulir otomatis");
-    const musicButton = makeButton("music", "♫ Musik", "Putar atau jeda musik");
-    const shareButton = makeButton("share", "↗ Bagikan", "Bagikan tautan undangan");
-    autoButton.setAttribute("aria-pressed", "false");
-    nav.append(topButton, nextButton);
-
-    const sectionOptions = [
-      { feature: "loveStory", aliases: ["story"], label: "Cerita", selectors: ["#story", "#story-list", ".story-section", ".story-list"] },
-      { feature: "events", aliases: [], label: "Acara", selectors: ["#event-list", ".event-section", ".events", "#events", "#events-section", "section:has(#link-akad-maps)"] },
-      { feature: "maps", aliases: [], label: "Lokasi", selectors: [".maps-section", "#maps-section", "#link-akad-maps", "#link-resepsi-maps"] },
-      { feature: "calendar", aliases: [], label: "Kalender", selectors: [".calendar-section", "#calendar-section", "#calendar-link"] },
-      { feature: "countdown", aliases: [], label: "Hitung", selectors: ["#countdown", ".countdown-section", ".countdown"] },
-      { feature: "gallery", aliases: [], label: "Galeri", selectors: ["#gallery", "#gallery-grid", ".gallery-section", ".gallery-grid"] },
-      { feature: "video", aliases: [], label: "Video", selectors: ["#video-section", ".video-section", "#wedding-video"] },
-      { feature: "rsvp", aliases: [], label: "RSVP", selectors: ["#rsvp-section", ".rsvp-section", "#rsvp-form"] },
-      { feature: "guestbook", aliases: [], label: "Ucapan", selectors: ["#guestbook-section", ".guestbook-section", "#wishes-form"] },
-      { feature: "gifts", aliases: [], label: "Hadiah", selectors: ["#gift-list", ".gift-section", "#gift-section"] },
-      { feature: "quotes", aliases: ["quote"], label: "Kutipan", selectors: ["#quote-section", ".quote-section", ".quote"] },
-      { feature: "hashtag", aliases: [], label: "Hashtag", selectors: ["#hashtag-section", ".hashtag-section"] }
-    ];
-
     const isVisible = element => {
-      if (!element || element.hidden) return false;
-      for (let node = element; node && node !== document.body; node = node.parentElement) {
-        if (node.hidden) return false;
-        const style = getComputedStyle(node);
-        if (style.display === "none" || style.visibility === "hidden") return false;
-      }
-      return element.getBoundingClientRect().height > 0;
+      if (!element || element.hidden || element.closest("[hidden]")) return false;
+      const style = getComputedStyle(element);
+      return style.display !== "none" && style.visibility !== "hidden" && element.getBoundingClientRect().height > 0;
     };
-
-    const refreshQuickButtons = () => {
-      nav.querySelectorAll('[data-oa-action="jump"]').forEach(button => button.remove());
-      const registeredSections = new Set();
-      sectionOptions.forEach(option => {
-        const enabled = features[option.feature] !== false && option.aliases.every(key => features[key] !== false);
-        if (!enabled) return;
-        let target = null;
-        for (const selector of option.selectors) {
-          const candidate = document.querySelector(selector);
-          if (candidate && isVisible(candidate)) {
-            target = candidate;
-            break;
-          }
-        }
-        if (!target || registeredSections.has(target)) return;
-        registeredSections.add(target);
-        if (!target.id) target.id = "oa-nav-" + option.feature;
-        const button = makeButton("jump", option.label, "Buka bagian " + option.label, option.feature);
-        button.dataset.target = target.id;
-        button.addEventListener("click", () => scrollToSection(document.getElementById(button.dataset.target)));
-        const before = autoButton.parentNode === nav ? autoButton : null;
-        nav.insertBefore(button, before);
-      });
-    };
-    document.addEventListener("oa:invitation-opened", refreshQuickButtons);
-    refreshQuickButtons();
-
-    const audio = document.getElementById("bg-music");
-    const nativeMusicControl = document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle");
-    const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
-    // Template-owned music buttons are authoritative; never add a second music control.
-    const engineOwnsMusic = hasMusic && !nativeMusicControl;
-    if (engineOwnsMusic) nav.append(musicButton);
-    nav.append(autoButton, shareButton);
-    document.body.append(nav);
-
-    const visibleSections = () => {
-      const candidates = document.querySelectorAll(
-        "main > section, #main-content > section, #app-inner > section, .invitation-container > section, .invite-shell > section, .sirein-page > section, .oa-shared-section, " +
-        ".story-section, .event-section, .gallery-section, .video-section, .rsvp-section, .guestbook-section, .gift-section, .quote-section"
-      );
-      const seen = new Set();
-      return Array.from(candidates).filter(section => {
-        if (seen.has(section) || !isVisible(section)) return false;
-        seen.add(section);
-        return true;
-      });
-    };
-
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
-      const top = Math.max(0, section.getBoundingClientRect().top + window.scrollY - 16);
-      window.scrollTo({ top, behavior: "smooth" });
+      window.scrollTo({ top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12), behavior: "smooth" });
+    };
+    const sectionOptions = [
+      { id:"home", label:"Home", selectors:["#main-content > section:not(#cover)","#app-inner > section:not(#cover)",".invitation-container > section:first-of-type"], feature:null },
+      { id:"couple", label:"Mempelai", selectors:["#couple-section",".couple-section","#couple",".bride-groom-section","[data-section='couple']"], feature:"couple" },
+      { id:"event", label:"Acara", selectors:["#events-section","#event-section",".event-section","#event-list",".events","section:has(#link-akad-maps)"], feature:"events" },
+      { id:"gallery", label:"Galeri", selectors:["#gallery-section",".gallery-section","#gallery-grid",".gallery-grid"], feature:"gallery" },
+      { id:"story", label:"Cerita", selectors:["#story-section",".story-section","#story-list"], feature:"loveStory" },
+      { id:"countdown", label:"Countdown", selectors:["#countdown",".countdown-section",".countdown"], feature:"countdown" },
+      { id:"rsvp", label:"RSVP", selectors:["#rsvp-section",".rsvp-section","#rsvp-form"], feature:"rsvp" },
+      { id:"wishes", label:"Ucapan", selectors:["#guestbook-section",".guestbook-section","#wishes-form"], feature:"guestbook" },
+      { id:"gift", label:"Hadiah", selectors:["#gift-section",".gift-section","#gift-list"], feature:"gifts" },
+      { id:"quote", label:"Kutipan", selectors:["#quote-section",".quote-section",".quote"], feature:"quotes" },
+      { id:"video", label:"Video", selectors:["#video-section",".video-section","#wedding-video"], feature:"video" }
+    ];
+    const resolveSections = () => {
+      const found = [];
+      const used = new Set();
+      sectionOptions.forEach(option => {
+        if (option.feature && features[option.feature] === false) return;
+        const target = option.selectors.map(selector => {
+          try { return document.querySelector(selector); } catch { return null; }
+        }).find(candidate => candidate && isVisible(candidate) && !used.has(candidate));
+        if (!target) return;
+        used.add(target);
+        if (!target.id) target.id = "oa-section-" + option.id;
+        found.push({ ...option, target });
+      });
+      return found;
     };
 
-    topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    nextButton.addEventListener("click", () => {
-      const current = window.scrollY + 90;
-      const next = visibleSections()
-        .map(section => ({ section, top: section.getBoundingClientRect().top + window.scrollY }))
-        .filter(item => item.top > current + 8)
-        .sort((a, b) => a.top - b.top)[0];
-      if (next) scrollToSection(next.section);
-      else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
-    });
-    if (engineOwnsMusic) {
-      const syncMusic = () => {
-        const playing = !audio.paused;
-        musicButton.textContent = playing ? "Ⅱ Musik" : "♫ Musik";
-        musicButton.setAttribute("aria-pressed", String(playing));
-        musicButton.setAttribute("aria-label", playing ? "Jeda musik" : "Putar musik");
-      };
-      musicButton.addEventListener("click", async () => {
-        if (audio.paused) {
-          try {
-            await audio.play();
-          } catch {
-            musicButton.title = "Musik belum dapat diputar. Coba lagi setelah membuka undangan.";
-          }
-        } else {
-          audio.pause();
-        }
-        syncMusic();
-      });
-      audio.addEventListener("play", syncMusic);
-      audio.addEventListener("pause", syncMusic);
-      syncMusic();
+    const nativeNavigation = document.querySelector("#app nav:not(#oa-floating-controls), #main-content nav:not(#oa-floating-controls), .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
+    const nativeMusic = document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle");
+    const audio = document.getElementById("bg-music");
+    const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
+    if (nativeNavigation) {
+      nativeNavigation.dataset.oaNativeNavigation = "true";
+      nativeNavigation.setAttribute("aria-label", "Navigasi utama undangan");
     }
 
-    shareButton.addEventListener("click", async () => {
-      const shareData = { title: document.title, text: "Undangan pernikahan digital", url: location.href };
-      try {
-        if (navigator.share) {
-          await navigator.share(shareData);
-        } else if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(location.href);
-          shareButton.textContent = "✓ Tersalin";
-          shareButton.setAttribute("aria-label", "Tautan undangan berhasil disalin");
-        } else {
-          const helper = document.createElement("textarea");
-          helper.value = location.href;
-          helper.setAttribute("readonly", "");
-          helper.style.position = "fixed";
-          helper.style.opacity = "0";
-          document.body.append(helper);
-          helper.select();
-          const copied = document.execCommand("copy");
-          helper.remove();
-          shareButton.textContent = copied ? "✓ Tersalin" : "↗ Bagikan";
+    const quick = document.createElement("div");
+    quick.id = "oa-quick-controls";
+    quick.className = "oa-quick-controls";
+    quick.setAttribute("aria-label", "Kontrol cepat undangan");
+    const autoButton = makeButton("auto", "▶", "Mulai gulir otomatis");
+    autoButton.className = "oa-quick-button oa-auto-scroll";
+    quick.append(autoButton);
+
+    let musicButton = null;
+    if (hasMusic && !nativeMusic) {
+      musicButton = makeButton("music", "♫", "Putar musik");
+      musicButton.className = "oa-quick-button oa-music-control";
+      quick.append(musicButton);
+    } else if (hasMusic && nativeMusic) {
+      nativeMusic.classList.add("oa-native-music-control");
+      nativeMusic.setAttribute("aria-label", nativeMusic.getAttribute("aria-label") || "Putar atau jeda musik");
+    }
+    document.body.append(quick);
+
+    if (!nativeNavigation && features.navigation !== false) {
+      const nav = document.createElement("nav");
+      nav.id = "oa-floating-controls";
+      nav.className = "oa-floating-controls";
+      nav.dataset.theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
+      nav.setAttribute("aria-label", "Navigasi undangan");
+      const menu = resolveSections();
+      const byId = id => menu.find(item => item.id === id);
+      const primaryIds = ["home","couple","event","gallery"];
+      primaryIds.forEach(id => {
+        const item = byId(id);
+        if (!item) return;
+        const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
+        button.dataset.target = item.target.id;
+        button.addEventListener("click", () => scrollToSection(item.target));
+        nav.append(button);
+        item.button = button;
+      });
+      const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
+      const moreWrap = document.createElement("div");
+      moreWrap.className = "oa-nav-more-wrap";
+      const moreButton = makeButton("more", "•••", "Buka menu lainnya");
+      moreButton.className = "oa-nav-more";
+      moreButton.setAttribute("aria-expanded","false");
+      const panel = document.createElement("div");
+      panel.className = "oa-nav-overflow";
+      panel.hidden = true;
+      overflowItems.forEach(item => {
+        const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
+        button.dataset.target = item.target.id;
+        button.addEventListener("click", () => {
+          scrollToSection(item.target);
+          panel.hidden = true;
+          moreButton.setAttribute("aria-expanded","false");
+        });
+        panel.append(button);
+        item.button = button;
+      });
+      moreButton.addEventListener("click", () => {
+        panel.hidden = !panel.hidden;
+        moreButton.setAttribute("aria-expanded", String(!panel.hidden));
+      });
+      moreWrap.append(moreButton,panel);
+      if (overflowItems.length) nav.append(moreWrap);
+      document.body.append(nav);
+
+      const updateActive = () => {
+        const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
+        let active = null;
+        menu.forEach(item => {
+          if (item.target.getBoundingClientRect().top + window.scrollY <= marker) active = item;
+        });
+        menu.forEach(item => {
+          if (!item.button) return;
+          const selected = item === active;
+          item.button.classList.toggle("is-active",selected);
+          item.button.setAttribute("aria-current",selected ? "location" : "false");
+        });
+      };
+      let ticking = false;
+      window.addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { updateActive(); ticking = false; });
+      }, {passive:true});
+      updateActive();
+      document.addEventListener("click", event => {
+        if (!moreWrap.contains(event.target) && !panel.hidden) {
+          panel.hidden = true;
+          moreButton.setAttribute("aria-expanded","false");
         }
-      } catch (error) {
-        if (error && error.name !== "AbortError") shareButton.title = "Tautan belum dapat dibagikan dari perangkat ini.";
-      }
-    });
+      });
+    } else if (nativeNavigation) {
+      const links = nativeNavigation.querySelectorAll('a[href^="#"],button[data-target]');
+      links.forEach(link => {
+        const targetId = (link.getAttribute("href") || "").replace(/^#/,"") || link.dataset.target;
+        if (targetId) link.dataset.oaTarget = targetId;
+      });
+    }
 
     let autoTimer = null;
-    const originalScrollBehavior = document.documentElement.style.scrollBehavior;
     const stopAutoScroll = () => {
       if (autoTimer !== null) window.clearInterval(autoTimer);
       autoTimer = null;
-      document.documentElement.style.scrollBehavior = originalScrollBehavior;
-      autoButton.textContent = "▶ Auto";
-      autoButton.setAttribute("aria-pressed", "false");
-      autoButton.setAttribute("aria-label", "Mulai gulir otomatis");
+      autoButton.textContent = "▶";
+      autoButton.setAttribute("aria-pressed","false");
+      autoButton.setAttribute("aria-label","Mulai gulir otomatis");
+      autoButton.classList.remove("is-running");
     };
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       autoButton.disabled = true;
-      autoButton.title = "Gulir otomatis dinonaktifkan sesuai pengaturan aksesibilitas perangkat.";
-      autoButton.textContent = "Auto off";
+      autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
     } else {
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null) {
-          stopAutoScroll();
-          return;
-        }
-        document.documentElement.style.scrollBehavior = "auto";
-        autoButton.textContent = "Ⅱ Jeda";
-        autoButton.setAttribute("aria-pressed", "true");
-        autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
+        if (autoTimer !== null) { stopAutoScroll(); return; }
+        autoButton.textContent = "Ⅱ";
+        autoButton.classList.add("is-running");
+        autoButton.setAttribute("aria-pressed","true");
+        autoButton.setAttribute("aria-label","Jeda gulir otomatis");
         autoTimer = window.setInterval(() => {
           if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
-            stopAutoScroll();
-            return;
+            stopAutoScroll(); return;
           }
-          window.scrollBy(0, 1);
-        }, 24);
+          window.scrollBy(0,1);
+        },24);
       });
-      ["wheel", "touchstart"].forEach(type => window.addEventListener(type, stopAutoScroll, { passive: true }));
-      window.addEventListener("pointerdown", event => {
-        if (!nav.contains(event.target)) stopAutoScroll();
-      }, { passive: true });
-      window.addEventListener("keydown", event => {
-        if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) stopAutoScroll();
+      ["wheel","touchstart"].forEach(type => window.addEventListener(type,stopAutoScroll,{passive:true}));
+      window.addEventListener("pointerdown",event => {
+        if (!quick.contains(event.target)) stopAutoScroll();
+      },{passive:true});
+      window.addEventListener("keydown",event => {
+        if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
       });
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) stopAutoScroll();
-      });
+      document.addEventListener("visibilitychange",() => { if(document.hidden) stopAutoScroll(); });
     }
 
-    if (features.navigation === false) nav.hidden = true;
+    if (musicButton) {
+      const syncMusic = () => {
+        const playing = !audio.paused;
+        musicButton.textContent = playing ? "Ⅱ" : "♫";
+        musicButton.classList.toggle("is-playing",playing);
+        musicButton.setAttribute("aria-pressed",String(playing));
+        musicButton.setAttribute("aria-label",playing ? "Jeda musik" : "Putar musik");
+      };
+      musicButton.addEventListener("click",async () => {
+        if (audio.paused) { try { await audio.play(); } catch { musicButton.title = "Musik belum dapat diputar. Coba lagi."; } }
+        else audio.pause();
+        syncMusic();
+      });
+      audio.addEventListener("play",syncMusic);
+      audio.addEventListener("pause",syncMusic);
+      syncMusic();
+    }
+    if (features.autoScroll === false) autoButton.hidden = true;
+    if (features.navigation === false) {
+      const nav = document.getElementById("oa-floating-controls");
+      if (nav) nav.hidden = true;
+    }
   }
 
   function setupReveal() {

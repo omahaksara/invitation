@@ -276,3 +276,66 @@ body {
 .oa-floating-controls[data-theme="sirein"] button { border-radius:16px 4px 16px 4px; }
 .oa-floating-controls[data-theme="taupe"] button { border-radius:3px 10px 3px 10px; }
 .oa-floating-controls[data-theme="velvet-romance"] button { border-radius:20px 20px 4px 4px; }
+
+
+/* Smart interaction layer: controls remain hidden until the invitation is opened. */
+body:not(.oa-invitation-opened) .oa-floating-controls,
+body:not(.oa-invitation-opened) .oa-quick-controls,
+body:not(.oa-invitation-opened) [data-oa-native-navigation],
+body:not(.oa-invitation-opened) #music-toggle,
+body:not(.oa-invitation-opened) #music-btn,
+body:not(.oa-invitation-opened) .music-toggle,
+body:not(.oa-invitation-opened) .music-float-btn,
+body:not(.oa-invitation-opened) .royal-music-toggle {
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+.oa-floating-controls {
+  position:fixed; z-index:89; left:50%; bottom:max(12px,env(safe-area-inset-bottom));
+  transform:translateX(-50%); display:flex; align-items:center; justify-content:center; gap:5px;
+  width:max-content; max-width:calc(100vw - 28px); padding:6px;
+  border:1px solid var(--oa-dock-border,rgba(255,255,255,.55));
+  border-radius:999px; background:var(--oa-dock-bg,rgba(248,246,240,.88));
+  box-shadow:0 9px 30px rgba(20,18,16,.16); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  transition:opacity .28s ease, transform .28s ease;
+}
+.oa-floating-controls[hidden],.oa-nav-overflow[hidden],.oa-quick-controls[hidden] {display:none!important}
+.oa-floating-controls button {
+  appearance:none; border:0; min-width:42px; min-height:42px; padding:0 12px; border-radius:999px;
+  background:transparent; color:var(--oa-dock-ink,#514735); font:600 11px/1 var(--oa-font-body,Arial,sans-serif);
+  cursor:pointer; white-space:nowrap; transition:background .2s ease,color .2s ease,transform .2s ease;
+}
+.oa-floating-controls button:active,.oa-quick-button:active {transform:scale(.94)}
+.oa-floating-controls button.is-active {background:var(--oa-dock-active,var(--oa-dock-ink,#514735));color:var(--oa-dock-active-ink,#fff)}
+.oa-nav-more-wrap {position:relative}
+.oa-nav-overflow {
+  position:absolute; right:0; bottom:calc(100% + 12px); min-width:142px; max-height:min(55vh,360px); overflow:auto;
+  display:grid; gap:4px; padding:8px; border:1px solid var(--oa-dock-border,rgba(255,255,255,.5));
+  border-radius:18px; background:var(--oa-dock-bg,rgba(248,246,240,.96)); box-shadow:0 12px 36px rgba(0,0,0,.18);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+}
+.oa-nav-overflow button {width:100%;text-align:left;justify-content:flex-start}
+.oa-quick-controls {
+  position:fixed; z-index:92; right:max(14px,env(safe-area-inset-right));
+  bottom:calc(max(14px,env(safe-area-inset-bottom)) + 74px); display:flex; flex-direction:column; gap:10px;
+  align-items:center; transition:opacity .28s ease,transform .28s ease;
+}
+.oa-quick-button {
+  width:44px; height:44px; border-radius:50%; border:1px solid var(--oa-quick-border,rgba(255,255,255,.7));
+  display:grid; place-items:center; background:var(--oa-quick-bg,rgba(248,246,240,.92));
+  color:var(--oa-quick-ink,#514735); box-shadow:0 6px 20px rgba(0,0,0,.16);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); font-size:17px; cursor:pointer;
+  transition:transform .2s ease,background .2s ease;
+}
+.oa-quick-button.is-running,.oa-quick-button.is-playing {background:var(--oa-dock-active,#514735);color:var(--oa-dock-active-ink,#fff)}
+.oa-native-music-control {z-index:92!important}
+@media(max-width:480px) {
+  .oa-floating-controls {left:10px;right:10px;bottom:max(9px,env(safe-area-inset-bottom));width:auto;max-width:none;transform:none;justify-content:space-around;gap:2px}
+  .oa-floating-controls button {min-width:0;min-height:40px;padding:0 9px;font-size:10px;flex:1 1 0}
+  .oa-quick-controls {right:max(12px,env(safe-area-inset-right));bottom:calc(max(12px,env(safe-area-inset-bottom)) + 66px)}
+  .oa-quick-button {width:42px;height:42px}
+}
+@media(prefers-reduced-motion:reduce) {
+  .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {transition:none!important}
+}
