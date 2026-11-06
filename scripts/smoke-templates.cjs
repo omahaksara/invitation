@@ -109,7 +109,8 @@ const themes = [
           const visibleLegacy = legacy.filter(element => {
             const style = getComputedStyle(element);
             const rect = element.getBoundingClientRect();
-            return style.display !== "none" && style.visibility !== "hidden" &&
+            return !element.closest("[hidden], [aria-hidden='true'], [inert]") &&
+              style.display !== "none" && style.visibility !== "hidden" &&
               style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
           });
           const sharedButtons = Array.from(document.querySelectorAll(
@@ -117,7 +118,8 @@ const themes = [
           )).filter(button => {
             const style = getComputedStyle(button);
             const rect = button.getBoundingClientRect();
-            return style.display !== "none" && style.visibility !== "hidden" &&
+            return !button.closest("[hidden], [aria-hidden='true'], [inert]") &&
+              style.display !== "none" && style.visibility !== "hidden" &&
               style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
           });
           const blockedShared = sharedButtons.filter(button => {
