@@ -139,7 +139,7 @@ const budiAniConfig = JSON.parse(fs.readFileSync(
 assert.equal(budiAniConfig.slug, 'budi-ani');
 assert.equal(budiAniConfig.status, 'published');
 assert.equal(budiAniConfig.demoMode, false);
-assert.match(budiAniConfig.integrations?.apiUrl || '', /^https:\\/\\//i,
+assert.ok(String(budiAniConfig.integrations?.apiUrl || '').startsWith('https://'),
   'Budi-Ani client fixture must point to an HTTPS backend');
 clientConfigs.set('budi-ani', budiAniConfig);
 
