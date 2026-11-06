@@ -15,7 +15,7 @@
 .kj-cover__names{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(3.4rem,14vw,6.2rem);line-height:.9;font-weight:500;margin:14px 0;color:var(--kj-paper)}
 .kj-cover__names em{display:block;font-size:.55em;color:var(--kj-gold2);font-weight:400;margin:8px 0}
 .kj-rule{height:1px;width:min(70%,260px);margin:20px auto;background:linear-gradient(90deg,transparent,var(--kj-gold),transparent)}
-.kj-guest{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;color:var(--kj-gold2);margin:8px 0}
+.kj-cover-date{margin:0 0 18px;color:var(--kj-gold2);font-size:.72rem;letter-spacing:.08em;line-height:1.7}.kj-guest{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;color:var(--kj-gold2);margin:8px 0}
 .kj-open{margin-top:18px;padding:13px 25px;border:1px solid var(--kj-gold);background:var(--kj-gold);color:#17130c;font:700 .7rem Manrope,sans-serif;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:transform .25s,background .25s}
 .kj-open:hover{transform:translateY(-2px);background:var(--kj-gold2)}
 .kj-cover.is-opening{opacity:0;pointer-events:none;transition:opacity .8s ease}
@@ -83,6 +83,7 @@
     <p class="kj-eyebrow" data-bind="cover.eyebrow">Sugeng Rawuh · Sugeng Rawuh</p>
     <h1 class="kj-cover__names"><span data-bind="couple.groom.nickname">Mempelai Pria</span><em>&amp;</em><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
     <div class="kj-rule"></div>
+    <p class="kj-cover-date"><span data-bind="events.akad.date">Tanggal acara</span> · <span data-bind="events.akad.location">Lokasi acara</span></p>
     <p class="kj-eyebrow" style="letter-spacing:.13em">Kepada Yth. Bapak/Ibu/Saudara/i</p>
     <h2 id="nama-tamu" class="kj-guest">Tamu Undangan</h2>
     <p class="kj-lead" data-bind="opening.text">Dengan penuh syukur, kami mengundang Anda.</p>
