@@ -345,6 +345,7 @@ body:not(.oa-invitation-opened) .royal-music-toggle {
 body.oa-form-focus .oa-floating-controls,
 body.oa-form-focus .oa-quick-controls,
 body.oa-form-focus [data-oa-native-navigation],
+body.oa-form-focus .oa-native-music-control,
 body.oa-lightbox-open .oa-floating-controls,
 body.oa-lightbox-open .oa-quick-controls,
 body.oa-lightbox-open [data-oa-native-navigation],
