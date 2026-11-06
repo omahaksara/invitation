@@ -1214,7 +1214,11 @@
         item.button = button;
       });
 
-      // Compact media controls sit horizontally in the dock, not in a vertical floating stack.\n      nav.append(autoButton);\n      if (musicButton) nav.append(musicButton);\n\n      const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
+      // Compact media controls sit horizontally in the dock, not in a vertical floating stack.
+      nav.append(autoButton);
+      if (musicButton) nav.append(musicButton);
+
+      const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
       {
         const moreWrap = document.createElement("div");
         moreWrap.className = "oa-nav-more-wrap";
