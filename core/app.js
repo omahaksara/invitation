@@ -1334,7 +1334,7 @@
         if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
       }, { passive: true });
       window.addEventListener("pointerdown", event => {
-        if (!quick.contains(event.target)) stopAutoScroll();
+        if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
       }, { passive: true });
       window.addEventListener("keydown", event => {
         if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
