@@ -5,6 +5,14 @@ const path = require("node:path");
 const screenshotDir = "artifacts/visual";
 fs.mkdirSync(screenshotDir, { recursive: true });
 
+async function captureScreenshot(page, file) {
+  try {
+    await page.screenshot({ path: file, fullPage: false, animations: "disabled", timeout: 5000 });
+  } catch (error) {
+    console.warn("WARN screenshot skipped " + file + ": " + (error?.message || error));
+  }
+}
+
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
   { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
@@ -102,7 +110,7 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
-        await page.screenshot({ path: path.join(screenshotDir, `${theme.slug}-desktop.png`), fullPage: false });
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-desktop.png`));
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(), 1,
@@ -290,7 +298,7 @@ const themes = [
         }
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
-        await page.screenshot({ path: path.join(screenshotDir, `${theme.slug}-mobile.png`), fullPage: false });
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
         const layout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           page: document.documentElement.scrollWidth,
