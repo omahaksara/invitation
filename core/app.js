@@ -79,6 +79,8 @@
       if (!theme || !templateHtml) {
         throw templateError || new Error("Tema undangan tidak dapat dimuat.");
       }
+      // Expose the actually selected theme to scoped engine controls; URL overrides are respected.
+      document.documentElement.dataset.oaTheme = theme;
       if (theme !== (requestedAlias || configuredAlias)) {
         console.warn("Tema pilihan tidak tersedia; memakai tema cadangan:", theme);
       }
@@ -1032,10 +1034,18 @@
   // receives the same working controls without duplicating theme-specific markup.
   function ensureFloatingControls(data) {
     if (document.getElementById("oa-floating-controls")) return;
+    // A template-authored navigation dock always wins. Do not stack engine controls over it.
+    const nativeNavigation = document.querySelector("#app nav:not(#oa-floating-controls), #main-content nav:not(#oa-floating-controls), .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
+    if (nativeNavigation) {
+      nativeNavigation.dataset.oaNativeNavigation = "true";
+      nativeNavigation.setAttribute("aria-label", "Navigasi utama undangan");
+      return;
+    }
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const nav = document.createElement("nav");
     nav.id = "oa-floating-controls";
     nav.className = "oa-floating-controls";
+    nav.dataset.theme = document.documentElement.dataset.oaTheme || (data && data.theme) || "karsa";
     nav.setAttribute("aria-label", "Navigasi undangan");
 
     const makeButton = (action, label, ariaLabel, feature) => {
