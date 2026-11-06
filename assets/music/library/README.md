@@ -36,6 +36,6 @@ Engine tetap menerima format lama `"music": "musik.mp3"` dan objek `{ "src": "..
 
 ## Status aset saat ini
 
-Track lama dipindahkan secara fisik pada level Git tanpa mengunduh atau mengode ulang file. Dua salinan lama memiliki blob yang sama, sehingga satu file kanonis cukup. Identitas lagu dan hak penggunaan belum diverifikasi; statusnya `review-required` dan track ini hanya untuk pengujian internal sampai izin penggunaannya dipastikan.
+Track lama dipindahkan secara fisik pada level Git tanpa mengunduh atau mengode ulang file. Dua salinan lama memiliki blob yang sama, sehingga satu file kanonis cukup. Pemilik proyek telah mengonfirmasi bahwa musik ini aman digunakan untuk undangan pelanggan. Manifest mencatat status `user-confirmed` dan `customerUse: true`. Simpan bukti kepemilikan atau izin/lisensi bersama arsip aset agar dapat ditunjukkan bila diperlukan dalam audit atau pertanyaan pelanggan.
 
 Jangan memasukkan lagu komersial berhak cipta ke katalog pelanggan tanpa izin yang sesuai. Browser juga dapat menolak autoplay; pemutaran harus dipicu oleh interaksi pengguna.
