@@ -32,13 +32,13 @@ footer{text-align:center;background:#4a3728;color:#f7eee4;padding:65px 20px}foot
 @media(max-width:640px){.couple-grid,.event-grid,.gift-grid{grid-template-columns:1fr}.section{padding:62px 18px}.story-item{grid-template-columns:1fr;gap:6px}.gallery-grid{gap:7px}.gallery-grid img{border-radius:9px}#countdown{gap:6px}.count-cell{padding:12px 3px}.count-cell b{font-size:1.55rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
 </style></head>
-<body><div class="lume" id="main-content">
+<body><div class="lume">
 <section id="cover" class="cover"><img data-bind="cover.image" src="" alt="Foto sampul"><div class="cover-card">
 <p class="eyebrow">A day to remember · Omah Aksara</p><p class="script" style="font-size:2rem;margin:12px 0">The Wedding Of</p>
 <h1><span data-bind="couple.bride.nickname">Mempelai Wanita</span><br><span class="amp">&amp;</span><br><span data-bind="couple.groom.nickname">Mempelai Pria</span></h1>
 <p class="eyebrow">Kepada Yth. Bapak/Ibu/Saudara/i</p><h2 class="guest" id="nama-tamu">Tamu Undangan</h2><p class="cover-date" data-bind="cover.dateLabel"></p>
 <button id="open-btn" class="open-btn"><span data-bind="cover.buttonText">Buka Undangan</span> ✧</button></div></section>
-<main id="app-inner" hidden>
+<main id="main-content" hidden>
 <section class="section"><div class="section-inner"><p class="eyebrow">Dengan penuh rasa syukur</p><div class="ornament"></div><p class="quote" data-bind="quote.arab"></p><p class="quote" data-bind="quote.text"></p><p class="detail" data-bind="quote.source"></p><p class="intro" data-bind="opening.text"></p></div></section>
 <section class="section alt"><div class="section-inner"><p class="eyebrow">The Couple</p><h2 class="section-title">Dua Hati, Satu Cerita</h2><div class="couple-grid"><article class="person"><img class="portrait" data-bind="couple.bride.photo" src="" alt="Mempelai wanita"><h3 data-bind="couple.bride.fullName">Nama Mempelai Wanita</h3><p class="detail" data-bind="couple.bride.parents"></p></article><article class="person"><img class="portrait" data-bind="couple.groom.photo" src="" alt="Mempelai pria"><h3 data-bind="couple.groom.fullName">Nama Mempelai Pria</h3><p class="detail" data-bind="couple.groom.parents"></p></article></div></div></section>
 <section id="story" class="section story-section"><p class="eyebrow">Our Journey</p><h2 class="section-title">Cerita yang Kami Rajut</h2><div id="story-list" class="story-list"></div></section>
@@ -49,6 +49,5 @@ footer{text-align:center;background:#4a3728;color:#f7eee4;padding:65px 20px}foot
 <section id="guestbook-section" class="section"><p class="eyebrow">With Love</p><h2 class="section-title">Ucapan &amp; Doa</h2><form id="wishes-form"></form><div id="wishes-list"></div></section>
 <section id="gift-section" class="section alt gift-section"><p class="eyebrow">A Token of Love</p><h2 class="section-title">Hadiah Digital</h2><p class="intro" data-bind="gifts.message"></p><div id="gift-list" class="gift-grid"></div></section>
 <section class="section hashtag-section"><p class="eyebrow">Our Celebration</p><h2 class="section-title" data-bind="hashtag">#HariBahagia</h2></section>
-</main>
-<footer><p class="script">Thank You</p><p>Merupakan kebahagiaan bagi kami atas doa dan kehadiran Anda.</p><h2><span data-bind="couple.bride.nickname">Mempelai</span> &amp; <span data-bind="couple.groom.nickname">Mempelai</span></h2></footer>
+<footer><p class="script">Thank You</p><p>Merupakan kebahagiaan bagi kami atas doa dan kehadiran Anda.</p><h2><span data-bind="couple.bride.nickname">Mempelai</span> &amp; <span data-bind="couple.groom.nickname">Mempelai</span></h2></footer></main>
 <audio id="bg-music" data-bind="media.music" loop preload="none"></audio></div></body></html>
