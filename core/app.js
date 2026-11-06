@@ -1068,7 +1068,7 @@
       { id:"couple", label:"Mempelai", selectors:["#couple-section",".couple-section","#couple",".couple","#bride-groom",".bride-groom-section","[data-section='couple']"], feature:"couple" },
       { id:"event", label:"Acara", selectors:["#events","#events-section","#event-section",".event-section",".events","#event-list","section:has(#link-akad-maps)"], feature:"events" },
       { id:"gallery", label:"Galeri", selectors:["#gallery","#gallery-section",".gallery-section","#gallery-grid",".gallery-grid"], feature:"gallery" },
-      { id:"story", label:"Cerita", selectors:["#story","#story-section",".story-section","#story-list"], feature:"loveStory" },
+      { id:"story", label:"Cerita", selectors:["#story","#story-section",".story-section","#story-list",".story-list"], feature:"loveStory" },
       { id:"countdown", label:"Countdown", selectors:["#countdown",".countdown-section",".countdown"], feature:"countdown" },
       { id:"video", label:"Video", selectors:["#video-section","#wedding-video",".video-section"], feature:"video" },
       { id:"rsvp", label:"RSVP", selectors:["#rsvp-section",".rsvp-section","#rsvp-form"], feature:"rsvp" },
@@ -1167,7 +1167,7 @@
       });
 
       const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
-      if (overflowItems.length) {
+      {
         const moreWrap = document.createElement("div");
         moreWrap.className = "oa-nav-more-wrap";
         const moreButton = makeButton("more", "Lainnya", "Buka bagian lainnya");
