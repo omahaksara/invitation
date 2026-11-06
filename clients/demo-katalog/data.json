@@ -116,6 +116,21 @@
         "logo": "bank/logo-mandiri.svg",
         "accountNumber": "0000000000",
         "accountHolder": "Sekar Ayuningtyas — REKENING DEMO"
+      },
+      {
+        "enabled": true,
+        "method": "GoPay",
+        "label": "GoPay (DEMO)",
+        "accountNumber": "0000000000",
+        "accountHolder": "Arkan Pradipta — AKUN DEMO",
+        "note": "Contoh tampilan saja. Nomor ini bukan akun pembayaran aktif."
+      },
+      {
+        "enabled": true,
+        "method": "QRIS",
+        "label": "QRIS (DEMO)",
+        "accountHolder": "Arkan & Sekar — DEMO",
+        "note": "Contoh tampilan saja. QR pembayaran asli harus diunggah oleh pemilik undangan."
       }
     ]
   },
