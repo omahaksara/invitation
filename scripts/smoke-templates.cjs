@@ -15,7 +15,7 @@ async function captureScreenshot(page, file) {
 
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
-  { slug: "royal-vintage", marker: ".invitation-container", open: null, cover: null },
+  { slug: "royal-vintage", marker: ".invitation-container", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "serena-ivory", marker: ".serena-ivory-page", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "sirein", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "atelier-editorial", client: "atelier-editorial-demo", marker: ".sirein-cover", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -102,8 +102,6 @@ const themes = [
             theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
           assert.equal(await page.locator("#oa-floating-controls").isVisible(), false,
             theme.slug + ": navigasi muncul sebelum cover dibuka");
-          assert.equal(await page.locator("#oa-quick-controls").isVisible(), false,
-            theme.slug + ": kontrol cepat muncul sebelum cover dibuka");
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
@@ -118,9 +116,9 @@ const themes = [
           theme.slug + ": tombol lanjut tidak tersedia");
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="share"]').count(), 1,
           theme.slug + ": tombol bagikan tidak tersedia");
-        assert.equal(await page.locator('#oa-quick-controls [data-oa-action="auto"]').count(), 1,
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').count(), 1,
           theme.slug + ": tombol auto-scroll tidak tersedia");
-        assert.equal(await page.locator('#oa-quick-controls [data-oa-action="music"]').count(), 1,
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="music"]').count(), 1,
           theme.slug + ": tombol musik universal tidak tersedia");
 
         // A shared dock is only valid when the theme's former floating controls
@@ -135,7 +133,7 @@ const themes = [
               style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
           });
           const sharedButtons = Array.from(document.querySelectorAll(
-            "#oa-floating-controls button, #oa-quick-controls button"
+            "#oa-floating-controls button"
           )).filter(button => {
             const style = getComputedStyle(button);
             const rect = button.getBoundingClientRect();
