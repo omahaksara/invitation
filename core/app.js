@@ -1116,6 +1116,20 @@
     }
     document.body.append(quick);
 
+    // Keep fixed controls out of the way while a guest is using forms or viewing a photo.
+    const isInvitationField = element => element && element.matches &&
+      element.matches("input, textarea, select, [contenteditable='true']") &&
+      !!element.closest("#rsvp-section, .rsvp-section, #guestbook-section, .guestbook-section, #rsvp-form, #wishes-form, form");
+    document.addEventListener("focusin", event => {
+      if (isInvitationField(event.target)) document.body.classList.add("oa-form-focus");
+    });
+    document.addEventListener("focusout", event => {
+      if (!isInvitationField(event.target)) return;
+      window.requestAnimationFrame(() => {
+        if (!isInvitationField(document.activeElement)) document.body.classList.remove("oa-form-focus");
+      });
+    });
+
     if (!nativeNavigation && features.navigation !== false) {
       const nav = document.createElement("nav");
       nav.id = "oa-floating-controls";
@@ -1344,12 +1358,30 @@
 
   function setupLightbox() {
     const gallery=document.getElementById("gallery-grid") || document.querySelector(".gallery-grid"); if(!gallery) return;
+    const closeLightbox = overlay => {
+      if (!overlay || !overlay.isConnected) return;
+      overlay.remove();
+      document.body.classList.remove("oa-lightbox-open");
+    };
     gallery.addEventListener("click",event=>{
       const img=event.target.closest("img"); if(!img) return;
+      if (document.querySelector(".lightbox-overlay")) return;
       const overlay=document.createElement("div"); overlay.className="lightbox-overlay";
+      overlay.setAttribute("role","dialog");
+      overlay.setAttribute("aria-modal","true");
+      overlay.setAttribute("aria-label","Pratinjau foto galeri");
+      overlay.tabIndex = -1;
       overlay.style.cssText="position:fixed;inset:0;z-index:1000;background:#141914ed;display:grid;place-items:center;padding:20px;cursor:zoom-out";
       const full=document.createElement("img");full.src=img.src;full.alt=img.alt;full.style.cssText="max-width:100%;max-height:90vh;object-fit:contain;box-shadow:0 10px 50px #0008";
-      overlay.append(full);overlay.addEventListener("click",()=>overlay.remove());document.body.append(overlay);
+      overlay.append(full);
+      overlay.addEventListener("click",()=>closeLightbox(overlay));
+      overlay.addEventListener("keydown",event=>{if(event.key==="Escape"){event.preventDefault();closeLightbox(overlay);}});
+      document.body.classList.add("oa-lightbox-open");
+      document.body.append(overlay);
+      overlay.focus({preventScroll:true});
+    });
+    document.addEventListener("keydown",event=>{
+      if(event.key==="Escape") closeLightbox(document.querySelector(".lightbox-overlay"));
     });
   }
 
