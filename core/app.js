@@ -131,8 +131,13 @@
 
     data.gallery = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg"];
     data.media = data.media && typeof data.media === "object" ? data.media : {};
-    data.media.music = "musik.mp3";
-    if (data.music) data.music = "musik.mp3";
+    data.media.music = {
+      id: "wedding-demo-existing",
+      title: "Wedding Demo Track",
+      category: "instrumental",
+      src: "../../assets/music/library/wedding-demo-existing.mp3"
+    };
+    if (data.music) data.music = data.media.music;
   }
 
   // Normalize common data differences before binding them to any theme.

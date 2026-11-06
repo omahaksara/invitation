@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "description": "Katalog musik bersama Omah Aksara. Hanya track dengan lisensi terverifikasi yang boleh ditawarkan kepada pelanggan.",
+  "tracks": [
+    {
+      "id": "wedding-demo-existing",
+      "title": "Wedding Demo Track",
+      "category": "instrumental",
+      "file": "wedding-demo-existing.mp3",
+      "src": "../../assets/music/library/wedding-demo-existing.mp3",
+      "licenseStatus": "review-required",
+      "customerUse": false,
+      "notes": "Aset lama dari folder klien demo; identitas lagu dan hak penggunaan belum diverifikasi."
+    }
+  ]
+}

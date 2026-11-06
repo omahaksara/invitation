@@ -44,7 +44,8 @@ Jika fitur memerlukan data atau layanan yang belum siap, engine harus menyembuny
 ## Hadiah, media, dan integrasi
 
 - `gifts`: `message` dan daftar `accounts` berisi `bank`, `accountNumber`, `accountHolder`, `logo` opsional untuk logo bank (path relatif dari folder klien atau URL), serta `qrCode` opsional bila pemilik memberi QR valid.
-- `media.music`: URL atau path relatif untuk musik.
+- `media.music`: string URL/path lama atau objek pilihan katalog berisi `id`, `title`, `category`, dan `src`. Path relatif tetap diselesaikan dari `clients/<slug>/`; untuk katalog bersama gunakan path seperti `../../assets/music/library/<file>.mp3`. Format string lama tetap didukung.
+- Musik bersama dikelola melalui `assets/music/library/manifest.json`; setiap entri harus mencantumkan identitas, kategori, path, dan status lisensi. Track dengan lisensi belum diverifikasi hanya boleh dipakai untuk pengujian internal, bukan otomatis ditawarkan untuk undangan pelanggan.
 - `integrations.apiUrl`: URL HTTPS deployment backend yang dipilih untuk undangan tersebut.
 - `api.apiUcapan` atau `api.apiUrl`: nama properti lama yang dibaca adaptor saat migrasi.
 
