@@ -27,6 +27,7 @@ const themes = [
   { slug: "elegance", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "aksara-velora", marker: ".velora-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" }
 ];
