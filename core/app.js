@@ -1084,10 +1084,6 @@
         let target = option.selectors.map(selector => {
           try { return document.querySelector(selector); } catch { return null; }
         }).find(candidate => candidate && isVisible(candidate) && !used.has(candidate));
-        if (option.id === "home" && target) {
-          const firstSection = target.querySelector(":scope > section:not(#cover):not(#cover-section), :scope > .sirein-section, :scope > .kinze-section, :scope > .serena-ivory-section");
-          if (firstSection && isVisible(firstSection)) target = firstSection;
-        }
         if (!target && option.id === "couple") {
           const photo = document.querySelector('[data-bind="couple.groom.photo"], [data-bind="couple.bride.photo"]');
           target = photo && photo.closest("section");
