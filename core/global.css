@@ -316,6 +316,15 @@ body:not(.oa-invitation-opened) .royal-music-toggle {
   backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
 }
 .oa-nav-overflow button {width:100%;text-align:left;justify-content:flex-start}
+/* Shared media actions: compact, visible, and aligned with the main dock. */
+.oa-floating-controls > button.oa-dock-action {
+  flex:0 0 40px; min-width:40px; width:40px; padding:0; font-size:16px; border-radius:50%;
+}
+.oa-floating-controls > button.oa-dock-action.is-running,
+.oa-floating-controls > button.oa-dock-action.is-playing {
+  background:var(--oa-dock-active,var(--oa-dock-ink,#514735));
+  color:var(--oa-dock-active-ink,#fff);
+}
 .oa-quick-controls {
   position:fixed; z-index:92; right:max(14px,env(safe-area-inset-right));
   bottom:calc(max(14px,env(safe-area-inset-bottom)) + 74px); display:flex; flex-direction:column; gap:10px;
