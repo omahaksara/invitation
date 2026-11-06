@@ -1128,8 +1128,8 @@
       return found;
     };
 
-    // Retire theme-specific docks/music buttons so visitors get the same controls
-    // everywhere. Keep the original theme markup in place but out of the layout.
+    // Retire theme-specific navigation so every theme uses the shared Omah Aksara dock.
+    // Theme styling remains intact; only duplicate navigation controls are hidden.
     const legacyNavs = new Set(document.querySelectorAll(
       "nav:not(#oa-floating-controls), [role='navigation']:not(#oa-floating-controls), " +
       ".nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
@@ -1158,15 +1158,17 @@
       nav.style.setProperty("pointer-events", "none", "important");
     });
     const audio = document.getElementById("bg-music");
-    const legacyMusic = document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']");
+    const legacyMusic = [...document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']")].filter(control => control.id !== "bg-music");
+    // Replace every theme-native music button with the shared music control.
+    // If a theme nests its audio element inside the visual button, preserve the audio.
     legacyMusic.forEach(control => {
-      if (control.id === "bg-music") return;
-      // Karsa nests its audio element inside the rotating disk; detach audio first
-      // so the shared music button can still control the same track.
       if (audio && control.contains(audio)) document.body.append(audio);
       control.classList.add("oa-legacy-music-control");
       control.setAttribute("aria-hidden", "true");
       control.setAttribute("inert", "");
+      control.style.setProperty("display", "none", "important");
+      control.style.setProperty("visibility", "hidden", "important");
+      control.style.setProperty("pointer-events", "none", "important");
     });
     const configuredMusic = data && data.media && data.media.music;
     const configuredMusicSrc = typeof configuredMusic === "string" ? configuredMusic : configuredMusic && configuredMusic.src;
