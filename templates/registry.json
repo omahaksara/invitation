@@ -18,6 +18,11 @@
       "status": "active"
     },
     {
+      "slug": "atelier-editorial",
+      "name": "Atelier Editorial",
+      "status": "active"
+    },
+    {
       "slug": "aurelia-noir",
       "name": "Aurelia Noir",
       "status": "active"
@@ -53,6 +58,11 @@
       "status": "active"
     },
     {
+      "slug": "kencana-jawa",
+      "name": "Kencana Jawa",
+      "status": "active"
+    },
+    {
       "slug": "kinze",
       "name": "Kinze",
       "status": "active"
@@ -65,6 +75,11 @@
     {
       "slug": "lumiere-bloom",
       "name": "Lumière Bloom",
+      "status": "active"
+    },
+    {
+      "slug": "lumina",
+      "name": "Lumina — Gen-Z Editorial",
       "status": "active"
     },
     {
@@ -105,11 +120,6 @@
     {
       "slug": "velvet-romance",
       "name": "Velvet Romance",
-      "status": "active"
-    },
-    {
-      "slug": "atelier-editorial",
-      "name": "Atelier Editorial",
       "status": "active"
     }
   ]
