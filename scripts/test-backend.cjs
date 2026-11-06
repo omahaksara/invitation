@@ -131,6 +131,48 @@ assert.equal(listed.items.length, 1);
 assert.equal(listed.items[0].name, 'Tamu Uji');
 assert.equal(listed.items[0].message, 'Semoga bahagia selalu.');
 
+// Exercise the real published client fixture against the same shared spreadsheet.
+// The client should auto-register by its published slug, while demo submissions stay local.
+const budiAniConfig = JSON.parse(fs.readFileSync(
+  path.join(__dirname, '..', 'clients', 'budi-ani', 'data.json'), 'utf8'
+));
+assert.equal(budiAniConfig.slug, 'budi-ani');
+assert.equal(budiAniConfig.status, 'published');
+assert.equal(budiAniConfig.demoMode, false);
+assert.match(budiAniConfig.integrations?.apiUrl || '', /^https:\\/\\//i,
+  'Budi-Ani client fixture must point to an HTTPS backend');
+clientConfigs.set('budi-ani', budiAniConfig);
+
+const budiAniRsvp = post({
+  action: 'rsvp', slug: 'budi-ani', name: 'Tamu Budi-Ani Uji',
+  attendance: 'hadir', guestCount: 1
+});
+assert.equal(budiAniRsvp.ok, true, 'published Budi-Ani client can connect to the shared backend');
+assert.ok(settings.rows.some(row => row[0] === 'budi-ani' && row[1] === 'published'),
+  'Budi-Ani is registered by its own published slug');
+assert.ok(db.getSheetByName('RSVP').rows.some(row =>
+  row[2] === 'budi-ani' && row[3] === 'Tamu Budi-Ani Uji'
+), 'Budi-Ani RSVP is stored under the Budi-Ani slug');
+
+const budiAniGuestbook = post({
+  action: 'guestbook', slug: 'budi-ani', name: 'Tamu Budi-Ani Uji',
+  message: 'Ucapan khusus untuk demo integrasi Budi-Ani.'
+});
+assert.equal(budiAniGuestbook.ok, true, 'Budi-Ani guestbook can write to the shared backend');
+const budiAniListed = response(context.doGet({
+  parameter: { action: 'guestbook', slug: 'budi-ani' }
+}));
+assert.equal(budiAniListed.ok, true);
+assert.equal(budiAniListed.items.length, 1);
+assert.equal(budiAniListed.items[0].name, 'Tamu Budi-Ani Uji',
+  'Budi-Ani reads only its own guestbook entries');
+const ujiListedAgain = response(context.doGet({
+  parameter: { action: 'guestbook', slug: 'uji-omah-aksara' }
+}));
+assert.equal(ujiListedAgain.items.length, 1);
+assert.equal(ujiListedAgain.items[0].name, 'Tamu Uji',
+  'another client cannot see Budi-Ani guestbook entries');
+
 const demoSlug = response(context.doGet({ parameter: { action: 'guestbook', slug: 'demo-katalog' } }));
 assert.equal(demoSlug.ok, false, 'demo slug cannot read the production guestbook');
 assert.equal(post({ action: 'rsvp', slug: 'demo-katalog', name: 'Demo', attendance: 'hadir', guestCount: 1 }).ok, false,
