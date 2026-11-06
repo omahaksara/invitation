@@ -1,5 +1,9 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const screenshotDir = "artifacts/visual";
+fs.mkdirSync(screenshotDir, { recursive: true });
 
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
@@ -98,6 +102,7 @@ const themes = [
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        await page.screenshot({ path: path.join(screenshotDir, `${theme.slug}-desktop.png`), fullPage: false });
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="next"]').count(), 1,
@@ -285,6 +290,7 @@ const themes = [
         }
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
+        await page.screenshot({ path: path.join(screenshotDir, `${theme.slug}-mobile.png`), fullPage: false });
         const layout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           page: document.documentElement.scrollWidth,
