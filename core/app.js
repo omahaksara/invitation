@@ -1037,6 +1037,7 @@
   function ensureFloatingControls(data) {
     if (document.getElementById("oa-floating-controls")) return;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
+    const theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -1049,24 +1050,31 @@
     const isVisible = element => {
       if (!element || element.hidden || element.closest("[hidden]")) return false;
       const style = getComputedStyle(element);
-      return style.display !== "none" && style.visibility !== "hidden" && element.getBoundingClientRect().height > 0;
+      return style.display !== "none" && style.visibility !== "hidden" &&
+        element.getBoundingClientRect().height > 0;
     };
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
-      window.scrollTo({ top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12), behavior: "smooth" });
+      window.scrollTo({
+        top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12),
+        behavior: "smooth"
+      });
     };
+
+    // One navigation contract for every theme. Selectors cover the legacy template
+    // structures while the theme itself continues to own its visual design.
     const sectionOptions = [
-      { id:"home", label:"Home", selectors:["#main-content > section:not(#cover)","#app-inner > section:not(#cover)",".invitation-container > section:first-of-type"], feature:null },
-      { id:"couple", label:"Mempelai", selectors:["#couple-section",".couple-section","#couple",".bride-groom-section","[data-section='couple']"], feature:"couple" },
-      { id:"event", label:"Acara", selectors:["#events-section","#event-section",".event-section","#event-list",".events","section:has(#link-akad-maps)"], feature:"events" },
-      { id:"gallery", label:"Galeri", selectors:["#gallery-section",".gallery-section","#gallery-grid",".gallery-grid"], feature:"gallery" },
-      { id:"story", label:"Cerita", selectors:["#story-section",".story-section","#story-list"], feature:"loveStory" },
+      { id:"home", label:"Home", selectors:["#main-content","#app-inner",".invitation-container",".sirein-page",".invite-shell"], feature:null },
+      { id:"couple", label:"Mempelai", selectors:["#couple-section",".couple-section","#couple",".couple","#bride-groom",".bride-groom-section","[data-section='couple']"], feature:"couple" },
+      { id:"event", label:"Acara", selectors:["#events","#events-section","#event-section",".event-section",".events","#event-list","section:has(#link-akad-maps)"], feature:"events" },
+      { id:"gallery", label:"Galeri", selectors:["#gallery","#gallery-section",".gallery-section","#gallery-grid",".gallery-grid"], feature:"gallery" },
+      { id:"story", label:"Cerita", selectors:["#story","#story-section",".story-section","#story-list"], feature:"loveStory" },
       { id:"countdown", label:"Countdown", selectors:["#countdown",".countdown-section",".countdown"], feature:"countdown" },
+      { id:"video", label:"Video", selectors:["#video-section","#wedding-video",".video-section"], feature:"video" },
       { id:"rsvp", label:"RSVP", selectors:["#rsvp-section",".rsvp-section","#rsvp-form"], feature:"rsvp" },
       { id:"wishes", label:"Ucapan", selectors:["#guestbook-section",".guestbook-section","#wishes-form"], feature:"guestbook" },
       { id:"gift", label:"Hadiah", selectors:["#gift-section",".gift-section","#gift-list"], feature:"gifts" },
-      { id:"quote", label:"Kutipan", selectors:["#quote-section",".quote-section",".quote"], feature:"quotes" },
-      { id:"video", label:"Video", selectors:["#video-section",".video-section","#wedding-video"], feature:"video" }
+      { id:"quote", label:"Kutipan", selectors:["#quote-section",".quote-section",".quote"], feature:"quotes" }
     ];
     const resolveSections = () => {
       const found = [];
@@ -1076,6 +1084,10 @@
         let target = option.selectors.map(selector => {
           try { return document.querySelector(selector); } catch { return null; }
         }).find(candidate => candidate && isVisible(candidate) && !used.has(candidate));
+        if (option.id === "home" && target) {
+          const firstSection = target.querySelector(":scope > section:not(#cover):not(#cover-section), :scope > .sirein-section, :scope > .kinze-section, :scope > .serena-ivory-section");
+          if (firstSection && isVisible(firstSection)) target = firstSection;
+        }
         if (!target && option.id === "couple") {
           const photo = document.querySelector('[data-bind="couple.groom.photo"], [data-bind="couple.bride.photo"]');
           target = photo && photo.closest("section");
@@ -1088,35 +1100,43 @@
       return found;
     };
 
-    const nativeNavigation = document.querySelector("#app nav:not(#oa-floating-controls), #main-content nav:not(#oa-floating-controls), .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
-    const nativeMusic = document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box");
+    // Retire theme-specific docks/music buttons so visitors get the same controls
+    // everywhere. Keep the original theme markup in place but out of the layout.
+    const legacyNavs = document.querySelectorAll("#app nav, #main-content nav, .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
+    legacyNavs.forEach(nav => {
+      if (nav.id === "oa-floating-controls") return;
+      nav.classList.add("oa-legacy-navigation");
+      nav.setAttribute("aria-hidden", "true");
+      nav.setAttribute("inert", "");
+    });
     const audio = document.getElementById("bg-music");
+    const legacyMusic = document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box");
+    legacyMusic.forEach(control => {
+      // Karsa nests its audio element inside the rotating disk; detach audio first
+      // so the shared music button can still control the same track.
+      if (audio && control.contains(audio)) document.body.append(audio);
+      control.classList.add("oa-legacy-music-control");
+      control.setAttribute("aria-hidden", "true");
+      control.setAttribute("inert", "");
+    });
     const hasMusic = !!(audio && (audio.getAttribute("src") || audio.src) && !audio.hidden && features.music !== false);
-    if (nativeNavigation) {
-      nativeNavigation.dataset.oaNativeNavigation = "true";
-      nativeNavigation.setAttribute("aria-label", "Navigasi utama undangan");
-    }
 
     const quick = document.createElement("div");
     quick.id = "oa-quick-controls";
     quick.className = "oa-quick-controls";
     quick.setAttribute("aria-label", "Kontrol cepat undangan");
-    const autoButton = makeButton("auto", "▶", "Mulai gulir otomatis");
+    const autoButton = makeButton("auto", "↧", "Mulai gulir otomatis");
     autoButton.className = "oa-quick-button oa-auto-scroll";
     quick.append(autoButton);
 
     let musicButton = null;
-    if (hasMusic && !nativeMusic) {
+    if (hasMusic) {
       musicButton = makeButton("music", "♫", "Putar musik");
       musicButton.className = "oa-quick-button oa-music-control";
       quick.append(musicButton);
-    } else if (hasMusic && nativeMusic) {
-      nativeMusic.classList.add("oa-native-music-control");
-      nativeMusic.setAttribute("aria-label", nativeMusic.getAttribute("aria-label") || "Putar atau jeda musik");
     }
     document.body.append(quick);
 
-    // Keep fixed controls out of the way while a guest is using forms or viewing a photo.
     const isInvitationField = element => element && element.matches &&
       element.matches("input, textarea, select, [contenteditable='true']") &&
       !!element.closest("#rsvp-section, .rsvp-section, #guestbook-section, .guestbook-section, #rsvp-form, #wishes-form, form");
@@ -1130,17 +1150,18 @@
       });
     });
 
-    if (!nativeNavigation && features.navigation !== false) {
+    let menu = [];
+    if (features.navigation !== false) {
+      menu = resolveSections();
       const nav = document.createElement("nav");
       nav.id = "oa-floating-controls";
       nav.className = "oa-floating-controls";
-      nav.dataset.theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
-      nav.setAttribute("aria-label", "Navigasi undangan");
-      const menu = resolveSections();
-      const byId = id => menu.find(item => item.id === id);
+      nav.dataset.theme = theme;
+      nav.setAttribute("aria-label", "Navigasi utama undangan");
+      nav.setAttribute("role", "navigation");
       const primaryIds = ["home","couple","event","gallery"];
       primaryIds.forEach(id => {
-        const item = byId(id);
+        const item = menu.find(entry => entry.id === id);
         if (!item) return;
         const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
         button.dataset.target = item.target.id;
@@ -1148,32 +1169,41 @@
         nav.append(button);
         item.button = button;
       });
+
       const overflowItems = menu.filter(item => !primaryIds.includes(item.id));
-      const moreWrap = document.createElement("div");
-      moreWrap.className = "oa-nav-more-wrap";
-      const moreButton = makeButton("more", "•••", "Buka menu lainnya");
-      moreButton.className = "oa-nav-more";
-      moreButton.setAttribute("aria-expanded","false");
-      const panel = document.createElement("div");
-      panel.className = "oa-nav-overflow";
-      panel.hidden = true;
-      overflowItems.forEach(item => {
-        const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
-        button.dataset.target = item.target.id;
-        button.addEventListener("click", () => {
-          scrollToSection(item.target);
-          panel.hidden = true;
-          moreButton.setAttribute("aria-expanded","false");
+      if (overflowItems.length) {
+        const moreWrap = document.createElement("div");
+        moreWrap.className = "oa-nav-more-wrap";
+        const moreButton = makeButton("more", "Lainnya", "Buka bagian lainnya");
+        moreButton.className = "oa-nav-more";
+        moreButton.setAttribute("aria-expanded", "false");
+        const panel = document.createElement("div");
+        panel.className = "oa-nav-overflow";
+        panel.hidden = true;
+        overflowItems.forEach(item => {
+          const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
+          button.dataset.target = item.target.id;
+          button.addEventListener("click", () => {
+            scrollToSection(item.target);
+            panel.hidden = true;
+            moreButton.setAttribute("aria-expanded", "false");
+          });
+          panel.append(button);
+          item.button = button;
         });
-        panel.append(button);
-        item.button = button;
-      });
-      moreButton.addEventListener("click", () => {
-        panel.hidden = !panel.hidden;
-        moreButton.setAttribute("aria-expanded", String(!panel.hidden));
-      });
-      moreWrap.append(moreButton,panel);
-      if (overflowItems.length) nav.append(moreWrap);
+        moreButton.addEventListener("click", () => {
+          panel.hidden = !panel.hidden;
+          moreButton.setAttribute("aria-expanded", String(!panel.hidden));
+        });
+        moreWrap.append(moreButton, panel);
+        nav.append(moreWrap);
+        document.addEventListener("click", event => {
+          if (!moreWrap.contains(event.target) && !panel.hidden) {
+            panel.hidden = true;
+            moreButton.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
       document.body.append(nav);
 
       const updateActive = () => {
@@ -1185,8 +1215,8 @@
         menu.forEach(item => {
           if (!item.button) return;
           const selected = item === active;
-          item.button.classList.toggle("is-active",selected);
-          item.button.setAttribute("aria-current",selected ? "location" : "false");
+          item.button.classList.toggle("is-active", selected);
+          item.button.setAttribute("aria-current", selected ? "location" : "false");
         });
       };
       let ticking = false;
@@ -1194,44 +1224,17 @@
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => { updateActive(); ticking = false; });
-      }, {passive:true});
+      }, { passive: true });
       updateActive();
-      document.addEventListener("click", event => {
-        if (!moreWrap.contains(event.target) && !panel.hidden) {
-          panel.hidden = true;
-          moreButton.setAttribute("aria-expanded","false");
-        }
-      });
-    } else if (nativeNavigation) {
-      const links = nativeNavigation.querySelectorAll('a[href^="#"],button[data-target]');
-      links.forEach(link => {
-        const targetId = (link.getAttribute("href") || "").replace(/^#/,"") || link.dataset.target;
-        if (targetId) link.dataset.oaTarget = targetId;
-      });
-      const syncNativeActive = () => {
-        const marker = window.scrollY + Math.min(window.innerHeight * .34,260);
-        let activeId = "";
-        links.forEach(link => {
-          const target = document.getElementById(link.dataset.oaTarget);
-          if (target && target.getBoundingClientRect().top + window.scrollY <= marker) activeId = link.dataset.oaTarget;
-        });
-        links.forEach(link => {
-          const active = !!activeId && link.dataset.oaTarget === activeId;
-          link.classList.toggle("is-active",active);
-          link.setAttribute("aria-current",active ? "location" : "false");
-        });
-      };
-      window.addEventListener("scroll",syncNativeActive,{passive:true});
-      syncNativeActive();
     }
 
     let autoTimer = null;
     const stopAutoScroll = () => {
       if (autoTimer !== null) window.clearInterval(autoTimer);
       autoTimer = null;
-      autoButton.textContent = "▶";
-      autoButton.setAttribute("aria-pressed","false");
-      autoButton.setAttribute("aria-label","Mulai gulir otomatis");
+      autoButton.textContent = "↧";
+      autoButton.setAttribute("aria-pressed", "false");
+      autoButton.setAttribute("aria-label", "Mulai gulir otomatis");
       autoButton.classList.remove("is-running");
     };
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -1242,43 +1245,45 @@
         if (autoTimer !== null) { stopAutoScroll(); return; }
         autoButton.textContent = "Ⅱ";
         autoButton.classList.add("is-running");
-        autoButton.setAttribute("aria-pressed","true");
-        autoButton.setAttribute("aria-label","Jeda gulir otomatis");
+        autoButton.setAttribute("aria-pressed", "true");
+        autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
         autoTimer = window.setInterval(() => {
           if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
             stopAutoScroll(); return;
           }
-          window.scrollBy(0,1);
-        },24);
+          window.scrollBy(0, 1);
+        }, 24);
       });
-      window.addEventListener("wheel",stopAutoScroll,{passive:true});
-      window.addEventListener("touchstart",event => {
+      window.addEventListener("wheel", stopAutoScroll, { passive: true });
+      window.addEventListener("touchstart", event => {
         if (!quick.contains(event.target)) stopAutoScroll();
-      },{passive:true});
-      window.addEventListener("pointerdown",event => {
+      }, { passive: true });
+      window.addEventListener("pointerdown", event => {
         if (!quick.contains(event.target)) stopAutoScroll();
-      },{passive:true});
-      window.addEventListener("keydown",event => {
+      }, { passive: true });
+      window.addEventListener("keydown", event => {
         if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
       });
-      document.addEventListener("visibilitychange",() => { if(document.hidden) stopAutoScroll(); });
+      document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
     }
 
     if (musicButton) {
       const syncMusic = () => {
         const playing = !audio.paused;
         musicButton.textContent = playing ? "Ⅱ" : "♫";
-        musicButton.classList.toggle("is-playing",playing);
-        musicButton.setAttribute("aria-pressed",String(playing));
-        musicButton.setAttribute("aria-label",playing ? "Jeda musik" : "Putar musik");
+        musicButton.classList.toggle("is-playing", playing);
+        musicButton.setAttribute("aria-pressed", String(playing));
+        musicButton.setAttribute("aria-label", playing ? "Jeda musik" : "Putar musik");
       };
-      musicButton.addEventListener("click",async () => {
-        if (audio.paused) { try { await audio.play(); } catch { musicButton.title = "Musik belum dapat diputar. Coba lagi."; } }
-        else audio.pause();
+      musicButton.addEventListener("click", async () => {
+        if (audio.paused) {
+          try { await audio.play(); }
+          catch { musicButton.title = "Musik belum dapat diputar. Coba lagi."; }
+        } else audio.pause();
         syncMusic();
       });
-      audio.addEventListener("play",syncMusic);
-      audio.addEventListener("pause",syncMusic);
+      audio.addEventListener("play", syncMusic);
+      audio.addEventListener("pause", syncMusic);
       syncMusic();
     }
     if (features.autoScroll === false) autoButton.hidden = true;
@@ -1357,31 +1362,40 @@
   }
 
   function setupLightbox() {
-    const gallery=document.getElementById("gallery-grid") || document.querySelector(".gallery-grid"); if(!gallery) return;
+    const gallery = document.getElementById("gallery-grid") ||
+      document.querySelector(".gallery-grid, #gallery, .gallery-section");
+    if (!gallery) return;
     const closeLightbox = overlay => {
       if (!overlay || !overlay.isConnected) return;
       overlay.remove();
       document.body.classList.remove("oa-lightbox-open");
     };
-    gallery.addEventListener("click",event=>{
-      const img=event.target.closest("img"); if(!img) return;
+    gallery.addEventListener("click", event => {
+      const image = event.target.closest("img");
+      if (!image || !gallery.contains(image)) return;
       if (document.querySelector(".lightbox-overlay")) return;
-      const overlay=document.createElement("div"); overlay.className="lightbox-overlay";
-      overlay.setAttribute("role","dialog");
-      overlay.setAttribute("aria-modal","true");
-      overlay.setAttribute("aria-label","Pratinjau foto galeri");
+      const overlay = document.createElement("div");
+      overlay.className = "lightbox-overlay";
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-label", "Pratinjau foto galeri");
       overlay.tabIndex = -1;
-      overlay.style.cssText="position:fixed;inset:0;z-index:1000;background:#141914ed;display:grid;place-items:center;padding:20px;cursor:zoom-out";
-      const full=document.createElement("img");full.src=img.src;full.alt=img.alt;full.style.cssText="max-width:100%;max-height:90vh;object-fit:contain;box-shadow:0 10px 50px #0008";
+      overlay.style.cssText = "position:fixed;inset:0;z-index:1000;background:#141914ed;display:grid;place-items:center;padding:20px;cursor:zoom-out";
+      const full = document.createElement("img");
+      full.src = image.currentSrc || image.src;
+      full.alt = image.alt || "Foto galeri";
+      full.style.cssText = "max-width:100%;max-height:90vh;object-fit:contain;box-shadow:0 10px 50px #0008";
       overlay.append(full);
-      overlay.addEventListener("click",()=>closeLightbox(overlay));
-      overlay.addEventListener("keydown",event=>{if(event.key==="Escape"){event.preventDefault();closeLightbox(overlay);}});
+      overlay.addEventListener("click", () => closeLightbox(overlay));
+      overlay.addEventListener("keydown", event => {
+        if (event.key === "Escape") { event.preventDefault(); closeLightbox(overlay); }
+      });
       document.body.classList.add("oa-lightbox-open");
       document.body.append(overlay);
-      overlay.focus({preventScroll:true});
+      overlay.focus({ preventScroll: true });
     });
-    document.addEventListener("keydown",event=>{
-      if(event.key==="Escape") closeLightbox(document.querySelector(".lightbox-overlay"));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeLightbox(document.querySelector(".lightbox-overlay"));
     });
   }
 
