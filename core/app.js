@@ -1048,10 +1048,17 @@
       return button;
     };
     const isVisible = element => {
-      if (!element || element.hidden || element.closest("[hidden]")) return false;
+      if (!element || element.hidden) return false;
       const style = getComputedStyle(element);
-      return style.display !== "none" && style.visibility !== "hidden" &&
-        element.getBoundingClientRect().height > 0;
+      if (style.display === "none" || style.visibility === "hidden") return false;
+      // Build the menu before the guest opens the cover. The invitation's main
+      // wrapper is intentionally hidden at that moment, so don't mistake its
+      // hidden state for a missing section.
+      const hiddenParent = element.closest("[hidden]");
+      if (hiddenParent && !hiddenParent.matches("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page")) return false;
+      const rect = element.getBoundingClientRect();
+      const waitingBehindCover = !!element.closest("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page");
+      return rect.height > 0 || (waitingBehindCover && (element.children.length > 0 || !!element.textContent.trim()));
     };
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
@@ -1116,16 +1123,30 @@
 
     // Retire theme-specific docks/music buttons so visitors get the same controls
     // everywhere. Keep the original theme markup in place but out of the layout.
-    const legacyNavs = document.querySelectorAll("#app nav, #main-content nav, .nocturne-nav, .celestial-nav, [data-oa-native-navigation]");
+    const legacyNavs = new Set(document.querySelectorAll(
+      "#app nav, #main-content nav, .nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
+      "[class*='bottom-nav'], [id*='bottom-nav'], [class*='bottom-navigation'], [id*='bottom-navigation'], " +
+      "[class*='navigation-dock'], [id*='navigation-dock'], [class*='nav-dock'], [id*='nav-dock']"
+    ));
+    // Some older themes use fixed button groups instead of a <nav>. Retire only
+    // floating/sticky controls with navigation-like names, never ordinary content.
+    document.querySelectorAll("#app [class], #app [id]").forEach(element => {
+      if (element.id === "oa-floating-controls" || element.id === "oa-quick-controls") return;
+      const identity = ((element.id || "") + " " + (typeof element.className === "string" ? element.className : "")).toLowerCase();
+      if (!/(nav|dock|bottom|float|control)/.test(identity)) return;
+      const position = getComputedStyle(element).position;
+      if ((position === "fixed" || position === "sticky") && element.querySelector("button, a, [role='button']")) legacyNavs.add(element);
+    });
     legacyNavs.forEach(nav => {
-      if (nav.id === "oa-floating-controls") return;
+      if (nav.id === "oa-floating-controls" || nav.id === "oa-quick-controls") return;
       nav.classList.add("oa-legacy-navigation");
       nav.setAttribute("aria-hidden", "true");
       nav.setAttribute("inert", "");
     });
     const audio = document.getElementById("bg-music");
-    const legacyMusic = document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box");
+    const legacyMusic = document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']");
     legacyMusic.forEach(control => {
+      if (control.id === "bg-music") return;
       // Karsa nests its audio element inside the rotating disk; detach audio first
       // so the shared music button can still control the same track.
       if (audio && control.contains(audio)) document.body.append(audio);
