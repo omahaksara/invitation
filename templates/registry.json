@@ -48,6 +48,11 @@
       "status": "active"
     },
     {
+      "slug": "kencana-jawa",
+      "name": "Kencana Jawa",
+      "status": "prototype"
+    },
+    {
       "slug": "kinze",
       "name": "Kinze",
       "status": "active"
