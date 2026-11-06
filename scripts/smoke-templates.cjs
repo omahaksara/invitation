@@ -211,7 +211,7 @@ const themes = [
           }, quoteTargetId, { timeout: 5000 });
         }
         assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
-        const autoScroll = page.locator('#oa-quick-controls [data-oa-action="auto"]');
+        const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
           theme.slug + ": auto-scroll harus nonaktif saat halaman pertama dibuka");
         if (await autoScroll.isEnabled()) {
@@ -230,7 +230,7 @@ const themes = [
         assert.equal(await navigation.locator('[data-oa-action="next"]').count(), 1,
           theme.slug + ": tombol bagian berikutnya tidak tersedia");
 
-        const musicControl = page.locator('#oa-quick-controls [data-oa-action="music"]').first();
+        const musicControl = page.locator('#oa-floating-controls [data-oa-action="music"]').first();
         await musicControl.waitFor({ state: "visible", timeout: 5000 });
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
         console.log("PASS " + theme.slug);
