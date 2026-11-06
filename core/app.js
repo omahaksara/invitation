@@ -1032,6 +1032,13 @@
   // receives the same working controls without duplicating theme-specific markup.
   function ensureFloatingControls(data) {
     if (document.getElementById("oa-floating-controls")) return;
+    // Respect premium navigation already authored by a theme. Never stack a second dock.
+    const nativeNavigation = document.querySelector(".nocturne-nav, .celestial-nav");
+    if (nativeNavigation) {
+      nativeNavigation.dataset.oaNativeNavigation = "true";
+      nativeNavigation.setAttribute("aria-label", "Navigasi utama undangan");
+      return;
+    }
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const nav = document.createElement("nav");
     nav.id = "oa-floating-controls";
