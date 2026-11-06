@@ -1405,7 +1405,8 @@
       const style = document.createElement("style");
       style.id = styleId;
       style.textContent = `
-        html { scroll-behavior: smooth; overflow-x: clip; }\n        body { overflow-x: clip; }
+        html { scroll-behavior: smooth; overflow-x: clip; }
+        body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
         .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .85s cubic-bezier(.2,.72,.18,1); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
