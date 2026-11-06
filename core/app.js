@@ -1124,9 +1124,11 @@
     // Retire theme-specific docks/music buttons so visitors get the same controls
     // everywhere. Keep the original theme markup in place but out of the layout.
     const legacyNavs = new Set(document.querySelectorAll(
-      "#app nav, #main-content nav, .nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
+      "nav:not(#oa-floating-controls), [role='navigation']:not(#oa-floating-controls), " +
+      ".nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
       "[class*='bottom-nav'], [id*='bottom-nav'], [class*='bottom-navigation'], [id*='bottom-navigation'], " +
-      "[class*='navigation-dock'], [id*='navigation-dock'], [class*='nav-dock'], [id*='nav-dock']"
+      "[class*='navigation-dock'], [id*='navigation-dock'], [class*='nav-dock'], [id*='nav-dock'], " +
+      "[class*='bottom-menu'], [id*='bottom-menu'], [class*='floating-nav'], [id*='floating-nav']"
     ));
     // Some older themes use fixed button groups instead of a <nav>. Retire only
     // floating/sticky controls with navigation-like names, never ordinary content.
@@ -1142,6 +1144,11 @@
       nav.classList.add("oa-legacy-navigation");
       nav.setAttribute("aria-hidden", "true");
       nav.setAttribute("inert", "");
+      // Hide the native dock itself, not only its clickability. Some themes place
+      // their navigation outside #app or use a role= navigation wrapper.
+      nav.style.setProperty("display", "none", "important");
+      nav.style.setProperty("visibility", "hidden", "important");
+      nav.style.setProperty("pointer-events", "none", "important");
     });
     const audio = document.getElementById("bg-music");
     const legacyMusic = document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']");
