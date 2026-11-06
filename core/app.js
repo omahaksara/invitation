@@ -8,6 +8,13 @@
     const params = new URLSearchParams(location.search);
     const slug = params.get("c") || "";
     const guestName = (params.get("to") || "").trim();
+    const buildShortInvitationUrl = () => {
+      const path = "/i/" + encodeURIComponent(slug) + (guestName ? "/" + encodeURIComponent(guestName) : "");
+      const shortUrl = new URL(path, "https://omahaksara.github.io");
+      const selectedTheme = params.get("theme") || "";
+      if (/^[a-z0-9][a-z0-9-]*$/i.test(selectedTheme)) shortUrl.searchParams.set("theme", selectedTheme);
+      return shortUrl.toString();
+    };
     if (!/^[a-z0-9][a-z0-9-]*$/i.test(slug)) {
       showError(app, "Undangan tidak ditemukan", "Pastikan tautan memiliki parameter ?c=slug-undangan.");
       return;
@@ -406,7 +413,7 @@
         const shareData = {
           title: document.title || "Undangan Pernikahan",
           text: "Anda diundang ke hari bahagia kami.",
-          url: window.location.href
+          url: buildShortInvitationUrl()
         };
         button.disabled = true;
         status.textContent = "";
@@ -1258,7 +1265,7 @@
         });
         const shareButton = makeButton("share", "Bagikan", "Bagikan undangan");
         shareButton.addEventListener("click", async () => {
-          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: location.href };
+          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: buildShortInvitationUrl() };
           try {
             if (navigator.share) await navigator.share(shareData);
             else if (navigator.clipboard?.writeText) {
