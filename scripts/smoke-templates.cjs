@@ -213,12 +213,20 @@ const themes = [
         }
         assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
-        assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-          theme.slug + ": auto-scroll harus nonaktif saat halaman pertama dibuka");
         if (await autoScroll.isEnabled()) {
+          // The invitation should begin scrolling automatically after it is opened.
+          await page.waitForFunction(() => {
+            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
+            return button?.getAttribute("aria-pressed") === "true";
+          }, undefined, { timeout: 3500 });
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": tombol auto-scroll tidak mulai");
+            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
           await page.waitForTimeout(120);
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
