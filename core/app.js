@@ -1089,14 +1089,17 @@
         // the existing story section instead of silently omitting navigation.
         if (!target && option.id === "story" && Array.isArray(data.story) && data.story.length) {
           const storyRoot = document.querySelector(".story-list, #story-list");
-          const storySection = storyRoot?.closest("section") ||
+          const storySection = storyRoot?.closest("section, .story-section, #story-section, #story, .panel, article") ||
             document.querySelector(".story-section, #story-section, #story");
-          if (storySection && !used.has(storySection)) {
-            storySection.hidden = false;
-            storySection.removeAttribute("hidden");
-            storySection.style.removeProperty("display");
-            if (getComputedStyle(storySection).display === "none") storySection.style.display = "block";
-            if (isVisible(storySection)) target = storySection;
+          const candidate = storySection || storyRoot;
+          if (candidate && !used.has(candidate)) {
+            // Legacy themes sometimes render the story cards inside a non-section wrapper
+            // or leave the wrapper collapsed. Prefer the real section, then the visible list.
+            candidate.hidden = false;
+            candidate.removeAttribute("hidden");
+            candidate.style.removeProperty("display");
+            if (getComputedStyle(candidate).display === "none") candidate.style.display = "block";
+            if (isVisible(candidate)) target = candidate;
           }
         }
         if (!target && option.id === "couple") {
