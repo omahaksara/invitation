@@ -220,6 +220,21 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const performanceAudit = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll("#app, #app *"));
+          const backdrop = [];
+          const slowTransitions = [];
+          for (const element of elements) {
+            const style = getComputedStyle(element);
+            const effect = style.backdropFilter || style.webkitBackdropFilter;
+            if (effect && effect !== "none" && !/^blur\\(0(?:px)?\\)$/.test(effect)) backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
+            const durations = style.transitionDuration.split(",").map(value => parseFloat(value) * (value.includes("ms") ? .001 : 1));
+            if (durations.some(value => value > .55)) slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
+          }
+          return { backdrop, slowTransitions: slowTransitions.slice(0, 12) };
+        });
+        assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
+        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
         const motionAudit = await page.evaluate(() => ({
           left: document.querySelectorAll('#app [data-oa-motion="left"]').length,
           right: document.querySelectorAll('#app [data-oa-motion="right"]').length,
