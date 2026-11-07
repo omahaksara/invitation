@@ -1090,14 +1090,18 @@
     const isVisible = element => {
       if (!element || element.hidden) return false;
       const style = getComputedStyle(element);
-      if (style.display === "none" || style.visibility === "hidden") return false;
-      // Build the menu before the guest opens the cover. The invitation's main
-      // wrapper is intentionally hidden at that moment, so don't mistake its
-      // hidden state for a missing section.
+      // A few themes (notably Aksara Velora) hide the main wrapper with
+      // display:none until the cover is opened instead of using [hidden].
+      // Keep that wrapper as the Home destination without treating unrelated
+      // display:none controls or sections as navigable targets.
+      const mainWrapperSelector = "#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page";
+      const isMainWrapper = element.matches(mainWrapperSelector);
+      if (style.display === "none" && !isMainWrapper) return false;
+      if (style.visibility === "hidden" && !isMainWrapper) return false;
       const hiddenParent = element.closest("[hidden]");
-      if (hiddenParent && !hiddenParent.matches("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page")) return false;
+      if (hiddenParent && !hiddenParent.matches(mainWrapperSelector)) return false;
       const rect = element.getBoundingClientRect();
-      const waitingBehindCover = !!element.closest("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page");
+      const waitingBehindCover = !!element.closest(mainWrapperSelector);
       return rect.height > 0 || (waitingBehindCover && (element.children.length > 0 || !!element.textContent.trim()));
     };
     const getScrollBehavior = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
