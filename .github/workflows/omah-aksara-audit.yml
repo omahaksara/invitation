@@ -39,7 +39,9 @@ jobs:
           cp backend/Code.gs /tmp/omah-aksara-backend.js
           node --check /tmp/omah-aksara-backend.js
       - name: Validate V2 data and local assets
-        run: node scripts/validate-invitations.cjs
+        run: |
+          node scripts/validate-invitations.cjs
+          node scripts/validate-asset-library.cjs
       - name: Verify all themes and demo data
         run: |
           node <<'NODE'
