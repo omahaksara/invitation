@@ -6,7 +6,9 @@
       "frames/jendela-jawa-arch.svg",
       "frames/jendela-klasik.svg",
       "frames/jendela-sunda.svg",
-      "frames/arch-melayu.svg"
+      "frames/arch-melayu.svg",
+      "frames/jendela-lengkung-bunga.svg",
+      "frames/arch-minimal.svg"
     ],
     "ornaments": [
       "ornaments/gunungan-line.svg",
@@ -17,12 +19,17 @@
       "ornaments/mega-mendung.svg",
       "ornaments/flower-tanjung.svg",
       "ornaments/leaf-vine.svg",
-      "ornaments/star-crescent.svg"
+      "ornaments/star-crescent.svg",
+      "ornaments/wayang-shadow-divider.svg",
+      "ornaments/kembang-setaman.svg",
+      "ornaments/peacock-feather.svg"
     ],
     "patterns": [
       "patterns/kawung-repeat.svg",
       "patterns/parang-repeat.svg",
-      "patterns/tenun-geometric.svg"
+      "patterns/tenun-geometric.svg",
+      "patterns/tumpal-geometric.svg",
+      "patterns/ceplok-geometric.svg"
     ],
     "wayang": [
       "wayang/anggada.svg",
