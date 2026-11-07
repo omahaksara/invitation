@@ -89,21 +89,10 @@ async function main() {
   await fs.mkdir(banksDir, { recursive: true });
   await fs.mkdir(walletsDir, { recursive: true });
 
-  const manifest = [
-    "# Omah Aksara — aset logo pembayaran lokal",
-    "",
-    "Semua file disimpan di repository dan digunakan dengan path lokal; tidak ada hotlink saat undangan dibuka.",
-    "Logo merek tetap merupakan merek dagang pemilik masing-masing. Gunakan hanya untuk mengidentifikasi rekening/metode pembayaran yang benar-benar dipilih pemilik undangan.",
-    "",
-    "| File | Sumber | Kredit/keterangan |",
-    "|---|---|---|",
-  ];
-
   for (const item of files) {
     const targetDir = item.name === "gopay.svg" ? walletsDir : banksDir;
     const bytes = await download(item);
     await fs.writeFile(path.join(targetDir, item.name), bytes);
-    manifest.push(`| ${item.name} | [Wikimedia Commons](${item.source}) | ${item.credit} |`);
 
     // Preserve the old demo-relative filenames while replacing their mock artwork.
     const legacy = {
