@@ -34,6 +34,9 @@ const themes = [
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
 { slug: "sagara", marker: ".sg-cover-photo", open: "#open-btn", cover: "#cover" },
+  { slug: "lume", marker: ".lume", open: "#open-btn", cover: "#cover" },
+  { slug: "nox", marker: ".nox", open: "#open-btn", cover: "#cover" },
+  { slug: "taupe", marker: ".taupe", open: "#open-btn", cover: "#cover" },
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
 ];
 
