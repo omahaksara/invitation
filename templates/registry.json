@@ -40,7 +40,7 @@
     {
       "slug": "earty",
       "name": "Earty",
-      "status": "active"
+      "status": "prototype"
     },
     {
       "slug": "elegance",
@@ -70,7 +70,7 @@
     {
       "slug": "lume",
       "name": "Lume",
-      "status": "active"
+      "status": "prototype"
     },
     {
       "slug": "lumiere-bloom",
@@ -85,7 +85,7 @@
     {
       "slug": "nox",
       "name": "Nox",
-      "status": "active"
+      "status": "prototype"
     },
     {
       "slug": "romantic-floral",
@@ -115,7 +115,7 @@
     {
       "slug": "taupe",
       "name": "Taupe",
-      "status": "active"
+      "status": "prototype"
     },
     {
       "slug": "velvet-romance",
