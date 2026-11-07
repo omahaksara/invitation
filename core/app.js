@@ -1469,6 +1469,15 @@
           #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
           html { scroll-behavior: auto !important; }
           .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+          html[data-oa-theme] #app,
+          html[data-oa-theme] #app *,
+          html[data-oa-theme] #app *::before,
+          html[data-oa-theme] #app *::after {
+            animation-duration:.01ms!important;
+            animation-iteration-count:1!important;
+            transition-duration:.01ms!important;
+            scroll-behavior:auto!important;
+          }
         }
       `;
       document.head.append(style);
