@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - "scripts/sync-payment-logos.cjs"
+      - "scripts/sync-wikimedia-bank-catalog.cjs"
       - ".github/workflows/sync-payment-logos.yml"
 
 permissions:
@@ -33,7 +34,9 @@ jobs:
           node-version: 20
 
       - name: Download and validate local logo assets
-        run: node scripts/sync-payment-logos.cjs
+        run: |
+          node scripts/sync-payment-logos.cjs
+          node scripts/sync-wikimedia-bank-catalog.cjs
 
       - name: Commit downloaded assets to this feature branch
         run: |
