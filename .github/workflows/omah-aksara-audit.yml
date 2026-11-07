@@ -75,6 +75,8 @@ jobs:
           assert.ok(app.includes('parsedTemplate.head.querySelectorAll("style")'), 'full-document theme CSS must be mounted');
           assert.ok(app.includes('ensureFloatingControls(data, buildShortInvitationUrl);'), 'shared dock must receive the canonical share URL builder');
           assert.ok(app.includes('function ensureFloatingControls(data, buildShortInvitationUrl)'), 'shared dock must accept the canonical share URL builder');
+          assert.ok(app.includes('behavior: getScrollBehavior()'), 'navigation scroll must respect reduced-motion preference');
+          assert.ok(app.includes('reducedMotionPreference ? 0 : 520'), 'cover opening delay must respect reduced-motion preference');
           assert.doesNotMatch(app.slice(app.indexOf('function setupMusic('), app.indexOf('function setupCountdown(')),
             /button\.textContent\s*=\s*["']♫["']/, 'music toggle must not destroy nested theme icons');
 
