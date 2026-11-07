@@ -112,8 +112,7 @@
         "accountNumber": "DEMO-BCA-0001",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "type": "bank"
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "paymentType": "bank",
@@ -122,8 +121,7 @@
         "accountNumber": "DEMO-BRI-0002",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "type": "bank"
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "paymentType": "bank",
@@ -132,8 +130,7 @@
         "accountNumber": "DEMO-BNI-0003",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "type": "bank"
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "paymentType": "bank",
@@ -142,8 +139,7 @@
         "accountNumber": "DEMO-MANDIRI-0004",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "type": "bank"
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "paymentType": "bank",
@@ -152,8 +148,7 @@
         "accountNumber": "DEMO-BSI-0005",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "type": "bank"
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "paymentType": "bank",
@@ -162,12 +157,10 @@
         "accountNumber": "DEMO-SULTENG-0006",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "type": "bank"
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "paymentType": "bank",
-        "type": "bank",
         "bank": "CIMB Niaga",
         "logo": "/assets/payment/banks/cimb.svg",
         "accountNumber": "DEMO-CIMB-0007",
@@ -182,8 +175,7 @@
         "accountNumber": "08XX-XXXX-0001",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
-        "type": "ewallet"
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
         "paymentType": "ewallet",
@@ -192,8 +184,7 @@
         "accountNumber": "08XX-XXXX-0002",
         "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
-        "type": "ewallet"
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
         "paymentType": "ewallet",
@@ -202,8 +193,7 @@
         "accountNumber": "08XX-XXXX-0003",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
-        "type": "ewallet"
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
         "paymentType": "ewallet",
@@ -212,8 +202,7 @@
         "accountNumber": "08XX-XXXX-0004",
         "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
-        "type": "ewallet"
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
         "paymentType": "qris",
@@ -223,8 +212,7 @@
         "qrCode": "/assets/payment/wallets/qris-demo.svg",
         "accountHolder": "QRIS Omah Aksara • DEMO",
         "demoOnly": true,
-        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar.",
-        "type": "qris"
+        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar."
       }
     ]
   },
