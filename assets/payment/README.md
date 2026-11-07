@@ -14,7 +14,7 @@ Contoh data:
 
 ## Bank
 
-Status sinkronisasi: BCA, BNI, Mandiri, BSI, BRI versi 2025, dan Bank Sulteng sudah tersedia sebagai file lokal. Aset BRI dan Bank Sulteng berhasil diunduh dari sumber Wikimedia Commons dan situs resmi Bank Sulteng, lalu dimasukkan ke branch ini. Keduanya belum dipakai sebagai rekening default demo.
+Status sinkronisasi: BCA, BNI, Mandiri, BSI, BRI versi 2025, dan Bank Sulteng tersedia sebagai file lokal dan sudah dipakai pada pratinjau demo. Bank Sulteng memakai PNG resmi resolusi tinggi karena sumber yang tersedia bukan SVG. Data nomor rekening pada demo adalah placeholder, bukan rekening aktif.
 
 | File lokal | Identitas | Sumber |
 |---|---|---|
@@ -22,7 +22,7 @@ Status sinkronisasi: BCA, BNI, Mandiri, BSI, BRI versi 2025, dan Bank Sulteng su
 | `banks/bni.svg` | BNI | [Wikimedia Commons — Bank Negara Indonesia logo (2004).svg](https://commons.wikimedia.org/wiki/File:Bank_Negara_Indonesia_logo_(2004).svg), PD-textlogo |
 | `banks/mandiri.svg` | Bank Mandiri | [Wikimedia Commons — Bank Mandiri logo 2016.svg](https://commons.wikimedia.org/wiki/File:Bank_Mandiri_logo_2016.svg), PD-textlogo |
 | `banks/bsi.svg` | Bank Syariah Indonesia | [Wikimedia Commons — Bank Syariah Indonesia.svg](https://commons.wikimedia.org/wiki/File:Bank_Syariah_Indonesia.svg), PD-textlogo |
-| `banks/bri.svg` | BRI | [Wikimedia Commons — BRI 2025.svg](https://commons.wikimedia.org/wiki/File:BRI_2025.svg), versi 16 Oktober 2025; akan diunduh oleh skrip sinkronisasi aset |
+| `banks/bri.svg` | BRI | [Wikimedia Commons — BRI 2025.svg](https://commons.wikimedia.org/wiki/File:BRI_2025.svg), versi 16 Oktober 2025; disimpan sebagai aset lokal |
 | `banks/bank-sulteng.png` | Bank Sulteng | [Halaman logo resmi Bank Sulteng](https://mail.banksulteng.co.id/tentang-kami/logo), file gambar resmi dari domain Bank Sulteng; format sumber PNG |
  
 ## E-wallet dan pembayaran
@@ -41,4 +41,4 @@ Status sinkronisasi: BCA, BNI, Mandiri, BSI, BRI versi 2025, dan Bank Sulteng su
 - Jangan membuat nomor rekening atau QRIS palsu. Logo QRIS tidak menggantikan QRIS dinamis milik klien.
 - Jangan mengubah warna, proporsi, atau bentuk logo resmi. Ukuran tampilan ditangani CSS `object-fit: contain`.
 - Nama merek dan logo tetap milik pemilik masing-masing; pemakaian harus mengikuti ketentuan merek dagang/brand guideline.
-- File lama pada `clients/demo-katalog/bank/` dipertahankan untuk kompatibilitas data lama; file BCA dan Mandiri di folder tersebut sudah diganti dengan artwork yang benar.
+- File lama pada `clients/demo-katalog/bank/` dipertahankan untuk kompatibilitas data lama; file BCA, BRI, dan Mandiri di folder tersebut sudah diganti dengan artwork sumber.
