@@ -779,6 +779,7 @@ html[data-oa-theme] #app .cover-monogram{animation-duration:.5s!important}
 }
 .oa-floating-controls[data-theme="earty"] button{border-radius:3px 12px 3px 12px}
 @media(prefers-reduced-motion:reduce){
+  html[data-oa-theme],
   html[data-oa-theme] #app,
   html[data-oa-theme] #app *,
   html[data-oa-theme] #app *::before,
