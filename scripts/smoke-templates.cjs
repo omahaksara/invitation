@@ -235,6 +235,19 @@ for (const slug of activeThemeSlugs) {
         });
         assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
         assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        const reducedMotionAudit = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll("#app, #app *"));
+          const seconds = value => Math.max(0, ...String(value || "0s").split(",").map(part => parseFloat(part) * (part.includes("ms") ? .001 : 1)).filter(Number.isFinite));
+          return {
+            transition: Math.max(0, ...elements.map(element => seconds(getComputedStyle(element).transitionDuration))),
+            animation: Math.max(0, ...elements.map(element => seconds(getComputedStyle(element).animationDuration))),
+            scroll: getComputedStyle(document.documentElement).scrollBehavior
+          };
+        });
+        assert.ok(reducedMotionAudit.transition <= .001 && reducedMotionAudit.animation <= .001 && reducedMotionAudit.scroll === "auto",
+          theme.slug + ": preferensi reduced-motion belum dihormati " + JSON.stringify(reducedMotionAudit));
+        await page.emulateMedia({ reducedMotion: "no-preference" });
         const motionAudit = await page.evaluate(() => ({
           left: document.querySelectorAll('#app [data-oa-motion="left"]').length,
           right: document.querySelectorAll('#app [data-oa-motion="right"]').length,
@@ -295,7 +308,7 @@ for (const slug of activeThemeSlugs) {
               style.pointerEvents !== "none" && rect.width > 0 && rect.height > 0;
           });
           const sharedButtons = Array.from(document.querySelectorAll(
-            "#oa-floating-controls button, #oa-floating-controls button"
+            "#oa-floating-controls button"
           )).filter(button => {
             const style = getComputedStyle(button);
             const rect = button.getBoundingClientRect();
@@ -431,6 +444,11 @@ for (const slug of activeThemeSlugs) {
         await page.waitForFunction(() => Boolean(window.__oaSharePayload?.url), undefined, { timeout: 5000 });
         const dockSharePayload = await page.evaluate(() => window.__oaSharePayload);
         assert.ok(dockSharePayload?.url, theme.slug + ": dock share action did not invoke Web Share API.");
+        const dockSharedUrl = new URL(dockSharePayload.url);
+        assert.ok(dockSharedUrl.origin === "https://omahaksara.github.io" &&
+          dockSharedUrl.pathname.startsWith("/i/demo-katalog/") &&
+          dockSharedUrl.pathname.includes("Nama%20Tamu"),
+          theme.slug + ": dock share action did not produce the canonical invitation URL.");
         // The in-content share button is a separate entry point; test it too.
         await page.evaluate(() => { window.__oaSharePayload = null; });
         const shareButton = page.locator("#oa-share-invitation");
