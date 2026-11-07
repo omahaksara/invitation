@@ -103,106 +103,107 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Pratinjau lengkap fitur Hadiah Digital Omah Aksara. Seluruh nama penerima, nomor rekening, nomor e-wallet, dan ID pembayaran di bawah ini adalah DATA SIMULASI — BUKAN REKENING AKTIF. Jangan melakukan transfer atau pembayaran. Saat menjadi klien, rekening dan metode pembayaran akan diganti dengan data resmi milik Anda.",
+    "message": "Berikut contoh tampilan hadiah digital Omah Aksara. Semua nama, nomor rekening, nomor e-wallet, dan QRIS pada halaman demo ini adalah DATA SIMULASI — bukan rekening atau tujuan pembayaran aktif. Jangan melakukan transfer atau pembayaran. Pada undangan klien, informasi ini akan diganti dengan data resmi milik mempelai.",
     "accounts": [
       {
-        "type": "bank",
-        "bank": "Bank Central Asia (BCA)",
+        "paymentType": "bank",
+        "bank": "Bank BCA",
         "logo": "/assets/payment/banks/bca.svg",
-        "accountNumber": "000000000000",
-        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
-        "note": "Nomor simulasi, bukan rekening aktif.",
-        "demoOnly": true
+        "accountNumber": "DEMO-BCA-0001",
+        "accountHolder": "Arkan Pradipta • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
-        "type": "bank",
-        "bank": "Bank Rakyat Indonesia (BRI)",
+        "paymentType": "bank",
+        "bank": "Bank BRI",
         "logo": "/assets/payment/banks/bri.svg",
-        "accountNumber": "000000000000",
-        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
-        "note": "Nomor simulasi, bukan rekening aktif.",
-        "demoOnly": true
+        "accountNumber": "DEMO-BRI-0002",
+        "accountHolder": "Sekar Ayuningtyas • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
-        "type": "bank",
-        "bank": "Bank Negara Indonesia (BNI)",
+        "paymentType": "bank",
+        "bank": "Bank BNI",
         "logo": "/assets/payment/banks/bni.svg",
-        "accountNumber": "000000000000",
-        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
-        "note": "Nomor simulasi, bukan rekening aktif.",
-        "demoOnly": true
+        "accountNumber": "DEMO-BNI-0003",
+        "accountHolder": "Arkan Pradipta • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
-        "type": "bank",
+        "paymentType": "bank",
         "bank": "Bank Mandiri",
         "logo": "/assets/payment/banks/mandiri.svg",
-        "accountNumber": "000000000000",
-        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
-        "note": "Nomor simulasi, bukan rekening aktif.",
-        "demoOnly": true
+        "accountNumber": "DEMO-MANDIRI-0004",
+        "accountHolder": "Sekar Ayuningtyas • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
-        "type": "bank",
-        "bank": "Bank Syariah Indonesia (BSI)",
+        "paymentType": "bank",
+        "bank": "Bank Syariah Indonesia",
         "logo": "/assets/payment/banks/bsi.svg",
-        "accountNumber": "000000000000",
-        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
-        "note": "Nomor simulasi, bukan rekening aktif.",
-        "demoOnly": true
+        "accountNumber": "DEMO-BSI-0005",
+        "accountHolder": "Arkan Pradipta • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
-        "type": "bank",
+        "paymentType": "bank",
         "bank": "Bank Sulteng",
         "logo": "/assets/payment/banks/bank-sulteng.png",
-        "accountNumber": "000000000000",
-        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
-        "note": "Nomor simulasi, bukan rekening aktif.",
-        "demoOnly": true
+        "accountNumber": "DEMO-SULTENG-0006",
+        "accountHolder": "Sekar Ayuningtyas • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
-        "type": "ewallet",
+        "paymentType": "ewallet",
         "bank": "DANA",
         "logo": "/assets/payment/wallets/dana.svg",
-        "accountNumber": "08XX-XXXX-XXXX",
-        "accountHolder": "Arkan Pradipta — AKUN DEMO",
-        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
-        "demoOnly": true
+        "accountNumber": "08XX-XXXX-0001",
+        "accountHolder": "Arkan Pradipta • AKUN DEMO",
+        "demoOnly": true,
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
-        "type": "ewallet",
+        "paymentType": "ewallet",
         "bank": "GoPay",
         "logo": "/assets/payment/wallets/gopay.svg",
-        "accountNumber": "08XX-XXXX-XXXX",
-        "accountHolder": "Sekar Ayuningtyas — AKUN DEMO",
-        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
-        "demoOnly": true
+        "accountNumber": "08XX-XXXX-0002",
+        "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
+        "demoOnly": true,
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
-        "type": "ewallet",
+        "paymentType": "ewallet",
         "bank": "OVO",
         "logo": "/assets/payment/wallets/ovo.svg",
-        "accountNumber": "08XX-XXXX-XXXX",
-        "accountHolder": "Arkan Pradipta — AKUN DEMO",
-        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
-        "demoOnly": true
+        "accountNumber": "08XX-XXXX-0003",
+        "accountHolder": "Arkan Pradipta • AKUN DEMO",
+        "demoOnly": true,
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
-        "type": "ewallet",
+        "paymentType": "ewallet",
         "bank": "ShopeePay",
         "logo": "/assets/payment/wallets/shopeepay.svg",
-        "accountNumber": "08XX-XXXX-XXXX",
-        "accountHolder": "Sekar Ayuningtyas — AKUN DEMO",
-        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
-        "demoOnly": true
+        "accountNumber": "08XX-XXXX-0004",
+        "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
+        "demoOnly": true,
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       },
       {
-        "type": "qris",
-        "bank": "QRIS",
+        "paymentType": "qris",
+        "bank": "QRIS • Simulasi",
         "logo": "/assets/payment/wallets/qris.svg",
-        "accountNumber": "QRIS-DEMO-TIDAK-AKTIF",
-        "accountHolder": "Omah Aksara — SIMULASI",
-        "note": "Ini hanya logo QRIS. Tidak ada kode QR pembayaran aktif.",
-        "demoOnly": true
+        "accountNumber": "TIDAK ADA KODE BAYAR",
+        "qrCode": "/assets/payment/wallets/qris-demo.svg",
+        "accountHolder": "QRIS Omah Aksara • DEMO",
+        "demoOnly": true,
+        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar."
       }
     ]
   },
