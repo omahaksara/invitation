@@ -14,6 +14,8 @@ Contoh data:
 
 ## Bank
 
+Status sinkronisasi: BCA, BNI, Mandiri, dan BSI sudah tersedia sebagai file lokal. BRI versi 2025 dan Bank Sulteng (PNG sumber resolusi tinggi) sudah masuk daftar unduhan otomatis, tetapi berkasnya belum tersedia di branch ini karena workflow unduh belum dijalankan. Keduanya belum dipakai oleh data demo.
+
 | File lokal | Identitas | Sumber |
 |---|---|---|
 | `banks/bca.svg` | BCA | [Wikimedia Commons — Bank Central Asia.svg](https://commons.wikimedia.org/wiki/File:Bank_Central_Asia.svg), PD-textlogo |
