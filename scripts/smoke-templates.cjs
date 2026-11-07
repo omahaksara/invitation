@@ -104,6 +104,17 @@ for (const slug of activeThemeSlugs) {
     for (const theme of themes) {
       const page = await browser.newPage();
       const pageErrors = [];
+      // Preserve the exact predicate in timeout diagnostics so a shared desktop
+      // failure can be traced to its real interaction rather than guessed.
+      const originalWaitForFunction = page.waitForFunction.bind(page);
+      page.waitForFunction = async (predicate, ...args) => {
+        try {
+          return await originalWaitForFunction(predicate, ...args);
+        } catch (error) {
+          const label = String(predicate).replace(/\\s+/g, " ").slice(0, 220);
+          throw new Error("waitForFunction predicate [" + label + "]: " + (error?.message || error));
+        }
+      };
       page.on("pageerror", error => pageErrors.push(error.message));
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
