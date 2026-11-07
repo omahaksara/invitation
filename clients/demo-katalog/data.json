@@ -112,7 +112,8 @@
         "accountNumber": "DEMO-BCA-0001",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank"
       },
       {
         "paymentType": "bank",
@@ -121,7 +122,8 @@
         "accountNumber": "DEMO-BRI-0002",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank"
       },
       {
         "paymentType": "bank",
@@ -130,7 +132,8 @@
         "accountNumber": "DEMO-BNI-0003",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank"
       },
       {
         "paymentType": "bank",
@@ -139,7 +142,8 @@
         "accountNumber": "DEMO-MANDIRI-0004",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank"
       },
       {
         "paymentType": "bank",
@@ -148,7 +152,8 @@
         "accountNumber": "DEMO-BSI-0005",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank"
       },
       {
         "paymentType": "bank",
@@ -157,7 +162,8 @@
         "accountNumber": "DEMO-SULTENG-0006",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank"
       },
       {
         "paymentType": "ewallet",
@@ -166,7 +172,8 @@
         "accountNumber": "08XX-XXXX-0001",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet"
       },
       {
         "paymentType": "ewallet",
@@ -175,7 +182,8 @@
         "accountNumber": "08XX-XXXX-0002",
         "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet"
       },
       {
         "paymentType": "ewallet",
@@ -184,7 +192,8 @@
         "accountNumber": "08XX-XXXX-0003",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet"
       },
       {
         "paymentType": "ewallet",
@@ -193,7 +202,8 @@
         "accountNumber": "08XX-XXXX-0004",
         "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet"
       },
       {
         "paymentType": "qris",
@@ -203,7 +213,8 @@
         "qrCode": "/assets/payment/wallets/qris-demo.svg",
         "accountHolder": "QRIS Omah Aksara • DEMO",
         "demoOnly": true,
-        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar."
+        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar.",
+        "type": "qris"
       }
     ]
   },
