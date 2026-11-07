@@ -30,7 +30,7 @@ async function fetchWithRetry(url, name) {
   for (let attempt = 0; attempt < 5; attempt += 1) {
     try {
       const response = await fetch(url, {
-        headers: { "User-Agent": "OmahAksara-LocalAssetSync/1.2 (payment logo asset maintenance)" },
+        headers: { "User-Agent": "OmahAksara-LocalAssetSync/1.3 (payment logo asset maintenance)" },
         redirect: "follow"
       });
       if (response.ok) return Buffer.from(await response.arrayBuffer());
