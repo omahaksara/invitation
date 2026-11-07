@@ -4,23 +4,42 @@
   "categories": {
     "frames": [
       "frames/jendela-jawa-arch.svg",
-      "frames/jendela-klasik.svg"
+      "frames/jendela-klasik.svg",
+      "frames/jendela-sunda.svg",
+      "frames/arch-melayu.svg"
     ],
     "ornaments": [
       "ornaments/gunungan-line.svg",
       "ornaments/floral-corner.svg",
       "ornaments/wayang-gunungan.svg",
       "ornaments/floral-divider.svg",
-      "ornaments/keris-motif.svg"
+      "ornaments/keris-motif.svg",
+      "ornaments/mega-mendung.svg",
+      "ornaments/flower-tanjung.svg",
+      "ornaments/leaf-vine.svg",
+      "ornaments/star-crescent.svg"
     ],
     "patterns": [
       "patterns/kawung-repeat.svg",
-      "patterns/parang-repeat.svg"
+      "patterns/parang-repeat.svg",
+      "patterns/tenun-geometric.svg"
     ],
     "wayang": [
       "wayang/anggada.svg",
       "wayang/hanoman.svg",
       "wayang/rama.svg"
+    ],
+    "sharedOrnaments": [
+      "/assets/ornaments/wayang-gunungan.svg",
+      "/assets/ornaments/jendela-jawa.svg",
+      "/assets/ornaments/batik-parang.svg",
+      "/assets/ornaments/floral-divider.svg",
+      "/assets/ornaments/arch-islamic.svg",
+      "/assets/ornaments/frame-corners.svg",
+      "/assets/ornaments/leaf-branch.svg",
+      "/assets/ornaments/jasmine.svg",
+      "/assets/ornaments/ukiran-bali.svg",
+      "/assets/ornaments/geo-islamic.svg"
     ]
   },
   "usage": "Reference with /assets/themes/<relative-path> from theme CSS or data. Check attribution before commercial redistribution."
