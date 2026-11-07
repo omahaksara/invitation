@@ -731,3 +731,13 @@ html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-
   line-height:1;
   font-weight:700;
 }
+
+
+/* Demo/payment metadata — subtle, readable, and theme-neutral. */
+.gift-note {
+  margin: 10px 0 0;
+  font-size: .78rem;
+  line-height: 1.5;
+  opacity: .72;
+  text-align: center;
+}
