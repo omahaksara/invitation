@@ -21,6 +21,7 @@ const files = [
   { name: "dana.png", folder: "wallets", type: "png", url: "https://upload.wikimedia.org/wikipedia/commons/5/52/Dana_logo.png", replace: true },
   { name: "ovo.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg", replace: true },
   { name: "linkaja.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/8/85/LinkAja.svg" },
+  { name: "shopeepay.svg", folder: "wallets", type: "svg", url: "https://shopeepay.co.id/assets/spp-logo-C03WIzdh.svg" },
   { name: "qris.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg" }
 ];
 
