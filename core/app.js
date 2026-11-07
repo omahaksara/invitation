@@ -628,10 +628,22 @@
       const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
       const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
       const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
-      const button = document.createElement("button"); button.type = "button"; button.textContent = item.copyLabel || (item.type === "qris" ? "Salin ID Demo" : item.type === "ewallet" ? "Salin Nomor E-Wallet" : "Salin Nomor Rekening");
-      button.addEventListener("click", () => copyText(item.accountNumber || "", button));
+      const isDemoOnly = item.demoOnly === true;
+      const button = document.createElement("button"); button.type = "button";
+      button.textContent = isDemoOnly ? "Simulasi — tidak untuk transaksi" : (item.copyLabel || (item.paymentType === "qris" ? "Salin ID Demo" : item.paymentType === "ewallet" ? "Salin Nomor E-Wallet" : "Salin Nomor Rekening"));
+      if (isDemoOnly) {
+        button.disabled = true;
+        button.setAttribute("aria-label", "Data simulasi, tidak dapat digunakan untuk transaksi");
+      } else {
+        button.addEventListener("click", () => copyText(item.accountNumber || "", button));
+      }
       card.append(bank, holder, number, button);
-      if (item.note) { const note = document.createElement("p"); note.className = "gift-note"; note.textContent = item.note; card.append(note); }
+      if (item.demoNote || item.note) {
+        const note = document.createElement("p");
+        note.className = "gift-note";
+        note.textContent = item.demoNote || item.note;
+        card.append(note);
+      }
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
       if (qrSrc) {
