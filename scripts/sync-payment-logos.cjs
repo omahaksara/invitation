@@ -56,9 +56,9 @@ const files = [
   {
     name: "bank-sulteng.png",
     type: "png",
-    url: "https://upload.wikimedia.org/wikipedia/commons/d/db/Logo_Bank_Sulteng.png",
-    source: "https://commons.wikimedia.org/wiki/File:Logo_Bank_Sulteng.png",
-    credit: "PT Bank Pembangunan Daerah Sulawesi Tengah; Wikimedia Commons, PD-textlogo",
+    url: "https://newadmin.banksulteng.co.id/media/1787730284_LOGO%20PRODUK%20BANKSULTENG-04.png",
+    source: "https://mail.banksulteng.co.id/tentang-kami/logo",
+    credit: "PT Bank Pembangunan Daerah Sulawesi Tengah; official brand asset",
   },
 ];
 
