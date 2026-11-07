@@ -186,7 +186,7 @@
       {
         "paymentType": "ewallet",
         "bank": "DANA",
-        "logo": "/assets/payment/wallets/dana.svg",
+        "logo": "/assets/payment/wallets/dana.png",
         "accountNumber": "08XX-XXXX-0001",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
