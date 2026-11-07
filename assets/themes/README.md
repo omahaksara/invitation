@@ -4,9 +4,9 @@ Pustaka bersama untuk aset visual tema undangan. Simpan aset di sini agar tema d
 
 ## Struktur
 
-- `frames/`: bingkai, jendela, arch, panel.
-- `ornaments/`: gunungan, floral, divider, corner ornament.
-- `patterns/`: motif berulang seperti kawung dan parang.
+- `frames/`: bingkai, jendela, arch, panel (Jawa, Sunda, Melayu, klasik).
+- `ornaments/`: gunungan, wayang, floral, divider, cloud-wave, botanical, crescent/star, corner ornament.
+- `patterns/`: motif berulang seperti kawung, parang, dan tenun geometris orisinal.
 - `wayang/`: ilustrasi wayang SVG beserta atribusi lisensi.
 
 ## Aturan
@@ -24,3 +24,8 @@ File SVG di `frames/`, `ornaments/`, dan `patterns/` yang diberi label Original 
 
 
 Aset orisinal tambahan: `frames/jendela-klasik.svg`, `ornaments/wayang-gunungan.svg`, `ornaments/floral-divider.svg`, `patterns/parang-repeat.svg`, dan `ornaments/keris-motif.svg`.
+
+## Pustaka dekorasi bersama
+Aset tambahan yang sudah tersedia di `/assets/ornaments/` dapat dipakai tanpa menyalin ke folder tema: gunungan, jendela Jawa, batik parang, floral divider, arch Islami, frame corners, daun, melati, ukiran Bali, dan geometri Islami. Daftar lengkap ada di `/assets/ornaments/manifest.json`.
+
+Total saat ini: 4 bingkai, 9 ornamen tema, 3 pola, 3 ilustrasi wayang berlisensi, ditambah 10 ornamen bersama. Aset ini tidak otomatis ditempel ke tema; pilih sesuai karakter tema agar tidak membuat tampilan penuh dekorasi.
