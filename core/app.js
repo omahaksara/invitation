@@ -680,9 +680,10 @@
         document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+        const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
-        }, 520);
+        }, reducedMotionPreference ? 0 : 520);
         if (audio && hasMusic) {
           try {
             await audio.play();
@@ -1099,11 +1100,12 @@
       const waitingBehindCover = !!element.closest("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page");
       return rect.height > 0 || (waitingBehindCover && (element.children.length > 0 || !!element.textContent.trim()));
     };
+    const getScrollBehavior = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
       window.scrollTo({
         top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12),
-        behavior: "smooth"
+        behavior: getScrollBehavior()
       });
     };
 
@@ -1278,7 +1280,7 @@
         });
         const topButton = makeButton("top", "Ke atas", "Kembali ke bagian atas");
         topButton.addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior: getScrollBehavior() });
           panel.hidden = true;
           moreButton.setAttribute("aria-expanded", "false");
         });
