@@ -788,3 +788,27 @@ html[data-oa-theme] #app .cover-monogram{animation-duration:.5s!important}
     transition-duration:.01ms!important;scroll-behavior:auto!important
   }
 }
+
+/* Reduced-motion override must outrank the performance caps and theme-specific reveal rules above. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-oa-theme] #app,
+  html[data-oa-theme] #app *,
+  html[data-oa-theme] #app *::before,
+  html[data-oa-theme] #app *::after,
+  html[data-oa-theme] #app #cover.is-opening,
+  html[data-oa-theme] #app .cover.is-opening,
+  html[data-oa-theme] #app [class$="-cover"].is-opening,
+  html[data-oa-theme] #app .reveal,
+  html[data-oa-theme] #app .oa-scroll-reveal,
+  html[data-oa-theme] #app [class*="reveal"],
+  html[data-oa-theme] #app .main-content,
+  html[data-oa-theme] #app .cover-monogram {
+    animation-duration: .001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  html[data-oa-theme] { scroll-behavior: auto !important; }
+}
