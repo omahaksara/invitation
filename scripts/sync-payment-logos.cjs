@@ -71,8 +71,8 @@ async function download(item) {
   const bytes = Buffer.from(await response.arrayBuffer());
   if (item.type === "svg") {
     const svg = bytes.toString("utf8");
-    if (!/<svg[\\s>]/i.test(svg)) throw new Error(`${item.name}: response is not SVG`);
-    if (/<script\\b|<foreignObject\\b|\\son[a-z]+\\s*=|href=["']https?:/i.test(svg)) {
+    if (!/<svg[\s>]/i.test(svg)) throw new Error(`${item.name}: response is not SVG`);
+    if (/<script\b|<foreignObject\b|\son[a-z]+\s*=|href=["']https?:/i.test(svg)) {
       throw new Error(`${item.name}: unsafe SVG content rejected`);
     }
   } else if (item.type === "png") {
