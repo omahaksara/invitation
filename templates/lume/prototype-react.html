@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wedding of Alfia & Fikri - Omah Aksara</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- React & ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel CDN for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --taupe: #b9a99a;
+      --taupe-dark: #a69687;
+      --beige: #f6f1eb;
+      --beige-deep: #ede6de;
+      --brown: #4a3728;
+      --cream: #fffcf8;
+      --cream-card: #fffbf6;
+      --line: #e6ddd3;
+      --surface: #fffcf8;
+      --muted: #8c7b6e;
+    }
+
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .script {
+      font-family: 'Great Vibes', 'Dancing Script', cursive;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--surface);
+      color: var(--brown);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ornament-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+    }
+
+    .ornament-dot {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--taupe);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo } = React;
+
+    // --- DATA MEMPELAI & DOKUMENTASI ---
+    const WEDDING_DATA = {
+      bride: {
+        name: "Alfia",
+        full: "Alfia Putri",
+        child: "Putri Pertama",
+        parents: "Bapak H. Ahmad & Ibu Hj. Siti Aminah",
+        initial: "A"
+      },
+      groom: {
+        name: "Fikri",
+        full: "Muhammad Fikri",
+        child: "Putra Kedua",
+        parents: "Bapak H. Usman & Ibu Hj. Fatimah",
+        initial: "F"
+      },
+      date: new Date("2026-05-06T08:00:00+07:00"),
+      akad: {
+        dateLabel: "Rabu, 06 Mei 2026",
+        time: "08:00 WIB - Selesai",
+        place: "Masjid Al-Ikhlas",
+        address: "Jl. Melati No. 12, Kebayoran Baru, Jakarta Selatan",
+        maps: "https://maps.google.com/?q=Masjid+Al+Ikhlas+Jakarta"
+      },
+      resepsi: {
+        dateLabel: "Rabu, 06 Mei 2026",
+        time: "11:00 WIB - Selesai",
+        place: "The Manor Andara",
+        address: "Jl. Andara Raya No. 88, Cilandak, Jakarta Selatan",
+        maps: "https://maps.google.com/?q=The+Manor+Andara"
+      },
+      gift: {
+        bank: "BCA",
+        number: "1234 5678 9012",
+        name: "Alfia Putri",
+        address: "Jl. Kemang Timur No. 23, Jakarta Selatan 12730"
+      }
+    };
+
+    const STORIES = [
+      { year: "2012", title: "Pertama Bertemu", desc: "Berawal dari bangku SMP, kami dipertemukan sebagai teman sekelas yang duduk bersebelahan. Tak ada yang menyangka pertemuan sederhana itu menjadi awal cerita panjang.", color: "#F6F1EB" },
+      { year: "2014", title: "Sahabat Sejati", desc: "Lulus SMP, kami melanjutkan ke SMA yang berbeda. Namun persahabatan kami tetap terjaga lewat surat dan pertemuan di perpustakaan kota setiap akhir pekan.", color: "#EDE6DE" },
+      { year: "2022", title: "Jatuh Cinta Kembali", desc: "Setelah 8 tahun berpisah kota untuk kuliah, takdir mempertemukan kami kembali di Jakarta. Obrolan yang sempat tertunda, akhirnya berlanjut menjadi rasa.", color: "#F6F1EB" },
+      { year: "Mei 2023", title: "Lamaran", desc: "Di bawah langit senja Pantai Sanur, Fikri melamar dengan cincin yang ia simpan sejak 6 bulan. Tanpa ragu, Alfia menjawab 'Ya' dengan air mata bahagia.", color: "#EDE6DE" }
+    ];
+
+    const GALLERY = Array.from({ length: 9 }).map((_, i) => ({
+      id: i,
+      label: `Moment ${i + 1}`,
+      color: i % 3 === 0 ? "#EDE6DE" : i % 3 === 1 ? "#F6F1EB" : "#FFFBF6"
+    }));
+
+    // --- HELPER HOOKS ---
+    function useGuestName() {
+      const [name, setName] = useState("Nama Tamu");
+      useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const guest = params.get("to") || params.get("nama") || params.get("name") || params.get("guest");
+        if (guest) setName(decodeURIComponent(guest));
+      }, []);
+      return name;
+    }
+
+    function useCountdown(targetDate) {
+      const [timeLeft, setTimeLeft] = useState(() => targetDate.getTime() - Date.now());
+      useEffect(() => {
+        const interval = setInterval(() => setTimeLeft(targetDate.getTime() - Date.now()), 1000);
+        return () => clearInterval(interval);
+      }, [targetDate]);
+
+      const r = Math.max(0, timeLeft);
+      return {
+        days: Math.floor(r / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((r / (1000 * 60 * 60)) % 24),
+        mins: Math.floor((r / (1000 * 60)) % 60),
+        secs: Math.floor((r / 1000) % 60)
+      };
+    }
+
+    function useScrollReveal() {
+      const refs = useRef(new Map());
+      useEffect(() => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+
+        refs.current.forEach((el) => observer.observe(el));
+        return () => observer.disconnect();
+      }, []);
+
+      return (key) => (el) => {
+        if (el) refs.current.set(key, el);
+        else refs.current.delete(key);
+      };
+    }
+
+    // --- KOMPONEN UTAMA ---
+    function App() {
+      const guestName = useGuestName();
+      const countdown = useCountdown(WEDDING_DATA.date);
+      const setRevealRef = useScrollReveal();
+
+      const [isCoverOpen, setIsCoverOpen] = useState(true);
+      const [isClosingCover, setIsClosingCover] = useState(false);
+      const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+      const [activeModalImage, setActiveModalImage] = useState(null);
+      const [copiedText, setCopiedText] = useState(null);
+
+      const [wishes, setWishes] = useState([
+        { id: "1", name: "Sahabat SMP", message: "Akhirnyaa! Dari jaman seragam putih biru sampai pelaminan. Bahagia selalu Alfia & Fikri!", attend: "Hadir", time: "2 jam lalu" },
+        { id: "2", name: "Keluarga Andara", message: "Barakallah, semoga menjadi keluarga sakinah mawaddah warahmah. Dilancarkan sampai hari H!", attend: "Hadir", time: "5 jam lalu" },
+        { id: "3", name: "Rekan Kerja", message: "Selamat menempuh hidup baru! Turut berbahagia untuk kalian berdua.", attend: "Ragu", time: "kemarin" }
+      ]);
+
+      const [formData, setFormData] = useState({ name: "", message: "", attend: "Hadir" });
+
+      const audioCtxRef = useRef(null);
+      const gainNodeRef = useRef(null);
+      const oscillatorsRef = useRef([]);
+
+      // Inisialisasi Audio Synthesizer sederhana
+      const startAudio = async () => {
+        setIsPlayingAudio(true);
+        try {
+          if (!audioCtxRef.current) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const ctx = new AudioContext();
+            audioCtxRef.current = ctx;
+
+            const gain = ctx.createGain();
+            gain.gain.value = 0;
+            gain.connect(ctx.destination);
+            gainNodeRef.current = gain;
+
+            const osc1 = ctx.createOscillator();
+            osc1.type = "sine";
+            osc1.frequency.value = 220;
+
+            const osc2 = ctx.createOscillator();
+            osc2.type = "triangle";
+            osc2.frequency.value = 329.63;
+
+            osc1.connect(gain);
+            osc2.connect(gain);
+            osc1.start();
+            osc2.start();
+
+            oscillatorsRef.current = [osc1, osc2];
+          }
+
+          if (audioCtxRef.current.state === "suspended") {
+            await audioCtxRef.current.resume();
+          }
+
+          if (gainNodeRef.current && audioCtxRef.current) {
+            gainNodeRef.current.gain.linearRampToValueAtTime(0.06, audioCtxRef.current.currentTime + 1.2);
+          }
+        } catch (e) {
+          console.error("Audio Web API Error", e);
+        }
+      };
+
+      const stopAudio = () => {
+        setIsPlayingAudio(false);
+        try {
+          if (gainNodeRef.current && audioCtxRef.current) {
+            gainNodeRef.current.gain.linearRampToValueAtTime(0, audioCtxRef.current.currentTime + 0.6);
+          }
+        } catch (e) {}
+      };
+
+      const handleOpenInvitation = () => {
+        setIsClosingCover(true);
+        startAudio();
+        setTimeout(() => {
+          setIsCoverOpen(false);
+          document.getElementById("countdown")?.scrollIntoView({ behavior: "smooth" });
+        }, 800);
+      };
+
+      const copyToClipboard = (text, label) => {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          setCopiedText(label);
+          setTimeout(() => setCopiedText(null), 2000);
+        } catch (e) {}
+        document.body.removeChild(textarea);
+      };
+
+      const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name.trim() || !formData.message.trim()) return;
+
+        const newWish = {
+          id: Date.now().toString(),
+          name: formData.name.trim(),
+          message: formData.message.trim(),
+          attend: formData.attend,
+          time: "baru saja"
+        };
+
+        setWishes((prev) => [newWish, ...prev]);
+        setFormData({ name: "", message: "", attend: "Hadir" });
+      };
+
+      const scrollToSection = (id) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+
+      const formattedDate = useMemo(() => {
+        return WEDDING_DATA.date.toLocaleDateString("id-ID", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+      }, []);
+
+      return (
+        <div className="min-h-screen w-full overflow-x-clip relative">
+          {/* TOAST SALIN TEKS */}
+          {copiedText && (
+            <div className="fixed left-1/2 -translate-x-1/2 top-20 z-50 bg-[var(--brown)] text-white text-[12px] px-4 py-2 rounded-full shadow-lg transition-all">
+              {copiedText} tersalin
+            </div>
+          )}
+
+          {/* AUDIO BUTTON */}
+          <div className="fixed right-4 top-4 z-40 flex flex-col gap-3">
+            <button
+              onClick={() => (isPlayingAudio ? stopAudio() : startAudio())}
+              className="w-11 h-11 rounded-full bg-white border border-[var(--line)] shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex items-center justify-center hover:scale-105 transition-transform"
+              aria-label="Toggle Audio"
+            >
+              {isPlayingAudio ? (
+                <i data-lucide="music" className="w-4 h-4 text-[var(--brown)]"></i>
+              ) : (
+                <i data-lucide="volume-x" className="w-4 h-4 text-[var(--muted)]"></i>
+              )}
+            </button>
+          </div>
+
+          {/* COVER PEMBUKA */}
+          {isCoverOpen && (
+            <div
+              className={`fixed inset-0 z-[100] flex flex-col items-center justify-between px-6 py-10 transition-all duration-700 ${
+                isClosingCover ? "opacity-0 pointer-events-none -translate-y-[20px]" : "opacity-100"
+              }`}
+              style={{ background: "var(--cream)", border: "12px solid var(--beige)" }}
+            >
+              <div className="w-full flex justify-center pt-6">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="ornament-dot">
+                    <i data-lucide="sparkles" className="w-3.5 h-3.5 text-[var(--taupe)]"></i>
+                  </div>
+                  <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">The Wedding of</p>
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col items-center justify-center w-full max-w-[380px] text-center">
+                <div className="w-full border border-[var(--line)] rounded-[32px] bg-white/70 backdrop-blur p-10 py-14 shadow-[0_20px_60px_rgba(74,55,40,0.06)]">
+                  <h1 className="script text-[56px] leading-[0.9] text-[var(--brown)]">
+                    <span className="block">{WEDDING_DATA.bride.name}</span>
+                    <span className="block text-[40px] my-2 text-[var(--taupe)]" style={{ fontFamily: "Great Vibes" }}>&</span>
+                    <span className="block">{WEDDING_DATA.groom.name}</span>
+                  </h1>
+
+                  <div className="mt-8 ornament-line"></div>
+
+                  <p className="mt-6 text-[13px] leading-relaxed text-[var(--muted)]">
+                    Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami
+                  </p>
+
+                  <div className="mt-10 bg-[var(--beige)] rounded-2xl py-5 px-4 border border-[var(--line)]">
+                    <p className="text-[11px] tracking-[0.2em] uppercase text-[var(--taupe)]">Kepada Yth.</p>
+                    <p className="mt-2 font-medium text-[16px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>
+                      {guestName}
+                    </p>
+                    <p className="text-[11px] mt-1 text-[var(--muted)]">di Tempat</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full flex flex-col items-center gap-4 pb-2">
+                <button
+                  onClick={handleOpenInvitation}
+                  className="group relative bg-[var(--brown)] text-white rounded-full px-8 py-3.5 text-[13px] tracking-[0.2em] uppercase flex items-center gap-3 hover:bg-[#3a2b1e] transition-all shadow-[0_10px_30px_rgba(74,55,40,0.25)]"
+                >
+                  <span>Buka Undangan</span>
+                  <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                    <i data-lucide="chevron-right" className="w-4 h-4"></i>
+                  </span>
+                </button>
+                <p className="text-[10px] tracking-[0.2em] uppercase opacity-60 text-[var(--muted)]">
+                  Mohon maaf jika ada kesalahan penulisan nama/gelar
+                </p>
+              </div>
+
+              <div
+                className="pointer-events-none absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: "radial-gradient(var(--brown) 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+              ></div>
+            </div>
+          )}
+
+          {/* HALAMAN UTAMA UNDANGAN */}
+          <main className="w-full max-w-[980px] mx-auto">
+            {/* HERO SECTION */}
+            <section id="home" className="px-6 md:px-10 pt-16 pb-10 text-center">
+              <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--taupe)]">We Are Getting Married</p>
+              <h2 ref={setRevealRef("hero")} className="reveal script text-[64px] md:text-[84px] leading-[0.9] mt-6 text-[var(--brown)]">
+                {WEDDING_DATA.bride.name} & {WEDDING_DATA.groom.name}
+              </h2>
+              <p className="mt-4 text-[14px] text-[var(--muted)]">{formattedDate} • Jakarta Selatan</p>
+              <div className="mt-8 flex justify-center">
+                <div className="w-[1px] h-16 bg-[var(--line)]"></div>
+              </div>
+            </section>
+
+            {/* COUNTDOWN SECTION */}
+            <section id="countdown" className="px-6 md:px-10">
+              <div ref={setRevealRef("countdown")} className="reveal bg-white border border-[var(--line)] rounded-[24px] p-6 md:p-8 shadow-[0_12px_40px_rgba(74,55,40,0.05)]">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-[14px] tracking-[0.25em] uppercase text-[var(--taupe)]">Menuju Hari Bahagia</h3>
+                  <i data-lucide="heart" className="w-4 h-4 text-[var(--taupe)]"></i>
+                </div>
+                <div className="grid grid-cols-4 gap-3">
+                  {[
+                    { v: countdown.days, l: "Hari" },
+                    { v: countdown.hours, l: "Jam" },
+                    { v: countdown.mins, l: "Menit" },
+                    { v: countdown.secs, l: "Detik" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="bg-[var(--beige)] border border-[var(--line)] rounded-[16px] py-5 text-center">
+                      <div className="text-[28px] md:text-[32px] font-semibold leading-none text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>
+                        {String(item.v).padStart(2, "0")}
+                      </div>
+                      <div className="mt-2 text-[11px] tracking-[0.18em] uppercase text-[var(--muted)]">{item.l}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => scrollToSection("event")}
+                    className="text-[12px] tracking-[0.2em] uppercase border-b border-[var(--brown)] pb-1 hover:opacity-70 transition-opacity text-[var(--brown)]"
+                  >
+                    Simpan Tanggal
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* KUTIPAN AL-QURAN */}
+            <section className="px-6 md:px-10 mt-12">
+              <div ref={setRevealRef("ayat")} className="reveal bg-[var(--cream-card)] border border-[var(--line)] rounded-[28px] p-8 md:p-12 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[1px] bg-[var(--taupe)]"></div>
+                <p className="text-[22px] md:text-[26px] leading-[1.6] mt-2 text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>
+                  وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا
+                </p>
+                <p className="mt-6 text-[13px] leading-[1.9] max-w-[560px] mx-auto text-[var(--muted)]">
+                  “Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.”
+                </p>
+                <div className="mt-6 inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-[var(--line)]">
+                  <span className="text-[11px] tracking-[0.2em] uppercase text-[var(--taupe)]">QS. Ar-Rum: 21</span>
+                </div>
+              </div>
+            </section>
+
+            {/* SALAM MEMPELAI */}
+            <section className="px-6 md:px-10 mt-16 text-center">
+              <div ref={setRevealRef("salam")} className="reveal max-w-[640px] mx-auto">
+                <p className="script text-[36px] text-[var(--brown)]">Assalamu’alaikum Wr. Wb.</p>
+                <div className="mt-6 ornament-line max-w-[120px] mx-auto"></div>
+                <p className="mt-6 text-[13.5px] leading-[1.9] text-center text-[var(--muted)]">
+                  Dengan memohon rahmat dan ridho Allah Subhanahu Wa Ta’ala, insyaAllah kami akan menyelenggarakan acara pernikahan putra-putri kami. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.
+                </p>
+              </div>
+            </section>
+
+            {/* SECTION PROFIL MEMPELAI */}
+            <section id="mempelai" className="px-6 md:px-10 mt-20">
+              <div className="text-center mb-10">
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">The Beloved</p>
+                <h2 className="mt-3 text-[32px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Bride & Groom</h2>
+              </div>
+
+              <div ref={setRevealRef("couple")} className="reveal grid md:grid-cols-[1fr_auto_1fr] gap-6 md:gap-0 items-center">
+                {/* MEMPELAI WANITA */}
+                <div className="bg-white border border-[var(--line)] rounded-[28px] p-8 text-center">
+                  <div className="mx-auto w-[132px] h-[132px] rounded-full bg-[var(--beige)] border border-[var(--line)] flex items-center justify-center relative">
+                    <span className="script text-[56px] text-[var(--brown)]">{WEDDING_DATA.bride.initial}</span>
+                    <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[var(--taupe)] text-white flex items-center justify-center text-[10px] tracking-widest">
+                      Bride
+                    </div>
+                  </div>
+                  <h3 className="mt-6 script text-[38px] leading-none text-[var(--brown)]">{WEDDING_DATA.bride.full}</h3>
+                  <p className="mt-3 text-[12px] tracking-[0.15em] uppercase text-[var(--taupe)]">{WEDDING_DATA.bride.child}</p>
+                  <div className="mt-4 ornament-line"></div>
+                  <p className="mt-4 text-[12.5px] leading-[1.6] text-[var(--muted)]">{WEDDING_DATA.bride.parents}</p>
+                </div>
+
+                <div className="flex justify-center md:px-6">
+                  <div className="w-16 h-16 rounded-full bg-[var(--brown)] text-white flex items-center justify-center shadow-[0_12px_30px_rgba(74,55,40,0.2)]">
+                    <span className="script text-[32px] -mt-1">&</span>
+                  </div>
+                </div>
+
+                {/* MEMPELAI PRIA */}
+                <div className="bg-white border border-[var(--line)] rounded-[28px] p-8 text-center">
+                  <div className="mx-auto w-[132px] h-[132px] rounded-full bg-[var(--beige)] border border-[var(--line)] flex items-center justify-center relative">
+                    <span className="script text-[56px] text-[var(--brown)]">{WEDDING_DATA.groom.initial}</span>
+                    <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[var(--brown)] text-white flex items-center justify-center text-[10px] tracking-widest">
+                      Groom
+                    </div>
+                  </div>
+                  <h3 className="mt-6 script text-[38px] leading-none text-[var(--brown)]">{WEDDING_DATA.groom.full}</h3>
+                  <p className="mt-3 text-[12px] tracking-[0.15em] uppercase text-[var(--taupe)]">{WEDDING_DATA.groom.child}</p>
+                  <div className="mt-4 ornament-line"></div>
+                  <p className="mt-4 text-[12.5px] leading-[1.6] text-[var(--muted)]">{WEDDING_DATA.groom.parents}</p>
+                </div>
+              </div>
+            </section>
+
+            {/* SECTION RANGKAIAN ACARA */}
+            <section id="event" className="px-6 md:px-10 mt-20">
+              <div className="text-center mb-10">
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">Save The Date</p>
+                <h2 className="mt-3 text-[32px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Wedding Event</h2>
+              </div>
+
+              <div ref={setRevealRef("event")} className="reveal grid md:grid-cols-2 gap-5">
+                {/* AKAD NIKAH */}
+                <div className="bg-[var(--brown)] text-white rounded-[28px] p-8 relative overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] tracking-[0.3em] uppercase opacity-70">Akad Nikah</p>
+                    <i data-lucide="calendar-days" className="w-4 h-4 opacity-60"></i>
+                  </div>
+                  <h3 className="mt-6 text-[24px] leading-tight" style={{ fontFamily: "Playfair Display" }}>Ijab Qabul</h3>
+                  <div className="mt-6 space-y-4 text-[13px] opacity-90 leading-relaxed">
+                    <div className="flex gap-3"><span className="opacity-60">Tanggal:</span><span>{WEDDING_DATA.akad.dateLabel}</span></div>
+                    <div className="flex gap-3"><span className="opacity-60">Waktu:</span><span>{WEDDING_DATA.akad.time}</span></div>
+                    <div className="flex gap-3"><span className="opacity-60">Tempat:</span><span>{WEDDING_DATA.akad.place}</span></div>
+                    <p className="text-[12px] opacity-60 pt-2 border-t border-white/15">{WEDDING_DATA.akad.address}</p>
+                  </div>
+                  <a
+                    href={WEDDING_DATA.akad.maps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-7 inline-flex items-center gap-2 bg-white text-[var(--brown)] rounded-full px-5 py-2.5 text-[12px] tracking-[0.15em] uppercase hover:bg-[var(--beige)] transition-colors"
+                  >
+                    <i data-lucide="map-pin" className="w-3.5 h-3.5"></i> Lihat Peta
+                  </a>
+                </div>
+
+                {/* RESEPSI */}
+                <div className="bg-white border border-[var(--line)] rounded-[28px] p-8 relative overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] tracking-[0.3em] uppercase text-[var(--taupe)]">Resepsi</p>
+                    <div className="w-8 h-8 rounded-full bg-[var(--beige)] flex items-center justify-center">
+                      <i data-lucide="heart" className="w-3.5 h-3.5 text-[var(--taupe)]"></i>
+                    </div>
+                  </div>
+                  <h3 className="mt-6 text-[24px] leading-tight text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Tasyakuran</h3>
+                  <div className="mt-6 space-y-4 text-[13px] leading-relaxed text-[var(--muted)]">
+                    <div className="flex gap-3"><span className="opacity-70">Tanggal:</span><span className="text-[var(--brown)]">{WEDDING_DATA.resepsi.dateLabel}</span></div>
+                    <div className="flex gap-3"><span className="opacity-70">Waktu:</span><span className="text-[var(--brown)]">{WEDDING_DATA.resepsi.time}</span></div>
+                    <div className="flex gap-3"><span className="opacity-70">Tempat:</span><span className="text-[var(--brown)]">{WEDDING_DATA.resepsi.place}</span></div>
+                    <p className="text-[12px] pt-2 border-t border-[var(--line)]">{WEDDING_DATA.resepsi.address}</p>
+                  </div>
+                  <a
+                    href={WEDDING_DATA.resepsi.maps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-7 inline-flex items-center gap-2 bg-[var(--brown)] text-white rounded-full px-5 py-2.5 text-[12px] tracking-[0.15em] uppercase hover:bg-[#3a2b1e] transition-colors"
+                  >
+                    <i data-lucide="map-pin" className="w-3.5 h-3.5"></i> Lihat Peta
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            {/* LOVE STORY */}
+            <section className="px-6 md:px-10 mt-20">
+              <div className="text-center mb-12">
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">Love Journey</p>
+                <h2 className="mt-3 text-[32px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Our Story</h2>
+              </div>
+
+              <div ref={setRevealRef("story")} className="reveal relative max-w-[720px] mx-auto">
+                <div className="absolute left-[18px] md:left-1/2 top-0 bottom-0 w-[1px] bg-[var(--line)] md:-translate-x-1/2"></div>
+                <div className="space-y-12">
+                  {STORIES.map((item, index) => (
+                    <div key={index} className={`relative flex gap-6 md:gap-0 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-start`}>
+                      <div className={`flex-1 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
+                        <div className="bg-white border border-[var(--line)] rounded-[20px] p-6 ml-12 md:ml-0">
+                          <div className={`flex items-center gap-3 ${index % 2 === 0 ? "md:justify-end" : "justify-start"}`}>
+                            <span className="text-[11px] tracking-[0.3em] uppercase px-3 py-1 rounded-full bg-[var(--beige)] border border-[var(--line)] text-[var(--taupe)]">
+                              {item.year}
+                            </span>
+                          </div>
+                          <h4 className="mt-4 text-[18px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>{item.title}</h4>
+                          <p className="mt-3 text-[12.5px] leading-[1.8] text-[var(--muted)]">{item.desc}</p>
+                          <div className="mt-4 w-full h-[92px] rounded-[14px] border border-[var(--line)] flex items-center justify-center" style={{ background: item.color }}>
+                            <span className="script text-[22px] opacity-60 text-[var(--brown)]">{item.year} Memory</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="absolute left-0 md:left-1/2 top-2 w-[36px] h-[36px] rounded-full bg-white border border-[var(--taupe)] flex items-center justify-center md:-translate-x-1/2 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                        <span className="w-2 h-2 rounded-full bg-[var(--taupe)]"></span>
+                      </div>
+                      <div className="hidden md:block flex-1"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* GALERI FOTO */}
+            <section id="gallery" className="px-6 md:px-10 mt-20">
+              <div className="text-center mb-10">
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">Captured Moments</p>
+                <h2 className="mt-3 text-[32px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Our Moment</h2>
+                <p className="mt-3 text-[12px] text-[var(--muted)]">Setiap detik bersamamu adalah cerita indah</p>
+              </div>
+
+              <div ref={setRevealRef("gallery")} className="reveal grid grid-cols-3 gap-2 md:gap-3">
+                {GALLERY.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveModalImage(item.id)}
+                    className="group relative aspect-[4/5] rounded-[18px] overflow-hidden border border-[var(--line)] bg-white text-left hover:shadow-[0_12px_30px_rgba(74,55,40,0.08)] transition-all"
+                  >
+                    <div className="absolute inset-0" style={{ background: item.color }}></div>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
+                      <div className="w-10 h-10 rounded-full bg-white/80 border border-[var(--line)] flex items-center justify-center">
+                        <i data-lucide="images" className="w-4 h-4 text-[var(--taupe)]"></i>
+                      </div>
+                      <span className="mt-3 text-[10px] tracking-[0.2em] uppercase text-[var(--muted)]">{item.label}</span>
+                    </div>
+                    <div className="absolute inset-0 bg-[var(--brown)]/0 group-hover:bg-[var(--brown)]/10 transition-colors"></div>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* WEDDING GIFT / AMPLOP DIGITAL */}
+            <section className="px-6 md:px-10 mt-20">
+              <div ref={setRevealRef("gift")} className="reveal bg-white border border-[var(--line)] rounded-[28px] p-8 md:p-10">
+                <div className="text-center">
+                  <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">Wedding Gift</p>
+                  <h2 className="mt-3 text-[28px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Tanda Kasih</h2>
+                  <p className="mt-3 text-[12.5px] leading-[1.7] max-w-[480px] mx-auto text-[var(--muted)]">
+                    Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.
+                  </p>
+                </div>
+
+                <div className="mt-8 grid md:grid-cols-2 gap-4">
+                  {/* REKENING BANK */}
+                  <div className="bg-[var(--beige)] border border-[var(--line)] rounded-[20px] p-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-white border border-[var(--line)] flex items-center justify-center text-[11px] font-semibold text-[var(--brown)]">
+                          BCA
+                        </div>
+                        <div>
+                          <p className="text-[12px] font-medium text-[var(--brown)]">{WEDDING_DATA.gift.bank} - {WEDDING_DATA.gift.name}</p>
+                          <p className="text-[11px] text-[var(--muted)]">Tabungan</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-5 bg-white rounded-[14px] border border-[var(--line)] px-4 py-3 flex items-center justify-between">
+                      <span className="text-[15px] tracking-[0.08em] font-medium text-[var(--brown)]">{WEDDING_DATA.gift.number}</span>
+                      <button
+                        onClick={() => copyToClipboard(WEDDING_DATA.gift.number.replace(/\s/g, ""), "No. Rekening")}
+                        className="w-8 h-8 rounded-full bg-[var(--brown)] text-white flex items-center justify-center hover:bg-[#3a2b1e] transition-colors"
+                      >
+                        <i data-lucide="copy" className="w-3.5 h-3.5"></i>
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(WEDDING_DATA.gift.number.replace(/\s/g, ""), "No. Rekening")}
+                      className="mt-3 w-full bg-white border border-[var(--line)] rounded-full py-2.5 text-[12px] tracking-[0.15em] uppercase hover:bg-[var(--beige)] transition-colors text-[var(--brown)]"
+                    >
+                      Salin Rekening
+                    </button>
+                  </div>
+
+                  {/* HADIAH FISIK */}
+                  <div className="bg-[var(--cream-card)] border border-[var(--line)] rounded-[20px] p-6">
+                    <p className="text-[11px] tracking-[0.25em] uppercase text-[var(--taupe)]">Kirim Hadiah Fisik</p>
+                    <p className="mt-3 text-[13px] leading-[1.7] text-[var(--brown)]">{WEDDING_DATA.gift.address}</p>
+                    <div className="mt-5 flex gap-2">
+                      <div className="flex-1 bg-white border border-[var(--line)] rounded-[12px] px-3 py-2.5 text-[11px] leading-[1.5] text-[var(--muted)]">
+                        a.n. Alfia & Fikri
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(WEDDING_DATA.gift.address, "Alamat")}
+                        className="px-4 rounded-full bg-[var(--brown)] text-white text-[11px] tracking-[0.15em] uppercase flex items-center gap-2 hover:bg-[#3a2b1e] transition-colors"
+                      >
+                        <i data-lucide="copy" className="w-3 h-3"></i> Salin
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* FORM UCAPAN & DOA */}
+            <section id="ucapan" className="px-6 md:px-10 mt-20">
+              <div className="text-center mb-8">
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[var(--taupe)]">Best Wishes</p>
+                <h2 className="mt-3 text-[32px] text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>Ucapan & Doa</h2>
+              </div>
+
+              <div ref={setRevealRef("wishes")} className="reveal grid md:grid-cols-[1.1fr_0.9fr] gap-6">
+                {/* FORM INPUT */}
+                <div className="bg-white border border-[var(--line)] rounded-[24px] p-6 md:p-7">
+                  <h3 className="text-[15px] font-medium text-[var(--brown)]">Kirim Ucapan</h3>
+                  <form onSubmit={handleFormSubmit} className="mt-5 space-y-4">
+                    <div>
+                      <label className="text-[11px] tracking-[0.15em] uppercase text-[var(--muted)]">Nama</label>
+                      <input
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Nama Anda"
+                        className="mt-2 w-full bg-[var(--beige)] border border-[var(--line)] rounded-[12px] px-4 py-3 text-[13px] outline-none focus:border-[var(--taupe)] focus:bg-white transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] tracking-[0.15em] uppercase text-[var(--muted)]">Ucapan</label>
+                      <textarea
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        placeholder="Tulis ucapan dan doa untuk kedua mempelai..."
+                        rows={4}
+                        className="mt-2 w-full bg-[var(--beige)] border border-[var(--line)] rounded-[12px] px-4 py-3 text-[13px] outline-none focus:border-[var(--taupe)] focus:bg-white transition-colors resize-none"
+                      ></textarea>
+                    </div>
+                    <div>
+                      <label className="text-[11px] tracking-[0.15em] uppercase text-[var(--muted)]">Konfirmasi Kehadiran</label>
+                      <div className="mt-2 grid grid-cols-3 gap-2">
+                        {["Hadir", "Tidak Hadir", "Ragu"].map((status) => (
+                          <button
+                            type="button"
+                            key={status}
+                            onClick={() => setFormData({ ...formData, attend: status })}
+                            className={`py-2.5 rounded-full text-[12px] border transition-all ${
+                              formData.attend === status
+                                ? "bg-[var(--brown)] text-white border-[var(--brown)]"
+                                : "bg-white border-[var(--line)] text-[var(--muted)] hover:border-[var(--taupe)]"
+                            }`}
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full bg-[var(--brown)] text-white rounded-full py-3.5 text-[12px] tracking-[0.2em] uppercase hover:bg-[#3a2b1e] transition-colors flex items-center justify-center gap-2"
+                    >
+                      <i data-lucide="message-circle-heart" className="w-4 h-4"></i> Kirim Ucapan
+                    </button>
+                  </form>
+                </div>
+
+                {/* DAFTAR UCAPAN */}
+                <div className="bg-[var(--beige)] border border-[var(--line)] rounded-[24px] p-4 md:p-5 h-[520px] overflow-hidden flex flex-col">
+                  <div className="flex items-center justify-between px-2 pb-3">
+                    <p className="text-[12px] font-medium text-[var(--brown)]">{wishes.length} Ucapan</p>
+                    <div className="flex items-center gap-1.5 text-[10px] px-2.5 py-1 rounded-full bg-white border border-[var(--line)] text-[var(--muted)]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Live preview
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
+                    {wishes.map((w) => (
+                      <div key={w.id} className="bg-white border border-[var(--line)] rounded-[16px] p-4">
+                        <div className="flex items-center justify-between">
+                          <p className="text-[13px] font-medium text-[var(--brown)]" style={{ fontFamily: "Playfair Display" }}>{w.name}</p>
+                          <span
+                            className={`text-[10px] px-2.5 py-1 rounded-full border ${
+                              w.attend === "Hadir"
+                                ? "bg-green-50 border-green-200 text-green-700"
+                                : w.attend === "Tidak Hadir"
+                                ? "bg-red-50 border-red-200 text-red-600"
+                                : "bg-amber-50 border-amber-200 text-amber-700"
+                            }`}
+                          >
+                            {w.attend}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-[12.5px] leading-[1.6] text-[var(--muted)]">"{w.message}"</p>
+                        <p className="mt-3 text-[10px] text-[var(--taupe)]">{w.time}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* FOOTER */}
+            <section className="px-6 md:px-10 mt-20 mb-28">
+              <div ref={setRevealRef("thanks")} className="reveal text-center bg-[var(--brown)] rounded-[32px] p-10 md:p-16 relative overflow-hidden">
+                <p className="script text-[42px] text-white/90">Terima Kasih</p>
+                <h2 className="mt-4 text-[22px] leading-[1.4] max-w-[560px] mx-auto text-white/80" style={{ fontFamily: "Playfair Display" }}>
+                  Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
+                </h2>
+                <div className="mt-8 ornament-line opacity-30"></div>
+                <p className="mt-8 text-[13px] tracking-[0.2em] uppercase text-white/60">Wassalamu’alaikum Wr. Wb.</p>
+                <p className="mt-10 script text-[44px] text-white">{WEDDING_DATA.bride.name} & {WEDDING_DATA.groom.name}</p>
+              </div>
+
+              <footer className="mt-10 text-center pb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[var(--line)] text-[11px] text-[var(--muted)]">
+                  <i data-lucide="heart" className="w-3 h-3 text-[var(--taupe)]"></i> Made with love — Serenade Taupe
+                </div>
+                <p className="mt-4 text-[10px] tracking-[0.2em] uppercase opacity-60 text-[var(--muted)]">
+                  © 2026 Alfia & Fikri • Digital Invitation
+                </p>
+              </footer>
+            </section>
+          </main>
+
+          {/* BOTTOM NAVIGATION BAR */}
+          <nav className="fixed bottom-0 left-0 right-0 z-30 flex justify-center pointer-events-none">
+            <div className="pointer-events-auto mb-4 mx-4 bg-white/95 backdrop-blur-xl border border-[var(--line)] rounded-full shadow-[0_16px_40px_rgba(74,55,40,0.12)] px-2 py-2 flex items-center gap-1">
+              {[
+                { id: "home", label: "Home", icon: "house" },
+                { id: "mempelai", label: "Mempelai", icon: "users" },
+                { id: "event", label: "Acara", icon: "calendar-days" },
+                { id: "gallery", label: "Gallery", icon: "images" },
+                { id: "ucapan", label: "Ucapan", icon: "message-circle-heart" }
+              ].map((nav) => (
+                <button
+                  key={nav.id}
+                  onClick={() => scrollToSection(nav.id)}
+                  className="flex flex-col md:flex-row items-center gap-1 md:gap-1.5 px-3.5 md:px-4 py-2 rounded-full hover:bg-[var(--beige)] transition-colors group"
+                >
+                  <i data-lucide={nav.icon} className="w-4 h-4 text-[var(--muted)] group-hover:text-[var(--brown)] transition-colors"></i>
+                  <span className="text-[10px] md:text-[11px] tracking-wide text-[var(--muted)]">{nav.label}</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+
+          {/* MODAL LIGHTBOX FOTO */}
+          {activeModalImage !== null && (
+            <div className="fixed inset-0 z-[80] bg-[var(--brown)]/80 backdrop-blur-md flex items-center justify-center p-6">
+              <div className="relative w-full max-w-[520px] bg-white rounded-[24px] overflow-hidden border border-[var(--line)] shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
+                <div className="aspect-[4/5] flex items-center justify-center" style={{ background: GALLERY[activeModalImage].color }}>
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-white border border-[var(--line)] flex items-center justify-center">
+                      <i data-lucide="images" className="w-6 h-6 text-[var(--taupe)]"></i>
+                    </div>
+                    <p className="mt-4 script text-[32px] text-[var(--brown)]">{GALLERY[activeModalImage].label}</p>
+                    <p className="mt-1 text-[11px] tracking-[0.2em] uppercase text-[var(--muted)]">Alfia & Fikri • 06 Mei 2026</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setActiveModalImage(null)}
+                  className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[var(--brown)] text-white flex items-center justify-center hover:bg-black transition-colors"
+                >
+                  <i data-lucide="x" className="w-4 h-4"></i>
+                </button>
+
+                <div className="p-5 flex items-center justify-between">
+                  <p className="text-[12px] text-[var(--muted)]">{activeModalImage + 1} / {GALLERY.length}</p>
+                  <div className="flex gap-2">
+                    <button
+                      disabled={activeModalImage === 0}
+                      onClick={() => setActiveModalImage((prev) => (prev > 0 ? prev - 1 : prev))}
+                      className="px-4 py-2 rounded-full border border-[var(--line)] text-[12px] disabled:opacity-40 hover:bg-[var(--beige)] transition-colors"
+                    >
+                      Prev
+                    </button>
+                    <button
+                      disabled={activeModalImage === GALLERY.length - 1}
+                      onClick={() => setActiveModalImage((prev) => (prev < GALLERY.length - 1 ? prev + 1 : prev))}
+                      className="px-4 py-2 rounded-full bg-[var(--brown)] text-white text-[12px] disabled:opacity-40 hover:bg-[#3a2b1e] transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Render Aplikasi React & Lucide Icons
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+
+    // Dynamic icon refresh
+    setTimeout(() => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }, 200);
+  </script>
+</body>
+</html>
+```
