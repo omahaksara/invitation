@@ -673,6 +673,13 @@ html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; -
 .oa-shared-section h3 { font-family:var(--oa-theme-display,var(--oa-font-display)); }
 
 
+/* Restore the original type systems of the four recovered editorial themes.
+   Engine-level typography must not override their native font choices. */
+html[data-oa-theme="earty"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; --oa-theme-display:"Cormorant Garamond",Georgia,serif; --oa-theme-body:"Montserrat",sans-serif; --oa-reveal-time:1.06s; --oa-reveal-ease:cubic-bezier(.16,.82,.22,1); }
+html[data-oa-theme="lume"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Poppins",sans-serif; --oa-theme-display:"Playfair Display",Georgia,serif; --oa-theme-body:"Poppins",sans-serif; --oa-reveal-time:.94s; --oa-reveal-ease:cubic-bezier(.2,.72,.24,1); }
+html[data-oa-theme="nox"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Plus Jakarta Sans",sans-serif; --oa-theme-display:"Playfair Display",Georgia,serif; --oa-theme-body:"Plus Jakarta Sans",sans-serif; --oa-reveal-time:1.02s; --oa-reveal-ease:cubic-bezier(.18,.8,.22,1); }
+html[data-oa-theme="taupe"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Poppins",sans-serif; --oa-theme-display:"Playfair Display",Georgia,serif; --oa-theme-body:"Poppins",sans-serif; --oa-reveal-time:.96s; --oa-reveal-ease:cubic-bezier(.2,.76,.22,1); }
+
 /* Missing active-theme dock identities: keep shared behavior, restore each theme's own finish. */
 .oa-floating-controls[data-theme="aksara-velora"] {
   --oa-dock-bg:#3A3532f5; --oa-dock-border:#D4B5A7; --oa-dock-ink:#FDFBF7; --oa-dock-accent:#A3705C;
