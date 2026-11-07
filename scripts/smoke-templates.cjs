@@ -40,6 +40,21 @@ const themes = [
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
 ];
 
+// Keep the browser matrix and theme-specific dock styling synchronized with the registry.
+const themeRegistry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
+const activeThemeSlugs = (themeRegistry.themes || [])
+  .filter(theme => theme && theme.status === "active")
+  .map(theme => theme.slug)
+  .sort();
+const browserThemeSlugs = themes.map(theme => theme.slug).sort();
+assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
+  "Browser smoke matrix must cover every active registry theme exactly once.");
+const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
+for (const slug of activeThemeSlugs) {
+  assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
+    slug + ": tema aktif belum memiliki identitas visual dock khusus.");
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const failures = [];
