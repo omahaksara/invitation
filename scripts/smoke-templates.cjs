@@ -213,6 +213,7 @@ for (const slug of activeThemeSlugs) {
             theme.slug + ": navigasi muncul sebelum cover dibuka");
           assert.equal(await page.locator("#oa-quick-controls").count(), 0,
             theme.slug + ": kontrol cepat terpisah tidak boleh menduplikasi dock bersama.");
+          const reducedMotionOpenStarted = Date.now();
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
@@ -520,6 +521,7 @@ for (const slug of activeThemeSlugs) {
     // Responsive and demo-interaction pass at a common mobile viewport.
     for (const theme of themes) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+      await page.emulateMedia({ reducedMotion: "reduce" });
       const pageErrors = [];
       const mockGuestbook = [];
       const mockApiPosts = [];
@@ -555,7 +557,11 @@ for (const slug of activeThemeSlugs) {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
             return !cover || cover.hidden || getComputedStyle(cover).display === "none";
           }, undefined, { timeout: 5000 });
+          assert.ok(Date.now() - reducedMotionOpenStarted < 250,
+            theme.slug + ": pembukaan cover terlalu lambat saat reduced-motion aktif (" + (Date.now() - reducedMotionOpenStarted) + " ms)");
         }
+        assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').isDisabled(), true,
+          theme.slug + ": gulir otomatis harus nonaktif saat reduced-motion aktif");
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
