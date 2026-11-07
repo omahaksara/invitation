@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <path d="M65 770V315Q65 75 300 45Q535 75 535 315V770" stroke="currentColor" stroke-width="12"/>
+  <path d="M105 770V318Q105 120 300 88Q495 120 495 318V770" stroke="currentColor" stroke-width="4"/>
+  <path d="M145 770V325Q145 165 300 132Q455 165 455 325V770" stroke="currentColor" stroke-width="3"/>
+  <path d="M65 355h80M455 355h80M65 570h80M455 570h80M65 770h470" stroke="currentColor" stroke-width="5"/>
+  <path d="M300 45v87M285 132h30" stroke="currentColor" stroke-width="3"/>
+</svg>

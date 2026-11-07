@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <title>Kembang Setaman</title>
+  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+    <g transform="translate(300 300)">
+      <path d="M0-190c-58 46-58 104 0 142 58-38 58-96 0-142Z"/>
+      <path d="M0-190c58 46 58 104 0 142" opacity=".6"/>
+      <path d="M0 190c-58-46-58-104 0-142 58 38 58 96 0 142Z"/>
+      <path d="M0 190c58-46 58-104 0-142" opacity=".6"/>
+      <path d="M-190 0c46-58 104-58 142 0-38 58-96 58-142 0Z"/>
+      <path d="M-190 0c46 58 104 58 142 0" opacity=".6"/>
+      <path d="M190 0c-46-58-104-58-142 0 38 58 96 58 142 0Z"/>
+      <path d="M190 0c-46 58-104 58-142 0" opacity=".6"/>
+      <path d="M-134-134c65-8 102 29 94 94-65 8-102-29-94-94Zm268 0c-65-8-102 29-94 94 65 8 102-29 94-94ZM-134 134c65 8 102-29 94-94-65-8-102 29-94 94Zm268 0c-65 8-102-29-94-94 65-8 102 29 94 94Z"/>
+      <circle r="48"/><circle r="24"/>
+    </g>
+  </g>
+</svg>

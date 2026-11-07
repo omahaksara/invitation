@@ -23,7 +23,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261106-controls6");
+      dataUrl.searchParams.set("_v", "20261107-payment-theme-assets2");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -46,7 +46,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261106-controls6");
+          registryUrl.searchParams.set("_v", "20261107-payment-theme-assets2");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -70,7 +70,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261106-controls6");
+          templateUrl.searchParams.set("_v", "20261107-payment-theme-assets2");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -117,7 +117,7 @@
         app.innerHTML = templateHtml;
       }
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
-      renderInvitation(data, clientBase, slug, guestName);
+      renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl);
     } catch (error) {
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan tidak dapat dimuat", error instanceof Error ? error.message : "Periksa koneksi internet lalu coba lagi.");
@@ -209,8 +209,8 @@
     return new URL(String(value), clientBase).href;
   }
 
-  function renderInvitation(data, clientBase, slug, guestName) {
-    ensureFeatureSections(data, clientBase, slug);
+  function renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl) {
+    ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl);
     window.__invitationData = data;
     document.querySelectorAll("[data-bind]").forEach(el => {
       const path = el.getAttribute("data-bind");
@@ -248,7 +248,7 @@
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
-    ensureFloatingControls(data);
+    ensureFloatingControls(data, buildShortInvitationUrl);
     // Forms, navigation, and fallback sections are created above; observe them too.
     setupReveal();
   }
@@ -303,7 +303,7 @@
   }
 
 
-  function ensureFeatureSections(data, clientBase, slug) {
+  function ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl) {
     const eventItems = Array.isArray(data.events)
       ? data.events
       : Object.entries(data.events || {}).map(([id, item]) => ({ id, ...item }));
@@ -612,6 +612,14 @@
     if (root) root.replaceChildren();
     if (!accounts.length || !root) return;
 
+    if (gifts && !Array.isArray(gifts) && gifts.message) {
+      const notice = document.createElement("p");
+      notice.className = "gift-message";
+      notice.textContent = gifts.message;
+      notice.style.cssText = "grid-column:1/-1;margin:0 0 12px;line-height:1.6";
+      root.append(notice);
+    }
+
     accounts.forEach(item => {
       const card = document.createElement("article"); card.className = "gift-card reveal";
       const logoSrc = item.logo || item.bankLogo || "";
@@ -620,15 +628,31 @@
         logo.src = assetUrl(logoSrc, clientBase);
         logo.alt = (item.bank || "Bank") + " — logo";
         logo.loading = "lazy";
+        logo.decoding = "async";
+        logo.onerror = () => logo.remove();
         logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
         card.append(logo);
       }
       const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
       const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
       const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
-      const button = document.createElement("button"); button.type = "button"; button.textContent = "Salin Nomor Rekening";
-      button.addEventListener("click", () => copyText(item.accountNumber || "", button));
+      const isDemoOnly = item.demoOnly === true;
+      const button = document.createElement("button"); button.type = "button";
+      button.textContent = isDemoOnly ? "Simulasi — tidak untuk transaksi" : (item.copyLabel || (item.paymentType === "qris" ? "Salin ID Demo" : item.paymentType === "ewallet" ? "Salin Nomor E-Wallet" : "Salin Nomor Rekening"));
+      if (isDemoOnly) {
+        button.disabled = true;
+        button.setAttribute("aria-label", "Data simulasi, tidak dapat digunakan untuk transaksi");
+      } else {
+        button.disabled = item.copyable === false || !(item.copyValue || item.accountNumber);
+      if (!button.disabled) button.addEventListener("click", () => copyText(item.copyValue || item.accountNumber || "", button));
+      }
       card.append(bank, holder, number, button);
+      if (item.demoNote || item.note) {
+        const note = document.createElement("p");
+        note.className = "gift-note";
+        note.textContent = item.demoNote || item.note;
+        card.append(note);
+      }
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
       if (qrSrc) {
@@ -656,9 +680,10 @@
         document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
+        const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
-        }, cover && cover.id === "cover" ? 1800 : 850);
+        }, reducedMotionPreference ? 0 : 520);
         if (audio && hasMusic) {
           try {
             await audio.play();
@@ -1048,10 +1073,11 @@
 
   // Shared navigation controls are mounted by the engine, so every active theme
   // receives the same working controls without duplicating theme-specific markup.
-  function ensureFloatingControls(data) {
+  function ensureFloatingControls(data, buildShortInvitationUrl) {
     if (document.getElementById("oa-floating-controls")) return;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
+    const getShareUrl = typeof buildShortInvitationUrl === "function" ? buildShortInvitationUrl : () => location.href;
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -1064,28 +1090,33 @@
     const isVisible = element => {
       if (!element || element.hidden) return false;
       const style = getComputedStyle(element);
-      if (style.display === "none" || style.visibility === "hidden") return false;
-      // Build the menu before the guest opens the cover. The invitation's main
-      // wrapper is intentionally hidden at that moment, so don't mistake its
-      // hidden state for a missing section.
+      // A few themes (notably Aksara Velora) hide the main wrapper with
+      // display:none until the cover is opened instead of using [hidden].
+      // Keep that wrapper as the Home destination without treating unrelated
+      // display:none controls or sections as navigable targets.
+      const mainWrapperSelector = "#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page";
+      const isMainWrapper = element.matches(mainWrapperSelector);
+      if (style.display === "none" && !isMainWrapper) return false;
+      if (style.visibility === "hidden" && !isMainWrapper) return false;
       const hiddenParent = element.closest("[hidden]");
-      if (hiddenParent && !hiddenParent.matches("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page")) return false;
+      if (hiddenParent && !hiddenParent.matches(mainWrapperSelector)) return false;
       const rect = element.getBoundingClientRect();
-      const waitingBehindCover = !!element.closest("#main-content, #app-inner, .invitation-container, .invite-shell, .sirein-page");
+      const waitingBehindCover = !!element.closest(mainWrapperSelector);
       return rect.height > 0 || (waitingBehindCover && (element.children.length > 0 || !!element.textContent.trim()));
     };
+    const getScrollBehavior = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
       window.scrollTo({
         top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12),
-        behavior: "smooth"
+        behavior: getScrollBehavior()
       });
     };
 
     // One navigation contract for every theme. Selectors cover the legacy template
     // structures while the theme itself continues to own its visual design.
     const sectionOptions = [
-      { id:"home", label:"Home", selectors:["#main-content","#app-inner",".invitation-container",".sirein-page",".invite-shell"], feature:null },
+      { id:"home", label:"Home", selectors:["#main-content","#app-inner",".invitation-container",".sirein-page",".invite-shell","#app"], feature:null },
       { id:"couple", label:"Mempelai", selectors:["#couple-section",".couple-section","#couple",".couple","#bride-groom",".bride-groom-section","[data-section='couple']"], feature:"couple" },
       { id:"event", label:"Acara", selectors:["#events","#events-section","#event-section",".event-section",".events","#event-list","section:has(#link-akad-maps)"], feature:"events" },
       { id:"gallery", label:"Galeri", selectors:["#gallery","#gallery-section",".gallery-section","#gallery-grid",".gallery-grid"], feature:"gallery" },
@@ -1219,6 +1250,7 @@
         if (!item) return;
         const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
         button.dataset.target = item.target.id;
+        button.dataset.oaSection = item.id;
         button.addEventListener("click", () => scrollToSection(item.target));
         nav.append(button);
         item.button = button;
@@ -1241,6 +1273,7 @@
         overflowItems.forEach(item => {
           const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
           button.dataset.target = item.target.id;
+          button.dataset.oaSection = item.id;
           button.addEventListener("click", () => {
             scrollToSection(item.target);
             panel.hidden = true;
@@ -1251,7 +1284,7 @@
         });
         const topButton = makeButton("top", "Ke atas", "Kembali ke bagian atas");
         topButton.addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior: getScrollBehavior() });
           panel.hidden = true;
           moreButton.setAttribute("aria-expanded", "false");
         });
@@ -1265,7 +1298,7 @@
         });
         const shareButton = makeButton("share", "Bagikan", "Bagikan undangan");
         shareButton.addEventListener("click", async () => {
-          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: buildShortInvitationUrl() };
+          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: getShareUrl() };
           try {
             if (navigator.share) await navigator.share(shareData);
             else if (navigator.clipboard?.writeText) {
@@ -1408,28 +1441,28 @@
         html { scroll-behavior: smooth; overflow-x: clip; }
         body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
-        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .85s cubic-bezier(.2,.72,.18,1); }
+        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .38s ease, transform .42s cubic-bezier(.2,.72,.18,1); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,22px,0); transition: opacity .82s ease, transform 1s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity, transform; }
-        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-30px,0,0); }
-        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(30px,0,0); }
-        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,24px,0); }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,14px,0); transition: opacity .4s ease, transform .46s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); }
+        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
+        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
+        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); filter: saturate(.88); transition: opacity 1s ease, transform 1.15s cubic-bezier(.2,.72,.18,1), filter 1.1s ease; }
-        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-34px,0,0) scale(.975); }
-        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(34px,0,0) scale(.975); }
-        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: saturate(1); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.985); transition: opacity .42s ease, transform .48s cubic-bezier(.2,.72,.18,1); }
+        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
+        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
+        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
         .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
         .story-content { min-width:0; }
         .story-date { display:block; margin-bottom:6px; }
         #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening {
-          animation: oa-cover-exit .9s cubic-bezier(.22,.7,.2,1) forwards;
+          animation: oa-cover-exit .48s cubic-bezier(.22,.7,.2,1) forwards;
           transform-origin: center top;
         }
         @keyframes oa-cover-exit {
-          0% { opacity:1; transform:scale(1); filter:blur(0); }
-          55% { opacity:.92; transform:scale(1.015); }
-          100% { opacity:0; transform:scale(1.035); filter:blur(5px); }
+          0% { opacity:1; transform:scale(1); }
+          55% { opacity:.92; transform:scale(1.008); }
+          100% { opacity:0; transform:scale(1.015); }
         }
         .oa-floating-controls { scrollbar-width:none; }
         .oa-floating-controls::-webkit-scrollbar { display:none; }
@@ -1440,9 +1473,59 @@
           #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
           html { scroll-behavior: auto !important; }
           .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+          html[data-oa-theme] #app,
+          html[data-oa-theme] #app *,
+          html[data-oa-theme] #app *::before,
+          html[data-oa-theme] #app *::after {
+            animation-duration:.01ms!important;
+            animation-iteration-count:1!important;
+            transition-duration:.01ms!important;
+            scroll-behavior:auto!important;
+          }
         }
       `;
       document.head.append(style);
+    }
+
+    // Enforce reduced motion at runtime as well as in CSS. Some legacy theme rules
+    // use stronger transition shorthands, so preserve and temporarily override inline
+    // motion properties, then restore them if the preference changes back.
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const originalMotionStyles = window.__oaOriginalMotionStyles ||
+      (window.__oaOriginalMotionStyles = new WeakMap());
+    const motionProperties = ["transition-duration", "animation-duration", "animation-iteration-count", "scroll-behavior"];
+    const applyMotionPreference = () => {
+      const targets = [document.documentElement, ...document.querySelectorAll("#app, #app *")];
+      targets.forEach(element => {
+        if (motionQuery.matches) {
+          if (!originalMotionStyles.has(element)) {
+            originalMotionStyles.set(element, motionProperties.map(property => ({
+              property,
+              value: element.style.getPropertyValue(property),
+              priority: element.style.getPropertyPriority(property)
+            })));
+          }
+          element.style.setProperty("transition-duration", ".01ms", "important");
+          element.style.setProperty("animation-duration", ".01ms", "important");
+          element.style.setProperty("animation-iteration-count", "1", "important");
+          if (element === document.documentElement) {
+            element.style.setProperty("scroll-behavior", "auto", "important");
+          }
+        } else if (originalMotionStyles.has(element)) {
+          originalMotionStyles.get(element).forEach(({ property, value, priority }) => {
+            if (value) element.style.setProperty(property, value, priority);
+            else element.style.removeProperty(property);
+          });
+          originalMotionStyles.delete(element);
+        }
+      });
+    };
+    applyMotionPreference();
+    if (!window.__oaReducedMotionListener) {
+      const onMotionPreferenceChange = () => applyMotionPreference();
+      if (motionQuery.addEventListener) motionQuery.addEventListener("change", onMotionPreferenceChange);
+      else if (motionQuery.addListener) motionQuery.addListener(onMotionPreferenceChange);
+      window.__oaReducedMotionListener = onMotionPreferenceChange;
     }
 
     const candidates = document.querySelectorAll(
@@ -1474,7 +1557,7 @@
         element.matches("h1, h2, h3") ? (motionIndex % 2 ? "right" : "left") : "up";
       element.classList.add("oa-motion-item");
       element.dataset.oaMotion = direction;
-      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 85 + "ms");
+      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 35 + "ms");
     });
     let photoIndex = 0;
     document.querySelectorAll("#app img.oa-motion-photo").forEach(image => {

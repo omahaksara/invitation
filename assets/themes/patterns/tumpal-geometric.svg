@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120">
+  <title>Tumpal Geometric Repeat</title>
+  <defs><pattern id="tumpal" width="80" height="120" patternUnits="userSpaceOnUse">
+    <path d="M40 8 72 68H8L40 8Z" fill="none" stroke="currentColor" stroke-width="3"/>
+    <path d="M40 28 58 62H22L40 28Z" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/>
+    <path d="M40 78 52 98 40 118 28 98 40 78Z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <circle cx="40" cy="98" r="4" fill="currentColor"/>
+  </pattern></defs>
+  <rect width="240" height="120" fill="url(#tumpal)"/>
+</svg>

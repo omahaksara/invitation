@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 760" fill="none">
+  <title>Peacock Feather Ornament</title>
+  <path d="M180 730C162 575 198 442 180 290 166 170 113 91 180 30c67 61 14 140 0 260" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M180 730c-3-150-2-290 0-430" stroke="currentColor" stroke-width="2" opacity=".6"/>
+  <path d="M180 300c-82-9-120-78-90-145 21-47 69-70 90-105 21 35 69 58 90 105 30 67-8 136-90 145Z" stroke="currentColor" stroke-width="5"/>
+  <path d="M180 267c-52-8-77-48-60-86 13-28 45-44 60-71 15 27 47 43 60 71 17 38-8 78-60 86Z" stroke="currentColor" stroke-width="4"/>
+  <path d="M180 237c-26-8-38-27-27-47 7-13 20-22 27-37 7 15 20 24 27 37 11 20-1 39-27 47Z" fill="currentColor" opacity=".22" stroke="currentColor" stroke-width="3"/>
+  <g stroke="currentColor" stroke-width="2" opacity=".55"><path d="m180 730-72-310m72 310 72-310M180 730 65 480m115 250 115-250M180 730 95 570m85 160 85-160"/></g>
+</svg>

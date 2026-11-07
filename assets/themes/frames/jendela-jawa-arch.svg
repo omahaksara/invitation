@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">Jendela lengkung dekoratif</title><desc id="desc">Bingkai jendela lengkung bergaya klasik untuk dekorasi undangan.</desc>
+<path d="M70 700V300C70 160 170 55 300 55s230 105 230 245v400" stroke="#B58A55" stroke-width="5"/>
+<path d="M105 700V302c0-118 82-210 195-210s195 92 195 210v398" stroke="#D8BD91" stroke-width="2.5"/>
+<path d="M70 300h460M105 302h390M300 94v606M105 500h390" stroke="#B58A55" stroke-width="2" opacity=".8"/>
+<path d="M150 300c0-91 62-162 150-162s150 71 150 162" stroke="#B58A55" stroke-width="2"/>
+<circle cx="300" cy="112" r="7" fill="#B58A55"/>
+<path d="M55 700h490M85 720h430" stroke="#B58A55" stroke-width="4" stroke-linecap="round"/>
+</svg>

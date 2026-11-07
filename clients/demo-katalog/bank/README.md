@@ -1,8 +1,8 @@
-# Logo bank untuk demo
+# Kompatibilitas logo bank demo
 
-Logo di folder ini adalah wordmark contoh untuk memperlihatkan posisi identitas bank pada kartu hadiah demo, bukan berkas logo resmi untuk kebutuhan komersial. Untuk undangan klien, gunakan logo resmi yang sesuai dan diizinkan.
+Folder ini dipertahankan agar data undangan lama yang masih memakai path relatif `bank/logo-*.svg` tetap terbaca.
 
-Untuk menambahkan bank lain:
-1. Letakkan logo di folder ini dengan nama file yang jelas.
-2. Tambahkan properti `"logo": "bank/nama-logo.svg"` pada item terkait di `gifts.accounts`.
-3. Pastikan nama file dan kapitalisasi cocok. Tidak perlu mengubah kode tampilan.
+- BCA, BRI (versi 2025), dan Mandiri sudah diganti dengan logo sumber yang benar.
+- Path bersama yang disarankan untuk data baru: `/assets/payment/banks/<nama>.svg` atau `/assets/payment/wallets/<nama>.svg`.
+- Jangan menambahkan file logo contoh/teks tiruan sebagai pengganti logo resmi.
+- Untuk semua tema, cukup atur `gifts.accounts[].logo`; engine inti akan memuat file lokal tersebut.

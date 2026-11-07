@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <title>Jendela Lengkung Bunga</title>
+  <g stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M90 930V390C90 190 230 70 400 70s310 120 310 320v540"/>
+    <path d="M125 930V395c0-178 119-290 275-290s275 112 275 290v535"/>
+    <path d="M160 930V400c0-156 100-255 240-255s240 99 240 255v530" opacity=".55"/>
+    <path d="M90 930h620M125 895h550" opacity=".55"/>
+    <path d="M90 410c45-8 75-35 95-78 20 43 50 70 95 78M520 410c45-8 75-35 95-78 20 43 50 70 95 78"/>
+    <path d="M400 105v75m-30-38h60m-45-16 30 32m0-32-30 32"/>
+    <path d="M205 895c0-36 28-64 64-64s64 28 64 64m198 0c0-36 28-64 64-64s64 28 64 64"/>
+    <path d="M269 831c-17-21-17-43 0-63 17 20 17 42 0 63Zm262 0c-17-21-17-43 0-63 17 20 17 42 0 63Z"/>
+  </g>
+</svg>

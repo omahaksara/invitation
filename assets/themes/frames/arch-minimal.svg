@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <title>Arch Minimal</title>
+  <path d="M100 950V405C100 210 230 90 400 90s300 120 300 315v545" stroke="currentColor" stroke-width="8"/>
+  <path d="M145 950V410c0-166 106-275 255-275s255 109 255 275v540" stroke="currentColor" stroke-width="2" opacity=".5"/>
+  <path d="M100 950h600M145 905h510" stroke="currentColor" stroke-width="3" opacity=".45"/>
+  <path d="M400 92v55m-18-27h36" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+</svg>

@@ -51,6 +51,22 @@
 @media(max-width:480px){.hero-photo-wrap{border-radius:140px 140px 6px 6px}.sirein-cover__content{max-width:360px}}
 @media(prefers-reduced-motion:reduce){.sirein-button,.event-card,.gift-card,.hero-photo,.person-photo-frame img,.gallery-grid img{transition:none!important}.sirein-button:hover,.event-card:hover,.gift-card:hover{transform:none}}
 
+
+/* Groom: left-aligned charcoal/copper editorial cover with a clear horizontal slide exit. */
+.sirein-cover{align-items:flex-end;justify-content:flex-start;text-align:left;padding:clamp(22px,7vw,76px);background:#25292d;color:#f7eee5;transition:opacity .42s ease,transform .48s cubic-bezier(.22,.7,.2,1)}
+.sirein-cover__image{opacity:.3;filter:grayscale(.28) contrast(1.12)}
+.sirein-cover__veil{background:linear-gradient(90deg,rgba(24,27,31,.9),rgba(24,27,31,.56) 58%,rgba(24,27,31,.16))}
+.sirein-cover__content{width:min(100%,560px);margin:0 auto 0 0;padding:clamp(28px,5vw,52px);border:0;border-left:3px solid #bd8c72;outline:0;background:rgba(29,31,33,.58);text-align:left}
+.sirein-cover .eyebrow{color:#d8b49f;text-align:left}
+.sirein-cover .script-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.5rem,8vw,4.2rem);line-height:1.04;margin:0 0 22px;text-align:left}
+.sirein-cover .script-title .ampersand{color:#c89583}
+.sirein-cover .cover-rule{margin:22px 0;background:#c89583}
+.sirein-cover .cover-to,.sirein-cover .guest-name,.sirein-cover .cover-note{text-align:left;color:#f4e8dc;margin-left:0}
+.sirein-cover .sirein-button{background:#bd8c72;border-color:#bd8c72;color:#24272b;border-radius:2px;letter-spacing:.12em}
+.sirein-cover.is-opening,#cover.is-opening{opacity:0;transform:translateX(-100%);pointer-events:none}
+#cover.is-opening{transition:transform .48s cubic-bezier(.22,.7,.2,1),opacity .42s ease}
+@media(max-width:480px){.sirein-cover{align-items:flex-end;padding:18px 16px 70px}.sirein-cover__content{padding:28px 20px}.sirein-cover .script-title{font-size:clamp(2.2rem,12vw,3.4rem)}}
+
 </style>
 <!-- Template Groom — Serenade Taupe, tema V2 untuk engine Omah Aksara -->
 <div id="cover-section" class="sirein-cover">
@@ -58,7 +74,7 @@
   <div class="sirein-cover__veil"></div>
   <div class="sirein-cover__content">
     <p class="eyebrow">The Wedding Of</p>
-    <h1 class="script-title"><span data-bind="couple.groom.nickname">Budi</span><span class="ampersand">&amp;</span><span data-bind="couple.bride.nickname">Ani</span></h1>
+    <h1 class="script-title"><span data-bind="couple.groom.nickname">Mempelai Pria</span><span class="ampersand">&amp;</span><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
     <div class="cover-rule"></div>
     <p class="cover-to">Kepada Yth. Bapak/Ibu/Saudara/i</p>
     <h2 id="nama-tamu" class="guest-name">Tamu Undangan</h2>
@@ -72,7 +88,7 @@
     <p class="eyebrow" data-bind="cover.title">Undangan Pernikahan</p>
     <div class="hero-photo-wrap"><img class="hero-photo" data-bind="cover.image" alt="Foto sampul pengantin"></div>
     <p class="hero-kicker">A celebration of love</p>
-    <h1 class="hero-names"><span data-bind="couple.groom.nickname">Budi</span><span class="ampersand">&amp;</span><span data-bind="couple.bride.nickname">Ani</span></h1>
+    <h1 class="hero-names"><span data-bind="couple.groom.nickname">Mempelai Pria</span><span class="ampersand">&amp;</span><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
     <p class="hero-date" data-bind="events.akad.date">Tanggal acara</p>
     <div class="ornament">✦</div>
   </section>
@@ -173,7 +189,7 @@
 
   <section class="sirein-footer">
     <p class="eyebrow">With Love</p>
-    <h2><span data-bind="couple.groom.nickname">Budi</span> <span class="ampersand">&amp;</span> <span data-bind="couple.bride.nickname">Ani</span></h2>
+    <h2><span data-bind="couple.groom.nickname">Mempelai Pria</span> <span class="ampersand">&amp;</span> <span data-bind="couple.bride.nickname">Mempelai Wanita</span></h2>
     <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Anda berkenan hadir dan memberikan doa restu.</p>
     <p class="footer-thanks">Terima kasih atas doa dan kasih sayang Anda.</p>
     <span class="footer-ornament">✦</span>

@@ -12,7 +12,7 @@
 <style>
 :root{color-scheme:dark;--navy:#131e26;--navy-deep:#0a131a;--panel:#1b2a35;--panel-2:#223443;--gold:#d4c5a0;--gold-bright:#e2d5b0;--muted:#a8bcc8;--paper:#e8eef1;--serif:"Playfair Display",Georgia,serif;--script:"Great Vibes",cursive;--sans:"Poppins",sans-serif;--line:rgba(212,197,160,.3)}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;background:var(--navy-deep);color:var(--paper);font-family:var(--sans);font-weight:300;line-height:1.8;-webkit-font-smoothing:antialiased}button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit}.invite-shell{width:100%;overflow:hidden;background:var(--navy)}[hidden]{display:none!important}
-.cover{min-height:100svh;position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 24px 64px;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#2c4a5e 0,rgba(19,30,38,.5) 38%,transparent 67%),linear-gradient(145deg,#172631,#0a131a 75%);color:#f5f0e5}
+.cover{min-height:100svh;position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:42px 24px 46px;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#2c4a5e 0,rgba(19,30,38,.5) 38%,transparent 67%),linear-gradient(145deg,#172631,#0a131a 75%);color:#f5f0e5}
 .cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;filter:saturate(.55) contrast(1.05);z-index:-3}
 .cover::before,.cover::after{content:"";position:absolute;z-index:-1;pointer-events:none;border:1px solid rgba(212,197,160,.36);width:min(78vw,500px);aspect-ratio:1;border-radius:50%;transform:scaleY(.72) rotate(32deg)}
 .cover::before{box-shadow:0 0 0 14px rgba(212,197,160,.025),0 0 0 30px rgba(212,197,160,.025),0 0 0 46px rgba(212,197,160,.02)}
@@ -21,8 +21,12 @@
 .cover-frame::before,.cover-frame::after{content:"✦";position:absolute;color:var(--gold);font-size:13px;left:50%;transform:translateX(-50%);background:var(--navy);padding:0 12px}
 .cover-frame::before{top:-12px}.cover-frame::after{bottom:-12px}
 .eyebrow{font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);line-height:1.9}
-.cover-monogram{font:clamp(3.8rem,14vw,7rem)/1 var(--serif);letter-spacing:-.08em;color:var(--gold-bright);margin:20px 0 12px;text-shadow:0 8px 40px #0005}
-.cover-monogram i{font-size:.55em;font-weight:400;color:#a8bcc8}
+.cover-ornament{display:block;width:76px;height:42px;margin:22px auto 14px;color:var(--gold);opacity:.92}
+.cover-ornament path,.cover-ornament circle{fill:none;stroke:currentColor;stroke-width:1.25}
+.cover h1{max-width:760px;gap:10px}
+.cover-date{font-size:1rem}
+.guest-label{margin-top:15px}
+.open-button{margin-top:22px}
 .cover h1{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;font:400 clamp(2.4rem,9vw,4.4rem)/1.1 var(--serif);margin:14px 0 18px;max-width:800px}
 .cover h1 i{font:400 .65em var(--script);color:var(--gold)}
 .cover-date{font:1.1rem var(--serif);letter-spacing:.12em;color:#e7deca;margin:0}
@@ -30,7 +34,6 @@
 .guest-label{font-size:.68rem;color:#c4cdd1;margin:18px 0 2px}.guest-name{font:1.35rem var(--serif);margin:0;min-height:1.5em;color:#fff}
 .open-button,.outline-button{display:inline-flex;align-items:center;justify-content:center;gap:22px;margin-top:28px;padding:13px 22px;border:1px solid rgba(212,197,160,.72);background:rgba(255,255,255,.035);color:#f5f0e5;font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:background .25s,transform .25s,border-color .25s}
 .open-button:hover,.outline-button:hover{background:rgba(212,197,160,.12);transform:translateY(-2px);border-color:var(--gold-bright)}
-.cover-foot{position:absolute;bottom:20px;font-size:.52rem;letter-spacing:.2em;color:#9cabb3}
 .cover.is-opening{animation:coverOut .9s cubic-bezier(.7,0,.2,1) forwards;pointer-events:none}
 .main-content{background:var(--navy);animation:fadeIn .8s both}.main-hero{position:relative;min-height:min(86svh,820px);display:flex;align-items:flex-end;justify-content:center;text-align:center;padding:90px 24px 72px;isolation:isolate;overflow:hidden}
 .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.56;filter:saturate(.65)}
@@ -61,16 +64,14 @@
   <section class="cover" id="cover-section">
     <img class="cover-photo" data-bind="cover.image" alt="Foto sampul undangan">
     <div class="cover-frame" aria-hidden="true"></div>
-    <p class="eyebrow" data-bind="cover.eyebrow">A Celebration of Love</p>
-    <div class="cover-monogram" aria-hidden="true">E <i>&amp;</i> E</div>
-    <p class="eyebrow">THE WEDDING CELEBRATION</p>
+    <p class="eyebrow" data-bind="cover.eyebrow">Undangan Pernikahan</p>
+    <svg class="cover-ornament" viewBox="0 0 120 64" aria-hidden="true"><path d="M60 4 72 25 60 60 48 25Z"/><path d="M38 32H82M45 22 60 32 75 22M45 42 60 32 75 42"/><circle cx="60" cy="32" r="4"/></svg>
     <h1><span data-bind="couple.groom.nickname">Mempelai Pria</span><i>&amp;</i><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
     <div class="gold-rule"></div>
     <p class="cover-date" data-bind="cover.dateLabel">Hari Bahagia Kami</p>
     <p class="guest-label">Kepada Yth.</p>
     <p class="guest-name" id="nama-tamu">Tamu Undangan</p>
     <button class="open-button" id="open-invitation-btn" type="button"><span data-bind="cover.buttonText">Buka Undangan</span><span aria-hidden="true">↗</span></button>
-    <p class="cover-foot">DENGAN PENUH HORMAT, KAMI MENGUNDANG ANDA</p>
   </section>
   <main id="main-content" class="main-content" hidden>
     <section class="main-hero">

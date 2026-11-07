@@ -1,0 +1,246 @@
+{
+  "version": 1,
+  "banks": [
+    {
+      "id": "bca",
+      "name": "Bank BCA",
+      "logo": "/assets/payment/banks/bca.svg"
+    },
+    {
+      "id": "bri",
+      "name": "Bank BRI",
+      "logo": "/assets/payment/banks/bri.svg"
+    },
+    {
+      "id": "bni",
+      "name": "Bank BNI",
+      "logo": "/assets/payment/banks/bni.svg"
+    },
+    {
+      "id": "mandiri",
+      "name": "Bank Mandiri",
+      "logo": "/assets/payment/banks/mandiri.svg"
+    },
+    {
+      "id": "bsi",
+      "name": "Bank Syariah Indonesia",
+      "logo": "/assets/payment/banks/bsi.svg"
+    },
+    {
+      "id": "cimb",
+      "name": "CIMB Niaga",
+      "logo": "/assets/payment/banks/cimb.svg"
+    },
+    {
+      "id": "permata",
+      "name": "Permata Bank",
+      "logo": "/assets/payment/banks/permata.svg"
+    },
+    {
+      "id": "danamon",
+      "name": "Bank Danamon",
+      "logo": "/assets/payment/banks/danamon.svg"
+    },
+    {
+      "id": "bank-jatim",
+      "name": "Bank Jatim",
+      "logo": "/assets/payment/banks/bank-jatim.svg"
+    },
+    {
+      "id": "btn",
+      "name": "Bank BTN",
+      "logo": "/assets/payment/banks/btn.svg"
+    },
+    {
+      "id": "bank-jakarta",
+      "name": "Bank Jakarta",
+      "logo": "/assets/payment/banks/bank-jakarta.svg"
+    },
+    {
+      "id": "bank-sulteng",
+      "name": "Bank Sulteng",
+      "logo": "/assets/payment/banks/bank-sulteng.png"
+    },
+    {
+      "id": "bank-banten",
+      "name": "Bank Banten",
+      "logo": "/assets/payment/banks/catalog/bank-banten-2026.svg"
+    },
+    {
+      "id": "bca-digital",
+      "name": "BCA Digital (blu)",
+      "logo": "/assets/payment/banks/catalog/bca-digital-logo.svg"
+    },
+    {
+      "id": "bca-syariah",
+      "name": "BCA Syariah",
+      "logo": "/assets/payment/banks/catalog/bca-syariah.svg"
+    },
+    {
+      "id": "bank-jago",
+      "name": "Bank Jago",
+      "logo": "/assets/payment/banks/catalog/bank-jago-2026.svg"
+    },
+    {
+      "id": "bank-jago-syariah",
+      "name": "Bank Jago Syariah",
+      "logo": "/assets/payment/banks/catalog/bank-jago-syariah-2026.svg"
+    },
+    {
+      "id": "bank-mega",
+      "name": "Bank Mega",
+      "logo": "/assets/payment/banks/catalog/bank-mega-2013.svg"
+    },
+    {
+      "id": "bank-raya",
+      "name": "Bank Raya",
+      "logo": "/assets/payment/banks/catalog/bank-raya-2023.svg"
+    },
+    {
+      "id": "bank-saqu",
+      "name": "Bank Saqu",
+      "logo": "/assets/payment/banks/catalog/bank-saqu.svg"
+    },
+    {
+      "id": "seabank",
+      "name": "SeaBank",
+      "logo": "/assets/payment/banks/catalog/seabank.svg"
+    },
+    {
+      "id": "superbank",
+      "name": "Superbank",
+      "logo": "/assets/payment/banks/catalog/superbank.svg"
+    },
+    {
+      "id": "allo-bank",
+      "name": "Allo Bank",
+      "logo": "/assets/payment/banks/catalog/allo-bank-logo.svg"
+    },
+    {
+      "id": "panin",
+      "name": "Panin Bank",
+      "logo": "/assets/payment/banks/catalog/logo-panin-bank.svg"
+    },
+    {
+      "id": "uob",
+      "name": "UOB Indonesia",
+      "logo": "/assets/payment/banks/catalog/uob-logo-2022.svg"
+    },
+    {
+      "id": "smbc",
+      "name": "SMBC Indonesia",
+      "logo": "/assets/payment/banks/catalog/smbc-indonesia-logo.svg"
+    },
+    {
+      "id": "j-trust",
+      "name": "J Trust Bank",
+      "logo": "/assets/payment/banks/catalog/j-trust-bank-logo.svg"
+    },
+    {
+      "id": "kb-bank",
+      "name": "KB Bank",
+      "logo": "/assets/payment/banks/catalog/kb-bukopin.svg"
+    },
+    {
+      "id": "mandiri-taspen",
+      "name": "Bank Mandiri Taspen",
+      "logo": "/assets/payment/banks/catalog/mandiri-taspen.svg"
+    },
+    {
+      "id": "bank-syariah-nasional",
+      "name": "Bank Syariah Nasional",
+      "logo": "/assets/payment/banks/catalog/logo-bank-syariah-nasional-horizontal.svg"
+    },
+    {
+      "id": "bank-nagari",
+      "name": "Bank Nagari",
+      "logo": "/assets/payment/banks/bank-nagari.svg"
+    },
+    {
+      "id": "bank-bsg",
+      "name": "Bank SulutGo (BSG)",
+      "logo": "/assets/payment/banks/bank-bsg.png"
+    },
+    {
+      "id": "bank-ntt",
+      "name": "Bank NTT",
+      "logo": "/assets/payment/banks/bank-ntt.png"
+    },
+    {
+      "id": "bank-aladin",
+      "name": "Bank Aladin Syariah",
+      "logo": "/assets/payment/banks/bank-aladin.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Bank_Aladin.png",
+      "license": "PD-self; source asset dated 2021"
+    },
+    {
+      "id": "bank-neo-commerce",
+      "name": "Bank Neo Commerce",
+      "logo": "/assets/payment/banks/bank-neo-commerce.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Bank_Neo_Commerce.png",
+      "license": "Public domain release by uploader; source dated 2023"
+    },
+    {
+      "id": "bank-sinarmas",
+      "name": "Bank Sinarmas",
+      "logo": "/assets/payment/banks/bank-sinarmas.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Bank_Sinarmas.png",
+      "license": "Public domain release by uploader; source dated 2021"
+    },
+    {
+      "id": "maybank-indonesia",
+      "name": "Maybank Indonesia",
+      "logo": "/assets/payment/banks/maybank-indonesia.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Logo_wordmark_Bank_Maybank_Indonesia.png",
+      "license": "PD-textlogo; source dated 2025"
+    },
+    {
+      "id": "btpn-syariah",
+      "name": "BTPN Syariah",
+      "logo": "/assets/payment/banks/btpn-syariah.png",
+      "source": "https://commons.wikimedia.org/wiki/File:BTPN_Syariah_logo.png",
+      "license": "PD-textlogo; source dated 2017"
+    },
+    {
+      "id": "bank-muamalat",
+      "name": "Bank Muamalat",
+      "logo": "/assets/payment/banks/bank-muamalat.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Muamalat_Logo.png",
+      "license": "CC BY-SA 4.0"
+    }
+  ],
+  "wallets": [
+    {
+      "id": "dana",
+      "name": "DANA",
+      "logo": "/assets/payment/wallets/dana.png"
+    },
+    {
+      "id": "gopay",
+      "name": "GoPay",
+      "logo": "/assets/payment/wallets/gopay.svg"
+    },
+    {
+      "id": "ovo",
+      "name": "OVO",
+      "logo": "/assets/payment/wallets/ovo.svg"
+    },
+    {
+      "id": "shopeepay",
+      "name": "ShopeePay",
+      "logo": "/assets/payment/wallets/shopeepay.svg"
+    },
+    {
+      "id": "linkaja",
+      "name": "LinkAja",
+      "logo": "/assets/payment/wallets/linkaja.svg"
+    },
+    {
+      "id": "qris",
+      "name": "QRIS",
+      "logo": "/assets/payment/wallets/qris.svg",
+      "demoPlaceholder": "/assets/payment/wallets/qris-demo.svg"
+    }
+  ],
+  "note": "Daftar ini adalah aset yang saat ini tersedia di repository, bukan daftar lengkap semua bank di Indonesia. Tambahkan logo baru hanya setelah sumber dan lisensinya diperiksa."
+}
