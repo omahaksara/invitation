@@ -352,6 +352,8 @@ for (const slug of activeThemeSlugs) {
           assert.equal(await quoteButton.count(), 1, theme.slug + ": pintasan quotes tidak tersedia");
         }
         const navigation = page.locator("#oa-floating-controls");
+        assert.equal(await navigation.locator('[data-oa-action="jump"][data-oa-section="home"]').count(), 1,
+          theme.slug + ": tombol Home tidak tersedia atau terduplikasi.");
         const shortcutAudit = await navigation.locator('[data-oa-action="jump"]').evaluateAll(buttons => buttons.map(button => {
           const targetId = button.dataset.target || "";
           const targets = targetId ? Array.from(document.querySelectorAll("[id]")).filter(element => element.id === targetId) : [];
