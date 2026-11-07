@@ -1110,7 +1110,7 @@
     // One navigation contract for every theme. Selectors cover the legacy template
     // structures while the theme itself continues to own its visual design.
     const sectionOptions = [
-      { id:"home", label:"Home", selectors:["#main-content","#app-inner",".invitation-container",".sirein-page",".invite-shell"], feature:null },
+      { id:"home", label:"Home", selectors:["#main-content","#app-inner",".invitation-container",".sirein-page",".invite-shell","#app"], feature:null },
       { id:"couple", label:"Mempelai", selectors:["#couple-section",".couple-section","#couple",".couple","#bride-groom",".bride-groom-section","[data-section='couple']"], feature:"couple" },
       { id:"event", label:"Acara", selectors:["#events","#events-section","#event-section",".event-section",".events","#event-list","section:has(#link-akad-maps)"], feature:"events" },
       { id:"gallery", label:"Galeri", selectors:["#gallery","#gallery-section",".gallery-section","#gallery-grid",".gallery-grid"], feature:"gallery" },
@@ -1244,6 +1244,7 @@
         if (!item) return;
         const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
         button.dataset.target = item.target.id;
+        button.dataset.oaSection = item.id;
         button.addEventListener("click", () => scrollToSection(item.target));
         nav.append(button);
         item.button = button;
@@ -1266,6 +1267,7 @@
         overflowItems.forEach(item => {
           const button = makeButton("jump", item.label, "Buka bagian " + item.label, item.feature);
           button.dataset.target = item.target.id;
+          button.dataset.oaSection = item.id;
           button.addEventListener("click", () => {
             scrollToSection(item.target);
             panel.hidden = true;
