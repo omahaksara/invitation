@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="42.333332mm"
+   height="45.824146mm"
+   viewBox="0 0 150 162.36902"
+   id="svg4386"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Bank BTN symbol.svg">
+  <defs
+     id="defs4388" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="75.270713"
+     inkscape:cy="-156.98259"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4391">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(187.41357,-213.0106)">
+    <g
+       id="g74"
+       transform="matrix(5.8648733,0,0,-5.8648733,-131.17234,353.75583)">
+      <path
+         d="M 0,0 0,-3.687 3.197,-1.841 6.395,-3.687 6.395,0 3.197,1.849 0,0 Z"
+         style="fill:#a68561;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path76"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
+       id="g78"
+       transform="matrix(5.8648733,0,0,-5.8648733,-56.179382,353.75583)">
+      <path
+         d="M 0,0 0,3.697 -9.591,9.234 -19.176,3.697 -19.176,0 -9.591,5.543 0,0 Z"
+         style="fill:#a68561;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path80"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
+       id="g82"
+       transform="matrix(5.8648733,0,0,-5.8648733,-187.41357,256.31096)">
+      <path
+         d="M 0,0 12.787,7.383 25.576,0 l 0,-14.766 -3.198,-1.849 0,14.766 -9.591,5.54 -9.588,-5.54 0,-14.766 L 0,-14.766 0,0 Z"
+         style="fill:#0069ab;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path84"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
+       id="g86"
+       transform="matrix(5.8648733,0,0,-5.8648733,-112.42821,256.31096)">
+      <path
+         d="m 0,0 6.394,-3.693 0,-14.764 -3.195,-1.843 0,14.764 -3.199,1.843 -3.195,-1.843 0,-14.764 -3.194,1.843 0,14.764 L 0,0 Z"
+         style="fill:#0069ab;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path88"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>
