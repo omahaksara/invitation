@@ -711,8 +711,8 @@ html[data-oa-theme="taupe"] { --oa-font-display:"Playfair Display",Georgia,serif
 }
 .oa-floating-controls[data-theme="sagara"] button { border-radius:999px; }
 
-html[data-oa-theme="aksara-velora"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Plus Jakarta Sans",sans-serif; --oa-reveal-time:.96s; --oa-reveal-ease:cubic-bezier(.2,.76,.22,1); }
-html[data-oa-theme="atelier-editorial"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; --oa-reveal-time:1.02s; --oa-reveal-ease:cubic-bezier(.18,.78,.2,1); }
-html[data-oa-theme="kencana-jawa"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.08s; --oa-reveal-ease:cubic-bezier(.16,.8,.22,1); }
-html[data-oa-theme="lumina"] { --oa-theme-display:"Unbounded",sans-serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.7,.25,1); }
-html[data-oa-theme="sagara"] { --oa-theme-display:"Fraunces",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.04s; --oa-reveal-ease:cubic-bezier(.17,.8,.24,1); }
+html[data-oa-theme="aksara-velora"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Plus Jakarta Sans",sans-serif; --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Plus Jakarta Sans",sans-serif; --oa-reveal-time:.96s; --oa-reveal-ease:cubic-bezier(.2,.76,.22,1); }
+html[data-oa-theme="atelier-editorial"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; --oa-reveal-time:1.02s; --oa-reveal-ease:cubic-bezier(.18,.78,.2,1); }
+html[data-oa-theme="kencana-jawa"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.08s; --oa-reveal-ease:cubic-bezier(.16,.8,.22,1); }
+html[data-oa-theme="lumina"] { --oa-font-display:"Unbounded",sans-serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Unbounded",sans-serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Fraunces",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.04s; --oa-reveal-ease:cubic-bezier(.17,.8,.24,1); }
