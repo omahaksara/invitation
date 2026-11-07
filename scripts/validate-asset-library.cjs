@@ -69,7 +69,7 @@ for (const item of demoAccounts) {
 }
 
 const themeFiles = [
-  ...Object.values(themeManifest.categories).flat().filter(file => !file.startsWith("/")),
+  ...Object.values(themeManifest.categories).flat().filter(file => !file.startsWith("/")).map(file => path.join("assets/themes", file)),
   ...ornamentManifest.assets.map(item => ornamentManifest.basePath + item.file).map(file => file.replace(/^\//, ""))
 ];
 for (const file of themeFiles) {
