@@ -14,7 +14,7 @@ Contoh data:
 
 ## Bank
 
-Status sinkronisasi: BCA, BNI, Mandiri, dan BSI sudah tersedia sebagai file lokal. BRI versi 2025 dan Bank Sulteng (PNG sumber resolusi tinggi) sudah masuk daftar unduhan otomatis, tetapi berkasnya belum tersedia di branch ini karena workflow unduh belum dijalankan. Keduanya belum dipakai oleh data demo.
+Status sinkronisasi: BCA, BNI, Mandiri, BSI, BRI versi 2025, dan Bank Sulteng sudah tersedia sebagai file lokal. Aset BRI dan Bank Sulteng berhasil diunduh dari sumber Wikimedia Commons dan situs resmi Bank Sulteng, lalu dimasukkan ke branch ini. Keduanya belum dipakai sebagai rekening default demo.
 
 | File lokal | Identitas | Sumber |
 |---|---|---|
