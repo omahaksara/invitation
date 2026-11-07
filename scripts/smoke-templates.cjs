@@ -436,7 +436,7 @@ for (const slug of activeThemeSlugs) {
             };
           }, theme.marker);
         } catch {}
-        const message = error && error.message ? error.message : String(error);
+        const message = error && error.stack ? error.stack : (error && error.message ? error.message : String(error));
         failures.push(theme.slug + ": " + message);
         console.error("FAIL " + theme.slug + ": " + message + " DEBUG " + JSON.stringify(debug));
       } finally {
