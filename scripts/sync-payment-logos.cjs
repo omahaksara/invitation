@@ -42,7 +42,7 @@ const files = [
   {
     name: "bsi.svg",
     type: "svg",
-    url: "https://upload.wikimedia.org/wikipedia/commons/0/0a/Bank_Syariah_Indonesia.svg",
+    url: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia.svg",
     source: "https://commons.wikimedia.org/wiki/File:Bank_Syariah_Indonesia.svg",
     credit: "PT Bank Syariah Indonesia Tbk; Wikimedia Commons, PD-textlogo",
   },
