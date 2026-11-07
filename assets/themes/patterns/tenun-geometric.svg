@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <defs><pattern id="tenun" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M30 2 58 30 30 58 2 30Z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M30 14 46 30 30 46 14 30Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="30" cy="30" r="3" fill="currentColor"/>
+  </pattern></defs>
+  <rect width="240" height="240" fill="url(#tenun)"/>
+</svg>
