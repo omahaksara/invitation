@@ -38,5 +38,6 @@ jobs:
             echo "No wayang asset changes."
           else
             git commit -m "Add attributed local wayang SVG assets"
-            git push origin "HEAD:${{ github.ref_name }}"
+            git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
           fi
