@@ -127,6 +127,21 @@ for (const slug of activeThemeSlugs) {
         assert.ok(imageAudit.images.every(src => src.startsWith(localPrefix)),
           theme.slug + ": ditemukan gambar eksternal pada demo " + JSON.stringify(imageAudit.images));
 
+        const imageLoadAudit = await page.evaluate(async () => {
+          const images = Array.from(document.querySelectorAll("#app img[src]"));
+          images.forEach(image => { image.loading = "eager"; });
+          await Promise.all(images.map(image => image.decode().catch(() => null)));
+          return images.map(image => ({
+            src: image.currentSrc || image.src,
+            width: image.naturalWidth,
+            height: image.naturalHeight,
+            complete: image.complete
+          }));
+        });
+        assert.ok(imageLoadAudit.length > 0, theme.slug + ": tidak ada gambar yang diuji.");
+        assert.ok(imageLoadAudit.every(image => image.complete && image.width > 0 && image.height > 0),
+          theme.slug + ": ada gambar yang gagal dimuat " + JSON.stringify(imageLoadAudit.filter(image => !image.width || !image.height)));
+
         if (theme.open) {
           // Shared navigation and quick controls must remain hidden behind the cover.
           assert.equal(await page.locator("#oa-floating-controls").count(), 1,
@@ -282,6 +297,72 @@ for (const slug of activeThemeSlugs) {
 
         const musicControl = page.locator('#oa-floating-controls [data-oa-action="music"]').first();
         await musicControl.waitFor({ state: "visible", timeout: 5000 });
+
+        // Exercise real click handlers, not only the presence/count of controls.
+        const jumpTargets = await navigation.locator('[data-oa-action="jump"]').evaluateAll(buttons =>
+          buttons.map(button => button.dataset.target).filter(Boolean));
+        for (const targetId of jumpTargets) {
+          const targetButton = navigation.locator('[data-oa-action="jump"][data-target="' + targetId + '"]');
+          if (!(await targetButton.isVisible())) {
+            const more = navigation.locator('[data-oa-action="more"]');
+            if (await more.getAttribute("aria-expanded") !== "true") await more.click();
+          }
+          await targetButton.click();
+          await page.waitForFunction(id => {
+            const target = document.getElementById(id);
+            if (!target) return false;
+            const top = target.getBoundingClientRect().top;
+            return top > -80 && top < window.innerHeight;
+          }, targetId, { timeout: 5000 });
+        }
+
+        const moreButton = navigation.locator('[data-oa-action="more"]');
+        if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
+        await navigation.locator('[data-oa-action="top"]').click();
+        await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
+        if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
+        await navigation.locator('[data-oa-action="next"]').click();
+        await page.waitForFunction(() => window.scrollY > 24, undefined, { timeout: 5000 });
+
+        await page.evaluate(() => {
+          window.__oaSharePayload = null;
+          Object.defineProperty(navigator, "share", {
+            configurable: true,
+            value: async payload => { window.__oaSharePayload = payload; }
+          });
+        });
+        if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
+        await navigation.locator('[data-oa-action="share"]').click();
+        const sharePayload = await page.evaluate(() => window.__oaSharePayload);
+        assert.ok(sharePayload && sharePayload.url && new URL(sharePayload.url).origin === location.origin,
+          theme.slug + ": tombol bagikan tidak mengirim URL undangan yang valid.");
+
+        await page.evaluate(() => {
+          const audio = document.getElementById("bg-music");
+          audio.__playing = false;
+          audio.__playCalls = 0;
+          audio.__pauseCalls = 0;
+          Object.defineProperty(audio, "paused", { configurable: true, get() { return !this.__playing; } });
+          audio.play = function() {
+            this.__playCalls++;
+            this.__playing = true;
+            this.dispatchEvent(new Event("play"));
+            return Promise.resolve();
+          };
+          audio.pause = function() {
+            this.__pauseCalls++;
+            this.__playing = false;
+            this.dispatchEvent(new Event("pause"));
+          };
+        });
+        await musicControl.click();
+        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "true");
+        assert.equal(await page.evaluate(() => document.getElementById("bg-music").__playCalls), 1,
+          theme.slug + ": tombol musik tidak memanggil play().");
+        await musicControl.click();
+        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "false");
+        assert.equal(await page.evaluate(() => document.getElementById("bg-music").__pauseCalls), 1,
+          theme.slug + ": tombol musik tidak memanggil pause().");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
         console.log("PASS " + theme.slug);
       } catch (error) {
