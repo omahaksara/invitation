@@ -15,15 +15,21 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function fetchRetry(url,label){
  let last;
  for(let i=0;i<8;i++){
+  let res;
   try{
-   const res=await fetch(url,{headers:{"User-Agent":"OmahAksara-BankLogoCatalog/1.0 (Wikimedia Commons attribution sync)"},redirect:"follow"});
-   if(res.ok)return res;
-   last=new Error(label+" HTTP "+res.status);
-   if(![429,500,502,503,504].includes(res.status))throw last;
-   const retryAfter=Number(res.headers.get("retry-after")||0)*1000;
-   last.retryAfter=retryAfter;
-  }catch(e){last=e;if(i===4)throw last;}
-  await sleep(Math.max(last?.retryAfter||0,5000*(i+1)));
+   res=await fetch(url,{headers:{"User-Agent":"OmahAksara-BankLogoCatalog/1.0 (Wikimedia Commons attribution sync)"},redirect:"follow"});
+  }catch(error){
+   last=error;
+   if(i===7)throw last;
+   await sleep(5000*(i+1));
+   continue;
+  }
+  if(res.ok)return res;
+  last=new Error(label+" HTTP "+res.status);
+  if(![429,500,502,503,504].includes(res.status))throw last;
+  const retryAfter=Number(res.headers.get("retry-after")||0)*1000;
+  if(i===7)throw last;
+  await sleep(Math.max(retryAfter,5000*(i+1)));
  }
  throw last;
 }
