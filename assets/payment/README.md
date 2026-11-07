@@ -28,7 +28,7 @@ Semua logo dipakai dari aset lokal. Sumber logo:
 - LinkAja: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:LinkAja.svg)
 - QRIS: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:QRIS_logo.svg), Bank Indonesia. Bukan QR transaksi.
 
-ShopeePay masih memakai aset lokal yang perlu diganti dengan unduhan resmi dari brand kit ShopeePay sebelum materi promosi komersial final. Merek tetap milik pemilik masing-masing. Jangan gunakan nomor rekening/QR simulasi untuk transaksi.
+ShopeePay: logo lokal diunduh dari domain resmi ShopeePay (`https://shopeepay.co.id/assets/spp-logo-C03WIzdh.svg`). Ikuti [Brand Guidelines ShopeePay](https://product.shopeepay.co.id/products/brand-guidelines): gunakan logo standar lengkap (ikon dompet + logotype Pay), pertahankan clear space 0,5x, dan jangan gunakan tulisan Pay saja. DANA bersumber dari logo versi 2018 dan OVO versi 2020; periksa kembali versi brand terbaru sebelum materi promosi komersial final. Merek tetap milik pemilik masing-masing. Jangan gunakan nomor rekening/QR simulasi untuk transaksi.
 
 
 ## Katalog demo dan aset pilihan
