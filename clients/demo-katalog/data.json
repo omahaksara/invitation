@@ -166,6 +166,16 @@
         "type": "bank"
       },
       {
+        "paymentType": "bank",
+        "type": "bank",
+        "bank": "CIMB Niaga",
+        "logo": "/assets/payment/banks/cimb.svg",
+        "accountNumber": "DEMO-CIMB-0007",
+        "accountHolder": "Arkan Pradipta • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+      },
+      {
         "paymentType": "ewallet",
         "bank": "DANA",
         "logo": "/assets/payment/wallets/dana.svg",
