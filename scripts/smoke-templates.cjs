@@ -428,6 +428,8 @@ for (const slug of activeThemeSlugs) {
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
         await navigation.locator('[data-oa-action="next"]').click();
         await page.waitForFunction(() => window.scrollY > 24, undefined, { timeout: 5000 });
+        await navigation.locator('[data-oa-action="jump"][data-oa-section="home"]').click();
+        await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
 
         await page.evaluate(() => {
           window.__oaSharePayload = null;
