@@ -556,6 +556,7 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
         await auditCover(page, theme, "mobile");
         if (theme.open) {
+          const reducedMotionOpenStarted = Date.now();
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
