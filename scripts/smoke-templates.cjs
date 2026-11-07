@@ -401,16 +401,23 @@ for (const slug of activeThemeSlugs) {
 
         await page.evaluate(() => {
           window.__oaSharePayload = null;
-          Object.defineProperty(window.navigator, "share", {
-            configurable: true,
-            writable: true,
-            value: async payload => { window.__oaSharePayload = payload; }
-          });
+          const stub = async payload => { window.__oaSharePayload = payload; };
+          try { Object.defineProperty(window.navigator, "share", { configurable: true, writable: true, value: stub }); } catch (_) {}
+          if (window.navigator.share !== stub) {
+            try { Object.defineProperty(Object.getPrototypeOf(window.navigator), "share", { configurable: true, writable: true, value: stub }); } catch (_) {}
+          }
+          window.__oaShareStubReady = window.navigator.share === stub;
         });
-        // The dock's share shortcut navigates to the shared share section;
-        // the actual Web Share API is invoked by that section's action button.
+        assert.equal(await page.evaluate(() => window.__oaShareStubReady), true,
+          theme.slug + ": Web Share API stub could not be installed for the interaction test.");
+        // The shared dock has a direct share action; verify it independently.
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
         await navigation.locator('[data-oa-action="share"]').click();
+        await page.waitForFunction(() => Boolean(window.__oaSharePayload?.url), undefined, { timeout: 5000 });
+        const dockSharePayload = await page.evaluate(() => window.__oaSharePayload);
+        assert.ok(dockSharePayload?.url, theme.slug + ": dock share action did not invoke Web Share API.");
+        // The in-content share button is a separate entry point; test it too.
+        await page.evaluate(() => { window.__oaSharePayload = null; });
         const shareButton = page.locator("#oa-share-invitation");
         await shareButton.scrollIntoViewIfNeeded();
         await shareButton.click();
