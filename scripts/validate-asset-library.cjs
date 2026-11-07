@@ -23,7 +23,7 @@ function validateSvg(file) {
   assert.match(svg, /<svg[\s>]/i, file + " is not SVG");
   assert.doesNotMatch(svg, /<script\b|<foreignObject\b|\son[a-z]+\s*=|href=["']https?:/i,
     file + " contains unsafe active/external SVG content");
-  assert.ok(/viewBox=/i.test(svg) || /\\bwidth=["\\x27][0-9.]+/i.test(svg) && /\\bheight=["\\x27][0-9.]+/i.test(svg), file + " should declare a viewBox or intrinsic dimensions");
+  assert.ok(/viewBox=/i.test(svg) || /\bwidth=["\x27][0-9.]+/i.test(svg) && /\bheight=["\x27][0-9.]+/i.test(svg), file + " should declare a viewBox or intrinsic dimensions");
 }
 function validatePng(file) {
   const bytes = fs.readFileSync(file);
