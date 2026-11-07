@@ -620,6 +620,8 @@
         logo.src = assetUrl(logoSrc, clientBase);
         logo.alt = (item.bank || "Bank") + " — logo";
         logo.loading = "lazy";
+        logo.decoding = "async";
+        logo.onerror = () => logo.remove();
         logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
         card.append(logo);
       }
