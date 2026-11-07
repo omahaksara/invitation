@@ -103,19 +103,106 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Doa restu dan kehadiran Bapak/Ibu/Saudara/i merupakan kehormatan serta hadiah terindah bagi kami. Informasi rekening berikut semata-mata contoh tampilan untuk demo katalog dan tidak dapat digunakan untuk transaksi. Mohon tidak melakukan transfer.",
+    "message": "Pratinjau lengkap fitur Hadiah Digital Omah Aksara. Seluruh nama penerima, nomor rekening, nomor e-wallet, dan ID pembayaran di bawah ini adalah DATA SIMULASI — BUKAN REKENING AKTIF. Jangan melakukan transfer atau pembayaran. Saat menjadi klien, rekening dan metode pembayaran akan diganti dengan data resmi milik Anda.",
     "accounts": [
       {
-        "bank": "Bank BCA",
+        "type": "bank",
+        "bank": "Bank Central Asia (BCA)",
         "logo": "/assets/payment/banks/bca.svg",
-        "accountNumber": "0000000000",
-        "accountHolder": "Arkan Pradipta — REKENING DEMO"
+        "accountNumber": "000000000000",
+        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
+        "note": "Nomor simulasi, bukan rekening aktif.",
+        "demoOnly": true
       },
       {
+        "type": "bank",
+        "bank": "Bank Rakyat Indonesia (BRI)",
+        "logo": "/assets/payment/banks/bri.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
+        "note": "Nomor simulasi, bukan rekening aktif.",
+        "demoOnly": true
+      },
+      {
+        "type": "bank",
+        "bank": "Bank Negara Indonesia (BNI)",
+        "logo": "/assets/payment/banks/bni.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
+        "note": "Nomor simulasi, bukan rekening aktif.",
+        "demoOnly": true
+      },
+      {
+        "type": "bank",
         "bank": "Bank Mandiri",
         "logo": "/assets/payment/banks/mandiri.svg",
-        "accountNumber": "0000000000",
-        "accountHolder": "Sekar Ayuningtyas — REKENING DEMO"
+        "accountNumber": "000000000000",
+        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
+        "note": "Nomor simulasi, bukan rekening aktif.",
+        "demoOnly": true
+      },
+      {
+        "type": "bank",
+        "bank": "Bank Syariah Indonesia (BSI)",
+        "logo": "/assets/payment/banks/bsi.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
+        "note": "Nomor simulasi, bukan rekening aktif.",
+        "demoOnly": true
+      },
+      {
+        "type": "bank",
+        "bank": "Bank Sulteng",
+        "logo": "/assets/payment/banks/bank-sulteng.png",
+        "accountNumber": "000000000000",
+        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
+        "note": "Nomor simulasi, bukan rekening aktif.",
+        "demoOnly": true
+      },
+      {
+        "type": "ewallet",
+        "bank": "DANA",
+        "logo": "/assets/payment/wallets/dana.svg",
+        "accountNumber": "08XX-XXXX-XXXX",
+        "accountHolder": "Arkan Pradipta — AKUN DEMO",
+        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
+        "demoOnly": true
+      },
+      {
+        "type": "ewallet",
+        "bank": "GoPay",
+        "logo": "/assets/payment/wallets/gopay.svg",
+        "accountNumber": "08XX-XXXX-XXXX",
+        "accountHolder": "Sekar Ayuningtyas — AKUN DEMO",
+        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
+        "demoOnly": true
+      },
+      {
+        "type": "ewallet",
+        "bank": "OVO",
+        "logo": "/assets/payment/wallets/ovo.svg",
+        "accountNumber": "08XX-XXXX-XXXX",
+        "accountHolder": "Arkan Pradipta — AKUN DEMO",
+        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
+        "demoOnly": true
+      },
+      {
+        "type": "ewallet",
+        "bank": "ShopeePay",
+        "logo": "/assets/payment/wallets/shopeepay.svg",
+        "accountNumber": "08XX-XXXX-XXXX",
+        "accountHolder": "Sekar Ayuningtyas — AKUN DEMO",
+        "note": "Nomor e-wallet disamarkan untuk pratinjau.",
+        "demoOnly": true
+      },
+      {
+        "type": "qris",
+        "bank": "QRIS",
+        "logo": "/assets/payment/wallets/qris.svg",
+        "accountNumber": "QRIS-DEMO-TIDAK-AKTIF",
+        "accountHolder": "Omah Aksara — SIMULASI",
+        "note": "Ini hanya logo QRIS. Tidak ada kode QR pembayaran aktif.",
+        "demoOnly": true
       }
     ]
   },
@@ -167,7 +254,7 @@
   "hashtag": "#ArkanSekarWedding",
   "seo": {
     "title": "Arkan & Sekar | Undangan Pernikahan — Omah Aksara",
-    "description": "Demo undangan pernikahan digital premium Omah Aksara dengan desain Lumière Bloom. Nama, jadwal, lokasi, galeri, dan rekening merupakan simulasi untuk pratinjau katalog."
+    "description": "Demo katalog Omah Aksara dengan pratinjau tema, galeri, RSVP, buku tamu, hadiah digital, rekening bank, e-wallet, dan QRIS. Semua data pembayaran adalah simulasi dan tidak dapat digunakan untuk transaksi."
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh. Dengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami. Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, memberikan doa restu, dan menjadi bagian dari awal perjalanan baru kami."
