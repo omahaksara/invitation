@@ -635,7 +635,8 @@
         button.disabled = true;
         button.setAttribute("aria-label", "Data simulasi, tidak dapat digunakan untuk transaksi");
       } else {
-        button.addEventListener("click", () => copyText(item.accountNumber || "", button));
+        button.disabled = item.copyable === false || !(item.copyValue || item.accountNumber);
+      if (!button.disabled) button.addEventListener("click", () => copyText(item.copyValue || item.accountNumber || "", button));
       }
       card.append(bank, holder, number, button);
       if (item.demoNote || item.note) {

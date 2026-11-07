@@ -103,7 +103,7 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Berikut contoh tampilan hadiah digital Omah Aksara. Semua nama, nomor rekening, nomor e-wallet, dan QRIS pada halaman demo ini adalah DATA SIMULASI — bukan rekening atau tujuan pembayaran aktif. Jangan melakukan transfer atau pembayaran. Pada undangan klien, informasi ini akan diganti dengan data resmi milik mempelai.",
+    "message": "Seluruh rekening dan nomor dompet digital di halaman ini adalah DATA SIMULASI untuk pratinjau katalog. Nomor sengaja tidak aktif. Jangan melakukan transfer atau pembayaran.",
     "accounts": [
       {
         "paymentType": "bank",
@@ -112,7 +112,11 @@
         "accountNumber": "DEMO-BCA-0001",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "bank",
@@ -121,7 +125,11 @@
         "accountNumber": "DEMO-BRI-0002",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "bank",
@@ -130,7 +138,11 @@
         "accountNumber": "DEMO-BNI-0003",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "bank",
@@ -139,7 +151,11 @@
         "accountNumber": "DEMO-MANDIRI-0004",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "bank",
@@ -148,7 +164,11 @@
         "accountNumber": "DEMO-BSI-0005",
         "accountHolder": "Arkan Pradipta • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "bank",
@@ -157,16 +177,11 @@
         "accountNumber": "DEMO-SULTENG-0006",
         "accountHolder": "Sekar Ayuningtyas • CONTOH",
         "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
-      },
-      {
-        "paymentType": "bank",
-        "bank": "CIMB Niaga",
-        "logo": "/assets/payment/banks/cimb.svg",
-        "accountNumber": "DEMO-CIMB-0007",
-        "accountHolder": "Arkan Pradipta • CONTOH",
-        "demoOnly": true,
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "type": "bank",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "ewallet",
@@ -175,7 +190,11 @@
         "accountNumber": "08XX-XXXX-0001",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "ewallet",
@@ -184,7 +203,11 @@
         "accountNumber": "08XX-XXXX-0002",
         "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "ewallet",
@@ -193,7 +216,11 @@
         "accountNumber": "08XX-XXXX-0003",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "ewallet",
@@ -202,7 +229,11 @@
         "accountNumber": "08XX-XXXX-0004",
         "accountHolder": "Sekar Ayuningtyas • AKUN DEMO",
         "demoOnly": true,
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "type": "ewallet",
+        "copyLabel": "Salin Nomor Demo",
+        "copyable": true,
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
       },
       {
         "paymentType": "qris",
@@ -212,7 +243,66 @@
         "qrCode": "/assets/payment/wallets/qris-demo.svg",
         "accountHolder": "QRIS Omah Aksara • DEMO",
         "demoOnly": true,
-        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar."
+        "demoNote": "Gambar QRIS hanya ilustrasi, bukan kode yang dapat dipindai atau dibayar.",
+        "type": "qris",
+        "copyLabel": "QRIS Demo — Nonaktif",
+        "copyable": false,
+        "note": "Logo QRIS hanya contoh identitas pembayaran. Ini bukan kode QR transaksi."
+      },
+      {
+        "bank": "CIMB Niaga",
+        "type": "bank",
+        "logo": "/assets/payment/banks/cimb-niaga.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
+        "demoOnly": true,
+        "copyable": true,
+        "copyLabel": "Salin Nomor Demo",
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+      },
+      {
+        "bank": "Permata Bank",
+        "type": "bank",
+        "logo": "/assets/payment/banks/permata.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
+        "demoOnly": true,
+        "copyable": true,
+        "copyLabel": "Salin Nomor Demo",
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+      },
+      {
+        "bank": "Bank Danamon",
+        "type": "bank",
+        "logo": "/assets/payment/banks/danamon.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Arkan Pradipta — CONTOH DEMO",
+        "demoOnly": true,
+        "copyable": true,
+        "copyLabel": "Salin Nomor Demo",
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+      },
+      {
+        "bank": "Bank Jatim",
+        "type": "bank",
+        "logo": "/assets/payment/banks/bank-jatim.svg",
+        "accountNumber": "000000000000",
+        "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
+        "demoOnly": true,
+        "copyable": true,
+        "copyLabel": "Salin Nomor Demo",
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+      },
+      {
+        "bank": "LinkAja",
+        "type": "ewallet",
+        "logo": "/assets/payment/wallets/linkaja.svg",
+        "accountNumber": "00000000000",
+        "accountHolder": "Arkan Pradipta — AKUN DEMO",
+        "demoOnly": true,
+        "copyable": true,
+        "copyLabel": "Salin Nomor Demo",
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
       }
     ]
   },
@@ -264,7 +354,7 @@
   "hashtag": "#ArkanSekarWedding",
   "seo": {
     "title": "Arkan & Sekar | Undangan Pernikahan — Omah Aksara",
-    "description": "Demo katalog Omah Aksara dengan pratinjau tema, galeri, RSVP, buku tamu, hadiah digital, rekening bank, e-wallet, dan QRIS. Semua data pembayaran adalah simulasi dan tidak dapat digunakan untuk transaksi."
+    "description": "Demo katalog Omah Aksara: pratinjau tema dan fitur hadiah dengan rekening serta nomor e-wallet simulasi yang tidak dapat digunakan untuk transaksi."
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh. Dengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami. Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, memberikan doa restu, dan menjadi bagian dari awal perjalanan baru kami."

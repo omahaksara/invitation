@@ -21,3 +21,6 @@ Pustaka bersama untuk aset visual tema undangan. Simpan aset di sini agar tema d
 ## Aset orisinal Omah Aksara
 
 File SVG di `frames/`, `ornaments/`, dan `patterns/` yang diberi label Original Omah Aksara adalah gambar vektor dekoratif orisinal yang dibuat khusus untuk pustaka ini.
+
+
+Aset orisinal tambahan: `frames/jendela-klasik.svg`, `ornaments/wayang-gunungan.svg`, `ornaments/floral-divider.svg`, `patterns/parang-repeat.svg`, dan `ornaments/keris-motif.svg`.

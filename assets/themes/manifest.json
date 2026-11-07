@@ -3,14 +3,19 @@
   "description": "Shared local decorative assets for Omah Aksara themes. Not auto-applied globally.",
   "categories": {
     "frames": [
-      "frames/jendela-jawa-arch.svg"
+      "frames/jendela-jawa-arch.svg",
+      "frames/jendela-klasik.svg"
     ],
     "ornaments": [
       "ornaments/gunungan-line.svg",
-      "ornaments/floral-corner.svg"
+      "ornaments/floral-corner.svg",
+      "ornaments/wayang-gunungan.svg",
+      "ornaments/floral-divider.svg",
+      "ornaments/keris-motif.svg"
     ],
     "patterns": [
-      "patterns/kawung-repeat.svg"
+      "patterns/kawung-repeat.svg",
+      "patterns/parang-repeat.svg"
     ],
     "wayang": [
       "wayang/anggada.svg",
