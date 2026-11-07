@@ -671,3 +671,41 @@ html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; -
 .oa-shared-section { font-family:var(--oa-theme-body,var(--oa-font-body)); }
 .oa-shared-section > h2,
 .oa-shared-section h3 { font-family:var(--oa-theme-display,var(--oa-font-display)); }
+
+
+/* Missing active-theme dock identities: keep shared behavior, restore each theme's own finish. */
+.oa-floating-controls[data-theme="aksara-velora"] {
+  --oa-dock-bg:#3A3532f5; --oa-dock-border:#D4B5A7; --oa-dock-ink:#FDFBF7; --oa-dock-accent:#A3705C;
+  border-radius:999px; box-shadow:0 10px 28px rgba(58,53,50,.22);
+}
+.oa-floating-controls[data-theme="aksara-velora"] button { border-radius:999px; }
+
+.oa-floating-controls[data-theme="atelier-editorial"] {
+  --oa-dock-bg:#302a30f5; --oa-dock-border:#d9c9c2; --oa-dock-ink:#f6f1ec; --oa-dock-accent:#9b6d63;
+  border-radius:3px; box-shadow:0 8px 24px rgba(48,42,48,.18);
+}
+.oa-floating-controls[data-theme="atelier-editorial"] button { border-radius:2px; letter-spacing:.06em; }
+
+.oa-floating-controls[data-theme="kencana-jawa"] {
+  --oa-dock-bg:#0e0d0bf7; --oa-dock-border:#c6a15b; --oa-dock-ink:#ecd9a8; --oa-dock-accent:#5b4727;
+  border-radius:5px; border-width:1px; box-shadow:0 10px 30px #0009,inset 0 0 0 1px #c6a15b22;
+}
+.oa-floating-controls[data-theme="kencana-jawa"] button { border-radius:3px; letter-spacing:.06em; }
+
+.oa-floating-controls[data-theme="lumina"] {
+  --oa-dock-bg:#14101ff7; --oa-dock-border:#ffe066; --oa-dock-ink:#fff9f2; --oa-dock-accent:#ff5da2;
+  border-radius:24px; box-shadow:0 10px 30px #08051288,0 0 18px #a78bfa30;
+}
+.oa-floating-controls[data-theme="lumina"] button { border-radius:999px; font-weight:800; }
+
+.oa-floating-controls[data-theme="sagara"] {
+  --oa-dock-bg:#0a2e3df5; --oa-dock-border:#7fe3d4; --oa-dock-ink:#f4ead8; --oa-dock-accent:#0e4a5e;
+  border-radius:26px; box-shadow:0 12px 30px rgba(10,46,61,.28);
+}
+.oa-floating-controls[data-theme="sagara"] button { border-radius:999px; }
+
+html[data-oa-theme="aksara-velora"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Plus Jakarta Sans",sans-serif; --oa-reveal-time:.96s; --oa-reveal-ease:cubic-bezier(.2,.76,.22,1); }
+html[data-oa-theme="atelier-editorial"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; --oa-reveal-time:1.02s; --oa-reveal-ease:cubic-bezier(.18,.78,.2,1); }
+html[data-oa-theme="kencana-jawa"] { --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.08s; --oa-reveal-ease:cubic-bezier(.16,.8,.22,1); }
+html[data-oa-theme="lumina"] { --oa-theme-display:"Unbounded",sans-serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="sagara"] { --oa-theme-display:"Fraunces",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.04s; --oa-reveal-ease:cubic-bezier(.17,.8,.24,1); }
