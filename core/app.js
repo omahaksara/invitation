@@ -117,7 +117,7 @@
         app.innerHTML = templateHtml;
       }
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
-      renderInvitation(data, clientBase, slug, guestName);
+      renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl);
     } catch (error) {
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan tidak dapat dimuat", error instanceof Error ? error.message : "Periksa koneksi internet lalu coba lagi.");
@@ -209,7 +209,7 @@
     return new URL(String(value), clientBase).href;
   }
 
-  function renderInvitation(data, clientBase, slug, guestName) {
+  function renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl) {
     ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl);
     window.__invitationData = data;
     document.querySelectorAll("[data-bind]").forEach(el => {
