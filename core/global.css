@@ -716,3 +716,18 @@ html[data-oa-theme="atelier-editorial"] { --oa-font-display:"Bodoni Moda",Georgi
 html[data-oa-theme="kencana-jawa"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.08s; --oa-reveal-ease:cubic-bezier(.16,.8,.22,1); }
 html[data-oa-theme="lumina"] { --oa-font-display:"Unbounded",sans-serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Unbounded",sans-serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.7,.25,1); }
 html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Fraunces",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.04s; --oa-reveal-ease:cubic-bezier(.17,.8,.24,1); }
+
+
+/* Keep media controls visually distinct even when both are active:
+   auto-scroll always uses a directional glyph; music keeps its play/pause glyph. */
+.oa-floating-controls button.oa-auto-scroll {
+  font-size:0 !important;
+  line-height:1;
+}
+.oa-floating-controls button.oa-auto-scroll::before {
+  content:"⇣";
+  display:inline-block;
+  font-size:1.08rem;
+  line-height:1;
+  font-weight:700;
+}
