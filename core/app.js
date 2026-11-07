@@ -248,7 +248,7 @@
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
-    ensureFloatingControls(data);
+    ensureFloatingControls(data, buildShortInvitationUrl);
     // Forms, navigation, and fallback sections are created above; observe them too.
     setupReveal();
   }
@@ -1072,10 +1072,11 @@
 
   // Shared navigation controls are mounted by the engine, so every active theme
   // receives the same working controls without duplicating theme-specific markup.
-  function ensureFloatingControls(data) {
+  function ensureFloatingControls(data, buildShortInvitationUrl) {
     if (document.getElementById("oa-floating-controls")) return;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
+    const getShareUrl = typeof buildShortInvitationUrl === "function" ? buildShortInvitationUrl : () => location.href;
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -1289,7 +1290,7 @@
         });
         const shareButton = makeButton("share", "Bagikan", "Bagikan undangan");
         shareButton.addEventListener("click", async () => {
-          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: buildShortInvitationUrl() };
+          const shareData = { title: document.title || "Undangan", text: "Dengan bahagia kami mengundang Anda.", url: getShareUrl() };
           try {
             if (navigator.share) await navigator.share(shareData);
             else if (navigator.clipboard?.writeText) {
