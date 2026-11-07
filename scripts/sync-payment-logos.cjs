@@ -104,10 +104,6 @@ async function main() {
     console.log(`Downloaded ${item.name} (${bytes.length} bytes)`);
   }
 
-  await fs.writeFile(
-    path.join(ROOT, "assets/payment/README.md"),
-    manifest.join("\n") + "\n"
-  );
 }
 
 main().catch((error) => {
