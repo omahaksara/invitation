@@ -177,8 +177,16 @@ for (const slug of activeThemeSlugs) {
         assert.equal(imageAudit.gallery.length, 4, theme.slug + ": galeri demo harus berisi 4 foto");
         assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
           theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
-        assert.ok(imageAudit.images.every(src => src.startsWith(localPrefix)),
-          theme.slug + ": ditemukan gambar eksternal pada demo " + JSON.stringify(imageAudit.images));
+        // Foto pasangan/galeri wajib berasal dari folder demo. Logo pembayaran dan
+        // ornamen visual boleh berasal dari pustaka aset lokal repository.
+        const allowedLocalImagePrefixes = [
+          localPrefix,
+          "http://127.0.0.1:4173/assets/payment/",
+          "http://127.0.0.1:4173/assets/themes/",
+          "http://127.0.0.1:4173/assets/ornaments/"
+        ];
+        assert.ok(imageAudit.images.every(src => allowedLocalImagePrefixes.some(prefix => src.startsWith(prefix))),
+          theme.slug + ": ditemukan gambar dari luar pustaka aset lokal demo " + JSON.stringify(imageAudit.images));
 
         const imageLoadAudit = await page.evaluate(async () => {
           const images = Array.from(document.querySelectorAll("#app img[src]"));
