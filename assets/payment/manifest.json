@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "banks": [
+    {
+      "id": "bca",
+      "name": "Bank BCA",
+      "logo": "/assets/payment/banks/bca.svg"
+    },
+    {
+      "id": "bri",
+      "name": "Bank BRI",
+      "logo": "/assets/payment/banks/bri.svg"
+    },
+    {
+      "id": "bni",
+      "name": "Bank BNI",
+      "logo": "/assets/payment/banks/bni.svg"
+    },
+    {
+      "id": "mandiri",
+      "name": "Bank Mandiri",
+      "logo": "/assets/payment/banks/mandiri.svg"
+    },
+    {
+      "id": "bsi",
+      "name": "Bank Syariah Indonesia",
+      "logo": "/assets/payment/banks/bsi.svg"
+    },
+    {
+      "id": "cimb",
+      "name": "CIMB Niaga",
+      "logo": "/assets/payment/banks/cimb.svg"
+    },
+    {
+      "id": "permata",
+      "name": "Permata Bank",
+      "logo": "/assets/payment/banks/permata.svg"
+    },
+    {
+      "id": "danamon",
+      "name": "Bank Danamon",
+      "logo": "/assets/payment/banks/danamon.svg"
+    },
+    {
+      "id": "bank-jatim",
+      "name": "Bank Jatim",
+      "logo": "/assets/payment/banks/bank-jatim.svg"
+    },
+    {
+      "id": "btn",
+      "name": "Bank BTN",
+      "logo": "/assets/payment/banks/btn.svg"
+    },
+    {
+      "id": "bank-jakarta",
+      "name": "Bank Jakarta",
+      "logo": "/assets/payment/banks/bank-jakarta.svg"
+    },
+    {
+      "id": "bank-sulteng",
+      "name": "Bank Sulteng",
+      "logo": "/assets/payment/banks/bank-sulteng.png"
+    }
+  ],
+  "wallets": [
+    {
+      "id": "dana",
+      "name": "DANA",
+      "logo": "/assets/payment/wallets/dana.svg"
+    },
+    {
+      "id": "gopay",
+      "name": "GoPay",
+      "logo": "/assets/payment/wallets/gopay.svg"
+    },
+    {
+      "id": "ovo",
+      "name": "OVO",
+      "logo": "/assets/payment/wallets/ovo.svg"
+    },
+    {
+      "id": "shopeepay",
+      "name": "ShopeePay",
+      "logo": "/assets/payment/wallets/shopeepay.svg"
+    },
+    {
+      "id": "linkaja",
+      "name": "LinkAja",
+      "logo": "/assets/payment/wallets/linkaja.svg"
+    },
+    {
+      "id": "qris",
+      "name": "QRIS",
+      "logo": "/assets/payment/wallets/qris.svg",
+      "demoPlaceholder": "/assets/payment/wallets/qris-demo.svg"
+    }
+  ],
+  "note": "Daftar ini adalah aset yang saat ini tersedia di repository, bukan daftar lengkap semua bank di Indonesia. Tambahkan logo baru hanya setelah sumber dan lisensinya diperiksa."
+}
