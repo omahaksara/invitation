@@ -58,9 +58,23 @@ async function main() {
     catalogue.on('pageerror', error => catalogueErrors.push(error.message));
     const catalogueResponse = await catalogue.goto(CATALOGUE_URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
     assert.ok(catalogueResponse && catalogueResponse.ok(), 'Public catalogue must load.');
-    await catalogue.waitForFunction(count =>
-      document.querySelectorAll('#catalog-grid iframe').length === count,
-      expectedThemes.length, { timeout: 25000 });
+    console.log('CHECK catalogue previews: waiting for ' + expectedThemes.length + ' iframes.');
+    try {
+      await catalogue.waitForFunction(count =>
+        document.querySelectorAll('#catalog-grid iframe').length === count,
+        expectedThemes.length, { timeout: 25000 });
+    } catch (error) {
+      const diagnostic = await catalogue.evaluate(() => ({
+        gridCount: document.querySelectorAll('#catalog-grid').length,
+        iframeCount: document.querySelectorAll('#catalog-grid iframe').length,
+        demoLinks: document.querySelectorAll('#catalog-grid .catalog-demo-link').length,
+        title: document.title,
+        readyState: document.readyState
+      }));
+      throw new Error('Catalogue preview stage timed out. Expected ' + expectedThemes.length +
+        ' iframes; observed ' + JSON.stringify(diagnostic) + '. Original: ' + error.message);
+    }
+    console.log('PASS catalogue preview count: ' + expectedThemes.length + '.');
 
     const displayedThemes = await catalogue.locator('#catalog-grid iframe').evaluateAll(frames =>
       frames.map(frame => new URL(frame.src).searchParams.get('theme')).filter(Boolean).sort());
@@ -88,10 +102,25 @@ async function main() {
       { waitUntil: 'domcontentloaded', timeout: 45000 }
     );
     assert.ok(invitationResponse && invitationResponse.ok(), 'Published Budi–Ani invitation must load.');
-    await invitation.waitForFunction(() =>
-      window.__invitationData && window.__invitationData.slug === 'budi-ani' &&
-      document.querySelector('#rsvp-form') && document.querySelector('#wishes-form'),
-      undefined, { timeout: 25000 });
+    console.log('CHECK Budi–Ani invitation data and forms.');
+    try {
+      await invitation.waitForFunction(() =>
+        window.__invitationData && window.__invitationData.slug === 'budi-ani' &&
+        document.querySelector('#rsvp-form') && document.querySelector('#wishes-form'),
+        undefined, { timeout: 25000 });
+    } catch (error) {
+      const diagnostic = await invitation.evaluate(() => ({
+        readyState: document.readyState,
+        dataLoaded: Boolean(window.__invitationData),
+        slug: window.__invitationData?.slug || null,
+        rsvpForm: Boolean(document.querySelector('#rsvp-form')),
+        wishesForm: Boolean(document.querySelector('#wishes-form')),
+        title: document.title
+      }));
+      throw new Error('Budi–Ani data/forms stage timed out. Observed ' +
+        JSON.stringify(diagnostic) + '. Original: ' + error.message);
+    }
+    console.log('PASS Budi–Ani data and forms.');
 
     assert.equal(await invitation.locator('[data-bind="couple.groom.nickname"]').first().textContent().then(x => x.trim()),
       'Budi', 'Published groom data must load.');
