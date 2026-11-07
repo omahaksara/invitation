@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "basePath": "/assets/ornaments/",
+  "assets": [
+    {
+      "file": "wayang-gunungan.svg",
+      "name": "Gunungan Wayang",
+      "category": "nusantara",
+      "tags": [
+        "jawa",
+        "wayang",
+        "gunungan",
+        "tradisional"
+      ],
+      "suggestedFor": [
+        "kencana-jawa",
+        "royal-vintage"
+      ]
+    },
+    {
+      "file": "jendela-jawa.svg",
+      "name": "Jendela Jawa",
+      "category": "frame",
+      "tags": [
+        "jawa",
+        "gebyok",
+        "jendela",
+        "arch"
+      ],
+      "suggestedFor": [
+        "kencana-jawa",
+        "elegance"
+      ]
+    },
+    {
+      "file": "batik-parang.svg",
+      "name": "Batik Parang",
+      "category": "pattern",
+      "tags": [
+        "jawa",
+        "batik",
+        "pattern"
+      ],
+      "suggestedFor": [
+        "kencana-jawa",
+        "royal-vintage"
+      ]
+    },
+    {
+      "file": "floral-divider.svg",
+      "name": "Floral Divider",
+      "category": "divider",
+      "tags": [
+        "floral",
+        "separator",
+        "romantic"
+      ],
+      "suggestedFor": [
+        "romantic-floral",
+        "lumiere-bloom"
+      ]
+    },
+    {
+      "file": "arch-islamic.svg",
+      "name": "Islamic Arch",
+      "category": "frame",
+      "tags": [
+        "islamic",
+        "arch",
+        "mihrab"
+      ],
+      "suggestedFor": [
+        "aksara-nocturne",
+        "serena-ivory"
+      ]
+    },
+    {
+      "file": "frame-corners.svg",
+      "name": "Frame Corners",
+      "category": "frame",
+      "tags": [
+        "border",
+        "corner",
+        "photo"
+      ],
+      "suggestedFor": [
+        "atelier-editorial",
+        "elegance"
+      ]
+    },
+    {
+      "file": "leaf-branch.svg",
+      "name": "Leaf Branch",
+      "category": "botanical",
+      "tags": [
+        "leaf",
+        "botanical",
+        "greenery"
+      ],
+      "suggestedFor": [
+        "botanical-garden"
+      ]
+    },
+    {
+      "file": "jasmine.svg",
+      "name": "Jasmine Flower",
+      "category": "floral",
+      "tags": [
+        "melati",
+        "wedding",
+        "floral"
+      ],
+      "suggestedFor": [
+        "romantic-floral",
+        "serena-ivory"
+      ]
+    },
+    {
+      "file": "ukiran-bali.svg",
+      "name": "Ukiran Bali",
+      "category": "nusantara",
+      "tags": [
+        "bali",
+        "ukiran",
+        "floral"
+      ],
+      "suggestedFor": [
+        "sagara",
+        "royal-vintage"
+      ]
+    },
+    {
+      "file": "geo-islamic.svg",
+      "name": "Islamic Geometry",
+      "category": "pattern",
+      "tags": [
+        "islamic",
+        "geometric",
+        "ornament"
+      ],
+      "suggestedFor": [
+        "aksara-nocturne",
+        "serena-ivory"
+      ]
+    }
+  ]
+}
