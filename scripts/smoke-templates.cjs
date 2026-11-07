@@ -486,11 +486,11 @@ for (const slug of activeThemeSlugs) {
           };
         });
         await musicControl.click();
-        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "true");
+        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "true", undefined, { timeout: 5000 });
         assert.equal(await page.evaluate(() => document.getElementById("bg-music").__playCalls), 1,
           theme.slug + ": tombol musik tidak memanggil play().");
         await musicControl.click();
-        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "false");
+        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "false", undefined, { timeout: 5000 });
         assert.equal(await page.evaluate(() => document.getElementById("bg-music").__pauseCalls), 1,
           theme.slug + ": tombol musik tidak memanggil pause().");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
