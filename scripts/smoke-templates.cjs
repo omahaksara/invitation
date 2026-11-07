@@ -13,6 +13,41 @@ async function captureScreenshot(page, file) {
   }
 }
 
+
+async function auditCover(page, theme, device) {
+  const cover = page.locator(theme.cover).first();
+  assert.equal(await cover.count(), 1, theme.slug + ": elemen cover utama tidak ditemukan");
+  assert.equal(await cover.isVisible(), true, theme.slug + ": cover tidak terlihat sebelum dibuka");
+  const openButton = page.locator(theme.open).first();
+  assert.equal(await openButton.count(), 1, theme.slug + ": tombol buka undangan tidak ditemukan");
+  assert.equal(await openButton.isVisible(), true, theme.slug + ": tombol buka tidak terlihat di cover");
+  const metrics = await page.evaluate(({ coverSelector, openSelector }) => {
+    const root = document.querySelector(coverSelector);
+    const button = document.querySelector(openSelector);
+    if (!root || !button) return null;
+    const box = root.getBoundingClientRect();
+    const action = button.getBoundingClientRect();
+    return {
+      viewportWidth: document.documentElement.clientWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      cover: { x: box.x, y: box.y, width: box.width, height: box.height },
+      button: { x: action.x, y: action.y, width: action.width, height: action.height },
+      textLength: (root.innerText || "").trim().length
+    };
+  }, { coverSelector: theme.cover, openSelector: theme.open });
+  assert.ok(metrics && metrics.cover.width > 0 && metrics.cover.height > 0,
+    theme.slug + ": ukuran cover kosong " + JSON.stringify(metrics));
+  assert.ok(metrics.documentWidth <= metrics.viewportWidth + 2,
+    theme.slug + ": cover menyebabkan overflow horizontal " + JSON.stringify(metrics));
+  assert.ok(metrics.textLength > 0,
+    theme.slug + ": cover tidak memiliki teks/nama yang terbaca");
+  assert.ok(metrics.button.width > 0 && metrics.button.height > 0 &&
+    metrics.button.x >= -2 && metrics.button.x + metrics.button.width <= metrics.viewportWidth + 2 &&
+    metrics.button.y >= -2 && metrics.button.y + metrics.button.height <= window.innerHeight + 2,
+    theme.slug + ": tombol buka terpotong/keluar viewport " + JSON.stringify(metrics));
+  await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-cover-${device}.png`));
+}
+
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
   { slug: "royal-vintage", marker: ".invitation-container", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -148,7 +183,7 @@ for (const slug of activeThemeSlugs) {
         assert.ok(imageLoadAudit.every(image => image.complete && image.width > 0 && image.height > 0),
           theme.slug + ": ada gambar yang gagal dimuat " + JSON.stringify(imageLoadAudit.filter(image => !image.width || !image.height)));
 
-        if (theme.open) {
+        await auditCover(page, theme, "desktop");\n\n        if (theme.open) {
           // Shared navigation and quick controls must remain hidden behind the cover.
           assert.equal(await page.locator("#oa-floating-controls").count(), 1,
             theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
@@ -431,7 +466,7 @@ for (const slug of activeThemeSlugs) {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
-        if (theme.open) {
+        await auditCover(page, theme, "mobile");\n        if (theme.open) {
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
