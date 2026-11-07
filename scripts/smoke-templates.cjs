@@ -148,7 +148,9 @@ for (const slug of activeThemeSlugs) {
             theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
           assert.equal(await page.locator("#oa-floating-controls").isVisible(), false,
             theme.slug + ": navigasi muncul sebelum cover dibuka");
-          assert.equal(await page.locator("#oa-floating-controls").isVisible(), false,
+          assert.equal(await page.locator("#oa-quick-controls").count(), 1,
+            theme.slug + ": kontrol cepat harus disiapkan tepat satu kali");
+          assert.equal(await page.locator("#oa-quick-controls").isVisible(), false,
             theme.slug + ": kontrol cepat muncul sebelum cover dibuka");
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
