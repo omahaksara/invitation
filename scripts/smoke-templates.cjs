@@ -29,6 +29,7 @@ async function auditCover(page, theme, device) {
     const action = button.getBoundingClientRect();
     return {
       viewportWidth: document.documentElement.clientWidth,
+      viewportHeight: document.documentElement.clientHeight,
       documentWidth: document.documentElement.scrollWidth,
       cover: { x: box.x, y: box.y, width: box.width, height: box.height },
       button: { x: action.x, y: action.y, width: action.width, height: action.height },
@@ -522,8 +523,7 @@ for (const slug of activeThemeSlugs) {
   } finally {
     await browser.close();
   }
-  assert.equal(failures.length, 0, failures.join("
-"));
+  assert.equal(failures.length, 0, failures.join("\n"));
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
