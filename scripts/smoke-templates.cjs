@@ -183,7 +183,9 @@ for (const slug of activeThemeSlugs) {
         assert.ok(imageLoadAudit.every(image => image.complete && image.width > 0 && image.height > 0),
           theme.slug + ": ada gambar yang gagal dimuat " + JSON.stringify(imageLoadAudit.filter(image => !image.width || !image.height)));
 
-        await auditCover(page, theme, "desktop");\n\n        if (theme.open) {
+        await auditCover(page, theme, "desktop");
+
+        if (theme.open) {
           // Shared navigation and quick controls must remain hidden behind the cover.
           assert.equal(await page.locator("#oa-floating-controls").count(), 1,
             theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
@@ -466,7 +468,8 @@ for (const slug of activeThemeSlugs) {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
-        await auditCover(page, theme, "mobile");\n        if (theme.open) {
+        await auditCover(page, theme, "mobile");
+        if (theme.open) {
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
@@ -519,7 +522,8 @@ for (const slug of activeThemeSlugs) {
   } finally {
     await browser.close();
   }
-  assert.equal(failures.length, 0, failures.join("\n"));
+  assert.equal(failures.length, 0, failures.join("
+"));
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
