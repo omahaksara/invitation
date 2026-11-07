@@ -259,7 +259,8 @@
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "paymentType": "bank"
       },
       {
         "bank": "Permata Bank",
@@ -271,7 +272,8 @@
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "paymentType": "bank"
       },
       {
         "bank": "Bank Danamon",
@@ -283,7 +285,8 @@
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "paymentType": "bank"
       },
       {
         "bank": "Bank Jatim",
@@ -295,7 +298,8 @@
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
-        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
+        "paymentType": "bank"
       },
       {
         "type": "bank",
@@ -327,7 +331,8 @@
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
-        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran.",
+        "paymentType": "ewallet"
       }
     ]
   },
