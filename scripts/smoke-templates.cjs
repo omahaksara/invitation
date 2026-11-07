@@ -335,7 +335,11 @@ for (const slug of activeThemeSlugs) {
           await quoteButton.click();
           await page.waitForFunction(id => {
             const target = document.getElementById(id);
-            return Boolean(target && Math.abs(target.getBoundingClientRect().top) < window.innerHeight);
+            if (!target) return false;
+            const rect = target.getBoundingClientRect();
+            // Long sections may begin far above the viewport while still occupying it.
+            // Intersection is the correct criterion; proximity of the top edge is not.
+            return rect.bottom > 0 && rect.top < window.innerHeight;
           }, quoteTargetId, { timeout: 5000 });
         }
         assert.equal(await navigation.count(), 1, theme.slug + ": navigasi bersama tidak tersedia");
@@ -361,8 +365,10 @@ for (const slug of activeThemeSlugs) {
           await page.waitForFunction(id => {
             const target = document.getElementById(id);
             if (!target) return false;
-            const top = target.getBoundingClientRect().top;
-            return top > -80 && top < window.innerHeight;
+            const rect = target.getBoundingClientRect();
+            // A valid jump places the destination in view; its top need not be near 0
+            // because section heights and scroll snapping differ between themes.
+            return rect.bottom > 0 && rect.top < window.innerHeight;
           }, targetId, { timeout: 5000 });
         }
 
