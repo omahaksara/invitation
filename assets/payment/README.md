@@ -23,7 +23,7 @@ Status sinkronisasi: BCA, BNI, Mandiri, dan BSI sudah tersedia sebagai file loka
 | `banks/mandiri.svg` | Bank Mandiri | [Wikimedia Commons — Bank Mandiri logo 2016.svg](https://commons.wikimedia.org/wiki/File:Bank_Mandiri_logo_2016.svg), PD-textlogo |
 | `banks/bsi.svg` | Bank Syariah Indonesia | [Wikimedia Commons — Bank Syariah Indonesia.svg](https://commons.wikimedia.org/wiki/File:Bank_Syariah_Indonesia.svg), PD-textlogo |
 | `banks/bri.svg` | BRI | [Wikimedia Commons — BRI 2025.svg](https://commons.wikimedia.org/wiki/File:BRI_2025.svg), versi 16 Oktober 2025; akan diunduh oleh skrip sinkronisasi aset |
-| `banks/bank-sulteng.png` | Bank Sulteng | [Wikimedia Commons — Logo Bank Sulteng.png](https://commons.wikimedia.org/wiki/File:Logo_Bank_Sulteng.png), sumber Bank Sulteng, PD-textlogo; format sumber PNG |
+| `banks/bank-sulteng.png` | Bank Sulteng | [Halaman logo resmi Bank Sulteng](https://mail.banksulteng.co.id/tentang-kami/logo), file gambar resmi dari domain Bank Sulteng; format sumber PNG |
  
 ## E-wallet dan pembayaran
 
