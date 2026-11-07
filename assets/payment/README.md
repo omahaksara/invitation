@@ -16,6 +16,12 @@ Semua logo dipakai dari aset lokal. Sumber logo:
 - Bank Nagari: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bank_Nagari.svg), CC0 1.0, pencipta Muhammad Ricky Nur Fahri.
 - Bank SulutGo (BSG): [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_Bank_BSG.png), CC BY-SA 4.0, pencipta Fiqhi Rizky.
 - Bank NTT: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_Bank_NTT.png), PD-textlogo.
+- Bank Aladin Syariah: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bank_Aladin.png), PD-self, sumber 2021.
+- Bank Neo Commerce: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bank_Neo_Commerce.png), dilepas ke domain publik oleh pengunggah, sumber 2023.
+- Bank Sinarmas: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bank_Sinarmas.png), dilepas ke domain publik oleh pengunggah, sumber 2021.
+- Maybank Indonesia: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_wordmark_Bank_Maybank_Indonesia.png), PD-textlogo, sumber 2025.
+- BTPN Syariah: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:BTPN_Syariah_logo.png), PD-textlogo, sumber 2017.
+- Bank Muamalat: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Muamalat_Logo.png), CC BY-SA 4.0.
 - GoPay: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:GoPay_logo.svg), media kit GoPay, logo 2025
 - DANA: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Dana_logo.png), CC0 1.0 (logo 2018).
 - OVO: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_ovo_purple.svg), CC BY-SA 4.0 (logo 2020; atribusi dan share-alike wajib).
@@ -30,8 +36,8 @@ ShopeePay masih memakai aset lokal yang perlu diganti dengan unduhan resmi dari 
 - `banks/`: logo utama untuk rekening bank yang paling sering dipakai, termasuk BCA, BRI (versi 2025), BNI, Mandiri, BSI, CIMB Niaga, Permata, Danamon, BTN, Bank Jatim, Bank Jakarta, dan Bank Sulteng.
 - `banks/catalog/`: koleksi 79 berkas SVG dari Wikimedia Commons. Koleksi ini mencakup logo aktif, variasi, dan beberapa logo historis/prototipe; periksa deskripsi pada `banks/catalog/manifest.json` sebelum memilihnya untuk data klien.
 - `wallets/`: DANA, GoPay, OVO, ShopeePay, LinkAja, dan QRIS. QRIS hanya logo/placeholder visual, bukan kode pembayaran.
-- `manifest.json`: indeks 33 pilihan bank dan 6 metode dompet digital/pembayaran yang tersedia untuk data undangan.
-- `clients/demo-katalog/data.json`: 39 kartu simulasi bank dan pembayaran untuk memperlihatkan variasi tampilan katalog. Seluruh nomor/pemilik adalah data palsu bertanda DEMO; fitur salin dinonaktifkan. Tidak ada rekening aktif atau QR transaksi.
+- `manifest.json`: indeks 39 pilihan bank dan 6 metode dompet digital/pembayaran yang tersedia untuk data undangan.
+- `clients/demo-katalog/data.json`: 45 kartu simulasi bank dan pembayaran untuk memperlihatkan variasi tampilan katalog. Seluruh nomor/pemilik adalah data palsu bertanda DEMO; fitur salin dinonaktifkan. Tidak ada rekening aktif atau QR transaksi.
 
 ### Menambahkan rekening klien
 
