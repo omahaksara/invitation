@@ -23,7 +23,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261107-controls7");
+      dataUrl.searchParams.set("_v", "20261107-controls8");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -46,7 +46,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261107-controls7");
+          registryUrl.searchParams.set("_v", "20261107-controls8");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -70,7 +70,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261107-controls7");
+          templateUrl.searchParams.set("_v", "20261107-controls8");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -658,7 +658,7 @@
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
-        }, cover && cover.id === "cover" ? 1800 : 850);
+        }, 520);
         if (audio && hasMusic) {
           try {
             await audio.play();
@@ -1408,28 +1408,28 @@
         html { scroll-behavior: smooth; overflow-x: clip; }
         body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
-        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .85s cubic-bezier(.2,.72,.18,1); }
+        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .38s ease, transform .42s cubic-bezier(.2,.72,.18,1); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,22px,0); transition: opacity .82s ease, transform 1s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity, transform; }
-        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-30px,0,0); }
-        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(30px,0,0); }
-        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,24px,0); }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,14px,0); transition: opacity .4s ease, transform .46s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); }
+        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
+        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
+        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); filter: saturate(.88); transition: opacity 1s ease, transform 1.15s cubic-bezier(.2,.72,.18,1), filter 1.1s ease; }
-        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-34px,0,0) scale(.975); }
-        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(34px,0,0) scale(.975); }
-        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: saturate(1); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.985); transition: opacity .42s ease, transform .48s cubic-bezier(.2,.72,.18,1); }
+        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
+        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
+        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
         .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
         .story-content { min-width:0; }
         .story-date { display:block; margin-bottom:6px; }
         #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening {
-          animation: oa-cover-exit .9s cubic-bezier(.22,.7,.2,1) forwards;
+          animation: oa-cover-exit .48s cubic-bezier(.22,.7,.2,1) forwards;
           transform-origin: center top;
         }
         @keyframes oa-cover-exit {
-          0% { opacity:1; transform:scale(1); filter:blur(0); }
-          55% { opacity:.92; transform:scale(1.015); }
-          100% { opacity:0; transform:scale(1.035); filter:blur(5px); }
+          0% { opacity:1; transform:scale(1); }
+          55% { opacity:.92; transform:scale(1.008); }
+          100% { opacity:0; transform:scale(1.015); }
         }
         .oa-floating-controls { scrollbar-width:none; }
         .oa-floating-controls::-webkit-scrollbar { display:none; }
@@ -1474,7 +1474,7 @@
         element.matches("h1, h2, h3") ? (motionIndex % 2 ? "right" : "left") : "up";
       element.classList.add("oa-motion-item");
       element.dataset.oaMotion = direction;
-      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 85 + "ms");
+      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 35 + "ms");
     });
     let photoIndex = 0;
     document.querySelectorAll("#app img.oa-motion-photo").forEach(image => {
