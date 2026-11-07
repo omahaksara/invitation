@@ -298,6 +298,26 @@
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
+        "type": "bank",
+        "paymentType": "bank",
+        "bank": "Bank BTN",
+        "logo": "/assets/payment/banks/btn.svg",
+        "accountNumber": "DEMO-BTN-0011",
+        "accountHolder": "Arkan Pradipta • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+      },
+      {
+        "type": "bank",
+        "paymentType": "bank",
+        "bank": "Bank Jakarta",
+        "logo": "/assets/payment/banks/bank-jakarta.svg",
+        "accountNumber": "DEMO-JAKARTA-0012",
+        "accountHolder": "Sekar Ayuningtyas • CONTOH",
+        "demoOnly": true,
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
+      },
+      {
         "bank": "LinkAja",
         "type": "ewallet",
         "logo": "/assets/payment/wallets/linkaja.svg",
