@@ -337,11 +337,17 @@ for (const slug of activeThemeSlugs) {
             value: async payload => { window.__oaSharePayload = payload; }
           });
         });
+        // The dock's share shortcut navigates to the shared share section;
+        // the actual Web Share API is invoked by that section's action button.
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
         await navigation.locator('[data-oa-action="share"]').click();
+        const shareButton = page.locator("#oa-share-invitation");
+        await shareButton.scrollIntoViewIfNeeded();
+        await shareButton.click();
+        await page.waitForFunction(() => Boolean(window.__oaSharePayload?.url), undefined, { timeout: 5000 });
         const sharePayload = await page.evaluate(() => window.__oaSharePayload);
         assert.ok(sharePayload && sharePayload.url && new URL(sharePayload.url).origin === location.origin,
-          theme.slug + ": tombol bagikan tidak mengirim URL undangan yang valid.");
+          theme.slug + ": aksi bagikan undangan tidak mengirim URL undangan yang valid.");
 
         await page.evaluate(() => {
           const audio = document.getElementById("bg-music");
