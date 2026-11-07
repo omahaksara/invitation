@@ -675,7 +675,7 @@ html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; -
 
 /* Restore the original type systems of the four recovered editorial themes.
    Engine-level typography must not override their native font choices. */
-html[data-oa-theme="earty"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; --oa-theme-display:"Cormorant Garamond",Georgia,serif; --oa-theme-body:"Montserrat",sans-serif; --oa-reveal-time:1.06s; --oa-reveal-ease:cubic-bezier(.16,.82,.22,1); }
+html[data-oa-theme="earty"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; --oa-theme-display:"Cormorant Garamond",Georgia,serif; --oa-theme-body:"Montserrat",sans-serif; --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.16,.82,.22,1); }
 html[data-oa-theme="lume"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Poppins",sans-serif; --oa-theme-display:"Playfair Display",Georgia,serif; --oa-theme-body:"Poppins",sans-serif; --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.2,.72,.24,1); }
 html[data-oa-theme="nox"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Plus Jakarta Sans",sans-serif; --oa-theme-display:"Playfair Display",Georgia,serif; --oa-theme-body:"Plus Jakarta Sans",sans-serif; --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.18,.8,.22,1); }
 html[data-oa-theme="taupe"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"Poppins",sans-serif; --oa-theme-display:"Playfair Display",Georgia,serif; --oa-theme-body:"Poppins",sans-serif; --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.2,.76,.22,1); }
@@ -714,8 +714,8 @@ html[data-oa-theme="taupe"] { --oa-font-display:"Playfair Display",Georgia,serif
 html[data-oa-theme="aksara-velora"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Plus Jakarta Sans",sans-serif; --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Plus Jakarta Sans",sans-serif; --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.2,.76,.22,1); }
 html[data-oa-theme="atelier-editorial"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.18,.78,.2,1); }
 html[data-oa-theme="kencana-jawa"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Cormorant Garamond",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.45s; --oa-reveal-ease:cubic-bezier(.16,.8,.22,1); }
-html[data-oa-theme="lumina"] { --oa-font-display:"Unbounded",sans-serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Unbounded",sans-serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.7,.25,1); }
-html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Fraunces",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:1.04s; --oa-reveal-ease:cubic-bezier(.17,.8,.24,1); }
+html[data-oa-theme="lumina"] { --oa-font-display:"Unbounded",sans-serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Unbounded",sans-serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.42s; --oa-reveal-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-font-body:"Manrope",sans-serif; --oa-theme-display:"Fraunces",serif; --oa-theme-body:"Manrope",sans-serif; --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.17,.8,.24,1); }
 
 
 /* Keep media controls visually distinct even when both are active:
