@@ -1483,6 +1483,48 @@
       document.head.append(style);
     }
 
+    // Enforce reduced motion at runtime as well as in CSS. Some legacy theme rules
+    // use stronger transition shorthands, so preserve and temporarily override inline
+    // motion properties, then restore them if the preference changes back.
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const originalMotionStyles = window.__oaOriginalMotionStyles ||
+      (window.__oaOriginalMotionStyles = new WeakMap());
+    const motionProperties = ["transition-duration", "animation-duration", "animation-iteration-count"];
+    const applyMotionPreference = () => {
+      const targets = [document.documentElement, ...document.querySelectorAll("#app, #app *")];
+      targets.forEach(element => {
+        if (motionQuery.matches) {
+          if (!originalMotionStyles.has(element)) {
+            originalMotionStyles.set(element, motionProperties.map(property => ({
+              property,
+              value: element.style.getPropertyValue(property),
+              priority: element.style.getPropertyPriority(property)
+            })));
+          }
+          element.style.setProperty("transition-duration", ".01ms", "important");
+          element.style.setProperty("animation-duration", ".01ms", "important");
+          element.style.setProperty("animation-iteration-count", "1", "important");
+          if (element === document.documentElement) {
+            element.style.setProperty("scroll-behavior", "auto", "important");
+          }
+        } else if (originalMotionStyles.has(element)) {
+          originalMotionStyles.get(element).forEach(({ property, value, priority }) => {
+            if (value) element.style.setProperty(property, value, priority);
+            else element.style.removeProperty(property);
+          });
+          originalMotionStyles.delete(element);
+          if (element === document.documentElement) element.style.removeProperty("scroll-behavior");
+        }
+      });
+    };
+    applyMotionPreference();
+    if (!window.__oaReducedMotionListener) {
+      const onMotionPreferenceChange = () => applyMotionPreference();
+      if (motionQuery.addEventListener) motionQuery.addEventListener("change", onMotionPreferenceChange);
+      else if (motionQuery.addListener) motionQuery.addListener(onMotionPreferenceChange);
+      window.__oaReducedMotionListener = onMotionPreferenceChange;
+    }
+
     const candidates = document.querySelectorAll(
       "#app-inner > section:not(#cover), .invitation-container > section, .sirein-page > section, .invite-shell > section, " +
       ".oa-shared-section, #rsvp-section, #guestbook-section, .event-card, .profile-card, .person-card, .story-item, .gift-card, .gallery-item"
