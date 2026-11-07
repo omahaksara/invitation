@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <path d="M55 760V300C55 145 165 45 300 45s245 100 245 255v460" stroke="currentColor" stroke-width="14"/>
+  <path d="M95 760V302c0-130 88-217 205-217s205 87 205 217v458" stroke="currentColor" stroke-width="5"/>
+  <path d="M300 88v672M95 380h410M95 570h410" stroke="currentColor" stroke-width="4"/>
+  <path d="M145 760V302c0-99 64-166 155-166s155 67 155 166v458" stroke="currentColor" stroke-width="2" stroke-dasharray="5 10"/>
+  <circle cx="300" cy="300" r="9" fill="currentColor"/>
+</svg>
