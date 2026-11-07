@@ -60,6 +60,96 @@
       "id": "bank-sulteng",
       "name": "Bank Sulteng",
       "logo": "/assets/payment/banks/bank-sulteng.png"
+    },
+    {
+      "id": "bank-banten",
+      "name": "Bank Banten",
+      "logo": "/assets/payment/banks/catalog/bank-banten-2026.svg"
+    },
+    {
+      "id": "bca-digital",
+      "name": "BCA Digital (blu)",
+      "logo": "/assets/payment/banks/catalog/bca-digital-logo.svg"
+    },
+    {
+      "id": "bca-syariah",
+      "name": "BCA Syariah",
+      "logo": "/assets/payment/banks/catalog/bca-syariah.svg"
+    },
+    {
+      "id": "bank-jago",
+      "name": "Bank Jago",
+      "logo": "/assets/payment/banks/catalog/bank-jago-2026.svg"
+    },
+    {
+      "id": "bank-jago-syariah",
+      "name": "Bank Jago Syariah",
+      "logo": "/assets/payment/banks/catalog/bank-jago-syariah-2026.svg"
+    },
+    {
+      "id": "bank-mega",
+      "name": "Bank Mega",
+      "logo": "/assets/payment/banks/catalog/bank-mega-2013.svg"
+    },
+    {
+      "id": "bank-raya",
+      "name": "Bank Raya",
+      "logo": "/assets/payment/banks/catalog/bank-raya-2023.svg"
+    },
+    {
+      "id": "bank-saqu",
+      "name": "Bank Saqu",
+      "logo": "/assets/payment/banks/catalog/bank-saqu.svg"
+    },
+    {
+      "id": "seabank",
+      "name": "SeaBank",
+      "logo": "/assets/payment/banks/catalog/seabank.svg"
+    },
+    {
+      "id": "superbank",
+      "name": "Superbank",
+      "logo": "/assets/payment/banks/catalog/superbank.svg"
+    },
+    {
+      "id": "allo-bank",
+      "name": "Allo Bank",
+      "logo": "/assets/payment/banks/catalog/allo-bank-logo.svg"
+    },
+    {
+      "id": "panin",
+      "name": "Panin Bank",
+      "logo": "/assets/payment/banks/catalog/logo-panin-bank.svg"
+    },
+    {
+      "id": "uob",
+      "name": "UOB Indonesia",
+      "logo": "/assets/payment/banks/catalog/uob-logo-2022.svg"
+    },
+    {
+      "id": "smbc",
+      "name": "SMBC Indonesia",
+      "logo": "/assets/payment/banks/catalog/smbc-indonesia-logo.svg"
+    },
+    {
+      "id": "j-trust",
+      "name": "J Trust Bank",
+      "logo": "/assets/payment/banks/catalog/j-trust-bank-logo.svg"
+    },
+    {
+      "id": "kb-bank",
+      "name": "KB Bank",
+      "logo": "/assets/payment/banks/catalog/kb-bukopin.svg"
+    },
+    {
+      "id": "mandiri-taspen",
+      "name": "Bank Mandiri Taspen",
+      "logo": "/assets/payment/banks/catalog/mandiri-taspen.svg"
+    },
+    {
+      "id": "bank-syariah-nasional",
+      "name": "Bank Syariah Nasional",
+      "logo": "/assets/payment/banks/catalog/logo-bank-syariah-nasional-horizontal.svg"
     }
   ],
   "wallets": [
