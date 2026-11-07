@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <title>Ceplok Geometric Repeat</title>
+  <defs><pattern id="ceplok" width="80" height="80" patternUnits="userSpaceOnUse">
+    <path d="M40 4 76 40 40 76 4 40 40 4Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path d="M40 18 62 40 40 62 18 40 40 18Z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M40 0v80M0 40h80" stroke="currentColor" stroke-width="1" opacity=".45"/>
+    <circle cx="40" cy="40" r="5" fill="currentColor"/>
+  </pattern></defs>
+  <rect width="160" height="160" fill="url(#ceplok)"/>
+</svg>
