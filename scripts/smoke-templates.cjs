@@ -43,7 +43,7 @@ async function auditCover(page, theme, device) {
     theme.slug + ": cover tidak memiliki teks/nama yang terbaca");
   assert.ok(metrics.button.width > 0 && metrics.button.height > 0 &&
     metrics.button.x >= -2 && metrics.button.x + metrics.button.width <= metrics.viewportWidth + 2 &&
-    metrics.button.y >= -2 && metrics.button.y + metrics.button.height <= window.innerHeight + 2,
+    metrics.button.y >= -2 && metrics.button.y + metrics.button.height <= metrics.viewportHeight + 2,
     theme.slug + ": tombol buka terpotong/keluar viewport " + JSON.stringify(metrics));
   await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-cover-${device}.png`));
 }
