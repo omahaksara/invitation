@@ -612,6 +612,14 @@
     if (root) root.replaceChildren();
     if (!accounts.length || !root) return;
 
+    if (gifts && !Array.isArray(gifts) && gifts.message) {
+      const notice = document.createElement("p");
+      notice.className = "gift-message";
+      notice.textContent = gifts.message;
+      notice.style.cssText = "grid-column:1/-1;margin:0 0 12px;line-height:1.6";
+      root.append(notice);
+    }
+
     accounts.forEach(item => {
       const card = document.createElement("article"); card.className = "gift-card reveal";
       const logoSrc = item.logo || item.bankLogo || "";
