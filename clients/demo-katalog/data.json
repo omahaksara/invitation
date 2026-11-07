@@ -107,13 +107,13 @@
     "accounts": [
       {
         "bank": "Bank BCA",
-        "logo": "bank/logo-bca.svg",
+        "logo": "/assets/payment/banks/bca.svg",
         "accountNumber": "0000000000",
         "accountHolder": "Arkan Pradipta — REKENING DEMO"
       },
       {
         "bank": "Bank Mandiri",
-        "logo": "bank/logo-mandiri.svg",
+        "logo": "/assets/payment/banks/mandiri.svg",
         "accountNumber": "0000000000",
         "accountHolder": "Sekar Ayuningtyas — REKENING DEMO"
       }
