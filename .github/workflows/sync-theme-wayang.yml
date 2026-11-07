@@ -1,0 +1,42 @@
+name: Sync wayang SVG theme assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/theme-dock-identities-audit
+    paths:
+      - "scripts/sync-theme-wayang.cjs"
+      - ".github/workflows/sync-theme-wayang.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-theme-wayang-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Download and validate wayang SVG assets
+        run: node scripts/sync-theme-wayang.cjs
+      - name: Commit local SVG assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/themes/wayang
+          if git diff --cached --quiet; then
+            echo "No wayang asset changes."
+          else
+            git commit -m "Add attributed local wayang SVG assets"
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi
