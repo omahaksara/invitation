@@ -20,8 +20,8 @@ function localFile(url) {
 }
 function validateSvg(file) {
   const svg = fs.readFileSync(file, "utf8");
-  assert.match(svg, /<svg[\\s>]/i, file + " is not SVG");
-  assert.doesNotMatch(svg, /<script\\b|<foreignObject\\b|\\son[a-z]+\\s*=|href=["']https?:/i,
+  assert.match(svg, /<svg[\s>]/i, file + " is not SVG");
+  assert.doesNotMatch(svg, /<script\b|<foreignObject\b|\son[a-z]+\s*=|href=["']https?:/i,
     file + " contains unsafe active/external SVG content");
   assert.match(svg, /viewBox=/i, file + " should declare a viewBox");
 }
@@ -70,7 +70,7 @@ for (const item of demoAccounts) {
 
 const themeFiles = [
   ...Object.values(themeManifest.categories).flat().filter(file => !file.startsWith("/")),
-  ...ornamentManifest.assets.map(item => ornamentManifest.basePath + item.file).map(file => file.replace(/^\\//, ""))
+  ...ornamentManifest.assets.map(item => ornamentManifest.basePath + item.file).map(file => file.replace(/^\//, ""))
 ];
 for (const file of themeFiles) {
   const resolved = path.resolve(ROOT, file);
