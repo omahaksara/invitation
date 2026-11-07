@@ -39,7 +39,7 @@ function collectAssetCandidates(data, prefix = '') {
 
   for (const [key, value] of Object.entries(data)) {
     const current = prefix ? prefix + '.' + key : key;
-    const assetKey = /^(?:image|photo|foto|src|music|audio|qr|qrCode|coverImage|backgroundImage)$/i.test(key);
+    const assetKey = /^(?:image|photo|foto|src|music|audio|qr|qrCode|coverImage|backgroundImage|logo|bankLogo)$/i.test(key);
     if (typeof value === 'string' && assetKey && value.trim()) {
       out.push({ key: current, value });
     } else if (typeof value === 'string' && key === 'gallery' && /\.(?:avif|gif|jpe?g|png|webp)$/i.test(value)) {
@@ -57,6 +57,18 @@ function validateAsset(slug, file, key, value) {
   if (/^[a-z][a-z0-9+.-]*:/i.test(clean)) return;
 
   const normalized = clean.replace(/^\.\//, '');
+  if (normalized.startsWith('/assets/payment/')) {
+    const resolvedSharedPayment = path.resolve(ROOT, normalized.slice(1));
+    const sharedPaymentRoot = path.resolve(ROOT, 'assets', 'payment') + path.sep;
+    if (!resolvedSharedPayment.startsWith(sharedPaymentRoot)) {
+      errors.push(slug + ': path logo pembayaran keluar dari pustaka aset bersama: "' + clean + '".');
+      return;
+    }
+    if (!fs.existsSync(resolvedSharedPayment) || !fs.statSync(resolvedSharedPayment).isFile()) {
+      errors.push(slug + ': logo pembayaran bersama tidak ditemukan: "' + clean + '".');
+    }
+    return;
+  }
   if (normalized.startsWith('/')) {
     warnings.push(`${slug}: aset ${key} memakai path absolut "${clean}"; pastikan path GitHub Pages memang benar.`);
     return;
