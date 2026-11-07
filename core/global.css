@@ -741,3 +741,13 @@ html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-
   opacity: .72;
   text-align: center;
 }
+
+.gift-card button:disabled {
+  opacity: .62;
+  cursor: not-allowed;
+  filter: saturate(.55);
+}
+.gift-card .gift-note {
+  max-width: 34ch;
+  margin-inline: auto;
+}
