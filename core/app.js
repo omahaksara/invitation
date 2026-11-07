@@ -210,7 +210,7 @@
   }
 
   function renderInvitation(data, clientBase, slug, guestName) {
-    ensureFeatureSections(data, clientBase, slug);
+    ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl);
     window.__invitationData = data;
     document.querySelectorAll("[data-bind]").forEach(el => {
       const path = el.getAttribute("data-bind");
@@ -303,7 +303,7 @@
   }
 
 
-  function ensureFeatureSections(data, clientBase, slug) {
+  function ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl) {
     const eventItems = Array.isArray(data.events)
       ? data.events
       : Object.entries(data.events || {}).map(([id, item]) => ({ id, ...item }));
