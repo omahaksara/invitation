@@ -3,66 +3,141 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f8f6f0">
-<meta name="description" content="Jelajahi tema undangan pernikahan digital Omah Aksara. Tema baru otomatis muncul dari folder templates.">
-<title>Katalog Tema — Omah Aksara</title>
+<meta name="theme-color" content="#f6f2e9">
+<meta name="description" content="Temukan desain undangan pernikahan digital Omah Aksara. Jelajahi 24 tema dengan preview cover interaktif.">
+<title>Katalog Tema — Omah Aksara Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#f8f6f0;--ink:#282b27;--muted:#77796f;--gold:#b49a67;--line:#e6e0d4;--card:#fffdf8}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif}
-header{padding:64px 22px 38px;text-align:center;background:radial-gradient(ellipse at 50% 0,#eee4d2 0,transparent 66%)}
-.eyebrow{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:#8c754c}
-h1{font:500 clamp(42px,7vw,72px)/1.05 'Cormorant Garamond',serif;margin:14px 0}
-header p{max-width:560px;margin:0 auto;color:var(--muted);line-height:1.8;font-size:14px}
-.wrap{max-width:1180px;margin:auto;padding:20px 22px 72px}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 22px;color:var(--muted);font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px}
-.card{overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:0 12px 32px #45361b0a;transition:transform .25s,box-shadow .25s}
-.card:hover{transform:translateY(-4px);box-shadow:0 18px 38px #45361b15}
-.preview{height:370px;background:#e9e2d5;position:relative;overflow:hidden}
-.preview iframe{width:150%;height:150%;border:0;transform:scale(.6667);transform-origin:top left;pointer-events:none;background:white}
-.preview:after{content:"";position:absolute;inset:0;background:transparent}
-.info{padding:20px 20px 22px}
-.name{font:500 30px/1.1 'Cormorant Garamond',serif;margin:0 0 7px}
-.slug{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
-.actions{display:flex;gap:10px;margin-top:18px}
-a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:11px 15px;font-size:12px;font-weight:600}
-.primary{background:var(--ink);color:white}.secondary{border:1px solid var(--line);color:var(--ink)}
-.status{padding:44px 18px;text-align:center;color:var(--muted);line-height:1.8}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:22px;border-top:1px solid var(--line)}
-@media(max-width:480px){header{padding-top:46px}.preview{height:330px}.toolbar{align-items:flex-start;flex-direction:column}}
+:root{--paper:#f6f2e9;--ink:#292820;--muted:#777367;--gold:#ad8b55;--line:#e4ddcf;--white:#fffdf8;--dark:#24251f}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}
+a{color:inherit}
+.hero{position:relative;overflow:hidden;padding:30px max(22px,calc((100vw - 1280px)/2)) 74px;background:radial-gradient(ellipse at 80% 12%,#e5d7bd 0,transparent 34%),linear-gradient(135deg,#f8f5ee,#eee5d5)}
+.hero:after{content:"";position:absolute;width:390px;height:390px;border:1px solid #b99e7040;border-radius:50%;right:-90px;bottom:-235px;box-shadow:0 0 0 34px #b99e7010,0 0 0 70px #b99e7008;pointer-events:none}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:16px;max-width:1280px;margin:auto;padding-bottom:58px}
+.brand{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700}
+.topnote{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.hero-copy{position:relative;z-index:1;max-width:760px}
+.eyebrow{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8b7047;font-weight:700}
+h1{font:500 clamp(48px,8vw,92px)/.98 "Playfair Display",serif;letter-spacing:-.045em;margin:18px 0 20px}
+h1 em{font-weight:400;color:#927448}
+.hero-copy p{max-width:520px;color:#69665d;font-size:14px;line-height:1.9;margin:0}
+.hero-meta{display:flex;align-items:center;gap:14px;margin-top:30px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#777064}
+.hero-meta:before{content:"";width:38px;height:1px;background:var(--gold)}
+.wrap{max-width:1280px;margin:auto;padding:38px 22px 90px}
+.intro-row{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}
+.section-kicker{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#987c50;font-weight:700}
+h2{font:500 clamp(28px,4vw,42px)/1.1 "Playfair Display",serif;margin:8px 0 0}
+.intro-note{max-width:320px;font-size:12px;line-height:1.7;color:var(--muted)}
+.controls{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:28px 0 24px}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.filter{border:1px solid var(--line);background:transparent;color:#6f6a5e;border-radius:99px;padding:9px 14px;font:600 11px "DM Sans",sans-serif;cursor:pointer;transition:.2s}
+.filter:hover,.filter[aria-pressed=true]{background:var(--dark);border-color:var(--dark);color:white}
+.search{width:min(100%,260px);border:1px solid var(--line);background:#fffdf8b8;border-radius:99px;padding:11px 16px;font:12px "DM Sans",sans-serif;color:var(--ink);outline:none}
+.search:focus{border-color:var(--gold);box-shadow:0 0 0 3px #ad8b5518}
+.count{font-size:11px;color:var(--muted);margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.card{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:5px;overflow:hidden;box-shadow:0 10px 30px #4637190a;transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-5px);box-shadow:0 22px 44px #46371918}
+.card.featured{grid-column:span 1}
+.preview{height:390px;position:relative;overflow:hidden;background:#e9e1d3}
+.preview iframe{position:absolute;inset:0;width:150%;height:150%;border:0;transform:scale(.6667);transform-origin:top left;pointer-events:none;background:white;transition:transform .6s}
+.card:hover .preview iframe{transform:scale(.70)}
+.preview:after{content:"";position:absolute;inset:0;border:1px solid #fff8;pointer-events:none}
+.preview-label{position:absolute;z-index:2;top:14px;left:14px;padding:7px 10px;background:#25251fe8;color:#fff;font-size:9px;letter-spacing:.16em;text-transform:uppercase}
+.card-info{padding:19px 20px 21px}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.mood{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9a8057}
+.index{font:italic 15px "Playfair Display",serif;color:#b8aa91}
+.name{font:500 27px/1.08 "Playfair Display",serif;margin:0}
+.slug{font-size:9px;letter-spacing:.13em;color:#999285;text-transform:uppercase;margin-top:7px}
+.card-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:19px;padding-top:14px;border-top:1px solid #eee8dd}
+.card-bottom small{font-size:10px;color:var(--muted)}
+.visit{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:var(--dark);color:white;padding:11px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;transition:background .2s}
+.visit:hover{background:#927448}
+.visit span{font-size:15px;line-height:10px}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;border:1px dashed var(--line);color:var(--muted);font-size:13px;line-height:1.8}
+.closing{margin-top:66px;padding:44px 28px;text-align:center;background:#eae2d4;position:relative;overflow:hidden}
+.closing small{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#8e744b}
+.closing h2{max-width:620px;margin:12px auto;font-size:clamp(28px,4vw,44px)}
+.closing p{font-size:12px;color:#777064;line-height:1.8;margin:0 auto;max-width:450px}
+footer{padding:22px;text-align:center;color:#8c877b;font-size:10px;letter-spacing:.12em;border-top:1px solid var(--line)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.preview{height:360px}}
+@media(max-width:580px){.hero{padding:22px 20px 54px}.topline{padding-bottom:52px}.topnote{display:none}.wrap{padding:30px 15px 65px}.intro-row{display:block}.intro-note{margin-top:12px}.controls{align-items:stretch}.filters{flex-wrap:nowrap;overflow:auto;padding-bottom:5px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap}.search{width:100%}.grid{grid-template-columns:1fr;gap:17px}.preview{height:420px}.card-info{padding:17px}.closing{margin-top:44px;padding:36px 20px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<header><div class="eyebrow">Omah Aksara Studio</div><h1>Katalog Tema</h1><p>Temukan desain yang terasa paling dekat dengan kisah kalian. Setiap tema memakai data demo yang sama agar mudah dibandingkan.</p></header>
-<main class="wrap"><div class="toolbar"><span id="count">Menyiapkan koleksi tema…</span><span>Desain undangan digital · Preview interaktif</span></div><section id="themes" class="grid" aria-live="polite"><div class="status">Menghubungkan katalog dengan koleksi tema…</div></section><div id="note" class="status" hidden></div></main>
-<footer>OMAH AKSARA · Dibuat dengan hati, untuk cerita yang tak sama.</footer>
+<header class="hero">
+  <div class="topline"><div class="brand">Omah Aksara · Wedding Studio</div><div class="topnote">A thoughtful invitation for your once-in-a-lifetime story</div></div>
+  <div class="hero-copy"><div class="eyebrow">The invitation collection</div><h1>Setiap kisah<br>punya <em>caranya.</em></h1><p>Bukan sekadar memilih undangan. Temukan suasana yang paling dekat dengan cerita kalian—dari klasik yang abadi sampai modern yang berani.</p><div class="hero-meta">Curated with intention · Made for your story</div></div>
+</header>
+<main class="wrap">
+  <div class="intro-row"><div><div class="section-kicker">Explore the collection</div><h2>Temukan yang terasa “kalian”.</h2></div><p class="intro-note">Lihat cover, rasakan karakternya, lalu buka demo untuk menjelajahi setiap detail undangan.</p></div>
+  <div class="controls"><div class="filters" id="filters" aria-label="Filter kategori tema"><button class="filter" data-filter="all" aria-pressed="true">Semua</button><button class="filter" data-filter="classic" aria-pressed="false">Klasik</button><button class="filter" data-filter="floral" aria-pressed="false">Floral</button><button class="filter" data-filter="modern" aria-pressed="false">Modern</button><button class="filter" data-filter="dark" aria-pressed="false">Dark &amp; Luxe</button><button class="filter" data-filter="cultural" aria-pressed="false">Tradisional</button><button class="filter" data-filter="minimal" aria-pressed="false">Minimal</button></div><input class="search" id="search" type="search" placeholder="Cari nama atau suasana tema…" aria-label="Cari tema"></div>
+  <p class="count" id="count" aria-live="polite">Menyiapkan koleksi tema…</p>
+  <section id="themes" class="grid" aria-live="polite"><div class="empty">Sedang menyiapkan preview koleksi…</div></section>
+  <section class="closing"><small>More than an invitation</small><h2>Hari istimewa layak dimulai dengan kesan yang istimewa.</h2><p>Pilih desain yang paling mewakili kalian. Setiap detail nantinya bisa disesuaikan dengan cerita dan kebutuhan acara.</p></section>
+</main>
+<footer>OMAH AKSARA STUDIO · MADE WITH CARE FOR YOUR STORY</footer>
 <script>
 (function(){
-  const owner='omahaksara', repo='invitation';
-  const root='../';
-  const grid=document.getElementById('themes'), count=document.getElementById('count'), note=document.getElementById('note');
-  const pretty=s=>s.split('-').map(w=>w==='aksara'?'Aksara':w==='vintage'?'Vintage':w==='romance'?'Romance':w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  const owner='omahaksara',repo='invitation',root='../';
+  const grid=document.getElementById('themes'),count=document.getElementById('count'),search=document.getElementById('search'),filters=document.getElementById('filters');
+  const featured=['royal-vintage','botanical-garden','aksara-nocturne'];
+  const moods={
+    'royal-vintage':'classic','karsa':'classic','elegance':'classic','calestial':'classic','earty':'classic','kencana-jawa':'cultural',
+    'romantic-floral':'floral','botanical-garden':'floral','lumiere-bloom':'floral','velvet-romance':'floral','serena-ivory':'floral',
+    'aksara-nocturne':'dark','aurelia-noir':'dark','nox':'dark','sirein':'dark',
+    'atelier-editorial':'modern','lumina':'modern','aksara-signature':'modern','aksara-velora':'modern','lume':'modern','kinze':'modern','groom':'modern','sagara':'modern',
+    'taupe':'minimal'
+  };
+  const moodNames={classic:'Timeless classic',floral:'Romantic botanical',modern:'Modern expression',dark:'Dark & luxe',cultural:'Heritage elegance',minimal:'Quiet minimalism'};
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function card(theme){
-    const slug=theme.slug, name=theme.name||pretty(slug), demo=root+'?c=demo-katalog&theme='+encodeURIComponent(slug);
-    return '<article class="card"><div class="preview"><iframe title="Pratinjau '+esc(name)+'" loading="lazy" src="'+demo+'" tabindex="-1"></iframe></div><div class="info"><h2 class="name">'+esc(name)+'</h2><div class="slug">'+esc(slug)+'</div><div class="actions"><a class="btn primary" href="'+demo+'" target="_blank" rel="noopener">Lihat Demo ↗</a><a class="btn secondary" href="'+root+'?c=demo-katalog&theme='+encodeURIComponent(slug)+'" target="_blank" rel="noopener">Buka tema</a></div></div></article>';
+  let themes=[],active='all',previewObserver=null;
+  function card(theme,index){
+    const slug=theme.slug,name=theme.name||slug.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' '),demo=root+'?c=demo-katalog&theme='+encodeURIComponent(slug),mood=moods[slug]||'modern',isFeatured=featured.includes(slug);
+    return '<article class="card'+(isFeatured?' featured':'')+'" data-name="'+esc((name+' '+slug+' '+moodNames[mood]).toLowerCase())+'" data-mood="'+mood+'"><div class="preview"><span class="preview-label">'+(isFeatured?'Editor’s pick':'Live cover preview')+'</span><iframe title="Preview cover '+esc(name)+'" loading="lazy" data-src="'+demo+'" tabindex="-1"></iframe></div><div class="card-info"><div class="card-top"><span class="mood">'+moodNames[mood]+'</span><span class="index">'+String(index+1).padStart(2,'0')+'</span></div><h3 class="name">'+esc(name)+'</h3><div class="slug">'+esc(slug)+'</div><div class="card-bottom"><small>Preview undangan lengkap</small><a class="visit" href="'+demo+'" target="_blank" rel="noopener">JELAJAHI <span>↗</span></a></div></div></article>';
   }
+  function render(){
+    const q=search.value.trim().toLowerCase();
+    const visible=themes.filter(t=>(active==='all'||(moods[t.slug]||'modern')===active)&&(!q||(t.name+' '+t.slug+' '+(moodNames[moods[t.slug]]||'')).toLowerCase().includes(q)));
+    if(previewObserver){previewObserver.disconnect();previewObserver=null;}
+    grid.innerHTML=visible.length?visible.map((t,i)=>card(t,i)).join(''):'<div class="empty">Belum ada tema yang cocok dengan pencarian ini.<br>Coba kata kunci atau kategori lain, ya.</div>';
+    const previews=grid.querySelectorAll('iframe[data-src]');
+    const activate=frame=>{if(!frame.src)frame.src=frame.dataset.src;frame.removeAttribute('data-src');};
+    if('IntersectionObserver' in window){
+      previewObserver=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{if(entry.isIntersecting){activate(entry.target);previewObserver.unobserve(entry.target);}});
+      },{rootMargin:'700px 0px'});
+      previews.forEach(frame=>previewObserver.observe(frame));
+    }else{previews.forEach(activate);}
+    count.textContent=visible.length+' dari '+themes.length+' tema · pilih preview untuk melihat keseluruhan undangan';
+  }
+  filters.addEventListener('click',event=>{
+    const button=event.target.closest('[data-filter]');if(!button)return;
+    active=button.dataset.filter;
+    filters.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    render();
+  });
+  search.addEventListener('input',render);
   async function load(){
     try{
       const response=await fetch('https://raw.githubusercontent.com/'+owner+'/'+repo+'/main/templates/registry.json',{cache:'no-store'});
-      if(!response.ok) throw new Error('Registry tema belum dapat diakses ('+response.status+').');
+      if(!response.ok)throw new Error('Registry tema belum dapat diakses ('+response.status+').');
       const registry=await response.json();
-      const themes=Array.isArray(registry.themes)?registry.themes
-        .filter(item=>item&&item.status==='active'&&/^[a-z0-9][a-z0-9-]*$/.test(item.slug)&&typeof item.name==='string')
-        .sort((a,b)=>a.name.localeCompare(b.name,'id')):[];
-      if(!themes.length) throw new Error('Belum ada tema aktif yang bisa ditampilkan.');
-      grid.innerHTML=themes.map(card).join('');
-      count.textContent=themes.length+' tema aktif · mengikuti templates/registry.json';
-      note.hidden=true;
+      themes=(Array.isArray(registry.themes)?registry.themes:[]).filter(item=>item&&item.status==='active'&&/^[a-z0-9][a-z0-9-]*$/.test(item.slug)&&typeof item.name==='string').sort((a,b)=>{
+        const af=featured.indexOf(a.slug),bf=featured.indexOf(b.slug);
+        if(af!==-1||bf!==-1)return (af===-1?99:af)-(bf===-1?99:bf);
+        return a.name.localeCompare(b.name,'id');
+      });
+      if(!themes.length)throw new Error('Belum ada tema aktif yang bisa ditampilkan.');
+      render();
     }catch(err){
-      grid.innerHTML='<div class="status">Katalog belum berhasil memuat tema otomatis.<br>'+esc(err.message)+'<br><a href="https://github.com/omahaksara/invitation/tree/main/templates">Lihat folder tema di GitHub</a></div>';
+      grid.innerHTML='<div class="empty">Katalog belum berhasil memuat tema otomatis.<br>'+esc(err.message)+'<br><a href="https://github.com/omahaksara/invitation/tree/main/templates">Lihat koleksi tema</a></div>';
       count.textContent='Katalog belum tersambung';
     }
   }

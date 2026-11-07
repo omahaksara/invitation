@@ -5,11 +5,18 @@
 #app *{box-sizing:border-box}
 #main-content{display:none;background:var(--kj-ink);color:var(--kj-paper);opacity:0;transition:opacity .55s ease}
 #main-content[style*="display: block"]{opacity:1}
-.kj-cover{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center;min-height:100svh;overflow:hidden;background:var(--kj-ink);color:var(--kj-paper);text-align:center;padding:28px 20px calc(30px + env(safe-area-inset-bottom))}
+.kj-cover{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;min-height:100svh;overflow:hidden;background:var(--kj-ink);color:var(--kj-paper);text-align:center;padding:24px 20px calc(24px + env(safe-area-inset-bottom))}
 .kj-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,13,11,.04) 15%,rgba(14,13,11,.28) 43%,rgba(14,13,11,.96) 100%)}
 .kj-cover__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.76}
 .kj-cover__pattern{position:absolute;inset:0;opacity:.22;background-image:radial-gradient(ellipse at 50% 50%,transparent 0 28%,rgba(198,161,91,.5) 29% 30%,transparent 31%),radial-gradient(ellipse at 0 0,transparent 0 28%,rgba(198,161,91,.35) 29% 30%,transparent 31%);background-size:54px 54px}
-.kj-cover__content{position:relative;z-index:2;width:min(100%,560px);padding:30px 22px;border:1px solid var(--kj-line);outline:1px solid rgba(198,161,91,.16);outline-offset:7px;background:linear-gradient(180deg,rgba(14,13,11,.12),rgba(14,13,11,.5));backdrop-filter:blur(2px)}
+.kj-cover__content{position:relative;z-index:2;width:min(100%,520px);padding:clamp(26px,5vh,48px) 24px;border:1px solid var(--kj-line);outline:1px solid rgba(198,161,91,.16);outline-offset:6px;background:linear-gradient(180deg,rgba(14,13,11,.38),rgba(14,13,11,.72));box-shadow:0 18px 60px rgba(0,0,0,.18)}
+.kj-cover__ornament{display:block;width:62px;height:48px;margin:0 auto 14px;color:var(--kj-gold);opacity:.9}
+.kj-cover__ornament path,.kj-cover__ornament circle{stroke:currentColor;fill:none;stroke-width:1.2}
+.kj-cover__content .kj-eyebrow{margin-bottom:10px;font-size:.62rem;letter-spacing:.24em}
+.kj-cover__names{font-size:clamp(3rem,12vw,5.6rem);line-height:.92;margin:12px 0}
+.kj-cover-date{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;margin:0;color:var(--kj-gold2)}
+.kj-cover__recipient{margin:19px 0 5px;color:var(--kj-muted);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+.kj-guest{font-size:clamp(1.25rem,4vw,1.55rem);margin:4px 0 0}
 .kj-eyebrow,.kj-kicker{margin:0 0 14px;color:var(--kj-gold2);font-size:.66rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase}
 .kj-script,.kj-heading,.kj-couple-name,#event-list .event-card h3,.kj-story-card h3,.kj-gift-card h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500}
 .kj-cover__names{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(3.4rem,14vw,6.2rem);line-height:.9;font-weight:500;margin:14px 0;color:var(--kj-paper)}
@@ -72,7 +79,7 @@
 .reveal.active{opacity:1;transform:none}
 .kj-section .reveal:nth-child(even){transition-delay:.08s}
 @media(min-width:760px){.kj-page{padding-left:34px;padding-right:34px}.kj-section{padding-top:82px}.kj-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.kj-gallery .gallery-item:nth-child(3n+1){grid-row:span 1}.kj-gallery .gallery-item:nth-child(4n+1){grid-row:span 2}}
-@media(max-width:520px){.kj-cover__content{padding:25px 16px}.kj-page{padding-left:17px;padding-right:17px}.kj-section{padding-top:55px}.kj-couple-grid{gap:12px}.kj-parents{font-size:.68rem}.kj-event-list,.kj-section--light .kj-gift-list,.kj-gift-list{grid-template-columns:1fr}.kj-section--light{margin-left:-17px;margin-right:-17px;padding-left:17px;padding-right:17px}.kj-countdown{gap:6px}.kj-countdown>div{padding:13px 2px}.kj-countdown span{font-size:.52rem}}
+@media(max-width:520px){.kj-cover__content{padding:26px 16px}.kj-page{padding-left:17px;padding-right:17px}.kj-section{padding-top:55px}.kj-couple-grid{gap:12px}.kj-parents{font-size:.68rem}.kj-event-list,.kj-section--light .kj-gift-list,.kj-gift-list{grid-template-columns:1fr}.kj-section--light{margin-left:-17px;margin-right:-17px;padding-left:17px;padding-right:17px}.kj-countdown{gap:6px}.kj-countdown>div{padding:13px 2px}.kj-countdown span{font-size:.52rem}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.kj-gunungan{animation:none}}
 </style>
 
@@ -80,13 +87,13 @@
   <img class="kj-cover__image" data-bind="cover.image" alt="Sampul undangan" fetchpriority="high">
   <div class="kj-cover__pattern" aria-hidden="true"></div>
   <div class="kj-cover__content reveal">
-    <p class="kj-eyebrow" data-bind="cover.eyebrow">Sugeng Rawuh · Sugeng Rawuh</p>
+    <p class="kj-eyebrow">Undangan Pernikahan</p>
+    <svg class="kj-cover__ornament" viewBox="0 0 120 78" aria-hidden="true"><path d="M60 4C34 24 22 44 22 66H98C98 44 86 24 60 4Z"/><path d="M60 18C46 32 40 48 40 64M60 18C74 32 80 48 80 64M30 66H90M38 58H82"/><circle cx="60" cy="38" r="6"/></svg>
     <h1 class="kj-cover__names"><span data-bind="couple.groom.nickname">Mempelai Pria</span><em>&amp;</em><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
     <div class="kj-rule"></div>
-    <p class="kj-cover-date"><span data-bind="events.akad.date">Tanggal acara</span> · <span data-bind="events.akad.location">Lokasi acara</span></p>
-    <p class="kj-eyebrow" style="letter-spacing:.13em">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+    <p class="kj-cover-date"><span data-bind="events.akad.date">Tanggal acara</span></p>
+    <p class="kj-cover__recipient">Kepada Yth.</p>
     <h2 id="nama-tamu" class="kj-guest">Tamu Undangan</h2>
-    <p class="kj-lead" data-bind="opening.text">Dengan penuh syukur, kami mengundang Anda.</p>
     <button id="open-invitation-btn" class="kj-open" type="button">✦ Buka Undangan ✦</button>
   </div>
 </div>
