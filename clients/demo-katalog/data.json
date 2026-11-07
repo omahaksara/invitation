@@ -186,7 +186,7 @@
       {
         "paymentType": "ewallet",
         "bank": "DANA",
-        "logo": "/assets/payment/wallets/dana.png",
+        "logo": "/assets/payment/wallets/dana.svg",
         "accountNumber": "08XX-XXXX-0001",
         "accountHolder": "Arkan Pradipta • AKUN DEMO",
         "demoOnly": true,
@@ -252,57 +252,62 @@
       {
         "bank": "CIMB Niaga",
         "type": "bank",
-        "logo": "/assets/payment/banks/cimb-niaga.svg",
-        "accountNumber": "000000000000",
+        "logo": "/assets/payment/banks/cimb.svg",
+        "accountNumber": "DEMO-CIMB-0007",
         "accountHolder": "Arkan Pradipta — CONTOH DEMO",
         "demoOnly": true,
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
-        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "bank": "Permata Bank",
         "type": "bank",
         "logo": "/assets/payment/banks/permata.svg",
-        "accountNumber": "000000000000",
+        "accountNumber": "DEMO-PERMATA-0008",
         "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
         "demoOnly": true,
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
-        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "bank": "Bank Danamon",
         "type": "bank",
         "logo": "/assets/payment/banks/danamon.svg",
-        "accountNumber": "000000000000",
+        "accountNumber": "DEMO-DANAMON-0009",
         "accountHolder": "Arkan Pradipta — CONTOH DEMO",
         "demoOnly": true,
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
-        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "bank": "Bank Jatim",
         "type": "bank",
         "logo": "/assets/payment/banks/bank-jatim.svg",
-        "accountNumber": "000000000000",
+        "accountNumber": "DEMO-JATIM-0010",
         "accountHolder": "Sekar Ayuningtyas — CONTOH DEMO",
         "demoOnly": true,
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
-        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
+        "demoNote": "Nomor rekening simulasi — bukan rekening aktif."
       },
       {
         "bank": "LinkAja",
         "type": "ewallet",
         "logo": "/assets/payment/wallets/linkaja.svg",
-        "accountNumber": "00000000000",
+        "accountNumber": "08XX-XXXX-0005",
         "accountHolder": "Arkan Pradipta — AKUN DEMO",
         "demoOnly": true,
         "copyable": true,
         "copyLabel": "Salin Nomor Demo",
-        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran."
+        "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
+        "demoNote": "Nomor e-wallet disamarkan dan tidak dapat menerima pembayaran."
       }
     ]
   },
