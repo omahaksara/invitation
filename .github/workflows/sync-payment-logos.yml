@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - fix/theme-dock-identities-audit
-      - main
     paths:
       - "scripts/sync-payment-logos.cjs"
       - "scripts/sync-wikimedia-bank-catalog.cjs"
@@ -20,6 +19,7 @@ concurrency:
 
 jobs:
   download-and-commit:
+    if: github.ref_name == 'fix/theme-dock-identities-audit'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current feature branch
