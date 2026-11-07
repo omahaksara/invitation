@@ -630,7 +630,8 @@
       const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
       const button = document.createElement("button"); button.type = "button"; button.textContent = item.copyLabel || (item.type === "qris" ? "Salin ID Demo" : item.type === "ewallet" ? "Salin Nomor E-Wallet" : "Salin Nomor Rekening");
       button.addEventListener("click", () => copyText(item.accountNumber || "", button));
-      card.append(bank, holder, number, button);\n      if (item.note) { const note = document.createElement("p"); note.className = "gift-note"; note.textContent = item.note; card.append(note); }
+      card.append(bank, holder, number, button);
+      if (item.note) { const note = document.createElement("p"); note.className = "gift-note"; note.textContent = item.note; card.append(note); }
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
       if (qrSrc) {
