@@ -103,6 +103,8 @@ for (const slug of activeThemeSlugs) {
   try {
     for (const theme of themes) {
       const page = await browser.newPage();
+      page.setDefaultTimeout(5000);
+      page.setDefaultNavigationTimeout(15000);
       const pageErrors = [];
       // Preserve the exact predicate in timeout diagnostics so a shared desktop
       // failure can be traced to its real interaction rather than guessed.
@@ -521,6 +523,8 @@ for (const slug of activeThemeSlugs) {
     // Responsive and demo-interaction pass at a common mobile viewport.
     for (const theme of themes) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+      page.setDefaultTimeout(5000);
+      page.setDefaultNavigationTimeout(15000);
       await page.emulateMedia({ reducedMotion: "reduce" });
       const pageErrors = [];
       const mockGuestbook = [];
