@@ -154,10 +154,8 @@ for (const slug of activeThemeSlugs) {
             theme.slug + ": navigasi bersama harus disiapkan tepat satu kali");
           assert.equal(await page.locator("#oa-floating-controls").isVisible(), false,
             theme.slug + ": navigasi muncul sebelum cover dibuka");
-          assert.equal(await page.locator("#oa-quick-controls").count(), 1,
-            theme.slug + ": kontrol cepat harus disiapkan tepat satu kali");
-          assert.equal(await page.locator("#oa-quick-controls").isVisible(), false,
-            theme.slug + ": kontrol cepat muncul sebelum cover dibuka");
+          assert.equal(await page.locator("#oa-quick-controls").count(), 0,
+            theme.slug + ": kontrol cepat terpisah tidak boleh menduplikasi dock bersama.");
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
