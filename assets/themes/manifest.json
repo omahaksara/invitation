@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "description": "Shared local decorative assets for Omah Aksara themes. Not auto-applied globally.",
+  "categories": {
+    "frames": [
+      "frames/jendela-jawa-arch.svg"
+    ],
+    "ornaments": [
+      "ornaments/gunungan-line.svg",
+      "ornaments/floral-corner.svg"
+    ],
+    "patterns": [
+      "patterns/kawung-repeat.svg"
+    ],
+    "wayang": [
+      "wayang/anggada.svg",
+      "wayang/hanoman.svg",
+      "wayang/rama.svg"
+    ]
+  },
+  "usage": "Reference with /assets/themes/<relative-path> from theme CSS or data. Check attribution before commercial redistribution."
+}
