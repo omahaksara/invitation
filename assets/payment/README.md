@@ -13,6 +13,9 @@ Semua logo dipakai dari aset lokal. Sumber logo:
 - BTN: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:BTN_2024.svg), logo versi 2024.
 - Bank Jakarta: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bank_Jakarta.svg).
 - Bank Sulteng: [situs resmi Bank Sulteng](https://mail.banksulteng.co.id/tentang-kami/logo)
+- Bank Nagari: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bank_Nagari.svg), CC0 1.0, pencipta Muhammad Ricky Nur Fahri.
+- Bank SulutGo (BSG): [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_Bank_BSG.png), CC BY-SA 4.0, pencipta Fiqhi Rizky.
+- Bank NTT: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_Bank_NTT.png), PD-textlogo.
 - GoPay: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:GoPay_logo.svg), media kit GoPay, logo 2025
 - DANA: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Dana_logo.png), CC0 1.0 (logo 2018).
 - OVO: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_ovo_purple.svg), CC BY-SA 4.0 (logo 2020; atribusi dan share-alike wajib).
@@ -27,8 +30,8 @@ ShopeePay masih memakai aset lokal yang perlu diganti dengan unduhan resmi dari 
 - `banks/`: logo utama untuk rekening bank yang paling sering dipakai, termasuk BCA, BRI (versi 2025), BNI, Mandiri, BSI, CIMB Niaga, Permata, Danamon, BTN, Bank Jatim, Bank Jakarta, dan Bank Sulteng.
 - `banks/catalog/`: koleksi 79 berkas SVG dari Wikimedia Commons. Koleksi ini mencakup logo aktif, variasi, dan beberapa logo historis/prototipe; periksa deskripsi pada `banks/catalog/manifest.json` sebelum memilihnya untuk data klien.
 - `wallets/`: DANA, GoPay, OVO, ShopeePay, LinkAja, dan QRIS. QRIS hanya logo/placeholder visual, bukan kode pembayaran.
-- `manifest.json`: indeks 30 pilihan bank dan 6 metode dompet digital/pembayaran yang tersedia untuk data undangan.
-- `clients/demo-katalog/data.json`: 36 kartu simulasi bank dan pembayaran untuk memperlihatkan variasi tampilan katalog. Seluruh nomor/pemilik adalah data palsu bertanda DEMO; fitur salin dinonaktifkan. Tidak ada rekening aktif atau QR transaksi.
+- `manifest.json`: indeks 33 pilihan bank dan 6 metode dompet digital/pembayaran yang tersedia untuk data undangan.
+- `clients/demo-katalog/data.json`: 39 kartu simulasi bank dan pembayaran untuk memperlihatkan variasi tampilan katalog. Seluruh nomor/pemilik adalah data palsu bertanda DEMO; fitur salin dinonaktifkan. Tidak ada rekening aktif atau QR transaksi.
 
 ### Menambahkan rekening klien
 
