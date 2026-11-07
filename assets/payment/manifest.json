@@ -150,6 +150,21 @@
       "id": "bank-syariah-nasional",
       "name": "Bank Syariah Nasional",
       "logo": "/assets/payment/banks/catalog/logo-bank-syariah-nasional-horizontal.svg"
+    },
+    {
+      "id": "bank-nagari",
+      "name": "Bank Nagari",
+      "logo": "/assets/payment/banks/bank-nagari.svg"
+    },
+    {
+      "id": "bank-bsg",
+      "name": "Bank SulutGo (BSG)",
+      "logo": "/assets/payment/banks/bank-bsg.png"
+    },
+    {
+      "id": "bank-ntt",
+      "name": "Bank NTT",
+      "logo": "/assets/payment/banks/bank-ntt.png"
     }
   ],
   "wallets": [
