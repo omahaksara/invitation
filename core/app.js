@@ -1489,7 +1489,7 @@
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const originalMotionStyles = window.__oaOriginalMotionStyles ||
       (window.__oaOriginalMotionStyles = new WeakMap());
-    const motionProperties = ["transition-duration", "animation-duration", "animation-iteration-count"];
+    const motionProperties = ["transition-duration", "animation-duration", "animation-iteration-count", "scroll-behavior"];
     const applyMotionPreference = () => {
       const targets = [document.documentElement, ...document.querySelectorAll("#app, #app *")];
       targets.forEach(element => {
@@ -1513,7 +1513,6 @@
             else element.style.removeProperty(property);
           });
           originalMotionStyles.delete(element);
-          if (element === document.documentElement) element.style.removeProperty("scroll-behavior");
         }
       });
     };
