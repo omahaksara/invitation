@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+<title>Motif kawung geometris dekoratif</title>
+<defs><pattern id="k" width="80" height="80" patternUnits="userSpaceOnUse">
+<g fill="none" stroke="#B58A55" stroke-width="1.7" opacity=".72">
+<path d="M40 2C28 15 24 28 40 40 56 28 52 15 40 2ZM40 78C28 65 24 52 40 40 56 52 52 65 40 78ZM2 40C15 28 28 24 40 40 28 56 15 52 2 40ZM78 40C65 28 52 24 40 40 52 56 65 52 78 40Z"/>
+<circle cx="40" cy="40" r="4"/>
+</g></pattern></defs><rect width="160" height="160" fill="url(#k)"/></svg>
