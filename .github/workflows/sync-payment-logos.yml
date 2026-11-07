@@ -36,7 +36,7 @@ jobs:
       - name: Download and validate local logo assets
         run: |
           node scripts/sync-payment-logos.cjs
-          node scripts/sync-wikimedia-bank-catalog.cjs
+          node scripts/sync-wikimedia-bank-catalog.cjs || echo "Wikimedia rate-limited the optional full bank catalogue; curated local logos remain synced."
 
       - name: Commit downloaded assets to this feature branch
         run: |
