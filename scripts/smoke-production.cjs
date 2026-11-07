@@ -88,8 +88,29 @@ async function main() {
     const firstDemoPath = firstDemoUrl.pathname.split('/').filter(Boolean).map(decodeURIComponent);
     assert.deepEqual(firstDemoPath.slice(0, 3), ['i', 'demo-katalog', 'Tamu Audit'],
       'Demo link must use the canonical personalized short path.');
-    assert.ok(firstDemoUrl.searchParams.get('theme'),
-      'Demo link must preserve the selected theme.');
+    const selectedDemoTheme = firstDemoUrl.searchParams.get('theme');
+    assert.ok(selectedDemoTheme, 'Demo link must preserve the selected theme.');
+
+    // Follow the real public short URL. GitHub Pages serves this through its 404 fallback,
+    // which must resolve the demo slug, guest name, and active theme before redirecting.
+    const shortDemo = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+    const shortDemoErrors = [];
+    shortDemo.on('pageerror', error => shortDemoErrors.push(error.message));
+    const shortDemoResponse = await shortDemo.goto(firstDemoHref, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    assert.ok(shortDemoResponse && shortDemoResponse.ok(), 'Personalized demo short URL must resolve.');
+    await shortDemo.waitForFunction(({ slug, theme }) =>
+      window.__invitationData && window.__invitationData.slug === slug &&
+      document.documentElement.dataset.oaTheme === theme,
+      { slug: 'demo-katalog', theme: selectedDemoTheme }, { timeout: 25000 });
+    const resolvedDemoUrl = new URL(shortDemo.url());
+    assert.equal(resolvedDemoUrl.pathname, '/invitation/', 'Demo short URL must redirect to the invitation engine.');
+    assert.equal(resolvedDemoUrl.searchParams.get('c'), 'demo-katalog', 'Demo short URL must preserve its isolated slug.');
+    assert.equal(resolvedDemoUrl.searchParams.get('to'), 'Tamu Audit', 'Demo short URL must preserve the guest name.');
+    assert.equal(resolvedDemoUrl.searchParams.get('theme'), selectedDemoTheme, 'Demo short URL must preserve the selected active theme.');
+    assert.equal(shortDemoErrors.length, 0, 'Demo short URL JavaScript errors: ' + shortDemoErrors.join('; '));
+    await shortDemo.close();
+    console.log('PASS personalized demo short URL: slug, guest name, and selected theme.');
+
     assert.equal(catalogueErrors.length, 0, 'Catalogue JavaScript errors: ' + catalogueErrors.join('; '));
     console.log('PASS public catalogue: ' + expectedThemes.length + ' live theme previews and personalized demo links.');
 
@@ -98,10 +119,15 @@ async function main() {
     invitation.on('pageerror', error => pageErrors.push(error.message));
 
     const invitationResponse = await invitation.goto(
-      INVITATION_URL + '?c=budi-ani&to=Tamu%20Audit',
+      CATALOGUE_URL + 'i/budi-ani/Tamu%20Audit',
       { waitUntil: 'domcontentloaded', timeout: 45000 }
     );
-    assert.ok(invitationResponse && invitationResponse.ok(), 'Published Budi–Ani invitation must load.');
+    assert.ok(invitationResponse && invitationResponse.ok(), 'Published Budi–Ani short URL must load.');
+    const resolvedBudiUrl = new URL(invitation.url());
+    assert.equal(resolvedBudiUrl.pathname, '/invitation/', 'Budi–Ani short URL must redirect to the invitation engine.');
+    assert.equal(resolvedBudiUrl.searchParams.get('c'), 'budi-ani', 'Budi–Ani short URL must preserve the client slug.');
+    assert.equal(resolvedBudiUrl.searchParams.get('to'), 'Tamu Audit', 'Budi–Ani short URL must preserve the guest name.');
+    assert.equal(resolvedBudiUrl.searchParams.get('theme'), 'sirein', 'Budi–Ani short URL must retain its configured theme.');
     console.log('CHECK Budi–Ani invitation data and forms.');
     try {
       await invitation.waitForFunction(() =>
