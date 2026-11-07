@@ -393,8 +393,9 @@ for (const slug of activeThemeSlugs) {
 
         await page.evaluate(() => {
           window.__oaSharePayload = null;
-          Object.defineProperty(navigator, "share", {
+          Object.defineProperty(window.navigator, "share", {
             configurable: true,
+            writable: true,
             value: async payload => { window.__oaSharePayload = payload; }
           });
         });
@@ -407,8 +408,11 @@ for (const slug of activeThemeSlugs) {
         await shareButton.click();
         await page.waitForFunction(() => Boolean(window.__oaSharePayload?.url), undefined, { timeout: 5000 });
         const sharePayload = await page.evaluate(() => window.__oaSharePayload);
-        assert.ok(sharePayload && sharePayload.url && new URL(sharePayload.url).origin === location.origin,
-          theme.slug + ": aksi bagikan undangan tidak mengirim URL undangan yang valid.");
+        const sharedUrl = sharePayload?.url ? new URL(sharePayload.url) : null;
+        assert.ok(sharedUrl && sharedUrl.origin === "https://omahaksara.github.io" &&
+          sharedUrl.pathname.startsWith("/i/demo-katalog/") &&
+          sharedUrl.pathname.includes("Nama%20Tamu"),
+          theme.slug + ": aksi bagikan undangan tidak mengirim URL undangan kanonis yang valid.");
 
         await page.evaluate(() => {
           const audio = document.getElementById("bg-music");
