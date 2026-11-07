@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - fix/theme-dock-identities-audit
+      - main
     paths:
       - "scripts/sync-payment-logos.cjs"
       - ".github/workflows/sync-payment-logos.yml"
