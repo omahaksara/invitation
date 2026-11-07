@@ -73,12 +73,15 @@ jobs:
           assert.match(app, /function downloadCalendarEvent\(/, 'calendar export missing');
           assert.doesNotMatch(app, /AKfycbysPpEGRqUtTluNSS8V1aUEwRU2zkO75aMiy0yEqAhlbbTf9yx-Cq1qjCZlKai-Ch6s7g/, 'production API URL must not be hard-coded');
           assert.ok(app.includes('parsedTemplate.head.querySelectorAll("style")'), 'full-document theme CSS must be mounted');
+          assert.ok(app.includes('ensureFloatingControls(data, buildShortInvitationUrl);'), 'shared dock must receive the canonical share URL builder');
+          assert.ok(app.includes('function ensureFloatingControls(data, buildShortInvitationUrl)'), 'shared dock must accept the canonical share URL builder');
           assert.doesNotMatch(app.slice(app.indexOf('function setupMusic('), app.indexOf('function setupCountdown(')),
             /button\.textContent\s*=\s*["']♫["']/, 'music toggle must not destroy nested theme icons');
 
           for (const file of themes) {
             assert.ok(fs.existsSync(file), file + ' is missing');
             const html = fs.readFileSync(file, 'utf8');
+            assert.doesNotMatch(html, /<\/g\/span>/i, file + ' contains malformed span closing tags');
             const styleCount = (html.match(/<style\b/gi) || []).length;
             assert.equal(styleCount, 1, file + ' must contain exactly one embedded style block');
             assert.match(html, /<\/style\s*>/i, file + ' style block must be closed');
