@@ -18,7 +18,7 @@ const files = [
   { name: "bank-jakarta.svg", folder: "banks", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Bank_Jakarta.svg" },
   { name: "bank-sulteng.png", folder: "banks", type: "png", url: "https://newadmin.banksulteng.co.id/media/1787730284_LOGO%20PRODUK%20BANKSULTENG-04.png" },
   { name: "gopay.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/b/b1/GoPay_logo.svg" },
-  { name: "dana.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/5/52/Dana_logo.png" },
+  { name: "dana.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/4/47/Logo_Dana_Wiki.svg" },
   { name: "linkaja.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/8/85/LinkAja.svg" },
   { name: "qris.svg", folder: "wallets", type: "svg", url: "https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg" }
 ];
