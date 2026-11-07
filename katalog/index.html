@@ -97,15 +97,24 @@ footer{padding:22px;text-align:center;color:#8c877b;font-size:10px;letter-spacin
   };
   const moodNames={classic:'Timeless classic',floral:'Romantic botanical',modern:'Modern expression',dark:'Dark & luxe',cultural:'Heritage elegance',minimal:'Quiet minimalism'};
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let themes=[],active='all';
+  let themes=[],active='all',previewObserver=null;
   function card(theme,index){
     const slug=theme.slug,name=theme.name||slug.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' '),demo=root+'?c=demo-katalog&theme='+encodeURIComponent(slug),mood=moods[slug]||'modern',isFeatured=featured.includes(slug);
-    return '<article class="card'+(isFeatured?' featured':'')+'" data-name="'+esc((name+' '+slug+' '+moodNames[mood]).toLowerCase())+'" data-mood="'+mood+'"><div class="preview"><span class="preview-label">'+(isFeatured?'Editor’s pick':'Live cover preview')+'</span><iframe title="Preview cover '+esc(name)+'" loading="lazy" src="'+demo+'" tabindex="-1"></iframe></div><div class="card-info"><div class="card-top"><span class="mood">'+moodNames[mood]+'</span><span class="index">'+String(index+1).padStart(2,'0')+'</span></div><h3 class="name">'+esc(name)+'</h3><div class="slug">'+esc(slug)+'</div><div class="card-bottom"><small>Preview undangan lengkap</small><a class="visit" href="'+demo+'" target="_blank" rel="noopener">JELAJAHI <span>↗</span></a></div></div></article>';
+    return '<article class="card'+(isFeatured?' featured':'')+'" data-name="'+esc((name+' '+slug+' '+moodNames[mood]).toLowerCase())+'" data-mood="'+mood+'"><div class="preview"><span class="preview-label">'+(isFeatured?'Editor’s pick':'Live cover preview')+'</span><iframe title="Preview cover '+esc(name)+'" loading="lazy" data-src="'+demo+'" tabindex="-1"></iframe></div><div class="card-info"><div class="card-top"><span class="mood">'+moodNames[mood]+'</span><span class="index">'+String(index+1).padStart(2,'0')+'</span></div><h3 class="name">'+esc(name)+'</h3><div class="slug">'+esc(slug)+'</div><div class="card-bottom"><small>Preview undangan lengkap</small><a class="visit" href="'+demo+'" target="_blank" rel="noopener">JELAJAHI <span>↗</span></a></div></div></article>';
   }
   function render(){
     const q=search.value.trim().toLowerCase();
     const visible=themes.filter(t=>(active==='all'||(moods[t.slug]||'modern')===active)&&(!q||(t.name+' '+t.slug+' '+(moodNames[moods[t.slug]]||'')).toLowerCase().includes(q)));
+    if(previewObserver){previewObserver.disconnect();previewObserver=null;}
     grid.innerHTML=visible.length?visible.map((t,i)=>card(t,i)).join(''):'<div class="empty">Belum ada tema yang cocok dengan pencarian ini.<br>Coba kata kunci atau kategori lain, ya.</div>';
+    const previews=grid.querySelectorAll('iframe[data-src]');
+    const activate=frame=>{if(!frame.src)frame.src=frame.dataset.src;frame.removeAttribute('data-src');};
+    if('IntersectionObserver' in window){
+      previewObserver=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{if(entry.isIntersecting){activate(entry.target);previewObserver.unobserve(entry.target);}});
+      },{rootMargin:'700px 0px'});
+      previews.forEach(frame=>previewObserver.observe(frame));
+    }else{previews.forEach(activate);}
     count.textContent=visible.length+' dari '+themes.length+' tema · pilih preview untuk melihat keseluruhan undangan';
   }
   filters.addEventListener('click',event=>{
