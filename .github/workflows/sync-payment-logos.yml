@@ -44,5 +44,6 @@ jobs:
             echo "No logo asset changes."
           else
             git commit -m "Add verified local bank and wallet logos"
+            git pull --rebase origin "${{ github.ref_name }}"
             git push origin "HEAD:${{ github.ref_name }}"
           fi
