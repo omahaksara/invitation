@@ -16,5 +16,17 @@ const files=[
 {name:"dana.png",folder:"wallets",type:"png",url:"https://upload.wikimedia.org/wikipedia/commons/5/52/Dana_logo.png"},
 {name:"linkaja.svg",folder:"wallets",type:"svg",url:"https://upload.wikimedia.org/wikipedia/commons/8/85/LinkAja.svg"},
 {name:"qris.svg",folder:"wallets",type:"svg",url:"https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg"}];
-async function main(){for(const item of files){const r=await fetch(item.url,{headers:{"User-Agent":"OmahAksara-LocalAssetSync/1.1"},redirect:"follow"});if(!r.ok)throw new Error(item.name+": HTTP "+r.status);const b=Buffer.from(await r.arrayBuffer());if(item.type==="svg"){const s=b.toString("utf8");if(!/<svg[\s>]/i.test(s)||/<script\b|<foreignObject\b|\son[a-z]+\s*=|href=["']https?:/i.test(s))throw new Error(item.name+": unsafe/invalid SVG");}else if(!b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw new Error(item.name+": invalid PNG");const dir=path.join(ROOT,"assets/payment",item.folder);await fs.mkdir(dir,{recursive:true});await fs.writeFile(path.join(dir,item.name),b);if(["bca.svg","bri.svg","mandiri.svg"].includes(item.name))await fs.writeFile(path.join(ROOT,"clients/demo-katalog/bank","logo-"+item.name),b);console.log("Synced "+item.folder+"/"+item.name);}}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function download(item){
+ let response;
+ for(let attempt=0;attempt<4;attempt++){
+  response=await fetch(item.url,{headers:{"User-Agent":"OmahAksara-LocalAssetSync/1.2 (Omah Aksara repo asset sync)"},redirect:"follow"});
+  if(response.ok)break;
+  if(response.status!==429 && response.status!==503)throw new Error(item.name+": HTTP "+response.status);
+  await sleep(2500*(attempt+1));
+ }
+ if(!response || !response.ok)throw new Error(item.name+": still rate limited after retries");
+ return Buffer.from(await response.arrayBuffer());
+}
+async function main(){for(const item of files){await sleep(1800);const b=await download(item);if(item.type==="svg"){const s=b.toString("utf8");if(!/<svg[\s>]/i.test(s)||/<script\b|<foreignObject\b|\son[a-z]+\s*=|href=["']https?:/i.test(s))throw new Error(item.name+": unsafe/invalid SVG");}else if(!b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw new Error(item.name+": invalid PNG");const dir=path.join(ROOT,"assets/payment",item.folder);await fs.mkdir(dir,{recursive:true});await fs.writeFile(path.join(dir,item.name),b);if(["bca.svg","bri.svg","mandiri.svg"].includes(item.name))await fs.writeFile(path.join(ROOT,"clients/demo-katalog/bank","logo-"+item.name),b);console.log("Synced "+item.folder+"/"+item.name);}}
 main().catch(e=>{console.error(e);process.exitCode=1;});
