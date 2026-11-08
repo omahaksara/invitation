@@ -121,5 +121,20 @@
   "schemaVersion": 2,
   "site": {
     "timezone": "Asia/Jakarta"
+  },
+  "features": {
+    "countdown": true,
+    "calendar": true,
+    "loveStory": true,
+    "gallery": true,
+    "video": false,
+    "maps": true,
+    "music": true,
+    "gifts": true,
+    "rsvp": true,
+    "guestbook": true,
+    "guestName": true,
+    "hashtag": false,
+    "quotes": true
   }
 }
