@@ -57,12 +57,8 @@ assert.equal(demo.demoMode, true, "catalog demo mode must remain enabled");
 assert.ok(demo.gifts.message && /SIMULASI|SIMULASI|DATA SIMULASI/i.test(demo.gifts.message), "demo payment warning is required");
 const demoBankCount = demoAccounts.filter(item => item.paymentType === "bank").length;
 const demoWalletCount = demoAccounts.filter(item => item.paymentType === "ewallet" || item.paymentType === "qris").length;
-// The catalog is a concise example, not a bank directory: one account per partner.
-assert.equal(demoAccounts.length, 2, "catalog demo must show exactly one payment account per partner");
-assert.equal(demoBankCount, 2, "catalog demo should show one bank account for each partner");
-assert.equal(demoWalletCount, 0, "catalog demo must not list unused wallets or QR methods");
-assert.ok(demoAccounts.some(item => /Arkan Pradipta/.test(item.accountHolder || "")), "groom demo account is required");
-assert.ok(demoAccounts.some(item => /Sekar Ayuningtyas/.test(item.accountHolder || "")), "bride demo account is required");
+assert.equal(demoBankCount, payments.banks.length, "every bank option must have one demo card");
+assert.equal(demoWalletCount, payments.wallets.length, "every wallet/payment option must have one demo card");
 for (const item of demoAccounts) {
   assert.equal(item.demoOnly, true, "all demo payment records must be marked demoOnly");
   assert.equal(item.copyable, false, "demo account copy action must remain disabled");
@@ -88,8 +84,8 @@ for (const file of themeManifest.categories.sharedOrnaments || []) {
 }
 
 console.log(
-  "Asset library passed: " + payments.banks.length + " selectable banks, " +
-  payments.wallets.length + " selectable wallet/payment methods, " + bankCatalog.items.length +
-  " archived bank SVGs, " + themeFiles.length + " theme assets; catalog demo cards " +
-  demoBankCount + " partner accounts and " + demoWalletCount + " wallet/payment methods."
+  "Asset library passed: " + payments.banks.length + " banks, " +
+  payments.wallets.length + " wallet/payment methods, " + bankCatalog.items.length +
+  " archived bank SVGs, " + themeFiles.length + " theme assets; demo cards " +
+  demoBankCount + " banks + " + demoWalletCount + " digital payment methods."
 );
