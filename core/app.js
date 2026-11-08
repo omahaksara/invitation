@@ -239,7 +239,7 @@
     renderEvents(data.events, data, clientBase);
     bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
-    renderGifts(data.gifts, clientBase);
+    renderGifts(data.gifts, clientBase, data.features || {});
     setupMusic(data.music, clientBase);
     setupCover();
     setupReveal();
@@ -266,8 +266,11 @@
     if (disabled("gallery")) hide(".gallery-section, #gallery-grid, .gallery-grid");
     if (disabled("video")) hide(".video-section, #video-section");
     if (disabled("maps")) {
-      document.querySelectorAll("#link-akad-maps, #link-resepsi-maps, .event-card a[href*='maps']").forEach(el => { el.hidden = true; });
+      document.querySelectorAll("#link-akad-maps, #link-resepsi-maps, .event-card a[href*='maps'], .oa-event-map, .oa-event-navigation").forEach(el => { el.hidden = true; });
       hide(".maps-section, #maps-section");
+    } else {
+      if (disabled("mapEmbed")) document.querySelectorAll(".oa-event-map").forEach(el => { el.hidden = true; });
+      if (disabled("navigation")) document.querySelectorAll(".oa-event-navigation").forEach(el => { el.hidden = true; });
     }
     if (disabled("countdown")) hide("#countdown, .countdown");
     if (disabled("calendar")) hide(".calendar-section, #calendar-section");
@@ -554,16 +557,49 @@
   function renderEvents(events, data, clientBase) {
     const root = document.getElementById("event-list");
     if (!root) return;
-    const items = Array.isArray(events) ? events : Object.entries(events || {}).map(([id, value]) => ({ id, ...value }));
+    const items = Array.isArray(events) ? events : Object.entries(events || {}).map(([id, item]) => ({ id, ...item }));
+    const features = data && data.features && typeof data.features === "object" ? data.features : {};
+    const mapsEnabled = features.maps !== false;
+    const embedEnabled = mapsEnabled && features.mapEmbed !== false;
+    const navigationEnabled = mapsEnabled && features.navigation !== false;
     root.replaceChildren();
     items.forEach((item, index) => {
       const card = document.createElement("article"); card.className = "event-card reveal";
       const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA 0" + (index + 1);
       const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
       const date = document.createElement("p"); date.textContent = formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
-      const venue = document.createElement("p"); venue.textContent = [item.venue || item.location, item.address].filter(Boolean).join("\n");
+      const mapDestination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
+      const venue = document.createElement("p"); venue.textContent = mapDestination;
       card.append(number, title, date, venue);
-      if (item.mapsUrl) { const link = document.createElement("a"); link.href = item.mapsUrl; link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = "Buka Lokasi ↗"; card.append(link); }
+      const mapUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl :
+        (mapDestination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapDestination) : "");
+      if (mapsEnabled && mapUrl) {
+        const link = document.createElement("a");
+        link.href = mapUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
+        link.textContent = "Lihat Lokasi ↗";
+        card.append(link);
+      }
+      if (navigationEnabled && mapDestination) {
+        const nav = document.createElement("a");
+        nav.className = "oa-event-navigation";
+        nav.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(mapDestination);
+        nav.target = "_blank"; nav.rel = "noopener noreferrer";
+        nav.textContent = "Navigasi ke Lokasi ↗";
+        card.append(nav);
+      }
+      if (embedEnabled && mapDestination) {
+        const details = document.createElement("details");
+        details.className = "oa-event-map";
+        const summary = document.createElement("summary"); summary.textContent = "Lihat peta";
+        const frame = document.createElement("iframe");
+        frame.title = "Peta lokasi " + (item.title || item.id || "acara");
+        frame.loading = "lazy"; frame.referrerPolicy = "no-referrer-when-downgrade";
+        frame.allowFullscreen = true;
+        frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(mapDestination) + "&output=embed";
+        frame.style.cssText = "display:block;width:100%;height:220px;border:0;border-radius:12px;margin-top:12px";
+        details.append(summary, frame);
+        card.append(details);
+      }
       root.append(card);
     });
   }
@@ -590,8 +626,17 @@
     });
   }
 
-  function renderGifts(gifts, clientBase) {
-    const accounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
+  function renderGifts(gifts, clientBase, features) {
+    const allAccounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
+    const flags = features && typeof features === "object" ? features : {};
+    const accounts = allAccounts.filter(item => {
+      if (!item || item.enabled === false) return false;
+      const type = String(item.paymentType || item.type || "bank").toLowerCase();
+      if (type === "bank" && flags.bank === false) return false;
+      if (type === "ewallet" && flags.ewallet === false) return false;
+      if (type === "qris" && flags.qris === false) return false;
+      return true;
+    });
     let root = document.getElementById("gift-list");
 
     if (!root) {
@@ -610,7 +655,11 @@
     staticCards.forEach(card => { card.hidden = true; });
 
     if (root) root.replaceChildren();
-    if (!accounts.length || !root) return;
+    if (!accounts.length || !root) {
+      const section = root && root.closest("section");
+      if (section) section.hidden = true;
+      return;
+    }
 
     if (gifts && !Array.isArray(gifts) && gifts.message) {
       const notice = document.createElement("p");

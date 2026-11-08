@@ -103,7 +103,7 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Pilih tampilan metode pembayaran yang ingin digunakan. Seluruh nama pemilik dan nomor di bawah adalah DATA SIMULASI katalog Omah Aksara — bukan rekening atau akun aktif. Tombol salin dinonaktifkan pada data demo. Jangan melakukan transfer.",
+    "message": "Hadiah digital ditampilkan sebagai contoh tampilan Omah Aksara. Rekening, nomor dompet digital, dan QRIS pada halaman ini sepenuhnya data simulasi — bukan akun aktif. Tombol transaksi dan salin dinonaktifkan.",
     "accounts": [
       {
         "paymentType": "bank",
@@ -116,7 +116,8 @@
         "type": "bank",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": true
       },
       {
         "paymentType": "bank",
@@ -129,7 +130,8 @@
         "type": "bank",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": true
       },
       {
         "paymentType": "bank",
@@ -142,7 +144,8 @@
         "type": "bank",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -155,7 +158,8 @@
         "type": "bank",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -168,7 +172,8 @@
         "type": "bank",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -181,7 +186,8 @@
         "type": "bank",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": false
       },
       {
         "paymentType": "ewallet",
@@ -194,7 +200,8 @@
         "type": "ewallet",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": true
       },
       {
         "paymentType": "ewallet",
@@ -207,7 +214,8 @@
         "type": "ewallet",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": true
       },
       {
         "paymentType": "ewallet",
@@ -220,7 +228,8 @@
         "type": "ewallet",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": false
       },
       {
         "paymentType": "ewallet",
@@ -233,7 +242,8 @@
         "type": "ewallet",
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "copyable": false,
-        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif."
+        "note": "Nomor contoh untuk memperlihatkan tampilan dan fungsi salin. Bukan rekening/nomor aktif.",
+        "enabled": false
       },
       {
         "paymentType": "qris",
@@ -247,7 +257,8 @@
         "type": "qris",
         "copyLabel": "QRIS Demo — Nonaktif",
         "copyable": false,
-        "note": "Logo QRIS hanya contoh identitas pembayaran. Ini bukan kode QR transaksi."
+        "note": "Logo QRIS hanya contoh identitas pembayaran. Ini bukan kode QR transaksi.",
+        "enabled": true
       },
       {
         "bank": "CIMB Niaga",
@@ -260,7 +271,8 @@
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "paymentType": "bank"
+        "paymentType": "bank",
+        "enabled": false
       },
       {
         "bank": "Permata Bank",
@@ -273,7 +285,8 @@
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "paymentType": "bank"
+        "paymentType": "bank",
+        "enabled": false
       },
       {
         "bank": "Bank Danamon",
@@ -286,7 +299,8 @@
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "paymentType": "bank"
+        "paymentType": "bank",
+        "enabled": false
       },
       {
         "bank": "Bank Jatim",
@@ -299,7 +313,8 @@
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
-        "paymentType": "bank"
+        "paymentType": "bank",
+        "enabled": false
       },
       {
         "type": "bank",
@@ -311,7 +326,8 @@
         "demoOnly": true,
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
         "copyable": false,
-        "copyLabel": "Data Demo — Tidak untuk Transaksi"
+        "copyLabel": "Data Demo — Tidak untuk Transaksi",
+        "enabled": false
       },
       {
         "type": "bank",
@@ -323,7 +339,8 @@
         "demoOnly": true,
         "demoNote": "Nomor rekening simulasi — bukan rekening aktif.",
         "copyable": false,
-        "copyLabel": "Data Demo — Tidak untuk Transaksi"
+        "copyLabel": "Data Demo — Tidak untuk Transaksi",
+        "enabled": false
       },
       {
         "bank": "LinkAja",
@@ -336,7 +353,8 @@
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "note": "Nomor simulasi untuk pratinjau. Bukan akun aktif dan tidak dapat menerima pembayaran.",
         "demoNote": "Nomor dompet digital disamarkan untuk pratinjau — bukan akun aktif.",
-        "paymentType": "ewallet"
+        "paymentType": "ewallet",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -349,7 +367,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -362,7 +381,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -375,7 +395,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -388,7 +409,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -401,7 +423,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -414,7 +437,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -427,7 +451,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -440,7 +465,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -453,7 +479,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -466,7 +493,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -479,7 +507,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -492,7 +521,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -505,7 +535,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -518,7 +549,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -531,7 +563,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -544,7 +577,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -557,7 +591,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -570,7 +605,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -583,7 +619,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -596,7 +633,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -609,7 +647,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -622,7 +661,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -635,7 +675,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -648,7 +689,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -661,7 +703,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -674,7 +717,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       },
       {
         "paymentType": "bank",
@@ -687,7 +731,8 @@
         "copyable": false,
         "copyLabel": "Data Demo — Tidak untuk Transaksi",
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
-        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi."
+        "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
+        "enabled": false
       }
     ]
   },
@@ -734,12 +779,17 @@
     "guestbook": true,
     "guestName": true,
     "hashtag": true,
-    "quotes": true
+    "quotes": true,
+    "bank": true,
+    "ewallet": true,
+    "qris": true,
+    "mapEmbed": true,
+    "navigation": true
   },
   "hashtag": "#ArkanSekarWedding",
   "seo": {
     "title": "Arkan & Sekar | Undangan Pernikahan — Omah Aksara",
-    "description": "Demo katalog Omah Aksara: pratinjau tema dan fitur hadiah dengan rekening serta nomor e-wallet simulasi yang tidak dapat digunakan untuk transaksi."
+    "description": "Demo katalog Omah Aksara: pratinjau undangan dengan pilihan hadiah digital terkurasi, QRIS ilustrasi non-transaksi, peta lokasi, dan tombol navigasi."
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh. Dengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami. Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, memberikan doa restu, dan menjadi bagian dari awal perjalanan baru kami."
