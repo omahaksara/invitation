@@ -280,7 +280,6 @@ body {
 
 /* Smart interaction layer: controls remain hidden until the invitation is opened. */
 body:not(.oa-invitation-opened) .oa-floating-controls,
-body:not(.oa-invitation-opened) .oa-quick-controls,
 body:not(.oa-invitation-opened) [data-oa-native-navigation],
 body:not(.oa-invitation-opened) #music-toggle,
 body:not(.oa-invitation-opened) #music-btn,
@@ -300,13 +299,13 @@ body:not(.oa-invitation-opened) .royal-music-toggle {
   box-shadow:0 9px 30px rgba(20,18,16,.16); backdrop-filter:none; -webkit-backdrop-filter:none;
   transition:opacity .28s ease, transform .28s ease;
 }
-.oa-floating-controls[hidden],.oa-nav-overflow[hidden],.oa-quick-controls[hidden] {display:none!important}
+.oa-floating-controls[hidden],.oa-nav-overflow[hidden]{display:none!important}
 .oa-floating-controls button {
   appearance:none; border:0; min-width:42px; min-height:42px; padding:0 12px; border-radius:999px;
   background:transparent; color:var(--oa-dock-ink,#514735); font:600 11px/1 var(--oa-font-body,Arial,sans-serif);
   cursor:pointer; white-space:nowrap; transition:background .2s ease,color .2s ease,transform .2s ease;
 }
-.oa-floating-controls button:active,.oa-quick-button:active {transform:scale(.94)}
+.oa-floating-controls button:active{transform:scale(.94)}
 .oa-floating-controls button.is-active {background:var(--oa-dock-active,var(--oa-dock-ink,#514735));color:var(--oa-dock-active-ink,#fff)}
 .oa-nav-more-wrap {position:relative}
 .oa-nav-overflow {
@@ -325,40 +324,20 @@ body:not(.oa-invitation-opened) .royal-music-toggle {
   background:var(--oa-dock-active,var(--oa-dock-ink,#514735));
   color:var(--oa-dock-active-ink,#fff);
 }
-.oa-quick-controls {
-  position:fixed; z-index:92; right:max(14px,env(safe-area-inset-right));
-  bottom:calc(max(14px,env(safe-area-inset-bottom)) + 74px); display:flex; flex-direction:column; gap:10px;
-  align-items:center; transition:opacity .28s ease,transform .28s ease;
-}
-.oa-quick-button {
-  width:44px; height:44px; border-radius:50%; border:1px solid var(--oa-quick-border,rgba(255,255,255,.7));
-  display:grid; place-items:center; background:var(--oa-quick-bg,rgba(248,246,240,.92));
-  color:var(--oa-quick-ink,#514735); box-shadow:0 6px 20px rgba(0,0,0,.16);
-  backdrop-filter:none; -webkit-backdrop-filter:none; font-size:17px; cursor:pointer;
-  transition:transform .2s ease,background .2s ease;
-}
-.oa-quick-button.is-running,.oa-quick-button.is-playing {background:var(--oa-dock-active,#514735);color:var(--oa-dock-active-ink,#fff)}
-.oa-native-music-control {z-index:92!important}
 @media(max-width:480px) {
   .oa-floating-controls {left:10px;right:10px;bottom:max(9px,env(safe-area-inset-bottom));width:auto;max-width:none;transform:none;justify-content:space-around;gap:2px}
   .oa-floating-controls button {min-width:0;min-height:40px;padding:0 9px;font-size:10px;flex:1 1 0}
-  .oa-quick-controls {right:max(12px,env(safe-area-inset-right));bottom:calc(max(12px,env(safe-area-inset-bottom)) + 66px)}
-  .oa-quick-button {width:42px;height:42px}
 }
 @media(prefers-reduced-motion:reduce) {
-  .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {transition:none!important}
+  .oa-floating-controls,.oa-floating-controls button{transition:none!important}
 }
 
 
 /* Context-aware controls: keep the dock clear of active forms and gallery previews. */
 body.oa-form-focus .oa-floating-controls,
-body.oa-form-focus .oa-quick-controls,
 body.oa-form-focus [data-oa-native-navigation],
-body.oa-form-focus .oa-native-music-control,
 body.oa-lightbox-open .oa-floating-controls,
-body.oa-lightbox-open .oa-quick-controls,
-body.oa-lightbox-open [data-oa-native-navigation],
-body.oa-lightbox-open .oa-native-music-control {
+body.oa-lightbox-open [data-oa-native-navigation]{
   opacity:0!important;
   visibility:hidden!important;
   pointer-events:none!important;
@@ -409,26 +388,6 @@ body.oa-lightbox-open .oa-native-music-control {
   justify-content:flex-start;
   padding-inline:12px;
 }
-.oa-quick-controls {
-  right:max(14px,env(safe-area-inset-right));
-  bottom:calc(max(14px,env(safe-area-inset-bottom)) + 78px);
-}
-.oa-quick-button {
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  border:1px solid var(--oa-dock-border,rgba(255,255,255,.7));
-  background:var(--oa-dock-bg,rgba(248,246,240,.94));
-  color:var(--oa-dock-ink,#514735);
-}
-.oa-quick-button:focus-visible {
-  outline:2px solid var(--oa-dock-accent,#9a8057);
-  outline-offset:3px;
-}
-.oa-quick-button.is-running,.oa-quick-button.is-playing {
-  background:var(--oa-dock-accent,#514735);
-  color:var(--oa-dock-active-ink,#fff);
-}
 @media(max-width:600px) {
   .oa-floating-controls {
     left:8px;
@@ -450,22 +409,15 @@ body.oa-lightbox-open .oa-native-music-control {
   }
   .oa-floating-controls .oa-nav-more { min-width:0; }
   .oa-nav-overflow { right:0; bottom:calc(100% + 10px); }
-  .oa-quick-controls {
-    right:max(10px,env(safe-area-inset-right));
-    bottom:calc(max(10px,env(safe-area-inset-bottom)) + 64px);
-    gap:8px;
-  }
-  .oa-quick-button { width:40px;height:40px; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .oa-floating-controls,.oa-floating-controls button,.oa-quick-controls,.oa-quick-button {
+  .oa-floating-controls,.oa-floating-controls button{
     transition:none!important;
   }
 }
 
 /* Keep the shared controls above theme sections and their reveal layers. */
-html.oa-invitation-opened > #oa-floating-controls,
-html.oa-invitation-opened > #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls{
   z-index: 9999 !important;
   isolation: isolate;
 }
@@ -481,8 +433,7 @@ body #app {
   z-index: 0;
   isolation: isolate;
 }
-html.oa-invitation-opened > #oa-floating-controls,
-html.oa-invitation-opened > #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls{
   position: fixed !important;
   z-index: 2147483000 !important;
   isolation: isolate !important;
@@ -499,15 +450,13 @@ html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
   max-height: min(55vh, 360px);
   overflow-y: auto;
 }
-html.oa-invitation-opened > #oa-floating-controls button,
-html.oa-invitation-opened > #oa-quick-controls button {
+html.oa-invitation-opened > #oa-floating-controls button{
   pointer-events: auto !important;
 }
 
 
 /* Final control layer: the shared dock must win against transformed theme sections. */
-html.oa-invitation-opened > #oa-floating-controls,
-html.oa-invitation-opened > #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls{
   position: fixed !important;
   z-index: 2147483000 !important;
   pointer-events: auto !important;
@@ -520,13 +469,7 @@ html.oa-invitation-opened > #oa-floating-controls {
   top: auto !important;
   transform: translateX(-50%) !important;
 }
-html.oa-invitation-opened > #oa-quick-controls {
-  right: max(12px, env(safe-area-inset-right)) !important;
-  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px) !important;
-  top: auto !important;
-}
-html.oa-invitation-opened > #oa-floating-controls button,
-html.oa-invitation-opened > #oa-quick-controls button {
+html.oa-invitation-opened > #oa-floating-controls button{
   pointer-events: auto !important;
 }
 html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
@@ -607,14 +550,12 @@ html[data-oa-theme] .oa-scroll-reveal.oa-visible { opacity:1; transform:none; }
 
 
 /* Root-mounted shared controls: reveal only after the invitation is opened. */
-html:not(.oa-invitation-opened) > #oa-floating-controls,
-html:not(.oa-invitation-opened) > #oa-quick-controls {
+html:not(.oa-invitation-opened) > #oa-floating-controls{
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
-html.oa-invitation-opened > #oa-floating-controls,
-html.oa-invitation-opened > #oa-quick-controls {
+html.oa-invitation-opened > #oa-floating-controls{
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
@@ -664,10 +605,8 @@ html[data-oa-theme="serena-ivory"] { --oa-theme-display:"Cormorant Garamond",ser
 html[data-oa-theme="sirein"] { --oa-theme-display:"Lora",serif; --oa-theme-body:"Inter",sans-serif; }
 html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; }
 
-.oa-floating-controls,
-.oa-quick-controls { font-family:var(--oa-theme-body,var(--oa-font-body)); }
-.oa-floating-controls button,
-.oa-quick-controls button { font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-floating-controls{ font-family:var(--oa-theme-body,var(--oa-font-body)); }
+.oa-floating-controls button{ font-family:var(--oa-theme-body,var(--oa-font-body)); }
 .oa-shared-section { font-family:var(--oa-theme-body,var(--oa-font-body)); }
 .oa-shared-section > h2,
 .oa-shared-section h3 { font-family:var(--oa-theme-display,var(--oa-font-display)); }
