@@ -583,6 +583,29 @@ for (const slug of activeThemeSlugs) {
         assert.ok(layout.guestbook > 0 && layout.guestbook <= layout.viewport,
           theme.slug + ": buku tamu tidak responsif " + JSON.stringify(layout));
 
+        // Verify that the final page content can scroll clear of the fixed shared dock.
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        const dockClearance = await page.evaluate(() => {
+          const dock = document.getElementById("oa-floating-controls");
+          const app = document.getElementById("app");
+          if (!dock || !app) return null;
+          const dockRect = dock.getBoundingClientRect();
+          const appRect = app.getBoundingClientRect();
+          return {
+            dockVisible: getComputedStyle(dock).visibility !== "hidden" &&
+              getComputedStyle(dock).display !== "none",
+            dockTop: dockRect.top,
+            appBottom: appRect.bottom,
+            gap: dockRect.top - appRect.bottom,
+            scrollY: window.scrollY,
+            scrollHeight: document.documentElement.scrollHeight
+          };
+        });
+        assert.ok(dockClearance && dockClearance.dockVisible,
+          theme.slug + ": dock bersama tidak terlihat saat audit ruang bawah.");
+        assert.ok(dockClearance.gap >= 8,
+          theme.slug + ": dock menutupi area akhir konten pada mobile " + JSON.stringify(dockClearance));
+
         const rsvp = page.locator("#rsvp-form");
         await rsvp.locator('[name="name"]').fill("Tamu Uji");
         await rsvp.locator('[name="attendance"]').selectOption("hadir");
