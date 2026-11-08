@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const DATABASE_ID = '1V37A5smUiF5Ld4uTj7I0kh019QwsWi5gIll1xGKdSVI';
+const DATABASE_ID = 'test-spreadsheet-id';
 const RSVP_HEADERS = ['Timestamp', 'ID', 'Slug Klien', 'Nama Tamu', 'Jumlah Hadir', 'Status Kehadiran', 'Pesan/Doa', 'Kontak', 'Sumber', 'User Agent'];
 const GUESTBOOK_HEADERS = ['Timestamp', 'ID', 'Slug Klien', 'Nama Pengirim', 'Ucapan', 'Status Moderasi', 'Sumber'];
 
@@ -39,7 +39,7 @@ const db = new Spreadsheet('Omah Aksara — Database RSVP & Buku Tamu', DATABASE
   new Sheet('RSVP', [RSVP_HEADERS]),
   new Sheet('Guestbook', [GUESTBOOK_HEADERS])
 ]);
-const properties = new Map();
+const properties = new Map([['OMAH_AKSARA_DATABASE_ID', DATABASE_ID]]);
 const cacheValues = new Map();
 const clientConfigs = new Map([
   ['uji-omah-aksara', { slug: 'uji-omah-aksara', status: 'published', demoMode: false }],
@@ -94,7 +94,11 @@ function post(payload) {
 
 const url = context.setupDatabase();
 assert.match(url, /^https:\/\/docs\.google\.test\//);
-assert.equal(properties.get('OMAH_AKSARA_DATABASE_ID'), DATABASE_ID);
+assert.equal(properties.get('OMAH_AKSARA_DATABASE_ID'), DATABASE_ID, 'setup reads the preconfigured Script Property without writing a fallback');
+const configuredId = properties.get('OMAH_AKSARA_DATABASE_ID');
+properties.delete('OMAH_AKSARA_DATABASE_ID');
+assert.throws(() => context.getDatabase_(), /Database belum dikonfigurasi/, 'database access fails closed when Script Property is missing');
+properties.set('OMAH_AKSARA_DATABASE_ID', configuredId);
 assert.deepEqual(db.getSheets().map(sheet => sheet.name), ['RSVP', 'Guestbook', 'Settings']);
 context.setupDatabase();
 assert.equal(db.getSheetByName('Settings').getLastRow(), 2, 'setup does not duplicate demo allowlist row');

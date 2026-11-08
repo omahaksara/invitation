@@ -12,7 +12,6 @@
  * Isi Settings dengan slug undangan dan status "published".
  * Ucapan buku tamu langsung disetujui setelah berhasil disimpan.
  */
-const DATABASE_ID = "1V37A5smUiF5Ld4uTj7I0kh019QwsWi5gIll1xGKdSVI";
 const DATABASE_ID_PROPERTY = "OMAH_AKSARA_DATABASE_ID";
 const SHEET_RSVP = "RSVP";
 const SHEET_GUESTBOOK = "Guestbook";
@@ -40,7 +39,7 @@ function authorizeExternalFetch() {
 }
 
 function setupDatabase() {
-  const ss = SpreadsheetApp.openById(DATABASE_ID);
+  const ss = SpreadsheetApp.openById(getDatabaseId_());
   [SHEET_RSVP, SHEET_GUESTBOOK].forEach(function(name) {
     const sheet = ss.getSheetByName(name);
     if (!sheet) throw new Error("Tab " + name + " tidak ditemukan.");
@@ -69,14 +68,23 @@ function setupDatabase() {
     }
   }
 
-  PropertiesService.getScriptProperties().setProperty(DATABASE_ID_PROPERTY, DATABASE_ID);
   Logger.log("Koneksi database berhasil: " + ss.getUrl());
   return ss.getUrl();
 }
 
+function getDatabaseId_() {
+  const id = PropertiesService.getScriptProperties().getProperty(DATABASE_ID_PROPERTY);
+  if (!id) {
+    throw new Error(
+      "Database belum dikonfigurasi. Tambahkan Script Property " +
+      DATABASE_ID_PROPERTY + " pada pengaturan project Apps Script."
+    );
+  }
+  return id;
+}
+
 function getDatabase_() {
-  const id = PropertiesService.getScriptProperties().getProperty(DATABASE_ID_PROPERTY) || DATABASE_ID;
-  return SpreadsheetApp.openById(id);
+  return SpreadsheetApp.openById(getDatabaseId_());
 }
 
 function getSheet_(name) {
