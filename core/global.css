@@ -812,3 +812,10 @@ html[data-oa-theme] #app .cover-monogram{animation-duration:.5s!important}
   }
   html[data-oa-theme] { scroll-behavior: auto !important; }
 }
+
+
+/* Reserve a clear reading/tap area beneath the final invitation content.
+   The shared dock is fixed to the viewport, so the document needs a matching tail space. */
+html.oa-invitation-opened body {
+  padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)) !important;
+}
