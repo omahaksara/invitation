@@ -158,6 +158,55 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": foto Love Story tidak sesuai data.json");
         assert.equal((await page.locator("#story-list article, .story-list article").first().textContent()).includes("Pertemuan yang Sederhana"), true,
           theme.slug + ": judul Love Story tidak terbaca");
+
+        // Regression coverage for the curated demo payment methods and map controls.
+        // These assertions run against every active theme using the same demo JSON.
+        const demoFeatureAudit = await page.evaluate(() => {
+          const data = window.__invitationData || {};
+          const accounts = Array.isArray(data.gifts?.accounts) ? data.gifts.accounts : [];
+          const enabledAccounts = accounts.filter(item => item && item.enabled !== false);
+          const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+          const mappedEvents = events.filter(item => [item.venue || item.location, item.address].filter(Boolean).length);
+          const giftCards = Array.from(document.querySelectorAll("#gift-list .gift-card"));
+          const eventCards = Array.from(document.querySelectorAll("#event-list .event-card"));
+          return {
+            expectedPayments: enabledAccounts.length,
+            paymentNames: enabledAccounts.map(item => item.bank || "HADIAH DIGITAL"),
+            paymentCards: giftCards.length,
+            paymentCardNames: giftCards.map(card => card.querySelector(".gift-bank")?.textContent?.trim() || ""),
+            disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
+            hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
+            expectedMappedEvents: mappedEvents.length,
+            navigationEnabled: data.features?.mapNavigation !== false,
+            mapEmbedEnabled: data.features?.mapEmbed !== false,
+            locationLinks: document.querySelectorAll(".oa-event-location").length,
+            navigationLinks: document.querySelectorAll(".oa-event-navigation").length,
+            mapEmbeds: document.querySelectorAll("details.oa-event-map").length,
+            lazyMapFrames: Array.from(document.querySelectorAll("details.oa-event-map iframe")).every(frame => {
+              try {
+                const url = new URL(frame.src);
+                return frame.loading === "lazy" && url.protocol === "https:" &&
+                  url.hostname === "www.google.com" && url.pathname === "/maps";
+              } catch { return false; }
+            })
+          };
+        });
+        assert.equal(demoFeatureAudit.paymentCards, demoFeatureAudit.expectedPayments,
+          theme.slug + ": jumlah metode pembayaran demo tidak sesuai JSON " + JSON.stringify(demoFeatureAudit));
+        assert.deepEqual(demoFeatureAudit.paymentCardNames, demoFeatureAudit.paymentNames,
+          theme.slug + ": metode pembayaran nonaktif ikut tampil atau urutannya berubah " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.disabledPaymentActions, true,
+          theme.slug + ": tombol pembayaran demo harus nonaktif " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.hasDemoNotice, true,
+          theme.slug + ": peringatan simulasi pembayaran tidak tampil " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.locationLinks, demoFeatureAudit.expectedMappedEvents,
+          theme.slug + ": tautan lokasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.navigationLinks, demoFeatureAudit.navigationEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
+          theme.slug + ": tautan navigasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.mapEmbeds, demoFeatureAudit.mapEmbedEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
+          theme.slug + ": peta tertanam tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.lazyMapFrames, true,
+          theme.slug + ": iframe peta harus memakai lazy loading dan URL Google Maps " + JSON.stringify(demoFeatureAudit));
         if (theme.slug === "aksara-signature") {
           await page.waitForFunction(() => Boolean(document.querySelector("#app style")), undefined, { timeout: 5000 });
         }
@@ -223,6 +272,21 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const mapAudit = await page.evaluate(() => {
+          const frames = Array.from(document.querySelectorAll(".oa-event-map iframe"));
+          const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
+          return {
+            frames: frames.map(frame => frame.src),
+            notes: notes.map(note => note.textContent),
+            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href)
+          };
+        });
+        assert.equal(mapAudit.frames.length, 0,
+          theme.slug + ": demo dengan titik lokasi belum diverifikasi tidak boleh menampilkan pin peta yang menyesatkan");
+        assert.equal(mapAudit.notes.length, 2,
+          theme.slug + ": catatan lokasi simulasi harus terlihat pada kedua acara");
+        assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
+          theme.slug + ": tautan pencarian Maps harus tetap tersedia");
         const performanceAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
           const backdrop = [];

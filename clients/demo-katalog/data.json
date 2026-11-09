@@ -42,24 +42,28 @@
       "date": "12 Juni 2027",
       "time": "08:00 - 10:00 WITA",
       "location": "Taman Seruni — Grand Garden Pavilion",
-      "address": "Alamat simulasi untuk pratinjau katalog, Makassar",
-      "mapsUrl": "https://maps.google.com/?q=Taman+Seruni+Makassar",
+      "address": "",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Taman%20Seruni%20Grand%20Garden%20Pavilion%2C%20Makassar%2C%20Sulawesi%20Selatan",
       "dateISO": "2027-06-12",
       "startTime": "08:00",
       "endTime": "10:00",
-      "timezone": "Asia/Makassar"
+      "timezone": "Asia/Makassar",
+      "mapQuery": "Taman Seruni Grand Garden Pavilion, Makassar, Sulawesi Selatan",
+      "mapNote": "Lokasi simulasi katalog. Alamat lengkap dan titik koordinat venue belum diverifikasi."
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
       "date": "12 Juni 2027",
       "time": "11:00 - 14:00 WITA",
       "location": "Taman Seruni — The Glasshouse",
-      "address": "Alamat simulasi untuk pratinjau katalog, Makassar",
-      "mapsUrl": "https://maps.google.com/?q=Taman+Seruni+Makassar",
+      "address": "",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Taman%20Seruni%20The%20Glasshouse%2C%20Makassar%2C%20Sulawesi%20Selatan",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
       "endTime": "14:00",
-      "timezone": "Asia/Makassar"
+      "timezone": "Asia/Makassar",
+      "mapQuery": "Taman Seruni The Glasshouse, Makassar, Sulawesi Selatan",
+      "mapNote": "Lokasi simulasi katalog. Alamat lengkap dan titik koordinat venue belum diverifikasi."
     }
   },
   "countdown": {
@@ -783,8 +787,8 @@
     "bank": true,
     "ewallet": true,
     "qris": true,
-    "mapEmbed": true,
-    "navigation": true
+    "mapEmbed": false,
+    "mapNavigation": false
   },
   "hashtag": "#ArkanSekarWedding",
   "seo": {
