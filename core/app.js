@@ -8,11 +8,17 @@
     const params = new URLSearchParams(location.search);
     const slug = params.get("c") || "";
     const guestName = (params.get("to") || "").trim();
-    const buildShortInvitationUrl = () => {
-      const path = "/i/" + encodeURIComponent(slug) + (guestName ? "/" + encodeURIComponent(guestName) : "");
+    const buildShortInvitationUrl = (invitationData = {}) => {
+      const guestSegment = guestName
+        ? guestName.normalize("NFKC").trim().replace(/\\s+/g, "-")
+        : "";
+      const path = "/i/" + encodeURIComponent(slug) + (guestSegment ? "/" + encodeURIComponent(guestSegment) : "");
       const shortUrl = new URL(path, "https://omahaksara.github.io");
       const selectedTheme = params.get("theme") || "";
-      if (/^[a-z0-9][a-z0-9-]*$/i.test(selectedTheme)) shortUrl.searchParams.set("theme", selectedTheme);
+      if (slug === "demo-katalog" && invitationData.demoMode === true &&
+          /^[a-z0-9][a-z0-9-]*$/i.test(selectedTheme)) {
+        shortUrl.searchParams.set("theme", selectedTheme);
+      }
       return shortUrl.toString();
     };
     if (!/^[a-z0-9][a-z0-9-]*$/i.test(slug)) {
@@ -32,17 +38,14 @@
       normalizeDemoAssets(data, slug);
       normalizeTemplateData(data);
       const requestedTheme = params.get("theme");
-      // Theme slugs are validated before they can override a published invitation.
-      // Demo previews retain folder-based discovery; published invitations only accept
-      // themes explicitly marked active in templates/registry.json.
+      // Only the public demo may preview alternate active themes.
+      // Published client invitations always use the theme configured in their own JSON.
       const isThemeSlug = value => /^[a-z0-9][a-z0-9-]*$/i.test(value || "");
       const canonicalTheme = value => value === "royal" ? "royal-vintage" : value;
       const configured = isThemeSlug(data.theme) ? data.theme : "karsa";
       const configuredAlias = canonicalTheme(configured);
       let requestedAlias = "";
-      if (data.demoMode === true && isThemeSlug(requestedTheme)) {
-        requestedAlias = canonicalTheme(requestedTheme);
-      } else if (data.status === "published" && isThemeSlug(requestedTheme)) {
+      if (slug === "demo-katalog" && data.demoMode === true && isThemeSlug(requestedTheme)) {
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
@@ -56,8 +59,8 @@
             if (activeThemes.includes(candidate)) requestedAlias = candidate;
           }
         } catch (themeError) {
-          // Fail safely: a registry/network problem keeps the configured theme.
-          console.warn("Tema dari link diabaikan; memakai tema bawaan undangan.", themeError);
+          // Fail safely: a registry/network problem keeps the demo's configured theme.
+          console.warn("Tema demo diabaikan; memakai tema bawaan demo.", themeError);
         }
       }
       // Never let a stale or mistyped theme slug turn the whole invitation into a blank/error page.
@@ -1440,7 +1443,7 @@
     if (document.getElementById("oa-floating-controls")) return;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
-    const getShareUrl = typeof buildShortInvitationUrl === "function" ? buildShortInvitationUrl : () => location.href;
+    const getShareUrl = typeof buildShortInvitationUrl === "function" ? () => buildShortInvitationUrl(data) : () => location.href;
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
       button.type = "button";
