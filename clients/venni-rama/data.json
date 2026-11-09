@@ -11,7 +11,7 @@
     "image": "cover.jpg",
     "heroImage": "cover.jpg",
     "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-    "dateLabel": "Jumat, 20 November 2026",
+    "dateLabel": "19–20 November 2026",
     "buttonText": "Buka Undangan"
   },
   "couple": {
@@ -36,43 +36,33 @@
     "source": "Al-Qur'an, QS. Ar-Rum: 21"
   },
   "events": {
-    "akad": {
-      "title": "Akad Nikah",
-      "date": "Jumat, 20 November 2026",
-      "time": "09.00–10.00 WITA",
+    "akad-resepsi": {
+      "title": "Akad Nikah & Resepsi Pernikahan",
+      "date": "19–20 November 2026",
+      "time": "Satu rangkaian acara",
       "location": "Kediaman Mempelai Wanita",
-      "address": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/J7gttbr9E9JUdsPe6?g_st=ac",
-      "dateISO": "2026-11-20",
-      "startTime": "09:00",
-      "endTime": "10:00",
+      "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
+      "mapQuery": "Kediaman Mempelai Wanita, Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "coordinates": {
-        "lat": 0.5843145,
-        "lng": 120.7682905
-      }
-    },
-    "resepsi": {
-      "title": "Resepsi Pernikahan",
-      "date": "Jumat, 20 November 2026",
-      "time": "11.00–selesai WITA",
-      "location": "Kediaman Mempelai Wanita",
-      "address": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/J7gttbr9E9JUdsPe6?g_st=ac",
-      "dateISO": "2026-11-20",
-      "startTime": "11:00",
-      "endTime": "",
-      "timezone": "Asia/Makassar",
-      "mapQuery": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "coordinates": {
-        "lat": 0.5843145,
-        "lng": 120.7682905
-      }
+      "schedule": [
+        {
+          "title": "Akad Nikah",
+          "date": "Kamis, 19 November 2026",
+          "dateISO": "2026-11-19",
+          "time": "09.00–10.00 WITA"
+        },
+        {
+          "title": "Resepsi Pernikahan",
+          "date": "Jumat, 20 November 2026",
+          "dateISO": "2026-11-20",
+          "time": "11.00 WITA–selesai"
+        }
+      ]
     }
   },
   "countdown": {
-    "targetDate": "2026-11-20T00:00:00+08:00"
+    "targetDate": "2026-11-19T09:00:00+08:00"
   },
   "story": [],
   "gallery": [
@@ -98,7 +88,8 @@
     }
   },
   "rsvp": {
-    "link": ""
+    "link": "",
+    "enabled": true
   },
   "demoGreetings": [],
   "schemaVersion": 2,
@@ -111,23 +102,27 @@
     "maps": true,
     "music": true,
     "gifts": false,
-    "rsvp": false,
-    "guestbook": false,
+    "rsvp": true,
+    "guestbook": true,
     "guestName": true,
     "hashtag": false,
     "quotes": true,
     "bank": false,
     "ewallet": false,
     "qris": false,
-    "mapEmbed": false,
-    "mapNavigation": false
+    "mapEmbed": true,
+    "mapNavigation": true
   },
   "seo": {
     "title": "Pratu Rama Syahputra & Venni Vidiya Sari | Undangan Pernikahan",
-    "description": "Undangan pernikahan Pratu Rama Syahputra dan Venni Vidiya Sari. Jumat, 20 November 2026."
+    "description": "Undangan pernikahan Pratu Rama Syahputra dan Venni Vidiya Sari, 19–20 November 2026."
   },
   "opening": {
     "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nAssalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta mengharap keberkahan-Nya, kami bermaksud menyelenggarakan akad nikah dan resepsi pernikahan putra-putri kami. Dengan penuh hormat dan kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir serta memberikan doa restu kepada kedua mempelai.\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir pada hari yang telah ditentukan.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
   },
-  "hashtag": "#RamaVenni"
+  "hashtag": "#RamaVenni",
+  "guestbook": {
+    "enabled": true,
+    "maxMessageLength": 500
+  }
 }
