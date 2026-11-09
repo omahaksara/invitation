@@ -108,6 +108,7 @@ body,#app{background:#f3e8d8!important;color:#4c392b!important}
 @media(max-width:650px){.aksav .oa-event-map-frame iframe{height:230px}}
 
 /* Aksav mobile-first structural and cover refinement */
+.aksav .oa-footer-brand{margin:22px auto 0;font-size:.72rem;letter-spacing:.08em;color:#8b7059}.aksav .oa-footer-brand strong{color:#9a704b;font-weight:600}
 .aksav{overflow-x:clip;overflow-y:visible;min-height:0;padding-bottom:calc(8rem + env(safe-area-inset-bottom))}
 .aksav .cover{min-height:100svh;height:auto;display:flex;align-items:flex-end;justify-content:center;padding:clamp(22px,5vh,52px) 18px calc(34px + env(safe-area-inset-bottom));background:#49372b;overflow:visible}
 .aksav .cover>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:1;z-index:-2}
@@ -161,7 +162,7 @@ body,#app{background:#f3e8d8!important;color:#4c392b!important}
 <section class="panel guestbook-section" id="guestbook-section"><p class="eyebrow" style="text-align:center">Your Wishes</p><h2 class="section-title serif">Ucapan &amp; Doa</h2><form id="wishes-form"></form><div id="wishes-list"></div></section>
 <section class="panel gift-section" id="gift-section"><p class="eyebrow" style="text-align:center">A Token of Love</p><h2 class="section-title serif">Hadiah Digital</h2><p class="intro" data-bind="gifts.message"></p><div id="gift-list" class="gift-grid"></div></section>
 <section class="panel hashtag-section" id="hashtag-section"><p class="eyebrow" style="text-align:center">Our Wedding</p><h2 class="section-title serif" data-bind="hashtag">#WeddingDay</h2></section>
-<footer><div class="ornament">✧</div><h2 class="serif" style="font-size:2.5rem">Terima Kasih</h2><p>Atas doa dan kehadiran Anda, menjadi bagian dari kebahagiaan kami.</p><p class="serif gold" style="font-size:1.5rem"><span data-bind="couple.groom.nickname">Mempelai</span> &amp; <span data-bind="couple.bride.nickname">Mempelai</span></p></footer>
+<footer><div class="ornament">✧</div><h2 class="serif" style="font-size:2.5rem">Terima Kasih</h2><p>Atas doa dan kehadiran Anda, menjadi bagian dari kebahagiaan kami.</p><p class="serif gold" style="font-size:1.5rem"><span data-bind="couple.groom.nickname">Mempelai</span> &amp; <span data-bind="couple.bride.nickname">Mempelai</span></p><p class="oa-footer-brand">Created with 🤍 by <strong>Omah Aksara</strong></p></footer>
 <nav class="aksav-nav" aria-label="Navigasi undangan"><a href="#cover"><span>⌂</span>Home</a><a href="#couple"><span>♡</span>Mempelai</a><a href="#events"><span>▦</span>Acara</a><a href="#gallery"><span>▧</span>Galeri</a><a href="#guestbook-section"><span>✉</span>Ucapan</a><a href="#gift-section"><span>♧</span>Hadiah</a><button id="music-toggle" type="button" aria-label="Putar atau jeda musik"><span>♫</span>Musik</button></nav>
 <audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
