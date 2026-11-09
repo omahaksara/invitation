@@ -784,7 +784,8 @@
     "ewallet": true,
     "qris": true,
     "mapEmbed": true,
-    "navigation": true
+    "navigation": true,
+    "closing": true
   },
   "hashtag": "#ArkanSekarWedding",
   "seo": {
@@ -793,5 +794,10 @@
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh. Dengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami. Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, memberikan doa restu, dan menjadi bagian dari awal perjalanan baru kami."
+  },
+  "closing": {
+    "title": "Terima Kasih",
+    "text": "Merupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Sampai bertemu di hari bahagia kami.",
+    "signature": "Dengan penuh cinta, Arkan & Sekar"
   }
 }
