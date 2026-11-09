@@ -1478,17 +1478,6 @@
       };
       document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
       if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
-      autoButton.addEventListener("click", () => {
-        // aria-pressed is the user-visible source of truth. The interval can be
-        // cleared by reaching the page end or by an external interaction between
-        // scheduling and click delivery; never restart when the control still
-        // visibly reports that scrolling is active.
-        if (autoButton.getAttribute("aria-pressed") === "true" || autoStartDelay !== null) {
-          stopAutoScroll();
-          return;
-        }
-        startAutoScroll();
-      });
       window.addEventListener("wheel", stopAutoScroll, { passive: true });
       window.addEventListener("touchstart", event => {
         if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
@@ -1501,6 +1490,15 @@
       });
       document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
     }
+    // Bind the dock action after the motion-preference branch so its click
+    // contract is always installed consistently for every theme.
+    autoButton.addEventListener("click", () => {
+      if (autoButton.getAttribute("aria-pressed") === "true" || autoStartDelay !== null) {
+        stopAutoScroll();
+        return;
+      }
+      startAutoScroll();
+    });
 
     if (musicButton) {
       const syncMusic = () => {
