@@ -39,30 +39,30 @@
     "akad": {
       "title": "Akad Nikah",
       "date": "Jumat, 20 November 2026",
-      "time": "",
+      "time": "09.00–10.00 WITA",
       "location": "Kediaman Mempelai Wanita",
-      "address": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "address": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
       "dateISO": "2026-11-20",
-      "startTime": "",
-      "endTime": "",
+      "startTime": "09:00",
+      "endTime": "10:00",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapNote": "Lokasi akad dan resepsi berada di kediaman mempelai wanita sesuai tautan Google Maps dari pemesan."
+      "mapQuery": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapNote": "Lokasi akad dan resepsi sama, di kediaman mempelai wanita."
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
       "date": "Jumat, 20 November 2026",
-      "time": "",
+      "time": "11.00–selesai WITA",
       "location": "Kediaman Mempelai Wanita",
-      "address": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "address": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
       "dateISO": "2026-11-20",
-      "startTime": "",
+      "startTime": "11:00",
       "endTime": "",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapNote": "Lokasi akad dan resepsi berada di kediaman mempelai wanita sesuai tautan Google Maps dari pemesan."
+      "mapQuery": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapNote": "Lokasi akad dan resepsi sama, di kediaman mempelai wanita."
     }
   },
   "countdown": {
