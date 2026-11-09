@@ -1,87 +1,99 @@
 # Menyiapkan backend RSVP dan buku tamu Omah Aksara
 
-Backend ini memakai Google Apps Script dan Google Sheets. Lingkungan uji dan produksi harus dibuat sebagai proyek Apps Script terpisah, masing-masing dengan spreadsheet dan Script Properties sendiri.
+Backend memakai Google Apps Script dan Google Sheets. Lingkungan TEST dan PROD wajib memakai **proyek Apps Script, spreadsheet, Script Properties, dan URL deployment yang berbeda**.
 
-## 1. Buat proyek Apps Script
+> **Penting:** kode backend saat ini tidak membuat spreadsheet otomatis dan tidak memakai konstanta `DATABASE_ID`. ID spreadsheet dibaca dari Script Property `OMAH_AKSARA_DATABASE_ID`. Jangan pernah mengisi property proyek TEST dengan ID spreadsheet produksi.
 
-1. Buka https://script.google.com/ lalu buat proyek baru.
-2. Salin seluruh isi `backend/Code.gs` ke file `Code.gs`.
-3. Beri nama yang jelas, misalnya `Omah Aksara API — TEST` atau `Omah Aksara API — PROD`.
+## 1. Buat spreadsheet TEST terlebih dahulu
 
-Jangan menggunakan satu proyek/database yang sama untuk data uji dan pelanggan.
+1. Buat Google Spreadsheet baru khusus pengujian, misalnya `Omah Aksara — TEST`.
+2. Buat tab bernama persis `RSVP` dan `Guestbook`.
+3. Isi baris pertama dengan header persis seperti berikut.
 
-## 2. Buat database
+Tab `RSVP` (10 kolom, urutan wajib):
 
-1. Pilih fungsi `setupDatabase` di editor Apps Script.
-2. Tekan **Run/Jalankan** dan selesaikan permintaan izin Google.
-3. Buka Execution log untuk melihat URL spreadsheet yang dibuat.
-4. Pastikan ada tiga tab: `RSVP`, `Guestbook`, dan `Settings`.
+```text
+Timestamp | ID | Slug Klien | Nama Tamu | Jumlah Hadir | Status Kehadiran | Pesan/Doa | Kontak | Sumber | User Agent
+```
 
-Fungsi setup bersifat idempoten: jika database sudah pernah dibuat, fungsi memakai spreadsheet yang sama. Database RSVP lama tidak dipindahkan atau dihapus.
+Tab `Guestbook` (7 kolom, urutan wajib):
 
-## 3. Daftarkan slug yang diizinkan
+```text
+Timestamp | ID | Slug Klien | Nama Pengirim | Ucapan | Status Moderasi | Sumber
+```
 
-Tab `Settings` adalah allowlist undangan yang boleh menggunakan backend. Masukkan satu baris per slug:
+Jangan membuat atau memakai spreadsheet produksi untuk langkah ini.
+
+## 2. Buat proyek Apps Script TEST
+
+1. Buka https://script.google.com/ dan buat proyek baru bernama `Omah Aksara API — TEST`.
+2. Salin seluruh isi `backend/Code.gs` dari repositori ke file `Code.gs`.
+3. Buka **Project Settings / Setelan project → Script Properties**.
+4. Tambahkan property:
+   - Property: `OMAH_AKSARA_DATABASE_ID`
+   - Value: ID spreadsheet TEST dari URL Google Sheets (bagian di antara `/d/` dan `/edit`).
+5. Periksa ulang bahwa nilainya adalah ID spreadsheet TEST, bukan ID database pelanggan/produksi.
+
+**Jangan jalankan `setupDatabase()` sebelum Script Property tersebut diisi dengan ID spreadsheet TEST.** Jika property kosong, backend memang harus gagal tertutup.
+
+## 3. Siapkan tab Settings
+
+1. Setelah Script Property diverifikasi, pilih fungsi `setupDatabase` lalu klik **Run/Jalankan**.
+2. Selesaikan permintaan izin Google.
+3. Fungsi memeriksa header RSVP dan Guestbook, lalu membuat tab `Settings` jika belum ada.
+4. Jika tab Settings baru dibuat, fungsi menambahkan baris awal `demo-katalog | published`. Baris ini **bukan izin untuk menulis dari demo**; backend tetap menolak slug demo.
+5. Pada tab `Settings`, pastikan header persis `slug` dan `status`. Hapus baris awal demo bila tidak diperlukan, lalu tambahkan hanya:
 
 | slug | status |
 |---|---|
 | uji-omah-aksara | published |
 
-- Gunakan slug folder yang persis sama dengan `clients/<slug>/`.
-- `published` mengizinkan RSVP dan buku tamu untuk slug tersebut.
-- `draft` atau status lain menolak permintaan.
-- Untuk lingkungan uji, gunakan slug uji; jangan daftarkan slug pelanggan produksi.
-- Untuk produksi, daftarkan slug pelanggan hanya setelah undangan disetujui untuk publikasi.
+Jangan masukkan slug pelanggan produksi ke allowlist TEST. Status selain `published` harus ditolak.
 
-Permintaan baca maupun tulis yang slug-nya tidak ada pada allowlist akan ditolak.
-
-## 4. Deploy sebagai Web App
+## 4. Deploy sebagai Web App TEST
 
 1. Pilih **Deploy → New deployment**.
 2. Pilih **Web app**.
 3. Atur **Execute as: Me**.
-4. Pilih akses yang memungkinkan tamu mengirim data sesuai kebijakan akun dan organisasi.
-5. Deploy dan simpan URL yang berakhiran `/exec` di konfigurasi lingkungan yang sesuai.
+4. Pilih akses yang memungkinkan browser tamu mengirim data sesuai kebijakan akun Google.
+5. Deploy dan simpan URL TEST yang berakhiran `/exec`.
 
-Setiap lingkungan mempunyai URL deployment sendiri. URL tersebut tidak boleh ditanam sebagai fallback di kode engine.
+URL deployment TEST harus berbeda dari URL produksi. Jangan mengganti URL API pelanggan di `clients/*/data.json` untuk melakukan tes ini.
 
-## 5. Uji endpoint
+## 5. Uji endpoint TEST
 
-Buka:
+Buka URL TEST dengan parameter:
 
 ```text
-URL_WEB_APP?action=health
+URL_WEB_APP_TEST?action=health
 ```
 
-Respons yang diharapkan mencakup `ok: true`, nama layanan, versi, dan `databaseConfigured: true`.
+Pastikan respons memuat `ok: true`, `databaseConfigured: true`, dan `version: 4` atau lebih tinggi.
 
-Lalu uji alur lengkap dengan slug yang sudah didaftarkan pada tab `Settings`:
+Lanjutkan pengujian tulis secara eksplisit dengan slug `uji-omah-aksara`:
 
-- Kirim RSVP dengan `action: "rsvp"`, nama uji, status hadir/tidak hadir, dan jumlah tamu.
-- Kirim ucapan dengan `action: "guestbook"`, nama uji, dan pesan.
-- Pastikan data masuk ke tab yang sesuai.
-- Buka `URL_WEB_APP?action=guestbook&slug=uji-omah-aksara` dan pastikan ucapan muncul.
-- Uji slug yang tidak terdaftar; backend harus menolak.
-- Bersihkan data uji setelah pemeriksaan selesai.
+- Kirim RSVP dengan `action: "rsvp"`, nama uji, status hadir/tidak hadir, dan jumlah tamu 1–10.
+- Pastikan baris baru muncul hanya pada tab RSVP di spreadsheet TEST.
+- Kirim ucapan dengan `action: "guestbook"`, nama uji, dan pesan uji.
+- Pastikan baris baru muncul pada tab Guestbook TEST.
+- Buka `URL_WEB_APP_TEST?action=guestbook&slug=uji-omah-aksara`; pastikan ucapan yang sama dikembalikan.
+- Uji slug draft/tidak terdaftar; GET dan POST harus ditolak.
+- Pastikan tidak ada baris yang masuk ke spreadsheet produksi.
+- Hapus seluruh baris data uji setelah bukti dicatat.
 
-Health check saja tidak membuktikan penulisan data berhasil. RSVP dan buku tamu harus benar-benar diuji sampai barisnya muncul di spreadsheet.
+Health check saja tidak membuktikan transaksi tulis. RSVP, guestbook, pembacaan ulang, dan penolakan slug harus benar-benar diuji sampai selesai.
 
-## 6. Hubungkan undangan ke backend yang benar
+## 6. Hubungkan produksi hanya setelah TEST lulus
 
-Pada `clients/<slug>/data.json`, isi:
+Produksi harus mempunyai spreadsheet, proyek Apps Script, Script Property `OMAH_AKSARA_DATABASE_ID`, dan deployment sendiri. Sebelum deployment produksi, verifikasi ulang property database produksi secara terpisah.
 
-```json
-"integrations": {
-  "apiUrl": "URL_WEB_APP_DARI_LINGKUNGAN_YANG_SESUAI"
-}
-```
-
-Ganti placeholder dengan URL HTTPS deployment yang benar. Jangan pernah memasukkan password, token privat, atau kredensial ke JSON publik.
+Pada konfigurasi klien yang memang akan menggunakan backend produksi, `integrations.apiUrl` harus berisi URL deployment PROD yang benar. Jangan mengganti URL klien produksi dengan URL TEST, dan jangan menaruh password, token privat, atau kredensial pada JSON publik.
 
 ## Perlindungan data
 
-- Backend memvalidasi slug, aksi, nama, pesan, status kehadiran, dan jumlah tamu.
-- Data buku tamu dipisahkan berdasarkan slug dan hanya dikembalikan untuk slug tersebut.
-- Allowlist `Settings` mencegah siapa pun menulis ke slug yang belum diaktifkan.
-- Endpoint tetap bersifat publik, bukan sistem login. Pembatasan spam dan pemantauan trafik tambahan perlu dipertimbangkan sebelum penggunaan skala besar.
-- Jangan menghubungkan produksi sebelum uji browser, isolasi slug, dan penulisan/bacaan data lulus.
+- `setupDatabase()` memeriksa header RSVP dan Guestbook; fungsi tidak membuat spreadsheet atau dua tab transaksi tersebut.
+- Backend membaca ID database dari Script Property `OMAH_AKSARA_DATABASE_ID`; database yang salah dapat mengarahkan transaksi ke spreadsheet yang salah.
+- Allowlist `Settings` dan status klien publikasi membatasi slug yang dapat membaca/menulis.
+- Data guestbook difilter berdasarkan slug.
+- Endpoint bersifat publik, bukan sistem login. Pembatasan spam dan pemantauan trafik tambahan tetap perlu dipertimbangkan sebelum penggunaan skala besar.
+- Jangan menyatakan backend siap produksi sebelum uji TEST end-to-end dan pemeriksaan isolasi data lulus.
