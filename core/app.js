@@ -600,21 +600,21 @@
     const date = String(event.dateISO || event.date || "");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "";
     const startTime = String(event.startTime || "09:00");
-    const endTime = String(event.endTime || "");
-    const [year, month, day] = date.split("-").map(Number);
-    const [startHour, startMinute] = startTime.split(":").map(Number);
-    const start = new Date(year, month - 1, day, startHour, startMinute || 0);
-    const end = endTime
-      ? (() => { const [h, m] = endTime.split(":").map(Number); return new Date(year, month - 1, day, h, m || 0); })()
-      : new Date(start.getTime() + 60 * 60 * 1000);
-    const stamp = value => value.getFullYear() + String(value.getMonth() + 1).padStart(2, "0") +
-      String(value.getDate()).padStart(2, "0") + "T" + String(value.getHours()).padStart(2, "0") +
-      String(value.getMinutes()).padStart(2, "0") + "00";
+    let endTime = String(event.endTime || "");
+    if (!endTime) {
+      const [hour, minute] = startTime.split(":").map(Number);
+      const totalMinutes = hour * 60 + (minute || 0) + 60;
+      endTime = String(Math.floor(totalMinutes / 60) % 24).padStart(2, "0") + ":" +
+        String(totalMinutes % 60).padStart(2, "0");
+    }
+    const stamp = (dateValue, timeValue) => dateValue.replace(/-/g, "") + "T" +
+      timeValue.replace(":", "").padEnd(4, "0") + "00";
+    const dates = stamp(date, startTime) + "/" + stamp(date, endTime);
     const location = [event.location || event.venue, event.address].filter(Boolean).join(", ");
     const params = new URLSearchParams({
       action: "TEMPLATE",
       text: event.title || "Acara Pernikahan",
-      dates: stamp(start) + "/" + stamp(end),
+      dates,
       ctz: event.timezone || data.site?.timezone || "Asia/Makassar",
       location,
       details: "Undangan pernikahan Omah Aksara." + (!endTime ? " Pengingat kalender dibuat 1 jam; durasi dapat disesuaikan di Google Calendar." : "")
