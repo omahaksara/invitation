@@ -239,6 +239,7 @@
     renderEvents(data.events, data, clientBase);
     bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
+    renderClosing(data);
     renderGifts(data.gifts, clientBase, data.features || {});
     setupMusic(data.music, clientBase);
     setupCover();
@@ -273,6 +274,7 @@
       if (disabled("navigation")) document.querySelectorAll(".oa-event-navigation").forEach(el => { el.hidden = true; });
     }
     if (disabled("countdown")) hide("#countdown, .countdown");
+    if (disabled("closing")) hide("[data-oa-closing], .oa-closing-section, .closing-section, #closing-section, .thank-you-section");
     if (disabled("calendar")) hide(".calendar-section, #calendar-section");
     if (disabled("quotes") || disabled("quote")) hide(".quote-section, .quote");
     if (disabled("gifts")) hide(".gift-section, #gift-section, #gift-list");
@@ -299,6 +301,7 @@
     if (!gallery.length) hide(".gallery-section, #gallery-grid, .gallery-grid");
     if (!gifts.length && !(data.gifts && data.gifts.message)) hide(".gift-section, #gift-section, #gift-list");
     if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
+    if (!(data.closing && (data.closing.title || data.closing.text || data.closing.signature))) hide("[data-oa-closing], .oa-closing-section");
     if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
     const eventValues = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
     if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) document.querySelectorAll("#link-akad-maps, #link-resepsi-maps").forEach(el => { el.hidden = true; });
@@ -438,6 +441,20 @@
           button.disabled = false;
         }
       });
+    }
+
+    if (data.closing && (data.closing.title || data.closing.text || data.closing.signature) &&
+        data.features?.closing !== false &&
+        !document.querySelector("[data-oa-closing], .oa-closing-section, .closing-section, #closing-section, .thank-you-section")) {
+      const section = makeSection("oa-closing-section", data.closing.title || "Terima Kasih");
+      section.dataset.oaClosing = "true";
+      section.setAttribute("aria-label", "Penutup undangan");
+      const message = document.createElement("p");
+      message.className = "oa-closing-message";
+      section.append(message);
+      const signature = document.createElement("p");
+      signature.className = "oa-closing-signature";
+      section.append(signature);
     }
 
     if (eventItems.length && !document.querySelector(".calendar-section, #calendar-section")) {
@@ -624,6 +641,22 @@
       const img = document.createElement("img"); img.src = assetUrl(src, clientBase); img.alt = typeof item === "string" ? "Galeri pernikahan" : (item.alt || "Galeri pernikahan"); img.loading = "lazy";
       figure.append(img); root.append(figure);
     });
+  }
+
+  function renderClosing(data) {
+    const closing = data && data.closing && typeof data.closing === "object" ? data.closing : null;
+    const section = document.querySelector("[data-oa-closing]");
+    if (!section || !closing) return;
+    const heading = section.querySelector("h2");
+    const message = section.querySelector(".oa-closing-message");
+    const signature = section.querySelector(".oa-closing-signature");
+    if (heading) heading.textContent = closing.title || "Terima Kasih";
+    if (message) message.textContent = closing.text || "";
+    if (signature) {
+      signature.textContent = closing.signature || "";
+      signature.hidden = !closing.signature;
+    }
+    section.hidden = !(closing.title || closing.text || closing.signature);
   }
 
   function renderGifts(gifts, clientBase, features) {
@@ -1642,41 +1675,118 @@
   function setupLightbox() {
     const gallery = document.getElementById("gallery-grid") ||
       document.querySelector(".gallery-grid, #gallery, .gallery-section");
-    if (!gallery) return;
-    const closeLightbox = overlay => {
-      if (!overlay || !overlay.isConnected) return;
+    if (!gallery || gallery.dataset.oaLightboxReady === "true") return;
+    gallery.dataset.oaLightboxReady = "true";
+
+    const getImages = () => [...gallery.querySelectorAll("img")].filter(image =>
+      !image.hidden && image.getAttribute("src") && image.getAttribute("src") !== "about:blank"
+    );
+    let activeIndex = 0;
+    let lastFocusedImage = null;
+    let overlay = null;
+    let keyHandler = null;
+
+    const close = () => {
+      if (!overlay) return;
+      document.removeEventListener("keydown", keyHandler);
       overlay.remove();
+      overlay = null;
+      keyHandler = null;
       document.body.classList.remove("oa-lightbox-open");
+      if (lastFocusedImage && lastFocusedImage.isConnected) lastFocusedImage.focus({ preventScroll: true });
     };
-    gallery.addEventListener("click", event => {
-      const image = event.target.closest("img");
-      if (!image || !gallery.contains(image)) return;
-      if (document.querySelector(".lightbox-overlay")) return;
-      const overlay = document.createElement("div");
-      overlay.className = "lightbox-overlay";
+
+    const open = (index, sourceImage) => {
+      const images = getImages();
+      if (!images.length || document.querySelector(".oa-gallery-lightbox")) return;
+      activeIndex = Math.max(0, Math.min(index, images.length - 1));
+      lastFocusedImage = sourceImage || images[activeIndex];
+      overlay = document.createElement("div");
+      overlay.className = "oa-gallery-lightbox";
       overlay.setAttribute("role", "dialog");
       overlay.setAttribute("aria-modal", "true");
-      overlay.setAttribute("aria-label", "Pratinjau foto galeri");
+      overlay.setAttribute("aria-label", "Galeri foto pernikahan");
       overlay.tabIndex = -1;
-      overlay.style.cssText = "position:fixed;inset:0;z-index:1000;background:#141914ed;display:grid;place-items:center;padding:20px;cursor:zoom-out";
-      const full = document.createElement("img");
-      full.src = image.currentSrc || image.src;
-      full.alt = image.alt || "Foto galeri";
-      full.style.cssText = "max-width:100%;max-height:90vh;object-fit:contain;box-shadow:0 10px 50px #0008";
-      overlay.append(full);
-      overlay.addEventListener("click", () => closeLightbox(overlay));
-      overlay.addEventListener("keydown", event => {
-        if (event.key === "Escape") { event.preventDefault(); closeLightbox(overlay); }
-      });
-      document.body.classList.add("oa-lightbox-open");
+      overlay.style.cssText = "position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:18px;background:rgba(12,12,12,.94);color:#fff;";
+
+      const panel = document.createElement("div");
+      panel.style.cssText = "position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;width:min(100%,1000px);height:min(88vh,820px);";
+      const toolbar = document.createElement("div");
+      toolbar.style.cssText = "display:flex;align-items:center;justify-content:space-between;gap:12px;";
+      const counter = document.createElement("span");
+      counter.setAttribute("aria-live", "polite");
+      counter.style.cssText = "font:500 13px/1.4 system-ui,sans-serif;letter-spacing:.08em;";
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.textContent = "Tutup";
+      closeButton.setAttribute("aria-label", "Tutup galeri");
+      closeButton.style.cssText = "min-width:44px;min-height:44px;padding:8px 14px;border:1px solid #ffffff66;border-radius:999px;background:#ffffff14;color:#fff;font:inherit;cursor:pointer;";
+      closeButton.addEventListener("click", close);
+      toolbar.append(counter, closeButton);
+
+      const stage = document.createElement("div");
+      stage.style.cssText = "position:relative;display:grid;place-items:center;min-height:0;gap:8px;";
+      const image = document.createElement("img");
+      image.alt = "";
+      image.decoding = "async";
+      image.style.cssText = "display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:4px;";
+      const makeArrow = (direction, label, glyph) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = glyph;
+        button.setAttribute("aria-label", label);
+        button.style.cssText = "position:absolute;top:50%;transform:translateY(-50%);"+direction+":0;width:46px;height:46px;border:1px solid #ffffff66;border-radius:50%;background:#151515aa;color:#fff;font-size:26px;line-height:1;cursor:pointer;";
+        button.addEventListener("click", () => show(activeIndex + (direction === "left" ? -1 : 1)));
+        return button;
+      };
+      const previous = makeArrow("left", "Foto sebelumnya", "‹");
+      const next = makeArrow("right", "Foto berikutnya", "›");
+      stage.append(image, previous, next);
+
+      const caption = document.createElement("p");
+      caption.style.cssText = "margin:0;text-align:center;font:400 13px/1.5 system-ui,sans-serif;color:#ffffffc9;";
+      panel.append(toolbar, stage, caption);
+      overlay.append(panel);
+      overlay.addEventListener("click", event => { if (event.target === overlay) close(); });
       document.body.append(overlay);
-      overlay.focus({ preventScroll: true });
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeLightbox(document.querySelector(".lightbox-overlay"));
+      document.body.classList.add("oa-lightbox-open");
+
+      const show = index => {
+        const currentImages = getImages();
+        if (!currentImages.length) return close();
+        activeIndex = (index + currentImages.length) % currentImages.length;
+        const current = currentImages[activeIndex];
+        image.src = current.currentSrc || current.src;
+        image.alt = current.alt || "Foto pernikahan";
+        caption.textContent = current.alt || "";
+        counter.textContent = (activeIndex + 1) + " / " + currentImages.length;
+        previous.hidden = currentImages.length < 2;
+        next.hidden = currentImages.length < 2;
+      };
+      keyHandler = event => {
+        if (!overlay) return;
+        if (event.key === "Escape") { event.preventDefault(); close(); }
+        else if (event.key === "ArrowLeft") { event.preventDefault(); show(activeIndex - 1); }
+        else if (event.key === "ArrowRight") { event.preventDefault(); show(activeIndex + 1); }
+        else if (event.key === "Tab") {
+          const controls = [previous, next, closeButton].filter(button => !button.hidden);
+          const first = controls[0], last = controls[controls.length - 1];
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        }
+      };
+      document.addEventListener("keydown", keyHandler);
+      show(activeIndex);
+      closeButton.focus({ preventScroll: true });
+    };
+
+    gallery.addEventListener("click", event => {
+      const clicked = event.target.closest("img");
+      if (!clicked || !gallery.contains(clicked)) return;
+      const images = getImages();
+      open(images.indexOf(clicked), clicked);
     });
   }
-
   window.copyRekening = async () => {
     const element = document.getElementById("rekening-num");
     if (!element) return;
