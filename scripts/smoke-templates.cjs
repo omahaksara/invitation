@@ -177,7 +177,7 @@ for (const slug of activeThemeSlugs) {
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
             hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
             expectedMappedEvents: mappedEvents.length,
-            navigationEnabled: data.features?.navigation !== false,
+            navigationEnabled: data.features?.mapNavigation !== false,
             mapEmbedEnabled: data.features?.mapEmbed !== false,
             locationLinks: document.querySelectorAll(".oa-event-location").length,
             navigationLinks: document.querySelectorAll(".oa-event-navigation").length,
