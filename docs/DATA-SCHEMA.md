@@ -43,7 +43,7 @@ Jika fitur memerlukan data atau layanan yang belum siap, engine harus menyembuny
 
 ## Hadiah, media, dan integrasi
 
-- `gifts`: `message` dan daftar `accounts` berisi `bank`, `accountNumber`, `accountHolder`, `logo` opsional untuk logo bank (path relatif dari folder klien atau URL), serta `qrCode` opsional bila pemilik memberi QR valid.
+- `gifts`: objek berisi `message`, `enabled` opsional untuk mengaktifkan/menyembunyikan seluruh bagian hadiah, dan daftar `accounts`. Setiap metode mendukung `type`/`paymentType` (`bank`, `ewallet`, atau `qris`), `enabled` per metode, `provider`/`bank`, `accountHolder`/`accountName`, `accountNumber`/`phoneNumber`/`destinationNumber`, `copyValue`, `logo`, serta `qrCode` atau `qr.src`. `type` yang tidak ditulis tetap dianggap `bank` agar data lama kompatibel. Data demo wajib memakai `demoOnly: true` dan `copyable: false`; QR demo harus berupa ilustrasi yang jelas bukan kode transaksi. Jangan menaruh QR atau nomor pembayaran asli pada katalog demo.
 - `media.music`: string URL/path lama atau objek pilihan katalog berisi `id`, `title`, `category`, dan `src`. Path relatif tetap diselesaikan dari `clients/<slug>/`; untuk katalog bersama gunakan path seperti `../../assets/music/library/<file>.mp3`. Format string lama tetap didukung.
 - Musik bersama dikelola melalui `assets/music/library/manifest.json`; setiap entri harus mencantumkan identitas, kategori, path, dan status lisensi. Track dengan lisensi belum diverifikasi hanya boleh dipakai untuk pengujian internal, bukan otomatis ditawarkan untuk undangan pelanggan.
 - `integrations.apiUrl`: URL HTTPS deployment backend yang dipilih untuk undangan tersebut.
