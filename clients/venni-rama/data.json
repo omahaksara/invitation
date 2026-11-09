@@ -89,7 +89,7 @@
       "id": "wedding-demo-existing",
       "title": "Wedding Demo Track",
       "category": "instrumental",
-      "src": "../../assets/music/library/wedding-demo-existing.mp3"
+      "src": "wedding-demo-existing.mp3"
     }
   },
   "rsvp": {
