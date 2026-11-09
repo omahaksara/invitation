@@ -557,16 +557,70 @@
     }
 
     if (eventItems.length && !document.querySelector(".calendar-section, #calendar-section")) {
-      const section = makeSection("calendar-section", "Simpan Tanggal");
-      eventItems.forEach((item, index) => {
-        if (!item || !item.date) return;
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = "Tambahkan " + (item.title || item.id || ("Acara " + (index + 1))) + " ke kalender";
-        button.addEventListener("click", () => downloadCalendarEvent(item, data, slug));
-        section.append(button);
+      const section = makeSection("calendar-section", "Simpan Jadwal Acara");
+      const calendarItems = eventItems.flatMap((item, eventIndex) => {
+        if (!item || typeof item !== "object") return [];
+        if (Array.isArray(item.schedule) && item.schedule.length) {
+          return item.schedule.filter(entry => entry && typeof entry === "object").map((entry, index) => ({
+            ...item, ...entry,
+            id: entry.id || (item.id || "event") + "-" + (index + 1),
+            title: entry.title || item.title || "Acara Pernikahan",
+            dateISO: entry.dateISO || entry.date || item.dateISO || item.date,
+            location: item.location || item.venue,
+            address: item.address || "",
+            timezone: entry.timezone || item.timezone
+          }));
+        }
+        return [{ ...item, id: item.id || "event-" + (eventIndex + 1) }];
+      });
+      calendarItems.forEach((item, index) => {
+        if (!item || !(item.dateISO || item.date)) return;
+        if (item.startTime && item.dateISO) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "oa-calendar-action";
+          button.textContent = "Simpan " + (item.title || "jadwal acara") + " ke Google Calendar";
+          button.addEventListener("click", () => {
+            const url = buildGoogleCalendarUrl(item, data);
+            if (url) window.open(url, "_blank", "noopener,noreferrer");
+          });
+          section.append(button);
+        } else {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = "Tambahkan " + (item.title || item.id || ("Acara " + (index + 1))) + " ke kalender";
+          button.addEventListener("click", () => downloadCalendarEvent(item, data, slug));
+          section.append(button);
+        }
       });
     }
+  }
+
+  function buildGoogleCalendarUrl(event, data) {
+    const date = String(event.dateISO || event.date || "");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "";
+    const startTime = String(event.startTime || "09:00");
+    let endTime = String(event.endTime || "");
+    const hasEndTime = !!endTime;
+    if (!endTime) {
+      const [hour, minute] = startTime.split(":").map(Number);
+      const totalMinutes = hour * 60 + (minute || 0) + 60;
+      endTime = String(Math.floor(totalMinutes / 60) % 24).padStart(2, "0") + ":" +
+        String(totalMinutes % 60).padStart(2, "0");
+    }
+    const stamp = (dateValue, timeValue) => dateValue.replace(/-/g, "") + "T" +
+      timeValue.replace(":", "").padEnd(4, "0") + "00";
+    const dates = stamp(date, startTime) + "/" + stamp(date, endTime);
+    const location = [event.location || event.venue, event.address].filter(Boolean).join(", ");
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: event.title || "Acara Pernikahan",
+      dates,
+      ctz: event.timezone || data.site?.timezone || "Asia/Makassar",
+      location,
+      details: "Undangan pernikahan Omah Aksara." + (!hasEndTime ? " Pengingat kalender dibuat 1 jam; durasi dapat disesuaikan di Google Calendar." : "")
+    });
+    return "https://calendar.google.com/calendar/render?" + params.toString();
   }
 
   function downloadCalendarEvent(event, data, slug) {
@@ -712,11 +766,35 @@
       const card = document.createElement("article"); card.className = "event-card reveal";
       const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA 0" + (index + 1);
       const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
-      const date = document.createElement("p"); date.textContent = formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
+      const date = document.createElement("p");
+      date.className = "oa-event-date";
+      date.textContent = item.schedule && item.schedule.length
+        ? (item.date || "")
+        : formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
       const mapTarget = resolveEventMapTarget(item);
       const venueText = [item.venue || item.location, item.address].filter(Boolean).join(", ");
       const venue = document.createElement("p"); venue.className = "oa-event-address"; venue.textContent = venueText;
       card.append(number, title, date);
+      if (Array.isArray(item.schedule) && item.schedule.length) {
+        const scheduleRoot = document.createElement("div");
+        scheduleRoot.className = "oa-event-schedule";
+        item.schedule.forEach(entry => {
+          if (!entry || typeof entry !== "object") return;
+          const scheduleItem = document.createElement("div");
+          scheduleItem.className = "oa-event-schedule-item";
+          const scheduleTitle = document.createElement("h4");
+          scheduleTitle.textContent = entry.title || "Rangkaian Acara";
+          const scheduleDate = document.createElement("p");
+          scheduleDate.textContent = entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, item.timezone || data.site?.timezone) : "");
+          const scheduleTime = document.createElement("p");
+          scheduleTime.textContent = entry.time || [entry.startTime, entry.endTime].filter(Boolean).join("–");
+          scheduleItem.append(scheduleTitle);
+          if (scheduleDate.textContent) scheduleItem.append(scheduleDate);
+          if (scheduleTime.textContent) scheduleItem.append(scheduleTime);
+          scheduleRoot.append(scheduleItem);
+        });
+        if (scheduleRoot.children.length) card.append(scheduleRoot);
+      }
       if (venueText) card.append(venue);
       const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
       const mapUrl = suppliedUrl || mapTarget.searchUrl;
@@ -748,6 +826,7 @@
         frame.setAttribute("allow", "fullscreen");
         frameWrap.append(frame);
         details.append(summary, frameWrap);
+        if (document.querySelector(".aksav")) details.open = true;
         card.append(details);
       } else if (mapsEnabled && item.mapNote) {
         const note = document.createElement("p");
