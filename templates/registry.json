@@ -121,6 +121,11 @@
       "slug": "velvet-romance",
       "name": "Velvet Romance",
       "status": "active"
+    },
+    {
+      "slug": "aksav",
+      "name": "Aksav",
+      "status": "active"
     }
   ]
 }

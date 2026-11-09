@@ -808,3 +808,26 @@ html[data-oa-theme] .event-card {
 @supports not (overflow: clip) {
   html[data-oa-theme] .event-card { overflow-x: hidden; }
 }
+
+
+/* Aksav: warm ivory and mocha finish for the shared navigation dock. */
+.oa-floating-controls[data-theme="aksav"] {
+  --oa-dock-bg:#f8efe4f5;
+  --oa-dock-border:#c9a982;
+  --oa-dock-ink:#594332;
+  --oa-dock-accent:#a87952;
+  --oa-dock-active:#8d6547;
+  --oa-dock-active-ink:#fffaf4;
+}
+html[data-oa-theme="aksav"] {
+  --oa-font-display:"Cormorant Garamond",Georgia,serif;
+  --oa-font-body:"Montserrat",Arial,sans-serif;
+  --oa-reveal-time:.46s;
+  --oa-reveal-ease:cubic-bezier(.2,.75,.25,1);
+  --oa-theme-display:"Cormorant Garamond",Georgia,serif;
+  --oa-theme-body:"Montserrat",Arial,sans-serif;
+}
+html[data-oa-theme="aksav"] {
+  --oa-reveal-time:.46s;
+  --oa-reveal-ease:cubic-bezier(.2,.75,.25,1);
+}
