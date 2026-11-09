@@ -270,6 +270,21 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const mapAudit = await page.evaluate(() => {
+          const frames = Array.from(document.querySelectorAll(".oa-event-map iframe"));
+          const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
+          return {
+            frames: frames.map(frame => frame.src),
+            notes: notes.map(note => note.textContent),
+            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href)
+          };
+        });
+        assert.equal(mapAudit.frames.length, 0,
+          theme.slug + ": demo dengan titik lokasi belum diverifikasi tidak boleh menampilkan pin peta yang menyesatkan");
+        assert.equal(mapAudit.notes.length, 2,
+          theme.slug + ": catatan lokasi simulasi harus terlihat pada kedua acara");
+        assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
+          theme.slug + ": tautan pencarian Maps harus tetap tersedia");
         const performanceAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
           const backdrop = [];
