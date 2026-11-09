@@ -557,16 +557,69 @@
     }
 
     if (eventItems.length && !document.querySelector(".calendar-section, #calendar-section")) {
-      const section = makeSection("calendar-section", "Simpan Tanggal");
-      eventItems.forEach((item, index) => {
-        if (!item || !item.date) return;
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = "Tambahkan " + (item.title || item.id || ("Acara " + (index + 1))) + " ke kalender";
-        button.addEventListener("click", () => downloadCalendarEvent(item, data, slug));
-        section.append(button);
+      const section = makeSection("calendar-section", "Simpan Jadwal Acara");
+      const calendarItems = eventItems.flatMap((item, eventIndex) => {
+        if (!item || typeof item !== "object") return [];
+        if (Array.isArray(item.schedule) && item.schedule.length) {
+          return item.schedule.filter(entry => entry && typeof entry === "object").map((entry, index) => ({
+            ...item, ...entry,
+            id: entry.id || (item.id || "event") + "-" + (index + 1),
+            title: entry.title || item.title || "Acara Pernikahan",
+            dateISO: entry.dateISO || entry.date || item.dateISO || item.date,
+            location: item.location || item.venue,
+            address: item.address || "",
+            timezone: entry.timezone || item.timezone
+          }));
+        }
+        return [{ ...item, id: item.id || "event-" + (eventIndex + 1) }];
+      });
+      calendarItems.forEach((item, index) => {
+        if (!item || !(item.dateISO || item.date)) return;
+        if (item.startTime && item.dateISO) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "oa-calendar-action";
+          button.textContent = "Simpan " + (item.title || "jadwal acara") + " ke Google Calendar";
+          button.addEventListener("click", () => {
+            const url = buildGoogleCalendarUrl(item, data);
+            if (url) window.open(url, "_blank", "noopener,noreferrer");
+          });
+          section.append(button);
+        } else {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = "Tambahkan " + (item.title || item.id || ("Acara " + (index + 1))) + " ke kalender";
+          button.addEventListener("click", () => downloadCalendarEvent(item, data, slug));
+          section.append(button);
+        }
       });
     }
+  }
+
+  function buildGoogleCalendarUrl(event, data) {
+    const date = String(event.dateISO || event.date || "");
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) return "";
+    const startTime = String(event.startTime || "09:00");
+    const endTime = String(event.endTime || "");
+    const [year, month, day] = date.split("-").map(Number);
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const start = new Date(year, month - 1, day, startHour, startMinute || 0);
+    const end = endTime
+      ? (() => { const [h, m] = endTime.split(":").map(Number); return new Date(year, month - 1, day, h, m || 0); })()
+      : new Date(start.getTime() + 60 * 60 * 1000);
+    const stamp = value => value.getFullYear() + String(value.getMonth() + 1).padStart(2, "0") +
+      String(value.getDate()).padStart(2, "0") + "T" + String(value.getHours()).padStart(2, "0") +
+      String(value.getMinutes()).padStart(2, "0") + "00";
+    const location = [event.location || event.venue, event.address].filter(Boolean).join(", ");
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: event.title || "Acara Pernikahan",
+      dates: stamp(start) + "/" + stamp(end),
+      ctz: event.timezone || data.site?.timezone || "Asia/Makassar",
+      location,
+      details: "Undangan pernikahan Omah Aksara." + (!endTime ? " Pengingat kalender dibuat 1 jam; durasi dapat disesuaikan di Google Calendar." : "")
+    });
+    return "https://calendar.google.com/calendar/render?" + params.toString();
   }
 
   function downloadCalendarEvent(event, data, slug) {
@@ -772,6 +825,7 @@
         frame.setAttribute("allow", "fullscreen");
         frameWrap.append(frame);
         details.append(summary, frameWrap);
+        if (document.querySelector(".aksav")) details.open = true;
         card.append(details);
       } else if (mapsEnabled && item.mapNote) {
         const note = document.createElement("p");
