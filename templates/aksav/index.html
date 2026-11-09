@@ -106,17 +106,50 @@ body,#app{background:#f3e8d8!important;color:#4c392b!important}
 .aksav .oa-event-map summary{padding:12px 16px;color:#795638;cursor:pointer;font-size:.8rem}
 .aksav .oa-event-map-frame iframe{display:block;width:100%;height:260px;border:0}
 @media(max-width:650px){.aksav .oa-event-map-frame iframe{height:230px}}
+
+/* Aksav mobile-first structural and cover refinement */
+.aksav{overflow-x:clip;overflow-y:visible;min-height:0;padding-bottom:calc(8rem + env(safe-area-inset-bottom))}
+.aksav .cover{min-height:100svh;height:auto;display:flex;align-items:flex-end;justify-content:center;padding:clamp(22px,5vh,52px) 18px calc(34px + env(safe-area-inset-bottom));background:#49372b;overflow:visible}
+.aksav .cover>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:1;z-index:-2}
+.aksav .cover-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(28,20,15,.88) 0%,rgba(38,28,21,.48) 48%,rgba(38,28,21,.08) 100%);pointer-events:none}
+.aksav .cover .arch{width:min(100%,680px);padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;text-align:center}
+.aksav .cover-kicker{margin:0 0 8px;color:#f4e7d7!important;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase}
+.aksav .cover h1{display:flex;flex-direction:column;gap:0;margin:10px 0;color:#fff8ef!important;font-size:clamp(3.4rem,13vw,6.2rem);line-height:.86;text-shadow:0 3px 24px #1c140fcc}
+.aksav .cover h1 [data-bind="couple.groom.nickname"],.aksav .cover h1 [data-bind="couple.bride.nickname"]{color:#fff8ef}
+.aksav .cover .cover-ampersand{color:#e6c49b;font-size:.58em;line-height:1.15}
+.aksav .cover-date{margin:14px 0 20px;color:#f4e7d7;font-size:.82rem;letter-spacing:.16em}
+.aksav .cover-recipient{display:grid;gap:4px;width:min(100%,340px);margin:0 auto 12px;padding:12px 18px;border:1px solid #f3dfc2a8;border-radius:14px;background:#fff9f01c;backdrop-filter:blur(12px);color:#fff8ef}
+.aksav .cover-recipient span{font-size:.7rem;letter-spacing:.12em}
+.aksav .cover-recipient strong{font:1.5rem 'Cormorant Garamond',serif;overflow-wrap:anywhere}
+.aksav .cover-note{margin:0 auto 16px;max-width:340px;color:#f3e5d4;font-size:.66rem;line-height:1.5}
+.aksav .cover .btn-open{gap:16px;padding:14px 28px;border:1px solid #f2d9b8a8;border-radius:999px;background:#fff9f022;color:#fff8ef;backdrop-filter:blur(14px);box-shadow:0 8px 30px #1c140f44;font-size:.78rem;letter-spacing:.1em}
+.aksav .cover .btn-open:hover{background:#fff9f044}
+.aksav .gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+.aksav .gallery-grid .gallery-item,.aksav .gallery-grid .gallery-item:nth-child(5n){grid-column:auto;margin:0;border-radius:18px;overflow:hidden}
+.aksav .gallery-grid .gallery-item img,.aksav .gallery-grid .gallery-item:nth-child(5n) img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+.aksav .gallery-grid .gallery-item:nth-child(3n + 2){margin-top:18px}
+.aksav .oa-event-map[open] .oa-event-map-frame{display:block}
+.aksav .oa-event-map-frame iframe{width:100%;min-height:220px;height:clamp(240px,62vw,360px);border:0;border-radius:0}
+.aksav .oa-event-map{overflow:hidden;border-radius:18px}
+.aksav .oa-event-schedule-item{display:grid;gap:3px}
+.aksav .oa-calendar-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.aksav .oa-calendar-actions a{display:inline-flex;align-items:center;justify-content:center;padding:10px 15px;border-radius:99px;background:#9a704b;color:#fffaf3;text-decoration:none;font-size:.78rem}
+.aksav footer{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+@media(max-width:420px){.aksav .cover h1{font-size:clamp(3.1rem,14vw,4.2rem)}.aksav .gallery-grid{gap:9px}.aksav .gallery-grid .gallery-item:nth-child(3n + 2){margin-top:12px}}
+@media(prefers-reduced-motion:reduce){.aksav .cover>img{animation:none!important}}
+
 </style>
 <div class="aksav" id="main-content">
 <section id="cover" class="cover">
-<img data-bind="cover.image" src="" alt="Foto sampul" fetchpriority="high">
+<img data-bind="cover.image" src="" alt="Foto Rama dan Venni" fetchpriority="high">
+<div class="cover-shade" aria-hidden="true"></div>
 <div class="arch">
-<p class="eyebrow">Omah Aksara · Luxury Invitation</p>
-<p class="serif gold" data-bind="cover.subtitle">The Wedding Of</p>
-<h1 class="serif"><span data-bind="couple.groom.nickname">Mempelai Pria</span><br><span class="gold">&amp;</span><br><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
-<div class="ornament">✧</div>
-<p class="sub">Kepada Yth. Bapak/Ibu/Saudara/i</p><h2 id="nama-tamu" class="serif" style="font-size:2rem;margin:8px 0 22px">Tamu Undangan</h2>
-<p class="sub" data-bind="cover.dateLabel"></p><div style="margin-top:25px"><button id="open-btn" class="btn-open btn">✉ &nbsp; <span data-bind="cover.buttonText">Buka Undangan</span> &nbsp; ↗</button></div>
+<p class="cover-kicker" data-bind="cover.subtitle">The Wedding of</p>
+<h1 class="serif"><span data-bind="couple.groom.nickname">Rama</span><span class="cover-ampersand">&amp;</span><span data-bind="couple.bride.nickname">Venni</span></h1>
+<p class="cover-date" data-bind="cover.dateLabel">20 November 2026</p>
+<div class="cover-recipient"><span>Kepada Yth.</span><strong id="nama-tamu">Tamu Undangan</strong></div>
+<p class="cover-note">Gelar akademik dicantumkan sesuai nama resmi mempelai.</p>
+<button id="open-btn" class="btn-open btn"><span data-bind="cover.buttonText">Buka Undangan</span><span aria-hidden="true">↗</span></button>
 </div></section>
 <section class="panel quote-section" id="blessing"><p class="eyebrow">Dengan penuh rasa syukur</p><div class="ornament">✧</div><p class="serif" data-bind="quote.arab">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنْفُسِكُمْ أَزْوَاجًا</p><p class="detail" data-bind="quote.text"></p><p class="detail" data-bind="quote.source"></p><p class="intro" data-bind="opening.text"></p></section>
 <section class="panel story-section" id="story"><p class="eyebrow" style="text-align:center">Our Story</p><h2 class="section-title serif">Kisah Cinta Kami</h2><p class="intro">Dua perjalanan yang dipertemukan, satu kisah yang akan terus ditulis bersama.</p><div id="story-list" class="story-list"></div></section>
