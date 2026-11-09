@@ -741,7 +741,7 @@
         "logo": "/assets/payment/wallets/dana.png",
         "accountNumber": "",
         "accountHolder": "Arkan Pradipta",
-        "qrCode": "/assets/qr-dana-arkan.svg",
+        "qrCode": "assets/qr-dana-arkan.svg",
         "demoOnly": false,
         "copyable": true,
         "copyValue": "https://qr.dana.id/v1/281012012019070710325453",
