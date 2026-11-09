@@ -463,6 +463,12 @@
           nav.textContent = "Navigasi ke Lokasi ↗";
           section.append(nav);
         }
+        if (item.mapNote) {
+          const note = document.createElement("p");
+          note.className = "oa-event-map-note";
+          note.textContent = item.mapNote;
+          section.append(note);
+        }
         if (embedEnabled && destination) {
           const details = document.createElement("details");
           details.className = "oa-event-map";
