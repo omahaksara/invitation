@@ -286,9 +286,22 @@ for (const slug of activeThemeSlugs) {
           }));
           assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
             theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-            theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          // A short invitation can already have reached the bottom and stopped
+          // automatically. In that case, first start it manually, then test pause.
+          if (autoState.pressed === "true") {
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          } else {
+            assert.ok(autoState.scrollY > 24,
+              theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          }
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
