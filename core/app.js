@@ -712,11 +712,35 @@
       const card = document.createElement("article"); card.className = "event-card reveal";
       const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA 0" + (index + 1);
       const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
-      const date = document.createElement("p"); date.textContent = formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
+      const date = document.createElement("p");
+      date.className = "oa-event-date";
+      date.textContent = item.schedule && item.schedule.length
+        ? (item.date || "")
+        : formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
       const mapTarget = resolveEventMapTarget(item);
       const venueText = [item.venue || item.location, item.address].filter(Boolean).join(", ");
       const venue = document.createElement("p"); venue.className = "oa-event-address"; venue.textContent = venueText;
       card.append(number, title, date);
+      if (Array.isArray(item.schedule) && item.schedule.length) {
+        const scheduleRoot = document.createElement("div");
+        scheduleRoot.className = "oa-event-schedule";
+        item.schedule.forEach(entry => {
+          if (!entry || typeof entry !== "object") return;
+          const scheduleItem = document.createElement("div");
+          scheduleItem.className = "oa-event-schedule-item";
+          const scheduleTitle = document.createElement("h4");
+          scheduleTitle.textContent = entry.title || "Rangkaian Acara";
+          const scheduleDate = document.createElement("p");
+          scheduleDate.textContent = entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, item.timezone || data.site?.timezone) : "");
+          const scheduleTime = document.createElement("p");
+          scheduleTime.textContent = entry.time || [entry.startTime, entry.endTime].filter(Boolean).join("–");
+          scheduleItem.append(scheduleTitle);
+          if (scheduleDate.textContent) scheduleItem.append(scheduleDate);
+          if (scheduleTime.textContent) scheduleItem.append(scheduleTime);
+          scheduleRoot.append(scheduleItem);
+        });
+        if (scheduleRoot.children.length) card.append(scheduleRoot);
+      }
       if (venueText) card.append(venue);
       const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
       const mapUrl = suppliedUrl || mapTarget.searchUrl;
