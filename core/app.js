@@ -1196,20 +1196,28 @@
   }
 
   function bindMapLinks(data) {
-    const events = data && data.events && !Array.isArray(data.events) ? data.events : {};
+    const rawEvents = data && data.events ? data.events : {};
+    const entries = Array.isArray(rawEvents)
+      ? rawEvents.map((item, index) => [item && item.id ? item.id : (index === 0 ? "akad" : index === 1 ? "resepsi" : String(index)), item])
+      : Object.entries(rawEvents);
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const mapsEnabled = features.maps !== false;
     const navigationEnabled = mapsEnabled && features.navigation !== false;
     const embedEnabled = mapsEnabled && features.mapEmbed !== false;
-    [["akad", "link-akad-maps"], ["resepsi", "link-resepsi-maps"]].forEach(([key, id]) => {
-      const item = events[key];
-      const anchor = document.getElementById(id);
-      if (!item || !anchor) return;
+    entries.forEach(([rawKey, item], index) => {
+      if (!item || typeof item !== "object") return;
+      const key = String(item.id || rawKey || (index === 0 ? "akad" : index === 1 ? "resepsi" : ""));
+      const normalizedKey = key.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+      const anchor = document.getElementById("link-" + normalizedKey + "-maps") ||
+        (index === 0 ? document.getElementById("link-akad-maps") : index === 1 ? document.getElementById("link-resepsi-maps") : null);
+      if (!anchor) return;
       const destination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
-      const mapUrl = typeof item.mapsUrl === "string" && (item.mapsUrl.startsWith("https://") || item.mapsUrl.startsWith("http://"))
-        ? item.mapsUrl
+      const suppliedUrl = typeof item.mapsUrl === "string" ? item.mapsUrl : item.mapUrl;
+      const mapUrl = typeof suppliedUrl === "string" && /^https?:\/\//i.test(suppliedUrl)
+        ? suppliedUrl
         : (destination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination) : "");
       if (!mapsEnabled || !mapUrl) { anchor.hidden = true; return; }
+      anchor.hidden = false;
       anchor.classList.add("oa-event-location");
       anchor.href = mapUrl;
       anchor.target = "_blank";
