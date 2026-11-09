@@ -601,6 +601,7 @@
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "";
     const startTime = String(event.startTime || "09:00");
     let endTime = String(event.endTime || "");
+    const hasEndTime = !!endTime;
     if (!endTime) {
       const [hour, minute] = startTime.split(":").map(Number);
       const totalMinutes = hour * 60 + (minute || 0) + 60;
@@ -617,7 +618,7 @@
       dates,
       ctz: event.timezone || data.site?.timezone || "Asia/Makassar",
       location,
-      details: "Undangan pernikahan Omah Aksara." + (!endTime ? " Pengingat kalender dibuat 1 jam; durasi dapat disesuaikan di Google Calendar." : "")
+      details: "Undangan pernikahan Omah Aksara." + (!hasEndTime ? " Pengingat kalender dibuat 1 jam; durasi dapat disesuaikan di Google Calendar." : "")
     });
     return "https://calendar.google.com/calendar/render?" + params.toString();
   }
