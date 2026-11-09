@@ -1,7 +1,7 @@
 {
   "slug": "venni-rama",
   "status": "published",
-  "theme": "royal-vintage",
+  "theme": "aksara-nocturne-venni",
   "guest": {
     "defaultName": "Tamu Undangan"
   },
@@ -42,7 +42,7 @@
       "time": "09.00–10.00 WITA",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
+      "mapsUrl": "https://maps.app.goo.gl/J7gttbr9E9JUdsPe6?g_st=ac",
       "dateISO": "2026-11-20",
       "startTime": "09:00",
       "endTime": "10:00",
@@ -56,7 +56,7 @@
       "time": "11.00–selesai WITA",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
+      "mapsUrl": "https://maps.app.goo.gl/J7gttbr9E9JUdsPe6?g_st=ac",
       "dateISO": "2026-11-20",
       "startTime": "11:00",
       "endTime": "",
