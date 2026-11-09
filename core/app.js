@@ -1488,18 +1488,12 @@
       window.addEventListener("keydown", event => {
         if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
       });
+      autoButton.addEventListener("click", () => {
+        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
+        startAutoScroll();
+      });
       document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
     }
-    // Bind the dock action after the motion-preference branch so its click
-    // contract is always installed consistently for every theme.
-    autoButton.addEventListener("click", () => {
-      if (autoButton.getAttribute("aria-pressed") === "true" || autoStartDelay !== null) {
-        stopAutoScroll();
-        return;
-      }
-      startAutoScroll();
-    });
-
     if (musicButton) {
       const syncMusic = () => {
         const playing = !audio.paused;
