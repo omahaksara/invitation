@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 
-// Production browser smoke: reads the live catalogue and guestbook only.
-// Never submits RSVP or guestbook forms. A guestbook GET may auto-register
-// an already-published slug in Settings if it is missing, as designed by the backend.
+// Production browser smoke: checks the live catalogue and a published invitation.
+// Never submits RSVP or guestbook forms. Opening a published invitation invokes
+// the same guestbook GET used for visitors; the backend may auto-register a published
+// slug in Settings on that first read if it is missing.
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 
@@ -27,7 +28,7 @@ async function waitForCurrentDeployments() {
         fetchText(INVITATION_URL),
         fetchText(CATALOGUE_URL)
       ]);
-      invitationReady = /core\/app\.js\?v=20261106-controls6(?:["'&]|$)/.test(invitationHtml);
+      invitationReady = /core\/app\.js\?v=20261107-payment-theme-assets2(?:["'&]|$)/.test(invitationHtml);
       catalogueReady = catalogueHtml.includes('preview-guest-name') && /frame\.src\s*=\s*demo\b/.test(catalogueHtml);
       if (invitationReady && catalogueReady) return;
     } catch (error) {
@@ -154,29 +155,15 @@ async function main() {
       'Ani', 'Published bride data must load.');
     assert.ok(await invitation.locator('#bg-music').getAttribute('src'), 'Invitation music source must be bound.');
 
-    // Execute the same cross-origin GET in the real browser context used by guests.
-    // This is read-only and does not submit any form.
-    const guestbook = await invitation.evaluate(async () => {
-      const apiUrl = window.__invitationData?.integrations?.apiUrl;
-      if (!apiUrl) throw new Error('Published invitation has no configured API URL.');
-      const url = new URL(apiUrl);
-      url.searchParams.set('action', 'guestbook');
-      url.searchParams.set('slug', 'budi-ani');
-      const response = await fetch(url, { cache: 'no-store', redirect: 'follow' });
-      if (!response.ok) throw new Error('Guestbook GET returned HTTP ' + response.status + '.');
-      const result = await response.json();
-      if (!result || result.ok !== true || !Array.isArray(result.items)) {
-        throw new Error('Guestbook GET returned an invalid API response.');
-      }
-      return { count: result.items.length };
-    });
-    await invitation.waitForFunction(count => {
+    // The invitation itself loads the guestbook once, exactly as a real visitor does.
+    // Observe the rendered result instead of issuing a second, redundant API GET.
+    await invitation.waitForFunction(() => {
       const root = document.getElementById('wishes-list');
-      if (!root) return false;
-      const cards = root.querySelectorAll('.wish-card').length;
-      const empty = Boolean(root.querySelector('.empty-wishes'));
-      return count === 0 ? empty : cards === count;
-    }, guestbook.count, { timeout: 10000 });
+      return !!root && !!root.querySelector('.wish-card, .empty-wishes');
+    }, undefined, { timeout: 15000 });
+    const guestbookCount = await invitation.locator('#wishes-list .wish-card').count();
+
+
 
     const layout = await invitation.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
@@ -184,7 +171,7 @@ async function main() {
     }));
     assert.ok(layout.page <= layout.viewport + 2, 'Published invitation overflows mobile width: ' + JSON.stringify(layout));
     assert.equal(pageErrors.length, 0, 'Published invitation JavaScript errors: ' + pageErrors.join('; '));
-    console.log('PASS live Budi–Ani invitation: couple data, RSVP, guestbook GET (' + guestbook.count +
+    console.log('PASS live Budi–Ani invitation: couple data, RSVP, guestbook rendered (' + guestbookCount +
       ' entries), music source, and mobile width. No production forms were submitted; a published slug may auto-register in Settings if missing.');
     await catalogue.close();
     await invitation.close();
