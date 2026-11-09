@@ -598,7 +598,7 @@
 
   function buildGoogleCalendarUrl(event, data) {
     const date = String(event.dateISO || event.date || "");
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) return "";
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "";
     const startTime = String(event.startTime || "09:00");
     const endTime = String(event.endTime || "");
     const [year, month, day] = date.split("-").map(Number);
