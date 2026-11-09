@@ -393,6 +393,49 @@
     const embedEnabled = mapsEnabled && mapFeatures.mapEmbed !== false;
     const hasEventRenderer = Boolean(document.getElementById("event-list"));
     const hasLegacyMapSection = Boolean(document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section"));
+    if (mapsEnabled && !hasEventRenderer && hasLegacyMapSection) {
+      eventItems.forEach((item, index) => {
+        if (!item) return;
+        const eventKey = String(item.id || (index === 0 ? "akad" : index === 1 ? "resepsi" : ""));
+        const legacyLink = eventKey ? document.getElementById("link-" + eventKey + "-maps") : null;
+        if (!legacyLink) return;
+        const destination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
+        const mapUrl = typeof item.mapsUrl === "string" && /^https?:\\/\\//i.test(item.mapsUrl)
+          ? item.mapsUrl
+          : (destination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination) : "");
+        if (mapUrl) {
+          legacyLink.classList.add("oa-event-location");
+          legacyLink.href = mapUrl;
+          legacyLink.target = "_blank";
+          legacyLink.rel = "noopener noreferrer";
+        }
+        const card = legacyLink.parentElement;
+        if (!card || !destination) return;
+        if (navigationEnabled && !card.querySelector(".oa-event-navigation")) {
+          const nav = document.createElement("a");
+          nav.className = "oa-event-navigation";
+          nav.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination);
+          nav.target = "_blank"; nav.rel = "noopener noreferrer";
+          nav.textContent = "Navigasi ke Lokasi ↗";
+          card.append(nav);
+        }
+        if (embedEnabled && !card.querySelector("details.oa-event-map")) {
+          const details = document.createElement("details");
+          details.className = "oa-event-map";
+          const summary = document.createElement("summary");
+          summary.textContent = "Lihat peta";
+          const frame = document.createElement("iframe");
+          frame.title = "Peta lokasi " + (item.title || eventKey);
+          frame.loading = "lazy";
+          frame.referrerPolicy = "no-referrer-when-downgrade";
+          frame.allowFullscreen = true;
+          frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(destination) + "&output=embed";
+          frame.style.cssText = "display:block;width:100%;height:220px;border:0;border-radius:12px;margin-top:12px";
+          details.append(summary, frame);
+          card.append(details);
+        }
+      });
+    }
     if (mapsEnabled && !hasEventRenderer && !hasLegacyMapSection &&
         eventItems.some(item => item && (item.mapsUrl || item.venue || item.location || item.address))) {
       const section = makeSection("maps-section", "Lokasi & Navigasi Acara");
