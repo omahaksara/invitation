@@ -177,6 +177,8 @@ for (const slug of activeThemeSlugs) {
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
             hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
             expectedMappedEvents: mappedEvents.length,
+            navigationEnabled: data.features?.navigation !== false,
+            mapEmbedEnabled: data.features?.mapEmbed !== false,
             locationLinks: document.querySelectorAll(".oa-event-location").length,
             navigationLinks: document.querySelectorAll(".oa-event-navigation").length,
             mapEmbeds: document.querySelectorAll("details.oa-event-map").length,
@@ -199,9 +201,9 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": peringatan simulasi pembayaran tidak tampil " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.locationLinks, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": tautan lokasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
-        assert.equal(demoFeatureAudit.navigationLinks, demoFeatureAudit.expectedMappedEvents,
+        assert.equal(demoFeatureAudit.navigationLinks, demoFeatureAudit.navigationEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
           theme.slug + ": tautan navigasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
-        assert.equal(demoFeatureAudit.mapEmbeds, demoFeatureAudit.expectedMappedEvents,
+        assert.equal(demoFeatureAudit.mapEmbeds, demoFeatureAudit.mapEmbedEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
           theme.slug + ": peta tertanam tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.lazyMapFrames, true,
           theme.slug + ": iframe peta harus memakai lazy loading dan URL Google Maps " + JSON.stringify(demoFeatureAudit));
