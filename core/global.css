@@ -762,6 +762,47 @@ html[data-oa-theme] #app .cover-monogram{animation-duration:.5s!important}
 }
 
 
+/* Lightweight shared premium closing section. Theme typography and colors remain inherited. */
+.oa-closing-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(54px, 9vw, 104px);
+  border-block: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.oa-closing-section::before {
+  content: "✦";
+  display: block;
+  margin: 0 auto 14px;
+  color: currentColor;
+  opacity: .58;
+  font-size: 1.15rem;
+}
+.oa-closing-section > h2 {
+  margin-bottom: 18px;
+}
+.oa-closing-section .oa-closing-message {
+  max-width: 620px;
+  margin: 0 auto;
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+.oa-closing-section .oa-closing-signature {
+  margin: 22px auto 0;
+  font-family: var(--oa-font-display, Georgia, serif);
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  font-style: italic;
+  letter-spacing: .02em;
+}
+.oa-gallery-lightbox button:focus-visible,
+.gallery-grid img:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .oa-closing-section::before { animation: none !important; }
+}
+
+
 /* Shared map frame: consistent local zoom, clipping and responsive sizing across themes. */
 html[data-oa-theme] .oa-event-map {
   max-width: 100%;
