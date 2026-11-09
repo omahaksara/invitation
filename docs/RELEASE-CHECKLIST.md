@@ -21,8 +21,15 @@ Jangan menandai rilis siap sebelum semua poin wajib memiliki bukti pengujian.
 - [ ] Flag `false` tidak menyisakan section kosong atau tombol palsu.
 
 ## Backend dan privasi
-- [ ] Endpoint uji dan produksi terpisah, tanpa fallback produksi yang ditanam di kode.
-- [ ] RSVP dan buku tamu benar-benar diuji melalui browser ke backend uji.
+- [ ] Endpoint TEST dan PROD memakai proyek Apps Script, spreadsheet, Script Properties, dan URL deployment yang terpisah.
+- [ ] Script Property `OMAH_AKSARA_DATABASE_ID` pada proyek TEST diverifikasi menunjuk ke spreadsheet TEST sebelum `setupDatabase()` dijalankan.
+- [ ] Tab RSVP dan Guestbook TEST mempunyai header persis sesuai `backend/Code.gs`; tab Settings hanya mengizinkan slug uji.
+- [ ] Health check TEST lulus dan menampilkan versi backend yang sesuai.
+- [ ] RSVP dan guestbook benar-benar diuji melalui browser ke backend TEST; baris tersimpan hanya di spreadsheet TEST.
+- [ ] GET guestbook mengembalikan ucapan yang baru diuji untuk slug yang sama.
+- [ ] Slug draft/tidak terdaftar ditolak untuk GET dan POST.
+- [ ] Baris data uji dibersihkan setelah bukti dicatat.
+- [ ] Tidak ada pengiriman data uji ke spreadsheet produksi.
 - [ ] Data terisolasi per slug tervalidasi.
 - [ ] Input, spam, pengiriman ganda, dan kegagalan jaringan diuji.
 - [ ] Demo tanpa endpoint menyatakan simulasi dan tidak menyimpan data.
