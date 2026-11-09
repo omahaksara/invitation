@@ -1,0 +1,139 @@
+{
+  "slug": "venni-rama",
+  "status": "draft",
+  "theme": "karsa",
+  "guest": {
+    "defaultName": "Tamu Undangan"
+  },
+  "cover": {
+    "title": "Undangan Pernikahan",
+    "subtitle": "The Wedding of",
+    "image": "foto-sampul.jpg",
+    "heroImage": "foto-sampul.jpg",
+    "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+    "dateLabel": "Jumat, 20 November 2026",
+    "buttonText": "Buka Undangan"
+  },
+  "couple": {
+    "groom": {
+      "nickname": "Rama",
+      "fullName": "Pratu Rama Syahputra",
+      "parents": "Putra kedua dari Alm. Bapak Gatot Subroto dan Ibu Tanti Erwiani",
+      "photo": "foto-pria.jpg",
+      "instagram": ""
+    },
+    "bride": {
+      "nickname": "Venni",
+      "fullName": "Venni Vidiya Sari, A.Md.Keb",
+      "parents": "Putri pertama dari Bapak Sutino dan Ibu Juwati",
+      "photo": "foto-wanita.jpg",
+      "instagram": ""
+    }
+  },
+  "quote": {
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنْفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "text": "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
+    "source": "Al-Qur'an, QS. Ar-Rum: 21"
+  },
+  "events": {
+    "akad": {
+      "title": "Akad Nikah",
+      "date": "Jumat, 20 November 2026",
+      "time": "",
+      "location": "",
+      "address": "Tinombala Induk V/18",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tinombala%20Induk%20V%2F18",
+      "dateISO": "2026-11-20",
+      "startTime": "",
+      "endTime": "",
+      "timezone": "Asia/Makassar",
+      "mapQuery": "Tinombala Induk V/18",
+      "mapNote": "Waktu dan nama tempat/gedung belum diberikan. Mohon konfirmasi sebelum undangan diterbitkan."
+    },
+    "resepsi": {
+      "title": "Resepsi Pernikahan",
+      "date": "Jumat, 20 November 2026",
+      "time": "",
+      "location": "",
+      "address": "Tinombala V/18",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tinombala%20V%2F18",
+      "dateISO": "2026-11-20",
+      "startTime": "",
+      "endTime": "",
+      "timezone": "Asia/Makassar",
+      "mapQuery": "Tinombala V/18",
+      "mapNote": "Waktu dan nama tempat/gedung belum diberikan. Mohon konfirmasi sebelum undangan diterbitkan."
+    }
+  },
+  "countdown": {
+    "targetDate": "2026-11-20T00:00:00+08:00"
+  },
+  "story": [],
+  "gallery": [
+    "foto1.jpg",
+    "foto2.jpg",
+    "foto3.jpg",
+    "foto4.jpg",
+    "foto5.jpg",
+    "foto6.jpg",
+    "foto7.jpg",
+    "foto8.jpg",
+    "foto9.jpg",
+    "foto10.jpg",
+    "foto11.jpg",
+    "foto12.jpg",
+    "foto13.jpg",
+    "foto14.jpg",
+    "foto15.jpg",
+    "foto16.jpg",
+    "foto17.jpg",
+    "foto18.jpg",
+    "foto19.jpg",
+    "foto20.jpg"
+  ],
+  "gifts": {
+    "message": "Informasi hadiah digital belum diberikan.",
+    "accounts": []
+  },
+  "media": {
+    "music": {
+      "id": "",
+      "title": "",
+      "category": "",
+      "src": ""
+    }
+  },
+  "rsvp": {
+    "link": ""
+  },
+  "demoGreetings": [],
+  "schemaVersion": 2,
+  "features": {
+    "countdown": true,
+    "calendar": true,
+    "loveStory": false,
+    "gallery": true,
+    "video": false,
+    "maps": true,
+    "music": false,
+    "gifts": false,
+    "rsvp": false,
+    "guestbook": false,
+    "guestName": true,
+    "hashtag": false,
+    "quotes": true,
+    "bank": false,
+    "ewallet": false,
+    "qris": false,
+    "mapEmbed": false,
+    "mapNavigation": false
+  },
+  "seo": {
+    "title": "Pratu Rama Syahputra & Venni Vidiya Sari | Undangan Pernikahan",
+    "description": "Undangan pernikahan Pratu Rama Syahputra dan Venni Vidiya Sari. Jumat, 20 November 2026."
+  },
+  "opening": {
+    "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nAssalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta mengharap keberkahan-Nya, kami bermaksud menyelenggarakan akad nikah dan resepsi pernikahan putra-putri kami. Dengan penuh hormat dan kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir serta memberikan doa restu kepada kedua mempelai.\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir pada hari yang telah ditentukan.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
+  },
+  "hashtag": "#RamaVenni"
+}
