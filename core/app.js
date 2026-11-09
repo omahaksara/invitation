@@ -634,11 +634,18 @@
     if (!root) return;
     const items = Array.isArray(gallery) ? gallery : (gallery && Array.isArray(gallery.items) ? gallery.items : []);
     root.replaceChildren();
-    items.forEach(item => {
+    items.forEach((item, index) => {
       const src = typeof item === "string" ? item : item.src;
       if (!src) return;
       const figure = document.createElement("figure"); figure.className = "gallery-item reveal";
-      const img = document.createElement("img"); img.src = assetUrl(src, clientBase); img.alt = typeof item === "string" ? "Galeri pernikahan" : (item.alt || "Galeri pernikahan"); img.loading = "lazy";
+      const img = document.createElement("img");
+      img.src = assetUrl(src, clientBase);
+      img.alt = typeof item === "string" ? "Foto galeri pernikahan " + (index + 1) : (item.alt || "Foto galeri pernikahan " + (index + 1));
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.tabIndex = 0;
+      img.setAttribute("role", "button");
+      img.setAttribute("aria-label", "Perbesar foto " + (index + 1));
       figure.append(img); root.append(figure);
     });
   }
@@ -1780,11 +1787,18 @@
       closeButton.focus({ preventScroll: true });
     };
 
-    gallery.addEventListener("click", event => {
-      const clicked = event.target.closest("img");
+    const openFromTarget = target => {
+      const clicked = target && target.closest ? target.closest("img") : null;
       if (!clicked || !gallery.contains(clicked)) return;
       const images = getImages();
       open(images.indexOf(clicked), clicked);
+    };
+    gallery.addEventListener("click", event => openFromTarget(event.target));
+    gallery.addEventListener("keydown", event => {
+      if ((event.key === "Enter" || event.key === " ") && event.target.matches("img[role='button']")) {
+        event.preventDefault();
+        openFromTarget(event.target);
+      }
     });
   }
   window.copyRekening = async () => {
