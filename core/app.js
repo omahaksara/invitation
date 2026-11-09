@@ -10,7 +10,7 @@
     const guestName = (params.get("to") || "").trim();
     const buildShortInvitationUrl = (invitationData = {}) => {
       const guestSegment = guestName
-        ? guestName.normalize("NFKC").trim().replace(/\\s+/g, "-")
+        ? guestName.normalize("NFKC").trim().replace(/\s+/g, "-")
         : "";
       const path = "/i/" + encodeURIComponent(slug) + (guestSegment ? "/" + encodeURIComponent(guestSegment) : "");
       const shortUrl = new URL(path, "https://omahaksara.github.io");
@@ -521,7 +521,7 @@
         const shareData = {
           title: document.title || "Undangan Pernikahan",
           text: "Anda diundang ke hari bahagia kami.",
-          url: buildShortInvitationUrl()
+          url: buildShortInvitationUrl(data)
         };
         button.disabled = true;
         status.textContent = "";
