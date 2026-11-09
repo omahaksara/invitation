@@ -788,7 +788,7 @@
     "ewallet": true,
     "qris": true,
     "mapEmbed": false,
-    "navigation": false
+    "mapNavigation": false
   },
   "hashtag": "#ArkanSekarWedding",
   "seo": {
