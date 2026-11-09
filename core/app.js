@@ -1153,12 +1153,50 @@
   }
 
   function bindMapLinks(data) {
-    const akad = document.getElementById("link-akad-maps");
-    const resepsi = document.getElementById("link-resepsi-maps");
-    const akadUrl = data.events && !Array.isArray(data.events) && data.events.akad && data.events.akad.mapsUrl;
-    const resepsiUrl = data.events && !Array.isArray(data.events) && data.events.resepsi && data.events.resepsi.mapsUrl;
-    if (akad && akadUrl) { akad.href = akadUrl; akad.target = "_blank"; akad.rel = "noopener noreferrer"; }
-    if (resepsi && resepsiUrl) { resepsi.href = resepsiUrl; resepsi.target = "_blank"; resepsi.rel = "noopener noreferrer"; }
+    const events = data && data.events && !Array.isArray(data.events) ? data.events : {};
+    const features = data && data.features && typeof data.features === "object" ? data.features : {};
+    const mapsEnabled = features.maps !== false;
+    const navigationEnabled = mapsEnabled && features.navigation !== false;
+    const embedEnabled = mapsEnabled && features.mapEmbed !== false;
+    [["akad", "link-akad-maps"], ["resepsi", "link-resepsi-maps"]].forEach(([key, id]) => {
+      const item = events[key];
+      const anchor = document.getElementById(id);
+      if (!item || !anchor) return;
+      const destination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
+      const mapUrl = typeof item.mapsUrl === "string" && /^https?:\\/\\//i.test(item.mapsUrl)
+        ? item.mapsUrl
+        : (destination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination) : "");
+      if (!mapsEnabled || !mapUrl) { anchor.hidden = true; return; }
+      anchor.classList.add("oa-event-location");
+      anchor.href = mapUrl;
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      const host = anchor.parentElement;
+      if (!host) return;
+      if (navigationEnabled && destination && !host.querySelector(".oa-event-navigation")) {
+        const nav = document.createElement("a");
+        nav.className = "oa-event-navigation";
+        nav.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination);
+        nav.target = "_blank"; nav.rel = "noopener noreferrer";
+        nav.textContent = "Navigasi ke Lokasi ↗";
+        anchor.insertAdjacentElement("afterend", nav);
+      }
+      if (embedEnabled && destination && !host.querySelector("details.oa-event-map")) {
+        const details = document.createElement("details");
+        details.className = "oa-event-map";
+        const summary = document.createElement("summary");
+        summary.textContent = "Lihat peta";
+        const frame = document.createElement("iframe");
+        frame.title = "Peta lokasi " + (item.title || key);
+        frame.loading = "lazy";
+        frame.referrerPolicy = "no-referrer-when-downgrade";
+        frame.allowFullscreen = true;
+        frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(destination) + "&output=embed";
+        frame.style.cssText = "display:block;width:100%;height:220px;border:0;border-radius:12px;margin-top:12px";
+        details.append(summary, frame);
+        host.append(details);
+      }
+    });
   }
 
   // Shared navigation controls are mounted by the engine, so every active theme
