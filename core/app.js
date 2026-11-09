@@ -389,7 +389,7 @@
     }
     const mapFeatures = data.features && typeof data.features === "object" ? data.features : {};
     const mapsEnabled = mapFeatures.maps !== false;
-    const navigationEnabled = mapsEnabled && mapFeatures.navigation !== false;
+    const navigationEnabled = mapsEnabled && mapFeatures.mapNavigation !== false;
     const embedEnabled = mapsEnabled && mapFeatures.mapEmbed !== false;
     const hasEventRenderer = Boolean(document.getElementById("event-list"));
     const hasLegacyMapSection = Boolean(document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section"));
@@ -469,12 +469,6 @@
           nav.target = "_blank"; nav.rel = "noopener noreferrer";
           nav.textContent = "Navigasi ke Lokasi ↗";
           section.append(nav);
-        }
-        if (item.mapNote) {
-          const note = document.createElement("p");
-          note.className = "oa-event-map-note";
-          note.textContent = item.mapNote;
-          section.append(note);
         }
         if (item.mapNote) {
           const note = document.createElement("p");
@@ -695,7 +689,7 @@
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const mapsEnabled = features.maps !== false;
     const embedEnabled = mapsEnabled && features.mapEmbed !== false;
-    const navigationEnabled = mapsEnabled && features.navigation !== false;
+    const navigationEnabled = mapsEnabled && features.mapNavigation !== false;
     root.replaceChildren();
     items.forEach((item, index) => {
       const card = document.createElement("article"); card.className = "event-card reveal";
@@ -1262,7 +1256,7 @@
       : Object.entries(rawEvents);
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const mapsEnabled = features.maps !== false;
-    const navigationEnabled = mapsEnabled && features.navigation !== false;
+    const navigationEnabled = mapsEnabled && features.mapNavigation !== false;
     const embedEnabled = mapsEnabled && features.mapEmbed !== false;
     entries.forEach(([rawKey, item], index) => {
       if (!item || typeof item !== "object") return;
