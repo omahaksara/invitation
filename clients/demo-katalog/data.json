@@ -103,7 +103,7 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Hadiah digital ditampilkan sebagai contoh tampilan Omah Aksara. Rekening, nomor dompet digital, dan QRIS pada halaman ini sepenuhnya data simulasi — bukan akun aktif. Tombol transaksi dan salin dinonaktifkan.",
+    "message": "Rekening bank dan nomor dompet digital pada halaman ini adalah data simulasi untuk pratinjau. QR DANA Arkan merupakan QR pembayaran aktif; pemindaian dan pembayaran akan masuk ke akun DANA Arkan.",
     "accounts": [
       {
         "paymentType": "bank",
@@ -733,6 +733,21 @@
         "demoNote": "Nomor rekening simulasi untuk pratinjau katalog — bukan rekening aktif.",
         "note": "Contoh tampilan metode transfer. Jangan gunakan untuk transaksi.",
         "enabled": false
+      },
+      {
+        "paymentType": "ewallet",
+        "type": "ewallet",
+        "bank": "DANA • QR Pembayaran",
+        "logo": "/assets/payment/wallets/dana.png",
+        "accountNumber": "",
+        "accountHolder": "Arkan Pradipta",
+        "qrCode": "/assets/qr-dana-arkan.svg",
+        "demoOnly": false,
+        "copyable": true,
+        "copyValue": "https://qr.dana.id/v1/281012012019070710325453",
+        "copyLabel": "Salin tautan QR DANA",
+        "note": "QR pembayaran DANA aktif milik Arkan. Jika dipindai dan dibayar, dana akan masuk ke akun Arkan, bukan akun simulasi Omah Aksara.",
+        "enabled": true
       }
     ]
   },
