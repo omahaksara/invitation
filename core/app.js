@@ -1479,7 +1479,14 @@
       document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
       if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
+        // aria-pressed is the user-visible source of truth. The interval can be
+        // cleared by reaching the page end or by an external interaction between
+        // scheduling and click delivery; never restart when the control still
+        // visibly reports that scrolling is active.
+        if (autoButton.getAttribute("aria-pressed") === "true" || autoStartDelay !== null) {
+          stopAutoScroll();
+          return;
+        }
         startAutoScroll();
       });
       window.addEventListener("wheel", stopAutoScroll, { passive: true });
