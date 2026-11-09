@@ -116,7 +116,6 @@ async function main() {
     assert.equal(await shortDemo.locator('#wishes-form').count(), 1, 'Demo guestbook form must render.');
     assert.ok(await shortDemo.locator('#bg-music').getAttribute('src'), 'Demo music source must be bound.');
     assert.equal(shortDemoErrors.length, 0, 'Demo short URL JavaScript errors: ' + shortDemoErrors.join('; '));
-    await shortDemo.close();
     console.log('PASS personalized demo short URL: slug, guest name, selected theme, forms, and music.');
 
     assert.equal(catalogueErrors.length, 0, 'Catalogue JavaScript errors: ' + catalogueErrors.join('; '));
@@ -125,16 +124,13 @@ async function main() {
     // Do not open a real client's live invitation during this smoke test:
     // rendering the guestbook may issue a GET that auto-registers its slug in
     // the production Settings sheet. Demo data is isolated and safe to inspect.
-    const layout = await invitation.evaluate(() => ({
+    const layout = await shortDemo.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       page: document.documentElement.scrollWidth
     }));
-    assert.ok(layout.page <= layout.viewport + 2, 'Published invitation overflows mobile width: ' + JSON.stringify(layout));
-    assert.equal(pageErrors.length, 0, 'Published invitation JavaScript errors: ' + pageErrors.join('; '));
-    console.log('PASS live Budi–Ani invitation: couple data, RSVP, guestbook rendered (' + guestbookCount +
-      ' entries), music source, and mobile width. No production forms were submitted; a published slug may auto-register in Settings if missing.');
+    assert.ok(layout.page <= layout.viewport + 2, 'Personalized demo overflows mobile width: ' + JSON.stringify(layout));
+    await shortDemo.close();
     await catalogue.close();
-    await invitation.close();
   } finally {
     await browser.close();
   }
