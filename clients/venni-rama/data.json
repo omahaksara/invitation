@@ -11,7 +11,7 @@
     "image": "cover.jpg",
     "heroImage": "cover.jpg",
     "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-    "dateLabel": "19–20 November 2026",
+    "dateLabel": "20 November 2026",
     "buttonText": "Buka Undangan"
   },
   "couple": {
@@ -38,8 +38,8 @@
   "events": {
     "akad-resepsi": {
       "title": "Akad Nikah & Resepsi Pernikahan",
-      "date": "19–20 November 2026",
-      "time": "Satu rangkaian acara",
+      "date": "Jumat, 20 November 2026",
+      "time": "Akad Nikah & Resepsi",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
@@ -47,22 +47,27 @@
       "timezone": "Asia/Makassar",
       "schedule": [
         {
+          "id": "akad",
           "title": "Akad Nikah",
-          "date": "Kamis, 19 November 2026",
-          "dateISO": "2026-11-19",
+          "date": "Jumat, 20 November 2026",
+          "dateISO": "2026-11-20",
+          "startTime": "09:00",
+          "endTime": "10:00",
           "time": "09.00–10.00 WITA"
         },
         {
+          "id": "resepsi",
           "title": "Resepsi Pernikahan",
           "date": "Jumat, 20 November 2026",
           "dateISO": "2026-11-20",
+          "startTime": "11:00",
           "time": "11.00 WITA–selesai"
         }
       ]
     }
   },
   "countdown": {
-    "targetDate": "2026-11-19T09:00:00+08:00"
+    "targetDate": "2026-11-20T09:00:00+08:00"
   },
   "story": [],
   "gallery": [
