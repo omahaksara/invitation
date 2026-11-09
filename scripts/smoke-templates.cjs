@@ -223,6 +223,18 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        assert.ok(await page.locator(".oa-closing-section").count() <= 1,
+          theme.slug + ": penutup bersama tidak boleh terduplikasi");
+        const galleryImage = page.locator(".gallery-grid img").first();
+        if (await galleryImage.count()) {
+          await galleryImage.click();
+          await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
+          assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
+            theme.slug + ": tombol foto berikutnya tidak tersedia");
+          await page.keyboard.press("ArrowRight");
+          await page.keyboard.press("Escape");
+          await page.waitForSelector(".oa-gallery-lightbox", { state: "detached", timeout: 3000 });
+        }
         const performanceAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
           const backdrop = [];
