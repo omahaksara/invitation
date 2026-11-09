@@ -637,6 +637,35 @@
     });
   }
 
+  function resolveEventMapTarget(item) {
+    const event = item && typeof item === "object" ? item : {};
+    const rawCoordinates = event.coordinates && typeof event.coordinates === "object" ? event.coordinates : {};
+    const lat = Number(rawCoordinates.lat ?? event.latitude ?? event.lat);
+    const lng = Number(rawCoordinates.lng ?? rawCoordinates.lon ?? event.longitude ?? event.lng ?? event.lon);
+    const hasCoordinates = Number.isFinite(lat) && Number.isFinite(lng) &&
+      lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+    const query = String(event.mapQuery || [event.venue || event.location || event.title, event.address]
+      .filter(Boolean).join(", ")).trim();
+    if (hasCoordinates) {
+      const point = lat + "," + lng;
+      return {
+        query: point,
+        embedUrl: "https://www.google.com/maps?q=" + encodeURIComponent(point) + "&z=16&output=embed",
+        searchUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(point),
+        directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(point),
+        verifiedPoint: true
+      };
+    }
+    const encoded = encodeURIComponent(query);
+    return {
+      query,
+      embedUrl: query ? "https://www.google.com/maps?q=" + encoded + "&z=16&output=embed" : "",
+      searchUrl: query ? "https://www.google.com/maps/search/?api=1&query=" + encoded : "",
+      directionsUrl: query ? "https://www.google.com/maps/dir/?api=1&destination=" + encoded : "",
+      verifiedPoint: false
+    };
+  }
+
   function renderEvents(events, data, clientBase) {
     const root = document.getElementById("event-list");
     if (!root) return;
@@ -651,38 +680,47 @@
       const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA 0" + (index + 1);
       const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
       const date = document.createElement("p"); date.textContent = formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
-      const mapDestination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
-      const venue = document.createElement("p"); venue.textContent = mapDestination;
-      card.append(number, title, date, venue);
-      const mapUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl :
-        (mapDestination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapDestination) : "");
+      const mapTarget = resolveEventMapTarget(item);
+      const venueText = [item.venue || item.location, item.address].filter(Boolean).join(", ");
+      const venue = document.createElement("p"); venue.className = "oa-event-address"; venue.textContent = venueText;
+      card.append(number, title, date);
+      if (venueText) card.append(venue);
+      const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
+      const mapUrl = mapTarget.verifiedPoint ? mapTarget.searchUrl : (suppliedUrl || mapTarget.searchUrl);
       if (mapsEnabled && mapUrl) {
         const link = document.createElement("a");
         link.className = "oa-event-location";
         link.href = mapUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
-        link.textContent = "Lihat Lokasi ↗";
+        link.textContent = item.mapNote ? "Cari Lokasi di Maps ↗" : "Lihat Lokasi ↗";
         card.append(link);
       }
-      if (navigationEnabled && mapDestination) {
+      if (navigationEnabled && mapTarget.query && !item.mapNote) {
         const nav = document.createElement("a");
         nav.className = "oa-event-navigation";
-        nav.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(mapDestination);
+        nav.href = mapTarget.directionsUrl;
         nav.target = "_blank"; nav.rel = "noopener noreferrer";
         nav.textContent = "Navigasi ke Lokasi ↗";
         card.append(nav);
       }
-      if (embedEnabled && mapDestination) {
+      if (embedEnabled && mapTarget.embedUrl && !item.mapNote) {
         const details = document.createElement("details");
         details.className = "oa-event-map";
         const summary = document.createElement("summary"); summary.textContent = "Lihat peta";
+        const frameWrap = document.createElement("div"); frameWrap.className = "oa-event-map-frame";
         const frame = document.createElement("iframe");
         frame.title = "Peta lokasi " + (item.title || item.id || "acara");
         frame.loading = "lazy"; frame.referrerPolicy = "no-referrer-when-downgrade";
         frame.allowFullscreen = true;
-        frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(mapDestination) + "&output=embed";
-        frame.style.cssText = "display:block;width:100%;height:220px;border:0;border-radius:12px;margin-top:12px";
-        details.append(summary, frame);
+        frame.src = mapTarget.embedUrl;
+        frame.setAttribute("allow", "fullscreen");
+        frameWrap.append(frame);
+        details.append(summary, frameWrap);
         card.append(details);
+      } else if (mapsEnabled && item.mapNote) {
+        const note = document.createElement("p");
+        note.className = "oa-event-map-note";
+        note.textContent = item.mapNote;
+        card.append(note);
       }
       root.append(card);
     });
@@ -1211,41 +1249,48 @@
       const anchor = document.getElementById("link-" + normalizedKey + "-maps") ||
         (index === 0 ? document.getElementById("link-akad-maps") : index === 1 ? document.getElementById("link-resepsi-maps") : null);
       if (!anchor) return;
-      const destination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
-      const suppliedUrl = typeof item.mapsUrl === "string" ? item.mapsUrl : item.mapUrl;
-      const mapUrl = typeof suppliedUrl === "string" && /^https?:\/\//i.test(suppliedUrl)
-        ? suppliedUrl
-        : (destination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination) : "");
+      const mapTarget = resolveEventMapTarget(item);
+      const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
+      const mapUrl = mapTarget.verifiedPoint ? mapTarget.searchUrl : (suppliedUrl || mapTarget.searchUrl);
       if (!mapsEnabled || !mapUrl) { anchor.hidden = true; return; }
       anchor.hidden = false;
       anchor.classList.add("oa-event-location");
       anchor.href = mapUrl;
       anchor.target = "_blank";
       anchor.rel = "noopener noreferrer";
+      if (item.mapNote) anchor.textContent = "Cari Lokasi di Maps ↗";
       const host = anchor.parentElement;
       if (!host) return;
-      if (navigationEnabled && destination && !host.querySelector(".oa-event-navigation")) {
+      if (navigationEnabled && mapTarget.query && !item.mapNote && !host.querySelector(".oa-event-navigation")) {
         const nav = document.createElement("a");
         nav.className = "oa-event-navigation";
-        nav.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination);
+        nav.href = mapTarget.directionsUrl;
         nav.target = "_blank"; nav.rel = "noopener noreferrer";
         nav.textContent = "Navigasi ke Lokasi ↗";
         anchor.insertAdjacentElement("afterend", nav);
       }
-      if (embedEnabled && destination && !host.querySelector("details.oa-event-map")) {
+      if (embedEnabled && mapTarget.embedUrl && !item.mapNote && !host.querySelector("details.oa-event-map")) {
         const details = document.createElement("details");
         details.className = "oa-event-map";
         const summary = document.createElement("summary");
         summary.textContent = "Lihat peta";
+        const frameWrap = document.createElement("div");
+        frameWrap.className = "oa-event-map-frame";
         const frame = document.createElement("iframe");
         frame.title = "Peta lokasi " + (item.title || key);
         frame.loading = "lazy";
         frame.referrerPolicy = "no-referrer-when-downgrade";
         frame.allowFullscreen = true;
-        frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(destination) + "&output=embed";
-        frame.style.cssText = "display:block;width:100%;height:220px;border:0;border-radius:12px;margin-top:12px";
-        details.append(summary, frame);
+        frame.src = mapTarget.embedUrl;
+        frame.setAttribute("allow", "fullscreen");
+        frameWrap.append(frame);
+        details.append(summary, frameWrap);
         host.append(details);
+      } else if (mapsEnabled && item.mapNote && !host.querySelector(".oa-event-map-note")) {
+        const note = document.createElement("p");
+        note.className = "oa-event-map-note";
+        note.textContent = item.mapNote;
+        host.append(note);
       }
     });
   }
