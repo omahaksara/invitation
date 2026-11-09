@@ -15,7 +15,7 @@ h1{font-family:Georgia,serif;font-size:clamp(30px,6vw,46px);line-height:1.08;mar
 .drop strong{display:block;font-size:17px}.drop small{color:var(--muted)}input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
 .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}.control label{display:flex;justify-content:space-between;font-weight:650;margin-bottom:7px}.control select,.control input[type=range]{width:100%}.control select{padding:11px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}
 button{border:0;border-radius:999px;padding:13px 20px;background:var(--ink);color:white;font-weight:700;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.secondary{background:#eee8de;color:var(--ink)}
-.status{color:var(--muted);font-size:13px;margin-top:12px}.list{display:grid;gap:8px;margin-top:14px}.file{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px}.file span:last-child{white-space:nowrap;color:var(--muted)}
+.status{color:var(--muted);font-size:13px;margin-top:12px}.list-heading{display:flex;justify-content:space-between;align-items:center;margin-top:16px}.list{display:grid;gap:8px;margin-top:10px}.file{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px}.file .filename{font-weight:650;overflow-wrap:anywhere}.file .filesize{white-space:nowrap;color:var(--muted)}.file .filemeta{grid-column:1/-1;color:var(--muted);font-size:12px}.file .filemeta.success{color:#28734d}.file .filemeta.error{color:#a33b32}
 .note{font-size:13px;color:var(--muted)}.safe{background:#f5f1e8;padding:12px 14px;border-radius:10px;margin-top:14px;font-size:13px}
 @media(max-width:560px){main{margin-top:20px}.panel{padding:16px}.controls{grid-template-columns:1fr}.file{font-size:12px}}
 </style>
@@ -28,7 +28,7 @@ button{border:0;border-radius:999px;padding:13px 20px;background:var(--ink);colo
 <section class="panel">
 <label class="drop" for="photos"><strong>Pilih semua foto klien</strong><small>JPG, JPEG, PNG, atau WebP · bisa pilih banyak sekaligus</small></label>
 <input id="photos" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple>
-<div id="fileList" class="list" aria-live="polite"></div>
+<div class="list-heading"><b>Daftar nama foto</b><span id="fileCount" class="note">0 foto</span></div><div id="fileList" class="list" aria-live="polite"></div>
 <div class="controls">
 <div class="control"><label for="maxSize">Ukuran sisi terpanjang</label><select id="maxSize"><option value="1600">1600 px — disarankan</option><option value="1920" selected>1920 px — kualitas tinggi</option><option value="2400">2400 px — detail lebih besar</option><option value="original">Pertahankan dimensi</option></select></div>
 <div class="control"><label for="quality">Kualitas JPG <output id="qualityValue">82%</output></label><input id="quality" type="range" min="55" max="92" value="82"></div>
@@ -50,16 +50,21 @@ button{border:0;border-radius:999px;padding:13px 20px;background:var(--ink);colo
 const input=document.getElementById('photos'), list=document.getElementById('fileList');
 const run=document.getElementById('run'), clear=document.getElementById('clear');
 const status=document.getElementById('status'), quality=document.getElementById('quality');
+const fileCount=document.getElementById('fileCount');
+let rows=[];
 const qualityValue=document.getElementById('qualityValue');
 let files=[];
 quality.addEventListener('input',()=>qualityValue.value=quality.value+'%');
 function fmt(n){return n<1024*1024?(n/1024).toFixed(0)+' KB':(n/1024/1024).toFixed(2)+' MB'}
 function render(){
- list.replaceChildren();
+ list.replaceChildren();rows=[];fileCount.textContent=files.length+' foto';
+ const names=new Map();
+ files.forEach(f=>{const base=jpgName(f.name).toLowerCase();names.set(base,(names.get(base)||0)+1)});
  files.forEach(f=>{const row=document.createElement('div');row.className='file';
- const name=document.createElement('span');name.textContent=f.name;
- const size=document.createElement('span');size.textContent=fmt(f.size);
- row.append(name,size);list.append(row)});
+ const name=document.createElement('span');name.className='filename';name.textContent=f.name;
+ const size=document.createElement('span');size.className='filesize';size.textContent=fmt(f.size);
+ const meta=document.createElement('span');meta.className='filemeta';meta.textContent='Hasil: '+jpgName(f.name)+' · Menunggu proses'+(names.get(jpgName(f.name).toLowerCase())>1?' · Nama dasar duplikat, hasil akan diberi nomor':'');
+ row.append(name,size,meta);list.append(row);rows.push({row,meta})});
  run.disabled=!files.length;status.textContent=files.length?files.length+' foto dipilih · total '+fmt(files.reduce((a,f)=>a+f.size,0)):'Belum ada foto dipilih.';
 }
 input.addEventListener('change',()=>{files=Array.from(input.files||[]).filter(f=>f.type.startsWith('image/'));render()});
@@ -77,7 +82,8 @@ run.addEventListener('click',async()=>{
  const zip=new JSZip(),seen=new Set();let done=0,totalBefore=0,totalAfter=0,failed=[];
  const max=document.getElementById('maxSize').value, q=Number(quality.value)/100;
  try{
-  for(const file of files){
+  for(let index=0;index<files.length;index++){
+   const file=files[index],row=rows[index];
    try{
     const img=await loadImage(file);const scale=max==='original'?1:Math.min(1,Number(max)/Math.max(img.width,img.height));
     const w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
@@ -85,10 +91,11 @@ run.addEventListener('click',async()=>{
     const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img.source,0,0,w,h);img.close();
     const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Gagal membuat JPG')),'image/jpeg',q));
     const name=uniqueName(jpgName(file.name),seen);zip.file(name,blob);
+    row.meta.textContent='Hasil: '+name+' · '+fmt(file.size)+' → '+fmt(blob.size)+' · Berhasil';row.meta.classList.add('success');
     totalBefore+=file.size;totalAfter+=blob.size;done++;
     status.textContent='Memproses '+done+' dari '+files.length+' foto…';
     canvas.width=1;canvas.height=1;
-   }catch(err){failed.push(file.name+': '+err.message)}
+   }catch(err){failed.push(file.name+': '+err.message);row.meta.textContent='Gagal: '+err.message;row.meta.classList.add('error')}
   }
   if(!done){status.textContent='Tidak ada foto berhasil diproses. '+failed.join(' | ');return}
   if(failed.length)zip.file('_FOTO_GAGAL.txt','Foto yang gagal diproses:\n'+failed.join('\n'));
