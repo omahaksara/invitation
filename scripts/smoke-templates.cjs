@@ -286,22 +286,16 @@ for (const slug of activeThemeSlugs) {
           }));
           assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
             theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          // The dock is fixed-position; trigger its real click handler directly so Playwright
-          // does not scroll the page to re-position a moving control during auto-scroll.
-          await autoScroll.evaluate(button => button.click());
+          await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
             theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          // The dock is fixed-position; trigger its real click handler directly so Playwright
-          // does not scroll the page to re-position a moving control during auto-scroll.
-          await autoScroll.evaluate(button => button.click());
+          await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
           await page.waitForTimeout(120);
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
-          // The dock is fixed-position; trigger its real click handler directly so Playwright
-          // does not scroll the page to re-position a moving control during auto-scroll.
-          await autoScroll.evaluate(button => button.click());
+          await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
             theme.slug + ": tombol auto-scroll tidak berhenti");
         }
