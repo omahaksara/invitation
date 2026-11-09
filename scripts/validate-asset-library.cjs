@@ -55,18 +55,28 @@ for (const item of bankCatalog.items) {
 const demoAccounts = demo.gifts && Array.isArray(demo.gifts.accounts) ? demo.gifts.accounts : [];
 assert.equal(demo.demoMode, true, "catalog demo mode must remain enabled");
 assert.ok(demo.gifts.message && /SIMULASI|SIMULASI|DATA SIMULASI/i.test(demo.gifts.message), "demo payment warning is required");
-const demoBankCount = demoAccounts.filter(item => item.paymentType === "bank").length;
-const demoWalletCount = demoAccounts.filter(item => item.paymentType === "ewallet" || item.paymentType === "qris").length;
+const demoOnlyAccounts = demoAccounts.filter(item => item.demoOnly === true);
+const liveAccounts = demoAccounts.filter(item => item.demoOnly === false);
+const demoBankCount = demoOnlyAccounts.filter(item => item.paymentType === "bank").length;
+const demoWalletCount = demoOnlyAccounts.filter(item => item.paymentType === "ewallet" || item.paymentType === "qris").length;
 assert.equal(demoBankCount, payments.banks.length, "every bank option must have one demo card");
 assert.equal(demoWalletCount, payments.wallets.length, "every wallet/payment option must have one demo card");
-for (const item of demoAccounts) {
-  assert.equal(item.demoOnly, true, "all demo payment records must be marked demoOnly");
+for (const item of demoOnlyAccounts) {
   assert.equal(item.copyable, false, "demo account copy action must remain disabled");
   assert.ok(item.logo, "demo payment card must have a local logo");
   localFile(item.logo);
   assert.ok(item.accountNumber, "demo payment card needs a clearly marked placeholder");
   assert.ok(/DEMO|XX|TIDAK ADA KODE BAYAR/i.test(item.accountNumber), "demo card must not expose a real account/payment identifier");
 }
+
+assert.equal(liveAccounts.length, 1, "only the explicitly configured Arkan DANA QR may be live in the demo catalog");
+const liveDana = liveAccounts[0];
+assert.equal(liveDana.paymentType, "ewallet", "live demo-catalog payment must be a DANA wallet QR");
+assert.equal(liveDana.bank, "DANA • QR Pembayaran", "live payment must be explicitly identified as DANA QR");
+assert.equal(liveDana.enabled, true, "Arkan DANA QR must be enabled");
+assert.equal(liveDana.copyable, true, "Arkan DANA QR link should be copyable");
+assert.match(liveDana.copyValue || "", /^https:\/\/qr\.dana\.id\//, "live DANA QR must use the verified DANA payment URL");
+assert.equal(liveDana.qrCode, "assets/qr-dana-arkan.svg", "live DANA QR artwork must stay inside the demo client folder");
 
 const themeFiles = [
   ...Object.values(themeManifest.categories).flat().filter(file => !file.startsWith("/")).map(file => path.join("assets/themes", file)),
