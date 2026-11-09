@@ -40,29 +40,29 @@
       "title": "Akad Nikah",
       "date": "Jumat, 20 November 2026",
       "time": "",
-      "location": "",
-      "address": "Tinombala Induk V/18",
-      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tinombala%20Induk%20V%2F18",
+      "location": "Kediaman Mempelai Wanita",
+      "address": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
       "dateISO": "2026-11-20",
       "startTime": "",
       "endTime": "",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Tinombala Induk V/18",
-      "mapNote": "Waktu dan nama tempat/gedung belum diberikan. Mohon konfirmasi sebelum undangan diterbitkan."
+      "mapQuery": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapNote": "Lokasi akad dan resepsi berada di kediaman mempelai wanita sesuai tautan Google Maps dari pemesan."
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
       "date": "Jumat, 20 November 2026",
       "time": "",
-      "location": "",
-      "address": "Tinombala V/18",
-      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tinombala%20V%2F18",
+      "location": "Kediaman Mempelai Wanita",
+      "address": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
       "dateISO": "2026-11-20",
       "startTime": "",
       "endTime": "",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Tinombala V/18",
-      "mapNote": "Waktu dan nama tempat/gedung belum diberikan. Mohon konfirmasi sebelum undangan diterbitkan."
+      "mapQuery": "Kediaman Mempelai Wanita, Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapNote": "Lokasi akad dan resepsi berada di kediaman mempelai wanita sesuai tautan Google Maps dari pemesan."
     }
   },
   "countdown": {
