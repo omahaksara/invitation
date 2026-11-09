@@ -615,6 +615,7 @@
         (mapDestination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapDestination) : "");
       if (mapsEnabled && mapUrl) {
         const link = document.createElement("a");
+        link.className = "oa-event-location";
         link.href = mapUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
         link.textContent = "Lihat Lokasi ↗";
         card.append(link);
