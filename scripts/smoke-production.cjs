@@ -97,84 +97,40 @@ async function main() {
     const shortDemo = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
     const shortDemoErrors = [];
     shortDemo.on('pageerror', error => shortDemoErrors.push(error.message));
-    const shortDemoResponse = await shortDemo.goto(firstDemoHref, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    assert.ok(shortDemoResponse && shortDemoResponse.ok(), 'Personalized demo short URL must resolve.');
+    // GitHub Pages serves unknown short paths through 404.html. The first
+    // navigation can therefore return HTTP 404 while the router performs a
+    // client-side redirect. Wait for the final engine URL instead of treating
+    // that expected fallback response as a failed invitation.
+    await shortDemo.goto(firstDemoHref, { waitUntil: 'domcontentloaded', timeout: 45000 });
     await shortDemo.waitForFunction(({ slug, theme }) =>
+      window.location.pathname === '/invitation/' &&
       window.__invitationData && window.__invitationData.slug === slug &&
       document.documentElement.dataset.oaTheme === theme,
-      { slug: 'demo-katalog', theme: selectedDemoTheme }, { timeout: 25000 });
+      { slug: 'demo-katalog', theme: selectedDemoTheme }, { timeout: 30000 });
     const resolvedDemoUrl = new URL(shortDemo.url());
     assert.equal(resolvedDemoUrl.pathname, '/invitation/', 'Demo short URL must redirect to the invitation engine.');
     assert.equal(resolvedDemoUrl.searchParams.get('c'), 'demo-katalog', 'Demo short URL must preserve its isolated slug.');
     assert.equal(resolvedDemoUrl.searchParams.get('to'), 'Tamu Audit', 'Demo short URL must preserve the guest name.');
     assert.equal(resolvedDemoUrl.searchParams.get('theme'), selectedDemoTheme, 'Demo short URL must preserve the selected active theme.');
+    assert.equal(await shortDemo.locator('#rsvp-form').count(), 1, 'Demo RSVP form must render.');
+    assert.equal(await shortDemo.locator('#wishes-form').count(), 1, 'Demo guestbook form must render.');
+    assert.ok(await shortDemo.locator('#bg-music').getAttribute('src'), 'Demo music source must be bound.');
     assert.equal(shortDemoErrors.length, 0, 'Demo short URL JavaScript errors: ' + shortDemoErrors.join('; '));
-    await shortDemo.close();
-    console.log('PASS personalized demo short URL: slug, guest name, and selected theme.');
+    console.log('PASS personalized demo short URL: slug, guest name, selected theme, forms, and music.');
 
     assert.equal(catalogueErrors.length, 0, 'Catalogue JavaScript errors: ' + catalogueErrors.join('; '));
     console.log('PASS public catalogue: ' + expectedThemes.length + ' live theme previews and personalized demo links.');
 
-    const invitation = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
-    const pageErrors = [];
-    invitation.on('pageerror', error => pageErrors.push(error.message));
-
-    const invitationResponse = await invitation.goto(
-      CATALOGUE_URL + 'i/budi-ani/Tamu%20Audit',
-      { waitUntil: 'domcontentloaded', timeout: 45000 }
-    );
-    assert.ok(invitationResponse && invitationResponse.ok(), 'Published Budi–Ani short URL must load.');
-    const resolvedBudiUrl = new URL(invitation.url());
-    assert.equal(resolvedBudiUrl.pathname, '/invitation/', 'Budi–Ani short URL must redirect to the invitation engine.');
-    assert.equal(resolvedBudiUrl.searchParams.get('c'), 'budi-ani', 'Budi–Ani short URL must preserve the client slug.');
-    assert.equal(resolvedBudiUrl.searchParams.get('to'), 'Tamu Audit', 'Budi–Ani short URL must preserve the guest name.');
-    assert.equal(resolvedBudiUrl.searchParams.get('theme'), 'sirein', 'Budi–Ani short URL must retain its configured theme.');
-    console.log('CHECK Budi–Ani invitation data and forms.');
-    try {
-      await invitation.waitForFunction(() =>
-        window.__invitationData && window.__invitationData.slug === 'budi-ani' &&
-        document.querySelector('#rsvp-form') && document.querySelector('#wishes-form'),
-        undefined, { timeout: 25000 });
-    } catch (error) {
-      const diagnostic = await invitation.evaluate(() => ({
-        readyState: document.readyState,
-        dataLoaded: Boolean(window.__invitationData),
-        slug: window.__invitationData?.slug || null,
-        rsvpForm: Boolean(document.querySelector('#rsvp-form')),
-        wishesForm: Boolean(document.querySelector('#wishes-form')),
-        title: document.title
-      }));
-      throw new Error('Budi–Ani data/forms stage timed out. Observed ' +
-        JSON.stringify(diagnostic) + '. Original: ' + error.message);
-    }
-    console.log('PASS Budi–Ani data and forms.');
-
-    assert.equal(await invitation.locator('[data-bind="couple.groom.nickname"]').first().textContent().then(x => x.trim()),
-      'Budi', 'Published groom data must load.');
-    assert.equal(await invitation.locator('[data-bind="couple.bride.nickname"]').first().textContent().then(x => x.trim()),
-      'Ani', 'Published bride data must load.');
-    assert.ok(await invitation.locator('#bg-music').getAttribute('src'), 'Invitation music source must be bound.');
-
-    // The invitation itself loads the guestbook once, exactly as a real visitor does.
-    // Observe the rendered result instead of issuing a second, redundant API GET.
-    await invitation.waitForFunction(() => {
-      const root = document.getElementById('wishes-list');
-      return !!root && !!root.querySelector('.wish-card, .empty-wishes');
-    }, undefined, { timeout: 15000 });
-    const guestbookCount = await invitation.locator('#wishes-list .wish-card').count();
-
-
-
-    const layout = await invitation.evaluate(() => ({
+    // Do not open a real client's live invitation during this smoke test:
+    // rendering the guestbook may issue a GET that auto-registers its slug in
+    // the production Settings sheet. Demo data is isolated and safe to inspect.
+    const layout = await shortDemo.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       page: document.documentElement.scrollWidth
     }));
-    assert.ok(layout.page <= layout.viewport + 2, 'Published invitation overflows mobile width: ' + JSON.stringify(layout));
-    assert.equal(pageErrors.length, 0, 'Published invitation JavaScript errors: ' + pageErrors.join('; '));
-    console.log('PASS live Budi–Ani invitation: couple data, RSVP, guestbook rendered (' + guestbookCount +
-      ' entries), music source, and mobile width. No production forms were submitted; a published slug may auto-register in Settings if missing.');
+    assert.ok(layout.page <= layout.viewport + 2, 'Personalized demo overflows mobile width: ' + JSON.stringify(layout));
+    await shortDemo.close();
     await catalogue.close();
-    await invitation.close();
   } finally {
     await browser.close();
   }
