@@ -273,6 +273,18 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        assert.ok(await page.locator(".oa-closing-section").count() <= 1,
+          theme.slug + ": penutup bersama tidak boleh terduplikasi");
+        const galleryImage = page.locator(".gallery-grid img").first();
+        if (await galleryImage.count()) {
+          await galleryImage.click();
+          await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
+          assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
+            theme.slug + ": tombol foto berikutnya tidak tersedia");
+          await page.keyboard.press("ArrowRight");
+          await page.keyboard.press("Escape");
+          await page.waitForSelector(".oa-gallery-lightbox", { state: "detached", timeout: 3000 });
+        }
         const mapAudit = await page.evaluate(() => {
           const frames = Array.from(document.querySelectorAll(".oa-event-map iframe"));
           const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
@@ -339,9 +351,22 @@ for (const slug of activeThemeSlugs) {
           }));
           assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
             theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-            theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          // A short invitation can already have reached the bottom and stopped
+          // automatically. In that case, first start it manually, then test pause.
+          if (autoState.pressed === "true") {
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          } else {
+            assert.ok(autoState.scrollY > 24,
+              theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          }
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
