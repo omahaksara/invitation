@@ -1,7 +1,7 @@
 {
   "slug": "venni-rama",
   "status": "published",
-  "theme": "aksara-nocturne-venni",
+  "theme": "aksav",
   "guest": {
     "defaultName": "Tamu Undangan"
   },
@@ -48,7 +48,10 @@
       "endTime": "10:00",
       "timezone": "Asia/Makassar",
       "mapQuery": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapNote": "Lokasi akad dan resepsi sama, di kediaman mempelai wanita."
+      "coordinates": {
+        "lat": 0.5843145,
+        "lng": 120.7682905
+      }
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
@@ -62,7 +65,10 @@
       "endTime": "",
       "timezone": "Asia/Makassar",
       "mapQuery": "Tinombaka, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapNote": "Lokasi akad dan resepsi sama, di kediaman mempelai wanita."
+      "coordinates": {
+        "lat": 0.5843145,
+        "lng": 120.7682905
+      }
     }
   },
   "countdown": {
