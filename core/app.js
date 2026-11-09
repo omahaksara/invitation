@@ -387,14 +387,54 @@
       const section = makeSection("hashtag-section", "Hashtag Pernikahan");
       const hashtag = document.createElement("p"); hashtag.textContent = data.hashtag; section.append(hashtag);
     }
-    if (eventItems.some(item => item && item.mapsUrl) &&
-        !document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section, #event-list")) {
-      const section = makeSection("maps-section", "Lokasi Acara");
-      eventItems.filter(item => item && item.mapsUrl).forEach(item => {
-        const link = document.createElement("a");
-        link.href = item.mapsUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
-        link.textContent = (item.title || item.id || "Buka Lokasi") + " ↗";
-        section.append(link);
+    const mapFeatures = data.features && typeof data.features === "object" ? data.features : {};
+    const mapsEnabled = mapFeatures.maps !== false;
+    const navigationEnabled = mapsEnabled && mapFeatures.navigation !== false;
+    const embedEnabled = mapsEnabled && mapFeatures.mapEmbed !== false;
+    const hasEventRenderer = Boolean(document.getElementById("event-list"));
+    const hasLegacyMapSection = Boolean(document.querySelector("#link-akad-maps, #link-resepsi-maps, .maps-section, #maps-section"));
+    if (mapsEnabled && !hasEventRenderer && !hasLegacyMapSection &&
+        eventItems.some(item => item && (item.mapsUrl || item.venue || item.location || item.address))) {
+      const section = makeSection("maps-section", "Lokasi & Navigasi Acara");
+      eventItems.forEach((item, index) => {
+        if (!item) return;
+        const destination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
+        const mapUrl = typeof item.mapsUrl === "string" && /^https?:\\/\\//i.test(item.mapsUrl)
+          ? item.mapsUrl
+          : (destination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination) : "");
+        const heading = document.createElement("h3");
+        heading.textContent = item.title || item.id || "Acara " + (index + 1);
+        section.append(heading);
+        if (mapUrl) {
+          const link = document.createElement("a");
+          link.className = "oa-event-location";
+          link.href = mapUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
+          link.textContent = "Lihat Lokasi ↗";
+          section.append(link);
+        }
+        if (navigationEnabled && destination) {
+          const nav = document.createElement("a");
+          nav.className = "oa-event-navigation";
+          nav.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination);
+          nav.target = "_blank"; nav.rel = "noopener noreferrer";
+          nav.textContent = "Navigasi ke Lokasi ↗";
+          section.append(nav);
+        }
+        if (embedEnabled && destination) {
+          const details = document.createElement("details");
+          details.className = "oa-event-map";
+          const summary = document.createElement("summary");
+          summary.textContent = "Lihat peta";
+          const frame = document.createElement("iframe");
+          frame.title = "Peta lokasi " + (item.title || item.id || "acara");
+          frame.loading = "lazy";
+          frame.referrerPolicy = "no-referrer-when-downgrade";
+          frame.allowFullscreen = true;
+          frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(destination) + "&output=embed";
+          frame.style.cssText = "display:block;width:100%;height:220px;border:0;border-radius:12px;margin-top:12px";
+          details.append(summary, frame);
+          section.append(details);
+        }
       });
     }
     if (!document.getElementById("oa-share-invitation")) {
