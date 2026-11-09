@@ -277,7 +277,7 @@
     if (disabled("closing")) hide("[data-oa-closing], .oa-closing-section, .closing-section, #closing-section, .thank-you-section");
     if (disabled("calendar")) hide(".calendar-section, #calendar-section");
     if (disabled("quotes") || disabled("quote")) hide(".quote-section, .quote");
-    if (disabled("gifts")) hide(".gift-section, #gift-section, #gift-list");
+    if (disabled("gifts") || (data.gifts && !Array.isArray(data.gifts) && data.gifts.enabled === false)) hide(".gift-section, #gift-section, #gift-list");
     if (disabled("rsvp")) hide("#rsvp-section, .rsvp-section, #rsvp-form, [data-bind='rsvp.link']");
     if (disabled("guestbook")) hide("#guestbook-section, .guestbook-section, #wishes-form");
     if (disabled("hashtag")) hide(".hashtag-section, #hashtag-section");
@@ -807,8 +807,9 @@
   function renderGifts(gifts, clientBase, features) {
     const allAccounts = Array.isArray(gifts) ? gifts : (gifts && Array.isArray(gifts.accounts) ? gifts.accounts : []);
     const flags = features && typeof features === "object" ? features : {};
+    const giftsDisabled = !!(gifts && !Array.isArray(gifts) && gifts.enabled === false);
     const accounts = allAccounts.filter(item => {
-      if (!item || item.enabled === false) return false;
+      if (giftsDisabled || !item || item.enabled === false) return false;
       const type = String(item.paymentType || item.type || "bank").toLowerCase();
       if (type === "bank" && flags.bank === false) return false;
       if (type === "ewallet" && flags.ewallet === false) return false;
@@ -849,29 +850,32 @@
 
     accounts.forEach(item => {
       const card = document.createElement("article"); card.className = "gift-card reveal";
+      const type = String(item.paymentType || item.type || "bank").toLowerCase();
+      const provider = item.provider || item.bank || item.name || (type === "qris" ? "QRIS" : type === "ewallet" ? "Dompet Digital" : "HADIAH DIGITAL");
       const logoSrc = item.logo || item.bankLogo || "";
       if (logoSrc) {
         const logo = document.createElement("img");
         logo.src = assetUrl(logoSrc, clientBase);
-        logo.alt = (item.bank || "Bank") + " — logo";
+        logo.alt = provider + " — logo";
         logo.loading = "lazy";
         logo.decoding = "async";
         logo.onerror = () => logo.remove();
         logo.style.cssText = "display:block;max-width:120px;max-height:48px;width:auto;height:auto;object-fit:contain;margin:0 auto 12px";
         card.append(logo);
       }
-      const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = item.bank || "HADIAH DIGITAL";
-      const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || "Penerima";
-      const number = document.createElement("p"); number.className = "gift-number"; number.textContent = item.accountNumber || "";
+      const bank = document.createElement("p"); bank.className = "gift-bank"; bank.textContent = provider;
+      const holder = document.createElement("h3"); holder.textContent = item.accountHolder || item.accountName || item.holder || (type === "qris" ? "Pembayaran melalui QR" : "Penerima");
+      const destination = item.accountNumber || item.phoneNumber || item.destinationNumber || "";
+      const number = document.createElement("p"); number.className = "gift-number"; number.textContent = destination;
       const isDemoOnly = item.demoOnly === true;
       const button = document.createElement("button"); button.type = "button";
-      button.textContent = isDemoOnly ? "Simulasi — tidak untuk transaksi" : (item.copyLabel || (item.paymentType === "qris" ? "Salin ID Demo" : item.paymentType === "ewallet" ? "Salin Nomor E-Wallet" : "Salin Nomor Rekening"));
+      button.textContent = isDemoOnly ? "Simulasi — tidak untuk transaksi" : (item.copyLabel || (type === "qris" ? "Salin ID Demo" : type === "ewallet" ? "Salin Nomor Dompet Digital" : "Salin Nomor Rekening"));
       if (isDemoOnly) {
         button.disabled = true;
         button.setAttribute("aria-label", "Data simulasi, tidak dapat digunakan untuk transaksi");
       } else {
-        button.disabled = item.copyable === false || !(item.copyValue || item.accountNumber);
-      if (!button.disabled) button.addEventListener("click", () => copyText(item.copyValue || item.accountNumber || "", button));
+        button.disabled = item.copyable === false || !(item.copyValue || destination);
+      if (!button.disabled) button.addEventListener("click", () => copyText(item.copyValue || destination || "", button));
       }
       card.append(bank, holder, number, button);
       if (item.demoNote || item.note) {
@@ -884,7 +888,7 @@
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
       if (qrSrc) {
         const img = document.createElement("img"); img.src = assetUrl(qrSrc, clientBase);
-        img.alt = "QR hadiah"; img.loading = "lazy"; img.style.cssText = "display:block;max-width:140px;width:100%;margin:18px auto 0";
+        img.alt = type === "qris" ? "Kode QR pembayaran" : "QR hadiah"; img.loading = "lazy"; img.style.cssText = "display:block;max-width:140px;width:100%;margin:18px auto 0";
         card.append(img);
       }
       root.append(card);
