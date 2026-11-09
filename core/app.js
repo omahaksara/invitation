@@ -1206,7 +1206,7 @@
       const anchor = document.getElementById(id);
       if (!item || !anchor) return;
       const destination = [item.venue || item.location, item.address].filter(Boolean).join(", ");
-      const mapUrl = typeof item.mapsUrl === "string" && /^https?:\\/\\//i.test(item.mapsUrl)
+      const mapUrl = typeof item.mapsUrl === "string" && (item.mapsUrl.startsWith("https://") || item.mapsUrl.startsWith("http://"))
         ? item.mapsUrl
         : (destination ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination) : "");
       if (!mapsEnabled || !mapUrl) { anchor.hidden = true; return; }
