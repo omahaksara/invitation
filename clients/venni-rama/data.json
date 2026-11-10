@@ -118,7 +118,9 @@
   },
   "rsvp": {
     "link": "",
-    "enabled": true
+    "enabled": true,
+    "whatsappNumber": "6285825306628",
+    "contactName": "Venni"
   },
   "demoGreetings": [],
   "schemaVersion": 2,
