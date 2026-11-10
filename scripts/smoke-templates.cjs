@@ -621,7 +621,9 @@ for (const slug of activeThemeSlugs) {
           const buttons = Array.from(document.querySelectorAll('#oa-floating-controls [data-oa-action="jump"]'));
           const next = buttons.find(button => {
             const target = document.getElementById(button.dataset.target || "");
-            return target && target.getBoundingClientRect().top + window.scrollY > marker + 8;
+            if (!target) return false;
+            const rect = target.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0 && rect.top + window.scrollY > marker + 8;
           });
           return next?.dataset.target || null;
         });
