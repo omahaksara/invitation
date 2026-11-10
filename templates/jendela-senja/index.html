@@ -111,7 +111,7 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
 #wishes-form button[type=submit]{background:var(--js-ink);color:var(--js-ivory)}
 #wishes-list{max-width:620px;margin:2rem auto;display:grid;gap:.8rem}
 #wishes-list .wish-card{padding:1rem;border:1px solid #d5c4b5;border-radius:2px 22px 2px 22px;background:#fffaf3}
-#wishes-list .wish-card h3{display:flex;align-items:center;gap:.75rem;margin:0 0 .5rem;font-family:var(--js-serif);font-size:1.1rem;font-weight:400}#wishes-list .wish-card p{margin:.2rem 0;color:#625b58} .js-wish-avatar{flex:0 0 34px;width:34px;height:38px;display:grid;place-items:center;border:1px solid #b98b69;border-radius:50% 50% 2px 2px/40% 40% 2px 2px;color:#6b4a3b;font-family:var(--js-serif);font-size:1rem}
+#wishes-list .wish-card h3{display:flex;align-items:center;gap:.75rem;margin:0 0 .5rem;font-family:var(--js-serif);font-size:1.1rem;font-weight:400}#wishes-list .wish-card h3:before{content:"✧";flex:0 0 34px;width:34px;height:38px;display:grid;place-items:center;border:1px solid #b98b69;border-radius:50% 50% 2px 2px/40% 40% 2px 2px;color:#6b4a3b;font-size:1rem}#wishes-list .wish-card p{margin:.2rem 0;color:#625b58}
 .gift-section{background:var(--js-plum);color:var(--js-ivory)}
 .gift-grid{display:grid;grid-template-columns:1fr;gap:1rem;max-width:650px;margin:auto}
 .gift-card{padding:1.4rem;text-align:center;border:1px solid rgba(226,164,107,.65);border-radius:2px 26px 2px 26px;background:rgba(20,22,31,.22)}
@@ -149,7 +149,7 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
   <main id="main-content" hidden>
     <section class="js-section js-intro">
       <p class="eyebrow">SEBUAH AWAL YANG INDAH</p>
-      <div class="arch-frame hero-frame"><img data-bind="cover.image" alt="Foto kedua mempelai"></div>
+      <div class="arch-frame hero-frame"><img data-bind="cover.heroImage" alt="Foto kedua mempelai"></div>
       <h2><span data-bind="couple.groom.nickname">Nama Pria</span> <em style="color:var(--js-amber)">&amp;</em> <span data-bind="couple.bride.nickname">Nama Wanita</span></h2>
       <p data-bind="opening.text">Dengan penuh syukur, kami mengundang Anda untuk merayakan hari bahagia kami.</p>
     </section>
@@ -196,27 +196,6 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
   <audio id="bg-music" preload="none" loop></audio>
   <button id="music-toggle" type="button" aria-label="Putar musik" hidden>♫</button>
 </div>
-<script>
-/* Add the small arch initials to engine-rendered guestbook cards without changing its API markup. */
-(function(){
-  const list=document.getElementById("wishes-list");
-  if(!list)return;
-  const decorate=card=>{
-    if(!card||card.dataset.jsDecorated==="true")return;
-    const heading=card.querySelector("h3");
-    if(!heading)return;
-    const initial=(heading.textContent.trim().charAt(0)||"T").toLocaleUpperCase("id-ID");
-    const avatar=document.createElement("span");
-    avatar.className="js-wish-avatar";
-    avatar.textContent=initial;
-    avatar.setAttribute("aria-hidden","true");
-    heading.prepend(avatar);
-    card.dataset.jsDecorated="true";
-  };
-  const scan=()=>list.querySelectorAll(".wish-card").forEach(decorate);
-  new MutationObserver(scan).observe(list,{childList:true,subtree:true});
-  scan();
-})();
-</script>
+
 </body>
 </html>
