@@ -809,7 +809,7 @@ for (const slug of activeThemeSlugs) {
         const attendance = rsvp.locator('[name="attendance"]');
         const attendanceType = await attendance.first().getAttribute("type");
         if (attendanceType === "radio") {
-          await attendance.filter({ value: "hadir" }).check();
+          await rsvp.locator('[name="attendance"][value="hadir"]').check();
         } else {
           await attendance.selectOption("hadir");
         }
