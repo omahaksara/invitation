@@ -22,6 +22,11 @@ body {
 .reveal { opacity: 0; transform: translateY(40px); transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.active { opacity: 1; transform: translateY(0); }
 
+/* Keep the optional quote section measurable for the shared navigation dock.
+   Its content is data-bound at runtime, so an empty initial render must not
+   collapse the destination to a zero-height target. */
+#quote-section { display: block; min-height: 12rem; }
+
 .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.active .line-draw { width: 100%; }
 
