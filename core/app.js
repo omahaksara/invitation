@@ -23,7 +23,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261107-payment-theme-assets2");
+      dataUrl.searchParams.set("_v", "20261110-venni-form-diagnostics");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -46,7 +46,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261107-payment-theme-assets2");
+          registryUrl.searchParams.set("_v", "20261110-venni-form-diagnostics");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -70,7 +70,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261107-payment-theme-assets2");
+          templateUrl.searchParams.set("_v", "20261110-venni-form-diagnostics");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -1296,16 +1296,38 @@
     if (button) button.disabled=true;
     status.textContent="Mengirim...";
     try {
-      const response = await fetch(apiUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload),redirect:"follow"});
-      if (!response.ok) throw new Error("Server merespons dengan status " + response.status);
-      const result = await response.json();
-      if (!result || result.ok !== true) throw new Error(result?.message || "Data belum tersimpan.");
-      status.textContent=successText; return true;
+      const response = await fetch(apiUrl,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(payload),
+        redirect:"follow"
+      });
+      const responseText = await response.text();
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (parseError) {
+        throw new Error("Respons Apps Script bukan JSON (HTTP " + response.status + ").");
+      }
+      if (!response.ok) throw new Error("Server merespons HTTP " + response.status + ".");
+      if (!result || result.ok !== true) {
+        status.textContent = result && result.message
+          ? result.message
+          : "Server belum menyimpan data. Silakan coba lagi.";
+        return false;
+      }
+      status.textContent=successText;
+      return true;
     } catch (error) {
       console.error("API Omah Aksara:",error);
-      status.textContent="Belum berhasil mengirim. Periksa URL Apps Script dan izin deployment, lalu coba lagi.";
+      const detail = error instanceof TypeError
+        ? "Browser tidak dapat membaca respons Apps Script. Periksa koneksi dan izin deployment."
+        : (error && error.message ? error.message : "Koneksi ke server gagal.");
+      status.textContent="Gagal mengirim: " + detail;
       return false;
-    } finally { if (button) button.disabled=false; }
+    } finally {
+      if (button) button.disabled=false;
+    }
   }
 
   function makeWishCard(item) {
