@@ -2098,7 +2098,7 @@
         @media (prefers-reduced-motion: reduce) {
           #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
           html { scroll-behavior: auto !important; }
-          .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+          .oa-scroll-reveal, .oa-stagger-item, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
           html[data-oa-theme] #app,
           html[data-oa-theme] #app *,
           html[data-oa-theme] #app *::before,
@@ -2220,6 +2220,7 @@
         const el = entry.target;
         if (el.classList.contains("reveal")) el.classList.add("active");
         if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        if (el.classList.contains("oa-stagger-item")) el.classList.add("oa-stagger-visible");
         el.classList.add("oa-motion-visible");
         observer.unobserve(el);
       }), { threshold: 0.08, rootMargin: "0px 0px -5% 0px" });
