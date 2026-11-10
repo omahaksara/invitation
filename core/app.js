@@ -653,7 +653,7 @@
         const shareData = {
           title: document.title || "Undangan Pernikahan",
           text: "Anda diundang ke hari bahagia kami.",
-          url: buildShortInvitationUrl()
+          url: buildShortInvitationUrl(data)
         };
         button.disabled = true;
         status.textContent = "";
@@ -1652,7 +1652,7 @@
     if (document.getElementById("oa-floating-controls")) return;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
-    const getShareUrl = typeof buildShortInvitationUrl === "function" ? buildShortInvitationUrl : () => location.href;
+    const getShareUrl = typeof buildShortInvitationUrl === "function" ? () => buildShortInvitationUrl(data) : () => location.href;
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
       button.type = "button";
