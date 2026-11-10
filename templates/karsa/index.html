@@ -25,7 +25,7 @@ body {
 /* Keep the optional quote section measurable for the shared navigation dock.
    Its content is data-bound at runtime, so an empty initial render must not
    collapse the destination to a zero-height target. */
-#quote-section { display: block; min-height: 12rem; }
+#quote-section:not([hidden]) { display: block; min-height: 12rem; }
 
 .line-draw { width: 0%; transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.active .line-draw { width: 100%; }
