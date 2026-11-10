@@ -767,6 +767,16 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": gulir otomatis harus nonaktif saat reduced-motion aktif");
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
+        const mediaPolicy = await page.evaluate(() => ({
+          galleryCount: document.querySelectorAll("#gallery-grid img, .gallery-grid img").length,
+          galleryLazy: Array.from(document.querySelectorAll("#gallery-grid img, .gallery-grid img"))
+            .every(image => image.loading === "lazy" && image.decoding === "async"),
+          audioPreload: document.getElementById("bg-music")?.preload
+        }));
+        assert.ok(mediaPolicy.galleryCount > 0 && mediaPolicy.galleryLazy,
+          theme.slug + ": foto galeri harus lazy-load dan decode async " + JSON.stringify(mediaPolicy));
+        assert.equal(mediaPolicy.audioPreload, "none",
+          theme.slug + ": musik tidak boleh diunduh sebelum diminta tamu.");
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
         const layout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
