@@ -67,6 +67,7 @@ const themes = [
   { slug: "aksara-velora", marker: ".velora-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" },
   { slug: "aksav", marker: ".aksav", open: "#open-btn", cover: "#cover" },
+  { slug: "aksav-forest", status: "prototype", marker: ".aksav", open: "#open-btn", cover: "#cover" },
   { slug: "kencana-jawa", marker: ".kj-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
