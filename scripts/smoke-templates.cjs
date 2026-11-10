@@ -119,6 +119,18 @@ for (const slug of activeThemeSlugs) {
         }
       };
       page.on("pageerror", error => pageErrors.push(error.message));
+      // Synthetic coordinates are injected only into this browser test.
+      // The public demo retains its unverified-location notice and no fake pin.
+      await page.route("**/clients/demo-katalog/data.json*", async route => {
+        const response = await route.fetch();
+        const fixture = await response.json();
+        fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
+        for (const event of Object.values(fixture.events || {})) {
+          event.coordinates = { lat: 0.123456, lng: 120.654321 };
+          event.mapNote = "";
+        }
+        await route.fulfill({ response, body: JSON.stringify(fixture) });
+      });
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
@@ -192,7 +204,9 @@ for (const slug of activeThemeSlugs) {
               try {
                 const url = new URL(frame.src);
                 return frame.loading === "lazy" && url.protocol === "https:" &&
-                  url.hostname === "www.google.com" && url.pathname === "/maps";
+                  url.hostname === "www.google.com" && url.pathname === "/maps" &&
+                  url.searchParams.get("q") === "0.123456,120.654321" &&
+                  url.searchParams.get("t") === "k" && url.searchParams.get("z") === "17";
               } catch { return false; }
             })
           };
@@ -216,7 +230,7 @@ for (const slug of activeThemeSlugs) {
         assert.equal(demoFeatureAudit.mapEmbeds, demoFeatureAudit.mapEmbedEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
           theme.slug + ": peta tertanam tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.lazyMapFrames, true,
-          theme.slug + ": iframe peta harus memakai lazy loading dan URL Google Maps " + JSON.stringify(demoFeatureAudit));
+          theme.slug + ": iframe peta harus memakai titik koordinat uji, mode satelit, zoom 17, dan lazy loading " + JSON.stringify(demoFeatureAudit));
         if (theme.slug === "aksara-signature") {
           await page.waitForFunction(() => Boolean(document.querySelector("#app style")), undefined, { timeout: 5000 });
         }
