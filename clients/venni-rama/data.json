@@ -42,7 +42,7 @@
       "time": "Akad Nikah & Resepsi",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
+      "mapsUrl": "https://goo.gl/maps/iPFaXggDtc5r17Jg9?g_st=ac",
       "mapQuery": "Kediaman Mempelai Wanita, Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "timezone": "Asia/Makassar",
       "schedule": [
@@ -129,5 +129,8 @@
   "guestbook": {
     "enabled": true,
     "maxMessageLength": 500
+  },
+  "integrations": {
+    "apiUrl": "https://script.google.com/macros/s/AKfycbxTtUh596hMTnZOboQWgFgRzXveS9H_crcGlaYc6hXJPzV_S5jTCQuuLTzd9jFg69Z_Aw/exec"
   }
 }
