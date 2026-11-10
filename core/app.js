@@ -1890,6 +1890,9 @@
         nextButton.addEventListener("click", () => {
           const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
           const next = menu.find(item => {
+            // The Home wrapper can begin below a legacy cover while still spanning
+            // the full document. It is not a "next section" destination.
+            if (item.id === "home") return false;
             const rect = item.target.getBoundingClientRect();
             return rect.width > 0 && rect.height > 0 && rect.top + window.scrollY > marker + 8;
           });
