@@ -120,14 +120,6 @@
       }
     ]
   },
-  "media": {
-    "music": {
-      "id": "wedding-demo-existing",
-      "title": "Musik undangan",
-      "category": "instrumental",
-      "src": "../../assets/music/library/wedding-demo-existing.mp3"
-    }
-  },
   "rsvp": {
     "link": "",
     "enabled": true
