@@ -203,7 +203,8 @@
           sameText(akad.address, resepsi.address) &&
           !!(akad.location || akad.venue || akad.address);
         const mapCompatible = !(akad.mapsUrl && resepsi.mapsUrl) || sameMap;
-        if ((samePoint || sameMap || sameVenue) && mapCompatible) {
+        const coordinateCompatible = !(akadPoint && resepsiPoint) || samePoint;
+        if ((samePoint || sameMap || sameVenue) && mapCompatible && coordinateCompatible) {
           const scheduleEntry = (event, id, fallbackTitle) => ({
             id,
             title: event.title || fallbackTitle,
@@ -241,6 +242,12 @@
           };
         }
       }
+    }
+
+    if (data.eventMode === "akad-only" && data.events && !Array.isArray(data.events)) {
+      data.events = data.events.akad ? { akad: data.events.akad } : {};
+    } else if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
+      data.events = data.events.resepsi ? { resepsi: data.events.resepsi } : {};
     }
 
     const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
@@ -625,7 +632,7 @@
             ...item, ...entry,
             id: entry.id || (item.id || "event") + "-" + (index + 1),
             title: entry.title || item.title || "Acara Pernikahan",
-            dateISO: entry.dateISO || entry.date || item.dateISO || item.date,
+            dateISO: entry.dateISO || (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date || "")) ? entry.date : (item.dateISO || (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(item.date || "")) ? item.date : ""))),
             location: entry.location || item.location || item.venue,
             address: entry.address || item.address || "",
             mapsUrl: entry.mapsUrl || item.mapsUrl || "",
