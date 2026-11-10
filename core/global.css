@@ -995,3 +995,25 @@ html[data-oa-theme] #app .oa-motion-photo img { transition-duration:.52s!importa
   html[data-oa-theme] #app img.oa-motion-photo,
   html[data-oa-theme] #app .oa-motion-photo img { transition-duration:.001ms!important; }
 }
+
+
+/* Apply each theme's motion character to every reveal layer, not only section headings.
+   Clamp the duration so expressive themes never make the page feel slow on mobile. */
+html[data-oa-theme] #app .oa-scroll-reveal,
+html[data-oa-theme] #app .oa-stagger-item,
+html[data-oa-theme] #app .oa-motion-item,
+html[data-oa-theme] #app img.oa-motion-photo,
+html[data-oa-theme] #app .oa-motion-photo img {
+  transition-duration:clamp(.4s,var(--oa-reveal-time,.48s),.52s)!important;
+  transition-timing-function:var(--oa-reveal-ease,cubic-bezier(.16,.82,.22,1))!important;
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-oa-theme] #app .oa-scroll-reveal,
+  html[data-oa-theme] #app .oa-stagger-item,
+  html[data-oa-theme] #app .oa-motion-item,
+  html[data-oa-theme] #app img.oa-motion-photo,
+  html[data-oa-theme] #app .oa-motion-photo img {
+    transition-duration:.001ms!important;
+    transition-delay:0ms!important;
+  }
+}
