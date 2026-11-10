@@ -39,7 +39,7 @@
     "akad": {
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://goo.gl/maps/iPFaXggDtc5r17Jg9?g_st=ac",
+      "mapsUrl": "https://maps.app.goo.gl/wqF3292vVpS8SnRh9?g_st=ac",
       "mapQuery": "Kediaman Mempelai Wanita, Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "timezone": "Asia/Makassar",
       "title": "Akad Nikah",
@@ -47,19 +47,29 @@
       "dateISO": "2026-11-20",
       "startTime": "09:00",
       "endTime": "10:00",
-      "time": "09.00–10.00 WITA"
+      "time": "09.00–10.00 WITA",
+      "coordinates": {
+        "lat": 0.584304,
+        "lng": 120.768292
+      },
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.584304%2C120.768292&t=k&z=18&output=embed"
     },
     "resepsi": {
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://goo.gl/maps/iPFaXggDtc5r17Jg9?g_st=ac",
+      "mapsUrl": "https://maps.app.goo.gl/wqF3292vVpS8SnRh9?g_st=ac",
       "mapQuery": "Kediaman Mempelai Wanita, Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "timezone": "Asia/Makassar",
       "title": "Resepsi Pernikahan",
       "date": "Jumat, 20 November 2026",
       "dateISO": "2026-11-20",
       "startTime": "17:00",
-      "time": "17.00 WITA–selesai"
+      "time": "17.00 WITA–selesai",
+      "coordinates": {
+        "lat": 0.584304,
+        "lng": 120.768292
+      },
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.584304%2C120.768292&t=k&z=18&output=embed"
     }
   },
   "countdown": {
