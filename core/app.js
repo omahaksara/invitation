@@ -885,11 +885,16 @@
       };
     }
     if (suppliedUrl) {
+      // Keep the address query available for satellite preview and directions.
+      // The original shared Maps URL remains the primary "open map" destination.
+      const encoded = encodeURIComponent(query);
       return {
-        query: "",
-        embedUrl: suppliedEmbed,
+        query,
+        embedUrl: suppliedEmbed || (query ? ("https://www.google.com/maps?q=" + encoded + "&t=k&z=17&output=embed") : ""),
         searchUrl: suppliedUrl,
-        directionsUrl: suppliedUrl,
+        directionsUrl: query
+          ? ("https://www.google.com/maps/dir/?api=1&destination=" + encoded)
+          : suppliedUrl,
         verifiedPoint: false
       };
     }
