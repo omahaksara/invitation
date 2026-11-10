@@ -1889,7 +1889,10 @@
         const nextButton = makeButton("next", "Bagian berikutnya", "Lanjut ke bagian berikutnya");
         nextButton.addEventListener("click", () => {
           const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
-          const next = menu.find(item => item.target.getBoundingClientRect().top + window.scrollY > marker + 8);
+          const next = menu.find(item => {
+            const rect = item.target.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0 && rect.top + window.scrollY > marker + 8;
+          });
           if (next) scrollToSection(next.target);
           panel.hidden = true;
           moreButton.setAttribute("aria-expanded", "false");
