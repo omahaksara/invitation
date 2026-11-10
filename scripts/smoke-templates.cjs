@@ -349,8 +349,11 @@ for (const slug of activeThemeSlugs) {
         // This browser-only fixture intentionally adds verified synthetic coordinates,
         // so the iframe count is validated below against the exact satellite URL.
         const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
-        assert.equal(mapAudit.notes.length, expectedLocationCards,
-          theme.slug + ": jumlah catatan lokasi harus mengikuti mode acara (satu untuk gabungan, dua untuk terpisah)");
+        // Synthetic verified coordinates are injected only for this browser run.
+        // The visible unverified-location note is checked on the untouched public fixture
+        // before interception; verified test pins must not display that warning.
+        assert.equal(mapAudit.notes.length, 0,
+          theme.slug + ": catatan lokasi belum terverifikasi tidak boleh tampil pada fixture koordinat uji");
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
         assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
