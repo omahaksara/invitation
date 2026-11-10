@@ -10,7 +10,7 @@
     const guestName = (params.get("to") || "").trim();
     const buildShortInvitationUrl = (invitationData = {}) => {
       const guestSegment = guestName
-        ? guestName.normalize("NFKC").trim().replace(/\\s+/g, "-")
+        ? guestName.normalize("NFKC").trim().replace(/\s+/g, "-")
         : "";
       const path = "/i/" + encodeURIComponent(slug) + (guestSegment ? "/" + encodeURIComponent(guestSegment) : "");
       const shortUrl = new URL(path, "https://omahaksara.github.io");
