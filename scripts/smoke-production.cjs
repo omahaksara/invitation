@@ -118,6 +118,30 @@ async function main() {
     assert.equal(shortDemoErrors.length, 0, 'Demo short URL JavaScript errors: ' + shortDemoErrors.join('; '));
     console.log('PASS personalized demo short URL: slug, guest name, selected theme, forms, and music.');
 
+    // Browser-origin POST probe for Apps Script CORS and deployment access.
+    // The empty payload is rejected before slug lookup or any spreadsheet write.
+    const venniData = JSON.parse(await fetchText('https://raw.githubusercontent.com/omahaksara/invitation/main/clients/venni-rama/data.json'));
+    const apiUrl = venniData.integrations && venniData.integrations.apiUrl;
+    assert.ok(apiUrl && /^https:\\/\\//i.test(apiUrl), 'Veni-Rama must have an HTTPS Apps Script endpoint.');
+    const postProbe = await catalogue.evaluate(async endpoint => {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: '{}',
+          redirect: 'follow'
+        });
+        const body = await response.text();
+        let json;
+        try { json = JSON.parse(body); } catch { return { ok: false, stage: 'json', status: response.status, body: body.slice(0, 180) }; }
+        return { ok: response.ok && json.ok === false && json.message === 'Slug atau nama tidak valid.', status: response.status, body: json };
+      } catch (error) {
+        return { ok: false, stage: 'fetch', error: String(error) };
+      }
+    }, apiUrl);
+    assert.equal(postProbe.ok, true, 'Browser-origin Apps Script POST probe failed: ' + JSON.stringify(postProbe));
+    console.log('PASS browser-origin Apps Script POST: CORS, redirect, deployment access, and JSON response. No sheet writes.');
+
     assert.equal(catalogueErrors.length, 0, 'Catalogue JavaScript errors: ' + catalogueErrors.join('; '));
     console.log('PASS public catalogue: ' + expectedThemes.length + ' live theme previews and personalized demo links.');
 
