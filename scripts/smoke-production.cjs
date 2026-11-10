@@ -28,7 +28,7 @@ async function waitForCurrentDeployments() {
         fetchText(INVITATION_URL),
         fetchText(CATALOGUE_URL)
       ]);
-      invitationReady = /core\/app\.js\?v=20261107-payment-theme-assets2(?:["'&]|$)/.test(invitationHtml);
+      invitationReady = /core\\/app\\.js\\?v=[^"'&]+(?:["'&]|$)/.test(invitationHtml);
       catalogueReady = catalogueHtml.includes('preview-guest-name') && /frame\.src\s*=\s*demo\b/.test(catalogueHtml);
       if (invitationReady && catalogueReady) return;
     } catch (error) {
