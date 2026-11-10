@@ -124,8 +124,14 @@ for (const slug of activeThemeSlugs) {
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
+        const originalEvents = Object.values(fixture.events || {});
+        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
+          event && !event.coordinates && event.latitude == null && event.longitude == null &&
+          typeof event.mapNote === "string" && event.mapNote.length > 0
+        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
         fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
-        for (const event of Object.values(fixture.events || {})) {
+        for (const event of originalEvents) {
+          // Verified synthetic coordinates exist only in this isolated browser fixture.
           event.coordinates = { lat: 0.123456, lng: 120.654321 };
           event.mapNote = "";
         }
@@ -339,8 +345,9 @@ for (const slug of activeThemeSlugs) {
             scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
           };
         });
-        assert.equal(mapAudit.frames.length, 0,
-          theme.slug + ": demo dengan titik lokasi belum diverifikasi tidak boleh menampilkan pin peta yang menyesatkan");
+        // The public demo fixture is asserted unpinned before interception above.
+        // This browser-only fixture intentionally adds verified synthetic coordinates,
+        // so the iframe count is validated below against the exact satellite URL.
         const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
         assert.equal(mapAudit.notes.length, expectedLocationCards,
           theme.slug + ": jumlah catatan lokasi harus mengikuti mode acara (satu untuk gabungan, dua untuk terpisah)");
