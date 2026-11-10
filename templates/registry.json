@@ -18,6 +18,16 @@
       "status": "active"
     },
     {
+      "slug": "aksav",
+      "name": "Aksav",
+      "status": "active"
+    },
+    {
+      "slug": "army",
+      "name": "Army — Forest & Champagne",
+      "status": "active"
+    },
+    {
       "slug": "atelier-editorial",
       "name": "Atelier Editorial",
       "status": "active"
@@ -120,11 +130,6 @@
     {
       "slug": "velvet-romance",
       "name": "Velvet Romance",
-      "status": "active"
-    },
-    {
-      "slug": "aksav",
-      "name": "Aksav",
       "status": "active"
     }
   ]
