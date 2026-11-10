@@ -407,6 +407,18 @@ for (const slug of activeThemeSlugs) {
         });
         assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
         assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
+        const themeMotionAudit = await page.evaluate(() => {
+          const root = getComputedStyle(document.documentElement);
+          const token = root.getPropertyValue("--oa-reveal-ease").trim();
+          const element = document.querySelector("#app .oa-motion-item, #app .oa-stagger-item, #app img.oa-motion-photo");
+          return {
+            token,
+            timing: element ? getComputedStyle(element).transitionTimingFunction : "",
+            duration: element ? getComputedStyle(element).transitionDuration : ""
+          };
+        });
+        assert.ok(themeMotionAudit.token && themeMotionAudit.timing === themeMotionAudit.token,
+          theme.slug + ": kurva transisi belum mengikuti identitas gerak tema " + JSON.stringify(themeMotionAudit));
         await page.emulateMedia({ reducedMotion: "reduce" });
         const reducedMotionAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
