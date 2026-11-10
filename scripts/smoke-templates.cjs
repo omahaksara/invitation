@@ -609,8 +609,23 @@ for (const slug of [...activeThemeSlugs, ...prototypeThemes.map(theme => theme.s
         await navigation.locator('[data-oa-action="top"]').click();
         await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
+        const nextTargetId = await page.evaluate(() => {
+          const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
+          const buttons = Array.from(document.querySelectorAll('#oa-floating-controls [data-oa-action="jump"]'));
+          const next = buttons.find(button => {
+            const target = document.getElementById(button.dataset.target || "");
+            return target && target.getBoundingClientRect().top + window.scrollY > marker + 8;
+          });
+          return next?.dataset.target || null;
+        });
+        assert.ok(nextTargetId, theme.slug + ": tidak ada target bagian berikutnya untuk diuji.");
         await navigation.locator('[data-oa-action="next"]').click();
-        await page.waitForFunction(() => window.scrollY > 24, undefined, { timeout: 5000 });
+        await page.waitForFunction(id => {
+          const target = document.getElementById(id);
+          if (!target) return false;
+          const rect = target.getBoundingClientRect();
+          return rect.bottom > 0 && rect.top < window.innerHeight;
+        }, nextTargetId, { timeout: 5000 });
         const homeButton = navigation.locator('[data-oa-action="jump"][data-oa-section="home"]');
         const homeTargetId = await homeButton.getAttribute("data-target");
         const scrollBeforeHome = await page.evaluate(() => window.scrollY);
