@@ -417,7 +417,11 @@ for (const slug of activeThemeSlugs) {
             duration: element ? getComputedStyle(element).transitionDuration : ""
           };
         });
-        assert.ok(themeMotionAudit.token && themeMotionAudit.timing === themeMotionAudit.token,
+        const easingNumbers = value => String(value || "").match(/[+-]?(?:\\d*\\.)?\\d+/g)?.map(Number) || [];
+        const tokenCurve = easingNumbers(themeMotionAudit.token);
+        const computedCurve = easingNumbers(themeMotionAudit.timing);
+        assert.ok(tokenCurve.length === 4 && computedCurve.length === 4 &&
+          tokenCurve.every((value, index) => Math.abs(value - computedCurve[index]) < 0.0001),
           theme.slug + ": kurva transisi belum mengikuti identitas gerak tema " + JSON.stringify(themeMotionAudit));
         await page.emulateMedia({ reducedMotion: "reduce" });
         const reducedMotionAudit = await page.evaluate(() => {
