@@ -371,7 +371,21 @@
     if (!stories.length) hide(".story-section, #story-list");
     if (!gallery.length) hide(".gallery-section, #gallery-grid, .gallery-grid");
     if (!gifts.length && !(data.gifts && data.gifts.message)) hide(".gift-section, #gift-section, #gift-list");
-    if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
+    const quoteEnabled = !(data.features && (data.features.quotes === false || data.features.quote === false));
+    const hasQuote = !!(data.quote && (data.quote.text || data.quote.arab));
+    if (!quoteEnabled || !hasQuote) {
+      hide(".quote-section, .quote");
+    } else {
+      // Re-enable a legacy quote section only when the feature is enabled and
+      // actual content exists; never resurrect an empty or disabled block.
+      document.querySelectorAll(".quote-section, .quote, #quote-section").forEach(element => {
+        const section = element.matches("section") ? element : element.closest("section");
+        const target = section || element;
+        target.hidden = false;
+        target.removeAttribute("hidden");
+        target.style.removeProperty("display");
+      });
+    }
     if (!(data.closing && (data.closing.title || data.closing.text || data.closing.signature))) hide("[data-oa-closing], .oa-closing-section");
     if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
     const eventSource = data.__renderEvents || data.events;
