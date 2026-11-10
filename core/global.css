@@ -982,3 +982,16 @@ html[data-oa-theme] .oa-event-map-fallback a{
   text-decoration:none;
   overflow-wrap:anywhere;
 }
+/* Scroll storytelling: let section reveals breathe while keeping ordinary UI transitions lightweight. */
+html[data-oa-theme] #app .oa-scroll-reveal { transition-duration:.62s!important; }
+html[data-oa-theme] #app .oa-stagger-item { transition-duration:.58s!important; }
+html[data-oa-theme] #app .oa-motion-item,
+html[data-oa-theme] #app img.oa-motion-photo,
+html[data-oa-theme] #app .oa-motion-photo img { transition-duration:.58s!important; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-oa-theme] #app .oa-scroll-reveal,
+  html[data-oa-theme] #app .oa-stagger-item,
+  html[data-oa-theme] #app .oa-motion-item,
+  html[data-oa-theme] #app img.oa-motion-photo,
+  html[data-oa-theme] #app .oa-motion-photo img { transition-duration:.001ms!important; }
+}
