@@ -174,7 +174,23 @@ for (const slug of activeThemeSlugs) {
 
         // Regression coverage for the curated demo payment methods and map controls.
         // These assertions run against every active theme using the same demo JSON.
-        const demoFeatureAudit = await page.evaluate(() => {
+        const copyAudit = await page.evaluate(() => {
+        const quote = document.querySelector('[data-bind="quote.text"]');
+        const opening = document.querySelector('[data-bind="opening.text"]');
+        const inspect = el => el ? {
+          textAlign: getComputedStyle(el).textAlign,
+          whiteSpace: getComputedStyle(el).whiteSpace,
+          width: Math.round(el.getBoundingClientRect().width)
+        } : null;
+        return { quote: inspect(quote), opening: inspect(opening) };
+      });
+      if (copyAudit.quote && (copyAudit.quote.textAlign !== "center" || copyAudit.quote.whiteSpace !== "pre-line")) {
+        throw new Error(theme.slug + ": teks doa/kutipan harus rata tengah dan mempertahankan paragraf " + JSON.stringify(copyAudit));
+      }
+      if (copyAudit.opening && (copyAudit.opening.textAlign !== "center" || copyAudit.opening.whiteSpace !== "pre-line")) {
+        throw new Error(theme.slug + ": paragraf pembuka harus rata tengah dan mempertahankan jarak paragraf " + JSON.stringify(copyAudit));
+      }
+      const demoFeatureAudit = await page.evaluate(() => {
           const data = window.__invitationData || {};
           const accounts = Array.isArray(data.gifts?.accounts) ? data.gifts.accounts : [];
           const enabledAccounts = accounts.filter(item => item && item.enabled !== false);
