@@ -42,11 +42,16 @@
       "time": "09.00–10.00 WITA",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://goo.gl/maps/FKbakp118ULbgp226",
+      "mapsUrl": "https://maps.app.goo.gl/XieoNsyRsv6KCJbZA?g_st=ac",
       "dateISO": "2026-11-20",
       "startTime": "09:00",
       "endTime": "10:00",
-      "timezone": "Asia/Makassar"
+      "timezone": "Asia/Makassar",
+      "coordinates": {
+        "lat": 0.584312,
+        "lng": 120.768284
+      },
+      "mapEmbedUrl": "https://maps.google.com/maps?q=0.584312,120.768284&t=k&z=17&output=embed"
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
@@ -54,10 +59,15 @@
       "time": "11.00 WITA–selesai",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "mapsUrl": "https://goo.gl/maps/FKbakp118ULbgp226",
+      "mapsUrl": "https://maps.app.goo.gl/XieoNsyRsv6KCJbZA?g_st=ac",
       "dateISO": "2026-11-20",
       "startTime": "11:00",
-      "timezone": "Asia/Makassar"
+      "timezone": "Asia/Makassar",
+      "coordinates": {
+        "lat": 0.584312,
+        "lng": 120.768284
+      },
+      "mapEmbedUrl": "https://maps.google.com/maps?q=0.584312,120.768284&t=k&z=17&output=embed"
     }
   },
   "countdown": {
