@@ -602,15 +602,13 @@ for (const slug of activeThemeSlugs) {
         }, nextTargetId, { timeout: 5000 });
         const homeButton = navigation.locator('[data-oa-action="jump"][data-oa-section="home"]');
         const homeTargetId = await homeButton.getAttribute("data-target");
-        const scrollBeforeHome = await page.evaluate(() => window.scrollY);
         await homeButton.click();
-        await page.waitForFunction(({ id, before }) => {
-          const target = document.getElementById(id);
-          if (!target) return false;
-          const rect = target.getBoundingClientRect();
-          const homeIsVisible = rect.bottom > 0 && rect.top < window.innerHeight;
-          return homeIsVisible && window.scrollY < before - 8;
-        }, { id: homeTargetId, before: scrollBeforeHome }, { timeout: 5000 });
+        // Home is explicitly defined by the shared engine as the top of the page.
+        // Some legacy wrappers span the full document and remain "visible" at any scroll position,
+        // so checking their intersection/relative movement is not a reliable Home assertion.
+        await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
+        assert.ok(await page.locator("#" + homeTargetId).count(),
+          theme.slug + ": target Home tidak ditemukan setelah kembali ke atas.");
 
         await page.evaluate(() => {
           window.__oaSharePayload = null;
