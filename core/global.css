@@ -872,3 +872,22 @@ html[data-oa-theme="aksav"] {
   --oa-reveal-time:.46s;
   --oa-reveal-ease:cubic-bezier(.2,.75,.25,1);
 }
+
+
+/* Army — Venni & Rama custom forest-green theme. */
+.oa-floating-controls[data-theme="army"]{
+  --oa-dock-bg:#102b23f5;
+  --oa-dock-border:#c9ad73;
+  --oa-dock-ink:#f4f0e5;
+  --oa-dock-accent:#d4b979;
+  --oa-dock-active:#c9ad73;
+  --oa-dock-active-ink:#102b23;
+}
+html[data-oa-theme="army"]{
+  --oa-font-display:"Cormorant Garamond",Georgia,serif;
+  --oa-font-body:"Montserrat",Arial,sans-serif;
+  --oa-reveal-time:.48s;
+  --oa-reveal-ease:cubic-bezier(.18,.78,.22,1);
+  --oa-theme-display:"Cormorant Garamond",Georgia,serif;
+  --oa-theme-body:"Montserrat",Arial,sans-serif;
+}
