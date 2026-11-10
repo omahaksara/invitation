@@ -544,7 +544,7 @@ for (const slug of activeThemeSlugs) {
         const dockSharedUrl = new URL(dockSharePayload.url);
         assert.ok(dockSharedUrl.origin === "https://omahaksara.github.io" &&
           dockSharedUrl.pathname.startsWith("/i/demo-katalog/") &&
-          dockSharedUrl.pathname.includes("Nama%20Tamu"),
+          dockSharedUrl.pathname.includes("Nama-Tamu"),
           theme.slug + ": dock share action did not produce the canonical invitation URL.");
         // The in-content share button is a separate entry point; test it too.
         await page.evaluate(() => { window.__oaSharePayload = null; });
