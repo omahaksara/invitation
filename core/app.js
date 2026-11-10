@@ -23,7 +23,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261110-satellite-map-v2");
+      dataUrl.searchParams.set("_v", "20261110-satellite-map-v3");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -46,7 +46,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261110-satellite-map-v2");
+          registryUrl.searchParams.set("_v", "20261110-satellite-map-v3");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -70,7 +70,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261110-satellite-map-v2");
+          templateUrl.searchParams.set("_v", "20261110-satellite-map-v3");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -859,7 +859,7 @@
     const encoded = encodeURIComponent(query);
     return {
       query,
-      embedUrl: suppliedEmbed || (query ? "https://www.google.com/maps?q=" + encoded + "&z=16&output=embed" : ""),
+      embedUrl: suppliedEmbed || (query ? "https://www.google.com/maps?q=" + encoded + "&t=k&z=17&output=embed" : ""),
       searchUrl: query ? "https://www.google.com/maps/search/?api=1&query=" + encoded : "",
       directionsUrl: query ? "https://www.google.com/maps/dir/?api=1&destination=" + encoded : "",
       verifiedPoint: false
@@ -909,6 +909,12 @@
         if (scheduleRoot.children.length) card.append(scheduleRoot);
       }
       if (venueText) card.append(venue);
+      if (mapsEnabled && mapTarget.query && !mapTarget.verifiedPoint && !item.mapNote) {
+        const precision = document.createElement("p");
+        precision.className = "oa-event-map-note";
+        precision.textContent = "Peta satelit mengikuti hasil pencarian alamat. Untuk pin yang benar-benar presisi, lengkapi koordinat lokasi.";
+        card.append(precision);
+      }
       const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
       const mapUrl = mapTarget.verifiedPoint ? mapTarget.searchUrl : (suppliedUrl || mapTarget.searchUrl);
       if (mapsEnabled && mapUrl) {
