@@ -133,7 +133,7 @@
     "gallery": true,
     "video": false,
     "maps": true,
-    "music": false,
+    "music": true,
     "gifts": true,
     "rsvp": true,
     "guestbook": true,
@@ -160,5 +160,13 @@
   },
   "integrations": {
     "apiUrl": "https://script.google.com/macros/s/AKfycbxTtUh596hMTnZOboQWgFgRzXveS9H_crcGlaYc6hXJPzV_S5jTCQuuLTzd9jFg69Z_Aw/exec"
+  },
+  "media": {
+    "music": {
+      "id": "venni-rama",
+      "title": "Musik Undangan Venni & Rama",
+      "category": "romantic",
+      "src": "../../assets/music/venni-rama.mp3"
+    }
   }
 }
