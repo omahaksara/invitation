@@ -89,7 +89,7 @@
       "id": "wedding-demo-existing",
       "title": "Wedding Demo Track",
       "category": "instrumental",
-      "src": "wedding-demo-existing.mp3"
+      "src": "../../assets/music/library/wedding-demo-existing.mp3"
     }
   },
   "rsvp": {
@@ -110,7 +110,7 @@
     "rsvp": true,
     "guestbook": true,
     "guestName": true,
-    "hashtag": false,
+    "hashtag": true,
     "quotes": true,
     "bank": false,
     "ewallet": false,
