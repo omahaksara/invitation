@@ -170,7 +170,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": animasi bertahap pada kartu/galeri belum dipasang");
         assert.ok(await page.evaluate(() => {
           const style = document.getElementById("oa-scroll-experience-style")?.textContent || "";
-          return style.includes("data-oa-reveal=\\\"left\\\"") && style.includes("oa-stagger-visible");
+          return style.includes('data-oa-reveal="left"') && style.includes("oa-stagger-visible");
         }), theme.slug + ": variasi gerak scroll dan stagger belum tersedia");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
