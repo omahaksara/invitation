@@ -615,6 +615,13 @@ for (const slug of activeThemeSlugs) {
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
         await navigation.locator('[data-oa-action="top"]').click();
         await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
+        // The invitation's optional auto-scroll may start shortly after opening.
+        // Pause it before measuring/clicking "next" so the target cannot move
+        // between the smoke test's expectation and the button's own calculation.
+        const autoScrollControl = navigation.locator('[data-oa-action="auto"]');
+        if (await autoScrollControl.count() && await autoScrollControl.getAttribute("aria-pressed") === "true") {
+          await autoScrollControl.click();
+        }
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
         const nextTargetId = await page.evaluate(() => {
           const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
