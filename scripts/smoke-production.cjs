@@ -122,7 +122,7 @@ async function main() {
     // The empty payload is rejected before slug lookup or any spreadsheet write.
     const venniData = JSON.parse(await fetchText('https://raw.githubusercontent.com/omahaksara/invitation/main/clients/venni-rama/data.json'));
     const apiUrl = venniData.integrations && venniData.integrations.apiUrl;
-    assert.ok(apiUrl && /^https:\\/\\//i.test(apiUrl), 'Veni-Rama must have an HTTPS Apps Script endpoint.');
+    assert.ok(typeof apiUrl === 'string' && apiUrl.startsWith('https://'), 'Veni-Rama must have an HTTPS Apps Script endpoint.');
     const postProbe = await catalogue.evaluate(async endpoint => {
       try {
         const response = await fetch(endpoint, {
