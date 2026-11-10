@@ -803,6 +803,45 @@ html[data-oa-theme] #app .cover-monogram{animation-duration:.5s!important}
 }
 
 
+/* Shared invitation copy: prayer and opening paragraphs follow the Veni reference rhythm.
+   Preserve intentional blank lines from JSON and center the copy consistently in every theme. */
+html[data-oa-theme] #app [data-bind="opening.text"],
+html[data-oa-theme] #app [data-bind="quote.text"],
+html[data-oa-theme] #app [data-bind="quote.source"] {
+  display: block;
+  width: min(100%, 760px);
+  max-width: 100%;
+  margin-inline: auto !important;
+  text-align: center !important;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+  text-wrap: pretty;
+}
+html[data-oa-theme] #app [data-bind="quote.arab"] {
+  display: block;
+  width: min(100%, 900px);
+  max-width: 100%;
+  margin-inline: auto !important;
+  text-align: center !important;
+  direction: rtl;
+  line-height: 2;
+}
+html[data-oa-theme] #app .quote-section,
+html[data-oa-theme] #app .quote-section > p,
+html[data-oa-theme] #app .quote-section > small {
+  text-align: center !important;
+}
+html[data-oa-theme] #app .oa-opening-copy {
+  width: min(100%, 920px);
+  margin: 0 auto;
+  padding: clamp(26px, 5vw, 54px) clamp(18px, 4vw, 32px);
+  text-align: center;
+}
+html[data-oa-theme] #app .oa-opening-copy [data-bind="opening.text"] {
+  margin: 0 auto;
+}
+
 /* Shared map frame: consistent local zoom, clipping and responsive sizing across themes. */
 html[data-oa-theme] .oa-event-map {
   max-width: 100%;
