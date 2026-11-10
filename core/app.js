@@ -1678,6 +1678,15 @@
     const getScrollBehavior = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
+      // Home is the top of the invitation, not the top edge of a long wrapper
+      // whose position can vary across legacy themes and cover layouts.
+      const isHomeTarget = section.matches(
+        "#main-content, #app-inner, .invitation-container, .sirein-page, .invite-shell, #app"
+      );
+      if (isHomeTarget) {
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        return;
+      }
       window.scrollTo({
         top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12),
         behavior: getScrollBehavior()
