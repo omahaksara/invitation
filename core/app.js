@@ -23,7 +23,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261110-map-canonical-url");
+      dataUrl.searchParams.set("_v", "20261110-quality-gate-v5");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -46,7 +46,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261110-map-canonical-url");
+          registryUrl.searchParams.set("_v", "20261110-quality-gate-v5");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -70,7 +70,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261110-map-canonical-url");
+          templateUrl.searchParams.set("_v", "20261110-quality-gate-v5");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -183,7 +183,74 @@
       data.events = normalizedEvents;
     }
 
-    const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+    // New invitations may opt into one combined event card. Legacy JSON without
+    // eventMode keeps its original rendering and calendar behavior unchanged.
+    if (data.eventMode === "combined" && data.events && !Array.isArray(data.events)) {
+      const akad = data.events.akad;
+      const resepsi = data.events.resepsi;
+      if (akad && typeof akad === "object" && resepsi && typeof resepsi === "object") {
+        const sameText = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+        const coordinateKey = event => {
+          const point = event.coordinates || {};
+          const lat = point.lat ?? event.latitude ?? event.lat;
+          const lng = point.lng ?? point.lon ?? event.longitude ?? event.lng ?? event.lon;
+          return lat != null && lng != null ? String(lat).trim() + "," + String(lng).trim() : "";
+        };
+        const akadPoint = coordinateKey(akad), resepsiPoint = coordinateKey(resepsi);
+        const samePoint = !!(akadPoint && resepsiPoint && sameText(akadPoint, resepsiPoint));
+        const sameMap = !!(akad.mapsUrl && resepsi.mapsUrl && sameText(akad.mapsUrl, resepsi.mapsUrl));
+        const sameVenue = sameText(akad.location || akad.venue, resepsi.location || resepsi.venue) &&
+          sameText(akad.address, resepsi.address) &&
+          !!(akad.location || akad.venue || akad.address);
+        const mapCompatible = !(akad.mapsUrl && resepsi.mapsUrl) || sameMap;
+        const coordinateCompatible = !(akadPoint && resepsiPoint) || samePoint;
+        if ((samePoint || sameMap || sameVenue) && mapCompatible && coordinateCompatible) {
+          const scheduleEntry = (event, id, fallbackTitle) => ({
+            id,
+            title: event.title || fallbackTitle,
+            date: event.date || (event.dateISO ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : ""),
+            dateISO: event.dateISO || "",
+            startTime: event.startTime || "",
+            endTime: event.endTime || "",
+            time: event.time || "",
+            timezone: event.timezone || akad.timezone || resepsi.timezone || data.site?.timezone || "Asia/Makassar"
+          });
+          const first = akad;
+          data.__renderEvents = {
+            combined: {
+              id: "combined",
+              title: "Akad & Resepsi",
+              date: first.date || (first.dateISO ? formatEventDate(first.dateISO, first.timezone || data.site?.timezone) : ""),
+              dateISO: first.dateISO || "",
+              startTime: first.startTime || "",
+              endTime: first.endTime || "",
+              timezone: first.timezone || resepsi.timezone || data.site?.timezone || "Asia/Makassar",
+              location: first.location || first.venue || resepsi.location || resepsi.venue || "",
+              address: first.address || resepsi.address || "",
+              mapsUrl: first.mapsUrl || resepsi.mapsUrl || "",
+              mapEmbedUrl: first.mapEmbedUrl || resepsi.mapEmbedUrl || "",
+              coordinates: first.coordinates || resepsi.coordinates,
+              latitude: first.latitude ?? first.lat,
+              longitude: first.longitude ?? first.lng ?? first.lon,
+              mapQuery: first.mapQuery || resepsi.mapQuery || "",
+              mapNote: first.mapNote || resepsi.mapNote || "",
+              schedule: [
+                scheduleEntry(akad, "akad", "Akad Nikah"),
+                scheduleEntry(resepsi, "resepsi", "Resepsi Pernikahan")
+              ]
+            }
+          };
+        }
+      }
+    }
+
+    if (data.eventMode === "akad-only" && data.events && !Array.isArray(data.events)) {
+      data.__renderEvents = data.events.akad ? { akad: data.events.akad } : {};
+    } else if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
+      data.__renderEvents = data.events.resepsi ? { resepsi: data.events.resepsi } : {};
+    }
+    const renderEventsData = data.__renderEvents || data.events;
+    const events = Array.isArray(renderEventsData) ? renderEventsData : Object.values(renderEventsData || {});
     const firstEvent = events.find(event => event && (event.date || event.dateISO));
     if (!data.cover.dateLabel && firstEvent) data.cover.dateLabel = firstEvent.date || firstEvent.dateISO || "";
     data.opening = data.opening && typeof data.opening === "object" ? data.opening : {};
@@ -236,7 +303,7 @@
     });
 
     renderStory(data.story, clientBase);
-    renderEvents(data.events, data, clientBase);
+    renderEvents(data.__renderEvents || data.events, data, clientBase);
     bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
     renderClosing(data);
@@ -303,16 +370,18 @@
     if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
     if (!(data.closing && (data.closing.title || data.closing.text || data.closing.signature))) hide("[data-oa-closing], .oa-closing-section");
     if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
-    const eventValues = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+    const eventSource = data.__renderEvents || data.events;
+    const eventValues = Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {});
     if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) document.querySelectorAll("#link-akad-maps, #link-resepsi-maps").forEach(el => { el.hidden = true; });
     if (!data.countdown?.targetDate && !eventValues.some(item => item && item.date)) hide("#countdown, .countdown");
   }
 
 
   function ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl) {
-    const eventItems = Array.isArray(data.events)
-      ? data.events
-      : Object.entries(data.events || {}).map(([id, item]) => ({ id, ...item }));
+    const eventSource = data.__renderEvents || data.events;
+    const eventItems = Array.isArray(eventSource)
+      ? eventSource
+      : Object.entries(eventSource || {}).map(([id, item]) => ({ id, ...item }));
     const stories = Array.isArray(data.story) ? data.story : [];
     const gallery = Array.isArray(data.gallery) ? data.gallery : (data.gallery && Array.isArray(data.gallery.items) ? data.gallery.items : []);
     const gifts = Array.isArray(data.gifts) ? data.gifts : (data.gifts && Array.isArray(data.gifts.accounts) ? data.gifts.accounts : []);
@@ -343,6 +412,29 @@
       return root;
     };
 
+    // One shared event renderer serves every theme. When a legacy theme has
+    // hard-coded event cards instead of #event-list, hide those cards and mount
+    // the shared renderer into the existing event section (or create one).
+    if (eventItems.length && !document.getElementById("event-list")) {
+      const legacyTitles = [...document.querySelectorAll('[data-bind="events.akad.title"], [data-bind="events.resepsi.title"]')];
+      let eventSection = (legacyTitles[0] && legacyTitles[0].closest("section")) ||
+        document.querySelector(".events-section, .event-section, #events-section, #events");
+      if (!eventSection) eventSection = makeSection("events-section", "Rangkaian Acara");
+      legacyTitles.forEach(title => {
+        let node = title.parentElement;
+        while (node && node !== eventSection) {
+          const relatedBindings = node.querySelectorAll('[data-bind^="events."]').length;
+          if (relatedBindings >= 2) {
+            node.hidden = true;
+            node.setAttribute("data-oa-legacy-event", "true");
+            break;
+          }
+          node = node.parentElement;
+        }
+      });
+      makeContainer(eventSection, "event-list", "event-grid");
+    }
+
     if (stories.length && !document.getElementById("story-list") && !document.querySelector(".story-list")) {
       const section = makeSection("story-section", "Cerita Kami");
       makeContainer(section, "story-list", "story-list");
@@ -371,11 +463,50 @@
         item.append(value, caption); root.append(item);
       });
     }
-    if ((quote.text || quote.arab) && !document.querySelector(".quote-section, [data-bind='quote.text'], [data-bind='quote.arab']")) {
-      const section = makeSection("quote-section", "Kutipan");
-      if (quote.arab) { const arab = document.createElement("p"); arab.setAttribute("data-bind", "quote.arab"); section.append(arab); }
-      const text = document.createElement("p"); text.setAttribute("data-bind", "quote.text"); section.append(text);
-      const source = document.createElement("small"); source.setAttribute("data-bind", "quote.source"); section.append(source);
+    // Ensure every theme presents the formal opening/prayer copy, even when
+    // its original markup did not include an opening.text binding.
+    if (data.opening?.text && !document.querySelector('[data-bind="opening.text"]')) {
+      const section = makeSection("oa-opening-copy", "Sambutan & Doa");
+      const paragraph = document.createElement("p");
+      paragraph.setAttribute("data-bind", "opening.text");
+      section.append(paragraph);
+      const cover = document.querySelector("#cover, .cover, [class$='-cover']");
+      if (cover && cover.parentNode && cover !== section) {
+        cover.insertAdjacentElement("afterend", section);
+      }
+    }
+
+    if (quote.text || quote.arab || quote.source) {
+      // Reuse a theme's existing blessing panel when present. Legacy themes may
+      // contain static copy but omit JSON bindings; bind those existing nodes
+      // instead of adding a second, visually duplicated prayer section.
+      const section = document.querySelector(".quote-section, .quote, #quote-section") ||
+        makeSection("quote-section", "Kutipan");
+      if (quote.arab && !section.querySelector('[data-bind="quote.arab"]')) {
+        const arab = document.createElement("p");
+        arab.setAttribute("data-bind", "quote.arab");
+        const ornament = section.querySelector(".ornament");
+        if (ornament) ornament.insertAdjacentElement("afterend", arab);
+        else section.prepend(arab);
+      }
+      if (quote.text && !section.querySelector('[data-bind="quote.text"]')) {
+        const existingCopy = section.querySelector("p.serif, p:not(.eyebrow):not(.detail):not(.intro)");
+        if (existingCopy) existingCopy.setAttribute("data-bind", "quote.text");
+        else {
+          const text = document.createElement("p");
+          text.setAttribute("data-bind", "quote.text");
+          section.append(text);
+        }
+      }
+      if (quote.source && !section.querySelector('[data-bind="quote.source"]')) {
+        const existingSource = section.querySelector("p.detail, small");
+        if (existingSource) existingSource.setAttribute("data-bind", "quote.source");
+        else {
+          const source = document.createElement("small");
+          source.setAttribute("data-bind", "quote.source");
+          section.append(source);
+        }
+      }
     }
     if ((video.src || video.url) && !document.querySelector(".video-section, #video-section")) {
       const section = makeSection("video-section", "Video Kenangan");
@@ -565,9 +696,11 @@
             ...item, ...entry,
             id: entry.id || (item.id || "event") + "-" + (index + 1),
             title: entry.title || item.title || "Acara Pernikahan",
-            dateISO: entry.dateISO || entry.date || item.dateISO || item.date,
-            location: item.location || item.venue,
-            address: item.address || "",
+            dateISO: entry.dateISO || (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date || "")) ? entry.date : (item.dateISO || (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(item.date || "")) ? item.date : ""))),
+            location: entry.location || item.location || item.venue,
+            address: entry.address || item.address || "",
+            mapsUrl: entry.mapsUrl || item.mapsUrl || "",
+            coordinates: entry.coordinates || item.coordinates,
             timezone: entry.timezone || item.timezone
           }));
         }
@@ -765,7 +898,7 @@
     const encoded = encodeURIComponent(query);
     return {
       query,
-      embedUrl: suppliedEmbed || (query ? "https://www.google.com/maps?q=" + encoded + "&z=16&output=embed" : ""),
+      embedUrl: suppliedEmbed || (query ? "https://www.google.com/maps?q=" + encoded + "&t=k&z=17&output=embed" : ""),
       searchUrl: query ? "https://www.google.com/maps/search/?api=1&query=" + encoded : "",
       directionsUrl: query ? "https://www.google.com/maps/dir/?api=1&destination=" + encoded : "",
       verifiedPoint: false
@@ -815,8 +948,14 @@
         if (scheduleRoot.children.length) card.append(scheduleRoot);
       }
       if (venueText) card.append(venue);
+      if (mapsEnabled && mapTarget.query && !mapTarget.verifiedPoint && !item.mapNote) {
+        const precision = document.createElement("p");
+        precision.className = "oa-event-map-note";
+        precision.textContent = "Peta satelit mengikuti hasil pencarian alamat. Untuk pin yang benar-benar presisi, lengkapi koordinat lokasi.";
+        card.append(precision);
+      }
       const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
-      const mapUrl = suppliedUrl || mapTarget.searchUrl;
+      const mapUrl = mapTarget.verifiedPoint ? mapTarget.searchUrl : (suppliedUrl || mapTarget.searchUrl);
       if (mapsEnabled && mapUrl) {
         const link = document.createElement("a");
         link.className = "oa-event-location";
@@ -1119,7 +1258,8 @@
   }
 
   function setupCountdown(data) {
-    const target = (Array.isArray(data.events) ? data.events : Object.values(data.events || {})).find(e => e && e.date);
+    const eventSource = data.__renderEvents || data.events;
+    const target = (Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {})).find(e => e && (e.date || e.dateISO));
     let targetDate;
     if (data.countdown && data.countdown.targetDate) {
       targetDate = new Date(data.countdown.targetDate);
@@ -1426,6 +1566,9 @@
   }
 
   function bindMapLinks(data) {
+    // The shared event renderer owns map links whenever it is mounted. This
+    // avoids duplicate legacy links/cards on themes upgraded from hard-coded markup.
+    if (document.getElementById("event-list")) return;
     const rawEvents = data && data.events ? data.events : {};
     const entries = Array.isArray(rawEvents)
       ? rawEvents.map((item, index) => [item && item.id ? item.id : (index === 0 ? "akad" : index === 1 ? "resepsi" : String(index)), item])
@@ -1535,6 +1678,15 @@
     const getScrollBehavior = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     const scrollToSection = section => {
       if (!section || !isVisible(section)) return;
+      // Home is the top of the invitation, not the top edge of a long wrapper
+      // whose position can vary across legacy themes and cover layouts.
+      const isHomeTarget = section.matches(
+        "#main-content, #app-inner, .invitation-container, .sirein-page, .invite-shell, #app"
+      );
+      if (isHomeTarget) {
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+        return;
+      }
       window.scrollTo({
         top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - 12),
         behavior: getScrollBehavior()

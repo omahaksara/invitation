@@ -29,9 +29,19 @@ Bentuk baku V2 adalah objek acara dengan kunci stabil, misalnya `events.akad` da
 - `dateISO`: tanggal kalender `YYYY-MM-DD`, dipakai untuk kalender dan validasi.
 - `startTime`, `endTime`: jam lokal `HH:mm`.
 - `timezone`: zona waktu IANA, misalnya `Asia/Makassar`.
-- `location`, `address`, `mapsUrl`: detail tempat dan tautan peta.
+- `location`, `address`, `mapsUrl`, `mapEmbedUrl`, `mapQuery`, `mapNote`: detail tempat dan tautan peta.
+- `coordinates`: titik terverifikasi berbentuk `{ "lat": -0.123, "lng": 120.456 }`. Koordinat hanya boleh diisi dari titik yang diberikan atau diverifikasi pemilik undangan.
 
-Adaptor sementara menerima array acara dan format tanggal lama. Data baru sebaiknya mengisi `dateISO`, `startTime`, `endTime`, dan `timezone` agar countdown dan ekspor kalender tidak menebak zona waktu.
+### Mode acara V2
+
+- `eventMode: "combined"` adalah default untuk undangan baru. Engine menggabungkan akad dan resepsi menjadi satu kartu dengan dua baris jadwal apabila kedua acara menunjuk lokasi yang sama dan data petanya konsisten.
+- `eventMode: "separate"` menampilkan akad dan resepsi sebagai kartu terpisah, termasuk ketika tanggal atau lokasinya berbeda.
+- `eventMode: "akad-only"` atau `eventMode: "resepsi-only"` dipakai bila hanya satu rangkaian acara yang diselenggarakan.
+- Jika `eventMode` tidak ada, engine mempertahankan perilaku JSON lama. Tidak ada migrasi otomatis atau perubahan data pelanggan lama.
+- Dalam mode gabungan, setiap entri jadwal tetap menyimpan tanggal, jam, dan zona waktunya sendiri. Kalender menyediakan satu entri per rangkaian acara; countdown mengarah ke acara valid paling awal. Peta hanya satu jika titik/lokasi benar-benar sama.
+- Jika lokasi atau tautan peta berbeda, engine tidak boleh memaksakan satu pin. Acara tetap ditampilkan terpisah agar tamu tidak diarahkan ke lokasi yang salah.
+
+Adaptor sementara tetap menerima array acara dan format tanggal lama. Data baru sebaiknya mengisi `dateISO`, `startTime`, `endTime`, dan `timezone` agar countdown dan ekspor kalender tidak menebak zona waktu.
 
 ## Fitur
 

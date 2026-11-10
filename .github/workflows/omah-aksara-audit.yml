@@ -12,6 +12,7 @@ on:
       - main
       - rebuild/omah-aksara-v2
       - fix/theme-native-navigation-and-distinct-docks
+      - upgrade/all-theme-json-combined-events
   workflow_dispatch:
 
 concurrency:

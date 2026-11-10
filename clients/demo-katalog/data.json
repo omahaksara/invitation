@@ -41,29 +41,29 @@
       "title": "Akad Nikah",
       "date": "12 Juni 2027",
       "time": "08:00 - 10:00 WITA",
-      "location": "Taman Seruni — Grand Garden Pavilion",
-      "address": "",
-      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Taman%20Seruni%20Grand%20Garden%20Pavilion%2C%20Makassar%2C%20Sulawesi%20Selatan",
+      "location": "Taman Seruni — Garden Pavilion (Lokasi Simulasi)",
+      "address": "Makassar, Sulawesi Selatan (alamat dan titik belum diverifikasi)",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Taman%20Seruni%20Garden%20Pavilion%20Makassar",
       "dateISO": "2027-06-12",
       "startTime": "08:00",
       "endTime": "10:00",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Taman Seruni Grand Garden Pavilion, Makassar, Sulawesi Selatan",
-      "mapNote": "Lokasi simulasi katalog. Alamat lengkap dan titik koordinat venue belum diverifikasi."
+      "mapQuery": "Taman Seruni Garden Pavilion, Makassar, Sulawesi Selatan",
+      "mapNote": "Lokasi simulasi katalog. Titik koordinat dan alamat lengkap belum diverifikasi; jangan digunakan sebagai petunjuk lokasi acara nyata."
     },
     "resepsi": {
       "title": "Resepsi Pernikahan",
       "date": "12 Juni 2027",
       "time": "11:00 - 14:00 WITA",
-      "location": "Taman Seruni — The Glasshouse",
-      "address": "",
-      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Taman%20Seruni%20The%20Glasshouse%2C%20Makassar%2C%20Sulawesi%20Selatan",
+      "location": "Taman Seruni — Garden Pavilion (Lokasi Simulasi)",
+      "address": "Makassar, Sulawesi Selatan (alamat dan titik belum diverifikasi)",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Taman%20Seruni%20Garden%20Pavilion%20Makassar",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
       "endTime": "14:00",
       "timezone": "Asia/Makassar",
-      "mapQuery": "Taman Seruni The Glasshouse, Makassar, Sulawesi Selatan",
-      "mapNote": "Lokasi simulasi katalog. Alamat lengkap dan titik koordinat venue belum diverifikasi."
+      "mapQuery": "Taman Seruni Garden Pavilion, Makassar, Sulawesi Selatan",
+      "mapNote": "Lokasi simulasi katalog. Titik koordinat dan alamat lengkap belum diverifikasi; jangan digunakan sebagai petunjuk lokasi acara nyata."
     }
   },
   "countdown": {
@@ -797,11 +797,12 @@
     "description": "Demo katalog Omah Aksara: pratinjau undangan dengan pilihan hadiah digital terkurasi, QRIS ilustrasi non-transaksi, peta lokasi, dan tombol navigasi."
   },
   "opening": {
-    "text": "Assalamu’alaikum warahmatullahi wabarakatuh. Dengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami. Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, memberikan doa restu, dan menjadi bagian dari awal perjalanan baru kami."
+    "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\\n\\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas segala karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami.\\n\\nDengan penuh hormat, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, menyaksikan rangkaian acara, serta memberikan doa restu kepada kedua mempelai.\\n\\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan turut mengiringi langkah awal perjalanan kami sebagai keluarga.\\n\\nWassalamu’alaikum warahmatullahi wabarakatuh."
   },
   "closing": {
     "title": "Terima Kasih",
-    "text": "Merupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Sampai bertemu di hari bahagia kami.",
+    "text": "Merupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\\n\\nSemoga setiap doa baik yang dipanjatkan menjadi keberkahan bagi perjalanan kami. Sampai bertemu di hari bahagia.",
     "signature": "Dengan penuh cinta, Arkan & Sekar"
-  }
+  },
+  "eventMode": "combined"
 }

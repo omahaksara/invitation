@@ -119,6 +119,24 @@ for (const slug of activeThemeSlugs) {
         }
       };
       page.on("pageerror", error => pageErrors.push(error.message));
+      // Synthetic coordinates are injected only into this browser test.
+      // The public demo retains its unverified-location notice and no fake pin.
+      await page.route("**/clients/demo-katalog/data.json*", async route => {
+        const response = await route.fetch();
+        const fixture = await response.json();
+        const originalEvents = Object.values(fixture.events || {});
+        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
+          event && !event.coordinates && event.latitude == null && event.longitude == null &&
+          typeof event.mapNote === "string" && event.mapNote.length > 0
+        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
+        fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
+        for (const event of originalEvents) {
+          // Verified synthetic coordinates exist only in this isolated browser fixture.
+          event.coordinates = { lat: 0.123456, lng: 120.654321 };
+          event.mapNote = "";
+        }
+        await route.fulfill({ response, body: JSON.stringify(fixture) });
+      });
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
@@ -162,14 +180,35 @@ for (const slug of activeThemeSlugs) {
 
         // Regression coverage for the curated demo payment methods and map controls.
         // These assertions run against every active theme using the same demo JSON.
-        const demoFeatureAudit = await page.evaluate(() => {
+        const copyAudit = await page.evaluate(() => {
+        const quote = document.querySelector('[data-bind="quote.text"]');
+        const opening = document.querySelector('[data-bind="opening.text"]');
+        const inspect = el => el ? {
+          textAlign: getComputedStyle(el).textAlign,
+          whiteSpace: getComputedStyle(el).whiteSpace,
+          width: Math.round(el.getBoundingClientRect().width)
+        } : null;
+        return { quote: inspect(quote), opening: inspect(opening) };
+      });
+      if (!copyAudit.quote || !copyAudit.opening) {
+        throw new Error(theme.slug + ": seluruh tema wajib menampilkan paragraf pembuka dan doa dari JSON demo " + JSON.stringify(copyAudit));
+      }
+      if (copyAudit.quote && (copyAudit.quote.textAlign !== "center" || copyAudit.quote.whiteSpace !== "pre-line")) {
+        throw new Error(theme.slug + ": teks doa/kutipan harus rata tengah dan mempertahankan paragraf " + JSON.stringify(copyAudit));
+      }
+      if (copyAudit.opening && (copyAudit.opening.textAlign !== "center" || copyAudit.opening.whiteSpace !== "pre-line")) {
+        throw new Error(theme.slug + ": paragraf pembuka harus rata tengah dan mempertahankan jarak paragraf " + JSON.stringify(copyAudit));
+      }
+      const demoFeatureAudit = await page.evaluate(() => {
           const data = window.__invitationData || {};
           const accounts = Array.isArray(data.gifts?.accounts) ? data.gifts.accounts : [];
           const enabledAccounts = accounts.filter(item => item && item.enabled !== false);
-          const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+          const eventSource = data.__renderEvents || data.events;
+          const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {});
           const mappedEvents = events.filter(item => [item.venue || item.location, item.address].filter(Boolean).length);
           const giftCards = Array.from(document.querySelectorAll("#gift-list .gift-card"));
           const eventCards = Array.from(document.querySelectorAll("#event-list .event-card"));
+          const scheduleRows = Array.from(document.querySelectorAll("#event-list .oa-event-schedule-item"));
           return {
             expectedPayments: enabledAccounts.length,
             paymentNames: enabledAccounts.map(item => item.bank || "HADIAH DIGITAL"),
@@ -178,6 +217,9 @@ for (const slug of activeThemeSlugs) {
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
             hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
             expectedMappedEvents: mappedEvents.length,
+            eventCards: eventCards.length,
+            scheduleRows: scheduleRows.length,
+            expectedScheduleRows: events.reduce((total, item) => total + (Array.isArray(item.schedule) ? item.schedule.length : 0), 0),
             navigationEnabled: data.features?.mapNavigation !== false,
             mapEmbedEnabled: data.features?.mapEmbed !== false,
             locationLinks: document.querySelectorAll(".oa-event-location").length,
@@ -187,7 +229,9 @@ for (const slug of activeThemeSlugs) {
               try {
                 const url = new URL(frame.src);
                 return frame.loading === "lazy" && url.protocol === "https:" &&
-                  url.hostname === "www.google.com" && url.pathname === "/maps";
+                  url.hostname === "www.google.com" && url.pathname === "/maps" &&
+                  url.searchParams.get("q") === "0.123456,120.654321" &&
+                  url.searchParams.get("t") === "k" && url.searchParams.get("z") === "17";
               } catch { return false; }
             })
           };
@@ -200,6 +244,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": tombol pembayaran demo harus nonaktif " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.hasDemoNotice, true,
           theme.slug + ": peringatan simulasi pembayaran tidak tampil " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.eventCards, demoFeatureAudit.expectedMappedEvents,
+          theme.slug + ": jumlah kartu acara tidak sesuai mode JSON " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.scheduleRows, demoFeatureAudit.expectedScheduleRows,
+          theme.slug + ": jumlah baris jadwal gabungan tidak sesuai JSON " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.locationLinks, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": tautan lokasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.navigationLinks, demoFeatureAudit.navigationEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
@@ -207,7 +255,7 @@ for (const slug of activeThemeSlugs) {
         assert.equal(demoFeatureAudit.mapEmbeds, demoFeatureAudit.mapEmbedEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
           theme.slug + ": peta tertanam tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.lazyMapFrames, true,
-          theme.slug + ": iframe peta harus memakai lazy loading dan URL Google Maps " + JSON.stringify(demoFeatureAudit));
+          theme.slug + ": iframe peta harus memakai titik koordinat uji, mode satelit, zoom 17, dan lazy loading " + JSON.stringify(demoFeatureAudit));
         if (theme.slug === "aksara-signature") {
           await page.waitForFunction(() => Boolean(document.querySelector("#app style")), undefined, { timeout: 5000 });
         }
@@ -291,15 +339,31 @@ for (const slug of activeThemeSlugs) {
           return {
             frames: frames.map(frame => frame.src),
             notes: notes.map(note => note.textContent),
-            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href)
+            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
+            eventMode: window.__invitationData?.eventMode || "",
+            eventCards: document.querySelectorAll("#event-list .event-card").length,
+            scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
           };
         });
-        assert.equal(mapAudit.frames.length, 0,
-          theme.slug + ": demo dengan titik lokasi belum diverifikasi tidak boleh menampilkan pin peta yang menyesatkan");
-        assert.equal(mapAudit.notes.length, 2,
-          theme.slug + ": catatan lokasi simulasi harus terlihat pada kedua acara");
+        // The public demo fixture is asserted unpinned before interception above.
+        // This browser-only fixture intentionally adds verified synthetic coordinates,
+        // so the iframe count is validated below against the exact satellite URL.
+        const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
+        // Synthetic verified coordinates are injected only for this browser run.
+        // The visible unverified-location note is checked on the untouched public fixture
+        // before interception; verified test pins must not display that warning.
+        assert.equal(mapAudit.notes.length, 0,
+          theme.slug + ": catatan lokasi belum terverifikasi tidak boleh tampil pada fixture koordinat uji");
+        assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
+          theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
         assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
           theme.slug + ": tautan pencarian Maps harus tetap tersedia");
+        if (mapAudit.eventMode === "combined") {
+          assert.equal(mapAudit.eventCards, 1,
+            theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
+          assert.equal(mapAudit.scheduleRows, 2,
+            theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
+        }
         const performanceAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
           const backdrop = [];
@@ -519,10 +583,32 @@ for (const slug of activeThemeSlugs) {
         await navigation.locator('[data-oa-action="top"]').click();
         await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
         if (await moreButton.getAttribute("aria-expanded") !== "true") await moreButton.click();
+        const nextTargetId = await page.evaluate(() => {
+          const marker = window.scrollY + Math.min(window.innerHeight * .34, 260);
+          const buttons = Array.from(document.querySelectorAll('#oa-floating-controls [data-oa-action="jump"]'));
+          const next = buttons.find(button => {
+            const target = document.getElementById(button.dataset.target || "");
+            return target && target.getBoundingClientRect().top + window.scrollY > marker + 8;
+          });
+          return next?.dataset.target || null;
+        });
+        assert.ok(nextTargetId, theme.slug + ": tidak ada target bagian berikutnya untuk diuji.");
         await navigation.locator('[data-oa-action="next"]').click();
-        await page.waitForFunction(() => window.scrollY > 24, undefined, { timeout: 5000 });
-        await navigation.locator('[data-oa-action="jump"][data-oa-section="home"]').click();
+        await page.waitForFunction(id => {
+          const target = document.getElementById(id);
+          if (!target) return false;
+          const rect = target.getBoundingClientRect();
+          return rect.bottom > 0 && rect.top < window.innerHeight;
+        }, nextTargetId, { timeout: 5000 });
+        const homeButton = navigation.locator('[data-oa-action="jump"][data-oa-section="home"]');
+        const homeTargetId = await homeButton.getAttribute("data-target");
+        await homeButton.click();
+        // Home is explicitly defined by the shared engine as the top of the page.
+        // Some legacy wrappers span the full document and remain "visible" at any scroll position,
+        // so checking their intersection/relative movement is not a reliable Home assertion.
         await page.waitForFunction(() => window.scrollY < 24, undefined, { timeout: 5000 });
+        assert.ok(await page.locator("#" + homeTargetId).count(),
+          theme.slug + ": target Home tidak ditemukan setelah kembali ke atas.");
 
         await page.evaluate(() => {
           window.__oaSharePayload = null;
