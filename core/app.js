@@ -476,11 +476,37 @@
       }
     }
 
-    if ((quote.text || quote.arab) && !document.querySelector(".quote-section, [data-bind='quote.text'], [data-bind='quote.arab']")) {
-      const section = makeSection("quote-section", "Kutipan");
-      if (quote.arab) { const arab = document.createElement("p"); arab.setAttribute("data-bind", "quote.arab"); section.append(arab); }
-      const text = document.createElement("p"); text.setAttribute("data-bind", "quote.text"); section.append(text);
-      const source = document.createElement("small"); source.setAttribute("data-bind", "quote.source"); section.append(source);
+    if (quote.text || quote.arab || quote.source) {
+      // Reuse a theme's existing blessing panel when present. Legacy themes may
+      // contain static copy but omit JSON bindings; bind those existing nodes
+      // instead of adding a second, visually duplicated prayer section.
+      const section = document.querySelector(".quote-section, .quote, #quote-section") ||
+        makeSection("quote-section", "Kutipan");
+      if (quote.arab && !section.querySelector('[data-bind="quote.arab"]')) {
+        const arab = document.createElement("p");
+        arab.setAttribute("data-bind", "quote.arab");
+        const ornament = section.querySelector(".ornament");
+        if (ornament) ornament.insertAdjacentElement("afterend", arab);
+        else section.prepend(arab);
+      }
+      if (quote.text && !section.querySelector('[data-bind="quote.text"]')) {
+        const existingCopy = section.querySelector("p.serif, p:not(.eyebrow):not(.detail):not(.intro)");
+        if (existingCopy) existingCopy.setAttribute("data-bind", "quote.text");
+        else {
+          const text = document.createElement("p");
+          text.setAttribute("data-bind", "quote.text");
+          section.append(text);
+        }
+      }
+      if (quote.source && !section.querySelector('[data-bind="quote.source"]')) {
+        const existingSource = section.querySelector("p.detail, small");
+        if (existingSource) existingSource.setAttribute("data-bind", "quote.source");
+        else {
+          const source = document.createElement("small");
+          source.setAttribute("data-bind", "quote.source");
+          section.append(source);
+        }
+      }
     }
     if ((video.src || video.url) && !document.querySelector(".video-section, #video-section")) {
       const section = makeSection("video-section", "Video Kenangan");
