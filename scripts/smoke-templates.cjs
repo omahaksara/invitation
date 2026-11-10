@@ -305,10 +305,19 @@ for (const slug of activeThemeSlugs) {
         });
         assert.equal(mapAudit.frames.length, 0,
           theme.slug + ": demo dengan titik lokasi belum diverifikasi tidak boleh menampilkan pin peta yang menyesatkan");
-        assert.equal(mapAudit.notes.length, 2,
-          theme.slug + ": catatan lokasi simulasi harus terlihat pada kedua acara");
+        const expectedLocationCards = demo.eventMode === "combined" ? 1 : 2;
+        assert.equal(mapAudit.notes.length, expectedLocationCards,
+          theme.slug + ": jumlah catatan lokasi harus mengikuti mode acara (satu untuk gabungan, dua untuk terpisah)");
+        assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
+          theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
         assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
           theme.slug + ": tautan pencarian Maps harus tetap tersedia");
+        if (demo.eventMode === "combined") {
+          assert.equal(await page.locator("#event-list .event-card").count(), 1,
+            theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
+          assert.equal(await page.locator("#event-list .oa-event-schedule-item").count(), 2,
+            theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
+        }
         const performanceAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
           const backdrop = [];
