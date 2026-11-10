@@ -417,7 +417,7 @@ for (const slug of activeThemeSlugs) {
             duration: element ? getComputedStyle(element).transitionDuration : ""
           };
         });
-        const easingNumbers = value => String(value || "").match(/[+-]?(?:\\d*\\.)?\\d+/g)?.map(Number) || [];
+        const easingNumbers = value => String(value || "").match(/[+-]?(?:\d*\.)?\d+/g)?.map(Number) || [];
         const tokenCurve = easingNumbers(themeMotionAudit.token);
         const computedCurve = easingNumbers(themeMotionAudit.timing);
         assert.ok(tokenCurve.length === 4 && computedCurve.length === 4 &&
