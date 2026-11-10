@@ -75,10 +75,6 @@ const themes = [
   { slug: "nox", marker: ".nox", open: "#open-btn", cover: "#cover" },
   { slug: "taupe", marker: ".taupe", open: "#open-btn", cover: "#cover" },
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
-];
-
-// Prototype themes receive isolated browser coverage without being promoted to active catalogue entries.
-const prototypeThemes = [
   { slug: "jendela-senja", marker: ".js-theme", open: "#open-btn", cover: "#cover" },
 ];
 
@@ -92,7 +88,7 @@ const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").m
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
-for (const slug of [...activeThemeSlugs, ...prototypeThemes.map(theme => theme.slug)]) {
+for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
   const themeFontTokens = sharedThemeCss.match(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\]\\s*\\{[^}]*\\}`, "m"))?.[0] || "";
@@ -107,7 +103,7 @@ for (const slug of [...activeThemeSlugs, ...prototypeThemes.map(theme => theme.s
   const browser = await chromium.launch({ headless: true });
   const failures = [];
   try {
-    for (const theme of [...themes, ...prototypeThemes]) {
+    for (const theme of themes) {
       const page = await browser.newPage();
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
