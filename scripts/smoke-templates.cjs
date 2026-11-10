@@ -300,22 +300,25 @@ for (const slug of activeThemeSlugs) {
           return {
             frames: frames.map(frame => frame.src),
             notes: notes.map(note => note.textContent),
-            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href)
+            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
+            eventMode: window.__invitationData?.eventMode || "",
+            eventCards: document.querySelectorAll("#event-list .event-card").length,
+            scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
           };
         });
         assert.equal(mapAudit.frames.length, 0,
           theme.slug + ": demo dengan titik lokasi belum diverifikasi tidak boleh menampilkan pin peta yang menyesatkan");
-        const expectedLocationCards = demo.eventMode === "combined" ? 1 : 2;
+        const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
         assert.equal(mapAudit.notes.length, expectedLocationCards,
           theme.slug + ": jumlah catatan lokasi harus mengikuti mode acara (satu untuk gabungan, dua untuk terpisah)");
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
         assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
           theme.slug + ": tautan pencarian Maps harus tetap tersedia");
-        if (demo.eventMode === "combined") {
-          assert.equal(await page.locator("#event-list .event-card").count(), 1,
+        if (mapAudit.eventMode === "combined") {
+          assert.equal(mapAudit.eventCards, 1,
             theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
-          assert.equal(await page.locator("#event-list .oa-event-schedule-item").count(), 2,
+          assert.equal(mapAudit.scheduleRows, 2,
             theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
         }
         const performanceAudit = await page.evaluate(() => {
