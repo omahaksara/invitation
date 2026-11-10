@@ -832,20 +832,32 @@
         nav.textContent = "Navigasi ke Lokasi ↗";
         card.append(nav);
       }
-      if (embedEnabled && mapTarget.embedUrl && !item.mapNote) {
+      if (embedEnabled && mapUrl && !item.mapNote) {
         const details = document.createElement("details");
         details.className = "oa-event-map";
-        const summary = document.createElement("summary"); summary.textContent = "Lihat peta";
-        const frameWrap = document.createElement("div"); frameWrap.className = "oa-event-map-frame";
-        const frame = document.createElement("iframe");
-        frame.title = "Peta lokasi " + (item.title || item.id || "acara");
-        frame.loading = "lazy"; frame.referrerPolicy = "no-referrer-when-downgrade";
-        frame.allowFullscreen = true;
-        frame.src = mapTarget.embedUrl;
-        frame.setAttribute("allow", "fullscreen");
-        frameWrap.append(frame);
-        details.append(summary, frameWrap);
-        if (document.querySelector(".aksav")) details.open = true;
+        const summary = document.createElement("summary"); summary.textContent = "Lihat peta lokasi";
+        details.append(summary);
+        if (mapTarget.embedUrl) {
+          const frameWrap = document.createElement("div"); frameWrap.className = "oa-event-map-frame";
+          const frame = document.createElement("iframe");
+          frame.title = "Peta lokasi " + (item.title || item.id || "acara");
+          frame.loading = "lazy"; frame.referrerPolicy = "no-referrer-when-downgrade";
+          frame.allowFullscreen = true;
+          frame.src = mapTarget.embedUrl;
+          frame.setAttribute("allow", "fullscreen");
+          frameWrap.append(frame);
+          details.append(frameWrap);
+        } else {
+          const fallback = document.createElement("div");
+          fallback.className = "oa-event-map-fallback";
+          fallback.textContent = "Titik peta dibuka langsung melalui Google Maps agar lokasi tetap sesuai tautan yang diberikan.";
+          const open = document.createElement("a");
+          open.href = mapUrl; open.target = "_blank"; open.rel = "noopener noreferrer";
+          open.textContent = "Buka titik lokasi di Google Maps ↗";
+          fallback.append(open);
+          details.append(fallback);
+        }
+        // Keep the map panel collapsed by default; never expand and enlarge the page on its own.
         card.append(details);
       } else if (mapsEnabled && item.mapNote) {
         const note = document.createElement("p");
@@ -1449,22 +1461,34 @@
         nav.textContent = "Navigasi ke Lokasi ↗";
         anchor.insertAdjacentElement("afterend", nav);
       }
-      if (embedEnabled && mapTarget.embedUrl && !item.mapNote && !host.querySelector("details.oa-event-map")) {
+      if (embedEnabled && mapUrl && !item.mapNote && !host.querySelector("details.oa-event-map")) {
         const details = document.createElement("details");
         details.className = "oa-event-map";
         const summary = document.createElement("summary");
-        summary.textContent = "Lihat peta";
-        const frameWrap = document.createElement("div");
-        frameWrap.className = "oa-event-map-frame";
-        const frame = document.createElement("iframe");
-        frame.title = "Peta lokasi " + (item.title || key);
-        frame.loading = "lazy";
-        frame.referrerPolicy = "no-referrer-when-downgrade";
-        frame.allowFullscreen = true;
-        frame.src = mapTarget.embedUrl;
-        frame.setAttribute("allow", "fullscreen");
-        frameWrap.append(frame);
-        details.append(summary, frameWrap);
+        summary.textContent = "Lihat peta lokasi";
+        details.append(summary);
+        if (mapTarget.embedUrl) {
+          const frameWrap = document.createElement("div");
+          frameWrap.className = "oa-event-map-frame";
+          const frame = document.createElement("iframe");
+          frame.title = "Peta lokasi " + (item.title || key);
+          frame.loading = "lazy";
+          frame.referrerPolicy = "no-referrer-when-downgrade";
+          frame.allowFullscreen = true;
+          frame.src = mapTarget.embedUrl;
+          frame.setAttribute("allow", "fullscreen");
+          frameWrap.append(frame);
+          details.append(frameWrap);
+        } else {
+          const fallback = document.createElement("div");
+          fallback.className = "oa-event-map-fallback";
+          fallback.textContent = "Titik peta dibuka langsung melalui Google Maps agar lokasi tetap sesuai tautan yang diberikan.";
+          const open = document.createElement("a");
+          open.href = mapUrl; open.target = "_blank"; open.rel = "noopener noreferrer";
+          open.textContent = "Buka titik lokasi di Google Maps ↗";
+          fallback.append(open);
+          details.append(fallback);
+        }
         host.append(details);
       } else if (mapsEnabled && item.mapNote && !host.querySelector(".oa-event-map-note")) {
         const note = document.createElement("p");
