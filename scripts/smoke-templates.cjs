@@ -173,6 +173,30 @@ for (const slug of [...activeThemeSlugs, ...prototypeThemes.map(theme => theme.s
           theme.slug + ": animasi saat scroll belum dipasang");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
+
+        if (theme.slug === "jendela-senja") {
+          const visualAudit = await page.evaluate(() => ({
+            theme: document.documentElement.dataset.oaTheme,
+            appRoots: document.querySelectorAll("#app").length,
+            themeRoots: document.querySelectorAll(".js-theme").length,
+            bodyBackground: getComputedStyle(document.body).backgroundColor,
+            displayFont: getComputedStyle(document.querySelector(".cover-title")).fontFamily,
+            coverImageBound: !!document.querySelector(".cover-image")?.getAttribute("src"),
+            eventCards: document.querySelectorAll("#event-list .event-card").length,
+            galleryImages: document.querySelectorAll("#gallery-grid img").length,
+            giftCards: document.querySelectorAll("#gift-list .gift-card").length,
+            radioChoices: document.querySelectorAll("#rsvp-form input[type=radio][name=attendance]").length
+          }));
+          assert.equal(visualAudit.theme, "jendela-senja", "jendela-senja: slug tema tidak diterapkan.");
+          assert.equal(visualAudit.appRoots, 1, "jendela-senja: ditemukan ID #app ganda.");
+          assert.equal(visualAudit.themeRoots, 1, "jendela-senja: root tema tidak tunggal.");
+          assert.equal(visualAudit.bodyBackground, "rgb(20, 22, 31)", "jendela-senja: CSS tema tidak termuat.");
+          assert.ok(visualAudit.displayFont.includes("Bodoni Moda"), "jendela-senja: font display tidak terpasang.");
+          assert.ok(visualAudit.coverImageBound, "jendela-senja: foto cover belum terikat dari JSON.");
+          assert.ok(visualAudit.eventCards > 0 && visualAudit.galleryImages > 0 && visualAudit.giftCards > 0,
+            "jendela-senja: renderer acara/galeri/hadiah tidak mengisi data demo " + JSON.stringify(visualAudit));
+          assert.equal(visualAudit.radioChoices, 2, "jendela-senja: pilihan RSVP tidak lengkap.");
+        }
         const storyAudit = await page.evaluate(() => ({
           total: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.length : 0,
           photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0
