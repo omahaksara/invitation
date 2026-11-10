@@ -75,6 +75,7 @@ const themes = [
   { slug: "nox", marker: ".nox", open: "#open-btn", cover: "#cover" },
   { slug: "taupe", marker: ".taupe", open: "#open-btn", cover: "#cover" },
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
+  { slug: "jendela-senja", marker: "#cover", open: "#open-btn", cover: "#cover", status: "prototype" },
 ];
 
 // Prototype themes receive isolated browser coverage without being promoted to active catalogue entries.
@@ -88,7 +89,7 @@ const activeThemeSlugs = (themeRegistry.themes || [])
   .filter(theme => theme && theme.status === "active")
   .map(theme => theme.slug)
   .sort();
-const browserThemeSlugs = themes.map(theme => theme.slug).sort();
+const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
