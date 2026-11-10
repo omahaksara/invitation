@@ -788,7 +788,13 @@ for (const slug of [...activeThemeSlugs, ...prototypeThemes.map(theme => theme.s
 
         const rsvp = page.locator("#rsvp-form");
         await rsvp.locator('[name="name"]').fill("Tamu Uji");
-        await rsvp.locator('[name="attendance"]').selectOption("hadir");
+        const attendance = rsvp.locator('[name="attendance"]');
+        const attendanceType = await attendance.first().getAttribute("type");
+        if (attendanceType === "radio") {
+          await attendance.filter({ value: "hadir" }).check();
+        } else {
+          await attendance.selectOption("hadir");
+        }
         await rsvp.locator('button[type="submit"]').first().click();
         await page.waitForFunction(() => /Konfirmasi berhasil|RSVP belum aktif|belum dikonfigurasi|Simulasi demo/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
           undefined, { timeout: 10000 });
