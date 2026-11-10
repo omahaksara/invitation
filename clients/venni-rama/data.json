@@ -47,7 +47,7 @@
       "dateISO": "2026-11-20",
       "startTime": "09:00",
       "endTime": "10:00",
-      "time": "09.00–10.00 WITA",
+      "time": "09.00 – 10.00 WITA",
       "coordinates": {
         "lat": 0.584304,
         "lng": 120.768292
@@ -64,7 +64,7 @@
       "date": "Jumat, 20 November 2026",
       "dateISO": "2026-11-20",
       "startTime": "17:00",
-      "time": "17.00 WITA–selesai",
+      "time": "17.00 WITA – selesai",
       "coordinates": {
         "lat": 0.584304,
         "lng": 120.768292
@@ -163,7 +163,7 @@
     "description": "Undangan pernikahan Pratu Rama Syahputra dan Venni Vidiya Sari, Jumat, 20 November 2026."
   },
   "opening": {
-    "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nAssalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dalam pernikahan putra-putri kami:\n\nPratu Rama Syahputra\n&\nVenni Vidiya Sari, A.Md.Keb\n\nKehadiran serta doa restu Bapak/Ibu/Saudara/i merupakan kehormatan dan kebahagiaan bagi keluarga kami.\n\nAtas perhatian dan doa restunya, kami mengucapkan terima kasih."
+    "text": "Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dalam pernikahan kami."
   },
   "hashtag": "#RamaVenni",
   "guestbook": {
