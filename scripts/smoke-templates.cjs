@@ -166,10 +166,12 @@ for (const slug of activeThemeSlugs) {
           const data = window.__invitationData || {};
           const accounts = Array.isArray(data.gifts?.accounts) ? data.gifts.accounts : [];
           const enabledAccounts = accounts.filter(item => item && item.enabled !== false);
-          const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+          const eventSource = data.__renderEvents || data.events;
+          const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {});
           const mappedEvents = events.filter(item => [item.venue || item.location, item.address].filter(Boolean).length);
           const giftCards = Array.from(document.querySelectorAll("#gift-list .gift-card"));
           const eventCards = Array.from(document.querySelectorAll("#event-list .event-card"));
+          const scheduleRows = Array.from(document.querySelectorAll("#event-list .oa-event-schedule-item"));
           return {
             expectedPayments: enabledAccounts.length,
             paymentNames: enabledAccounts.map(item => item.bank || "HADIAH DIGITAL"),
@@ -178,6 +180,9 @@ for (const slug of activeThemeSlugs) {
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
             hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
             expectedMappedEvents: mappedEvents.length,
+            eventCards: eventCards.length,
+            scheduleRows: scheduleRows.length,
+            expectedScheduleRows: events.reduce((total, item) => total + (Array.isArray(item.schedule) ? item.schedule.length : 0), 0),
             navigationEnabled: data.features?.mapNavigation !== false,
             mapEmbedEnabled: data.features?.mapEmbed !== false,
             locationLinks: document.querySelectorAll(".oa-event-location").length,
@@ -200,6 +205,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": tombol pembayaran demo harus nonaktif " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.hasDemoNotice, true,
           theme.slug + ": peringatan simulasi pembayaran tidak tampil " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.eventCards, demoFeatureAudit.expectedMappedEvents,
+          theme.slug + ": jumlah kartu acara tidak sesuai mode JSON " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.scheduleRows, demoFeatureAudit.expectedScheduleRows,
+          theme.slug + ": jumlah baris jadwal gabungan tidak sesuai JSON " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.locationLinks, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": tautan lokasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.navigationLinks, demoFeatureAudit.navigationEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
