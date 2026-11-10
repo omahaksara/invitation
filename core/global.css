@@ -247,6 +247,7 @@ body {
 .oa-floating-controls[data-theme="karsa"] { --oa-dock-bg:#171b18f5;--oa-dock-border:#a58a61;--oa-dock-ink:#f4eee3;--oa-dock-accent:#6e6048;border-radius:999px;box-shadow:0 8px 28px #090c0a88; }
 .oa-floating-controls[data-theme="kinze"] { --oa-dock-bg:#101b2bf5;--oa-dock-border:#d8b76a;--oa-dock-ink:#f2e7ce;--oa-dock-accent:#3c526c;border-radius:8px 8px 22px 22px;box-shadow:0 10px 30px #080f1b88; }
 .oa-floating-controls[data-theme="lume"] { --oa-dock-bg:#faf8eff5;--oa-dock-border:#b7a77b;--oa-dock-ink:#655d49;--oa-dock-accent:#e8dfc5;border-radius:2px;box-shadow:0 6px 20px #5d52301c; }
+.oa-floating-controls[data-theme="jendela-senja"] { --oa-dock-bg:#14161ff7;--oa-dock-border:#E2A46B;--oa-dock-ink:#F3EBDD;--oa-dock-accent:#3A2A3C;border-radius:999px;border-width:1px;box-shadow:0 12px 32px #090a10a8,inset 0 0 0 1px #E2A46B22; }
 .oa-floating-controls[data-theme="lumiere-bloom"] { --oa-dock-bg:#fff8f3f7;--oa-dock-border:#d7a85e;--oa-dock-ink:#704859;--oa-dock-accent:#f0d8d7;border-radius:30px 30px 12px 12px;box-shadow:0 10px 28px #8e5d6b22; }
 .oa-floating-controls[data-theme="nox"] { --oa-dock-bg:#171717f7;--oa-dock-border:#b85d38;--oa-dock-ink:#f4e8df;--oa-dock-accent:#6f3327;border-radius:0;border-width:1px 0 0;box-shadow:0 -8px 30px #0008; }
 .oa-floating-controls[data-theme="romantic-floral"] { --oa-dock-bg:#fbf4efF7;--oa-dock-border:#e5cca0;--oa-dock-ink:#755b43;--oa-dock-accent:#ead7c9;border-radius:2px 2px 24px 24px;box-shadow:0 9px 26px #8e725322; }
@@ -500,6 +501,7 @@ html[data-oa-theme="romantic-floral"] { --oa-font-display:"Cormorant Garamond",G
 html[data-oa-theme="elegance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
 html[data-oa-theme="aurelia-noir"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
 html[data-oa-theme="lumiere-bloom"] { --oa-font-display:"Playfair Display",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
+html[data-oa-theme="jendela-senja"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Manrope",sans-serif; }
 html[data-oa-theme="aksara-nocturne"] { --oa-font-display:"Marcellus",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
 html[data-oa-theme="calestial"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Cormorant Garamond",Georgia,serif; }
 
@@ -525,6 +527,8 @@ html[data-oa-theme] textarea,
 html[data-oa-theme] select {
   font-family:var(--oa-font-body,Inter,sans-serif);
 }
+
+html[data-oa-theme="jendela-senja"] { --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
 
 /* Theme motion tokens: each visual identity gets its own reveal rhythm. */
 html[data-oa-theme="aksara-nocturne"] { --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
