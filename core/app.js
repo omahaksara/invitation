@@ -8,11 +8,18 @@
     const params = new URLSearchParams(location.search);
     const slug = params.get("c") || "";
     const guestName = (params.get("to") || "").trim();
-    const buildShortInvitationUrl = () => {
-      const path = "/i/" + encodeURIComponent(slug) + (guestName ? "/" + encodeURIComponent(guestName) : "");
+    const buildShortInvitationUrl = (invitationData = {}) => {
+      const guestSegment = guestName
+        ? guestName.normalize("NFKC").trim().replace(/\\s+/g, "-")
+        : "";
+      const path = "/i/" + encodeURIComponent(slug) + (guestSegment ? "/" + encodeURIComponent(guestSegment) : "");
       const shortUrl = new URL(path, "https://omahaksara.github.io");
       const selectedTheme = params.get("theme") || "";
-      if (/^[a-z0-9][a-z0-9-]*$/i.test(selectedTheme)) shortUrl.searchParams.set("theme", selectedTheme);
+      // Alternate themes are preview-only and must never override a client invitation.
+      if (slug === "demo-katalog" && invitationData.demoMode === true &&
+          /^[a-z0-9][a-z0-9-]*$/i.test(selectedTheme)) {
+        shortUrl.searchParams.set("theme", selectedTheme);
+      }
       return shortUrl.toString();
     };
     if (!/^[a-z0-9][a-z0-9-]*$/i.test(slug)) {
@@ -23,7 +30,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261110-quality-gate-v5");
+      dataUrl.searchParams.set("_v", "20261110-link-hardening-v1");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -32,21 +39,18 @@
       normalizeDemoAssets(data, slug);
       normalizeTemplateData(data);
       const requestedTheme = params.get("theme");
-      // Theme slugs are validated before they can override a published invitation.
-      // Demo previews retain folder-based discovery; published invitations only accept
-      // themes explicitly marked active in templates/registry.json.
+      // Only the public demo catalog may preview alternate themes.
+      // Every customer invitation remains bound to its own configured JSON theme.
       const isThemeSlug = value => /^[a-z0-9][a-z0-9-]*$/i.test(value || "");
       const canonicalTheme = value => value === "royal" ? "royal-vintage" : value;
       const configured = isThemeSlug(data.theme) ? data.theme : "karsa";
       const configuredAlias = canonicalTheme(configured);
       let requestedAlias = "";
-      if (data.demoMode === true && isThemeSlug(requestedTheme)) {
-        requestedAlias = canonicalTheme(requestedTheme);
-      } else if (data.status === "published" && isThemeSlug(requestedTheme)) {
+      if (slug === "demo-katalog" && data.demoMode === true && isThemeSlug(requestedTheme)) {
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261110-quality-gate-v5");
+          registryUrl.searchParams.set("_v", "20261110-link-hardening-v1");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -56,8 +60,8 @@
             if (activeThemes.includes(candidate)) requestedAlias = candidate;
           }
         } catch (themeError) {
-          // Fail safely: a registry/network problem keeps the configured theme.
-          console.warn("Tema dari link diabaikan; memakai tema bawaan undangan.", themeError);
+          // Fail safely: a registry/network problem keeps the demo's configured theme.
+          console.warn("Tema demo diabaikan; memakai tema bawaan demo.", themeError);
         }
       }
       // Never let a stale or mistyped theme slug turn the whole invitation into a blank/error page.
@@ -70,7 +74,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261110-quality-gate-v5");
+          templateUrl.searchParams.set("_v", "20261110-link-hardening-v1");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
