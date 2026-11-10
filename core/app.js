@@ -910,7 +910,7 @@
       }
       if (venueText) card.append(venue);
       const suppliedUrl = typeof item.mapsUrl === "string" && /^https?:\/\//i.test(item.mapsUrl) ? item.mapsUrl : "";
-      const mapUrl = suppliedUrl || mapTarget.searchUrl;
+      const mapUrl = mapTarget.verifiedPoint ? mapTarget.searchUrl : (suppliedUrl || mapTarget.searchUrl);
       if (mapsEnabled && mapUrl) {
         const link = document.createElement("a");
         link.className = "oa-event-location";
