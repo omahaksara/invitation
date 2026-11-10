@@ -184,6 +184,9 @@ for (const slug of activeThemeSlugs) {
         } : null;
         return { quote: inspect(quote), opening: inspect(opening) };
       });
+      if (!copyAudit.quote || !copyAudit.opening) {
+        throw new Error(theme.slug + ": seluruh tema wajib menampilkan paragraf pembuka dan doa dari JSON demo " + JSON.stringify(copyAudit));
+      }
       if (copyAudit.quote && (copyAudit.quote.textAlign !== "center" || copyAudit.quote.whiteSpace !== "pre-line")) {
         throw new Error(theme.slug + ": teks doa/kutipan harus rata tengah dan mempertahankan paragraf " + JSON.stringify(copyAudit));
       }
