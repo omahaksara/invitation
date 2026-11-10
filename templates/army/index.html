@@ -356,6 +356,51 @@ body,#app{background:var(--army-forest)!important;color:var(--army-ivory)!import
 .army #blessing .opening-thanks{font-weight:600}
 .army #blessing .opening-wassalam{margin-bottom:0;font-style:italic}
 @media(max-width:650px){.army #blessing .opening-intro-card{padding:25px 18px;border-radius:20px}.army #blessing .opening-couple-name{margin:18px auto;padding:14px 8px}}
+
+/* Army theme motion polish — scoped to this template; content and behavior stay unchanged. */
+html[data-oa-theme] #app .army .reveal,
+html[data-oa-theme] #app .army .oa-scroll-reveal{
+  opacity:0;
+  transform:translate3d(0,26px,0) scale(.99);
+  filter:blur(1.5px);
+  transition-property:opacity,transform,filter!important;
+  transition-duration:.76s!important;
+  transition-timing-function:cubic-bezier(.2,.72,.18,1)!important;
+}
+html[data-oa-theme] #app .army .reveal.active,
+html[data-oa-theme] #app .army .oa-scroll-reveal.oa-visible{
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+  filter:blur(0);
+}
+html[data-oa-theme] #app .army .oa-motion-item{
+  transition-duration:.68s!important;
+  transition-timing-function:cubic-bezier(.2,.72,.18,1)!important;
+}
+html[data-oa-theme] #app .army img.oa-motion-photo,
+html[data-oa-theme] #app .army .oa-motion-photo img{
+  transition-duration:.82s!important;
+  transition-timing-function:cubic-bezier(.2,.72,.18,1)!important;
+}
+html[data-oa-theme] #app .army #cover.is-opening{
+  animation:army-cover-exit .72s cubic-bezier(.22,.72,.2,1) forwards!important;
+  pointer-events:none;
+}
+@keyframes army-cover-exit{
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:brightness(1)}
+  55%{opacity:.96;transform:translate3d(0,-1.5%,0) scale(1.012);filter:brightness(1.06)}
+  100%{opacity:0;transform:translate3d(0,-3%,0) scale(1.025);filter:brightness(1.1)}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-oa-theme] #app .army .reveal,
+  html[data-oa-theme] #app .army .oa-scroll-reveal,
+  html[data-oa-theme] #app .army .oa-motion-item,
+  html[data-oa-theme] #app .army img.oa-motion-photo{
+    opacity:1!important;transform:none!important;filter:none!important;
+    transition:none!important;animation:none!important
+  }
+}
+
 </style>
 <div class="army" id="main-content">
 <section id="cover" class="cover">
