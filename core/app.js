@@ -116,6 +116,7 @@
       } else {
         app.innerHTML = templateHtml;
       }
+      prepareInvitationImages(app);
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
       renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl);
     } catch (error) {
@@ -276,6 +277,25 @@
     return new URL(String(value), clientBase).href;
   }
 
+  // Apply one shared image-loading policy without changing customer JSON or image files.
+  // Cover portraits load eagerly; below-the-fold photos stay lazy and decode off the main path.
+  function prepareInvitationImages(root) {
+    if (!root) return;
+    root.querySelectorAll("img").forEach(image => {
+      const isCoverImage = image.matches(
+        '#cover img, #cover-section img, .sirein-cover img, [data-bind="cover.image"], [data-bind="cover.heroImage"], [data-oa-cover-image]'
+      ) || /cover|hero|portrait/i.test((image.id || "") + " " + (image.className || ""));
+      image.decoding = "async";
+      if (isCoverImage) {
+        image.loading = "eager";
+        image.fetchPriority = "high";
+      } else {
+        image.loading = "lazy";
+        image.fetchPriority = "low";
+      }
+    });
+  }
+
   function renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl) {
     ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl);
     window.__invitationData = data;
@@ -284,7 +304,16 @@
       const value = valueAt(data, path);
       if (value === undefined || value === null || typeof value === "object") return;
       if (["IMG", "AUDIO", "VIDEO"].includes(el.tagName)) {
-        if (String(value).trim()) el.src = assetUrl(value, clientBase);
+        if (String(value).trim()) {
+          if (el.tagName === "IMG") {
+            const isCoverImage = el.matches('#cover img, #cover-section img, [data-bind="cover.image"], [data-bind="cover.heroImage"], [data-oa-cover-image]') ||
+              /cover|hero|portrait/i.test((el.id || "") + " " + (el.className || ""));
+            el.decoding = "async";
+            el.loading = isCoverImage ? "eager" : "lazy";
+            el.fetchPriority = isCoverImage ? "high" : "low";
+          }
+          el.src = assetUrl(value, clientBase);
+        }
       } else if (el.tagName === "A") {
         if (String(value).trim()) {
           el.href = String(value);
@@ -570,6 +599,7 @@
           frame.loading = "lazy";
           frame.referrerPolicy = "no-referrer-when-downgrade";
           frame.allowFullscreen = true;
+          frame.loading = "lazy";
           frame.src = mapTarget.embedUrl;
           frame.setAttribute("allow", "fullscreen");
           frameWrap.append(frame);
@@ -622,6 +652,7 @@
           frame.loading = "lazy";
           frame.referrerPolicy = "no-referrer-when-downgrade";
           frame.allowFullscreen = true;
+          frame.loading = "lazy";
           frame.src = mapTarget.embedUrl;
           frame.setAttribute("allow", "fullscreen");
           frameWrap.append(frame);
@@ -843,10 +874,12 @@
       if (photoPath && String(photoPath).trim()) {
         const image = document.createElement("img");
         image.className = "oa-story-photo";
-        image.src = assetUrl(String(photoPath), clientBase);
-        image.alt = String(titleText || "Foto cerita perjalanan pasangan");
         image.loading = "lazy";
         image.decoding = "async";
+        image.fetchPriority = "low";
+        image.sizes = "(max-width: 640px) 92vw, 680px";
+        image.src = assetUrl(String(photoPath), clientBase);
+        image.alt = String(titleText || "Foto cerita perjalanan pasangan");
         image.onerror = () => { image.hidden = true; };
         content.append(image);
       }
@@ -982,6 +1015,7 @@
           frame.title = "Peta lokasi " + (item.title || item.id || "acara");
           frame.loading = "lazy"; frame.referrerPolicy = "no-referrer-when-downgrade";
           frame.allowFullscreen = true;
+          frame.loading = "lazy";
           frame.src = mapTarget.embedUrl;
           frame.setAttribute("allow", "fullscreen");
           frameWrap.append(frame);
@@ -1026,10 +1060,12 @@
       if (!src) return;
       const figure = document.createElement("figure"); figure.className = "gallery-item reveal";
       const img = document.createElement("img");
-      img.src = assetUrl(src, clientBase);
-      img.alt = typeof item === "string" ? "Foto galeri pernikahan " + (index + 1) : (item.alt || "Foto galeri pernikahan " + (index + 1));
       img.loading = "lazy";
       img.decoding = "async";
+      img.fetchPriority = "low";
+      img.sizes = "(max-width: 640px) 92vw, 900px";
+      img.src = assetUrl(src, clientBase);
+      img.alt = typeof item === "string" ? "Foto galeri pernikahan " + (index + 1) : (item.alt || "Foto galeri pernikahan " + (index + 1));
       img.tabIndex = 0;
       img.setAttribute("role", "button");
       img.setAttribute("aria-label", "Perbesar foto " + (index + 1));
@@ -1136,8 +1172,11 @@
       const qr = item.qrCode || item.qr;
       const qrSrc = typeof qr === "string" ? qr : qr?.src;
       if (qrSrc) {
-        const img = document.createElement("img"); img.src = assetUrl(qrSrc, clientBase);
-        img.alt = type === "qris" ? "Kode QR pembayaran" : "QR hadiah"; img.loading = "lazy"; img.style.cssText = "display:block;max-width:140px;width:100%;margin:18px auto 0";
+        const img = document.createElement("img");
+        img.loading = "lazy"; img.decoding = "async"; img.fetchPriority = "low";
+        img.alt = type === "qris" ? "Kode QR pembayaran" : "QR hadiah";
+        img.src = assetUrl(qrSrc, clientBase);
+        img.style.cssText = "display:block;max-width:140px;width:100%;margin:18px auto 0";
         card.append(img);
       }
       root.append(card);
@@ -1196,6 +1235,8 @@
       return;
     }
 
+    // Do not download background music until the guest explicitly presses play.
+    audio.preload = "none";
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
     if (button.tagName !== "BUTTON") {
       button.setAttribute("role", "button");
@@ -1618,6 +1659,7 @@
           frame.loading = "lazy";
           frame.referrerPolicy = "no-referrer-when-downgrade";
           frame.allowFullscreen = true;
+          frame.loading = "lazy";
           frame.src = mapTarget.embedUrl;
           frame.setAttribute("allow", "fullscreen");
           frameWrap.append(frame);
