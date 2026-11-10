@@ -982,3 +982,24 @@ html[data-oa-theme] .oa-event-map-fallback a{
   text-decoration:none;
   overflow-wrap:anywhere;
 }
+
+ 
+/* Private Venni–Rama forest-green variant: shared dock and motion identity. */
+.oa-floating-controls[data-theme="aksav-forest"] {
+  --oa-dock-bg:#0b241bf5;
+  --oa-dock-border:#b99f68;
+  --oa-dock-ink:#f2efe6;
+  --oa-dock-accent:#e0c98f;
+  --oa-dock-active:#b99f68;
+  --oa-dock-active-ink:#10251b;
+  border-radius:999px;
+  box-shadow:0 10px 30px rgba(0,0,0,.34);
+}
+html[data-oa-theme="aksav-forest"] {
+  --oa-font-display:"Cormorant Garamond",Georgia,serif;
+  --oa-font-body:"Montserrat",Arial,sans-serif;
+  --oa-theme-display:"Cormorant Garamond",Georgia,serif;
+  --oa-theme-body:"Montserrat",Arial,sans-serif;
+  --oa-reveal-time:.46s;
+  --oa-reveal-ease:cubic-bezier(.18,.76,.22,1);
+}
