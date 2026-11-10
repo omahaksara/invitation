@@ -75,7 +75,6 @@ const themes = [
   { slug: "nox", marker: ".nox", open: "#open-btn", cover: "#cover" },
   { slug: "taupe", marker: ".taupe", open: "#open-btn", cover: "#cover" },
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
-  { slug: "jendela-senja", marker: "#cover", open: "#open-btn", cover: "#cover", status: "prototype" },
 ];
 
 // Prototype themes receive isolated browser coverage without being promoted to active catalogue entries.
