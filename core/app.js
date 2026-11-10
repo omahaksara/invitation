@@ -216,7 +216,7 @@
             timezone: event.timezone || akad.timezone || resepsi.timezone || data.site?.timezone || "Asia/Makassar"
           });
           const first = akad;
-          data.events = {
+          data.__renderEvents = {
             combined: {
               id: "combined",
               title: "Akad & Resepsi",
@@ -245,12 +245,12 @@
     }
 
     if (data.eventMode === "akad-only" && data.events && !Array.isArray(data.events)) {
-      data.events = data.events.akad ? { akad: data.events.akad } : {};
+      data.__renderEvents = data.events.akad ? { akad: data.events.akad } : {};
     } else if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
-      data.events = data.events.resepsi ? { resepsi: data.events.resepsi } : {};
+      data.__renderEvents = data.events.resepsi ? { resepsi: data.events.resepsi } : {};
     }
-
-    const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+    const renderEventsData = data.__renderEvents || data.events;
+    const events = Array.isArray(renderEventsData) ? renderEventsData : Object.values(renderEventsData || {});
     const firstEvent = events.find(event => event && (event.date || event.dateISO));
     if (!data.cover.dateLabel && firstEvent) data.cover.dateLabel = firstEvent.date || firstEvent.dateISO || "";
     data.opening = data.opening && typeof data.opening === "object" ? data.opening : {};
@@ -303,7 +303,7 @@
     });
 
     renderStory(data.story, clientBase);
-    renderEvents(data.events, data, clientBase);
+    renderEvents(data.__renderEvents || data.events, data, clientBase);
     bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
     renderClosing(data);
@@ -370,16 +370,18 @@
     if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
     if (!(data.closing && (data.closing.title || data.closing.text || data.closing.signature))) hide("[data-oa-closing], .oa-closing-section");
     if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
-    const eventValues = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+    const eventSource = data.__renderEvents || data.events;
+    const eventValues = Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {});
     if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) document.querySelectorAll("#link-akad-maps, #link-resepsi-maps").forEach(el => { el.hidden = true; });
     if (!data.countdown?.targetDate && !eventValues.some(item => item && item.date)) hide("#countdown, .countdown");
   }
 
 
   function ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl) {
-    const eventItems = Array.isArray(data.events)
-      ? data.events
-      : Object.entries(data.events || {}).map(([id, item]) => ({ id, ...item }));
+    const eventSource = data.__renderEvents || data.events;
+    const eventItems = Array.isArray(eventSource)
+      ? eventSource
+      : Object.entries(eventSource || {}).map(([id, item]) => ({ id, ...item }));
     const stories = Array.isArray(data.story) ? data.story : [];
     const gallery = Array.isArray(data.gallery) ? data.gallery : (data.gallery && Array.isArray(data.gallery.items) ? data.gallery.items : []);
     const gifts = Array.isArray(data.gifts) ? data.gifts : (data.gifts && Array.isArray(data.gifts.accounts) ? data.gifts.accounts : []);
@@ -409,6 +411,29 @@
       section.append(root);
       return root;
     };
+
+    // One shared event renderer serves every theme. When a legacy theme has
+    // hard-coded event cards instead of #event-list, hide those cards and mount
+    // the shared renderer into the existing event section (or create one).
+    if (eventItems.length && !document.getElementById("event-list")) {
+      const legacyTitles = [...document.querySelectorAll('[data-bind="events.akad.title"], [data-bind="events.resepsi.title"]')];
+      let eventSection = (legacyTitles[0] && legacyTitles[0].closest("section")) ||
+        document.querySelector(".events-section, .event-section, #events-section, #events");
+      if (!eventSection) eventSection = makeSection("events-section", "Rangkaian Acara");
+      legacyTitles.forEach(title => {
+        let node = title.parentElement;
+        while (node && node !== eventSection) {
+          const relatedBindings = node.querySelectorAll('[data-bind^="events."]').length;
+          if (relatedBindings >= 2) {
+            node.hidden = true;
+            node.setAttribute("data-oa-legacy-event", "true");
+            break;
+          }
+          node = node.parentElement;
+        }
+      });
+      makeContainer(eventSection, "event-list", "event-grid");
+    }
 
     if (stories.length && !document.getElementById("story-list") && !document.querySelector(".story-list")) {
       const section = makeSection("story-section", "Cerita Kami");
@@ -1188,7 +1213,8 @@
   }
 
   function setupCountdown(data) {
-    const target = (Array.isArray(data.events) ? data.events : Object.values(data.events || {})).find(e => e && e.date);
+    const eventSource = data.__renderEvents || data.events;
+    const target = (Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {})).find(e => e && (e.date || e.dateISO));
     let targetDate;
     if (data.countdown && data.countdown.targetDate) {
       targetDate = new Date(data.countdown.targetDate);
