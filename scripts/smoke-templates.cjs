@@ -87,6 +87,13 @@ const activeThemeSlugs = (themeRegistry.themes || [])
 const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
+const engineSource = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf8");
+assert.ok(engineSource.includes('slug === "demo-katalog" && data.demoMode === true'),
+  "Alternate theme overrides must be restricted to the public demo catalog.");
+assert.ok(engineSource.includes('slug === "demo-katalog" && invitationData.demoMode === true'),
+  "Shared invitation links must not expose theme overrides for customer invitations.");
+assert.ok(engineSource.includes('guestName.normalize("NFKC").trim().replace(/\\\\s+/g, "-")'),
+  "Guest names in short invitation links must use canonical hyphen-separated segments.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
 for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
@@ -652,7 +659,7 @@ for (const slug of activeThemeSlugs) {
         const dockSharedUrl = new URL(dockSharePayload.url);
         assert.ok(dockSharedUrl.origin === "https://omahaksara.github.io" &&
           dockSharedUrl.pathname.startsWith("/i/demo-katalog/") &&
-          dockSharedUrl.pathname.includes("Nama%20Tamu"),
+          dockSharedUrl.pathname.includes("Nama-Tamu"),
           theme.slug + ": dock share action did not produce the canonical invitation URL.");
         // The in-content share button is a separate entry point; test it too.
         await page.evaluate(() => { window.__oaSharePayload = null; });
@@ -664,7 +671,7 @@ for (const slug of activeThemeSlugs) {
         const sharedUrl = sharePayload?.url ? new URL(sharePayload.url) : null;
         assert.ok(sharedUrl && sharedUrl.origin === "https://omahaksara.github.io" &&
           sharedUrl.pathname.startsWith("/i/demo-katalog/") &&
-          sharedUrl.pathname.includes("Nama%20Tamu"),
+          sharedUrl.pathname.includes("Nama-Tamu"),
           theme.slug + ": aksi bagikan undangan tidak mengirim URL undangan kanonis yang valid.");
 
         await page.evaluate(() => {
