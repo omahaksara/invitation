@@ -1521,6 +1521,9 @@
   }
 
   function bindMapLinks(data) {
+    // The shared event renderer owns map links whenever it is mounted. This
+    // avoids duplicate legacy links/cards on themes upgraded from hard-coded markup.
+    if (document.getElementById("event-list")) return;
     const rawEvents = data && data.events ? data.events : {};
     const entries = Array.isArray(rawEvents)
       ? rawEvents.map((item, index) => [item && item.id ? item.id : (index === 0 ? "akad" : index === 1 ? "resepsi" : String(index)), item])
