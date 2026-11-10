@@ -636,12 +636,39 @@ for (const slug of activeThemeSlugs) {
         });
         assert.ok(nextTargetId, theme.slug + ": tidak ada target bagian berikutnya untuk diuji.");
         await navigation.locator('[data-oa-action="next"]').click();
-        await page.waitForFunction(id => {
-          const target = document.getElementById(id);
-          if (!target) return false;
-          const rect = target.getBoundingClientRect();
-          return rect.bottom > 0 && rect.top < window.innerHeight;
-        }, nextTargetId, { timeout: 5000 });
+        try {
+          await page.waitForFunction(id => {
+            const target = document.getElementById(id);
+            if (!target) return false;
+            const rect = target.getBoundingClientRect();
+            return rect.bottom > 0 && rect.top < window.innerHeight;
+          }, nextTargetId, { timeout: 5000 });
+        } catch (error) {
+          const nextDebug = await page.evaluate(id => {
+            const target = document.getElementById(id);
+            const rect = target?.getBoundingClientRect();
+            const buttons = Array.from(document.querySelectorAll('#oa-floating-controls [data-oa-action="jump"]'));
+            return {
+              targetId: id,
+              scrollY: window.scrollY,
+              viewportHeight: window.innerHeight,
+              target: target ? {
+                tag: target.tagName,
+                className: typeof target.className === "string" ? target.className : "",
+                hidden: target.hidden,
+                display: getComputedStyle(target).display,
+                visibility: getComputedStyle(target).visibility,
+                rect: rect ? { x:rect.x,y:rect.y,width:rect.width,height:rect.height,top:rect.top,bottom:rect.bottom } : null
+              } : null,
+              menu: buttons.map(button => {
+                const item = document.getElementById(button.dataset.target || "");
+                const box = item?.getBoundingClientRect();
+                return { id:button.dataset.target, label:button.textContent, rect:box ? { top:box.top,bottom:box.bottom,width:box.width,height:box.height } : null };
+              })
+            };
+          }, nextTargetId);
+          throw new Error((error?.message || error) + " NEXT_DEBUG " + JSON.stringify(nextDebug));
+        }
         const homeButton = navigation.locator('[data-oa-action="jump"][data-oa-section="home"]');
         const homeTargetId = await homeButton.getAttribute("data-target");
         await homeButton.click();
