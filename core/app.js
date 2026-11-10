@@ -23,7 +23,7 @@
     const clientBase = new URL(`${basePath}/clients/${slug}/`, location.origin);
     try {
       const dataUrl = new URL("data.json", clientBase);
-      dataUrl.searchParams.set("_v", "20261110-satellite-map-v3");
+      dataUrl.searchParams.set("_v", "20261110-copy-alignment-v4");
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Data undangan tidak ditemukan.");
       const data = await response.json();
@@ -46,7 +46,7 @@
         const candidate = canonicalTheme(requestedTheme);
         try {
           const registryUrl = new URL(`${basePath}/templates/registry.json`, location.origin);
-          registryUrl.searchParams.set("_v", "20261110-satellite-map-v3");
+          registryUrl.searchParams.set("_v", "20261110-copy-alignment-v4");
           const registryResponse = await fetch(registryUrl, { cache: "no-store" });
           if (registryResponse.ok) {
             const registry = await registryResponse.json();
@@ -70,7 +70,7 @@
         try {
           const themeBase = new URL(`${basePath}/templates/${candidateTheme}/`, location.origin);
           const templateUrl = new URL("index.html", themeBase);
-          templateUrl.searchParams.set("_v", "20261110-satellite-map-v3");
+          templateUrl.searchParams.set("_v", "20261110-copy-alignment-v4");
           const templateResponse = await fetch(templateUrl, { cache: "no-store" });
           if (!templateResponse.ok) {
             templateError = new Error("Tema undangan tidak ditemukan: " + candidateTheme);
@@ -463,6 +463,19 @@
         item.append(value, caption); root.append(item);
       });
     }
+    // Ensure every theme presents the formal opening/prayer copy, even when
+    // its original markup did not include an opening.text binding.
+    if (data.opening?.text && !document.querySelector('[data-bind="opening.text"]')) {
+      const section = makeSection("oa-opening-copy", "Sambutan & Doa");
+      const paragraph = document.createElement("p");
+      paragraph.setAttribute("data-bind", "opening.text");
+      section.append(paragraph);
+      const cover = document.querySelector("#cover, .cover, [class$='-cover']");
+      if (cover && cover.parentNode && cover !== section) {
+        cover.insertAdjacentElement("afterend", section);
+      }
+    }
+
     if ((quote.text || quote.arab) && !document.querySelector(".quote-section, [data-bind='quote.text'], [data-bind='quote.arab']")) {
       const section = makeSection("quote-section", "Kutipan");
       if (quote.arab) { const arab = document.createElement("p"); arab.setAttribute("data-bind", "quote.arab"); section.append(arab); }
