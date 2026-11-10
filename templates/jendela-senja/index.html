@@ -102,7 +102,7 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
 #rsvp-form option,#wishes-form option{color:var(--js-ink)}
 #rsvp-form input:focus,#rsvp-form textarea:focus,#wishes-form input:focus,#wishes-form textarea:focus{border-bottom-width:2px}
 #rsvp-form button[type=submit],#wishes-form button[type=submit]{width:100%;margin-top:1rem;padding:.9rem 1rem;border:0;border-radius:99px;background:var(--js-ivory);color:var(--js-ink);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
-#rsvp-form [name=attendance]{appearance:none}
+#rsvp-form label:has(input[type=radio]){display:inline-flex;align-items:center;justify-content:center;gap:.45rem;margin:.35rem .3rem .35rem 0;padding:.62rem 1rem;border:1px solid rgba(226,164,107,.7);border-radius:99px;color:var(--js-ivory);cursor:pointer}#rsvp-form input[type=radio]{width:auto;accent-color:var(--js-amber)}#rsvp-form label:has(input[type=radio]:checked){background:rgba(226,164,107,.17);border-color:var(--js-amber)}
 #rsvp-status,#wishes-status{color:var(--js-amber);font-size:.75rem}
 #guestbook-section{background:var(--js-ivory);color:var(--js-ink)}
 #wishes-form{border-color:#cbb8a6;background:#fffaf2}
@@ -110,8 +110,8 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
 #wishes-form input,#wishes-form textarea{color:var(--js-ink);border-color:#b78b69}
 #wishes-form button[type=submit]{background:var(--js-ink);color:var(--js-ivory)}
 #wishes-list{max-width:620px;margin:2rem auto;display:grid;gap:.8rem}
-#wishes-list>*{padding:1rem;border:1px solid #d5c4b5;border-radius:2px 22px 2px 22px;background:#fffaf3}
-#wishes-list .wish-name,#wishes-list strong{font-family:var(--js-serif);font-size:1.1rem}
+#wishes-list .wish-card{padding:1rem;border:1px solid #d5c4b5;border-radius:2px 22px 2px 22px;background:#fffaf3}
+#wishes-list .wish-card h3{display:flex;align-items:center;gap:.75rem;margin:0 0 .5rem;font-family:var(--js-serif);font-size:1.1rem;font-weight:400}#wishes-list .wish-card p{margin:.2rem 0;color:#625b58} .js-wish-avatar{flex:0 0 34px;width:34px;height:38px;display:grid;place-items:center;border:1px solid #b98b69;border-radius:50% 50% 2px 2px/40% 40% 2px 2px;color:#6b4a3b;font-family:var(--js-serif);font-size:1rem}
 .gift-section{background:var(--js-plum);color:var(--js-ivory)}
 .gift-grid{display:grid;grid-template-columns:1fr;gap:1rem;max-width:650px;margin:auto}
 .gift-card{padding:1.4rem;text-align:center;border:1px solid rgba(226,164,107,.65);border-radius:2px 26px 2px 26px;background:rgba(20,22,31,.22)}
@@ -178,7 +178,7 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
     </section>
     <section class="js-section rsvp-section" id="rsvp-section">
       <header class="js-heading"><p class="eyebrow">KONFIRMASI KEHADIRAN</p><h2>RSVP</h2><p>Mohon kesediaan Anda untuk mengonfirmasi kehadiran.</p></header>
-      <form id="rsvp-form" class="form-card"><label>Nama<input id="rsvp-name" name="name" type="text" autocomplete="name" maxlength="100" required></label><label>Kehadiran<select name="attendance" required><option value="">Pilih jawaban</option><option value="hadir">Hadir</option><option value="tidak_hadir">Berhalangan</option></select></label><label>Jumlah tamu<select name="guestCount"><option value="1">1 orang</option><option value="2">2 orang</option></select></label><button type="submit">Kirim Konfirmasi</button><p id="rsvp-status" role="status"></p></form>
+      <form id="rsvp-form" class="form-card"><label>Nama<input id="rsvp-name" name="name" type="text" autocomplete="name" maxlength="100" required></label><fieldset style="border:0;padding:0;margin:.6rem 0"><legend style="margin-bottom:.45rem;color:#d8cec7;font-size:.72rem">Kehadiran</legend><label><input type="radio" name="attendance" value="hadir" required> Hadir</label><label><input type="radio" name="attendance" value="tidak_hadir"> Berhalangan</label></fieldset><label>Jumlah tamu<select name="guestCount"><option value="1">1 orang</option><option value="2">2 orang</option></select></label><button type="submit">Kirim Konfirmasi</button><p id="rsvp-status" role="status"></p></form>
     </section>
     <section class="js-section" id="guestbook-section">
       <header class="js-heading"><p class="eyebrow">DOA DARI ORANG TERCINTA</p><h2>Buku Tamu</h2><p>Tinggalkan pesan dan doa terbaik untuk perjalanan kami.</p></header>
@@ -196,5 +196,27 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
   <audio id="bg-music" preload="none" loop></audio>
   <button id="music-toggle" type="button" aria-label="Putar musik" hidden>♫</button>
 </div>
+<script>
+/* Add the small arch initials to engine-rendered guestbook cards without changing its API markup. */
+(function(){
+  const list=document.getElementById("wishes-list");
+  if(!list)return;
+  const decorate=card=>{
+    if(!card||card.dataset.jsDecorated==="true")return;
+    const heading=card.querySelector("h3");
+    if(!heading)return;
+    const initial=(heading.textContent.trim().charAt(0)||"T").toLocaleUpperCase("id-ID");
+    const avatar=document.createElement("span");
+    avatar.className="js-wish-avatar";
+    avatar.textContent=initial;
+    avatar.setAttribute("aria-hidden","true");
+    heading.prepend(avatar);
+    card.dataset.jsDecorated="true";
+  };
+  const scan=()=>list.querySelectorAll(".wish-card").forEach(decorate);
+  new MutationObserver(scan).observe(list,{childList:true,subtree:true});
+  scan();
+})();
+</script>
 </body>
 </html>
