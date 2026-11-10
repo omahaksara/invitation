@@ -165,7 +165,13 @@ for (const slug of activeThemeSlugs) {
         assert.ok(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior === "smooth"),
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
-          theme.slug + ": animasi saat scroll belum dipasang");
+          theme.slug + ": animasi transisi antarbagian belum dipasang");
+        assert.ok(await page.locator(".oa-stagger-item").count() > 0,
+          theme.slug + ": animasi bertahap pada kartu/galeri belum dipasang");
+        assert.ok(await page.evaluate(() => {
+          const style = document.getElementById("oa-scroll-experience-style")?.textContent || "";
+          return style.includes("data-oa-reveal=\\\"left\\\"") && style.includes("oa-stagger-visible");
+        }), theme.slug + ": variasi gerak scroll dan stagger belum tersedia");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
 
