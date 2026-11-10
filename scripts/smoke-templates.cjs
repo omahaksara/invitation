@@ -92,7 +92,7 @@ assert.ok(engineSource.includes('slug === "demo-katalog" && data.demoMode === tr
   "Alternate theme overrides must be restricted to the public demo catalog.");
 assert.ok(engineSource.includes('slug === "demo-katalog" && invitationData.demoMode === true'),
   "Shared invitation links must not expose theme overrides for customer invitations.");
-assert.ok(engineSource.includes('guestName.normalize("NFKC").trim().replace(/\\\\s+/g, "-")'),
+assert.ok(engineSource.includes('guestName.normalize("NFKC").trim().replace(/\\s+/g, "-")'),
   "Guest names in short invitation links must use canonical hyphen-separated segments.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
 for (const slug of activeThemeSlugs) {
