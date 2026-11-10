@@ -76,7 +76,7 @@ function validateAsset(slug, file, key, value) {
 
   const resolved = path.resolve(CLIENTS, slug, normalized);
   const clientRoot = path.resolve(CLIENTS, slug) + path.sep;
-  const sharedMusicRoot = path.resolve(ROOT, 'assets', 'music', 'library') + path.sep;
+  const sharedMusicRoot = path.resolve(ROOT, 'assets', 'music') + path.sep;
   const isClientAsset = resolved.startsWith(clientRoot);
   const isSharedMusicAsset = resolved.startsWith(sharedMusicRoot) &&
     /^(?:media|music|audio)(?:\.|$)/i.test(key);
