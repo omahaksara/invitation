@@ -828,6 +828,47 @@ html[data-oa-theme] .oa-event-map-frame iframe {
   border: 0;
   border-radius: inherit;
 }
+
+html[data-oa-theme] details.oa-event-map {
+  margin-top: 14px;
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 4%, transparent);
+}
+html[data-oa-theme] details.oa-event-map > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 15px;
+  cursor: pointer;
+  list-style: none;
+  font: inherit;
+  font-size: .86em;
+  font-weight: 600;
+  color: inherit;
+}
+html[data-oa-theme] details.oa-event-map > summary::-webkit-details-marker { display: none; }
+html[data-oa-theme] details.oa-event-map > summary::after {
+  content: "+";
+  flex: 0 0 auto;
+  font-size: 1.25em;
+  line-height: 1;
+}
+html[data-oa-theme] details.oa-event-map[open] > summary::after { content: "−"; }
+html[data-oa-theme] details.oa-event-map > summary:focus-visible,
+html[data-oa-theme] .oa-event-map-fallback a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+html[data-oa-theme] .oa-event-map-frame {
+  margin-top: 0;
+  border-radius: 0;
+}
+html[data-oa-theme] .oa-event-map-frame iframe {
+  border-radius: 0;
+}
 html[data-oa-theme] .oa-event-map-note {
   margin: 10px 0 0;
   padding: 10px 12px;
