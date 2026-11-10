@@ -18,6 +18,11 @@
       "status": "active"
     },
     {
+      "slug": "aksav",
+      "name": "Aksav",
+      "status": "active"
+    },
+    {
       "slug": "atelier-editorial",
       "name": "Atelier Editorial",
       "status": "active"
@@ -50,6 +55,11 @@
     {
       "slug": "groom",
       "name": "Groom — Serenade Taupe",
+      "status": "active"
+    },
+    {
+      "slug": "jendela-senja",
+      "name": "Jendela Senja",
       "status": "active"
     },
     {
@@ -120,11 +130,6 @@
     {
       "slug": "velvet-romance",
       "name": "Velvet Romance",
-      "status": "active"
-    },
-    {
-      "slug": "aksav",
-      "name": "Aksav",
       "status": "active"
     }
   ]

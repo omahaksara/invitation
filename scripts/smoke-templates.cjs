@@ -75,6 +75,7 @@ const themes = [
   { slug: "nox", marker: ".nox", open: "#open-btn", cover: "#cover" },
   { slug: "taupe", marker: ".taupe", open: "#open-btn", cover: "#cover" },
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
+  { slug: "jendela-senja", marker: ".js-theme", open: "#open-btn", cover: "#cover" },
 ];
 
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
@@ -83,7 +84,7 @@ const activeThemeSlugs = (themeRegistry.themes || [])
   .filter(theme => theme && theme.status === "active")
   .map(theme => theme.slug)
   .sort();
-const browserThemeSlugs = themes.map(theme => theme.slug).sort();
+const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
@@ -167,6 +168,30 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": animasi saat scroll belum dipasang");
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
+
+        if (theme.slug === "jendela-senja") {
+          const visualAudit = await page.evaluate(() => ({
+            theme: document.documentElement.dataset.oaTheme,
+            appRoots: document.querySelectorAll("#app").length,
+            themeRoots: document.querySelectorAll(".js-theme").length,
+            bodyBackground: getComputedStyle(document.body).backgroundColor,
+            displayFont: getComputedStyle(document.querySelector(".cover-title")).fontFamily,
+            coverImageBound: !!document.querySelector(".cover-image")?.getAttribute("src"),
+            eventCards: document.querySelectorAll("#event-list .event-card").length,
+            galleryImages: document.querySelectorAll("#gallery-grid img").length,
+            giftCards: document.querySelectorAll("#gift-list .gift-card").length,
+            radioChoices: document.querySelectorAll("#rsvp-form input[type=radio][name=attendance]").length
+          }));
+          assert.equal(visualAudit.theme, "jendela-senja", "jendela-senja: slug tema tidak diterapkan.");
+          assert.equal(visualAudit.appRoots, 1, "jendela-senja: ditemukan ID #app ganda.");
+          assert.equal(visualAudit.themeRoots, 1, "jendela-senja: root tema tidak tunggal.");
+          assert.equal(visualAudit.bodyBackground, "rgb(20, 22, 31)", "jendela-senja: CSS tema tidak termuat.");
+          assert.ok(visualAudit.displayFont.includes("Bodoni Moda"), "jendela-senja: font display tidak terpasang.");
+          assert.ok(visualAudit.coverImageBound, "jendela-senja: foto cover belum terikat dari JSON.");
+          assert.ok(visualAudit.eventCards > 0 && visualAudit.galleryImages > 0 && visualAudit.giftCards > 0,
+            "jendela-senja: renderer acara/galeri/hadiah tidak mengisi data demo " + JSON.stringify(visualAudit));
+          assert.equal(visualAudit.radioChoices, 2, "jendela-senja: pilihan RSVP tidak lengkap.");
+        }
         const storyAudit = await page.evaluate(() => ({
           total: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.length : 0,
           photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0
@@ -349,11 +374,8 @@ for (const slug of activeThemeSlugs) {
         // This browser-only fixture intentionally adds verified synthetic coordinates,
         // so the iframe count is validated below against the exact satellite URL.
         const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
-        // Synthetic verified coordinates are injected only for this browser run.
-        // The visible unverified-location note is checked on the untouched public fixture
-        // before interception; verified test pins must not display that warning.
         assert.equal(mapAudit.notes.length, 0,
-          theme.slug + ": catatan lokasi belum terverifikasi tidak boleh tampil pada fixture koordinat uji");
+          theme.slug + ": pin sintetis yang sudah diverifikasi tidak boleh menampilkan peringatan lokasi belum terverifikasi");
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
         assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
@@ -784,7 +806,13 @@ for (const slug of activeThemeSlugs) {
 
         const rsvp = page.locator("#rsvp-form");
         await rsvp.locator('[name="name"]').fill("Tamu Uji");
-        await rsvp.locator('[name="attendance"]').selectOption("hadir");
+        const attendance = rsvp.locator('[name="attendance"]');
+        const attendanceType = await attendance.first().getAttribute("type");
+        if (attendanceType === "radio") {
+          await rsvp.locator('[name="attendance"][value="hadir"]').check();
+        } else {
+          await attendance.selectOption("hadir");
+        }
         await rsvp.locator('button[type="submit"]').first().click();
         await page.waitForFunction(() => /Konfirmasi berhasil|RSVP belum aktif|belum dikonfigurasi|Simulasi demo/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
           undefined, { timeout: 10000 });
