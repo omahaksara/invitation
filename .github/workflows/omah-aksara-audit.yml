@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/jendela-senja-theme
       - rebuild/v2-clean-public
       - release/all-themes-sync
       - rebuild/public-ready-v2
