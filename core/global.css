@@ -872,3 +872,29 @@ html[data-oa-theme="aksav"] {
   --oa-reveal-time:.46s;
   --oa-reveal-ease:cubic-bezier(.2,.75,.25,1);
 }
+
+
+/* Map panel fallback: preserve the theme's map box when only a verified share URL exists. */
+html[data-oa-theme] .oa-event-map-fallback{
+  display:grid;
+  gap:10px;
+  padding:16px;
+  margin-top:10px;
+  border:1px dashed currentColor;
+  border-radius:12px;
+  font-size:.84rem;
+  line-height:1.6;
+  opacity:.86;
+}
+html[data-oa-theme] .oa-event-map-fallback a{
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  align-items:center;
+  justify-content:center;
+  padding:9px 14px;
+  border:1px solid currentColor;
+  border-radius:999px;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
