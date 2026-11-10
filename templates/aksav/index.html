@@ -238,6 +238,25 @@ body,#app{background:#f3e8d8!important;color:#4c392b!important}
   .aksav #rsvp-form,.aksav #wishes-form{padding:18px 15px;margin:16px auto}
 }
 
+/* Opening invitation: preserve intentional paragraph breaks and keep the text readable. */
+.aksav #blessing [data-bind="opening.text"]{
+  max-width:720px;
+  margin:26px auto 0;
+  color:#725b46;
+  font-size:clamp(.9rem,2.2vw,1rem);
+  line-height:1.95;
+  text-align:left;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+@media(max-width:650px){
+  .aksav #blessing [data-bind="opening.text"]{
+    margin-top:20px;
+    padding:0 5px;
+    line-height:1.85;
+  }
+}
+
 </style>
 <div class="aksav" id="main-content">
 <section id="cover" class="cover">
