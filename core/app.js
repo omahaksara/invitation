@@ -731,22 +731,41 @@
     const lng = Number(rawCoordinates.lng ?? rawCoordinates.lon ?? event.longitude ?? event.lng ?? event.lon);
     const hasCoordinates = Number.isFinite(lat) && Number.isFinite(lng) &&
       lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+    const suppliedUrl = typeof event.mapsUrl === "string" && /^https?:\/\//i.test(event.mapsUrl.trim())
+      ? event.mapsUrl.trim() : "";
+    const suppliedEmbed = typeof event.mapEmbedUrl === "string" && /^https:\/\//i.test(event.mapEmbedUrl.trim())
+      ? event.mapEmbedUrl.trim() : "";
     const query = String(event.mapQuery || [event.venue || event.location || event.title, event.address]
       .filter(Boolean).join(", ")).trim();
+
+    // An explicit Maps share URL is the canonical destination. Never replace it
+    // with a text search generated from the postal address. A separate embed URL
+    // may be supplied when the owner has a verified Google Maps embed link.
     if (hasCoordinates) {
       const point = lat + "," + lng;
       return {
         query: point,
-        embedUrl: "https://www.google.com/maps?q=" + encodeURIComponent(point) + "&z=16&output=embed",
-        searchUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(point),
+        embedUrl: suppliedEmbed || ("https://www.google.com/maps?q=" + encodeURIComponent(point) + "&z=16&output=embed"),
+        searchUrl: suppliedUrl || ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(point)),
         directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(point),
         verifiedPoint: true
       };
     }
+    if (suppliedUrl) {
+      return {
+        query: "",
+        embedUrl: suppliedEmbed,
+        searchUrl: suppliedUrl,
+        directionsUrl: suppliedUrl,
+        verifiedPoint: false
+      };
+    }
+
+    // Backward-compatible fallback for older invitation JSON without a Maps URL.
     const encoded = encodeURIComponent(query);
     return {
       query,
-      embedUrl: query ? "https://www.google.com/maps?q=" + encoded + "&z=16&output=embed" : "",
+      embedUrl: suppliedEmbed || (query ? "https://www.google.com/maps?q=" + encoded + "&z=16&output=embed" : ""),
       searchUrl: query ? "https://www.google.com/maps/search/?api=1&query=" + encoded : "",
       directionsUrl: query ? "https://www.google.com/maps/dir/?api=1&destination=" + encoded : "",
       verifiedPoint: false
