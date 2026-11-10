@@ -745,7 +745,7 @@
       const point = lat + "," + lng;
       return {
         query: point,
-        embedUrl: suppliedEmbed || ("https://www.google.com/maps?q=" + encodeURIComponent(point) + "&z=16&output=embed"),
+        embedUrl: suppliedEmbed || ("https://www.google.com/maps?q=" + encodeURIComponent(point) + "&t=k&z=17&output=embed"),
         searchUrl: suppliedUrl || ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(point)),
         directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(point),
         verifiedPoint: true
