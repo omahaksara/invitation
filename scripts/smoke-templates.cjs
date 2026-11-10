@@ -134,6 +134,8 @@ for (const slug of activeThemeSlugs) {
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
+        assert.ok(!JSON.stringify(fixture).includes("\\\\n"),
+          "Demo invitation copy must contain real line breaks, not literal \\n sequences.");
         const originalEvents = Object.values(fixture.events || {});
         assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
           event && !event.coordinates && event.latitude == null && event.longitude == null &&
