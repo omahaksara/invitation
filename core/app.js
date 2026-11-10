@@ -2062,14 +2062,19 @@
         html { scroll-behavior: smooth; overflow-x: clip; }
         body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
-        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .38s ease, transform .42s cubic-bezier(.2,.72,.18,1); }
-        .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,14px,0); transition: opacity .4s ease, transform .46s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); }
-        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
-        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
-        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
+        .oa-scroll-reveal { opacity: 0; transform: translate3d(0,34px,0) scale(.988); transition: opacity .62s cubic-bezier(.2,.72,.18,1), transform .72s cubic-bezier(.16,.82,.22,1); will-change:opacity,transform; }
+        .oa-scroll-reveal[data-oa-reveal="left"] { transform: translate3d(-30px,12px,0) scale(.99); }
+        .oa-scroll-reveal[data-oa-reveal="right"] { transform: translate3d(30px,12px,0) scale(.99); }
+        .oa-scroll-reveal[data-oa-reveal="soft"] { transform: translate3d(0,18px,0) scale(.965); }
+        .oa-scroll-reveal.oa-visible { opacity:1; transform:translate3d(0,0,0) scale(1); will-change:auto; }
+        .oa-stagger-item { opacity:0; transform:translate3d(0,24px,0) scale(.985); transition:opacity .58s cubic-bezier(.2,.72,.18,1),transform .68s cubic-bezier(.16,.82,.22,1); transition-delay:var(--oa-stagger-delay,0ms); }
+        .oa-stagger-item.oa-stagger-visible { opacity:1; transform:translate3d(0,0,0) scale(1); }
+        .oa-motion-item { opacity:0; transform:translate3d(0,18px,0); transition:opacity .56s ease,transform .62s cubic-bezier(.16,.82,.22,1); transition-delay:var(--oa-motion-delay,0ms); }
+        .oa-motion-item[data-oa-motion="left"] { transform:translate3d(-22px,0,0); }
+        .oa-motion-item[data-oa-motion="right"] { transform:translate3d(22px,0,0); }
+        .oa-motion-item[data-oa-motion="up"] { transform:translate3d(0,22px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.985); transition: opacity .42s ease, transform .48s cubic-bezier(.2,.72,.18,1); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity:0; transform:scale(.955); transition:opacity .68s ease,transform .82s cubic-bezier(.16,.82,.22,1); }
         img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
         img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
         img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
@@ -2153,9 +2158,20 @@
       "#app-inner > section:not(#cover), .invitation-container > section, .sirein-page > section, .invite-shell > section, " +
       ".oa-shared-section, #rsvp-section, #guestbook-section, .event-card, .profile-card, .person-card, .story-item, .gift-card, .gallery-item"
     );
-    candidates.forEach(element => {
+    candidates.forEach((element, index) => {
       if (element.closest("#cover, #cover-section, .sirein-cover")) return;
-      if (!element.classList.contains("reveal")) element.classList.add("oa-scroll-reveal");
+      if (!element.classList.contains("reveal")) {
+        element.classList.add("oa-scroll-reveal");
+        const variant = ["left", "soft", "right", "soft"][index % 4];
+        element.dataset.oaReveal = element.dataset.oaReveal || variant;
+      }
+    });
+
+    // Cards enter one by one as guests scroll, not as a static stack of pages.
+    document.querySelectorAll("#app .event-card, #app .profile-card, #app .person-card, #app .story-item, #app .gift-card, #app .gallery-item").forEach((element, index) => {
+      if (element.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls")) return;
+      element.classList.add("oa-stagger-item");
+      element.style.setProperty("--oa-stagger-delay", (index % 5) * 65 + "ms");
     });
 
     // Arah gerak dibedakan: foto hadir dengan zoom lembut, teks/kartu naik perlahan.
@@ -2164,7 +2180,7 @@
     document.querySelectorAll(
       "#app h1, #app h2, #app h3, #app p, #app blockquote, #app .story-content, #app .event-card, #app .profile-card, #app .person-card, #app .gift-card, #app .gallery-item"
     ).forEach(element => {
-      if (element.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      if (element.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a, .oa-stagger-item")) return;
       if (element.matches("p") && element.closest(".story-content, .event-card, .profile-card, .person-card, .gift-card, .gallery-item")) return;
       motionTargets.add(element);
     });
@@ -2185,12 +2201,13 @@
       image.dataset.oaMotion = photoIndex++ % 2 ? "right" : "left";
     });
 
-    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible), .oa-motion-item:not(.oa-motion-visible), img.oa-motion-photo:not(.oa-motion-visible)");
+    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible), .oa-stagger-item:not(.oa-stagger-visible), .oa-motion-item:not(.oa-motion-visible), img.oa-motion-photo:not(.oa-motion-visible)");
     if (!elements.length) return;
     if (!( "IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
       elements.forEach(el => {
         if (el.classList.contains("reveal")) el.classList.add("active");
         if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        if (el.classList.contains("oa-stagger-item")) el.classList.add("oa-stagger-visible");
         el.classList.add("oa-motion-visible");
       });
       return;
