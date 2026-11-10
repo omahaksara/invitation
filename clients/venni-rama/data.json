@@ -36,34 +36,30 @@
     "source": "Al-Qur'an, QS. Ar-Rum: 21"
   },
   "events": {
-    "akad-resepsi": {
-      "title": "Akad Nikah & Resepsi Pernikahan",
+    "akad": {
+      "title": "Akad Nikah",
       "date": "Jumat, 20 November 2026",
-      "time": "Akad Nikah & Resepsi",
+      "time": "09.00–10.00 WITA",
       "location": "Kediaman Mempelai Wanita",
       "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
       "mapQuery": "Kediaman Mempelai Wanita, Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
-      "timezone": "Asia/Makassar",
-      "schedule": [
-        {
-          "id": "akad",
-          "title": "Akad Nikah",
-          "date": "Jumat, 20 November 2026",
-          "dateISO": "2026-11-20",
-          "startTime": "09:00",
-          "endTime": "10:00",
-          "time": "09.00–10.00 WITA"
-        },
-        {
-          "id": "resepsi",
-          "title": "Resepsi Pernikahan",
-          "date": "Jumat, 20 November 2026",
-          "dateISO": "2026-11-20",
-          "startTime": "11:00",
-          "time": "11.00 WITA–selesai"
-        }
-      ]
+      "dateISO": "2026-11-20",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "timezone": "Asia/Makassar"
+    },
+    "resepsi": {
+      "title": "Resepsi Pernikahan",
+      "date": "Jumat, 20 November 2026",
+      "time": "11.00 WITA–selesai",
+      "location": "Kediaman Mempelai Wanita",
+      "address": "Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "mapsUrl": "https://maps.app.goo.gl/LRLeNHT9NvzpZ2nk9",
+      "mapQuery": "Kediaman Mempelai Wanita, Tinombala Induk V/18, Kecamatan Ongka Malino, Kabupaten Parigi Moutong, Sulawesi Tengah",
+      "dateISO": "2026-11-20",
+      "startTime": "11:00",
+      "timezone": "Asia/Makassar"
     }
   },
   "countdown": {
@@ -80,10 +76,7 @@
     "galeri-08.jpg",
     "galeri-14.jpg"
   ],
-  "gifts": {
-    "message": "Informasi hadiah digital belum diberikan.",
-    "accounts": []
-  },
+  "gifts": [],
   "media": {
     "music": {
       "id": "wedding-demo-existing",
@@ -93,8 +86,8 @@
     }
   },
   "rsvp": {
-    "link": "",
-    "enabled": true
+    "enabled": true,
+    "maxGuestCount": 2
   },
   "demoGreetings": [],
   "schemaVersion": 2,
@@ -123,7 +116,7 @@
     "description": "Undangan pernikahan Pratu Rama Syahputra dan Venni Vidiya Sari, Jumat, 20 November 2026."
   },
   "opening": {
-    "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nAssalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta mengharap keberkahan-Nya, kami bermaksud menyelenggarakan akad nikah dan resepsi pernikahan putra-putri kami. Dengan penuh hormat dan kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir serta memberikan doa restu kepada kedua mempelai.\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir pada hari yang telah ditentukan.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
+    "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nAssalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyelenggarakan akad nikah dan resepsi pernikahan putra-putri kami.\n\nDengan penuh hormat, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir serta memberikan doa restu kepada kedua mempelai.\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i dapat hadir pada hari yang telah ditentukan.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
   },
   "hashtag": "#RamaVenni",
   "guestbook": {
@@ -132,5 +125,9 @@
   },
   "integrations": {
     "apiUrl": "https://script.google.com/macros/s/AKfycbxTtUh596hMTnZOboQWgFgRzXveS9H_crcGlaYc6hXJPzV_S5jTCQuuLTzd9jFg69Z_Aw/exec"
+  },
+  "demoMode": false,
+  "site": {
+    "timezone": "Asia/Makassar"
   }
 }
