@@ -183,6 +183,66 @@
       data.events = normalizedEvents;
     }
 
+    // New invitations may opt into one combined event card. Legacy JSON without
+    // eventMode keeps its original rendering and calendar behavior unchanged.
+    if (data.eventMode === "combined" && data.events && !Array.isArray(data.events)) {
+      const akad = data.events.akad;
+      const resepsi = data.events.resepsi;
+      if (akad && typeof akad === "object" && resepsi && typeof resepsi === "object") {
+        const sameText = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+        const coordinateKey = event => {
+          const point = event.coordinates || {};
+          const lat = point.lat ?? event.latitude ?? event.lat;
+          const lng = point.lng ?? point.lon ?? event.longitude ?? event.lng ?? event.lon;
+          return lat != null && lng != null ? String(lat).trim() + "," + String(lng).trim() : "";
+        };
+        const akadPoint = coordinateKey(akad), resepsiPoint = coordinateKey(resepsi);
+        const samePoint = !!(akadPoint && resepsiPoint && sameText(akadPoint, resepsiPoint));
+        const sameMap = !!(akad.mapsUrl && resepsi.mapsUrl && sameText(akad.mapsUrl, resepsi.mapsUrl));
+        const sameVenue = sameText(akad.location || akad.venue, resepsi.location || resepsi.venue) &&
+          sameText(akad.address, resepsi.address) &&
+          !!(akad.location || akad.venue || akad.address);
+        const mapCompatible = !(akad.mapsUrl && resepsi.mapsUrl) || sameMap;
+        if ((samePoint || sameMap || sameVenue) && mapCompatible) {
+          const scheduleEntry = (event, id, fallbackTitle) => ({
+            id,
+            title: event.title || fallbackTitle,
+            date: event.date || (event.dateISO ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : ""),
+            dateISO: event.dateISO || "",
+            startTime: event.startTime || "",
+            endTime: event.endTime || "",
+            time: event.time || "",
+            timezone: event.timezone || akad.timezone || resepsi.timezone || data.site?.timezone || "Asia/Makassar"
+          });
+          const first = akad;
+          data.events = {
+            combined: {
+              id: "combined",
+              title: "Akad & Resepsi",
+              date: first.date || (first.dateISO ? formatEventDate(first.dateISO, first.timezone || data.site?.timezone) : ""),
+              dateISO: first.dateISO || "",
+              startTime: first.startTime || "",
+              endTime: first.endTime || "",
+              timezone: first.timezone || resepsi.timezone || data.site?.timezone || "Asia/Makassar",
+              location: first.location || first.venue || resepsi.location || resepsi.venue || "",
+              address: first.address || resepsi.address || "",
+              mapsUrl: first.mapsUrl || resepsi.mapsUrl || "",
+              mapEmbedUrl: first.mapEmbedUrl || resepsi.mapEmbedUrl || "",
+              coordinates: first.coordinates || resepsi.coordinates,
+              latitude: first.latitude ?? first.lat,
+              longitude: first.longitude ?? first.lng ?? first.lon,
+              mapQuery: first.mapQuery || resepsi.mapQuery || "",
+              mapNote: first.mapNote || resepsi.mapNote || "",
+              schedule: [
+                scheduleEntry(akad, "akad", "Akad Nikah"),
+                scheduleEntry(resepsi, "resepsi", "Resepsi Pernikahan")
+              ]
+            }
+          };
+        }
+      }
+    }
+
     const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
     const firstEvent = events.find(event => event && (event.date || event.dateISO));
     if (!data.cover.dateLabel && firstEvent) data.cover.dateLabel = firstEvent.date || firstEvent.dateISO || "";
@@ -566,8 +626,10 @@
             id: entry.id || (item.id || "event") + "-" + (index + 1),
             title: entry.title || item.title || "Acara Pernikahan",
             dateISO: entry.dateISO || entry.date || item.dateISO || item.date,
-            location: item.location || item.venue,
-            address: item.address || "",
+            location: entry.location || item.location || item.venue,
+            address: entry.address || item.address || "",
+            mapsUrl: entry.mapsUrl || item.mapsUrl || "",
+            coordinates: entry.coordinates || item.coordinates,
             timezone: entry.timezone || item.timezone
           }));
         }
