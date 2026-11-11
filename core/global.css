@@ -979,49 +979,49 @@ html[data-oa-theme="army"]{--oa-font-display:"Cormorant Garamond",Georgia,serif;
 /* Hybrid adaptive motion tokens.
    The engine selects one profile per theme; templates keep their own artwork and markup. */
 html[data-oa-motion-profile="cinematic"] {
-  --oa-motion-duration: 780ms;
+  --oa-motion-duration: 720ms;
   --oa-motion-ease: cubic-bezier(.16,.82,.22,1);
   --oa-motion-distance: 30px;
   --oa-motion-photo-scale: .94;
   --oa-motion-photo-clip: 8%;
   --oa-motion-photo-distance: 18px;
-  --oa-motion-opening-duration: 920ms;
+  --oa-motion-opening-duration: 820ms;
 }
 html[data-oa-motion-profile="curtain"] {
-  --oa-motion-duration: 860ms;
+  --oa-motion-duration: 760ms;
   --oa-motion-ease: cubic-bezier(.22,.78,.18,1);
   --oa-motion-distance: 24px;
   --oa-motion-photo-scale: .96;
   --oa-motion-photo-clip: 12%;
   --oa-motion-photo-distance: 20px;
-  --oa-motion-opening-duration: 1120ms;
+  --oa-motion-opening-duration: 860ms;
 }
 html[data-oa-motion-profile="editorial"] {
-  --oa-motion-duration: 640ms;
+  --oa-motion-duration: 620ms;
   --oa-motion-ease: cubic-bezier(.2,.72,.24,1);
   --oa-motion-distance: 18px;
   --oa-motion-photo-scale: .985;
   --oa-motion-photo-clip: 0%;
   --oa-motion-photo-distance: 12px;
-  --oa-motion-opening-duration: 780ms;
+  --oa-motion-opening-duration: 740ms;
 }
 html[data-oa-motion-profile="organic"] {
-  --oa-motion-duration: 900ms;
+  --oa-motion-duration: 760ms;
   --oa-motion-ease: cubic-bezier(.18,.82,.22,1);
   --oa-motion-distance: 22px;
   --oa-motion-photo-scale: .94;
   --oa-motion-photo-clip: 15%;
   --oa-motion-photo-distance: 18px;
-  --oa-motion-opening-duration: 1040ms;
+  --oa-motion-opening-duration: 880ms;
 }
 html[data-oa-motion-profile="soft"] {
-  --oa-motion-duration: 680ms;
+  --oa-motion-duration: 620ms;
   --oa-motion-ease: cubic-bezier(.2,.76,.22,1);
   --oa-motion-distance: 15px;
   --oa-motion-photo-scale: .975;
   --oa-motion-photo-clip: 5%;
   --oa-motion-photo-distance: 10px;
-  --oa-motion-opening-duration: 760ms;
+  --oa-motion-opening-duration: 720ms;
 }
 html[data-oa-motion-profile="bold"] {
   --oa-motion-duration: 580ms;
@@ -1030,16 +1030,16 @@ html[data-oa-motion-profile="bold"] {
   --oa-motion-photo-scale: .92;
   --oa-motion-photo-clip: 9%;
   --oa-motion-photo-distance: 16px;
-  --oa-motion-opening-duration: 800ms;
+  --oa-motion-opening-duration: 780ms;
 }
 html[data-oa-motion-profile="dramatic"] {
-  --oa-motion-duration: 1040ms;
+  --oa-motion-duration: 780ms;
   --oa-motion-ease: cubic-bezier(.18,.86,.18,1);
   --oa-motion-distance: 34px;
   --oa-motion-photo-scale: .90;
   --oa-motion-photo-clip: 18%;
   --oa-motion-photo-distance: 24px;
-  --oa-motion-opening-duration: 1240ms;
+  --oa-motion-opening-duration: 900ms;
 }
 
 /* Theme-aware finishing touches: motion changes presentation, never interaction or data. */
