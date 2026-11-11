@@ -151,6 +151,24 @@ function validateClient(slug, file) {
     for (const key of ['startTime', 'endTime']) {
       if (event[key] && !/^\d{2}:\d{2}$/.test(event[key])) errors.push(`${slug}: ${key} acara ke-${index + 1} harus berformat HH:mm.`);
     }
+    if (event.activities !== undefined && !Array.isArray(event.activities)) {
+      errors.push(`${slug}: activities pada kelompok acara ke-${index + 1} harus berupa array.`);
+    } else if (Array.isArray(event.activities)) {
+      event.activities.forEach((activity, activityIndex) => {
+        if (!isObject(activity)) {
+          errors.push(`${slug}: activities[${activityIndex}] pada kelompok acara ke-${index + 1} harus berupa objek.`);
+          return;
+        }
+        if (activity.dateISO && !/^\d{4}-\d{2}-\d{2}$/.test(activity.dateISO)) {
+          errors.push(`${slug}: tanggal ISO aktivitas ke-${activityIndex + 1} pada kelompok acara ke-${index + 1} tidak valid.`);
+        }
+        for (const key of ['startTime', 'endTime']) {
+          if (activity[key] && !/^\d{2}:\d{2}$/.test(activity[key])) {
+            errors.push(`${slug}: ${key} aktivitas ke-${activityIndex + 1} pada kelompok acara ke-${index + 1} harus berformat HH:mm.`);
+          }
+        }
+      });
+    }
   });
 
   if (data.schemaVersion !== 2) {
