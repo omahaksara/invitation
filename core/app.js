@@ -117,7 +117,7 @@
         app.innerHTML = templateHtml;
       }
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
-      renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl);
+      renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl, params.get("view") === "portfolio");
     } catch (error) {
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan tidak dapat dimuat", error instanceof Error ? error.message : "Periksa koneksi internet lalu coba lagi.");
@@ -276,7 +276,7 @@
     return new URL(String(value), clientBase).href;
   }
 
-  function renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl) {
+  function renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl, viewOnly = false) {
     ensureFeatureSections(data, clientBase, slug, buildShortInvitationUrl);
     window.__invitationData = data;
     document.querySelectorAll("[data-bind]").forEach(el => {
@@ -312,7 +312,7 @@
     setupCover();
     setupReveal();
     setupCountdown(data);
-    setupForms(data, slug);
+    setupForms(data, slug, viewOnly);
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
@@ -1405,7 +1405,7 @@
     list.style.cssText += ";display:grid;gap:12px;margin:24px auto;max-width:620px";
   }
 
-  function setupForms(data, slug) {
+  function setupForms(data, slug, viewOnly = false) {
     ensureApiForms();
     const configuredApiUrl = (data.integrations && data.integrations.apiUrl) || (data.api && (data.api.apiUcapan || data.api.apiUrl)) || "";
     const apiUrl = /^https:\/\//i.test(configuredApiUrl) ? configuredApiUrl : "";
@@ -1413,6 +1413,19 @@
     const wishes = document.getElementById("wishes-form");
     if (data.rsvp && data.rsvp.enabled === false) { const section=document.getElementById("rsvp-section"); if(section) section.hidden=true; }
     if (data.guestbook && data.guestbook.enabled === false) { const section=document.getElementById("guestbook-section"); if(section) section.hidden=true; }
+    if (viewOnly) {
+      // Portfolio links are read-only: preserve RSVP preview and guestbook entries,
+      // but never allow a form submission from this viewing mode.
+      if (rsvp) {
+        rsvp.querySelectorAll("input, select, textarea, button").forEach(control => { control.disabled = true; });
+        const note = document.createElement("p");
+        note.className = "oa-portfolio-readonly-note";
+        note.textContent = "Mode portofolio — formulir hanya untuk dilihat.";
+        note.style.cssText = "margin:10px auto;text-align:center;font-size:12px;opacity:.75";
+        rsvp.prepend(note);
+      }
+      if (wishes) wishes.hidden = true;
+    }
     if (!apiUrl && data.demoMode !== true) {
       const message = "Formulir belum aktif karena endpoint backend belum dikonfigurasi.";
       [["rsvp-status", rsvp], ["wishes-status", wishes]].forEach(([id, form]) => {
@@ -1424,6 +1437,7 @@
     }
     if (rsvp) rsvp.addEventListener("submit", async event => {
       event.preventDefault();
+      if (viewOnly) return;
       const status = document.getElementById("rsvp-status");
       const button = rsvp.querySelector("button[type=submit]");
       if (!apiUrl && data.demoMode !== true) { status.textContent = "RSVP belum aktif karena endpoint backend belum dikonfigurasi."; return; }
@@ -1436,6 +1450,7 @@
     });
     if (wishes) wishes.addEventListener("submit", async event => {
       event.preventDefault();
+      if (viewOnly) return;
       let status = document.getElementById("wishes-status");
       if (!status) { status = document.createElement("p"); status.id = "wishes-status"; status.setAttribute("role", "status"); wishes.append(status); }
       const button = wishes.querySelector("button[type=submit]");
@@ -1465,7 +1480,7 @@
       }
     });
     if (data.demoMode === true && wishes) renderDemoWishes(data.demoGreetings || []);
-    else if (apiUrl && wishes) loadWishes(apiUrl,slug);
+    else if (apiUrl && data.guestbook?.enabled !== false) loadWishes(apiUrl,slug);
   }
 
   async function sendPayload(apiUrl,payload,status,button,successText) {
