@@ -1,0 +1,52 @@
+name: No Local Server — Invitation Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: invitation-checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-and-backend:
+    name: Static and backend validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax and invitation data
+        run: npm run test:static
+      - name: Test Apps Script backend logic without production requests
+        run: npm run test:backend
+
+  browser-smoke:
+    name: Browser smoke test for active themes
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright
+        run: npm install --no-save --no-package-lock playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Test every active invitation theme
+        run: node scripts/smoke-templates.cjs
