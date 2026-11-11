@@ -33,28 +33,19 @@ Lakukan sebelum perubahan besar dan setelah rilis:
 - Simpan daftar endpoint dan pengaturan deployment di tempat privat yang aman; jangan menaruh token, kata sandi, atau kredensial di repo publik.
 - Simpan setidaknya dua salinan di lokasi berbeda dan uji ZIP dapat dibuka.
 
-## Perintah pemeriksaan lokal
+## Pemeriksaan tanpa server lokal manual
 
 Memerlukan Node.js 20 atau lebih baru. Jalankan dari root repo `omahaksara/invitation`:
 
 ```bash
 npm run test:static
 npm run test:backend
-```
-
-Smoke test browser:
-
-```bash
-npm install --no-save playwright
+npm install --no-save --no-package-lock playwright
 npx playwright install chromium
-python3 -m http.server 4173 --bind 127.0.0.1
-```
-
-Di terminal lain pada root repo:
-
-```bash
 node scripts/smoke-templates.cjs
 ```
+
+Smoke test browser membuat server fixture sementara pada loopback dan menutupnya sendiri. Pengelola tidak perlu menjalankan `python -m http.server` atau membuka terminal kedua. Untuk pemeriksaan rutin tanpa menyiapkan lingkungan lokal, gunakan workflow GitHub Actions `No Local Server — Invitation Checks` melalui pull request ke `main` atau tombol `workflow_dispatch`.
 
 Smoke test produksi `node scripts/smoke-production.cjs` bersifat read-only untuk form produksi, tetapi tetap melakukan GET ke backend buku tamu. Jalankan hanya saat sadar bahwa GET backend mungkin auto-register slug published ke tab Settings jika slug belum ada.
 
