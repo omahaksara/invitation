@@ -586,6 +586,12 @@ if (motionOnly) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        // Wait for the main-content entrance choreography to finish before testing
+        // pointer interactions; otherwise the animated main layer can intercept taps.
+        await page.waitForFunction(() => {
+          const main = document.getElementById("main-content") || document.getElementById("app-inner");
+          return !main || !main.getAnimations().some(animation => animation.playState === "running");
+        }, undefined, { timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         const galleryImage = page.locator(".gallery-grid img").first();
@@ -618,8 +624,15 @@ if (motionOnly) {
           theme.slug + ": pin sintetis yang sudah diverifikasi tidak boleh menampilkan peringatan lokasi belum terverifikasi");
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
-        assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
-          theme.slug + ": tautan pencarian Maps harus tetap tersedia");
+        assert.ok(mapAudit.mapLinks.every(url => {
+          try {
+            const parsed = new URL(url);
+            return /(^|\\.)google\\.com$/.test(parsed.hostname) ||
+              /(^|\\.)google\\.co\\.id$/.test(parsed.hostname) ||
+              /(^|\\.)maps\\.app$/.test(parsed.hostname) ||
+              /(^|\\.)goo\\.gl$/.test(parsed.hostname);
+          } catch (_) { return false; }
+        }), theme.slug + ": tautan Google Maps dari data undangan harus tetap tersedia " + JSON.stringify(mapAudit.mapLinks));
         if (mapAudit.eventMode === "combined") {
           assert.equal(mapAudit.eventCards, 1,
             theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
