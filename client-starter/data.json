@@ -103,6 +103,8 @@
     "gallery": true,
     "video": false,
     "maps": true,
+    "mapEmbed": true,
+    "mapNavigation": true,
     "music": false,
     "gifts": true,
     "rsvp": true,
