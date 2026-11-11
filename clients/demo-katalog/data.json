@@ -17,20 +17,20 @@
   },
   "couple": {
     "groom": {
-      "nickname": "Dafa",
-      "fullName": "Dafa Yudista",
-      "parents": "Putra dari keluarga Dafa",
+      "nickname": "Arkan",
+      "fullName": "Arkan Mahendra",
+      "parents": "Putra dari Bapak Fajar Mahendra dan Ibu Ratih Puspitasari",
       "photo": "mempelai-pria.jpg",
       "instagram": "",
-      "initial": "D"
+      "initial": "A"
     },
     "bride": {
-      "nickname": "Ica",
-      "fullName": "Ica Dwi Artika",
-      "parents": "Putri dari keluarga Ica",
+      "nickname": "Arunika",
+      "fullName": "Arunika Prameswari",
+      "parents": "Putri dari Bapak Arya Pratama dan Ibu Larasati Wulandari",
       "photo": "mempelai-wanita.jpg",
       "instagram": "",
-      "initial": "I"
+      "initial": "A"
     }
   },
   "quote": {
@@ -40,8 +40,8 @@
   },
   "events": {
     "akad": {
-      "location": "Lokasi Acara Dafa & Ica",
-      "address": "Lokasi simulasi undangan Dafa & Ica, Palu, Sulawesi Tengah",
+      "location": "Lokasi Acara Arkan & Arunika",
+      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LNqjwkDgGuZeNLXD9?g_st=ac",
       "mapQuery": "0.584505,120.768477",
       "timezone": "Asia/Makassar",
@@ -58,8 +58,8 @@
       "mapEmbedUrl": "https://www.google.com/maps?q=0.584505%2C120.768477&t=k&z=18&output=embed"
     },
     "resepsi": {
-      "location": "Lokasi Acara Dafa & Ica",
-      "address": "Lokasi simulasi undangan Dafa & Ica, Palu, Sulawesi Tengah",
+      "location": "Lokasi Acara Arkan & Arunika",
+      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LNqjwkDgGuZeNLXD9?g_st=ac",
       "mapQuery": "0.584505,120.768477",
       "timezone": "Asia/Makassar",
@@ -122,7 +122,7 @@
       {
         "paymentType": "bank",
         "provider": "Bank BCA",
-        "accountHolder": "Dafa Yudista • DEMO",
+        "accountHolder": "Arkan Mahendra • DEMO",
         "accountNumber": "DEMO-BCA-0001",
         "copyable": false,
         "demoOnly": true,
@@ -132,7 +132,7 @@
       {
         "paymentType": "bank",
         "provider": "Bank BRI",
-        "accountHolder": "Ica Dwi Artika • DEMO",
+        "accountHolder": "Arunika Prameswari • DEMO",
         "accountNumber": "DEMO-BRI-0002",
         "copyable": false,
         "demoOnly": true,
@@ -142,7 +142,7 @@
       {
         "paymentType": "ewallet",
         "provider": "DANA",
-        "accountHolder": "Dafa Yudista • DEMO",
+        "accountHolder": "Arkan Mahendra • DEMO",
         "accountNumber": "08XX-XXXX-0001",
         "copyable": false,
         "demoOnly": true,
@@ -152,7 +152,7 @@
       {
         "paymentType": "ewallet",
         "provider": "GoPay",
-        "accountHolder": "Ica Dwi Artika • DEMO",
+        "accountHolder": "Arunika Prameswari • DEMO",
         "accountNumber": "08XX-XXXX-0002",
         "copyable": false,
         "demoOnly": true,
@@ -180,16 +180,16 @@
   },
   "demoGreetings": [
     {
-      "name": "Keluarga Dafa",
+      "name": "Keluarga Arkan",
       "message": "Barakallahu laka wa baraka ‘alaika wa jama‘a bainakuma fii khair. Semoga menjadi keluarga yang sakinah, mawaddah, dan rahmah."
     },
     {
-      "name": "Keluarga Ica",
+      "name": "Keluarga Arunika",
       "message": "Selamat menempuh kehidupan baru. Semoga rumah tangga selalu dipenuhi ketenangan, kasih sayang, dan keberkahan."
     },
     {
       "name": "Sahabat",
-      "message": "Semoga Dafa dan Ica selalu saling menjaga, menguatkan, dan bertumbuh bersama dalam setiap keadaan."
+      "message": "Semoga Arkan dan Arunika selalu saling menjaga, menguatkan, dan bertumbuh bersama dalam setiap keadaan."
     }
   ],
   "schemaVersion": 2,
@@ -214,8 +214,8 @@
     "mapNavigation": true
   },
   "seo": {
-    "title": "Dafa Yudista & Ica Dwi Artika | Undangan Pernikahan",
-    "description": "Pratinjau demo undangan digital Dafa dan Ica dari Omah Aksara."
+    "title": "Arkan Mahendra & Arunika Prameswari | Undangan Pernikahan",
+    "description": "Pratinjau demo undangan digital Arkan dan Arunika dari Omah Aksara."
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari hari bahagia pernikahan kami.\n\nKehadiran serta doa restu yang diberikan akan menjadi kebahagiaan dan kenangan berharga bagi kami.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
