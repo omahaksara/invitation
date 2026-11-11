@@ -38,43 +38,45 @@
     "text": "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
     "source": "Al-Qur'an, QS. Ar-Rum: 21"
   },
-  "events": {
-    "akad": {
+  "events": [
+    {
+      "id": "akad-resepsi",
+      "title": "Akad & Resepsi",
+      "date": "Sabtu, 12 Juni 2027",
+      "dateISO": "2027-06-12",
+      "timezone": "Asia/Makassar",
       "location": "Lokasi Acara Dafa & Ica",
       "address": "Lokasi simulasi undangan Dafa & Ica, Palu, Sulawesi Tengah",
       "mapsUrl": "https://maps.app.goo.gl/LNqjwkDgGuZeNLXD9?g_st=ac",
       "mapQuery": "0.584505,120.768477",
-      "timezone": "Asia/Makassar",
-      "title": "Akad Nikah",
-      "date": "Sabtu, 12 Juni 2027",
-      "dateISO": "2027-06-12",
-      "startTime": "08:00",
-      "endTime": "10:00",
-      "time": "08.00 – 10.00 WITA",
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.584505%2C120.768477&t=k&z=18&output=embed",
       "coordinates": {
         "lat": 0.584505,
         "lng": 120.768477
       },
-      "mapEmbedUrl": "https://www.google.com/maps?q=0.584505%2C120.768477&t=k&z=18&output=embed"
-    },
-    "resepsi": {
-      "location": "Lokasi Acara Dafa & Ica",
-      "address": "Lokasi simulasi undangan Dafa & Ica, Palu, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/LNqjwkDgGuZeNLXD9?g_st=ac",
-      "mapQuery": "0.584505,120.768477",
-      "timezone": "Asia/Makassar",
-      "title": "Resepsi Pernikahan",
-      "date": "Sabtu, 12 Juni 2027",
-      "dateISO": "2027-06-12",
-      "startTime": "11:00",
-      "time": "11.00 – 14.00 WITA",
-      "coordinates": {
-        "lat": 0.584505,
-        "lng": 120.768477
-      },
-      "mapEmbedUrl": "https://www.google.com/maps?q=0.584505%2C120.768477&t=k&z=18&output=embed"
+      "activities": [
+        {
+          "id": "akad",
+          "title": "Akad Nikah",
+          "date": "Sabtu, 12 Juni 2027",
+          "dateISO": "2027-06-12",
+          "startTime": "08:00",
+          "endTime": "10:00",
+          "time": "08.00 – 10.00 WITA",
+          "timezone": "Asia/Makassar"
+        },
+        {
+          "id": "resepsi",
+          "title": "Resepsi Pernikahan",
+          "date": "Sabtu, 12 Juni 2027",
+          "dateISO": "2027-06-12",
+          "startTime": "11:00",
+          "time": "11.00 – 14.00 WITA",
+          "timezone": "Asia/Makassar"
+        }
+      ]
     }
-  },
+  ],
   "countdown": {
     "targetDate": "2027-06-12T08:00:00+08:00"
   },
@@ -234,7 +236,6 @@
       "src": "../../assets/music/library/wedding-demo-existing.mp3"
     }
   },
-  "eventMode": "combined",
   "site": {
     "timezone": "Asia/Makassar"
   }
