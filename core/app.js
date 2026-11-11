@@ -180,6 +180,45 @@
       data.events = normalizedEvents;
     }
 
+    // Canonical event shape: every theme receives stable akad/resepsi
+    // objects with the same date, time, venue, and map fields.
+    const normalizeEvent = (source, fallbackTitle) => {
+      if (!source || typeof source !== "object") return source;
+      const event = { ...source };
+      event.title = event.title || event.nama || fallbackTitle || "Acara";
+      event.location = event.location || event.venue || event.tempat || "";
+      event.address = event.address || event.alamat || "";
+      event.mapsUrl = event.mapsUrl || event.mapUrl || event.googleMapsUrl || event.urlMaps || "";
+      event.mapEmbedUrl = event.mapEmbedUrl || event.embedUrl || event.mapsEmbedUrl || "";
+      event.dateISO = event.dateISO || event.isoDate || event.tanggalISO || "";
+      event.date = event.date || event.tanggal || (event.dateISO
+        ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : "");
+      event.startTime = event.startTime || event.timeStart || event.jamMulai || "";
+      event.endTime = event.endTime || event.timeEnd || event.jamSelesai || "";
+      event.time = event.time || event.waktu || [event.startTime, event.endTime].filter(Boolean).join("–");
+      event.timezone = event.timezone || event.timeZone || data.site?.timezone || "Asia/Makassar";
+      event.mapQuery = event.mapQuery || event.mapSearch || [event.location, event.address].filter(Boolean).join(", ");
+      const coords = event.coordinates && typeof event.coordinates === "object" ? { ...event.coordinates } : {};
+      const lat = coords.lat ?? coords.latitude ?? event.latitude ?? event.lat;
+      const lng = coords.lng ?? coords.lon ?? coords.longitude ?? event.longitude ?? event.lng ?? event.lon;
+      if (lat !== undefined && lng !== undefined && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
+        coords.lat = Number(lat);
+        coords.lng = Number(lng);
+        delete coords.latitude;
+        delete coords.longitude;
+        data.features = data.features && typeof data.features === "object" ? data.features : {};
+        event.coordinates = coords;
+      }
+      return event;
+    };
+    if (data.events && !Array.isArray(data.events)) {
+      Object.keys(data.events).forEach(key => {
+        data.events[key] = normalizeEvent(data.events[key], key === "akad" ? "Akad Nikah" : key === "resepsi" ? "Resepsi Pernikahan" : "Acara");
+      });
+    } else if (Array.isArray(data.events)) {
+      data.events = data.events.map((event, index) => normalizeEvent(event, index === 0 ? "Akad Nikah" : index === 1 ? "Resepsi Pernikahan" : "Acara"));
+    }
+
     // New invitations may opt into one combined event card. Legacy JSON without
     // eventMode keeps its original rendering and calendar behavior unchanged.
     if (data.eventMode === "combined" && data.events && !Array.isArray(data.events)) {
@@ -246,45 +285,6 @@
     } else if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
       data.__renderEvents = data.events.resepsi ? { resepsi: data.events.resepsi } : {};
     }
-    // Canonical event shape: every theme receives stable akad/resepsi
-    // objects with the same date, time, venue, and map fields.
-    const normalizeEvent = (source, fallbackTitle) => {
-      if (!source || typeof source !== "object") return source;
-      const event = { ...source };
-      event.title = event.title || event.nama || fallbackTitle || "Acara";
-      event.location = event.location || event.venue || event.tempat || "";
-      event.address = event.address || event.alamat || "";
-      event.mapsUrl = event.mapsUrl || event.mapUrl || event.googleMapsUrl || event.urlMaps || "";
-      event.mapEmbedUrl = event.mapEmbedUrl || event.embedUrl || event.mapsEmbedUrl || "";
-      event.dateISO = event.dateISO || event.isoDate || event.tanggalISO || "";
-      event.date = event.date || event.tanggal || (event.dateISO
-        ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : "");
-      event.startTime = event.startTime || event.timeStart || event.jamMulai || "";
-      event.endTime = event.endTime || event.timeEnd || event.jamSelesai || "";
-      event.time = event.time || event.waktu || [event.startTime, event.endTime].filter(Boolean).join("–");
-      event.timezone = event.timezone || event.timeZone || data.site?.timezone || "Asia/Makassar";
-      event.mapQuery = event.mapQuery || event.mapSearch || [event.location, event.address].filter(Boolean).join(", ");
-      const coords = event.coordinates && typeof event.coordinates === "object" ? { ...event.coordinates } : {};
-      const lat = coords.lat ?? coords.latitude ?? event.latitude ?? event.lat;
-      const lng = coords.lng ?? coords.lon ?? coords.longitude ?? event.longitude ?? event.lng ?? event.lon;
-      if (lat !== undefined && lng !== undefined && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
-        coords.lat = Number(lat);
-        coords.lng = Number(lng);
-        delete coords.latitude;
-        delete coords.longitude;
-        data.features = data.features && typeof data.features === "object" ? data.features : {};
-        event.coordinates = coords;
-      }
-      return event;
-    };
-    if (data.events && !Array.isArray(data.events)) {
-      Object.keys(data.events).forEach(key => {
-        data.events[key] = normalizeEvent(data.events[key], key === "akad" ? "Akad Nikah" : key === "resepsi" ? "Resepsi Pernikahan" : "Acara");
-      });
-    } else if (Array.isArray(data.events)) {
-      data.events = data.events.map((event, index) => normalizeEvent(event, index === 0 ? "Akad Nikah" : index === 1 ? "Resepsi Pernikahan" : "Acara"));
-    }
-
     // Normalize story/gallery aliases once, rather than asking each theme
     // to understand different field names or asset representations.
     if (Array.isArray(data.story)) {
