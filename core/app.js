@@ -1267,7 +1267,7 @@
     if (open) {
       open.addEventListener("click", async () => {
         if (cover) cover.classList.add("is-opening");
-        if (main) { main.hidden = false; main.style.display = "block"; }
+        if (main) { main.hidden = false; main.style.display = "block"; main.classList.add("oa-main-opening"); }
         document.body.classList.add("oa-invitation-opened");
         document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
@@ -1275,7 +1275,7 @@
         const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
-        }, reducedMotionPreference ? 0 : 520);
+        }, reducedMotionPreference ? 0 : 680);
         if (audio && hasMusic) {
           try {
             await audio.play();
@@ -2147,14 +2147,17 @@
         html { scroll-behavior: smooth; overflow-x: clip; }
         body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
-        .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .38s ease, transform .42s cubic-bezier(.2,.72,.18,1); }
+        :root { --oa-motion-duration: 720ms; --oa-motion-ease: cubic-bezier(.2,.72,.18,1); }
+        .oa-scroll-reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,14px,0); transition: opacity .4s ease, transform .46s cubic-bezier(.2,.72,.18,1); transition-delay: var(--oa-motion-delay, 0ms); }
+        #app .reveal:not(.active) { opacity: 0 !important; transform: translate3d(0,22px,0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
+        #app .reveal.active { opacity: 1 !important; transform: none; }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .68s ease, transform .76s var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
         .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
         .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
         .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.985); transition: opacity .42s ease, transform .48s cubic-bezier(.2,.72,.18,1); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); transition: opacity .78s ease, transform .9s var(--oa-motion-ease); }
         img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
         img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
         img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
@@ -2162,14 +2165,16 @@
         .story-content { min-width:0; }
         .story-date { display:block; margin-bottom:6px; }
         #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening {
-          animation: oa-cover-exit .48s cubic-bezier(.22,.7,.2,1) forwards;
+          animation: oa-cover-exit .64s cubic-bezier(.22,.7,.2,1) forwards;
           transform-origin: center top;
         }
         @keyframes oa-cover-exit {
-          0% { opacity:1; transform:scale(1); }
-          55% { opacity:.92; transform:scale(1.008); }
-          100% { opacity:0; transform:scale(1.015); }
+          0% { opacity:1; transform:scale(1); filter:blur(0); }
+          45% { opacity:.72; transform:scale(1.012); filter:blur(1px); }
+          100% { opacity:0; transform:scale(1.025); filter:blur(3px); }
         }
+        #main-content.oa-main-opening, #app-inner.oa-main-opening { animation: oa-main-enter .9s cubic-bezier(.2,.72,.18,1) both; }
+        @keyframes oa-main-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
         .oa-floating-controls { scrollbar-width:none; }
         .oa-floating-controls::-webkit-scrollbar { display:none; }
         .oa-floating-controls button { flex:0 0 auto; }
@@ -2177,6 +2182,7 @@
         @media (max-width:600px) { .oa-story-photo { max-height:320px; } }
         @media (prefers-reduced-motion: reduce) {
           #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
+          #main-content.oa-main-opening, #app-inner.oa-main-opening { animation:none !important; opacity:1; transform:none; }
           html { scroll-behavior: auto !important; }
           .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
           html[data-oa-theme] #app,
@@ -2263,7 +2269,7 @@
         element.matches("h1, h2, h3") ? (motionIndex % 2 ? "right" : "left") : "up";
       element.classList.add("oa-motion-item");
       element.dataset.oaMotion = direction;
-      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 35 + "ms");
+      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 70 + "ms");
     });
     let photoIndex = 0;
     document.querySelectorAll("#app img.oa-motion-photo").forEach(image => {
@@ -2290,7 +2296,7 @@
         if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
         el.classList.add("oa-motion-visible");
         observer.unobserve(el);
-      }), { threshold: 0.08, rootMargin: "0px 0px -5% 0px" });
+      }), { threshold: 0.06, rootMargin: "0px 0px -3% 0px" });
       window.__oaScrollRevealObserver = observer;
     }
     elements.forEach(element => observer.observe(element));
