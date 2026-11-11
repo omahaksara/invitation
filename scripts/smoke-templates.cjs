@@ -188,6 +188,13 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": inisial mempelai wanita salah " + JSON.stringify(initialAudit));
         assert.equal(initialAudit.pair, initialAudit.groomExpected + initialAudit.brideExpected,
           theme.slug + ": urutan inisial pasangan harus pria lalu wanita " + JSON.stringify(initialAudit));
+        const monogram = page.locator(".cover-monogram");
+        if (await monogram.count()) {
+          assert.equal((await monogram.locator('[data-bind="couple.groom.initial"]').textContent()).trim(),
+            initialAudit.groomExpected, theme.slug + ": monogram pria tidak mengikuti data pasangan");
+          assert.equal((await monogram.locator('[data-bind="couple.bride.initial"]').textContent()).trim(),
+            initialAudit.brideExpected, theme.slug + ": monogram wanita tidak mengikuti data pasangan");
+        }
 
         if (theme.slug === "jendela-senja") {
           const visualAudit = await page.evaluate(() => ({
