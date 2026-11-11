@@ -173,7 +173,7 @@ for (const slug of activeThemeSlugs) {
         const initialAudit = await page.evaluate(() => {
           const couple = window.__invitationData?.couple || {};
           const firstLetter = person => String(person?.nickname || person?.fullName || "")
-            .match(/[\\p{L}\\p{N}]/u)?.[0]?.toLocaleUpperCase("id-ID") || "";
+            .match(/[\p{L}\p{N}]/u)?.[0]?.toLocaleUpperCase("id-ID") || "";
           return {
             groom: couple.groom?.initial || "",
             bride: couple.bride?.initial || "",
