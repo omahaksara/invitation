@@ -62,7 +62,7 @@ Adaptor sementara tetap menerima array acara dan format tanggal lama. Data baru 
 
 `features` adalah objek boolean. Semua fitur inti aktif secara default bila properti tidak ditulis; `false` menonaktifkan fitur. Nama yang didukung:
 
-`countdown`, `calendar`, `loveStory`, `gallery`, `video`, `maps`, `music`, `gifts`, `rsvp`, `guestbook`, `guestName`, `hashtag`, `quotes`.
+`countdown`, `calendar`, `loveStory`, `gallery`, `video`, `maps`, `mapEmbed`, `mapNavigation`, `music`, `gifts`, `bank`, `ewallet`, `qris`, `rsvp`, `guestbook`, `guestName`, `hashtag`, `quotes`, `closing`.
 
 Jika fitur memerlukan data atau layanan yang belum siap, engine harus menyembunyikan bagian yang tidak relevan atau memberi status yang jelas. Tombol tidak boleh tampak aktif tanpa tindakan, dan UI tidak boleh menyatakan sukses tanpa konfirmasi backend.
 
