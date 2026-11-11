@@ -4,6 +4,7 @@
   "status": "draft",
   "demoMode": false,
   "theme": "karsa",
+  "eventMode": "combined",
   "guest": {
     "defaultName": "Tamu Undangan"
   },
