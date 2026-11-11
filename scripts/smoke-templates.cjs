@@ -49,7 +49,7 @@ async function auditCover(page, theme, device) {
   await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-cover-${device}.png`));
 }
 
-const themes = [
+const allThemes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
   { slug: "royal-vintage", marker: ".invitation-container", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "serena-ivory", marker: ".serena-ivory-page", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -85,7 +85,7 @@ const activeThemeSlugs = (themeRegistry.themes || [])
   .filter(theme => theme && theme.status === "active")
   .map(theme => theme.slug)
   .sort();
-const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
+const browserThemeSlugs = allThemes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
@@ -112,6 +112,20 @@ for (const slug of activeThemeSlugs) {
     slug + ": token tipografi tema belum lengkap.");
   assert.ok(themeRevealTokens.includes("--oa-reveal-ease"),
     slug + ": token animasi reveal tema belum lengkap.");
+}
+
+const motionRepresentativeSlugs = [
+  "karsa", "royal-vintage", "atelier-editorial", "botanical-garden",
+  "kinze", "groom", "calestial"
+];
+const motionOnly = process.env.OA_MOTION_ONLY === "1";
+const themes = motionOnly
+  ? allThemes.filter(theme => motionRepresentativeSlugs.includes(theme.slug))
+  : allThemes;
+if (motionOnly) {
+  assert.equal(themes.length, motionRepresentativeSlugs.length,
+    "Motion smoke harus menemukan satu tema perwakilan untuk setiap profil.");
+  console.log("Motion-only browser matrix: " + themes.map(theme => theme.slug).join(", "));
 }
 
 (async () => {
