@@ -136,7 +136,11 @@
   function normalizeTemplateData(data) {
     if (!data || typeof data !== "object") return;
     data.cover = data.cover && typeof data.cover === "object" ? data.cover : {};
-    if (!data.cover.heroImage) data.cover.heroImage = data.cover.image || "";
+    // Canonical cover image with bidirectional aliases for older theme markup.
+    data.cover.heroImage = data.cover.heroImage || data.cover.image || data.cover.foto ||
+      data.cover.backgroundImage || data.cover.background || "";
+    data.cover.image = data.cover.image || data.cover.heroImage;
+    data.cover.foto = data.cover.foto || data.cover.heroImage;
 
     // Canonical couple fields for every theme. A supplied initial is kept only
     // when it matches that person's nickname; otherwise derive it from the
@@ -145,6 +149,13 @@
     ["groom", "bride"].forEach(role => {
       const person = data.couple[role] && typeof data.couple[role] === "object"
         ? data.couple[role] : (data.couple[role] = {});
+      // Accept legacy Indonesian/English identity and portrait keys, then expose
+      // one stable shape to every theme without rewriting the client JSON.
+      person.nickname = person.nickname || person.namaPanggilan || person.shortName || "";
+      person.fullName = person.fullName || person.namaLengkap || person.name || person.nama || "";
+      person.parents = person.parents || person.orangTua || person.parentNames || "";
+      person.photo = person.photo || person.foto || person.image || person.photoUrl || "";
+      person.instagram = person.instagram || person.instagramUrl || "";
       const sourceName = String(person.nickname || person.fullName || "").trim();
       const firstLetter = sourceName.match(/[\p{L}\p{N}]/u)?.[0] || "";
       // Always uppercase and derive independently from the matching person's
