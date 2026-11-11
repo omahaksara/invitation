@@ -31,6 +31,9 @@ Bentuk baku V2 adalah objek acara dengan kunci stabil, misalnya `events.akad` da
 - `startTime`, `endTime`: jam lokal `HH:mm`.
 - `timezone`: zona waktu IANA, misalnya `Asia/Makassar`.
 - `location`, `address`, `mapsUrl`, `mapEmbedUrl`, `mapQuery`, `mapNote`: detail tempat dan tautan peta.
+- Nama properti baku untuk tautan adalah `mapsUrl`; adaptor lama menerima `mapUrl`, `googleMapsUrl`, dan `urlMaps`. Untuk sematan, gunakan `mapEmbedUrl` (alias lama `embedUrl`/`mapsEmbedUrl`).
+- Nama properti baku koordinat adalah `coordinates: { lat, lng }`; adaptor menerima `latitude`/`longitude`, `lat`/`lng`, dan `lon`, lalu menormalkannya ke `lat`/`lng`. Koordinat harus berasal dari pemilik atau hasil verifikasi lokasi, bukan hasil tebakan alamat.
+- `mapQuery` adalah teks pencarian lokasi untuk Maps/navigasi. Jika kosong, core membentuknya dari `location` dan `address`; tautan `mapsUrl` yang diberikan pemilik tetap diprioritaskan sebagai tujuan buka peta.
 - `coordinates`: titik terverifikasi berbentuk `{ "lat": -0.123, "lng": 120.456 }`. Koordinat hanya boleh diisi dari titik yang diberikan atau diverifikasi pemilik undangan.
 
 ### Mode acara V2
@@ -44,6 +47,16 @@ Bentuk baku V2 adalah objek acara dengan kunci stabil, misalnya `events.akad` da
 
 Adaptor sementara tetap menerima array acara dan format tanggal lama. Data baru sebaiknya mengisi `dateISO`, `startTime`, `endTime`, dan `timezone` agar countdown dan ekspor kalender tidak menebak zona waktu.
 
+## Konten tambahan dan identitas publik
+
+- `opening`: objek dengan `text` dan opsi konten pembuka lainnya.
+- `closing`: objek opsional dengan `title`, `text`, dan `signature`; bagian ini disembunyikan bila seluruh isinya kosong.
+- `seo`: objek metadata halaman (misalnya `title`, `description`, dan `image`).
+- `site`: konfigurasi publik undangan, termasuk `timezone` (default `Asia/Makassar` bila tidak diisi).
+- `guest`: nama tamu bawaan opsional; nama dari tautan undangan tetap menjadi prioritas.
+- `countdown`: objek target hitung mundur. Core dapat membaca tanggal acara sebagai fallback, tetapi data baru sebaiknya menetapkan target secara eksplisit bila countdown diarahkan ke acara tertentu.
+- `guestbook` dan `rsvp`: konfigurasi fitur. Endpoint/integrasi khusus klien tetap opsional dan tidak boleh disalin ke data demo.
+
 ## Fitur
 
 `features` adalah objek boolean. Semua fitur inti aktif secara default bila properti tidak ditulis; `false` menonaktifkan fitur. Nama yang didukung:
@@ -54,8 +67,8 @@ Jika fitur memerlukan data atau layanan yang belum siap, engine harus menyembuny
 
 ## Hadiah, media, dan integrasi
 
-- `gifts`: objek berisi `message`, `enabled` opsional untuk mengaktifkan/menyembunyikan seluruh bagian hadiah, dan daftar `accounts`. Setiap metode mendukung `type`/`paymentType` (`bank`, `ewallet`, atau `qris`), `enabled` per metode, `provider`/`bank`, `accountHolder`/`accountName`, `accountNumber`/`phoneNumber`/`destinationNumber`, `copyValue`, `logo`, serta `qrCode` atau `qr.src`. `type` yang tidak ditulis tetap dianggap `bank` agar data lama kompatibel. Data demo wajib memakai `demoOnly: true` dan `copyable: false`; QR demo harus berupa ilustrasi yang jelas bukan kode transaksi. Jangan menaruh QR atau nomor pembayaran asli pada katalog demo.
-- `media.music`: string URL/path lama atau objek pilihan katalog berisi `id`, `title`, `category`, dan `src`. Path relatif tetap diselesaikan dari `clients/<slug>/`; untuk katalog bersama gunakan path seperti `../../assets/music/library/<file>.mp3`. Format string lama tetap didukung.
+- `gifts`: objek berisi `message`, `enabled` opsional untuk mengaktifkan/menyembunyikan seluruh bagian hadiah, dan daftar `accounts`. Bentuk lama berupa array akun tetap diterima lalu dinormalisasi ke objek ini. Setiap metode mendukung `type`/`paymentType` (`bank`, `ewallet`, atau `qris`), `enabled` per metode, `provider`/`bank`, `accountHolder`/`accountName`, `accountNumber`/`phoneNumber`/`destinationNumber`, `copyValue`, `logo`, serta `qrCode` atau `qr.src`. `type` yang tidak ditulis tetap dianggap `bank` agar data lama kompatibel. Data demo wajib memakai `demoOnly: true` dan `copyable: false`; QR demo harus berupa ilustrasi yang jelas bukan kode transaksi. Jangan menaruh QR atau nomor pembayaran asli pada katalog demo.
+- `media.music`: string URL/path lama atau objek pilihan katalog berisi `id`, `title`, `category`, dan `src`. Core juga menyediakan alias baca `data.music` untuk tema/renderer lama; sumber baku tetap `media.music`. Path relatif tetap diselesaikan dari `clients/<slug>/`; untuk katalog bersama gunakan path seperti `../../assets/music/library/<file>.mp3`. Format string lama tetap didukung.
 - Musik bersama dikelola melalui `assets/music/library/manifest.json`; setiap entri harus mencantumkan identitas, kategori, path, dan status lisensi. Track dengan lisensi belum diverifikasi hanya boleh dipakai untuk pengujian internal, bukan otomatis ditawarkan untuk undangan pelanggan.
 - `integrations.apiUrl`: URL HTTPS deployment backend yang dipilih untuk undangan tersebut.
 - `api.apiUcapan` atau `api.apiUrl`: nama properti lama yang dibaca adaptor saat migrasi.
