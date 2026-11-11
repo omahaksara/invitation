@@ -48,20 +48,24 @@ Lihat [`docs/DATA-SCHEMA.md`](docs/DATA-SCHEMA.md) untuk format data dan adaptor
 
 ## Menjalankan pemeriksaan
 
-Node.js 20 atau lebih baru dibutuhkan untuk tes statis.
+Node.js 20 atau lebih baru dibutuhkan untuk tes statis dan backend:
 
 ```bash
 npm run test:static
 npm run test:backend
 ```
 
-Untuk tes browser lokal, jalankan server statis di port 4173, pastikan Playwright/Chromium terpasang, lalu jalankan:
+Untuk smoke test browser, pasang Playwright dan Chromium lalu jalankan skripnya:
 
 ```bash
+npm install --no-save --no-package-lock playwright
+npx playwright install chromium
 node scripts/smoke-templates.cjs
 ```
 
-GitHub Actions memeriksa sintaks JavaScript, data V2, seluruh tema aktif pada registry, binding pasangan, musik, nama tamu, dan alur pembukaan. Tes otomatis tetap harus dilengkapi uji RSVP/buku tamu end-to-end pada deployment backend uji dan pemeriksaan visual di ponsel/desktop.
+**Tidak perlu menjalankan server lokal secara manual.** `scripts/smoke-templates.cjs` membuat dan menutup server fixture sementara pada loopback untuk browser test, lalu menguji seluruh tema aktif. GitHub Actions menjalankan pemeriksaan statis, backend, dan browser pada runner terisolasi saat pull request ke `main` atau melalui `workflow_dispatch`. Pengujian tersebut tidak menerbitkan website dan tidak mengirim data ke backend produksi.
+
+Tes otomatis tetap harus dilengkapi uji RSVP/buku tamu end-to-end pada deployment backend uji dan pemeriksaan visual di ponsel/desktop.
 
 Smoke test produksi `node scripts/smoke-production.cjs` menggunakan browser untuk membaca katalog, undangan, dan buku tamu. Jangan menjalankannya sembarangan: permintaan GET buku tamu dapat mendaftarkan slug published yang belum tercatat pada tab `Settings`. Script ini tidak mengirim formulir RSVP atau buku tamu.
 
