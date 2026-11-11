@@ -131,6 +131,20 @@ for (const slug of activeThemeSlugs) {
           event && !event.coordinates && event.latitude == null && event.longitude == null &&
           typeof event.mapNote === "string" && event.mapNote.length > 0
         ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
+        // Exercise legacy image aliases through the real shared normalizer.
+        fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
+        delete fixture.cover.image;
+        fixture.couple.groom.foto = fixture.couple.groom.photo;
+        delete fixture.couple.groom.photo;
+        fixture.couple.bride.image = fixture.couple.bride.photo;
+        delete fixture.couple.bride.photo;
+        fixture.gallery = (fixture.gallery || []).map((src, index) => ({ url: src, alt: "Foto uji " + (index + 1) }));
+        fixture.story = (fixture.story || []).map(item => {
+          const legacy = { ...item, image: item.foto || item.photo || item.image || "" };
+          delete legacy.foto;
+          delete legacy.photo;
+          return legacy;
+        });
         fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
         for (const event of originalEvents) {
           // Exercise legacy map aliases while keeping every synthetic point isolated
@@ -380,6 +394,22 @@ for (const slug of activeThemeSlugs) {
         assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
         assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
         assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
+        const normalizedImageAudit = await page.evaluate(() => ({
+          coverImage: window.__invitationData?.cover?.image,
+          coverHeroImage: window.__invitationData?.cover?.heroImage,
+          groomPhoto: window.__invitationData?.couple?.groom?.photo,
+          bridePhoto: window.__invitationData?.couple?.bride?.photo,
+          storyPhotos: (window.__invitationData?.story || []).map(item => item.foto),
+          gallerySources: (window.__invitationData?.gallery || []).map(item => typeof item === "string" ? item : item.src)
+        }));
+        assert.ok(normalizedImageAudit.coverImage && normalizedImageAudit.coverImage === normalizedImageAudit.coverHeroImage,
+          theme.slug + ": alias foto cover tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
+        assert.ok(normalizedImageAudit.groomPhoto && normalizedImageAudit.bridePhoto,
+          theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
+        assert.ok(normalizedImageAudit.storyPhotos.length === 4 && normalizedImageAudit.storyPhotos.every(Boolean),
+          theme.slug + ": alias foto cerita tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
+        assert.ok(normalizedImageAudit.gallerySources.length === 4 && normalizedImageAudit.gallerySources.every(Boolean),
+          theme.slug + ": alias URL galeri tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
         assert.equal(imageAudit.gallery.length, 4, theme.slug + ": galeri demo harus berisi 4 foto");
         assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
           theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
