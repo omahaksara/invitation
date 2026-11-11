@@ -157,11 +157,12 @@
         "paymentType": "qris",
         "provider": "QRIS • Simulasi",
         "accountHolder": "Omah Aksara • DEMO",
-        "accountNumber": "TIDAK ADA KODE BAYAR",
+        "accountNumber": "DEMO — BUKAN KODE PEMBAYARAN",
         "copyable": false,
         "demoOnly": true,
-        "demoNote": "QRIS hanya ilustrasi dan tidak dapat dipindai untuk pembayaran.",
-        "enabled": true
+        "demoNote": "QRIS ilustrasi untuk pratinjau katalog. Tidak untuk dipindai atau digunakan bertransaksi.",
+        "enabled": true,
+        "qrCode": "qris-demo.jpg"
       }
     ]
   },
