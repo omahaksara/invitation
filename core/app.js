@@ -137,6 +137,20 @@
     if (!data || typeof data !== "object") return;
     data.cover = data.cover && typeof data.cover === "object" ? data.cover : {};
     if (!data.cover.heroImage) data.cover.heroImage = data.cover.image || "";
+
+    // Canonical couple fields for every theme. A supplied initial is kept only
+    // when it matches that person's nickname; otherwise derive it from the
+    // correct person so themes cannot accidentally swap groom/bride initials.
+    data.couple = data.couple && typeof data.couple === "object" ? data.couple : {};
+    ["groom", "bride"].forEach(role => {
+      const person = data.couple[role] && typeof data.couple[role] === "object"
+        ? data.couple[role] : (data.couple[role] = {});
+      const sourceName = String(person.nickname || person.fullName || "").trim();
+      const firstLetter = sourceName.match(/[\\p{L}\\p{N}]/u)?.[0] || "";
+      const supplied = String(person.initial || "").trim();
+      person.initial = supplied && firstLetter && supplied.toLocaleLowerCase() === firstLetter.toLocaleLowerCase()
+        ? supplied : firstLetter.toLocaleUpperCase();
+    });
     if (!data.cover.eyebrow) data.cover.eyebrow = data.cover.title || "The Wedding Of";
     if (!data.cover.buttonText) data.cover.buttonText = "Buka Undangan";
 
