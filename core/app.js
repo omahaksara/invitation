@@ -146,7 +146,7 @@
       const person = data.couple[role] && typeof data.couple[role] === "object"
         ? data.couple[role] : (data.couple[role] = {});
       const sourceName = String(person.nickname || person.fullName || "").trim();
-      const firstLetter = sourceName.match(/[\\p{L}\\p{N}]/u)?.[0] || "";
+      const firstLetter = sourceName.match(/[\p{L}\p{N}]/u)?.[0] || "";
       // Always uppercase and derive independently from the matching person's
       // nickname; never trust stale initials copied from another theme/client.
       person.initial = firstLetter.toLocaleUpperCase("id-ID");
