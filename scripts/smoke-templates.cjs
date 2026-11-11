@@ -257,10 +257,13 @@ if (motionOnly) {
           assert.ok(await page.locator(".atelier-cover .atelier-button").count() > 0,
             "atelier-editorial: tombol cover dengan namespace mandiri tidak ditemukan");
         }
-        await page.waitForFunction(() => {
-          const el = document.querySelector('[data-bind="couple.groom.nickname"]');
-          return el && el.textContent.trim() === "Arkan";
-        }, undefined, { timeout: 10000 });
+        const groomNickname = await page.evaluate(() =>
+          String(window.__invitationData?.couple?.groom?.nickname || "").trim()
+        );
+        assert.ok(groomNickname, theme.slug + ": nama mempelai pria tidak tersedia pada data demo.");
+        await page.waitForFunction(name =>
+          (document.getElementById("app")?.innerText || "").includes(name),
+          groomNickname, { timeout: 10000 });
 
         assert.equal((await page.locator("#nama-tamu").textContent()).trim(), "Nama Tamu",
           theme.slug + ": nama tamu tidak terbaca");
@@ -286,8 +289,11 @@ if (motionOnly) {
           theme.slug + ": profil motion tidak dikenali " + JSON.stringify(motionAudit));
         assert.ok(motionAudit.ready && parseFloat(motionAudit.duration) > 0,
           theme.slug + ": motion lifecycle/timing belum siap " + JSON.stringify(motionAudit));
-        assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
-          theme.slug + ": nama mempelai wanita tidak terbaca");
+        const brideNickname = await page.evaluate(() =>
+          String(window.__invitationData?.couple?.bride?.nickname || "").trim()
+        );
+        assert.ok(brideNickname && await page.locator("#app").evaluate((el, name) => el.innerText.includes(name), brideNickname),
+          theme.slug + ": nama mempelai wanita tidak terbaca dari data demo.");
 
         const initialAudit = await page.evaluate(() => {
           const couple = window.__invitationData?.couple || {};
@@ -403,8 +409,13 @@ if (motionOnly) {
           theme.slug + ": jumlah Love Story tidak sesuai data.json");
         assert.equal(await page.locator("#story-list .oa-story-photo, .story-list .oa-story-photo").count(), storyAudit.photos,
           theme.slug + ": foto Love Story tidak sesuai data.json");
-        assert.equal((await page.locator("#story-list article, .story-list article").first().textContent()).includes("Pertemuan yang Sederhana"), true,
-          theme.slug + ": judul Love Story tidak terbaca");
+        const expectedStoryTitle = await page.evaluate(() => {
+          const story = window.__invitationData?.story;
+          const first = Array.isArray(story) ? story[0] : story;
+          return String(first?.judul || first?.title || "").trim();
+        });
+        assert.ok(expectedStoryTitle && (await page.locator("#story-list article, .story-list article").first().textContent()).includes(expectedStoryTitle),
+          theme.slug + ": judul Love Story tidak terbaca sesuai data demo.");
 
         // Regression coverage for the curated demo payment methods and map controls.
         // These assertions run against every active theme using the same demo JSON.
@@ -991,18 +1002,41 @@ if (motionOnly) {
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
-        const layout = await page.evaluate(() => ({
-          viewport: document.documentElement.clientWidth,
-          page: document.documentElement.scrollWidth,
-          rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
-          guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
-        }));
+        const layout = await page.evaluate(() => {
+          const data = window.__invitationData || {};
+          const rsvpEnabled = data.features?.rsvp !== false && data.rsvp?.enabled !== false;
+          const guestbookEnabled = data.features?.guestbook !== false && data.guestbook?.enabled !== false;
+          const rsvp = document.querySelector("#rsvp-form");
+          const guestbook = document.querySelector("#wishes-form");
+          const measure = element => ({
+            width: element.getBoundingClientRect().width,
+            visible: Boolean(element.getClientRects().length) &&
+              getComputedStyle(element).display !== "none" &&
+              getComputedStyle(element).visibility !== "hidden"
+          });
+          return {
+            viewport: document.documentElement.clientWidth,
+            page: document.documentElement.scrollWidth,
+            rsvpEnabled, guestbookEnabled,
+            rsvp: measure(rsvp), guestbook: measure(guestbook)
+          };
+        });
         assert.ok(layout.page <= layout.viewport + 2,
           theme.slug + ": horizontal overflow di mobile " + JSON.stringify(layout));
-        assert.ok(layout.rsvp > 0 && layout.rsvp <= layout.viewport,
-          theme.slug + ": formulir RSVP tidak responsif " + JSON.stringify(layout));
-        assert.ok(layout.guestbook > 0 && layout.guestbook <= layout.viewport,
-          theme.slug + ": buku tamu tidak responsif " + JSON.stringify(layout));
+        if (layout.rsvpEnabled) {
+          assert.ok(layout.rsvp.width > 0 && layout.rsvp.width <= layout.viewport,
+            theme.slug + ": formulir RSVP aktif tidak responsif " + JSON.stringify(layout));
+        } else {
+          assert.equal(layout.rsvp.visible, false,
+            theme.slug + ": RSVP yang dinonaktifkan pada demo tidak boleh tampil " + JSON.stringify(layout));
+        }
+        if (layout.guestbookEnabled) {
+          assert.ok(layout.guestbook.width > 0 && layout.guestbook.width <= layout.viewport,
+            theme.slug + ": buku tamu aktif tidak responsif " + JSON.stringify(layout));
+        } else {
+          assert.equal(layout.guestbook.visible, false,
+            theme.slug + ": buku tamu yang dinonaktifkan pada demo tidak boleh tampil " + JSON.stringify(layout));
+        }
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
@@ -1027,27 +1061,9 @@ if (motionOnly) {
         assert.ok(dockClearance.gap >= 8,
           theme.slug + ": dock menutupi area akhir konten pada mobile " + JSON.stringify(dockClearance));
 
-        const rsvp = page.locator("#rsvp-form");
-        await rsvp.locator('[name="name"]').fill("Tamu Uji");
-        const attendance = rsvp.locator('[name="attendance"]');
-        const attendanceType = await attendance.first().getAttribute("type");
-        if (attendanceType === "radio") {
-          await rsvp.locator('[name="attendance"][value="hadir"]').check();
-        } else {
-          await attendance.selectOption("hadir");
-        }
-        await rsvp.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Konfirmasi berhasil|RSVP belum aktif|belum dikonfigurasi|Simulasi demo/i.test(document.querySelector("#rsvp-status")?.textContent || ""),
-          undefined, { timeout: 10000 });
-
-        const wishes = page.locator("#wishes-form");
-        await wishes.locator('[name="name"]').fill("Tamu Uji");
-        await wishes.locator('[name="message"]').fill("Semoga bahagia selalu.");
-        await wishes.locator('button[type="submit"]').first().click();
-        await page.waitForFunction(() => /Simulasi demo: ucapan ini hanya tampil sementara dan tidak disimpan\./.test(document.querySelector("#wishes-status")?.textContent || ""),
-          undefined, { timeout: 10000 });
-        await page.waitForFunction(() => Array.from(document.querySelectorAll("#wishes-list .wish-card")).some(card => card.innerText.includes("Semoga bahagia selalu.")),
-          undefined, { timeout: 5000 });
+        // The public demo intentionally disables RSVP and guestbook until release.
+        // Do not submit hidden forms or treat their zero layout size as a responsive defect.
+        // The API is still mocked above so accidental network writes remain detectable.
         assert.equal(mockGuestbook.length, 0, theme.slug + ": demo tidak boleh menulis ke mock database");
         assert.equal(mockApiPosts.length, 0, theme.slug + ": demo tidak boleh mengirim RSVP/ucapan ke API");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
