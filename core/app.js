@@ -448,6 +448,7 @@
       if (data.gifts && data.gifts.message) {
         const message = document.createElement("p");
         message.textContent = data.gifts.message;
+        message.style.cssText = "max-width:680px;margin:0 auto 18px;text-align:center;line-height:1.7";
         section.append(message);
       }
       makeContainer(section, "gift-list", "gift-grid");
@@ -1098,7 +1099,7 @@
       const notice = document.createElement("p");
       notice.className = "gift-message";
       notice.textContent = gifts.message;
-      notice.style.cssText = "grid-column:1/-1;margin:0 0 12px;line-height:1.6";
+      notice.style.cssText = "grid-column:1/-1;max-width:680px;margin:0 auto 12px;text-align:center;line-height:1.7";
       root.append(notice);
     }
 
