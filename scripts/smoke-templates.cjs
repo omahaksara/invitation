@@ -164,15 +164,24 @@ for (const slug of activeThemeSlugs) {
       };
       page.on("pageerror", error => pageErrors.push(error.message));
       // Synthetic coordinates are injected only into this browser test.
-      // The public demo retains its unverified-location notice and no fake pin.
+      // The public demo may contain an explicitly labelled illustrative map pin;
+      // never mistake that sample point for a verified client venue.
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
         const originalEvents = Object.values(fixture.events || {});
-        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
-          event && !event.coordinates && event.latitude == null && event.longitude == null &&
-          typeof event.mapNote === "string" && event.mapNote.length > 0
-        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
+        assert.ok(originalEvents.length > 0 && originalEvents.every(event => {
+          if (!event || typeof event.mapNote !== "string" || !event.mapNote.trim()) return false;
+          const hasCoordinates = event.coordinates &&
+            Number.isFinite(Number(event.coordinates.lat)) &&
+            Number.isFinite(Number(event.coordinates.lng));
+          const hasLegacyCoordinates = event.latitude != null || event.longitude != null;
+          if (hasCoordinates || hasLegacyCoordinates) {
+            return /simulasi|contoh|ilustrasi/i.test(event.mapNote) &&
+              /simulasi|contoh|demo/i.test(String(event.location || "") + " " + String(event.address || ""));
+          }
+          return true;
+        }), "Public demo map coordinates, when present, must be clearly labelled as illustrative and never presented as a verified venue.");
         // Exercise legacy image aliases through the real shared normalizer.
         fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
         delete fixture.cover.image;
