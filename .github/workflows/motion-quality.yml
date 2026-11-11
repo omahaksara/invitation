@@ -45,6 +45,9 @@ jobs:
       - name: Run focused browser smoke for all 7 motion profiles
         run: npm run test:motion:browser
 
+      - name: Run full regression suite across all themes and backend contracts
+        run: npm test
+
       - name: Upload visual evidence
         if: always()
         uses: actions/upload-artifact@v4
