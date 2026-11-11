@@ -89,7 +89,15 @@ const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").m
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
+const sharedAppJs = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf8");
+const motionProfiles = ["cinematic", "curtain", "editorial", "organic", "soft", "bold", "dramatic"];
+for (const profile of motionProfiles) {
+  assert.ok(sharedThemeCss.includes(`html[data-oa-motion-profile="${profile}"]`),
+    profile + ": token profil gerak adaptif belum tersedia.");
+}
 for (const slug of activeThemeSlugs) {
+  assert.match(sharedAppJs, new RegExp('"'+slug+'"\\s*:\\s*"(?:' + motionProfiles.join("|") + ')"'),
+    slug + ": belum memiliki identitas motion adaptif.");
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
   const themeFontTokens = sharedThemeCss.match(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\]\\s*\\{[^}]*\\}`, "m"))?.[0] || "";
@@ -205,6 +213,10 @@ for (const slug of activeThemeSlugs) {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        await page.waitForFunction(() =>
+          ["cinematic","curtain","editorial","organic","soft","bold","dramatic"].includes(
+            document.documentElement.dataset.oaMotionProfile || ""
+          ), undefined, { timeout: 5000 });
         if (theme.slug === "atelier-editorial") {
           assert.equal(await page.locator(".atelier-page").count(), 1,
             "atelier-editorial: namespace halaman mandiri tidak ditemukan");
@@ -228,6 +240,20 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
+        await page.waitForFunction(() => document.documentElement.classList.contains("oa-motion-ready"),
+          undefined, { timeout: 5000 });
+        const motionAudit = await page.evaluate(() => {
+          const target = document.querySelector(".oa-scroll-reveal");
+          return {
+            profile: document.documentElement.dataset.oaMotionProfile,
+            ready: document.documentElement.classList.contains("oa-motion-ready"),
+            duration: target ? getComputedStyle(target).transitionDuration : ""
+          };
+        });
+        assert.ok(motionProfiles.includes(motionAudit.profile),
+          theme.slug + ": profil motion tidak dikenali " + JSON.stringify(motionAudit));
+        assert.ok(motionAudit.ready && parseFloat(motionAudit.duration) > 0,
+          theme.slug + ": motion lifecycle/timing belum siap " + JSON.stringify(motionAudit));
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
 
