@@ -174,9 +174,11 @@
   },
   "rsvp": {
     "link": "",
-    "enabled": false,
+    "enabled": true,
     "whatsappNumber": "",
-    "contactName": ""
+    "contactName": "",
+    "maxGuestCount": 2,
+    "demoOnly": true
   },
   "demoGreetings": [
     {
@@ -202,8 +204,8 @@
     "maps": true,
     "music": true,
     "gifts": true,
-    "rsvp": false,
-    "guestbook": false,
+    "rsvp": true,
+    "guestbook": true,
     "guestName": true,
     "hashtag": true,
     "quotes": true,
@@ -222,8 +224,9 @@
   },
   "hashtag": "#ArkanArunikaWedding",
   "guestbook": {
-    "enabled": false,
-    "maxMessageLength": 500
+    "enabled": true,
+    "maxMessageLength": 500,
+    "demoOnly": true
   },
   "integrations": {},
   "media": {
