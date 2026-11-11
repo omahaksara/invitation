@@ -119,8 +119,8 @@ function validateClient(slug, file) {
   if (data.status !== undefined && !['draft', 'published'].includes(data.status)) {
     errors.push(`${slug}: status harus draft atau published.`);
   }
-  if (data.eventMode !== undefined && !['combined', 'akad-only', 'resepsi-only'].includes(data.eventMode)) {
-    errors.push(`${slug}: eventMode harus combined, akad-only, atau resepsi-only.`);
+  if (data.eventMode !== undefined && !['combined', 'separate', 'akad-only', 'resepsi-only'].includes(data.eventMode)) {
+    errors.push(`${slug}: eventMode harus combined, separate, akad-only, atau resepsi-only.`);
   }
   if (data.eventMode === 'combined' && (!isObject(data.events) || !isObject(data.events.akad) || !isObject(data.events.resepsi))) {
     errors.push(`${slug}: eventMode combined membutuhkan events.akad dan events.resepsi berbentuk objek.`);
