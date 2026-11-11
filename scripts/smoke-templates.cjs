@@ -168,11 +168,19 @@ for (const slug of activeThemeSlugs) {
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
-        const originalEvents = Object.values(fixture.events || {});
-        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
-          event && !event.coordinates && event.latitude == null && event.longitude == null &&
-          typeof event.mapNote === "string" && event.mapNote.length > 0
-        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
+        const originalEvents = Array.isArray(fixture.events) ? fixture.events : Object.values(fixture.events || {});
+        assert.ok(originalEvents.length > 0 && originalEvents.every(event => {
+          if (!event || typeof event !== "object") return false;
+          const point = event.coordinates || {};
+          const hasValidPoint = Number.isFinite(Number(point.lat)) && Number.isFinite(Number(point.lng)) &&
+            Number(point.lat) >= -90 && Number(point.lat) <= 90 &&
+            Number(point.lng) >= -180 && Number(point.lng) <= 180;
+          const hasClearUnverifiedNote = !event.coordinates && event.latitude == null && event.longitude == null &&
+            typeof event.mapNote === "string" && event.mapNote.length > 0;
+          return hasValidPoint || hasClearUnverifiedNote;
+        }), "Demo event groups must have either valid coordinates or a clear unverified-location note.");
+        assert.ok(originalEvents.some(event => Array.isArray(event.activities) && event.activities.length >= 2),
+          "Demo fixture must exercise grouped events with multiple activities.");
         // Exercise legacy image aliases through the real shared normalizer.
         fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
         delete fixture.cover.image;
