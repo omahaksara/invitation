@@ -39,8 +39,8 @@ for (const profile of expectedProfiles) {
   ));
   assert.ok(blockMatch, 'Token CSS profil tidak ditemukan: ' + profile);
   const block = blockMatch[1];
-  const duration = Number((block.match(/--oa-motion-duration:\\s*(\\d+)ms/) || [])[1]);
-  const opening = Number((block.match(/--oa-motion-opening-duration:\\s*(\\d+)ms/) || [])[1]);
+  const duration = Number((block.match(/--oa-motion-duration:\s*(\d+)ms/) || [])[1]);
+  const opening = Number((block.match(/--oa-motion-opening-duration:\s*(\d+)ms/) || [])[1]);
   assert.ok(duration >= 500 && duration <= 800,
     profile + ': durasi reveal di luar batas 500–800ms (' + duration + 'ms).');
   assert.ok(opening >= 650 && opening <= 900,
@@ -49,9 +49,9 @@ for (const profile of expectedProfiles) {
   assert.ok(/--oa-motion-photo-distance:/.test(block), profile + ': jarak gerak foto belum didefinisikan.');
 }
 
-assert.ok(/prefers-reduced-motion:\\s*reduce/.test(app),
+assert.ok(/prefers-reduced-motion:\s*reduce/.test(app),
   'Aturan prefers-reduced-motion tidak ditemukan pada engine.');
-assert.ok(/oa-motion-photo\\.oa-motion-visible[^}]*clip-path:\\s*inset\\(0 0 0 0/.test(app),
+assert.ok(/oa-motion-photo\.oa-motion-visible[^}]*clip-path:\s*inset\(0 0 0 0/.test(app),
   'Foto tidak memiliki state clip-path penuh setelah reveal.');
 assert.ok(/IntersectionObserver/.test(app), 'Observer reveal tidak ditemukan.');
 
