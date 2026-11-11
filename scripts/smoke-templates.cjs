@@ -170,6 +170,25 @@ for (const slug of activeThemeSlugs) {
         assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
           theme.slug + ": nama mempelai wanita tidak terbaca");
 
+        const initialAudit = await page.evaluate(() => {
+          const couple = window.__invitationData?.couple || {};
+          const firstLetter = person => String(person?.nickname || person?.fullName || "")
+            .match(/[\\p{L}\\p{N}]/u)?.[0]?.toLocaleUpperCase("id-ID") || "";
+          return {
+            groom: couple.groom?.initial || "",
+            bride: couple.bride?.initial || "",
+            groomExpected: firstLetter(couple.groom),
+            brideExpected: firstLetter(couple.bride),
+            pair: couple.initials || ""
+          };
+        });
+        assert.equal(initialAudit.groom, initialAudit.groomExpected,
+          theme.slug + ": inisial mempelai pria salah " + JSON.stringify(initialAudit));
+        assert.equal(initialAudit.bride, initialAudit.brideExpected,
+          theme.slug + ": inisial mempelai wanita salah " + JSON.stringify(initialAudit));
+        assert.equal(initialAudit.pair, initialAudit.groomExpected + initialAudit.brideExpected,
+          theme.slug + ": urutan inisial pasangan harus pria lalu wanita " + JSON.stringify(initialAudit));
+
         if (theme.slug === "jendela-senja") {
           const visualAudit = await page.evaluate(() => ({
             theme: document.documentElement.dataset.oaTheme,
