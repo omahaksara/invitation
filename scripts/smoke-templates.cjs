@@ -101,8 +101,51 @@ for (const slug of activeThemeSlugs) {
 }
 
 (async () => {
-  const browser = await chromium.launch({ headless: true });
+  // Serve the repository fixture locally so this test is self-contained.
+  // API calls remain isolated by the Playwright route mocks below.
+  const root = path.resolve(__dirname, "..");
+  const mimeTypes = {
+    ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8",
+    ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png",
+    ".webp": "image/webp", ".svg": "image/svg+xml", ".mp3": "audio/mpeg",
+    ".ogg": "audio/ogg", ".wav": "audio/wav", ".mp4": "video/mp4",
+    ".webm": "video/webm", ".woff": "font/woff", ".woff2": "font/woff2", ".ttf": "font/ttf"
+  };
+  const server = require("node:http").createServer((request, response) => {
+    let pathname;
+    try {
+      pathname = decodeURIComponent(new URL(request.url, "http://127.0.0.1").pathname);
+    } catch {
+      response.writeHead(400).end("Bad request");
+      return;
+    }
+    const target = path.resolve(root, "." + pathname);
+    if (target !== root && !target.startsWith(root + path.sep)) {
+      response.writeHead(403).end("Forbidden");
+      return;
+    }
+    let file = target;
+    try {
+      if (fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
+      if (!fs.statSync(file).isFile()) throw new Error("Not a file");
+      response.writeHead(200, {
+        "Content-Type": mimeTypes[path.extname(file).toLowerCase()] || "application/octet-stream",
+        "Cache-Control": "no-store"
+      });
+      fs.createReadStream(file).pipe(response);
+    } catch {
+      response.writeHead(404).end("Not found");
+    }
+  });
+  let browser;
   const failures = [];
+  try {
+    await new Promise((resolve, reject) => {
+      server.once("error", reject);
+      server.listen(4173, "127.0.0.1", resolve);
+    });
+    browser = await chromium.launch({ headless: true });
   try {
     for (const theme of themes) {
       const page = await browser.newPage();
@@ -961,7 +1004,8 @@ for (const slug of activeThemeSlugs) {
       }
     }
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
+    if (server.listening) await new Promise(resolve => server.close(resolve));
   }
   assert.equal(failures.length, 0, failures.join("\n"));
 })().catch(error => {
