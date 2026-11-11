@@ -39,7 +39,7 @@ function collectAssetCandidates(data, prefix = '') {
 
   for (const [key, value] of Object.entries(data)) {
     const current = prefix ? prefix + '.' + key : key;
-    const assetKey = /^(?:image|photo|foto|src|music|audio|qr|qrCode|coverImage|backgroundImage|logo|bankLogo)$/i.test(key);
+    const assetKey = /^(?:image|photo|foto|src|music|audio|qr|qrCode|coverImage|heroImage|background|backgroundImage|poster|photoUrl|imageUrl|thumbnail|logo|bankLogo)$/i.test(key);
     if (typeof value === 'string' && assetKey && value.trim()) {
       out.push({ key: current, value });
     } else if (typeof value === 'string' && key === 'gallery' && /\.(?:avif|gif|jpe?g|png|webp)$/i.test(value)) {
@@ -119,6 +119,12 @@ function validateClient(slug, file) {
   if (data.status !== undefined && !['draft', 'published'].includes(data.status)) {
     errors.push(`${slug}: status harus draft atau published.`);
   }
+  if (data.eventMode !== undefined && !['combined', 'akad-only', 'resepsi-only'].includes(data.eventMode)) {
+    errors.push(`${slug}: eventMode harus combined, akad-only, atau resepsi-only.`);
+  }
+  if (data.eventMode === 'combined' && (!isObject(data.events) || !isObject(data.events.akad) || !isObject(data.events.resepsi))) {
+    errors.push(`${slug}: eventMode combined membutuhkan events.akad dan events.resepsi berbentuk objek.`);
+  }
   if (data.features !== undefined) {
     if (!isObject(data.features)) {
       errors.push(`${slug}: features harus berupa objek boolean.`);
@@ -168,12 +174,28 @@ function validateClient(slug, file) {
     : (isObject(data.events) ? Object.keys(data.events).length : 0);
   if (eventCount === 0) warnings.push(`${slug}: belum ada acara pada data.events.`);
 
+  if (data.story !== undefined && !Array.isArray(data.story)) {
+    errors.push(`${slug}: story harus berupa array.`);
+  }
   if (data.gallery !== undefined && !Array.isArray(data.gallery) && !isObject(data.gallery)) {
     errors.push(`${slug}: gallery harus berupa array atau objek dengan daftar items.`);
+  }
+  if (isObject(data.gallery) && data.gallery.items !== undefined && !Array.isArray(data.gallery.items)) {
+    errors.push(`${slug}: gallery.items harus berupa array.`);
   }
 
   if (data.gifts !== undefined && !Array.isArray(data.gifts) && !isObject(data.gifts)) {
     errors.push(`${slug}: gifts harus berupa array atau objek.`);
+  }
+  if (isObject(data.gifts) && data.gifts.accounts !== undefined && !Array.isArray(data.gifts.accounts)) {
+    errors.push(`${slug}: gifts.accounts harus berupa array.`);
+  }
+  if (data.media !== undefined && !isObject(data.media)) {
+    errors.push(`${slug}: media harus berupa objek.`);
+  }
+  if (isObject(data.media) && data.media.music !== undefined &&
+      typeof data.media.music !== 'string' && !isObject(data.media.music)) {
+    errors.push(`${slug}: media.music harus berupa path string atau objek metadata musik.`);
   }
 
   for (const asset of collectAssetCandidates(data)) {
