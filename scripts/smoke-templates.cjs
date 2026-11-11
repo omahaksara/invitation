@@ -191,16 +191,28 @@ if (motionOnly) {
         }
       };
       page.on("pageerror", error => pageErrors.push(error.message));
-      // Synthetic coordinates are injected only into this browser test.
-      // The public demo retains its unverified-location notice and no fake pin.
+      // Preserve the real public-demo map contract: each event must either
+      // carry valid coordinates and a map target, or an explicit unverified note.
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
         const originalEvents = Object.values(fixture.events || {});
-        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
-          event && !event.coordinates && event.latitude == null && event.longitude == null &&
-          typeof event.mapNote === "string" && event.mapNote.length > 0
-        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
+        assert.ok(originalEvents.length > 0 && originalEvents.every(event => {
+          if (!event || typeof event !== "object") return false;
+          const coordinates = event.coordinates;
+          const hasCoordinates = coordinates &&
+            Number.isFinite(Number(coordinates.lat)) &&
+            Number.isFinite(Number(coordinates.lng)) &&
+            Math.abs(Number(coordinates.lat)) <= 90 &&
+            Math.abs(Number(coordinates.lng)) <= 180;
+          const hasMapTarget = (typeof event.mapsUrl === "string" && event.mapsUrl.length > 0) ||
+            (typeof event.mapEmbedUrl === "string" && event.mapEmbedUrl.length > 0) ||
+            (typeof event.mapQuery === "string" && event.mapQuery.length > 0);
+          const clearlyUnverified = typeof event.mapNote === "string" &&
+            event.mapNote.trim().length > 0 && !coordinates &&
+            event.latitude == null && event.longitude == null;
+          return hasCoordinates ? hasMapTarget : clearlyUnverified;
+        }), "Public demo events must have valid mapped coordinates or an explicit unverified-location note.");
         // Exercise legacy image aliases through the real shared normalizer.
         fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
         delete fixture.cover.image;
