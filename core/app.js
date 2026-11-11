@@ -2189,16 +2189,16 @@
         body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
         :root { --oa-motion-duration: 720ms; --oa-motion-ease: cubic-bezier(.2,.72,.18,1); }
-        .oa-scroll-reveal { opacity: 0; transform: translate3d(0,var(--oa-motion-distance,24px),0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
+        .oa-scroll-reveal { opacity: 0; transform: translate3d(0,var(--oa-motion-distance,24px),0); transition: opacity var(--oa-motion-duration) var(--oa-motion-ease), transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease), filter var(--oa-motion-duration) var(--oa-motion-ease); will-change: opacity,transform,clip-path; }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
         #app .reveal:not(.active) { opacity: 0 !important; transform: translate3d(0,22px,0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
         #app .reveal.active { opacity: 1 !important; transform: none; }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,var(--oa-motion-distance,18px),0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,var(--oa-motion-distance,18px),0); transition: opacity var(--oa-motion-duration) var(--oa-motion-ease), transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease), filter var(--oa-motion-duration) var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity,transform,clip-path; }
         .oa-motion-item[data-oa-motion="left"] { transform: translate3d(calc(0px - var(--oa-motion-distance,16px)),0,0); }
         .oa-motion-item[data-oa-motion="right"] { transform: translate3d(var(--oa-motion-distance,16px),0,0); }
         .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,var(--oa-motion-distance,16px),0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(var(--oa-motion-photo-scale,.965)); clip-path: inset(0 var(--oa-motion-photo-clip,0%) 0 var(--oa-motion-photo-clip,0%) round 4px); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(var(--oa-motion-photo-scale,.965)); clip-path: inset(0 var(--oa-motion-photo-clip,0%) 0 var(--oa-motion-photo-clip,0%) round 4px); transition: opacity var(--oa-motion-duration) var(--oa-motion-ease), transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease), filter var(--oa-motion-duration) var(--oa-motion-ease); }
         img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(calc(0px - var(--oa-motion-photo-distance,14px)),0,0) scale(var(--oa-motion-photo-scale,.99)); }
         img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(var(--oa-motion-photo-distance,14px),0,0) scale(var(--oa-motion-photo-scale,.99)); }
         img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); clip-path: inset(0 0 0 0 round 4px); filter:none; }
@@ -2237,6 +2237,41 @@
           0% { opacity:1; clip-path:circle(72% at 50% 50%); transform:scale(1); }
           100% { opacity:0; clip-path:circle(0% at 50% 50%); transform:scale(.98); }
         }
+        /* Distinct scroll choreography: each profile changes shape, depth and direction. */
+        html[data-oa-motion-profile="cinematic"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="cinematic"] #app .oa-motion-item:not(.oa-motion-visible) { filter:blur(7px); clip-path:inset(0 0 12% 0); transform:translate3d(0,38px,0) scale(.965); }
+        html[data-oa-motion-profile="curtain"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="curtain"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:inset(0 0 100% 0); transform:translate3d(0,24px,0) scaleY(.96); transform-origin:top center; }
+        html[data-oa-motion-profile="editorial"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="editorial"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:inset(0 100% 0 0); transform:translate3d(-32px,0,0); }
+        html[data-oa-motion-profile="editorial"] #app .oa-motion-item[data-oa-motion="right"]:not(.oa-motion-visible) { clip-path:inset(0 0 0 100%); transform:translate3d(32px,0,0); }
+        html[data-oa-motion-profile="organic"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="organic"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:circle(0% at 50% 50%); transform:translate3d(0,18px,0) scale(.9) rotate(-1.2deg); }
+        html[data-oa-motion-profile="soft"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="soft"] #app .oa-motion-item:not(.oa-motion-visible) { filter:blur(4px); transform:translate3d(0,18px,0) scale(.985); }
+        html[data-oa-motion-profile="bold"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="bold"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:inset(0 0 0 100%); transform:translate3d(42px,0,0) skewX(-2deg); }
+        html[data-oa-motion-profile="dramatic"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="dramatic"] #app .oa-motion-item:not(.oa-motion-visible) { filter:blur(9px); clip-path:inset(8% 0 8% 0); transform:translate3d(0,46px,0) scale(.9) rotateX(7deg); transform-origin:50% 80%; perspective:900px; }
+        html[data-oa-motion-profile] #app .oa-scroll-reveal.oa-visible,
+        html[data-oa-motion-profile] #app .oa-motion-item.oa-motion-visible { opacity:1; filter:none; clip-path:inset(0 0 0 0); transform:translate3d(0,0,0) scale(1) rotate(0) skewX(0) rotateX(0); }
+        /* Seven distinct cover exits, not one generic fade reused across themes. */
+        html[data-oa-motion-profile="cinematic"] #cover.is-opening,
+        html[data-oa-motion-profile="cinematic"] #cover-section.is-opening,
+        html[data-oa-motion-profile="cinematic"] .sirein-cover.is-opening { animation-name:oa-cover-cinematic-exit; }
+        html[data-oa-motion-profile="soft"] #cover.is-opening,
+        html[data-oa-motion-profile="soft"] #cover-section.is-opening,
+        html[data-oa-motion-profile="soft"] .sirein-cover.is-opening { animation-name:oa-cover-soft-exit; }
+        html[data-oa-motion-profile="bold"] #cover.is-opening,
+        html[data-oa-motion-profile="bold"] #cover-section.is-opening,
+        html[data-oa-motion-profile="bold"] .sirein-cover.is-opening { animation-name:oa-cover-bold-exit; }
+        html[data-oa-motion-profile="dramatic"] #cover.is-opening,
+        html[data-oa-motion-profile="dramatic"] #cover-section.is-opening,
+        html[data-oa-motion-profile="dramatic"] .sirein-cover.is-opening { animation-name:oa-cover-dramatic-exit; }
+        @keyframes oa-cover-cinematic-exit { 0% { opacity:1; transform:scale(1); filter:blur(0); } 55% { opacity:1; transform:scale(1.055); filter:blur(0); } 100% { opacity:0; transform:scale(1.12); filter:blur(8px); } }
+        @keyframes oa-cover-soft-exit { 0% { opacity:1; filter:blur(0); transform:scale(1); } 100% { opacity:0; filter:blur(12px); transform:scale(1.035); } }
+        @keyframes oa-cover-bold-exit { 0% { opacity:1; clip-path:inset(0); transform:translateX(0) skewX(0); } 100% { opacity:0; clip-path:inset(0 0 0 100%); transform:translateX(-3%) skewX(-4deg); } }
+        @keyframes oa-cover-dramatic-exit { 0% { opacity:1; clip-path:inset(0); transform:perspective(900px) rotateX(0) scale(1); filter:blur(0); } 100% { opacity:0; clip-path:inset(0 0 100% 0); transform:perspective(900px) rotateX(-9deg) scale(.96); filter:blur(5px); } }
         .oa-floating-controls { scrollbar-width:none; }
         .oa-floating-controls::-webkit-scrollbar { display:none; }
         .oa-floating-controls button { flex:0 0 auto; }
