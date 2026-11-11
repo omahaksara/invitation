@@ -2355,6 +2355,8 @@
       window.__oaScrollRevealObserver = observer;
     }
     elements.forEach(element => observer.observe(element));
+    // Mark motion as initialized only after targets are observed; the CSS fallback keeps content visible otherwise.
+    document.documentElement.classList.add("oa-motion-ready");
   }
 
   function setupLightbox() {
