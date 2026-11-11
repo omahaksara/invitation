@@ -133,7 +133,12 @@ for (const slug of activeThemeSlugs) {
         ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
         fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
         for (const event of originalEvents) {
-          // Verified synthetic coordinates exist only in this isolated browser fixture.
+          // Exercise legacy map aliases while keeping every synthetic point isolated
+          // to this intercepted browser fixture; never write these values to demo/client JSON.
+          event.mapUrl = "https://www.google.com/maps?q=0.123456,120.654321";
+          delete event.mapsUrl;
+          event.embedUrl = "https://www.google.com/maps?q=0.123456%2C120.654321&t=k&z=17&output=embed";
+          delete event.mapEmbedUrl;
           event.coordinates = { lat: 0.123456, lng: 120.654321 };
           event.mapNote = "";
         }
@@ -207,7 +212,8 @@ for (const slug of activeThemeSlugs) {
             events: events.map(event => ({
               title: event.title, date: event.date, startTime: event.startTime,
               timezone: event.timezone, mapQuery: event.mapQuery,
-              mapsUrl: event.mapsUrl, coordinates: event.coordinates
+              mapsUrl: event.mapsUrl, mapEmbedUrl: event.mapEmbedUrl,
+              coordinates: event.coordinates
             })),
             account: {
               paymentType: firstAccount.paymentType, provider: firstAccount.provider,
@@ -226,6 +232,10 @@ for (const slug of activeThemeSlugs) {
         assert.ok(contractAudit.events.every(event => event.coordinates?.lat === 0.123456 &&
           event.coordinates?.lng === 120.654321),
           theme.slug + ": koordinat lokasi tidak terbaca konsisten " + JSON.stringify(contractAudit.events));
+        assert.ok(contractAudit.events.every(event =>
+          event.mapsUrl === "https://www.google.com/maps?q=0.123456,120.654321" &&
+          event.mapEmbedUrl === "https://www.google.com/maps?q=0.123456%2C120.654321&t=k&z=17&output=embed"),
+          theme.slug + ": alias URL peta lama tidak dinormalisasi ke field kanonis " + JSON.stringify(contractAudit.events));
         assert.ok(contractAudit.account.paymentType && contractAudit.account.provider &&
           contractAudit.account.accountHolder && contractAudit.account.accountNumber,
           theme.slug + ": struktur rekening/metode hadiah belum dinormalisasi " + JSON.stringify(contractAudit.account));
