@@ -196,6 +196,46 @@ for (const slug of activeThemeSlugs) {
             initialAudit.brideExpected, theme.slug + ": monogram wanita tidak mengikuti data pasangan");
         }
 
+        const contractAudit = await page.evaluate(() => {
+          const data = window.__invitationData || {};
+          const events = Array.isArray(data.events) ? data.events : Object.values(data.events || {});
+          const accounts = Array.isArray(data.gifts) ? data.gifts : (data.gifts?.accounts || []);
+          const firstAccount = accounts.find(item => item && item.enabled !== false) || accounts[0] || {};
+          const firstStory = Array.isArray(data.story) ? data.story[0] || {} : {};
+          const firstGallery = Array.isArray(data.gallery) ? data.gallery[0] : null;
+          return {
+            events: events.map(event => ({
+              title: event.title, date: event.date, startTime: event.startTime,
+              timezone: event.timezone, mapQuery: event.mapQuery,
+              mapsUrl: event.mapsUrl, coordinates: event.coordinates
+            })),
+            account: {
+              paymentType: firstAccount.paymentType, provider: firstAccount.provider,
+              accountHolder: firstAccount.accountHolder, accountNumber: firstAccount.accountNumber
+            },
+            music: data.media?.music || data.music || null,
+            story: { judul: firstStory.judul, tanggal: firstStory.tanggal, cerita: firstStory.cerita, foto: firstStory.foto },
+            gallery: typeof firstGallery === "string" ? firstGallery : firstGallery?.src,
+            rsvp: data.rsvp?.link || ""
+          };
+        });
+        assert.ok(contractAudit.events.length >= 2,
+          theme.slug + ": data akad/resepsi tidak masuk kontrak normalisasi");
+        assert.ok(contractAudit.events.every(event => event.title && event.date && event.timezone && event.mapQuery),
+          theme.slug + ": field jadwal/lokasi belum seragam " + JSON.stringify(contractAudit.events));
+        assert.ok(contractAudit.events.every(event => event.coordinates?.lat === 0.123456 &&
+          event.coordinates?.lng === 120.654321),
+          theme.slug + ": koordinat lokasi tidak terbaca konsisten " + JSON.stringify(contractAudit.events));
+        assert.ok(contractAudit.account.paymentType && contractAudit.account.provider &&
+          contractAudit.account.accountHolder && contractAudit.account.accountNumber,
+          theme.slug + ": struktur rekening/metode hadiah belum dinormalisasi " + JSON.stringify(contractAudit.account));
+        assert.ok(contractAudit.music && (typeof contractAudit.music === "string" || contractAudit.music.src),
+          theme.slug + ": sumber musik tidak terbaca dari media.music");
+        assert.ok(contractAudit.story.judul && contractAudit.story.cerita && contractAudit.story.foto,
+          theme.slug + ": struktur love story belum lengkap " + JSON.stringify(contractAudit.story));
+        assert.ok(contractAudit.gallery,
+          theme.slug + ": referensi foto galeri tidak terbaca");
+
         if (theme.slug === "jendela-senja") {
           const visualAudit = await page.evaluate(() => ({
             theme: document.documentElement.dataset.oaTheme,
