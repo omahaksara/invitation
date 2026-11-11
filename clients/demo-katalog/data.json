@@ -11,7 +11,7 @@
     "subtitle": "The Wedding of",
     "image": "foto-sampul.jpg",
     "heroImage": "foto-sampul.jpg",
-    "eyebrow": "BISMILLĀHIRRAḤMĀNIRRAḤĪM",
+    "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
     "dateLabel": "Sabtu, 12 Juni 2027",
     "buttonText": "Buka Undangan"
   },
@@ -19,7 +19,7 @@
     "groom": {
       "nickname": "Dafa",
       "fullName": "Dafa Yudista",
-      "parents": "Putra pertama dari Bapak Aditya Pradipta dan Ibu Larasati",
+      "parents": "Putra dari keluarga Dafa",
       "photo": "foto-pria.jpg",
       "instagram": "",
       "initial": "D"
@@ -27,7 +27,7 @@
     "bride": {
       "nickname": "Ica",
       "fullName": "Ica Dwi Artika",
-      "parents": "Putri kedua dari Bapak Wiratama Ayuningtyas dan Ibu Ratih Puspitasari",
+      "parents": "Putri dari keluarga Ica",
       "photo": "foto-wanita.jpg",
       "instagram": "",
       "initial": "i"
@@ -83,33 +83,28 @@
   },
   "story": [
     {
-      "judul": "Pertemuan yang Sederhana",
+      "judul": "Sebuah Pertemuan",
       "tanggal": "2022",
-      "cerita": "Kami dipertemukan dalam sebuah kesempatan yang tidak pernah kami rencanakan. Percakapan sederhana menjadi awal dari rasa ingin mengenal, menghargai, dan memahami satu sama lain.",
+      "cerita": "Tidak semua hal indah datang dengan rencana. Dari pertemuan sederhana, tumbuh rasa ingin mengenal lebih dekat. Percakapan kecil menjadi awal dari kisah yang perlahan menemukan maknanya.",
       "foto": "foto1.jpg"
     },
     {
-      "judul": "Mengenal dan Bertumbuh",
-      "tanggal": "2023",
-      "cerita": "Waktu mengajarkan kami bahwa kedekatan dibangun melalui kejujuran, kesediaan untuk mendengarkan, serta perhatian pada hal-hal kecil yang kerap luput dari pandangan.",
+      "judul": "Belajar Saling Mengenal",
+      "tanggal": "2023–2024",
+      "cerita": "Hari demi hari mengajarkan kami bahwa kedekatan dibangun lewat kejujuran, kesediaan mendengarkan, dan perhatian pada hal-hal sederhana. Kami belajar menerima perbedaan, saling menghargai, dan bertumbuh bersama.",
       "foto": "foto2.jpg"
     },
     {
-      "judul": "Satu Niat, Dua Keluarga",
-      "tanggal": "2025",
-      "cerita": "Dengan kesungguhan hati, kami menyampaikan niat baik kepada keluarga. Doa, restu, dan kehangatan kedua keluarga menguatkan langkah kami menuju komitmen yang lebih berarti.",
+      "judul": "Memantapkan Niat",
+      "tanggal": "2025–2026",
+      "cerita": "Dengan niat yang semakin teguh, kami melibatkan keluarga dalam langkah yang lebih serius. Doa dan restu orang-orang terkasih menguatkan keyakinan kami untuk melangkah menuju masa depan bersama.",
       "foto": "foto3.jpg"
     },
     {
-      "judul": "Memantapkan Langkah",
-      "tanggal": "2026",
-      "cerita": "Kami belajar bahwa pernikahan bukan sekadar tentang merayakan hari bahagia, melainkan kesediaan untuk terus bertumbuh, saling menjaga, dan pulang kepada satu sama lain.",
-      "foto": "foto4.jpg"
-    },
-    {
-      "judul": "Mengikat Janji",
+      "judul": "Menuju Hari Bahagia",
       "tanggal": "2027",
-      "cerita": "Insyaallah, di hadapan Allah SWT dan orang-orang terkasih, kami akan memulai babak baru sebagai keluarga. Semoga langkah ini senantiasa dinaungi keberkahan, kesabaran, dan kasih sayang."
+      "cerita": "Kini, dengan memohon ridha Allah SWT, kami bersiap mengikat janji dalam pernikahan. Semoga perjalanan baru ini menjadi ruang untuk saling menjaga, menguatkan, dan menghadirkan ketenangan sepanjang usia.",
+      "foto": "foto4.jpg"
     }
   ],
   "gallery": [
@@ -119,7 +114,7 @@
     "foto4.jpg"
   ],
   "gifts": {
-    "message": "Hadiah digital ditampilkan sebagai contoh tampilan Omah Aksara. Rekening, nomor dompet digital, dan QRIS pada halaman ini sepenuhnya data simulasi — bukan akun aktif. Tombol transaksi dan salin dinonaktifkan.",
+    "message": "Doa restu dan kehadiran Anda merupakan hadiah terindah bagi kami. Bagi keluarga dan sahabat yang ingin melihat contoh fitur hadiah digital, halaman ini menampilkan data simulasi. Seluruh rekening, nomor dompet digital, dan QRIS bukan akun aktif serta tidak dapat digunakan untuk transaksi.",
     "accounts": [
       {
         "paymentType": "bank",
@@ -755,7 +750,7 @@
   "media": {
     "music": {
       "id": "wedding-demo-existing",
-      "title": "Wedding Demo Track",
+      "title": "Musik Undangan Dafa & Ica",
       "category": "instrumental",
       "src": "../../assets/music/library/wedding-demo-existing.mp3"
     }
@@ -765,20 +760,20 @@
   },
   "demoGreetings": [
     {
-      "name": "Keluarga Pradipta",
-      "message": "Selamat menempuh kehidupan baru. Semoga Allah SWT senantiasa melimpahkan keberkahan, menghadirkan sakinah, mawaddah, dan rahmah, serta menguatkan dalam setiap langkah kehidupan."
+      "name": "Keluarga Dafa",
+      "message": "Barakallahu laka wa baraka ‘alaika wa jama‘a bainakuma fii khair. Semoga Allah SWT menjadikan keluarga yang sakinah, mawaddah, dan rahmah, serta senantiasa melimpahkan keberkahan dalam setiap langkah."
     },
     {
-      "name": "Sahabat Ica",
-      "message": "Semoga ikatan suci ini menjadi awal perjalanan yang penuh ketulusan. Saling menguatkan dalam suka dan duka, serta selalu menemukan alasan untuk bersyukur dan bertumbuh bersama."
+      "name": "Keluarga Ica",
+      "message": "Selamat menempuh kehidupan baru. Semoga rumah tangga yang dibangun menjadi tempat pulang yang penuh ketenangan, kasih sayang, kesabaran, dan saling pengertian."
     },
     {
       "name": "Sahabat Dafa",
-      "message": "Barakallahu laka wa baraka ‘alaika wa jama‘a bainakuma fii khair. Semoga menjadi keluarga yang harmonis, penuh kasih sayang, dan senantiasa dalam lindungan-Nya."
+      "message": "Semoga perjalanan baru ini dipenuhi kebahagiaan sederhana, komunikasi yang baik, dan keberanian untuk terus tumbuh serta saling menguatkan."
     },
     {
-      "name": "Keluarga Besar",
-      "message": "Dengan doa terbaik, semoga rumah tangga yang dibangun menjadi tempat pulang yang menenteramkan, dipenuhi rasa hormat, kesabaran, dan kebahagiaan yang sederhana namun bermakna."
+      "name": "Sahabat Ica",
+      "message": "Doa terbaik untuk Dafa dan Ica. Semoga cinta selalu dirawat dengan rasa hormat, kepercayaan, dan syukur dalam setiap keadaan."
     }
   ],
   "schemaVersion": 2,
@@ -806,15 +801,15 @@
   "hashtag": "#DafaIcaWedding",
   "seo": {
     "title": "Dafa & Ica | Undangan Pernikahan — Omah Aksara",
-    "description": "Demo katalog Omah Aksara: pratinjau undangan dengan pilihan hadiah digital terkurasi, QRIS ilustrasi non-transaksi, peta lokasi, dan tombol navigasi."
+    "description": "Pratinjau demo undangan digital Omah Aksara bersama Dafa dan Ica. Jelajahi kisah, galeri, jadwal acara, peta, musik, RSVP, serta contoh hadiah digital yang seluruh datanya bersifat simulasi."
   },
   "opening": {
-    "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\\n\\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas segala karunia-Nya, kami bermaksud menyelenggarakan pernikahan putra-putri kami.\\n\\nDengan penuh hormat, kami mengundang Bapak/Ibu/Saudara/i untuk berkenan hadir, menyaksikan rangkaian acara, serta memberikan doa restu kepada kedua mempelai.\\n\\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan turut mengiringi langkah awal perjalanan kami sebagai keluarga.\\n\\nWassalamu’alaikum warahmatullahi wabarakatuh."
+    "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari hari bahagia pernikahan kami.\n\nKehadiran serta doa restu yang diberikan akan menjadi kebahagiaan dan kenangan berharga bagi kami.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
   },
   "closing": {
     "title": "Terima Kasih",
-    "text": "Merupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\\n\\nSemoga setiap doa baik yang dipanjatkan menjadi keberkahan bagi perjalanan kami. Sampai bertemu di hari bahagia.",
-    "signature": "Dengan penuh cinta, Dafa & Ica"
+    "text": "Merupakan kebahagiaan dan kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir serta memberikan doa restu.\n\nSemoga Allah SWT senantiasa melimpahkan keberkahan dalam langkah baru yang akan kami jalani. Terima kasih atas perhatian, doa, dan kasih sayang yang diberikan.",
+    "signature": "Dengan penuh cinta,\nDafa & Ica"
   },
   "eventMode": "combined",
   "site": {
