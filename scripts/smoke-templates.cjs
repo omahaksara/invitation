@@ -94,7 +94,13 @@ const motionProfiles = ["cinematic", "curtain", "editorial", "organic", "soft", 
 for (const profile of motionProfiles) {
   assert.ok(sharedThemeCss.includes(`html[data-oa-motion-profile="${profile}"]`),
     profile + ": token profil gerak adaptif belum tersedia.");
+  const profileRule = sharedThemeCss.match(new RegExp(`html\\[data-oa-motion-profile=["']${profile}["']\\]\\s*\\{([^}]*)\\}`, "m"))?.[1] || "";
+  for (const token of ["--oa-motion-duration", "--oa-motion-photo-distance", "--oa-motion-opening-duration"]) {
+    assert.ok(profileRule.includes(token), profile + ": token " + token + " belum lengkap.");
+  }
 }
+assert.ok(sharedThemeCss.includes("html:not(.oa-motion-ready) #app .oa-scroll-reveal"),
+  "Motion fallback harus menjaga konten tetap terlihat sebelum observer siap.");
 for (const slug of activeThemeSlugs) {
   assert.match(sharedAppJs, new RegExp('"'+slug+'"\\s*:\\s*"(?:' + motionProfiles.join("|") + ')"'),
     slug + ": belum memiliki identitas motion adaptif.");
