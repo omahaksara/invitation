@@ -147,10 +147,11 @@
         ? data.couple[role] : (data.couple[role] = {});
       const sourceName = String(person.nickname || person.fullName || "").trim();
       const firstLetter = sourceName.match(/[\\p{L}\\p{N}]/u)?.[0] || "";
-      const supplied = String(person.initial || "").trim();
-      person.initial = supplied && firstLetter && supplied.toLocaleLowerCase() === firstLetter.toLocaleLowerCase()
-        ? supplied : firstLetter.toLocaleUpperCase();
+      // Always uppercase and derive independently from the matching person's
+      // nickname; never trust stale initials copied from another theme/client.
+      person.initial = firstLetter.toLocaleUpperCase("id-ID");
     });
+    data.couple.initials = [data.couple.groom.initial, data.couple.bride.initial].filter(Boolean).join("");
     if (!data.cover.eyebrow) data.cover.eyebrow = data.cover.title || "The Wedding Of";
     if (!data.cover.buttonText) data.cover.buttonText = "Buka Undangan";
 
