@@ -6,10 +6,11 @@
   "scripts": {
     "check:syntax": "node --check core/app.js && cp backend/Code.gs /tmp/omah-aksara-backend.js && node --check /tmp/omah-aksara-backend.js",
     "validate:data": "node scripts/validate-invitations.cjs",
-    "test:static": "npm run check:syntax && npm run validate:data",
+    "test:static": "npm run check:syntax && npm run validate:data && npm run test:motion",
     "test:browser": "node scripts/smoke-templates.cjs",
     "test": "npm run test:static && npm run test:backend && npm run test:browser",
-    "test:backend": "node scripts/test-backend.cjs"
+    "test:backend": "node scripts/test-backend.cjs",
+    "test:motion": "node scripts/check-motion-profiles.cjs"
   },
   "engines": {
     "node": ">=20"
