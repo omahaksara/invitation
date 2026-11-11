@@ -450,11 +450,16 @@ if (motionOnly) {
           const scheduleRows = Array.from(document.querySelectorAll("#event-list .oa-event-schedule-item"));
           return {
             expectedPayments: enabledAccounts.length,
-            paymentNames: enabledAccounts.map(item => item.bank || "HADIAH DIGITAL"),
+            paymentNames: enabledAccounts.map(item => item.provider || item.bank || item.name || "HADIAH DIGITAL"),
             paymentCards: giftCards.length,
             paymentCardNames: giftCards.map(card => card.querySelector(".gift-bank")?.textContent?.trim() || ""),
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
-            hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
+            hasDemoNotice: /simulasi|tidak dapat digunakan untuk transaksi/i.test(
+              document.querySelector("#gift-list .gift-message")?.textContent || ""
+            ) && giftCards.every(card =>
+              card.querySelector("button")?.disabled === true &&
+              /simulasi|bukan rekening aktif|bukan akun aktif|bukan kode pembayaran/i.test(card.innerText)
+            ),
             expectedMappedEvents: mappedEvents.length,
             eventCards: eventCards.length,
             scheduleRows: scheduleRows.length,
