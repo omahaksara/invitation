@@ -222,7 +222,13 @@ for (const slug of activeThemeSlugs) {
           const firstAccount = accounts.find(item => item && item.enabled !== false) || accounts[0] || {};
           const firstStory = Array.isArray(data.story) ? data.story[0] || {} : {};
           const firstGallery = Array.isArray(data.gallery) ? data.gallery[0] : null;
+          const renderedEvents = data.__renderEvents && typeof data.__renderEvents === "object"
+            ? Object.values(data.__renderEvents) : events;
           return {
+            eventMode: data.eventMode || "",
+            renderedEventCount: renderedEvents.length,
+            combinedScheduleCount: renderedEvents.reduce((total, event) =>
+              total + (Array.isArray(event?.schedule) ? event.schedule.length : 0), 0),
             events: events.map(event => ({
               title: event.title, date: event.date, startTime: event.startTime,
               timezone: event.timezone, mapQuery: event.mapQuery,
@@ -239,6 +245,12 @@ for (const slug of activeThemeSlugs) {
             rsvp: data.rsvp?.link || ""
           };
         });
+        assert.equal(contractAudit.eventMode, "combined",
+          theme.slug + ": template data baru harus memakai mode acara gabungan.");
+        assert.equal(contractAudit.renderedEventCount, 1,
+          theme.slug + ": akad dan resepsi pada lokasi yang sama harus menjadi satu kartu.");
+        assert.equal(contractAudit.combinedScheduleCount, 2,
+          theme.slug + ": kartu gabungan harus tetap menampilkan dua jadwal terpisah.");
         assert.ok(contractAudit.events.length >= 2,
           theme.slug + ": data akad/resepsi tidak masuk kontrak normalisasi");
         assert.ok(contractAudit.events.every(event => event.title && event.date && event.timezone && event.mapQuery),
