@@ -244,7 +244,16 @@
         data.events[key] = normalizeEvent(data.events[key], key === "akad" ? "Akad Nikah" : key === "resepsi" ? "Resepsi Pernikahan" : "Acara");
       });
     } else if (Array.isArray(data.events)) {
-      data.events = data.events.map((event, index) => normalizeEvent(event, index === 0 ? "Akad Nikah" : index === 1 ? "Resepsi Pernikahan" : "Acara"));
+      data.events = data.events.map((event, index) => normalizeEvent(event, "Acara " + (index + 1)));
+      // Transitional aliases for legacy cover bindings that still read events.akad.date.
+      // The actual event renderer continues to consume the array without mutating client JSON.
+      const firstGroup = data.events[0];
+      const firstActivity = firstGroup && Array.isArray(firstGroup.activities) ? firstGroup.activities[0] : null;
+      const secondActivity = firstGroup && Array.isArray(firstGroup.activities) ? firstGroup.activities[1] : null;
+      if (firstGroup) {
+        data.events.akad = { ...firstGroup, ...(firstActivity || {}), date: firstActivity?.date || firstGroup.date || "", dateISO: firstActivity?.dateISO || firstGroup.dateISO || "" };
+        if (secondActivity) data.events.resepsi = { ...firstGroup, ...secondActivity };
+      }
     }
 
     // New invitations may opt into one combined event card. Legacy JSON without
@@ -711,7 +720,7 @@
         section.append(heading);
         if (mapUrl) {
           const link = document.createElement("a");
-          link.className = "oa-event-location";
+          link.className = root.dataset.eventMapClass || "oa-event-location";
           link.href = mapUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
           link.textContent = "Lihat Lokasi ↗";
           section.append(link);
@@ -1044,11 +1053,11 @@
     const navigationEnabled = mapsEnabled && features.mapNavigation !== false;
     root.replaceChildren();
     items.forEach((item, index) => {
-      const card = document.createElement("article"); card.className = "event-card reveal";
+      const card = document.createElement("article"); card.className = root.dataset.eventCardClass || "event-card reveal";
       const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA " + String(index + 1).padStart(2, "0");
-      const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
+      const title = document.createElement("h3"); title.className = root.dataset.eventTitleClass || ""; title.textContent = item.title || item.id || "Acara";
       const date = document.createElement("p");
-      date.className = "oa-event-date";
+      date.className = root.dataset.eventDateClass || "oa-event-date";
       const scheduleEntries = Array.isArray(item.schedule) ? item.schedule.filter(entry => entry && typeof entry === "object") : [];
       const activityDates = [...new Set(scheduleEntries.map(entry =>
         entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, entry.timezone || item.timezone || data.site?.timezone) : "")
@@ -1061,7 +1070,7 @@
         : formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
       const mapTarget = resolveEventMapTarget(item);
       const venueText = [item.venue || item.location, item.address].filter(Boolean).join(", ");
-      const venue = document.createElement("p"); venue.className = "oa-event-address"; venue.textContent = venueText;
+      const venue = document.createElement("p"); venue.className = root.dataset.eventAddressClass || "oa-event-address"; venue.textContent = venueText;
       card.append(number, title, date);
       if (Array.isArray(item.schedule) && item.schedule.length) {
         const scheduleRoot = document.createElement("div");
