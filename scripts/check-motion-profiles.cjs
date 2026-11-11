@@ -54,6 +54,10 @@ assert.ok(/prefers-reduced-motion:\s*reduce/.test(app),
 assert.ok(/oa-motion-photo\.oa-motion-visible[^}]*clip-path:\s*inset\(0 0 0 0/.test(app),
   'Foto tidak memiliki state clip-path penuh setelah reveal.');
 assert.ok(/IntersectionObserver/.test(app), 'Observer reveal tidak ditemukan.');
+assert.ok(/getPropertyValue\("--oa-motion-opening-duration"\)/.test(app),
+  'Penutupan cover harus membaca durasi opening dari profil aktif.');
+assert.ok(/reducedMotionPreference \? 0 : safeOpeningDuration/.test(app),
+  'Timer penutupan cover harus mengikuti durasi profil dan reduced-motion.');
 
 console.log(
   'PASS motion profile audit: ' + activeThemes.length + ' tema aktif, ' +
