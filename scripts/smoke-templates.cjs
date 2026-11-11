@@ -146,7 +146,6 @@ for (const slug of activeThemeSlugs) {
       server.listen(4173, "127.0.0.1", resolve);
     });
     browser = await chromium.launch({ headless: true });
-  try {
     for (const theme of themes) {
       const page = await browser.newPage();
       page.setDefaultTimeout(5000);
