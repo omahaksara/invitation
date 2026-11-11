@@ -625,13 +625,13 @@ if (motionOnly) {
         assert.ok(reducedMotionAudit.transition <= .001 && reducedMotionAudit.animation <= .001 && reducedMotionAudit.scroll === "auto",
           theme.slug + ": preferensi reduced-motion belum dihormati " + JSON.stringify(reducedMotionAudit));
         await page.emulateMedia({ reducedMotion: "no-preference" });
-        const motionAudit = await page.evaluate(() => ({
+        const motionDirectionAudit = await page.evaluate(() => ({
           left: document.querySelectorAll('#app [data-oa-motion="left"]').length,
           right: document.querySelectorAll('#app [data-oa-motion="right"]').length,
           up: document.querySelectorAll('#app [data-oa-motion="up"]').length,
           photos: document.querySelectorAll('#app img.oa-motion-photo').length
         }));
-        assert.ok(motionAudit.left + motionAudit.right > 0 && motionAudit.up > 0,
+        assert.ok(motionDirectionAudit.left + motionDirectionAudit.right > 0 && motionDirectionAudit.up > 0,
           theme.slug + ": animasi arah samping dan naik belum diterapkan");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
