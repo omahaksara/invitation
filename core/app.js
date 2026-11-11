@@ -209,6 +209,23 @@
       event.time = event.time || event.waktu || [event.startTime, event.endTime].filter(Boolean).join("–");
       event.timezone = event.timezone || event.timeZone || data.site?.timezone || "Asia/Makassar";
       event.mapQuery = event.mapQuery || event.mapSearch || [event.location, event.address].filter(Boolean).join(", ");
+      // Flexible event groups: one group may contain any number of activities.
+      // Keep the original activities and expose the shared renderer's schedule alias.
+      const activitySource = Array.isArray(event.activities) ? event.activities : null;
+      if (activitySource) {
+        event.activities = activitySource.filter(activity => activity && typeof activity === "object").map((activity, index) => {
+          const entry = { ...activity };
+          entry.title = entry.title || entry.nama || entry.name || ("Rangkaian Acara " + (index + 1));
+          entry.dateISO = entry.dateISO || entry.isoDate || entry.tanggalISO || "";
+          entry.date = entry.date || entry.tanggal || (entry.dateISO
+            ? formatEventDate(entry.dateISO, entry.timezone || event.timezone || data.site?.timezone) : "");
+          entry.startTime = entry.startTime || entry.timeStart || entry.jamMulai || "";
+          entry.endTime = entry.endTime || entry.timeEnd || entry.jamSelesai || "";
+          entry.time = entry.time || entry.waktu || [entry.startTime, entry.endTime].filter(Boolean).join("–");
+          return entry;
+        });
+        event.schedule = event.activities;
+      }
       const coords = event.coordinates && typeof event.coordinates === "object" ? { ...event.coordinates } : {};
       const lat = coords.lat ?? coords.latitude ?? event.latitude ?? event.lat;
       const lng = coords.lng ?? coords.lon ?? coords.longitude ?? event.longitude ?? event.lng ?? event.lon;
@@ -1032,8 +1049,15 @@
       const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
       const date = document.createElement("p");
       date.className = "oa-event-date";
-      date.textContent = item.schedule && item.schedule.length
-        ? (item.date || "")
+      const scheduleEntries = Array.isArray(item.schedule) ? item.schedule.filter(entry => entry && typeof entry === "object") : [];
+      const activityDates = [...new Set(scheduleEntries.map(entry =>
+        entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, entry.timezone || item.timezone || data.site?.timezone) : "")
+      ).filter(Boolean))];
+      // Show a shared date once at group level; keep per-activity dates only
+      // when the activities genuinely happen on different dates.
+      const groupDate = item.date || (activityDates.length === 1 ? activityDates[0] : "");
+      date.textContent = scheduleEntries.length
+        ? groupDate
         : formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
       const mapTarget = resolveEventMapTarget(item);
       const venueText = [item.venue || item.location, item.address].filter(Boolean).join(", ");
@@ -1049,7 +1073,8 @@
           const scheduleTitle = document.createElement("h4");
           scheduleTitle.textContent = entry.title || "Rangkaian Acara";
           const scheduleDate = document.createElement("p");
-          scheduleDate.textContent = entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, item.timezone || data.site?.timezone) : "");
+          const entryDate = entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, entry.timezone || item.timezone || data.site?.timezone) : "");
+          scheduleDate.textContent = activityDates.length > 1 ? entryDate : "";
           const scheduleTime = document.createElement("p");
           scheduleTime.textContent = entry.time || [entry.startTime, entry.endTime].filter(Boolean).join("–");
           scheduleItem.append(scheduleTitle);
