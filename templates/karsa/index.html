@@ -186,29 +186,8 @@ body {
         <p class="text-[9px] uppercase tracking-[0.4em] text-center text-stone-400 mb-2">Titik Mangsa</p>
         <h3 class="font-serif text-center font-light text-3xl text-[var(--text-color)] mb-16 tracking-wide">Sasmita Adicara</h3>
         
-        <div class="space-y-4">
-            <!-- Akad -->
-            <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
-                <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2" data-bind="events.akad.title">Akad Nikah</h5>
-                <p class="text-[9px] uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6" data-bind="events.akad.date">Tanggal</p>
-                <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
-                    <p class="font-mono" data-bind="events.akad.time">Waktu</p>
-                    <p class="pt-2 px-2 font-serif text-sm text-stone-600 italic leading-relaxed" data-bind="events.akad.address">Alamat</p>
-                </div>
-                <a id="link-akad-maps" href="#" target="_blank" rel="noopener noreferrer" class="btn-editorial">Buka Peta Lokasi</a>
-            </div>
-
-            <!-- Resepsi -->
-            <div class="bg-white border border-stone-200/40 p-8 text-center rounded-sm mb-6 shadow-sm reveal">
-                <h5 class="font-serif text-2xl font-light text-[var(--text-color)] tracking-wide mb-2" data-bind="events.resepsi.title">Resepsi</h5>
-                <p class="text-[9px] uppercase tracking-[0.3em] text-amber-700/90 font-medium mb-6" data-bind="events.resepsi.date">Tanggal</p>
-                <div class="text-xs font-light text-stone-500 space-y-1 mb-6">
-                    <p class="font-mono" data-bind="events.resepsi.time">Waktu</p>
-                    <p class="pt-2 px-2 font-serif text-sm text-stone-600 italic leading-relaxed" data-bind="events.resepsi.address">Alamat</p>
-                </div>
-                <a id="link-resepsi-maps" href="#" target="_blank" rel="noopener noreferrer" class="btn-editorial">Buka Peta Lokasi</a>
-            </div>
-        </div>
+        <div id="event-list" class="space-y-4"></div>
+    
     </section>
 
     <!-- FITUR UCAPAN & DOA SINKRON -->
