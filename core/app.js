@@ -246,6 +246,96 @@
     } else if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
       data.__renderEvents = data.events.resepsi ? { resepsi: data.events.resepsi } : {};
     }
+    // Canonical event shape: every theme receives stable akad/resepsi
+    // objects with the same date, time, venue, and map fields.
+    const normalizeEvent = (source, fallbackTitle) => {
+      if (!source || typeof source !== "object") return source;
+      const event = { ...source };
+      event.title = event.title || event.nama || fallbackTitle || "Acara";
+      event.location = event.location || event.venue || event.tempat || "";
+      event.address = event.address || event.alamat || "";
+      event.mapsUrl = event.mapsUrl || event.mapUrl || event.googleMapsUrl || event.urlMaps || "";
+      event.mapEmbedUrl = event.mapEmbedUrl || event.embedUrl || event.mapsEmbedUrl || "";
+      event.dateISO = event.dateISO || event.isoDate || event.tanggalISO || "";
+      event.date = event.date || event.tanggal || (event.dateISO
+        ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : "");
+      event.startTime = event.startTime || event.timeStart || event.jamMulai || "";
+      event.endTime = event.endTime || event.timeEnd || event.jamSelesai || "";
+      event.time = event.time || event.waktu || [event.startTime, event.endTime].filter(Boolean).join("–");
+      event.timezone = event.timezone || event.timeZone || data.site?.timezone || "Asia/Makassar";
+      event.mapQuery = event.mapQuery || event.mapSearch || [event.location, event.address].filter(Boolean).join(", ");
+      const coords = event.coordinates && typeof event.coordinates === "object" ? { ...event.coordinates } : {};
+      const lat = coords.lat ?? coords.latitude ?? event.latitude ?? event.lat;
+      const lng = coords.lng ?? coords.lon ?? coords.longitude ?? event.longitude ?? event.lng ?? event.lon;
+      if (lat !== undefined && lng !== undefined && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
+        coords.lat = Number(lat);
+        coords.lng = Number(lng);
+        delete coords.latitude;
+        delete coords.longitude;
+        data.features = data.features && typeof data.features === "object" ? data.features : {};
+        event.coordinates = coords;
+      }
+      return event;
+    };
+    if (data.events && !Array.isArray(data.events)) {
+      Object.keys(data.events).forEach(key => {
+        data.events[key] = normalizeEvent(data.events[key], key === "akad" ? "Akad Nikah" : key === "resepsi" ? "Resepsi Pernikahan" : "Acara");
+      });
+    } else if (Array.isArray(data.events)) {
+      data.events = data.events.map((event, index) => normalizeEvent(event, index === 0 ? "Akad Nikah" : index === 1 ? "Resepsi Pernikahan" : "Acara"));
+    }
+
+    // Normalize story/gallery aliases once, rather than asking each theme
+    // to understand different field names or asset representations.
+    if (Array.isArray(data.story)) {
+      data.story = data.story.map(item => item && typeof item === "object" ? ({
+        ...item,
+        judul: item.judul ?? item.title ?? "Cerita kami",
+        tanggal: item.tanggal ?? item.year ?? item.date ?? "",
+        cerita: item.cerita ?? item.description ?? "",
+        foto: item.foto ?? item.photo ?? item.image ?? ""
+      }) : item);
+    }
+    if (Array.isArray(data.gallery)) {
+      data.gallery = data.gallery.map(item => typeof item === "string" ? item : item && typeof item === "object" ? ({
+        ...item, src: item.src || item.url || item.foto || item.image || ""
+      }) : item).filter(item => typeof item === "string" ? !!item.trim() : !!item?.src);
+    } else if (data.gallery && Array.isArray(data.gallery.items)) {
+      data.gallery = data.gallery.items.map(item => typeof item === "string" ? item : ({
+        ...item, src: item.src || item.url || item.foto || item.image || ""
+      })).filter(item => typeof item === "string" ? !!item.trim() : !!item?.src);
+    }
+
+    // One gift account contract for old bank fields and newer payment methods.
+    if (Array.isArray(data.gifts)) data.gifts = { accounts: data.gifts };
+    if (data.gifts && typeof data.gifts === "object") {
+      data.gifts.accounts = Array.isArray(data.gifts.accounts) ? data.gifts.accounts.map(item => {
+        if (!item || typeof item !== "object") return item;
+        const account = { ...item };
+        account.paymentType = String(account.paymentType || account.type || "bank").toLowerCase();
+        account.provider = account.provider || account.bank || account.name || "";
+        account.accountHolder = account.accountHolder || account.accountName || account.holder || "";
+        account.accountNumber = account.accountNumber || account.phoneNumber || account.destinationNumber || "";
+        account.copyValue = account.copyValue || account.accountNumber;
+        account.qrCode = account.qrCode || account.qr?.src || account.qr || "";
+        return account;
+      }) : [];
+    }
+
+    // Music is canonical at media.music; data.music remains a read-only alias
+    // for older render helpers and theme markup.
+    data.media = data.media && typeof data.media === "object" ? data.media : {};
+    if (!data.media.music && data.music) data.media.music = data.music;
+    if (!data.music && data.media.music) data.music = data.media.music;
+    if (typeof data.media.music === "string") data.music = data.media.music;
+    else if (data.media.music && typeof data.media.music === "object") data.music = data.media.music;
+
+    data.rsvp = data.rsvp && typeof data.rsvp === "object" ? data.rsvp : {};
+    data.rsvp.link = data.rsvp.link || data.rsvp.url || data.rsvp.formUrl || "";
+    data.guestbook = data.guestbook && typeof data.guestbook === "object" ? data.guestbook : undefined;
+    data.site = data.site && typeof data.site === "object" ? data.site : {};
+    data.site.timezone = data.site.timezone || "Asia/Makassar";
+
     const renderEventsData = data.__renderEvents || data.events;
     const events = Array.isArray(renderEventsData) ? renderEventsData : Object.values(renderEventsData || {});
     const firstEvent = events.find(event => event && (event.date || event.dateISO));
