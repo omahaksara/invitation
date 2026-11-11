@@ -220,7 +220,7 @@
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari hari bahagia pernikahan kami.\n\nKehadiran serta doa restu yang diberikan akan menjadi kebahagiaan dan kenangan berharga bagi kami.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
   },
-  "hashtag": "#DafaIcaWedding",
+  "hashtag": "#ArkanArunikaWedding",
   "guestbook": {
     "enabled": false,
     "maxMessageLength": 500
@@ -229,7 +229,7 @@
   "media": {
     "music": {
       "id": "wedding-demo-existing",
-      "title": "Musik Undangan Dafa & Ica",
+      "title": "Musik Undangan Arkan & Arunika",
       "category": "instrumental",
       "src": "../../assets/music/library/wedding-demo-existing.mp3"
     }
