@@ -696,26 +696,14 @@ html[data-oa-theme="sagara"] { --oa-font-display:"Fraunces",Georgia,serif; --oa-
 }
 
 
-/* Shared performance guard: remove costly glass blur and cap theme transitions. */
+/* Shared performance guard: disable expensive glass blur without flattening each theme's motion timing. */
 html[data-oa-theme] #app,
 html[data-oa-theme] #app *,
 html[data-oa-theme] #app *::before,
 html[data-oa-theme] #app *::after{
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
-  transition-duration:.34s!important;
 }
-html[data-oa-theme] #app #cover.is-opening,
-html[data-oa-theme] #app .cover.is-opening,
-html[data-oa-theme] #app [class$="-cover"].is-opening{
-  animation-duration:.46s!important;
-  transition-duration:.42s!important;
-}
-html[data-oa-theme] #app .reveal,
-html[data-oa-theme] #app .oa-scroll-reveal,
-html[data-oa-theme] #app [class*="reveal"]{transition-duration:.42s!important}
-html[data-oa-theme] #app .main-content,
-html[data-oa-theme] #app .cover-monogram{animation-duration:.5s!important}
 .oa-floating-controls[data-theme="earty"]{
   --oa-dock-bg:#f2ecdf;--oa-dock-border:#8c6a4f;--oa-dock-ink:#3e4738;--oa-dock-accent:#a56f4f;
   border-radius:16px 16px 16px 5px;box-shadow:0 9px 26px rgba(56,62,47,.16)
