@@ -1045,7 +1045,7 @@
     root.replaceChildren();
     items.forEach((item, index) => {
       const card = document.createElement("article"); card.className = "event-card reveal";
-      const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA 0" + (index + 1);
+      const number = document.createElement("p"); number.className = "event-index"; number.textContent = "ACARA " + String(index + 1).padStart(2, "0");
       const title = document.createElement("h3"); title.textContent = item.title || item.id || "Acara";
       const date = document.createElement("p");
       date.className = "oa-event-date";
@@ -1055,7 +1055,7 @@
       ).filter(Boolean))];
       // Show a shared date once at group level; keep per-activity dates only
       // when the activities genuinely happen on different dates.
-      const groupDate = item.date || (activityDates.length === 1 ? activityDates[0] : "");
+      const groupDate = activityDates.length > 1 ? "" : (item.date || (activityDates.length === 1 ? activityDates[0] : ""));
       date.textContent = scheduleEntries.length
         ? groupDate
         : formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
