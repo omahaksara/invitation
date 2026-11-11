@@ -246,12 +246,16 @@
         const akadPoint = coordinateKey(akad), resepsiPoint = coordinateKey(resepsi);
         const samePoint = !!(akadPoint && resepsiPoint && sameText(akadPoint, resepsiPoint));
         const sameMap = !!(akad.mapsUrl && resepsi.mapsUrl && sameText(akad.mapsUrl, resepsi.mapsUrl));
+        const sameEmbed = !!(akad.mapEmbedUrl && resepsi.mapEmbedUrl && sameText(akad.mapEmbedUrl, resepsi.mapEmbedUrl));
         const sameVenue = sameText(akad.location || akad.venue, resepsi.location || resepsi.venue) &&
           sameText(akad.address, resepsi.address) &&
           !!(akad.location || akad.venue || akad.address);
-        const mapCompatible = !(akad.mapsUrl && resepsi.mapsUrl) || sameMap;
+        // Do not collapse two schedules into one card when either supplied map
+        // destination differs; the guest must never receive an ambiguous pin.
+        const mapCompatible = (!(akad.mapsUrl && resepsi.mapsUrl) || sameMap) &&
+          (!(akad.mapEmbedUrl && resepsi.mapEmbedUrl) || sameEmbed);
         const coordinateCompatible = !(akadPoint && resepsiPoint) || samePoint;
-        if ((samePoint || sameMap || sameVenue) && mapCompatible && coordinateCompatible) {
+        if ((samePoint || sameMap || sameEmbed || sameVenue) && mapCompatible && coordinateCompatible) {
           const scheduleEntry = (event, id, fallbackTitle) => ({
             id,
             title: event.title || fallbackTitle,
