@@ -1046,7 +1046,14 @@
   function renderEvents(events, data, clientBase) {
     const root = document.getElementById("event-list");
     if (!root) return;
-    const items = Array.isArray(events) ? events : Object.entries(events || {}).map(([id, item]) => ({ id, ...item }));
+    const rawItems = Array.isArray(events) ? events : Object.entries(events || {}).map(([id, item]) => ({ id, ...item }));
+    const items = rawItems.filter(item => item && typeof item === "object" && (
+      item.date || item.dateISO || item.time || item.startTime || item.endTime ||
+      item.location || item.venue || item.address || item.mapsUrl || item.mapEmbedUrl ||
+      item.coordinates || (Array.isArray(item.schedule) && item.schedule.length)
+    ));
+    const section = root.closest("section");
+    if (section) section.hidden = items.length === 0;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const mapsEnabled = features.maps !== false;
     const embedEnabled = mapsEnabled && features.mapEmbed !== false;
@@ -1068,6 +1075,7 @@
       date.textContent = scheduleEntries.length
         ? groupDate
         : formatEventDate(item.date, item.timezone || data.site?.timezone) + (item.startTime ? " · " + item.startTime + (item.endTime ? "–" + item.endTime : "") : item.time ? " · " + item.time : "");
+      date.hidden = !date.textContent;
       const mapTarget = resolveEventMapTarget(item);
       const venueText = [item.venue || item.location, item.address].filter(Boolean).join(", ");
       const venue = document.createElement("p"); venue.className = root.dataset.eventAddressClass || "oa-event-address"; venue.textContent = venueText;
@@ -1085,6 +1093,7 @@
           const entryDate = entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, entry.timezone || item.timezone || data.site?.timezone) : "");
           scheduleDate.textContent = activityDates.length > 1 ? entryDate : "";
           const scheduleTime = document.createElement("p");
+          scheduleTime.className = "oa-event-time";
           scheduleTime.textContent = entry.time || [entry.startTime, entry.endTime].filter(Boolean).join("–");
           scheduleItem.append(scheduleTitle);
           if (scheduleDate.textContent) scheduleItem.append(scheduleDate);
