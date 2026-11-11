@@ -963,7 +963,7 @@
   function resolveEventMapTarget(item) {
     const event = item && typeof item === "object" ? item : {};
     const rawCoordinates = event.coordinates && typeof event.coordinates === "object" ? event.coordinates : {};
-    const lat = Number(rawCoordinates.lat ?? event.latitude ?? event.lat);
+    const lat = Number(rawCoordinates.lat ?? rawCoordinates.latitude ?? event.latitude ?? event.lat);
     const lng = Number(rawCoordinates.lng ?? rawCoordinates.lon ?? event.longitude ?? event.lng ?? event.lon);
     const rawLat = rawCoordinates.lat ?? rawCoordinates.latitude ?? event.latitude ?? event.lat;
     const rawLng = rawCoordinates.lng ?? rawCoordinates.lon ?? rawCoordinates.longitude ?? event.longitude ?? event.lng ?? event.lon;
