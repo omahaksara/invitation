@@ -53,6 +53,16 @@ assert.ok(/prefers-reduced-motion:\s*reduce/.test(app),
   'Aturan prefers-reduced-motion tidak ditemukan pada engine.');
 assert.ok(/oa-motion-photo\.oa-motion-visible[^}]*clip-path:\s*inset\(0 0 0 0/.test(app),
   'Foto tidak memiliki state clip-path penuh setelah reveal.');
+const choreographyProfiles = ['cinematic', 'curtain', 'editorial', 'organic', 'soft', 'bold', 'dramatic'];
+for (const profile of choreographyProfiles) {
+  assert.ok(app.includes('html[data-oa-motion-profile="' + profile + '"] #app .oa-motion-item:not(.oa-motion-visible)'),
+    profile + ': choreography scroll khusus belum tersedia.');
+}
+for (const animation of ['oa-cover-cinematic-exit', 'oa-cover-curtain-exit', 'oa-cover-editorial-exit', 'oa-cover-organic-exit', 'oa-cover-soft-exit', 'oa-cover-bold-exit', 'oa-cover-dramatic-exit']) {
+  assert.ok(app.includes(animation), 'Animasi cover khusus belum tersedia: ' + animation);
+}
+assert.ok(/clip-path var\(--oa-motion-duration/.test(app), 'Reveal belum mentransisikan clip-path.');
+assert.ok(/filter var\(--oa-motion-duration/.test(app), 'Reveal belum mentransisikan filter blur.');
 assert.ok(/IntersectionObserver/.test(app), 'Observer reveal tidak ditemukan.');
 assert.ok(/getPropertyValue\("--oa-motion-opening-duration"\)/.test(app),
   'Penutupan cover harus membaca durasi opening dari profil aktif.');
