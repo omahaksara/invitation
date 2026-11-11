@@ -212,7 +212,7 @@
       const coords = event.coordinates && typeof event.coordinates === "object" ? { ...event.coordinates } : {};
       const lat = coords.lat ?? coords.latitude ?? event.latitude ?? event.lat;
       const lng = coords.lng ?? coords.lon ?? coords.longitude ?? event.longitude ?? event.lng ?? event.lon;
-      if (lat !== undefined && lng !== undefined && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
+      if (lat !== undefined && lat !== null && String(lat).trim() !== "" && lng !== undefined && lng !== null && String(lng).trim() !== "" && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng)) && Number(lat) >= -90 && Number(lat) <= 90 && Number(lng) >= -180 && Number(lng) <= 180) {
         coords.lat = Number(lat);
         coords.lng = Number(lng);
         delete coords.latitude;
@@ -440,7 +440,7 @@
       hide(".maps-section, #maps-section");
     } else {
       if (disabled("mapEmbed")) document.querySelectorAll(".oa-event-map").forEach(el => { el.hidden = true; });
-      if (disabled("navigation")) document.querySelectorAll(".oa-event-navigation").forEach(el => { el.hidden = true; });
+      if (disabled("mapNavigation")) document.querySelectorAll(".oa-event-navigation").forEach(el => { el.hidden = true; });
     }
     if (disabled("countdown")) hide("#countdown, .countdown");
     if (disabled("closing")) hide("[data-oa-closing], .oa-closing-section, .closing-section, #closing-section, .thank-you-section");
@@ -965,7 +965,11 @@
     const rawCoordinates = event.coordinates && typeof event.coordinates === "object" ? event.coordinates : {};
     const lat = Number(rawCoordinates.lat ?? event.latitude ?? event.lat);
     const lng = Number(rawCoordinates.lng ?? rawCoordinates.lon ?? event.longitude ?? event.lng ?? event.lon);
-    const hasCoordinates = Number.isFinite(lat) && Number.isFinite(lng) &&
+    const rawLat = rawCoordinates.lat ?? rawCoordinates.latitude ?? event.latitude ?? event.lat;
+    const rawLng = rawCoordinates.lng ?? rawCoordinates.lon ?? rawCoordinates.longitude ?? event.longitude ?? event.lng ?? event.lon;
+    const hasCoordinates = rawLat !== undefined && rawLat !== null && String(rawLat).trim() !== "" &&
+      rawLng !== undefined && rawLng !== null && String(rawLng).trim() !== "" &&
+      Number.isFinite(lat) && Number.isFinite(lng) &&
       lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
     const suppliedUrl = typeof event.mapsUrl === "string" && /^https?:\/\//i.test(event.mapsUrl.trim())
       ? event.mapsUrl.trim() : "";
