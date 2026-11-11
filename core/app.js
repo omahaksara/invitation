@@ -1088,12 +1088,14 @@
           const scheduleItem = document.createElement("div");
           scheduleItem.className = "oa-event-schedule-item";
           const scheduleTitle = document.createElement("h4");
+          scheduleTitle.className = root.dataset.eventActivityTitleClass || "";
           scheduleTitle.textContent = entry.title || "Rangkaian Acara";
           const scheduleDate = document.createElement("p");
+          scheduleDate.className = root.dataset.eventActivityDateClass || "";
           const entryDate = entry.date || (entry.dateISO ? formatEventDate(entry.dateISO, entry.timezone || item.timezone || data.site?.timezone) : "");
           scheduleDate.textContent = activityDates.length > 1 ? entryDate : "";
           const scheduleTime = document.createElement("p");
-          scheduleTime.className = "oa-event-time";
+          scheduleTime.className = root.dataset.eventTimeClass || "oa-event-time";
           scheduleTime.textContent = entry.time || [entry.startTime, entry.endTime].filter(Boolean).join("–");
           scheduleItem.append(scheduleTitle);
           if (scheduleDate.textContent) scheduleItem.append(scheduleDate);
