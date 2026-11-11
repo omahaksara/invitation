@@ -325,6 +325,8 @@ for (const slug of activeThemeSlugs) {
             navigationEnabled: data.features?.mapNavigation !== false,
             mapEmbedEnabled: data.features?.mapEmbed !== false,
             locationLinks: document.querySelectorAll(".oa-event-location").length,
+            locationHrefs: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
+            expectedMapUrls: events.map(item => item.mapsUrl).filter(Boolean),
             navigationLinks: document.querySelectorAll(".oa-event-navigation").length,
             mapEmbeds: document.querySelectorAll("details.oa-event-map").length,
             lazyMapFrames: Array.from(document.querySelectorAll("details.oa-event-map iframe")).every(frame => {
@@ -352,6 +354,8 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": jumlah baris jadwal gabungan tidak sesuai JSON " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.locationLinks, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": tautan lokasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
+        assert.deepEqual(demoFeatureAudit.locationHrefs, demoFeatureAudit.expectedMapUrls,
+          theme.slug + ": tautan lokasi harus mempertahankan URL Maps milik data undangan " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.navigationLinks, demoFeatureAudit.navigationEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
           theme.slug + ": tautan navigasi tidak sesuai data acara " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.mapEmbeds, demoFeatureAudit.mapEmbedEnabled ? demoFeatureAudit.expectedMappedEvents : 0,
