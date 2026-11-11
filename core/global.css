@@ -984,6 +984,7 @@ html[data-oa-motion-profile="cinematic"] {
   --oa-motion-distance: 30px;
   --oa-motion-photo-scale: .94;
   --oa-motion-photo-clip: 8%;
+  --oa-motion-photo-distance: 18px;
   --oa-motion-opening-duration: 920ms;
 }
 html[data-oa-motion-profile="curtain"] {
@@ -992,6 +993,7 @@ html[data-oa-motion-profile="curtain"] {
   --oa-motion-distance: 24px;
   --oa-motion-photo-scale: .96;
   --oa-motion-photo-clip: 12%;
+  --oa-motion-photo-distance: 20px;
   --oa-motion-opening-duration: 1120ms;
 }
 html[data-oa-motion-profile="editorial"] {
@@ -1000,6 +1002,7 @@ html[data-oa-motion-profile="editorial"] {
   --oa-motion-distance: 18px;
   --oa-motion-photo-scale: .985;
   --oa-motion-photo-clip: 0%;
+  --oa-motion-photo-distance: 12px;
   --oa-motion-opening-duration: 780ms;
 }
 html[data-oa-motion-profile="organic"] {
@@ -1008,6 +1011,7 @@ html[data-oa-motion-profile="organic"] {
   --oa-motion-distance: 22px;
   --oa-motion-photo-scale: .94;
   --oa-motion-photo-clip: 15%;
+  --oa-motion-photo-distance: 18px;
   --oa-motion-opening-duration: 1040ms;
 }
 html[data-oa-motion-profile="soft"] {
@@ -1016,6 +1020,7 @@ html[data-oa-motion-profile="soft"] {
   --oa-motion-distance: 15px;
   --oa-motion-photo-scale: .975;
   --oa-motion-photo-clip: 5%;
+  --oa-motion-photo-distance: 10px;
   --oa-motion-opening-duration: 760ms;
 }
 html[data-oa-motion-profile="bold"] {
@@ -1024,6 +1029,7 @@ html[data-oa-motion-profile="bold"] {
   --oa-motion-distance: 26px;
   --oa-motion-photo-scale: .92;
   --oa-motion-photo-clip: 9%;
+  --oa-motion-photo-distance: 16px;
   --oa-motion-opening-duration: 800ms;
 }
 html[data-oa-motion-profile="dramatic"] {
@@ -1032,6 +1038,7 @@ html[data-oa-motion-profile="dramatic"] {
   --oa-motion-distance: 34px;
   --oa-motion-photo-scale: .90;
   --oa-motion-photo-clip: 18%;
+  --oa-motion-photo-distance: 24px;
   --oa-motion-opening-duration: 1240ms;
 }
 
