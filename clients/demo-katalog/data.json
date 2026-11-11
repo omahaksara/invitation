@@ -9,8 +9,8 @@
   "cover": {
     "title": "Undangan Pernikahan",
     "subtitle": "The Wedding of",
-    "image": "foto-sampul.jpg",
-    "heroImage": "foto-sampul.jpg",
+    "image": "cover.jpg",
+    "heroImage": "cover.jpg",
     "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
     "dateLabel": "Sabtu, 12 Juni 2027",
     "buttonText": "Buka Undangan"
@@ -20,7 +20,7 @@
       "nickname": "Dafa",
       "fullName": "Dafa Yudista",
       "parents": "Putra dari keluarga Dafa",
-      "photo": "foto-pria.jpg",
+      "photo": "mempelai-pria.jpg",
       "instagram": "",
       "initial": "D"
     },
@@ -28,7 +28,7 @@
       "nickname": "Ica",
       "fullName": "Ica Dwi Artika",
       "parents": "Putri dari keluarga Ica",
-      "photo": "foto-wanita.jpg",
+      "photo": "mempelai-wanita.jpg",
       "instagram": "",
       "initial": "i"
     }
@@ -86,32 +86,32 @@
       "judul": "Sebuah Pertemuan",
       "tanggal": "2022",
       "cerita": "Tidak semua hal indah datang dengan rencana. Dari pertemuan sederhana, tumbuh rasa ingin mengenal lebih dekat. Percakapan kecil menjadi awal dari kisah yang perlahan menemukan maknanya.",
-      "foto": "foto1.jpg"
+      "foto": "foto-01.jpg"
     },
     {
       "judul": "Belajar Saling Mengenal",
       "tanggal": "2023–2024",
       "cerita": "Hari demi hari mengajarkan kami bahwa kedekatan dibangun lewat kejujuran, kesediaan mendengarkan, dan perhatian pada hal-hal sederhana. Kami belajar menerima perbedaan, saling menghargai, dan bertumbuh bersama.",
-      "foto": "foto2.jpg"
+      "foto": "foto-02.jpg"
     },
     {
       "judul": "Memantapkan Niat",
       "tanggal": "2025–2026",
       "cerita": "Dengan niat yang semakin teguh, kami melibatkan keluarga dalam langkah yang lebih serius. Doa dan restu orang-orang terkasih menguatkan keyakinan kami untuk melangkah menuju masa depan bersama.",
-      "foto": "foto3.jpg"
+      "foto": "foto-03.jpg"
     },
     {
       "judul": "Menuju Hari Bahagia",
       "tanggal": "2027",
       "cerita": "Kini, dengan memohon ridha Allah SWT, kami bersiap mengikat janji dalam pernikahan. Semoga perjalanan baru ini menjadi ruang untuk saling menjaga, menguatkan, dan menghadirkan ketenangan sepanjang usia.",
-      "foto": "foto4.jpg"
+      "foto": "foto-04.jpg"
     }
   ],
   "gallery": [
-    "foto1.jpg",
-    "foto2.jpg",
-    "foto3.jpg",
-    "foto4.jpg"
+    "foto-01.jpg",
+    "foto-02.jpg",
+    "foto-03.jpg",
+    "foto-04.jpg"
   ],
   "gifts": {
     "message": "Doa restu dan kehadiran Anda merupakan hadiah terindah bagi kami. Bagi keluarga dan sahabat yang ingin melihat contoh fitur hadiah digital, halaman ini menampilkan data simulasi. Seluruh rekening, nomor dompet digital, dan QRIS bukan akun aktif serta tidak dapat digunakan untuk transaksi.",
