@@ -12,12 +12,13 @@ Semua undangan baru menggunakan satu skema. Engine membaca format ini sebagai mo
 
 ## Pasangan dan konten
 
-- `couple.groom` dan `couple.bride`: `nickname`, `fullName`, `parents`, `photo`, `instagram`, serta `initial` (otomatis dinormalisasi dari `nickname` oleh core).
+- `couple.groom` dan `couple.bride`: bentuk baku `nickname`, `fullName`, `parents`, `photo`, `instagram`, serta `initial` (otomatis dihitung dari nama panggilan oleh core).
+- Alias lama identitas/foto yang diterima: `namaPanggilan`/`shortName`, `namaLengkap`/`name`/`nama`, `orangTua`/`parentNames`, dan `foto`/`image`/`photoUrl`; semuanya dipetakan ke bentuk baku tanpa menulis ulang JSON klien.
 - Urutan inisial pasangan selalu pria lalu wanita: `couple.initials` = `couple.groom.initial` + `couple.bride.initial`. Nilai inisial lama yang keliru tidak dipercaya; core menghitung ulang dengan huruf kapital.
-- `cover`: judul, teks pembuka, foto, dan label tanggal untuk cover.
+- `cover`: bentuk baku foto adalah `heroImage`; alias `image`, `foto`, `backgroundImage`, dan `background` diterima. Core menyediakan `cover.image` dan `cover.foto` sebagai alias baca agar markup tema lama tetap bekerja.
 - `quote`: `arab`, `text`, dan `source`.
 - `story`: daftar cerita berjumlah fleksibel. Bentuk baku berbahasa Indonesia: `judul`, `tanggal`, `cerita`, `foto`. Engine juga membaca alias lama `title`, `year`/`date`, `description`, `photo`/`image` agar data lama tetap kompatibel. Path foto relatif terhadap `clients/<slug>/` dan diperiksa oleh validator aset.
-- `gallery`: daftar URL aset atau objek `src` dan `alt`.
+- `gallery`: daftar URL aset atau objek baku `src` dan `alt`. Alias objek `url`, `foto`, dan `image` diterima lalu dinormalisasi ke `src`.
 - `hashtag`: string hashtag.
 - `video`: objek opsional dengan `src` atau `url`, serta `poster`.
 
