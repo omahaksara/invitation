@@ -124,29 +124,11 @@
     }
   }
 
-  // Keep the public demo independent from external/legacy image URLs.
-  // This normalization is deliberately scoped to demo-katalog only; client data is untouched.
+  // Demo assets are defined by clients/demo-katalog/data.json.
+  // Never overwrite its photo or music paths here: the same data contract must
+  // be consumed by every theme, with demo/client isolation handled by JSON.
   function normalizeDemoAssets(data, slug) {
     if (slug !== "demo-katalog" || !data || data.demoMode !== true) return;
-    data.cover = data.cover && typeof data.cover === "object" ? data.cover : {};
-    data.cover.image = "foto-sampul.jpg";
-    data.cover.heroImage = "foto-sampul.jpg";
-
-    data.couple = data.couple && typeof data.couple === "object" ? data.couple : {};
-    data.couple.groom = data.couple.groom && typeof data.couple.groom === "object" ? data.couple.groom : {};
-    data.couple.bride = data.couple.bride && typeof data.couple.bride === "object" ? data.couple.bride : {};
-    data.couple.groom.photo = "foto-pria.jpg";
-    data.couple.bride.photo = "foto-wanita.jpg";
-
-    data.gallery = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg"];
-    data.media = data.media && typeof data.media === "object" ? data.media : {};
-    data.media.music = {
-      id: "wedding-demo-existing",
-      title: "Wedding Demo Track",
-      category: "instrumental",
-      src: "../../assets/music/library/wedding-demo-existing.mp3"
-    };
-    if (data.music) data.music = data.media.music;
   }
 
   // Normalize common data differences before binding them to any theme.
