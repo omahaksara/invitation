@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   static-and-motion:
-    name: Static audit + 7-profile browser smoke
+    name: Static audit + protected-scope 7-profile browser smoke
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -42,10 +42,10 @@ jobs:
       - name: Run syntax, data and motion static audits
         run: npm run test:static
 
-      - name: Run focused browser smoke for all 7 motion profiles
+      - name: Run focused browser smoke for 7 profiles (Army excluded)
         run: npm run test:motion:browser
 
-      - name: Run full regression suite across all themes and backend contracts
+      - name: Run regression suite across eligible themes and backend contracts (Army excluded)
         run: npm test
 
       - name: Upload visual evidence
