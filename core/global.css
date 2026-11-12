@@ -1061,9 +1061,9 @@ html[data-oa-motion-profile="bold"] #app .gift-card {
 }
 
 /* Never leave motion-hidden content behind if scripting or observation is unavailable. */
-html:not(.oa-motion-ready) #app .oa-scroll-reveal,
-html:not(.oa-motion-ready) #app .oa-motion-item,
-html:not(.oa-motion-ready) #app img.oa-motion-photo {
+html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app .oa-scroll-reveal,
+html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app .oa-motion-item,
+html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app img.oa-motion-photo {
   opacity: 1;
   transform: none;
   clip-path: none;
