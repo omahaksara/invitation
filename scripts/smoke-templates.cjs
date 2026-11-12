@@ -102,8 +102,8 @@ for (const profile of motionProfiles) {
     assert.ok(profileRule.includes(token), profile + ": token " + token + " belum lengkap.");
   }
 }
-assert.ok(sharedThemeCss.includes("html:not(.oa-motion-ready) #app .oa-scroll-reveal"),
-  "Motion fallback harus menjaga konten tetap terlihat sebelum observer siap.");
+assert.ok(sharedThemeCss.includes('html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app .oa-scroll-reveal'),
+  "Motion fallback adaptif harus menjaga konten tema non-Army tetap terlihat sebelum observer siap.");
 for (const slug of activeThemeSlugs) {
   assert.match(sharedAppJs, new RegExp('"'+slug+'"\\s*:\\s*"(?:' + motionProfiles.join("|") + ')"'),
     slug + ": belum memiliki identitas motion adaptif.");
