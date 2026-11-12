@@ -641,7 +641,6 @@ if (motionOnly) {
               host === "google.co.id" || host.endsWith(".google.co.id") ||
               host === "maps.app" || host.endsWith(".maps.app") ||
               host === "goo.gl" || host.endsWith(".goo.gl");
-              /(^|\\.)maps\\.app$/.test(parsed.hostname) ||
           } catch (_) { return false; }
         }), theme.slug + ": tautan Google Maps dari data undangan harus tetap tersedia " + JSON.stringify(mapAudit.mapLinks));
         if (mapAudit.eventMode === "combined") {
