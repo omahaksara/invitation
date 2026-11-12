@@ -11,7 +11,7 @@ const app = fs.readFileSync(path.join(root, 'core/app.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'core/global.css'), 'utf8');
 
 const activeThemes = (registry.themes || [])
-  .filter(theme => theme && theme.status === 'active')
+  .filter(theme => theme && theme.status === 'active' && theme.slug !== 'army')
   .map(theme => theme.slug);
 assert.ok(activeThemes.length > 0, 'Registry tidak memiliki tema aktif.');
 
@@ -19,6 +19,9 @@ const mappingStart = app.indexOf('const motionProfiles = {');
 const mappingEnd = app.indexOf('\n    };', mappingStart);
 assert.ok(mappingStart >= 0 && mappingEnd > mappingStart, 'Pemetaan motionProfiles tidak ditemukan.');
 const mappingSource = app.slice(mappingStart, mappingEnd);
+assert.ok(!/"army"\s*:/.test(mappingSource), 'Army tidak boleh memiliki profil motion adaptif.');
+assert.match(app, /if \(themeSlug === "army"\)\s*\{\s*setupLegacyReveal\(\);\s*return;/,
+  'Army harus tetap memakai jalur reveal lama tanpa inisialisasi motion adaptif.');
 const mappings = Object.fromEntries(
   [...mappingSource.matchAll(/"([a-z0-9-]+)"\s*:\s*"([a-z]+)"/g)]
     .map(match => [match[1], match[2]])
@@ -70,6 +73,6 @@ assert.ok(/reducedMotionPreference \? 0 : safeOpeningDuration/.test(app),
   'Timer penutupan cover harus mengikuti durasi profil dan reduced-motion.');
 
 console.log(
-  'PASS motion profile audit: ' + activeThemes.length + ' tema aktif, ' +
+  'PASS motion profile audit: ' + activeThemes.length + ' tema non-Army yang memenuhi syarat, ' +
   profiles.size + ' profil, timing, easing, photo reveal, dan reduced-motion.'
 );
