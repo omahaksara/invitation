@@ -89,10 +89,10 @@ assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every eligible active theme exactly once (Army is protected).");
 assert.ok(!allThemes.some(theme => theme.slug === "army"),
   "Protected Army theme must never be loaded by this adaptive-motion browser suite.");
-assert.match(sharedAppJs, /if \(themeSlug === "army"\)\s*\{\s*setupLegacyReveal\(\);\s*return;/,
-  "Army must use the unchanged legacy reveal path.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
 const sharedAppJs = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf8");
+assert.match(sharedAppJs, /if \(themeSlug === "army"\)\s*\{\s*setupLegacyReveal\(\);\s*return;/,
+  "Army must use the unchanged legacy reveal path.");
 const motionProfiles = ["cinematic", "curtain", "editorial", "organic", "soft", "bold", "dramatic"];
 for (const profile of motionProfiles) {
   assert.ok(sharedThemeCss.includes(`html[data-oa-motion-profile="${profile}"]`),
