@@ -593,12 +593,18 @@ if (motionOnly) {
         // pointer interactions; otherwise the animated main layer can intercept taps.
         await page.waitForFunction(() => {
           const main = document.getElementById("main-content") || document.getElementById("app-inner");
-          return !main || !main.getAnimations().some(animation => animation.playState === "running");
+          return !main || !main.getAnimations({ subtree: true }).some(animation => animation.playState === "running");
         }, undefined, { timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         const galleryImage = page.locator(".gallery-grid img").first();
         if (await galleryImage.count()) {
+          await galleryImage.scrollIntoViewIfNeeded();
+          await page.waitForFunction(() => {
+            const image = document.querySelector(".gallery-grid img");
+            return !image || (image.classList.contains("oa-motion-visible") &&
+              !image.getAnimations().some(animation => animation.playState === "running"));
+          }, undefined, { timeout: 5000 });
           await galleryImage.click();
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
@@ -630,7 +636,11 @@ if (motionOnly) {
         assert.ok(mapAudit.mapLinks.every(url => {
           try {
             const parsed = new URL(url);
-            return /(^|\\.)google\\.com$/.test(parsed.hostname) ||
+            const host = parsed.hostname.toLowerCase();
+            return host === "google.com" || host.endsWith(".google.com") ||
+              host === "google.co.id" || host.endsWith(".google.co.id") ||
+              host === "maps.app" || host.endsWith(".maps.app") ||
+              host === "goo.gl" || host.endsWith(".goo.gl");
               /(^|\\.)google\\.co\\.id$/.test(parsed.hostname) ||
               /(^|\\.)maps\\.app$/.test(parsed.hostname) ||
               /(^|\\.)goo\\.gl$/.test(parsed.hostname);
