@@ -2146,6 +2146,182 @@
   }
 
   function setupReveal() {
+    // Army is Venni–Rama's protected theme: retain the exact legacy reveal path.
+    // Adaptive profiles, injected motion styles, and re-entry choreography are not initialized there.
+    const themeSlug = document.documentElement.dataset.oaTheme || "";
+    if (themeSlug === "army") {
+      setupLegacyReveal();
+      return;
+    }
+    setupAdaptiveReveal();
+  }
+
+  function setupLegacyReveal() {
+    const styleId = "oa-scroll-experience-style";
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        html { scroll-behavior: smooth; overflow-x: clip; }
+        body { overflow-x: clip; }
+        section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
+        :root { --oa-motion-duration: 720ms; --oa-motion-ease: cubic-bezier(.2,.72,.18,1); }
+        .oa-scroll-reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
+        .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
+        #app .reveal:not(.active) { opacity: 0 !important; transform: translate3d(0,22px,0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
+        #app .reveal.active { opacity: 1 !important; transform: none; }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .68s ease, transform .76s var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
+        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
+        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
+        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
+        .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); transition: opacity .78s ease, transform .9s var(--oa-motion-ease); }
+        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
+        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
+        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
+        .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
+        .story-content { min-width:0; }
+        .story-date { display:block; margin-bottom:6px; }
+        #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening {
+          animation: oa-cover-exit .64s cubic-bezier(.22,.7,.2,1) forwards;
+          transform-origin: center top;
+        }
+        @keyframes oa-cover-exit {
+          0% { opacity:1; transform:scale(1); filter:blur(0); }
+          45% { opacity:.72; transform:scale(1.012); filter:blur(1px); }
+          100% { opacity:0; transform:scale(1.025); filter:blur(3px); }
+        }
+        #main-content.oa-main-opening, #app-inner.oa-main-opening { animation: oa-main-enter .9s cubic-bezier(.2,.72,.18,1) both; }
+        @keyframes oa-main-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        .oa-floating-controls { scrollbar-width:none; }
+        .oa-floating-controls::-webkit-scrollbar { display:none; }
+        .oa-floating-controls button { flex:0 0 auto; }
+        @media (max-width:600px) { .oa-floating-controls { overflow-x:auto; justify-content:flex-start; max-width:calc(100vw - 18px); } }
+        @media (max-width:600px) { .oa-story-photo { max-height:320px; } }
+        @media (prefers-reduced-motion: reduce) {
+          #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
+          #main-content.oa-main-opening, #app-inner.oa-main-opening { animation:none !important; opacity:1; transform:none; }
+          html { scroll-behavior: auto !important; }
+          .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+          html[data-oa-theme] #app,
+          html[data-oa-theme] #app *,
+          html[data-oa-theme] #app *::before,
+          html[data-oa-theme] #app *::after {
+            animation-duration:.01ms!important;
+            animation-iteration-count:1!important;
+            transition-duration:.01ms!important;
+            scroll-behavior:auto!important;
+          }
+        }
+      `;
+      document.head.append(style);
+    }
+
+    // Enforce reduced motion at runtime as well as in CSS. Some legacy theme rules
+    // use stronger transition shorthands, so preserve and temporarily override inline
+    // motion properties, then restore them if the preference changes back.
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const originalMotionStyles = window.__oaOriginalMotionStyles ||
+      (window.__oaOriginalMotionStyles = new WeakMap());
+    const motionProperties = ["transition-duration", "animation-duration", "animation-iteration-count", "scroll-behavior"];
+    const applyMotionPreference = () => {
+      const targets = [document.documentElement, ...document.querySelectorAll("#app, #app *")];
+      targets.forEach(element => {
+        if (motionQuery.matches) {
+          if (!originalMotionStyles.has(element)) {
+            originalMotionStyles.set(element, motionProperties.map(property => ({
+              property,
+              value: element.style.getPropertyValue(property),
+              priority: element.style.getPropertyPriority(property)
+            })));
+          }
+          element.style.setProperty("transition-duration", ".01ms", "important");
+          element.style.setProperty("animation-duration", ".01ms", "important");
+          element.style.setProperty("animation-iteration-count", "1", "important");
+          if (element === document.documentElement) {
+            element.style.setProperty("scroll-behavior", "auto", "important");
+          }
+        } else if (originalMotionStyles.has(element)) {
+          originalMotionStyles.get(element).forEach(({ property, value, priority }) => {
+            if (value) element.style.setProperty(property, value, priority);
+            else element.style.removeProperty(property);
+          });
+          originalMotionStyles.delete(element);
+        }
+      });
+    };
+    applyMotionPreference();
+    if (!window.__oaReducedMotionListener) {
+      const onMotionPreferenceChange = () => applyMotionPreference();
+      if (motionQuery.addEventListener) motionQuery.addEventListener("change", onMotionPreferenceChange);
+      else if (motionQuery.addListener) motionQuery.addListener(onMotionPreferenceChange);
+      window.__oaReducedMotionListener = onMotionPreferenceChange;
+    }
+
+    const candidates = document.querySelectorAll(
+      "#app-inner > section:not(#cover), .invitation-container > section, .sirein-page > section, .invite-shell > section, " +
+      ".oa-shared-section, #rsvp-section, #guestbook-section, .event-card, .profile-card, .person-card, .story-item, .gift-card, .gallery-item"
+    );
+    candidates.forEach(element => {
+      if (element.closest("#cover, #cover-section, .sirein-cover")) return;
+      if (!element.classList.contains("reveal")) element.classList.add("oa-scroll-reveal");
+    });
+
+    // Arah gerak dibedakan: foto hadir dengan zoom lembut, teks/kartu naik perlahan.
+    // Hindari elemen kecil, ikon, foto di dalam tombol, dan elemen yang sudah menjadi satu animasi kartu.
+    const motionTargets = new Set();
+    document.querySelectorAll(
+      "#app h1, #app h2, #app h3, #app p, #app blockquote, #app .story-content, #app .event-card, #app .profile-card, #app .person-card, #app .gift-card, #app .gallery-item"
+    ).forEach(element => {
+      if (element.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      if (element.matches("p") && element.closest(".story-content, .event-card, .profile-card, .person-card, .gift-card, .gallery-item")) return;
+      motionTargets.add(element);
+    });
+    document.querySelectorAll("#app img").forEach(image => {
+      if (image.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      image.classList.add("oa-motion-photo");
+    });
+    let motionIndex = 0;
+    motionTargets.forEach(element => {
+      const direction = element.matches("blockquote") ? "right" :
+        element.matches("h1, h2, h3") ? (motionIndex % 2 ? "right" : "left") : "up";
+      element.classList.add("oa-motion-item");
+      element.dataset.oaMotion = direction;
+      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 70 + "ms");
+    });
+    let photoIndex = 0;
+    document.querySelectorAll("#app img.oa-motion-photo").forEach(image => {
+      image.dataset.oaMotion = photoIndex++ % 2 ? "right" : "left";
+    });
+
+    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible), .oa-motion-item:not(.oa-motion-visible), img.oa-motion-photo:not(.oa-motion-visible)");
+    if (!elements.length) return;
+    if (!( "IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      elements.forEach(el => {
+        if (el.classList.contains("reveal")) el.classList.add("active");
+        if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        el.classList.add("oa-motion-visible");
+      });
+      return;
+    }
+
+    let observer = window.__oaScrollRevealObserver;
+    if (!observer) {
+      observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        if (el.classList.contains("reveal")) el.classList.add("active");
+        if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        el.classList.add("oa-motion-visible");
+        observer.unobserve(el);
+      }), { threshold: 0.06, rootMargin: "0px 0px -3% 0px" });
+      window.__oaScrollRevealObserver = observer;
+    }
+    elements.forEach(element => observer.observe(element));
+  }
+
+
+  function setupAdaptiveReveal() {
     // Adaptive motion identity: presentation-only metadata; never written to invitation JSON.
     const themeSlug = document.documentElement.dataset.oaTheme || "karsa";
     const motionProfiles = {
@@ -2153,7 +2329,6 @@
       "aksara-signature":"editorial",
       "aksara-velora":"soft",
       "aksav":"bold",
-      "army":"organic",
       "atelier-editorial":"editorial",
       "aurelia-noir":"dramatic",
       "botanical-garden":"organic",
@@ -2387,12 +2562,16 @@
     let observer = window.__oaScrollRevealObserver;
     if (!observer) {
       observer = new IntersectionObserver(entries => entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
         const el = entry.target;
-        if (el.classList.contains("reveal")) el.classList.add("active");
-        if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
-        el.classList.add("oa-motion-visible");
-        observer.unobserve(el);
+        if (entry.isIntersecting) {
+          if (el.classList.contains("reveal")) el.classList.add("active");
+          if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+          el.classList.add("oa-motion-visible");
+        } else {
+          if (el.classList.contains("reveal")) el.classList.remove("active");
+          if (el.classList.contains("oa-scroll-reveal")) el.classList.remove("oa-visible");
+          el.classList.remove("oa-motion-visible");
+        }
       }), { threshold: 0.06, rootMargin: "0px 0px -3% 0px" });
       window.__oaScrollRevealObserver = observer;
     }
