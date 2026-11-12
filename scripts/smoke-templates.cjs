@@ -67,7 +67,6 @@ const allThemes = [
   { slug: "aksara-velora", marker: ".velora-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" },
   { slug: "aksav", marker: ".aksav", open: "#open-btn", cover: "#cover" },
-  { slug: "army", marker: ".army", open: "#open-btn", cover: "#cover" },
   { slug: "kencana-jawa", marker: ".kj-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
@@ -82,12 +81,16 @@ const allThemes = [
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
 const themeRegistry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
 const activeThemeSlugs = (themeRegistry.themes || [])
-  .filter(theme => theme && theme.status === "active")
+  .filter(theme => theme && theme.status === "active" && theme.slug !== "army")
   .map(theme => theme.slug)
   .sort();
 const browserThemeSlugs = allThemes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
-  "Browser smoke matrix must cover every active registry theme exactly once.");
+  "Browser smoke matrix must cover every eligible active theme exactly once (Army is protected).");
+assert.ok(!allThemes.some(theme => theme.slug === "army"),
+  "Protected Army theme must never be loaded by this adaptive-motion browser suite.");
+assert.match(sharedAppJs, /if \(themeSlug === "army"\)\s*\{\s*setupLegacyReveal\(\);\s*return;/,
+  "Army must use the unchanged legacy reveal path.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
 const sharedAppJs = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf8");
 const motionProfiles = ["cinematic", "curtain", "editorial", "organic", "soft", "bold", "dramatic"];
