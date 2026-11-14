@@ -1273,13 +1273,17 @@
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const themeSlug = document.documentElement.dataset.oaTheme || "";
         const openingDurationToken = getComputedStyle(document.documentElement)
           .getPropertyValue("--oa-motion-opening-duration").trim();
         const openingDurationValue = parseFloat(openingDurationToken);
         const openingDurationMs = openingDurationToken.endsWith("s") && !openingDurationToken.endsWith("ms")
           ? openingDurationValue * 1000
           : openingDurationValue;
-        const safeOpeningDuration = Number.isFinite(openingDurationMs) ? openingDurationMs : 820;
+        // Preserve the protected Army / Venni–Rama cover timing exactly as before adaptive motion.
+        const safeOpeningDuration = themeSlug === "army"
+          ? 680
+          : Number.isFinite(openingDurationMs) ? openingDurationMs : 820;
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
         }, reducedMotionPreference ? 0 : safeOpeningDuration);
