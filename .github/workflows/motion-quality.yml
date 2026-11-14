@@ -1,0 +1,67 @@
+name: Motion quality gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "core/**"
+      - "templates/**"
+      - "scripts/**"
+      - "index.html"
+      - "package.json"
+      - ".github/workflows/motion-quality.yml"
+  push:
+    branches: [feat/hybrid-adaptive-motion]
+    paths:
+      - "core/**"
+      - "templates/**"
+      - "scripts/**"
+      - "index.html"
+      - "package.json"
+      - ".github/workflows/motion-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: motion-quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-and-motion:
+    name: Static audit + protected-scope 7-profile browser smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install browser test dependency
+        run: npm install --no-save --no-package-lock playwright@1.56.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run syntax, data and motion static audits
+        run: npm run test:static
+
+      - name: Run focused browser smoke for 7 profiles (Army excluded)
+        run: npm run test:motion:browser
+
+      - name: Run regression suite across eligible themes and backend contracts (Army excluded)
+        run: npm test
+
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-visual-evidence
+          path: artifacts/visual/
+          if-no-files-found: ignore
+          retention-days: 7
