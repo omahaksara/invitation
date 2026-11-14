@@ -979,7 +979,7 @@ html[data-oa-theme="army"]{--oa-font-display:"Cormorant Garamond",Georgia,serif;
 /* Hybrid adaptive motion tokens.
    The engine selects one profile per theme; templates keep their own artwork and markup. */
 html[data-oa-motion-profile="cinematic"] {
-  --oa-motion-duration: 720ms;
+  --oa-motion-duration: 540ms;
   --oa-motion-ease: cubic-bezier(.16,.82,.22,1);
   --oa-motion-distance: 30px;
   --oa-motion-photo-scale: .94;
@@ -988,7 +988,7 @@ html[data-oa-motion-profile="cinematic"] {
   --oa-motion-opening-duration: 820ms;
 }
 html[data-oa-motion-profile="curtain"] {
-  --oa-motion-duration: 760ms;
+  --oa-motion-duration: 550ms;
   --oa-motion-ease: cubic-bezier(.22,.78,.18,1);
   --oa-motion-distance: 24px;
   --oa-motion-photo-scale: .96;
@@ -997,7 +997,7 @@ html[data-oa-motion-profile="curtain"] {
   --oa-motion-opening-duration: 860ms;
 }
 html[data-oa-motion-profile="editorial"] {
-  --oa-motion-duration: 620ms;
+  --oa-motion-duration: 520ms;
   --oa-motion-ease: cubic-bezier(.2,.72,.24,1);
   --oa-motion-distance: 18px;
   --oa-motion-photo-scale: .985;
@@ -1024,7 +1024,7 @@ html[data-oa-motion-profile="soft"] {
   --oa-motion-opening-duration: 720ms;
 }
 html[data-oa-motion-profile="bold"] {
-  --oa-motion-duration: 580ms;
+  --oa-motion-duration: 500ms;
   --oa-motion-ease: cubic-bezier(.16,.9,.22,1);
   --oa-motion-distance: 26px;
   --oa-motion-photo-scale: .92;
@@ -1033,7 +1033,7 @@ html[data-oa-motion-profile="bold"] {
   --oa-motion-opening-duration: 780ms;
 }
 html[data-oa-motion-profile="dramatic"] {
-  --oa-motion-duration: 780ms;
+  --oa-motion-duration: 550ms;
   --oa-motion-ease: cubic-bezier(.18,.86,.18,1);
   --oa-motion-distance: 34px;
   --oa-motion-photo-scale: .90;
