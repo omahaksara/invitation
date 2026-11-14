@@ -593,10 +593,17 @@ if (motionOnly) {
         // pointer interactions; otherwise the animated main layer can intercept taps.
         await page.waitForFunction(() => {
           const main = document.getElementById("main-content") || document.getElementById("app-inner");
-          return !main || !main.getAnimations({ subtree: true }).some(animation => animation.playState === "running");
+          return !main || !main.getAnimations().some(animation => animation.playState === "running");
         }, undefined, { timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
+        // Pause automatic scrolling before the manual gallery interaction so the observer
+        // is not racing the test's scrollIntoView request.
+        const autoScrollBeforeGallery = page.locator('#oa-floating-controls [data-oa-action="auto"]');
+        if (await autoScrollBeforeGallery.count() &&
+            await autoScrollBeforeGallery.getAttribute("aria-pressed") === "true") {
+          await autoScrollBeforeGallery.click();
+        }
         const galleryImage = page.locator(".gallery-grid img").first();
         if (await galleryImage.count()) {
           await galleryImage.scrollIntoViewIfNeeded();
@@ -650,7 +657,11 @@ if (motionOnly) {
             theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
         }
         const performanceAudit = await page.evaluate(() => {
-          const elements = Array.from(document.querySelectorAll("#app, #app *"));
+          // Audit only elements managed by the new motion layer. Theme-native cover,
+          // decorative and legacy transitions are intentionally outside this gate.
+          const elements = Array.from(document.querySelectorAll(
+            "#app .oa-scroll-reveal, #app .oa-motion-item, #app img.oa-motion-photo"
+          ));
           const backdrop = [];
           const slowTransitions = [];
           for (const element of elements) {
