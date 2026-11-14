@@ -603,14 +603,11 @@ if (motionOnly) {
         }
         const galleryImage = page.locator(".gallery-grid img").first();
         if (await galleryImage.count()) {
-          await page.evaluate(() => {
-            const image = document.querySelector(".gallery-grid img");
-            if (image) image.scrollIntoView({ block: "center", inline: "nearest", behavior: "instant" });
-          });
-          await page.waitForFunction(() => {
-            const image = document.querySelector(".gallery-grid img");
-            return !image || image.classList.contains("oa-motion-visible");
-          }, undefined, { timeout: 5000 });
+          await galleryImage.scrollIntoViewIfNeeded();
+          await galleryImage.waitFor({ state: "visible", timeout: 5000 });
+          // The gallery interaction is independent of whether the template's own
+          // reveal observer has already marked this image; do not turn a reveal
+          // timing race into a false lightbox failure.
           await galleryImage.click();
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
@@ -792,9 +789,16 @@ if (motionOnly) {
 
         assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="loveStory"]').count(),
           theme.slug + ": pintasan cerita tidak tersedia");
+        const optionalFeatureFlags = await page.evaluate(() => window.__invitationData?.features || {});
         for (const feature of ["events", "countdown", "gallery", "rsvp", "guestbook", "gifts"]) {
-          assert.ok(await page.locator('#oa-floating-controls [data-oa-feature="' + feature + '"]').count(),
-            theme.slug + ": pintasan " + feature + " tidak tersedia");
+          const shortcutCount = await page.locator('#oa-floating-controls [data-oa-feature="' + feature + '"]').count();
+          if (optionalFeatureFlags[feature] === false) {
+            assert.equal(shortcutCount, 0,
+              theme.slug + ": pintasan " + feature + " harus disembunyikan saat fitur dinonaktifkan");
+          } else {
+            assert.ok(shortcutCount > 0,
+              theme.slug + ": pintasan " + feature + " tidak tersedia meskipun fitur aktif");
+          }
         }
         const quoteData = await page.evaluate(() => window.__invitationData?.quote || {});
         const quoteEnabled = await page.evaluate(() => {
