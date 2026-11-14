@@ -10,6 +10,15 @@ on:
       - "index.html"
       - "package.json"
       - ".github/workflows/motion-quality.yml"
+  push:
+    branches: [feat/hybrid-adaptive-motion]
+    paths:
+      - "core/**"
+      - "templates/**"
+      - "scripts/**"
+      - "index.html"
+      - "package.json"
+      - ".github/workflows/motion-quality.yml"
   workflow_dispatch:
 
 permissions:
