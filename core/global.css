@@ -1006,7 +1006,7 @@ html[data-oa-motion-profile="editorial"] {
   --oa-motion-opening-duration: 740ms;
 }
 html[data-oa-motion-profile="organic"] {
-  --oa-motion-duration: 760ms;
+  --oa-motion-duration: 550ms;
   --oa-motion-ease: cubic-bezier(.18,.82,.22,1);
   --oa-motion-distance: 22px;
   --oa-motion-photo-scale: .94;
@@ -1015,7 +1015,7 @@ html[data-oa-motion-profile="organic"] {
   --oa-motion-opening-duration: 880ms;
 }
 html[data-oa-motion-profile="soft"] {
-  --oa-motion-duration: 620ms;
+  --oa-motion-duration: 520ms;
   --oa-motion-ease: cubic-bezier(.2,.76,.22,1);
   --oa-motion-distance: 15px;
   --oa-motion-photo-scale: .975;
