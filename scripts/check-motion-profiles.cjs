@@ -22,6 +22,8 @@ const mappingSource = app.slice(mappingStart, mappingEnd);
 assert.ok(!/"army"\s*:/.test(mappingSource), 'Army tidak boleh memiliki profil motion adaptif.');
 assert.match(app, /if \(themeSlug === "army"\)\s*\{\s*setupLegacyReveal\(\);\s*return;/,
   'Army harus tetap memakai jalur reveal lama tanpa inisialisasi motion adaptif.');
+assert.match(app, /themeSlug === "army"\s*\?\s*680\s*:/,
+  'Army / Venni–Rama harus mempertahankan timer cover legacy 680ms.');
 const mappings = Object.fromEntries(
   [...mappingSource.matchAll(/"([a-z0-9-]+)"\s*:\s*"([a-z]+)"/g)]
     .map(match => [match[1], match[2]])
@@ -44,8 +46,8 @@ for (const profile of expectedProfiles) {
   const block = blockMatch[1];
   const duration = Number((block.match(/--oa-motion-duration:\s*(\d+)ms/) || [])[1]);
   const opening = Number((block.match(/--oa-motion-opening-duration:\s*(\d+)ms/) || [])[1]);
-  assert.ok(duration >= 500 && duration <= 800,
-    profile + ': durasi reveal di luar batas 500–800ms (' + duration + 'ms).');
+  assert.ok(duration >= 500 && duration <= 550,
+    profile + ': durasi reveal di luar batas 500–550ms (' + duration + 'ms).');
   assert.ok(opening >= 650 && opening <= 900,
     profile + ': durasi opening di luar batas 650–900ms (' + opening + 'ms).');
   assert.ok(/--oa-motion-ease:/.test(block), profile + ': easing belum didefinisikan.');
