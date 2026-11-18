@@ -605,19 +605,9 @@ if (motionOnly) {
         if (await galleryImage.count()) {
           await galleryImage.scrollIntoViewIfNeeded();
           await galleryImage.waitFor({ state: "visible", timeout: 5000 });
-          // Wait for the page-level entrance choreography to finish before testing
-          // the gallery. During a transform animation Chromium may hit-test the
-          // transformed parent instead of the image, even though the image is visible.
-          await page.evaluate(async () => {
-            const opening = document.querySelector("#main-content.oa-main-opening, #app-inner.oa-main-opening");
-            if (opening) {
-              const animations = opening.getAnimations({ subtree: true });
-              await Promise.all(animations.map(animation => animation.finished.catch(() => undefined)));
-            }
-          });
-          // Trigger the image's native click handler after the entrance settles.
-          // This keeps the smoke focused on lightbox wiring rather than transient
-          // pointer hit-testing against theme-specific transformed containers.
+          // Use the native click handler directly. Waiting for every Web Animation
+          // can hang forever when a theme contains an infinite decorative animation.
+          // The smoke verifies lightbox wiring, not completion of theme choreography.
           await galleryImage.evaluate(element => element.click());
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
