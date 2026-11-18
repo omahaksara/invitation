@@ -1273,9 +1273,20 @@
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
         const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const themeSlug = document.documentElement.dataset.oaTheme || "";
+        const openingDurationToken = getComputedStyle(document.documentElement)
+          .getPropertyValue("--oa-motion-opening-duration").trim();
+        const openingDurationValue = parseFloat(openingDurationToken);
+        const openingDurationMs = openingDurationToken.endsWith("s") && !openingDurationToken.endsWith("ms")
+          ? openingDurationValue * 1000
+          : openingDurationValue;
+        // Preserve the protected Army / Venni–Rama cover timing exactly as before adaptive motion.
+        const safeOpeningDuration = themeSlug === "army"
+          ? 680
+          : Number.isFinite(openingDurationMs) ? openingDurationMs : 820;
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
-        }, reducedMotionPreference ? 0 : 680);
+        }, reducedMotionPreference ? 0 : safeOpeningDuration);
         if (audio && hasMusic) {
           try {
             await audio.play();
@@ -2139,6 +2150,17 @@
   }
 
   function setupReveal() {
+    // Army is Venni–Rama's protected theme: retain the exact legacy reveal path.
+    // Adaptive profiles, injected motion styles, and re-entry choreography are not initialized there.
+    const themeSlug = document.documentElement.dataset.oaTheme || "";
+    if (themeSlug === "army") {
+      setupLegacyReveal();
+      return;
+    }
+    setupAdaptiveReveal();
+  }
+
+  function setupLegacyReveal() {
     const styleId = "oa-scroll-experience-style";
     if (!document.getElementById(styleId)) {
       const style = document.createElement("style");
@@ -2300,6 +2322,266 @@
       window.__oaScrollRevealObserver = observer;
     }
     elements.forEach(element => observer.observe(element));
+  }
+
+
+  function setupAdaptiveReveal() {
+    // Adaptive motion identity: presentation-only metadata; never written to invitation JSON.
+    const themeSlug = document.documentElement.dataset.oaTheme || "karsa";
+    const motionProfiles = {
+      "aksara-nocturne":"cinematic",
+      "aksara-signature":"editorial",
+      "aksara-velora":"soft",
+      "aksav":"bold",
+      "atelier-editorial":"editorial",
+      "aurelia-noir":"dramatic",
+      "botanical-garden":"organic",
+      "calestial":"dramatic",
+      "earty":"organic",
+      "elegance":"soft",
+      "groom":"bold",
+      "jendela-senja":"cinematic",
+      "karsa":"cinematic",
+      "kencana-jawa":"curtain",
+      "kinze":"soft",
+      "lume":"soft",
+      "lumiere-bloom":"organic",
+      "lumina":"editorial",
+      "nox":"dramatic",
+      "romantic-floral":"organic",
+      "royal-vintage":"curtain",
+      "sagara":"organic",
+      "serena-ivory":"soft",
+      "sirein":"editorial",
+      "taupe":"soft",
+      "velvet-romance":"cinematic"
+    };
+    const motionProfile = motionProfiles[themeSlug] || "soft";
+    document.documentElement.dataset.oaMotionProfile = motionProfile;
+
+    const styleId = "oa-scroll-experience-style";
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        html { scroll-behavior: smooth; overflow-x: clip; }
+        body { overflow-x: clip; }
+        section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
+        :root { --oa-motion-duration: 720ms; --oa-motion-ease: cubic-bezier(.2,.72,.18,1); }
+        .oa-scroll-reveal { opacity: 0; transform: translate3d(0,var(--oa-motion-distance,24px),0); transition: opacity var(--oa-motion-duration) var(--oa-motion-ease), transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease), filter var(--oa-motion-duration) var(--oa-motion-ease); will-change: opacity,transform,clip-path; }
+        .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
+        #app .reveal:not(.active) { opacity: 0 !important; transform: translate3d(0,22px,0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
+        #app .reveal.active { opacity: 1 !important; transform: none; }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,var(--oa-motion-distance,18px),0); transition: opacity var(--oa-motion-duration) var(--oa-motion-ease), transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease), filter var(--oa-motion-duration) var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); will-change: opacity,transform,clip-path; }
+        .oa-motion-item[data-oa-motion="left"] { transform: translate3d(calc(0px - var(--oa-motion-distance,16px)),0,0); }
+        .oa-motion-item[data-oa-motion="right"] { transform: translate3d(var(--oa-motion-distance,16px),0,0); }
+        .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,var(--oa-motion-distance,16px),0); }
+        .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(var(--oa-motion-photo-scale,.965)); clip-path: inset(0 var(--oa-motion-photo-clip,0%) 0 var(--oa-motion-photo-clip,0%) round 4px); transition: opacity var(--oa-motion-duration) var(--oa-motion-ease), transform var(--oa-motion-duration) var(--oa-motion-ease), clip-path var(--oa-motion-duration) var(--oa-motion-ease), filter var(--oa-motion-duration) var(--oa-motion-ease); }
+        img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(calc(0px - var(--oa-motion-photo-distance,14px)),0,0) scale(var(--oa-motion-photo-scale,.99)); }
+        img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(var(--oa-motion-photo-distance,14px),0,0) scale(var(--oa-motion-photo-scale,.99)); }
+        img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); clip-path: inset(0 0 0 0 round 4px); filter:none; }
+        .oa-story-photo { display:block; width:min(100%, 340px); max-height:420px; aspect-ratio:4/3; object-fit:cover; margin:0 0 16px; border-radius:12px; border:1px solid rgba(160,140,110,.28); }
+        .story-content { min-width:0; }
+        .story-date { display:block; margin-bottom:6px; }
+        #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening {
+          animation: oa-cover-exit var(--oa-motion-opening-duration,.64s) cubic-bezier(.22,.7,.2,1) forwards;
+          transform-origin: center top;
+        }
+        @keyframes oa-cover-exit {
+          0% { opacity:1; transform:scale(1); filter:blur(0); }
+          45% { opacity:.72; transform:scale(1.012); filter:blur(1px); }
+          100% { opacity:0; transform:scale(1.025); filter:blur(3px); }
+        }
+        #main-content.oa-main-opening, #app-inner.oa-main-opening { animation: oa-main-enter var(--oa-motion-opening-duration,.9s) cubic-bezier(.2,.72,.18,1) both; }
+        @keyframes oa-main-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        html[data-oa-motion-profile="curtain"] #cover.is-opening,
+        html[data-oa-motion-profile="curtain"] #cover-section.is-opening,
+        html[data-oa-motion-profile="curtain"] .sirein-cover.is-opening { animation-name: oa-cover-curtain-exit; }
+        html[data-oa-motion-profile="editorial"] #cover.is-opening,
+        html[data-oa-motion-profile="editorial"] #cover-section.is-opening,
+        html[data-oa-motion-profile="editorial"] .sirein-cover.is-opening { animation-name: oa-cover-editorial-exit; }
+        html[data-oa-motion-profile="organic"] #cover.is-opening,
+        html[data-oa-motion-profile="organic"] #cover-section.is-opening,
+        html[data-oa-motion-profile="organic"] .sirein-cover.is-opening { animation-name: oa-cover-organic-exit; }
+        @keyframes oa-cover-curtain-exit {
+          0% { opacity:1; clip-path:inset(0); transform:scale(1); }
+          100% { opacity:0; clip-path:inset(0 0 100% 0); transform:translateY(-1.5%); }
+        }
+        @keyframes oa-cover-editorial-exit {
+          0% { opacity:1; clip-path:inset(0); transform:translateX(0); }
+          100% { opacity:0; clip-path:inset(0 0 0 100%); transform:translateX(-1.5%); }
+        }
+        @keyframes oa-cover-organic-exit {
+          0% { opacity:1; clip-path:circle(72% at 50% 50%); transform:scale(1); }
+          100% { opacity:0; clip-path:circle(0% at 50% 50%); transform:scale(.98); }
+        }
+        /* Distinct scroll choreography: each profile changes shape, depth and direction. */
+        html[data-oa-motion-profile="cinematic"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="cinematic"] #app .oa-motion-item:not(.oa-motion-visible) { filter:blur(7px); clip-path:inset(0 0 12% 0); transform:translate3d(0,38px,0) scale(.965); }
+        html[data-oa-motion-profile="curtain"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="curtain"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:inset(0 0 100% 0); transform:translate3d(0,24px,0) scaleY(.96); transform-origin:top center; }
+        html[data-oa-motion-profile="editorial"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="editorial"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:inset(0 100% 0 0); transform:translate3d(-32px,0,0); }
+        html[data-oa-motion-profile="editorial"] #app .oa-motion-item[data-oa-motion="right"]:not(.oa-motion-visible) { clip-path:inset(0 0 0 100%); transform:translate3d(32px,0,0); }
+        html[data-oa-motion-profile="organic"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="organic"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:circle(0% at 50% 50%); transform:translate3d(0,18px,0) scale(.9) rotate(-1.2deg); }
+        html[data-oa-motion-profile="soft"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="soft"] #app .oa-motion-item:not(.oa-motion-visible) { filter:blur(4px); transform:translate3d(0,18px,0) scale(.985); }
+        html[data-oa-motion-profile="bold"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="bold"] #app .oa-motion-item:not(.oa-motion-visible) { clip-path:inset(0 0 0 100%); transform:translate3d(42px,0,0) skewX(-2deg); }
+        html[data-oa-motion-profile="dramatic"] #app .oa-scroll-reveal:not(.oa-visible),
+        html[data-oa-motion-profile="dramatic"] #app .oa-motion-item:not(.oa-motion-visible) { filter:blur(9px); clip-path:inset(8% 0 8% 0); transform:translate3d(0,46px,0) scale(.9) rotateX(7deg); transform-origin:50% 80%; perspective:900px; }
+        html[data-oa-motion-profile] #app .oa-scroll-reveal.oa-visible,
+        html[data-oa-motion-profile] #app .oa-motion-item.oa-motion-visible { opacity:1; filter:none; clip-path:inset(0 0 0 0); transform:translate3d(0,0,0) scale(1) rotate(0) skewX(0) rotateX(0); }
+        /* Seven distinct cover exits, not one generic fade reused across themes. */
+        html[data-oa-motion-profile="cinematic"] #cover.is-opening,
+        html[data-oa-motion-profile="cinematic"] #cover-section.is-opening,
+        html[data-oa-motion-profile="cinematic"] .sirein-cover.is-opening { animation-name:oa-cover-cinematic-exit; }
+        html[data-oa-motion-profile="soft"] #cover.is-opening,
+        html[data-oa-motion-profile="soft"] #cover-section.is-opening,
+        html[data-oa-motion-profile="soft"] .sirein-cover.is-opening { animation-name:oa-cover-soft-exit; }
+        html[data-oa-motion-profile="bold"] #cover.is-opening,
+        html[data-oa-motion-profile="bold"] #cover-section.is-opening,
+        html[data-oa-motion-profile="bold"] .sirein-cover.is-opening { animation-name:oa-cover-bold-exit; }
+        html[data-oa-motion-profile="dramatic"] #cover.is-opening,
+        html[data-oa-motion-profile="dramatic"] #cover-section.is-opening,
+        html[data-oa-motion-profile="dramatic"] .sirein-cover.is-opening { animation-name:oa-cover-dramatic-exit; }
+        @keyframes oa-cover-cinematic-exit { 0% { opacity:1; transform:scale(1); filter:blur(0); } 55% { opacity:1; transform:scale(1.055); filter:blur(0); } 100% { opacity:0; transform:scale(1.12); filter:blur(8px); } }
+        @keyframes oa-cover-soft-exit { 0% { opacity:1; filter:blur(0); transform:scale(1); } 100% { opacity:0; filter:blur(12px); transform:scale(1.035); } }
+        @keyframes oa-cover-bold-exit { 0% { opacity:1; clip-path:inset(0); transform:translateX(0) skewX(0); } 100% { opacity:0; clip-path:inset(0 0 0 100%); transform:translateX(-3%) skewX(-4deg); } }
+        @keyframes oa-cover-dramatic-exit { 0% { opacity:1; clip-path:inset(0); transform:perspective(900px) rotateX(0) scale(1); filter:blur(0); } 100% { opacity:0; clip-path:inset(0 0 100% 0); transform:perspective(900px) rotateX(-9deg) scale(.96); filter:blur(5px); } }
+        .oa-floating-controls { scrollbar-width:none; }
+        .oa-floating-controls::-webkit-scrollbar { display:none; }
+        .oa-floating-controls button { flex:0 0 auto; }
+        @media (max-width:600px) { .oa-floating-controls { overflow-x:auto; justify-content:flex-start; max-width:calc(100vw - 18px); } }
+        @media (max-width:600px) { .oa-story-photo { max-height:320px; } }
+        @media (prefers-reduced-motion: reduce) {
+          #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening { animation:none !important; opacity:0; }
+          #main-content.oa-main-opening, #app-inner.oa-main-opening { animation:none !important; opacity:1; transform:none; }
+          html { scroll-behavior: auto !important; }
+          .oa-scroll-reveal, .oa-motion-item, img.oa-motion-photo, .oa-motion-photo img { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+          html[data-oa-theme] #app,
+          html[data-oa-theme] #app *,
+          html[data-oa-theme] #app *::before,
+          html[data-oa-theme] #app *::after {
+            animation-duration:.01ms!important;
+            animation-iteration-count:1!important;
+            transition-duration:.01ms!important;
+            scroll-behavior:auto!important;
+          }
+        }
+      `;
+      document.head.append(style);
+    }
+
+    // Enforce reduced motion at runtime as well as in CSS. Some legacy theme rules
+    // use stronger transition shorthands, so preserve and temporarily override inline
+    // motion properties, then restore them if the preference changes back.
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const originalMotionStyles = window.__oaOriginalMotionStyles ||
+      (window.__oaOriginalMotionStyles = new WeakMap());
+    const motionProperties = ["transition-duration", "animation-duration", "animation-iteration-count", "scroll-behavior"];
+    const applyMotionPreference = () => {
+      const targets = [document.documentElement, ...document.querySelectorAll("#app, #app *")];
+      targets.forEach(element => {
+        if (motionQuery.matches) {
+          if (!originalMotionStyles.has(element)) {
+            originalMotionStyles.set(element, motionProperties.map(property => ({
+              property,
+              value: element.style.getPropertyValue(property),
+              priority: element.style.getPropertyPriority(property)
+            })));
+          }
+          element.style.setProperty("transition-duration", ".01ms", "important");
+          element.style.setProperty("animation-duration", ".01ms", "important");
+          element.style.setProperty("animation-iteration-count", "1", "important");
+          if (element === document.documentElement) {
+            element.style.setProperty("scroll-behavior", "auto", "important");
+          }
+        } else if (originalMotionStyles.has(element)) {
+          originalMotionStyles.get(element).forEach(({ property, value, priority }) => {
+            if (value) element.style.setProperty(property, value, priority);
+            else element.style.removeProperty(property);
+          });
+          originalMotionStyles.delete(element);
+        }
+      });
+    };
+    applyMotionPreference();
+    if (!window.__oaReducedMotionListener) {
+      const onMotionPreferenceChange = () => applyMotionPreference();
+      if (motionQuery.addEventListener) motionQuery.addEventListener("change", onMotionPreferenceChange);
+      else if (motionQuery.addListener) motionQuery.addListener(onMotionPreferenceChange);
+      window.__oaReducedMotionListener = onMotionPreferenceChange;
+    }
+
+    const candidates = document.querySelectorAll(
+      "#app-inner > section:not(#cover), .invitation-container > section, .sirein-page > section, .invite-shell > section, " +
+      ".oa-shared-section, #rsvp-section, #guestbook-section, .event-card, .profile-card, .person-card, .story-item, .gift-card, .gallery-item"
+    );
+    candidates.forEach(element => {
+      if (element.closest("#cover, #cover-section, .sirein-cover")) return;
+      if (!element.classList.contains("reveal")) element.classList.add("oa-scroll-reveal");
+    });
+
+    // Arah gerak dibedakan: foto hadir dengan zoom lembut, teks/kartu naik perlahan.
+    // Hindari elemen kecil, ikon, foto di dalam tombol, dan elemen yang sudah menjadi satu animasi kartu.
+    const motionTargets = new Set();
+    document.querySelectorAll(
+      "#app h1, #app h2, #app h3, #app p, #app blockquote, #app .story-content, #app .event-card, #app .profile-card, #app .person-card, #app .gift-card, #app .gallery-item"
+    ).forEach(element => {
+      if (element.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      if (element.matches("p") && element.closest(".story-content, .event-card, .profile-card, .person-card, .gift-card, .gallery-item")) return;
+      motionTargets.add(element);
+    });
+    document.querySelectorAll("#app img").forEach(image => {
+      if (image.closest("#cover, #cover-section, .sirein-cover, #oa-floating-controls, button, a")) return;
+      image.classList.add("oa-motion-photo");
+    });
+    let motionIndex = 0;
+    motionTargets.forEach(element => {
+      const direction = element.matches("blockquote") ? "right" :
+        element.matches("h1, h2, h3") ? (motionIndex % 2 ? "right" : "left") : "up";
+      element.classList.add("oa-motion-item");
+      element.dataset.oaMotion = direction;
+      element.style.setProperty("--oa-motion-delay", (motionIndex++ % 4) * 70 + "ms");
+    });
+    let photoIndex = 0;
+    document.querySelectorAll("#app img.oa-motion-photo").forEach(image => {
+      image.dataset.oaMotion = photoIndex++ % 2 ? "right" : "left";
+    });
+
+    const elements = document.querySelectorAll(".reveal:not(.active), .oa-scroll-reveal:not(.oa-visible), .oa-motion-item:not(.oa-motion-visible), img.oa-motion-photo:not(.oa-motion-visible)");
+    if (!elements.length) return;
+    if (!( "IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      elements.forEach(el => {
+        if (el.classList.contains("reveal")) el.classList.add("active");
+        if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+        el.classList.add("oa-motion-visible");
+      });
+      return;
+    }
+
+    let observer = window.__oaScrollRevealObserver;
+    if (!observer) {
+      observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        const el = entry.target;
+        if (entry.isIntersecting) {
+          if (el.classList.contains("reveal")) el.classList.add("active");
+          if (el.classList.contains("oa-scroll-reveal")) el.classList.add("oa-visible");
+          el.classList.add("oa-motion-visible");
+        } else {
+          if (el.classList.contains("reveal")) el.classList.remove("active");
+          if (el.classList.contains("oa-scroll-reveal")) el.classList.remove("oa-visible");
+          el.classList.remove("oa-motion-visible");
+        }
+      }), { threshold: 0.06, rootMargin: "0px 0px -3% 0px" });
+      window.__oaScrollRevealObserver = observer;
+    }
+    elements.forEach(element => observer.observe(element));
+    // Mark motion as initialized only after targets are observed; the CSS fallback keeps content visible otherwise.
+    document.documentElement.classList.add("oa-motion-ready");
   }
 
   function setupLightbox() {

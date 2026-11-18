@@ -975,3 +975,96 @@ html[data-oa-theme] .oa-event-map-fallback a{
 /* Army — forest green, ivory and champagne shared dock. */
 .oa-floating-controls[data-theme="army"]{--oa-dock-bg:#102b23f5;--oa-dock-border:#c9ad73;--oa-dock-ink:#f4f0e5;--oa-dock-accent:#d4b979;--oa-dock-active:#c9ad73;--oa-dock-active-ink:#102b23;}
 html[data-oa-theme="army"]{--oa-font-display:"Cormorant Garamond",Georgia,serif;--oa-font-body:"Montserrat",Arial,sans-serif;--oa-reveal-time:.48s;--oa-reveal-ease:cubic-bezier(.18,.78,.22,1);--oa-theme-display:"Cormorant Garamond",Georgia,serif;--oa-theme-body:"Montserrat",Arial,sans-serif;}
+
+/* Hybrid adaptive motion tokens.
+   The engine selects one profile per theme; templates keep their own artwork and markup. */
+html[data-oa-motion-profile="cinematic"] {
+  --oa-motion-duration: 540ms;
+  --oa-motion-ease: cubic-bezier(.16,.82,.22,1);
+  --oa-motion-distance: 30px;
+  --oa-motion-photo-scale: .94;
+  --oa-motion-photo-clip: 8%;
+  --oa-motion-photo-distance: 18px;
+  --oa-motion-opening-duration: 820ms;
+}
+html[data-oa-motion-profile="curtain"] {
+  --oa-motion-duration: 550ms;
+  --oa-motion-ease: cubic-bezier(.22,.78,.18,1);
+  --oa-motion-distance: 24px;
+  --oa-motion-photo-scale: .96;
+  --oa-motion-photo-clip: 12%;
+  --oa-motion-photo-distance: 20px;
+  --oa-motion-opening-duration: 860ms;
+}
+html[data-oa-motion-profile="editorial"] {
+  --oa-motion-duration: 520ms;
+  --oa-motion-ease: cubic-bezier(.2,.72,.24,1);
+  --oa-motion-distance: 18px;
+  --oa-motion-photo-scale: .985;
+  --oa-motion-photo-clip: 0%;
+  --oa-motion-photo-distance: 12px;
+  --oa-motion-opening-duration: 740ms;
+}
+html[data-oa-motion-profile="organic"] {
+  --oa-motion-duration: 550ms;
+  --oa-motion-ease: cubic-bezier(.18,.82,.22,1);
+  --oa-motion-distance: 22px;
+  --oa-motion-photo-scale: .94;
+  --oa-motion-photo-clip: 15%;
+  --oa-motion-photo-distance: 18px;
+  --oa-motion-opening-duration: 880ms;
+}
+html[data-oa-motion-profile="soft"] {
+  --oa-motion-duration: 520ms;
+  --oa-motion-ease: cubic-bezier(.2,.76,.22,1);
+  --oa-motion-distance: 15px;
+  --oa-motion-photo-scale: .975;
+  --oa-motion-photo-clip: 5%;
+  --oa-motion-photo-distance: 10px;
+  --oa-motion-opening-duration: 720ms;
+}
+html[data-oa-motion-profile="bold"] {
+  --oa-motion-duration: 500ms;
+  --oa-motion-ease: cubic-bezier(.16,.9,.22,1);
+  --oa-motion-distance: 26px;
+  --oa-motion-photo-scale: .92;
+  --oa-motion-photo-clip: 9%;
+  --oa-motion-photo-distance: 16px;
+  --oa-motion-opening-duration: 780ms;
+}
+html[data-oa-motion-profile="dramatic"] {
+  --oa-motion-duration: 550ms;
+  --oa-motion-ease: cubic-bezier(.18,.86,.18,1);
+  --oa-motion-distance: 34px;
+  --oa-motion-photo-scale: .90;
+  --oa-motion-photo-clip: 18%;
+  --oa-motion-photo-distance: 24px;
+  --oa-motion-opening-duration: 900ms;
+}
+
+/* Theme-aware finishing touches: motion changes presentation, never interaction or data. */
+html[data-oa-motion-profile="editorial"] #app h1,
+html[data-oa-motion-profile="editorial"] #app h2 {
+  text-wrap: balance;
+}
+html[data-oa-motion-profile="organic"] #app .gallery-item,
+html[data-oa-motion-profile="organic"] #app .story-item {
+  transform-origin: 50% 65%;
+}
+html[data-oa-motion-profile="dramatic"] #app .gallery-item,
+html[data-oa-motion-profile="cinematic"] #app .gallery-item {
+  transform-origin: 50% 50%;
+}
+html[data-oa-motion-profile="bold"] #app .event-card,
+html[data-oa-motion-profile="bold"] #app .gift-card {
+  transform-origin: 50% 80%;
+}
+
+/* Never leave motion-hidden content behind if scripting or observation is unavailable. */
+html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app .oa-scroll-reveal,
+html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app .oa-motion-item,
+html:not(.oa-motion-ready):not([data-oa-theme="army"]) #app img.oa-motion-photo {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+}
