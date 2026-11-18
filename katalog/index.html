@@ -34,7 +34,6 @@ a{color:inherit}
 .scroll-cue{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;color:#87795f;text-decoration:none;font-size:9px;letter-spacing:.2em;text-transform:uppercase}
 .scroll-cue:after{content:"";height:30px;width:1px;background:linear-gradient(#ad8b55,transparent);animation:scrollline 1.8s ease-in-out infinite}
 @keyframes scrollline{0%,100%{transform:scaleY(.45);transform-origin:top;opacity:.5}50%{transform:scaleY(1);transform-origin:top;opacity:1}}
-.topline{padding-bottom:0}
 .hero:after{content:"";position:absolute;width:390px;height:390px;border:1px solid #b99e7040;border-radius:50%;right:-90px;bottom:-235px;box-shadow:0 0 0 34px #b99e7010,0 0 0 70px #b99e7008;pointer-events:none}
 .topline{display:flex;justify-content:space-between;align-items:center;gap:16px;max-width:1280px;margin:auto;padding-bottom:58px}
 .brand{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700}
@@ -112,11 +111,10 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
 </header>
 <main class="wrap" id="koleksi">
   <section class="collection-lead"><div class="section-kicker">A story begins here</div><h2>Temukan desain yang terasa <em>“kalian”.</em></h2><p>Setiap pasangan punya cerita dan suasana yang berbeda. Jelajahi koleksi kami, temukan karakter yang paling dekat, lalu lihat pengalaman undangan secara utuh.</p><div class="collection-rule"><span></span> THE COLLECTION <span></span></div></section>
-  <div class="intro-row" id="tentang"><div><div class="section-kicker">Explore the collection</div><h2>Temukan yang terasa “kalian”.</h2></div><p class="intro-note">Lihat cover, rasakan karakternya, lalu buka demo untuk menjelajahi setiap detail undangan.</p></div>
   <div class="controls"><div class="filters" id="filters" aria-label="Filter kategori tema"><button class="filter" data-filter="all" aria-pressed="true">Semua</button><button class="filter" data-filter="classic" aria-pressed="false">Klasik</button><button class="filter" data-filter="floral" aria-pressed="false">Floral</button><button class="filter" data-filter="modern" aria-pressed="false">Modern</button><button class="filter" data-filter="dark" aria-pressed="false">Dark &amp; Luxe</button><button class="filter" data-filter="cultural" aria-pressed="false">Tradisional</button><button class="filter" data-filter="minimal" aria-pressed="false">Minimal</button></div><input class="search" id="search" type="search" placeholder="Cari nama atau suasana tema…" aria-label="Cari tema"></div>
   <p class="count" id="count" aria-live="polite">Menyiapkan koleksi tema…</p>
   <section id="themes" class="grid" aria-live="polite"><div class="empty">Sedang menyiapkan preview koleksi…</div></section>
-  <section class="closing"><small>More than an invitation</small><h2>Hari istimewa layak dimulai dengan kesan yang istimewa.</h2><p>Pilih desain yang paling mewakili kalian. Setiap detail nantinya bisa disesuaikan dengan cerita dan kebutuhan acara.</p></section>
+  <section class="closing" id="tentang"><small>More than an invitation</small><h2>Hari istimewa layak dimulai dengan kesan yang istimewa.</h2><p>Pilih desain yang paling mewakili kalian. Setiap detail nantinya bisa disesuaikan dengan cerita dan kebutuhan acara.</p></section>
 </main>
 <button class="back-top" id="backTop" type="button" aria-label="Kembali ke atas">↑</button>
 <footer>OMAH AKSARA STUDIO · MADE WITH CARE FOR YOUR STORY</footer>
