@@ -25,7 +25,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: motion-quality-${{ github.event.pull_request.number || github.ref }}
+  # One shared group prevents stale push and pull_request runs from occupying runners.
+  group: motion-quality-${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
