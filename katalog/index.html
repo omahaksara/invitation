@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f6f2e9">
-<meta name="description" content="Temukan desain undangan pernikahan digital Omah Aksara. Jelajahi 24 tema dengan preview cover interaktif.">
+<meta name="description" content="Temukan desain undangan pernikahan digital Omah Aksara. Jelajahi koleksi tema dengan preview cover interaktif.">
 <title>Katalog Tema — Omah Aksara Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,11 +39,11 @@ h2{font:500 clamp(28px,4vw,42px)/1.1 "Playfair Display",serif;margin:8px 0 0}
 .search{width:min(100%,260px);border:1px solid var(--line);background:#fffdf8b8;border-radius:99px;padding:11px 16px;font:12px "DM Sans",sans-serif;color:var(--ink);outline:none}
 .search:focus{border-color:var(--gold);box-shadow:0 0 0 3px #ad8b5518}
 .count{font-size:11px;color:var(--muted);margin:0 0 14px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.card{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:5px;overflow:hidden;box-shadow:0 10px 30px #4637190a;transition:transform .3s,box-shadow .3s}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.card{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 8px 26px #4637190a;transition:transform .3s,box-shadow .3s}
 .card:hover{transform:translateY(-5px);box-shadow:0 22px 44px #46371918}
 .card.featured{grid-column:span 1}
-.preview{height:390px;position:relative;overflow:hidden;background:#e9e1d3}
+.preview{height:390px;position:relative;overflow:hidden;background:linear-gradient(145deg,#e8dfd0,#f8f4ec)}
 .preview iframe{position:absolute;inset:0;width:150%;height:150%;border:0;transform:scale(.6667);transform-origin:top left;pointer-events:none;background:white;transition:transform .6s}
 .card:hover .preview iframe{transform:scale(.70)}
 .preview:after{content:"";position:absolute;inset:0;border:1px solid #fff8;pointer-events:none}
@@ -57,7 +57,7 @@ h2{font:500 clamp(28px,4vw,42px)/1.1 "Playfair Display",serif;margin:8px 0 0}
 .card-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:19px;padding-top:14px;border-top:1px solid #eee8dd}
 .card-bottom small{font-size:10px;color:var(--muted)}
 .visit{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:var(--dark);color:white;padding:11px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;transition:background .2s}
-.visit:hover{background:#927448}
+.visit:hover{background:#927448}.visit:focus-visible,.filter:focus-visible,.search:focus-visible{outline:3px solid #ad8b55;outline-offset:3px}
 .visit span{font-size:15px;line-height:10px}
 .empty{grid-column:1/-1;text-align:center;padding:60px 20px;border:1px dashed var(--line);color:var(--muted);font-size:13px;line-height:1.8}
 .closing{margin-top:66px;padding:44px 28px;text-align:center;background:#eae2d4;position:relative;overflow:hidden}
@@ -89,13 +89,13 @@ footer{padding:22px;text-align:center;color:#8c877b;font-size:10px;letter-spacin
   const grid=document.getElementById('themes'),count=document.getElementById('count'),search=document.getElementById('search'),filters=document.getElementById('filters');
   const featured=['royal-vintage','botanical-garden','aksara-nocturne'];
   const moods={
-    'royal-vintage':'classic','karsa':'classic','elegance':'classic','calestial':'classic','earty':'classic','kencana-jawa':'cultural',
-    'romantic-floral':'floral','botanical-garden':'floral','lumiere-bloom':'floral','velvet-romance':'floral','serena-ivory':'floral',
-    'aksara-nocturne':'dark','aurelia-noir':'dark','nox':'dark','sirein':'dark',
+    'royal-vintage':'classic','karsa':'classic','elegance':'minimal','calestial':'classic','earty':'minimal','kencana-jawa':'cultural','aksav':'modern',
+    'romantic-floral':'floral','botanical-garden':'floral','lumiere-bloom':'floral','velvet-romance':'floral','serena-ivory':'floral','jendela-senja':'floral',
+    'aksara-nocturne':'dark','aurelia-noir':'dark','nox':'dark','sirein':'dark','army':'dark',
     'atelier-editorial':'modern','lumina':'modern','aksara-signature':'modern','aksara-velora':'modern','lume':'modern','kinze':'modern','groom':'modern','sagara':'modern',
     'taupe':'minimal'
   };
-  const moodNames={classic:'Timeless classic',floral:'Romantic botanical',modern:'Modern expression',dark:'Dark & luxe',cultural:'Heritage elegance',minimal:'Quiet minimalism'};
+  const moodNames={classic:'Klasik elegan',floral:'Floral & romantis',modern:'Modern ekspresif',dark:'Dark & luxe',cultural:'Tradisi Nusantara',minimal:'Minimalis tenang'};
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let themes=[],active='all',previewObserver=null;
   function card(theme,index){
@@ -104,7 +104,7 @@ footer{padding:22px;text-align:center;color:#8c877b;font-size:10px;letter-spacin
   }
   function render(){
     const q=search.value.trim().toLowerCase();
-    const visible=themes.filter(t=>(active==='all'||(moods[t.slug]||'modern')===active)&&(!q||(t.name+' '+t.slug+' '+(moodNames[moods[t.slug]]||'')).toLowerCase().includes(q)));
+    const visible=themes.filter(t=>(active==='all'||(moods[t.slug]||'modern')===active)&&(!q||(t.name+' '+t.slug+' '+(moodNames[moods[t.slug]||'modern']||'')).toLowerCase().includes(q)));
     if(previewObserver){previewObserver.disconnect();previewObserver=null;}
     grid.innerHTML=visible.length?visible.map((t,i)=>card(t,i)).join(''):'<div class="empty">Belum ada tema yang cocok dengan pencarian ini.<br>Coba kata kunci atau kategori lain, ya.</div>';
     const previews=grid.querySelectorAll('iframe[data-src]');
@@ -115,7 +115,7 @@ footer{padding:22px;text-align:center;color:#8c877b;font-size:10px;letter-spacin
       },{rootMargin:'700px 0px'});
       previews.forEach(frame=>previewObserver.observe(frame));
     }else{previews.forEach(activate);}
-    count.textContent=visible.length+' dari '+themes.length+' tema · pilih preview untuk melihat keseluruhan undangan';
+    count.textContent=visible.length+' tema ditampilkan dari '+themes.length+' desain aktif · buka demo untuk menjelajahi detail undangan';
   }
   filters.addEventListener('click',event=>{
     const button=event.target.closest('[data-filter]');if(!button)return;
