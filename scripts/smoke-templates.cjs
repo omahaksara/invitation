@@ -605,10 +605,20 @@ if (motionOnly) {
         if (await galleryImage.count()) {
           await galleryImage.scrollIntoViewIfNeeded();
           await galleryImage.waitFor({ state: "visible", timeout: 5000 });
-          // The gallery interaction is independent of whether the template's own
-          // reveal observer has already marked this image; do not turn a reveal
-          // timing race into a false lightbox failure.
-          await galleryImage.click();
+          // Wait for the page-level entrance choreography to finish before testing
+          // the gallery. During a transform animation Chromium may hit-test the
+          // transformed parent instead of the image, even though the image is visible.
+          await page.evaluate(async () => {
+            const opening = document.querySelector("#main-content.oa-main-opening, #app-inner.oa-main-opening");
+            if (opening) {
+              const animations = opening.getAnimations({ subtree: true });
+              await Promise.all(animations.map(animation => animation.finished.catch(() => undefined)));
+            }
+          });
+          // Trigger the image's native click handler after the entrance settles.
+          // This keeps the smoke focused on lightbox wiring rather than transient
+          // pointer hit-testing against theme-specific transformed containers.
+          await galleryImage.evaluate(element => element.click());
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
             theme.slug + ": tombol foto berikutnya tidak tersedia");
