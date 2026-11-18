@@ -141,6 +141,13 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
       count.textContent='Katalog belum tersambung';
     }
   }
+  const backTop=document.getElementById('backTop');
+  window.addEventListener('scroll',()=>backTop.classList.toggle('visible',window.scrollY>520),{passive:true});
+  backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
+  if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');revealObserver.unobserve(entry.target);}}),{threshold:.12});
+    document.querySelectorAll('.collection-lead,.intro-row,.controls,.closing').forEach(el=>{el.classList.add('reveal');revealObserver.observe(el);});
+  }
   load();
 })();
 </script>
