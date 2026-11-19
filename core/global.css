@@ -989,15 +989,15 @@ body:not(.oa-invitation-opened) .celestial-nav {
 
 /* Shared reveal contract: consistent 650ms fade-up, while each theme retains
    its own easing, typography, palette, ornaments and native cover structure. */
-html[data-oa-theme] #app .oa-scroll-reveal {
+html[data-oa-theme]:not([data-oa-theme="army"]) #app .oa-scroll-reveal {
   transition: opacity .65s ease,
               transform .65s var(--oa-reveal-ease, cubic-bezier(.2,.72,.18,1));
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-oa-theme] #app .oa-scroll-reveal,
-  html[data-oa-theme] #app .oa-motion-item,
-  html[data-oa-theme] #app img.oa-motion-photo,
-  html[data-oa-theme] #app .oa-motion-photo img {
+  html[data-oa-theme]:not([data-oa-theme="army"]) #app .oa-scroll-reveal,
+  html[data-oa-theme]:not([data-oa-theme="army"]) #app .oa-motion-item,
+  html[data-oa-theme]:not([data-oa-theme="army"]) #app img.oa-motion-photo,
+  html[data-oa-theme]:not([data-oa-theme="army"]) #app .oa-motion-photo img {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
