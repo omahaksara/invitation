@@ -2103,36 +2103,61 @@
         window.scrollBy(0, 1);
       }, 24);
     };
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      autoButton.disabled = true;
-      autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
-    } else {
-      // Mulai setelah sampul dibuka; jeda singkat memberi waktu menikmati transisi pembuka.
-      const scheduleAutoScroll = () => {
-        if (autoStartDelay !== null || autoTimer !== null) return;
-        autoStartDelay = window.setTimeout(() => {
-          autoStartDelay = null;
+    if (theme === "army" || theme === "aksav") {
+      // Protected themes retain their pre-existing behavior; do not alter their experience.
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        autoButton.disabled = true;
+        autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
+      } else {
+        const scheduleAutoScroll = () => {
+          if (autoStartDelay !== null || autoTimer !== null) return;
+          autoStartDelay = window.setTimeout(() => {
+            autoStartDelay = null;
+            startAutoScroll();
+          }, 1800);
+        };
+        document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
+        if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
+        window.addEventListener("wheel", stopAutoScroll, { passive: true });
+        window.addEventListener("touchstart", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("pointerdown", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("keydown", event => {
+          if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
+        });
+        autoButton.addEventListener("click", () => {
+          if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
           startAutoScroll();
-        }, 1800);
-      };
-      document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
-      if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
-      window.addEventListener("wheel", stopAutoScroll, { passive: true });
-      window.addEventListener("touchstart", event => {
-        if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
-      }, { passive: true });
-      window.addEventListener("pointerdown", event => {
-        if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
-      }, { passive: true });
-      window.addEventListener("keydown", event => {
-        if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
-      });
-      autoButton.addEventListener("click", () => {
-        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
-        startAutoScroll();
-      });
-      document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
+        });
+        document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
+      }
+    } else {
+      // Scrolling stays idle until the guest explicitly starts it.
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        autoButton.disabled = true;
+        autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
+      } else {
+        window.addEventListener("wheel", stopAutoScroll, { passive: true });
+        window.addEventListener("touchstart", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("pointerdown", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("keydown", event => {
+          if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
+        });
+        autoButton.addEventListener("click", () => {
+          if (autoTimer !== null) { stopAutoScroll(); return; }
+          startAutoScroll();
+        });
+        document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
+      }
     }
+
     if (musicButton) {
       const syncMusic = () => {
         const playing = !audio.paused;
