@@ -412,8 +412,8 @@
     renderGifts(data.gifts, clientBase, data.features || {});
     setupMusic(data.music, clientBase);
     setupCover();
-    const preserveArmyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
-    if (!preserveArmyTheme) setupReveal();
+    const preserveLegacyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+    if (!preserveLegacyTheme) setupReveal();
     setupCountdown(data);
     setupForms(data, slug, viewOnly);
     applyFeatureFlags(data);
@@ -421,7 +421,7 @@
     setupLightbox();
     // Army is the protected Venni–Rama theme: do not mount or replace its
     // navigation, music, scroll, or reveal controls from the shared branch engine.
-    if (!preserveArmyTheme) {
+    if (!preserveLegacyTheme) {
       ensureFloatingControls(data, buildShortInvitationUrl);
       // Forms, navigation, and fallback sections are created above; observe them too.
       setupReveal();
@@ -1281,8 +1281,8 @@
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
         }, reducedMotionPreference ? 0 : 680);
-        const preserveArmyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
-        if (preserveArmyTheme) {
+        const preserveLegacyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+        if (preserveLegacyTheme) {
           // Keep Army's established cover-to-music behavior unchanged.
           if (audio && hasMusic) {
             try {
@@ -1302,7 +1302,7 @@
           musicToggle?.setAttribute("aria-pressed", "false");
           musicToggle?.setAttribute("aria-label", "Putar musik");
         }
-        if (!preserveArmyTheme) setupReveal();
+        if (!preserveLegacyTheme) setupReveal();
       });
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
@@ -1324,9 +1324,9 @@
       return;
     }
 
-    const preserveArmyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+    const preserveLegacyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
     // Army is a protected client theme: retain the pre-branch audio initialization.
-    if (!preserveArmyTheme) {
+    if (!preserveLegacyTheme) {
       audio.autoplay = false;
       audio.removeAttribute("autoplay");
       audio.preload = "none";
@@ -1355,16 +1355,16 @@
     const toggle = async () => {
       if (audio.paused) {
         try {
-          if (!preserveArmyTheme) audio.muted = false;
+          if (!preserveLegacyTheme) audio.muted = false;
           await audio.play();
           syncMusicState(true);
         } catch {
-          if (!preserveArmyTheme) audio.muted = true;
+          if (!preserveLegacyTheme) audio.muted = true;
           syncMusicState(false);
         }
       } else {
         audio.pause();
-        if (!preserveArmyTheme) audio.muted = true;
+        if (!preserveLegacyTheme) audio.muted = true;
         syncMusicState(false);
       }
     };
