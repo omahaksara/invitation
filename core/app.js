@@ -412,15 +412,20 @@
     renderGifts(data.gifts, clientBase, data.features || {});
     setupMusic(data.music, clientBase);
     setupCover();
-    setupReveal();
+    const preserveArmyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+    if (!preserveArmyTheme) setupReveal();
     setupCountdown(data);
     setupForms(data, slug, viewOnly);
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
-    ensureFloatingControls(data, buildShortInvitationUrl);
-    // Forms, navigation, and fallback sections are created above; observe them too.
-    setupReveal();
+    // Army is the protected Venni–Rama theme: do not mount or replace its
+    // navigation, music, scroll, or reveal controls from the shared branch engine.
+    if (!preserveArmyTheme) {
+      ensureFloatingControls(data, buildShortInvitationUrl);
+      // Forms, navigation, and fallback sections are created above; observe them too.
+      setupReveal();
+    }
   }
 
 
@@ -1276,16 +1281,28 @@
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
         }, reducedMotionPreference ? 0 : 680);
-        // Opening the invitation never starts audio. Music requires an explicit
-        // click on the theme's music control or the shared dock control.
-        if (audio && hasMusic) {
+        const preserveArmyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+        if (preserveArmyTheme) {
+          // Keep Army's established cover-to-music behavior unchanged.
+          if (audio && hasMusic) {
+            try {
+              await audio.play();
+              musicToggle?.classList.add("playing");
+              musicToggle?.setAttribute("aria-pressed", "true");
+              musicToggle?.setAttribute("aria-label", "Jeda musik");
+            } catch {
+              musicToggle?.setAttribute("aria-pressed", "false");
+            }
+          }
+        } else if (audio && hasMusic) {
+          // Other themes require an explicit click before music can play.
           audio.pause();
           audio.muted = true;
           musicToggle?.classList.remove("playing");
           musicToggle?.setAttribute("aria-pressed", "false");
           musicToggle?.setAttribute("aria-label", "Putar musik");
         }
-        setupReveal();
+        if (!preserveArmyTheme) setupReveal();
       });
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
@@ -1307,11 +1324,15 @@
       return;
     }
 
-    audio.autoplay = false;
-    audio.removeAttribute("autoplay");
-    audio.preload = "none";
-    audio.muted = true;
-    audio.pause();
+    const preserveArmyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+    // Army is a protected client theme: retain the pre-branch audio initialization.
+    if (!preserveArmyTheme) {
+      audio.autoplay = false;
+      audio.removeAttribute("autoplay");
+      audio.preload = "none";
+      audio.muted = true;
+      audio.pause();
+    }
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
     if (button.tagName !== "BUTTON") {
       button.setAttribute("role", "button");
@@ -1333,12 +1354,17 @@
 
     const toggle = async () => {
       if (audio.paused) {
-        audio.muted = false;
-        try { await audio.play(); syncMusicState(true); }
-        catch { audio.muted = true; syncMusicState(false); }
+        try {
+          if (!preserveArmyTheme) audio.muted = false;
+          await audio.play();
+          syncMusicState(true);
+        } catch {
+          if (!preserveArmyTheme) audio.muted = true;
+          syncMusicState(false);
+        }
       } else {
         audio.pause();
-        audio.muted = true;
+        if (!preserveArmyTheme) audio.muted = true;
         syncMusicState(false);
       }
     };
