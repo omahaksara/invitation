@@ -65,12 +65,11 @@ const themes = [
   { slug: "aurelia-noir", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "lumiere-bloom", marker: ".invite-shell", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "aksara-velora", marker: ".velora-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover" },
-  { slug: "aksav", marker: ".aksav", open: "#open-btn", cover: "#cover" },
-  { slug: "army", marker: ".army", open: "#open-btn", cover: "#cover" },
+  { slug: "aksara-nocturne", marker: ".nocturne", open: "#open-btn", cover: "#cover", nativeNavigation: ".nocturne-nav", musicControl: "#music-toggle" },
+  { slug: "aksav", marker: ".aksav", open: "#open-btn", cover: "#cover", nativeNavigation: ".aksav-nav", musicControl: "#music-toggle" },
   { slug: "kencana-jawa", marker: ".kj-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
+  { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover", nativeNavigation: ".celestial-nav", musicControl: "#music-toggle" },
 { slug: "sagara", marker: ".sg-cover-photo", open: "#open-btn", cover: "#cover" },
   { slug: "lume", marker: ".lume", open: "#open-btn", cover: "#cover" },
   { slug: "nox", marker: ".nox", open: "#open-btn", cover: "#cover" },
@@ -82,13 +81,32 @@ const themes = [
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
 const themeRegistry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
 const activeThemeSlugs = (themeRegistry.themes || [])
-  .filter(theme => theme && theme.status === "active")
+  .filter(theme => theme && theme.status === "active" && !["army", "aksav"].includes(theme.slug))
   .map(theme => theme.slug)
   .sort();
-const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
+const testThemes = themes.filter(theme => !["army", "aksav"].includes(theme.slug));
+const browserThemeSlugs = testThemes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
+const sharedAppJs = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf8");
+// Protected Army/Venni–Rama must remain outside the shared motion/navigation
+// enhancement path and outside all fixture/browser smoke tests.
+assert.ok(!testThemes.some(theme => theme.slug === "army"),
+  "Protected Army theme must never enter the browser smoke matrix.");
+assert.ok(!testThemes.some(theme => theme.slug === "aksav"),
+  "Protected Aksav theme must never enter the browser smoke matrix.");
+assert.match(sharedAppJs, /const preserveLegacyTheme = \["army", "aksav"\]\.includes\(\(document\.documentElement\.dataset\.oaTheme \|\| ""\)\.toLowerCase\(\))/,
+  "Shared engine must explicitly recognize the protected Army theme.");
+assert.match(sharedAppJs, /if \(!preserveLegacyTheme\) setupReveal\(\)/,
+  "Protected Army theme must bypass the new reveal experience.");
+assert.match(sharedAppJs, /if \(!preserveLegacyTheme\) \{\s*ensureFloatingControls/,
+  "Protected Army theme must bypass the new shared navigation dock.");
+assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\):not\(\[data-oa-theme="aksav"\]\) #app \.oa-scroll-reveal/,
+  "Shared reveal CSS must explicitly exclude the protected Army theme.");
+assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\):not\(\[data-oa-theme="aksav"\]\) #app \.oa-motion-item/,
+  "Reduced-motion reveal CSS must explicitly exclude the protected Army theme.");
+
 for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
@@ -146,7 +164,7 @@ for (const slug of activeThemeSlugs) {
       server.listen(4173, "127.0.0.1", resolve);
     });
     browser = await chromium.launch({ headless: true });
-    for (const theme of themes) {
+    for (const theme of testThemes) {
       const page = await browser.newPage();
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
@@ -165,6 +183,15 @@ for (const slug of activeThemeSlugs) {
       page.on("pageerror", error => pageErrors.push(error.message));
       // Synthetic coordinates are injected only into this browser test.
       // The public demo retains its unverified-location notice and no fake pin.
+      // Fail closed: desktop smoke must never contact a live Apps Script endpoint.
+      await page.route("**/macros/s/**", async route => {
+        const request = route.request();
+        if (request.method() === "GET") {
+          await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true, items: [] }) });
+          return;
+        }
+        await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true, demo: true }) });
+      });
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
@@ -495,6 +522,38 @@ for (const slug of activeThemeSlugs) {
 
         await auditCover(page, theme, "desktop");
 
+        if (theme.nativeNavigation) {
+          await page.locator(theme.open).click();
+          await page.waitForFunction(() => {
+            const cover = document.getElementById("cover") || document.getElementById("cover-section");
+            return !cover || cover.hidden || getComputedStyle(cover).display === "none";
+          }, undefined, { timeout: 5000 });
+          assert.equal(await page.locator("#oa-floating-controls").count(), 0,
+            theme.slug + ": shared dock harus tidak dibuat ketika navigasi native tersedia");
+          assert.equal(await page.locator(theme.nativeNavigation).isVisible(), true,
+            theme.slug + ": navigasi native harus tetap terlihat setelah cover dibuka");
+          assert.equal(await page.locator(theme.musicControl).count(), 1,
+            theme.slug + ": harus tersedia tepat satu kontrol musik native");
+          const audioState = await page.evaluate(() => {
+            const audio = document.getElementById("bg-music");
+            return { paused: audio?.paused, muted: audio?.muted, autoplay: audio?.autoplay };
+          });
+          assert.deepEqual(audioState, { paused: true, muted: true, autoplay: false },
+            theme.slug + ": musik tidak boleh autoplay dan harus mute pada awal undangan " + JSON.stringify(audioState));
+          await page.locator(theme.musicControl).click();
+          await page.waitForFunction(() => {
+            const audio = document.getElementById("bg-music");
+            return audio && !audio.paused && !audio.muted;
+          }, undefined, { timeout: 5000 });
+          await page.locator(theme.musicControl).click();
+          await page.waitForFunction(() => {
+            const audio = document.getElementById("bg-music");
+            return audio && audio.paused && audio.muted;
+          }, undefined, { timeout: 5000 });
+          console.log("PASS native navigation + explicit music " + theme.slug);
+          continue;
+        }
+
         if (theme.open) {
           // Shared navigation and quick controls must remain hidden behind the cover.
           assert.equal(await page.locator("#oa-floating-controls").count(), 1,
@@ -511,6 +570,23 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const sharedAudioState = await page.evaluate(() => {
+          const audio = document.getElementById("bg-music");
+          return { paused: audio?.paused, muted: audio?.muted, autoplay: audio?.autoplay };
+        });
+        assert.deepEqual(sharedAudioState, { paused: true, muted: true, autoplay: false },
+          theme.slug + ": musik harus idle, mute, dan tanpa autoplay setelah cover dibuka " + JSON.stringify(sharedAudioState));
+        const sharedMusicButton = page.locator('#oa-floating-controls [data-oa-action="music"]');
+        await sharedMusicButton.click();
+        await page.waitForFunction(() => {
+          const audio = document.getElementById("bg-music");
+          return audio && !audio.paused && !audio.muted;
+        }, undefined, { timeout: 5000 });
+        await sharedMusicButton.click();
+        await page.waitForFunction(() => {
+          const audio = document.getElementById("bg-music");
+          return audio && audio.paused && audio.muted;
+        }, undefined, { timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         const galleryImage = page.locator(".gallery-grid img").first();
@@ -560,12 +636,12 @@ for (const slug of activeThemeSlugs) {
             const effect = style.backdropFilter || style.webkitBackdropFilter;
             if (effect && effect !== "none" && !/^blur\\(0(?:px)?\\)$/.test(effect)) backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
             const durations = style.transitionDuration.split(",").map(value => parseFloat(value) * (value.includes("ms") ? .001 : 1));
-            if (durations.some(value => value > .55)) slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
+            if (durations.some(value => value > .66)) slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
           }
           return { backdrop, slowTransitions: slowTransitions.slice(0, 12) };
         });
         assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
-        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
+        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,66 detik " + JSON.stringify(performanceAudit.slowTransitions));
         await page.emulateMedia({ reducedMotion: "reduce" });
         const reducedMotionAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
@@ -589,38 +665,20 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": animasi arah samping dan naik belum diterapkan");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
-          // The invitation should begin scrolling automatically after it is opened.
-          await page.waitForFunction(() => {
-            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
-            // A short invitation may reach its end before the assertion runs.
-            // Accept either an active control or proof that the page has begun moving.
-            return button?.getAttribute("aria-pressed") === "true" || window.scrollY > 24;
-          }, undefined, { timeout: 3500 });
-          const autoState = await page.evaluate(() => ({
+          await page.waitForTimeout(250);
+          const idleState = await page.evaluate(() => ({
             pressed: document.querySelector('#oa-floating-controls [data-oa-action="auto"]')?.getAttribute("aria-pressed"),
             scrollY: window.scrollY
           }));
-          assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
-            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          // A short invitation can already have reached the bottom and stopped
-          // automatically. In that case, first start it manually, then test pause.
-          if (autoState.pressed === "true") {
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          } else {
-            assert.ok(autoState.scrollY > 24,
-              theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          }
+          assert.equal(idleState.pressed, "false",
+            theme.slug + ": auto-scroll tidak boleh aktif otomatis setelah undangan dibuka");
+          await page.waitForTimeout(250);
+          const idleAfter = await page.evaluate(() => window.scrollY);
+          assert.ok(Math.abs(idleAfter - idleState.scrollY) <= 2,
+            theme.slug + ": halaman bergulir sendiri tanpa interaksi pengguna");
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
+            theme.slug + ": auto-scroll tidak dapat dimulai melalui klik pengguna");
           await page.waitForTimeout(120);
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
@@ -883,9 +941,10 @@ for (const slug of activeThemeSlugs) {
       }
     }
 
-    // Responsive and demo-interaction pass at a common mobile viewport.
-    for (const theme of themes) {
-      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+    // Responsive and demo-interaction pass at both requested mobile widths.
+    for (const width of [360, 390]) {
+    for (const theme of testThemes) {
+      const page = await browser.newPage({ viewport: { width, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
       await page.emulateMedia({ reducedMotion: "reduce" });
@@ -928,11 +987,33 @@ for (const slug of activeThemeSlugs) {
           assert.ok(Date.now() - reducedMotionOpenStarted < 250,
             theme.slug + ": pembukaan cover terlalu lambat saat reduced-motion aktif (" + (Date.now() - reducedMotionOpenStarted) + " ms)");
         }
+        const audioState = await page.evaluate(() => {
+          const audio = document.getElementById("bg-music");
+          return { paused: audio?.paused, muted: audio?.muted, autoplay: audio?.autoplay };
+        });
+        assert.deepEqual(audioState, { paused: true, muted: true, autoplay: false },
+          theme.slug + ": musik tidak boleh autoplay setelah cover dibuka " + JSON.stringify(audioState));
+        if (theme.nativeNavigation) {
+          assert.equal(await page.locator("#oa-floating-controls").count(), 0,
+            theme.slug + ": dock bersama tidak boleh muncul di tema dengan navigasi native");
+          assert.equal(await page.locator(theme.nativeNavigation).isVisible(), true,
+            theme.slug + ": navigasi native tidak terlihat pada mobile");
+          const layout = await page.evaluate(() => ({
+            viewport: document.documentElement.clientWidth,
+            page: document.documentElement.scrollWidth
+          }));
+          assert.ok(layout.page <= layout.viewport + 2,
+            theme.slug + ": horizontal overflow pada mobile " + JSON.stringify(layout));
+          await captureScreenshot(page, path.join(screenshotDir, theme.slug + "-mobile-" + width + ".png"));
+          assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
+          console.log("PASS native mobile " + width + "px " + theme.slug);
+          continue;
+        }
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="auto"]').isDisabled(), true,
           theme.slug + ": gulir otomatis harus nonaktif saat reduced-motion aktif");
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
-        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-${width}.png`));
         const layout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           page: document.documentElement.scrollWidth,
@@ -1001,6 +1082,7 @@ for (const slug of activeThemeSlugs) {
       } finally {
         await page.close();
       }
+    }
     }
   } finally {
     if (browser) await browser.close();

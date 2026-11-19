@@ -412,15 +412,20 @@
     renderGifts(data.gifts, clientBase, data.features || {});
     setupMusic(data.music, clientBase);
     setupCover();
-    setupReveal();
+    const preserveLegacyTheme = ["army", "aksav"].includes((document.documentElement.dataset.oaTheme || "").toLowerCase());
+    if (!preserveLegacyTheme) setupReveal();
     setupCountdown(data);
     setupForms(data, slug, viewOnly);
     applyFeatureFlags(data);
     hideEmptyOptionalSections(data);
     setupLightbox();
-    ensureFloatingControls(data, buildShortInvitationUrl);
-    // Forms, navigation, and fallback sections are created above; observe them too.
-    setupReveal();
+    // Army is the protected Venni–Rama theme: do not mount or replace its
+    // navigation, music, scroll, or reveal controls from the shared branch engine.
+    if (!preserveLegacyTheme) {
+      ensureFloatingControls(data, buildShortInvitationUrl);
+      // Forms, navigation, and fallback sections are created above; observe them too.
+      setupReveal();
+    }
   }
 
 
@@ -1276,17 +1281,28 @@
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
         }, reducedMotionPreference ? 0 : 680);
-        if (audio && hasMusic) {
-          try {
-            await audio.play();
-            musicToggle?.classList.add("playing");
-            musicToggle?.setAttribute("aria-pressed", "true");
-            musicToggle?.setAttribute("aria-label", "Jeda musik");
-          } catch {
-            musicToggle?.setAttribute("aria-pressed", "false");
+        const preserveLegacyTheme = ["army", "aksav"].includes((document.documentElement.dataset.oaTheme || "").toLowerCase());
+        if (preserveLegacyTheme) {
+          // Keep Army's established cover-to-music behavior unchanged.
+          if (audio && hasMusic) {
+            try {
+              await audio.play();
+              musicToggle?.classList.add("playing");
+              musicToggle?.setAttribute("aria-pressed", "true");
+              musicToggle?.setAttribute("aria-label", "Jeda musik");
+            } catch {
+              musicToggle?.setAttribute("aria-pressed", "false");
+            }
           }
+        } else if (audio && hasMusic) {
+          // Other themes require an explicit click before music can play.
+          audio.pause();
+          audio.muted = true;
+          musicToggle?.classList.remove("playing");
+          musicToggle?.setAttribute("aria-pressed", "false");
+          musicToggle?.setAttribute("aria-label", "Putar musik");
         }
-        setupReveal();
+        if (!preserveLegacyTheme) setupReveal();
       });
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
@@ -1308,6 +1324,15 @@
       return;
     }
 
+    const preserveLegacyTheme = ["army", "aksav"].includes((document.documentElement.dataset.oaTheme || "").toLowerCase());
+    // Army is a protected client theme: retain the pre-branch audio initialization.
+    if (!preserveLegacyTheme) {
+      audio.autoplay = false;
+      audio.removeAttribute("autoplay");
+      audio.preload = "none";
+      audio.muted = true;
+      audio.pause();
+    }
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
     if (button.tagName !== "BUTTON") {
       button.setAttribute("role", "button");
@@ -1329,10 +1354,17 @@
 
     const toggle = async () => {
       if (audio.paused) {
-        try { await audio.play(); syncMusicState(true); }
-        catch { syncMusicState(false); }
+        try {
+          if (!preserveLegacyTheme) audio.muted = false;
+          await audio.play();
+          syncMusicState(true);
+        } catch {
+          if (!preserveLegacyTheme) audio.muted = true;
+          syncMusicState(false);
+        }
       } else {
         audio.pause();
+        if (!preserveLegacyTheme) audio.muted = true;
         syncMusicState(false);
       }
     };
@@ -1873,24 +1905,35 @@
       return found;
     };
 
-    // Retire theme-specific navigation so every theme uses the shared Omah Aksara dock.
-    // Theme styling remains intact; only duplicate navigation controls are hidden.
-    const legacyNavs = new Set(document.querySelectorAll(
-      "nav:not(#oa-floating-controls), [role='navigation']:not(#oa-floating-controls), " +
-      ".nocturne-nav, .celestial-nav, [data-oa-native-navigation], " +
-      "[class*='bottom-nav'], [id*='bottom-nav'], [class*='bottom-navigation'], [id*='bottom-navigation'], " +
-      "[class*='navigation-dock'], [id*='navigation-dock'], [class*='nav-dock'], [id*='nav-dock'], " +
-      "[class*='bottom-menu'], [id*='bottom-menu'], [class*='floating-nav'], [id*='floating-nav']"
-    ));
+    // Three active themes ship a deliberate native navigation design. Keep it
+    // intact and do not mount a second shared navigation dock on those themes.
+    const nativeNavigationSelector = ".nocturne-nav, .aksav-nav, .celestial-nav, [data-oa-native-navigation]";
+    const nativeNavigationElement = document.querySelector(nativeNavigationSelector);
+    const hasNativeNavigation = !!nativeNavigationElement;
+    if (hasNativeNavigation && features.navigation === false) {
+      nativeNavigationElement.hidden = true;
+      nativeNavigationElement.style.setProperty("display", "none", "important");
+    }
+    const legacyNavs = new Set();
+    if (!hasNativeNavigation) {
+      document.querySelectorAll(
+        "nav:not(#oa-floating-controls), [role='navigation']:not(#oa-floating-controls), " +
+        "[class*='bottom-nav'], [id*='bottom-nav'], [class*='bottom-navigation'], [id*='bottom-navigation'], " +
+        "[class*='navigation-dock'], [id*='navigation-dock'], [class*='nav-dock'], [id*='nav-dock'], " +
+        "[class*='bottom-menu'], [id*='bottom-menu'], [class*='floating-nav'], [id*='floating-nav']"
+      ).forEach(element => legacyNavs.add(element));
+    }
     // Some older themes use fixed button groups instead of a <nav>. Retire only
     // floating/sticky controls with navigation-like names, never ordinary content.
-    document.querySelectorAll("#app [class], #app [id]").forEach(element => {
-      if (element.id === "oa-floating-controls") return;
-      const identity = ((element.id || "") + " " + (typeof element.className === "string" ? element.className : "")).toLowerCase();
-      if (!/(nav|dock|bottom|float|control)/.test(identity)) return;
-      const position = getComputedStyle(element).position;
-      if ((position === "fixed" || position === "sticky") && element.querySelector("button, a, [role='button']")) legacyNavs.add(element);
-    });
+    if (!hasNativeNavigation) {
+      document.querySelectorAll("#app [class], #app [id]").forEach(element => {
+        if (element.id === "oa-floating-controls") return;
+        const identity = ((element.id || "") + " " + (typeof element.className === "string" ? element.className : "")).toLowerCase();
+        if (!/(nav|dock|bottom|float|control)/.test(identity)) return;
+        const position = getComputedStyle(element).position;
+        if ((position === "fixed" || position === "sticky") && element.querySelector("button, a, [role='button']")) legacyNavs.add(element);
+      });
+    }
     legacyNavs.forEach(nav => {
       if (nav.id === "oa-floating-controls") return;
       nav.classList.add("oa-legacy-navigation");
@@ -1904,10 +1947,14 @@
     });
     const audio = document.getElementById("bg-music");
     const legacyMusic = [...document.querySelectorAll("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box, [class*='music-float'], [id*='music-float']")].filter(control => control.id !== "bg-music");
-    // Replace every theme-native music button with the shared music control.
-    // If a theme nests its audio element inside the visual button, preserve the audio.
+    // Native-navigation themes retain exactly one native music control. Other
+    // themes hand music to the shared dock, hiding their template-level control.
+    const nativeMusicControl = hasNativeNavigation
+      ? document.querySelector("#music-toggle, #music-btn, .music-toggle, .music-float-btn, .royal-music-toggle, .music-disk-box")
+      : null;
     legacyMusic.forEach(control => {
       if (audio && control.contains(audio)) document.body.append(audio);
+      if (hasNativeNavigation && control === nativeMusicControl) return;
       control.classList.add("oa-legacy-music-control");
       control.setAttribute("aria-hidden", "true");
       control.setAttribute("inert", "");
@@ -1943,7 +1990,7 @@
     });
 
     let menu = [];
-    if (features.navigation !== false) {
+    if (features.navigation !== false && !hasNativeNavigation) {
       menu = resolveSections();
       const nav = document.createElement("nav");
       nav.id = "oa-floating-controls";
@@ -2082,36 +2129,61 @@
         window.scrollBy(0, 1);
       }, 24);
     };
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      autoButton.disabled = true;
-      autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
-    } else {
-      // Mulai setelah sampul dibuka; jeda singkat memberi waktu menikmati transisi pembuka.
-      const scheduleAutoScroll = () => {
-        if (autoStartDelay !== null || autoTimer !== null) return;
-        autoStartDelay = window.setTimeout(() => {
-          autoStartDelay = null;
+    if (theme === "army" || theme === "aksav") {
+      // Protected themes retain their pre-existing behavior; do not alter their experience.
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        autoButton.disabled = true;
+        autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
+      } else {
+        const scheduleAutoScroll = () => {
+          if (autoStartDelay !== null || autoTimer !== null) return;
+          autoStartDelay = window.setTimeout(() => {
+            autoStartDelay = null;
+            startAutoScroll();
+          }, 1800);
+        };
+        document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
+        if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
+        window.addEventListener("wheel", stopAutoScroll, { passive: true });
+        window.addEventListener("touchstart", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("pointerdown", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("keydown", event => {
+          if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
+        });
+        autoButton.addEventListener("click", () => {
+          if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
           startAutoScroll();
-        }, 1800);
-      };
-      document.addEventListener("oa:invitation-opened", scheduleAutoScroll, { once: true });
-      if (document.body.classList.contains("oa-invitation-opened")) scheduleAutoScroll();
-      window.addEventListener("wheel", stopAutoScroll, { passive: true });
-      window.addEventListener("touchstart", event => {
-        if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
-      }, { passive: true });
-      window.addEventListener("pointerdown", event => {
-        if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
-      }, { passive: true });
-      window.addEventListener("keydown", event => {
-        if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
-      });
-      autoButton.addEventListener("click", () => {
-        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
-        startAutoScroll();
-      });
-      document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
+        });
+        document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
+      }
+    } else {
+      // Scrolling stays idle until the guest explicitly starts it.
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        autoButton.disabled = true;
+        autoButton.title = "Gulir otomatis tidak aktif karena preferensi gerakan minim.";
+      } else {
+        window.addEventListener("wheel", stopAutoScroll, { passive: true });
+        window.addEventListener("touchstart", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("pointerdown", event => {
+          if (!event.target.closest("#oa-floating-controls")) stopAutoScroll();
+        }, { passive: true });
+        window.addEventListener("keydown", event => {
+          if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
+        });
+        autoButton.addEventListener("click", () => {
+          if (autoTimer !== null) { stopAutoScroll(); return; }
+          startAutoScroll();
+        });
+        document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
+      }
     }
+
     if (musicButton) {
       const syncMusic = () => {
         const playing = !audio.paused;
@@ -2122,9 +2194,13 @@
       };
       musicButton.addEventListener("click", async () => {
         if (audio.paused) {
+          audio.muted = false;
           try { await audio.play(); }
-          catch { musicButton.title = "Musik belum dapat diputar. Coba lagi."; }
-        } else audio.pause();
+          catch { audio.muted = true; musicButton.title = "Musik belum dapat diputar. Coba lagi."; }
+        } else {
+          audio.pause();
+          audio.muted = true;
+        }
         syncMusic();
       });
       audio.addEventListener("play", syncMusic);
@@ -2147,17 +2223,17 @@
         html { scroll-behavior: smooth; overflow-x: clip; }
         body { overflow-x: clip; }
         section[id], [id].oa-shared-section { scroll-margin-top: 1rem; }
-        :root { --oa-motion-duration: 720ms; --oa-motion-ease: cubic-bezier(.2,.72,.18,1); }
-        .oa-scroll-reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
+        :root { --oa-motion-duration: 650ms; --oa-motion-ease: cubic-bezier(.2,.72,.18,1); }
+        html[data-oa-theme] #app .oa-scroll-reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s var(--oa-reveal-ease, var(--oa-motion-ease)); }
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
         #app .reveal:not(.active) { opacity: 0 !important; transform: translate3d(0,22px,0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
         #app .reveal.active { opacity: 1 !important; transform: none; }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .68s ease, transform .76s var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .65s ease, transform .65s var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
         .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
         .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
         .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); transition: opacity .78s ease, transform .9s var(--oa-motion-ease); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); transition: opacity .65s ease, transform .65s var(--oa-motion-ease); }
         img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
         img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
         img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
