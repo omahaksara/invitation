@@ -610,13 +610,16 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": animasi arah samping dan naik belum diterapkan");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
+          await page.waitForTimeout(250);
           const idleState = await page.evaluate(() => ({
             pressed: document.querySelector('#oa-floating-controls [data-oa-action="auto"]')?.getAttribute("aria-pressed"),
             scrollY: window.scrollY
           }));
           assert.equal(idleState.pressed, "false",
             theme.slug + ": auto-scroll tidak boleh aktif otomatis setelah undangan dibuka");
-          assert.ok(idleState.scrollY <= 2,
+          await page.waitForTimeout(250);
+          const idleAfter = await page.evaluate(() => window.scrollY);
+          assert.ok(Math.abs(idleAfter - idleState.scrollY) <= 2,
             theme.slug + ": halaman bergulir sendiri tanpa interaksi pengguna");
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
