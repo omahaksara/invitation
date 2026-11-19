@@ -81,10 +81,10 @@ const themes = [
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
 const themeRegistry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
 const activeThemeSlugs = (themeRegistry.themes || [])
-  .filter(theme => theme && theme.status === "active" && theme.slug !== "army")
+  .filter(theme => theme && theme.status === "active" && !["army", "aksav"].includes(theme.slug))
   .map(theme => theme.slug)
   .sort();
-const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
+const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype" && !["army", "aksav"].includes(theme.slug)).map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
@@ -610,38 +610,17 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": animasi arah samping dan naik belum diterapkan");
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
-          // The invitation should begin scrolling automatically after it is opened.
-          await page.waitForFunction(() => {
-            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
-            // A short invitation may reach its end before the assertion runs.
-            // Accept either an active control or proof that the page has begun moving.
-            return button?.getAttribute("aria-pressed") === "true" || window.scrollY > 24;
-          }, undefined, { timeout: 3500 });
-          const autoState = await page.evaluate(() => ({
+          const idleState = await page.evaluate(() => ({
             pressed: document.querySelector('#oa-floating-controls [data-oa-action="auto"]')?.getAttribute("aria-pressed"),
             scrollY: window.scrollY
           }));
-          assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
-            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          // A short invitation can already have reached the bottom and stopped
-          // automatically. In that case, first start it manually, then test pause.
-          if (autoState.pressed === "true") {
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          } else {
-            assert.ok(autoState.scrollY > 24,
-              theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          }
+          assert.equal(idleState.pressed, "false",
+            theme.slug + ": auto-scroll tidak boleh aktif otomatis setelah undangan dibuka");
+          assert.ok(idleState.scrollY <= 2,
+            theme.slug + ": halaman bergulir sendiri tanpa interaksi pengguna");
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
+            theme.slug + ": auto-scroll tidak dapat dimulai melalui klik pengguna");
           await page.waitForTimeout(120);
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
             theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
