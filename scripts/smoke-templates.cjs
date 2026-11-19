@@ -916,7 +916,7 @@ for (const slug of activeThemeSlugs) {
 
     // Responsive and demo-interaction pass at both requested mobile widths.
     for (const width of [360, 390]) {
-    for (const theme of themes) {
+    for (const theme of testThemes) {
       const page = await browser.newPage({ viewport: { width, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
