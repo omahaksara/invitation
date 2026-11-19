@@ -96,13 +96,13 @@ assert.ok(!testThemes.some(theme => theme.slug === "army"),
   "Protected Army theme must never enter the browser smoke matrix.");
 assert.ok(!testThemes.some(theme => theme.slug === "aksav"),
   "Protected Aksav theme must never enter the browser smoke matrix.");
-assert.match(sharedAppJs, /const preserveArmyTheme = \(document\.documentElement\.dataset\.oaTheme \|\| ""\)\.toLowerCase\(\) === "army"/,
+assert.match(sharedAppJs, /const preserveLegacyTheme = \(document\.documentElement\.dataset\.oaTheme \|\| ""\)\.toLowerCase\(\) === "army"/,
   "Shared engine must explicitly recognize the protected Army theme.");
-assert.match(sharedAppJs, /if \(!preserveArmyTheme\) setupReveal\(\)/,
+assert.match(sharedAppJs, /if \(!preserveLegacyTheme\) setupReveal\(\)/,
   "Protected Army theme must bypass the new reveal experience.");
-assert.match(sharedAppJs, /if \(!preserveArmyTheme\) \{\s*ensureFloatingControls/,
+assert.match(sharedAppJs, /if \(!preserveLegacyTheme\) \{\s*ensureFloatingControls/,
   "Protected Army theme must bypass the new shared navigation dock.");
-assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\) #app \.oa-scroll-reveal/,
+assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\):not\(\[data-oa-theme="aksav"\]\) #app \.oa-scroll-reveal/,
   "Shared reveal CSS must explicitly exclude the protected Army theme.");
 assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\) #app \.oa-motion-item/,
   "Reduced-motion reveal CSS must explicitly exclude the protected Army theme.");
@@ -183,6 +183,15 @@ for (const slug of activeThemeSlugs) {
       page.on("pageerror", error => pageErrors.push(error.message));
       // Synthetic coordinates are injected only into this browser test.
       // The public demo retains its unverified-location notice and no fake pin.
+      // Fail closed: desktop smoke must never contact a live Apps Script endpoint.
+      await page.route("**/macros/s/**", async route => {
+        const request = route.request();
+        if (request.method() === "GET") {
+          await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true, items: [] }) });
+          return;
+        }
+        await route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: true, demo: true }) });
+      });
       await page.route("**/clients/demo-katalog/data.json*", async route => {
         const response = await route.fetch();
         const fixture = await response.json();
