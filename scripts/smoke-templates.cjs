@@ -89,6 +89,18 @@ const browserThemeSlugs = testThemes.filter(theme => theme.status !== "prototype
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
+const sharedAppJs = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf8");
+// Protected Army/Venni–Rama must remain outside the shared motion/navigation
+// enhancement path and outside all fixture/browser smoke tests.
+assert.ok(!testThemes.some(theme => theme.slug === "army"),
+  "Protected Army theme must never enter the browser smoke matrix.");
+assert.match(sharedAppJs, /const preserveArmyTheme = \(document\.documentElement\.dataset\.oaTheme \|\| ""\)\.toLowerCase\(\) === "army"/,
+  "Shared engine must explicitly recognize the protected Army theme.");
+assert.match(sharedAppJs, /if \(!preserveArmyTheme\) setupReveal\(\)/,
+  "Protected Army theme must bypass the new reveal experience.");
+assert.match(sharedAppJs, /if \(!preserveArmyTheme\) \{\s*ensureFloatingControls/,
+  "Protected Army theme must bypass the new shared navigation dock.");
+
 for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
