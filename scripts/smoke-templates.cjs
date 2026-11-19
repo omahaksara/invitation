@@ -84,7 +84,8 @@ const activeThemeSlugs = (themeRegistry.themes || [])
   .filter(theme => theme && theme.status === "active" && !["army", "aksav"].includes(theme.slug))
   .map(theme => theme.slug)
   .sort();
-const browserThemeSlugs = themes.filter(theme => theme.status !== "prototype" && !["army", "aksav"].includes(theme.slug)).map(theme => theme.slug).sort();
+const testThemes = themes.filter(theme => !["army", "aksav"].includes(theme.slug));
+const browserThemeSlugs = testThemes.filter(theme => theme.status !== "prototype").map(theme => theme.slug).sort();
 assert.deepEqual(browserThemeSlugs, activeThemeSlugs,
   "Browser smoke matrix must cover every active registry theme exactly once.");
 const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"), "utf8");
@@ -145,7 +146,7 @@ for (const slug of activeThemeSlugs) {
       server.listen(4173, "127.0.0.1", resolve);
     });
     browser = await chromium.launch({ headless: true });
-    for (const theme of themes) {
+    for (const theme of testThemes) {
       const page = await browser.newPage();
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
@@ -512,7 +513,17 @@ for (const slug of activeThemeSlugs) {
           });
           assert.deepEqual(audioState, { paused: true, muted: true, autoplay: false },
             theme.slug + ": musik tidak boleh autoplay dan harus mute pada awal undangan " + JSON.stringify(audioState));
-          console.log("PASS native navigation + muted music " + theme.slug);
+          await page.locator(theme.musicControl).click();
+          await page.waitForFunction(() => {
+            const audio = document.getElementById("bg-music");
+            return audio && !audio.paused && !audio.muted;
+          }, undefined, { timeout: 5000 });
+          await page.locator(theme.musicControl).click();
+          await page.waitForFunction(() => {
+            const audio = document.getElementById("bg-music");
+            return audio && audio.paused && audio.muted;
+          }, undefined, { timeout: 5000 });
+          console.log("PASS native navigation + explicit music " + theme.slug);
           continue;
         }
 
@@ -532,6 +543,23 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const sharedAudioState = await page.evaluate(() => {
+          const audio = document.getElementById("bg-music");
+          return { paused: audio?.paused, muted: audio?.muted, autoplay: audio?.autoplay };
+        });
+        assert.deepEqual(sharedAudioState, { paused: true, muted: true, autoplay: false },
+          theme.slug + ": musik harus idle, mute, dan tanpa autoplay setelah cover dibuka " + JSON.stringify(sharedAudioState));
+        const sharedMusicButton = page.locator('#oa-floating-controls [data-oa-action="music"]');
+        await sharedMusicButton.click();
+        await page.waitForFunction(() => {
+          const audio = document.getElementById("bg-music");
+          return audio && !audio.paused && !audio.muted;
+        }, undefined, { timeout: 5000 });
+        await sharedMusicButton.click();
+        await page.waitForFunction(() => {
+          const audio = document.getElementById("bg-music");
+          return audio && audio.paused && audio.muted;
+        }, undefined, { timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         const galleryImage = page.locator(".gallery-grid img").first();
