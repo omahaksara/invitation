@@ -102,9 +102,9 @@ assert.match(sharedAppJs, /if \(!preserveLegacyTheme\) setupReveal\(\)/,
   "Protected Army theme must bypass the new reveal experience.");
 assert.match(sharedAppJs, /if \(!preserveLegacyTheme\) \{\s*ensureFloatingControls/,
   "Protected Army theme must bypass the new shared navigation dock.");
-assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\):not\(\[data-oa-theme="aksav"\]\) #app \.oa-motion-item/,
+assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\):not\(\[data-oa-theme="aksav"\]\) #app \.oa-scroll-reveal/,
   "Shared reveal CSS must explicitly exclude the protected Army theme.");
-assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\) #app \.oa-motion-item/,
+assert.match(sharedThemeCss, /html\[data-oa-theme\]:not\(\[data-oa-theme="army"\]\):not\(\[data-oa-theme="aksav"\]\) #app \.oa-motion-item/,
   "Reduced-motion reveal CSS must explicitly exclude the protected Army theme.");
 
 for (const slug of activeThemeSlugs) {
