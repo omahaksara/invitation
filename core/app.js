@@ -412,7 +412,7 @@
     renderGifts(data.gifts, clientBase, data.features || {});
     setupMusic(data.music, clientBase);
     setupCover();
-    const preserveLegacyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+    const preserveLegacyTheme = ["army", "aksav"].includes((document.documentElement.dataset.oaTheme || "").toLowerCase());
     if (!preserveLegacyTheme) setupReveal();
     setupCountdown(data);
     setupForms(data, slug, viewOnly);
@@ -1281,7 +1281,7 @@
         window.setTimeout(() => {
           if (cover) { cover.hidden = true; cover.style.display = "none"; }
         }, reducedMotionPreference ? 0 : 680);
-        const preserveLegacyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+        const preserveLegacyTheme = ["army", "aksav"].includes((document.documentElement.dataset.oaTheme || "").toLowerCase());
         if (preserveLegacyTheme) {
           // Keep Army's established cover-to-music behavior unchanged.
           if (audio && hasMusic) {
@@ -1324,7 +1324,7 @@
       return;
     }
 
-    const preserveLegacyTheme = (document.documentElement.dataset.oaTheme || "").toLowerCase() === "army";
+    const preserveLegacyTheme = ["army", "aksav"].includes((document.documentElement.dataset.oaTheme || "").toLowerCase());
     // Army is a protected client theme: retain the pre-branch audio initialization.
     if (!preserveLegacyTheme) {
       audio.autoplay = false;
