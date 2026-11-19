@@ -975,3 +975,33 @@ html[data-oa-theme] .oa-event-map-fallback a{
 /* Army — forest green, ivory and champagne shared dock. */
 .oa-floating-controls[data-theme="army"]{--oa-dock-bg:#102b23f5;--oa-dock-border:#c9ad73;--oa-dock-ink:#f4f0e5;--oa-dock-accent:#d4b979;--oa-dock-active:#c9ad73;--oa-dock-active-ink:#102b23;}
 html[data-oa-theme="army"]{--oa-font-display:"Cormorant Garamond",Georgia,serif;--oa-font-body:"Montserrat",Arial,sans-serif;--oa-reveal-time:.48s;--oa-reveal-ease:cubic-bezier(.18,.78,.22,1);--oa-theme-display:"Cormorant Garamond",Georgia,serif;--oa-theme-body:"Montserrat",Arial,sans-serif;}
+
+
+/* Native navigation remains the single navigation system on these themes.
+   Keep it behind the invitation cover until the guest opens the invitation. */
+body:not(.oa-invitation-opened) .nocturne-nav,
+body:not(.oa-invitation-opened) .aksav-nav,
+body:not(.oa-invitation-opened) .celestial-nav {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Shared reveal contract: consistent 650ms fade-up, while each theme retains
+   its own easing, typography, palette, ornaments and native cover structure. */
+html[data-oa-theme] #app .oa-scroll-reveal {
+  transition: opacity .65s ease,
+              transform .65s var(--oa-reveal-ease, cubic-bezier(.2,.72,.18,1));
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-oa-theme] #app .oa-scroll-reveal,
+  html[data-oa-theme] #app .oa-motion-item,
+  html[data-oa-theme] #app img.oa-motion-photo,
+  html[data-oa-theme] #app .oa-motion-photo img {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
