@@ -1881,9 +1881,13 @@
 
     // Three active themes ship a deliberate native navigation design. Keep it
     // intact and do not mount a second shared navigation dock on those themes.
-    const hasNativeNavigation = !!document.querySelector(
-      ".nocturne-nav, .aksav-nav, .celestial-nav, [data-oa-native-navigation]"
-    );
+    const nativeNavigationSelector = ".nocturne-nav, .aksav-nav, .celestial-nav, [data-oa-native-navigation]";
+    const nativeNavigationElement = document.querySelector(nativeNavigationSelector);
+    const hasNativeNavigation = !!nativeNavigationElement;
+    if (hasNativeNavigation && features.navigation === false) {
+      nativeNavigationElement.hidden = true;
+      nativeNavigationElement.style.setProperty("display", "none", "important");
+    }
     const legacyNavs = new Set();
     if (!hasNativeNavigation) {
       document.querySelectorAll(
