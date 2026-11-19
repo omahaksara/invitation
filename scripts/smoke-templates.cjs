@@ -94,6 +94,8 @@ const sharedAppJs = fs.readFileSync(path.join(__dirname, "../core/app.js"), "utf
 // enhancement path and outside all fixture/browser smoke tests.
 assert.ok(!testThemes.some(theme => theme.slug === "army"),
   "Protected Army theme must never enter the browser smoke matrix.");
+assert.ok(!testThemes.some(theme => theme.slug === "aksav"),
+  "Protected Aksav theme must never enter the browser smoke matrix.");
 assert.match(sharedAppJs, /const preserveArmyTheme = \(document\.documentElement\.dataset\.oaTheme \|\| ""\)\.toLowerCase\(\) === "army"/,
   "Shared engine must explicitly recognize the protected Army theme.");
 assert.match(sharedAppJs, /if \(!preserveArmyTheme\) setupReveal\(\)/,
