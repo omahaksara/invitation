@@ -2082,6 +2082,11 @@
     };
     const startAutoScroll = () => {
       if (autoTimer !== null || autoButton.hidden || autoButton.disabled) return;
+      // If the reader manually restarts at the end, begin a fresh pass from the top.
+      // Without this reset the interval immediately detects the end and stops again.
+      const reachedPageEnd =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3;
+      if (reachedPageEnd) window.scrollTo({ top: 0, behavior: "auto" });
       autoButton.textContent = "Ⅱ";
       autoButton.classList.add("is-running");
       autoButton.setAttribute("aria-pressed", "true");
