@@ -2123,7 +2123,13 @@
         if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
       });
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
+        if (autoTimer !== null) { stopAutoScroll(); return; }
+        // A manual start takes priority over the delayed start scheduled on cover open.
+        // Previously this click only cancelled the pending delay, leaving the button idle.
+        if (autoStartDelay !== null) {
+          window.clearTimeout(autoStartDelay);
+          autoStartDelay = null;
+        }
         startAutoScroll();
       });
       document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
