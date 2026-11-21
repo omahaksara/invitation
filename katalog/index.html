@@ -90,6 +90,20 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 .catalog-proof{display:grid;grid-template-columns:repeat(3,1fr);max-width:900px;margin:0 auto 62px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fffdf84d}.proof-item{padding:22px 18px;text-align:center}.proof-item+.proof-item{border-left:1px solid var(--line)}.proof-item strong{display:block;font:500 20px "Playfair Display",serif;color:#76603b}.proof-item span{display:block;margin-top:6px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+/* Accessibility and narrow-screen proof-strip fixes */
+.back-top{visibility:hidden}.back-top.visible{visibility:visible}.back-top:focus-visible{visibility:visible;opacity:1;pointer-events:auto;transform:translateY(0);outline:3px solid #ad8b55;outline-offset:3px}
+@media(max-width:580px){.catalog-proof{grid-template-columns:1fr;margin-bottom:44px}.proof-item{padding:15px 12px}.proof-item strong{font-size:18px}.proof-item span{font-size:9px;letter-spacing:.12em}.proof-item+.proof-item{border-left:0;border-top:1px solid var(--line)}}
+
+/* Catalog order-history cards */
+.history-section{margin:74px 0 0;padding-top:42px;border-top:1px solid var(--line)}
+.history-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.history-card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:24px;box-shadow:0 8px 26px #4637190a}
+.history-status{display:inline-block;padding:6px 9px;background:#eee8dc;color:#786342;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.history-card h3{font:500 26px/1.15 "Playfair Display",serif;margin:17px 0 8px}
+.history-meta{font-size:11px;line-height:1.8;color:var(--muted)}
+.history-card .visit{margin-top:18px}
+@media(max-width:580px){.history-section{margin-top:52px;padding-top:30px}.history-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -118,6 +132,10 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
   <div class="controls"><div class="filters" id="filters" aria-label="Filter kategori tema"><button class="filter" data-filter="all" aria-pressed="true">Semua</button><button class="filter" data-filter="classic" aria-pressed="false">Klasik</button><button class="filter" data-filter="floral" aria-pressed="false">Floral</button><button class="filter" data-filter="modern" aria-pressed="false">Modern</button><button class="filter" data-filter="dark" aria-pressed="false">Dark &amp; Luxe</button><button class="filter" data-filter="cultural" aria-pressed="false">Tradisional</button><button class="filter" data-filter="minimal" aria-pressed="false">Minimal</button></div><input class="search" id="search" type="search" placeholder="Cari nama atau suasana tema…" aria-label="Cari tema"></div>
   <p class="count" id="count" aria-live="polite">Menyiapkan koleksi tema…</p>
   <section id="themes" class="grid" aria-live="polite"><div class="empty">Sedang menyiapkan preview koleksi…</div></section>
+  <section class="history-section" id="riwayat-pesanan" aria-labelledby="historyTitle">
+    <div class="intro-row"><div><div class="section-kicker">Cerita yang telah dimulai</div><h2 id="historyTitle">Riwayat Pesanan</h2></div><p class="intro-note">Beberapa undangan yang telah menyertai hari istimewa klien kami. Tanggal acara yang sudah berlalu tetap menjadi bagian dari perjalanan Omah Aksara.</p></div>
+    <div class="history-grid" id="orderHistory" aria-live="polite"><div class="empty">Memuat riwayat pesanan…</div></div>
+  </section>
   <section class="closing" id="tentang"><small>More than an invitation</small><h2>Hari istimewa layak dimulai dengan kesan yang istimewa.</h2><p>Pilih desain yang paling mewakili kalian. Setiap detail nantinya bisa disesuaikan dengan cerita dan kebutuhan acara.</p></section>
 </main>
 <button class="back-top" id="backTop" type="button" aria-label="Kembali ke atas">↑</button>
@@ -181,6 +199,18 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
       count.textContent='Katalog belum tersambung';
     }
   }
+  async function loadHistory(){
+    const target=document.getElementById('orderHistory');
+    if(!target)return;
+    try{
+      const response=await fetch('./riwayat-pesanan.json',{cache:'no-store'});
+      if(!response.ok)throw new Error('Riwayat belum dapat dimuat.');
+      const payload=await response.json();
+      const orders=Array.isArray(payload.orders)?payload.orders.filter(order=>order&&order.status==='completed'&&/^[a-z0-9][a-z0-9-]*$/.test(order.slug)&&typeof order.coupleName==='string'&&typeof order.dateLabel==='string'):[]; 
+      target.innerHTML=orders.length?orders.map(order=>'<article class="history-card"><span class="history-status">Pesanan selesai</span><h3>'+esc(order.coupleName)+'</h3><div class="history-meta">Hari istimewa · '+esc(order.dateLabel)+'<br>Tema · '+esc(order.themeName||'Omah Aksara')+'</div><a class="visit" href="../?c='+encodeURIComponent(order.slug)+'" target="_blank" rel="noopener">LIHAT UNDANGAN <span>↗</span></a></article>').join(''):'<div class="empty">Riwayat pesanan akan ditampilkan di sini.</div>';
+    }catch(error){target.innerHTML='<div class="empty">Riwayat pesanan belum dapat dimuat.</div>';}
+  }
+  loadHistory();
   const backTop=document.getElementById('backTop');
   window.addEventListener('scroll',()=>backTop.classList.toggle('visible',window.scrollY>520),{passive:true});
   backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
