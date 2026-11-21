@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "description": "Metadata portofolio riwayat pesanan yang aman ditampilkan di katalog. Tidak menyimpan data undangan pelanggan.",
+  "orders": [
+    {
+      "slug": "venni-rama",
+      "coupleName": "Venni & Rama",
+      "dateLabel": "20 November 2026",
+      "themeName": "Army — Forest & Champagne",
+      "status": "completed"
+    }
+  ]
+}
