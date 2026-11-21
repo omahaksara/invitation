@@ -721,8 +721,23 @@ if (motionOnly) {
             assert.ok(autoState.scrollY > 24,
               theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
             await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
+            const restartState = await page.evaluate(() => {
+              const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
+              const rect = button?.getBoundingClientRect();
+              return {
+                pressed: button?.getAttribute("aria-pressed"),
+                disabled: button?.disabled,
+                hidden: button?.hidden,
+                connected: Boolean(button?.isConnected),
+                insideDock: Boolean(button?.closest("#oa-floating-controls")),
+                scrollY: window.scrollY,
+                innerHeight: window.innerHeight,
+                scrollHeight: document.documentElement.scrollHeight,
+                buttonRect: rect ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null
+              };
+            });
+            assert.equal(restartState.pressed, "true",
+              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir " + JSON.stringify(restartState));
             await autoScroll.click();
             assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
               theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
