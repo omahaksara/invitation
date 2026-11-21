@@ -2207,7 +2207,7 @@
           100% { opacity:0; transform:scale(1.025); filter:blur(3px); }
         }
         #main-content.oa-main-opening, #app-inner.oa-main-opening { animation: oa-main-enter .9s cubic-bezier(.2,.72,.18,1) both; }
-        @keyframes oa-main-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes oa-main-enter { from { opacity:0; } to { opacity:1; } }
         .oa-floating-controls { scrollbar-width:none; }
         .oa-floating-controls::-webkit-scrollbar { display:none; }
         .oa-floating-controls button { flex:0 0 auto; }
@@ -2405,7 +2405,7 @@
           100% { opacity:0; transform:scale(1.025); filter:blur(3px); }
         }
         #main-content.oa-main-opening, #app-inner.oa-main-opening { animation: oa-main-enter var(--oa-motion-opening-duration,.9s) cubic-bezier(.2,.72,.18,1) both; }
-        @keyframes oa-main-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes oa-main-enter { from { opacity:0; } to { opacity:1; } }
         html[data-oa-motion-profile="curtain"] #cover.is-opening,
         html[data-oa-motion-profile="curtain"] #cover-section.is-opening,
         html[data-oa-motion-profile="curtain"] .sirein-cover.is-opening { animation-name: oa-cover-curtain-exit; }
