@@ -90,6 +90,10 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 .catalog-proof{display:grid;grid-template-columns:repeat(3,1fr);max-width:900px;margin:0 auto 62px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fffdf84d}.proof-item{padding:22px 18px;text-align:center}.proof-item+.proof-item{border-left:1px solid var(--line)}.proof-item strong{display:block;font:500 20px "Playfair Display",serif;color:#76603b}.proof-item span{display:block;margin-top:6px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+
+/* Accessibility and narrow-screen proof-strip fixes */
+.back-top{visibility:hidden}.back-top.visible{visibility:visible}.back-top:focus-visible{visibility:visible;opacity:1;pointer-events:auto;transform:translateY(0);outline:3px solid #ad8b55;outline-offset:3px}
+@media(max-width:580px){.catalog-proof{grid-template-columns:1fr;margin-bottom:44px}.proof-item{padding:15px 12px}.proof-item strong{font-size:18px}.proof-item span{font-size:9px;letter-spacing:.12em}.proof-item+.proof-item{border-left:0;border-top:1px solid var(--line)}}
 </style>
 </head>
 <body>
