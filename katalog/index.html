@@ -85,6 +85,14 @@ h2{font:500 clamp(28px,4vw,42px)/1.1 "Playfair Display",serif;margin:8px 0 0}
 .closing p{font-size:12px;color:#777064;line-height:1.8;margin:0 auto;max-width:450px}
 footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-spacing:.12em;border-top:1px solid var(--line)}
 .back-top{position:fixed;z-index:20;right:22px;bottom:22px;width:44px;height:44px;border:1px solid #c9b58e;background:#fffdf0;color:#66563a;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 24px #3025151c;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s}.back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}.reveal.in-view{opacity:1;transform:none}
+.history-section{margin:74px 0 0;padding-top:42px;border-top:1px solid var(--line)}
+.history-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.history-card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:24px;box-shadow:0 8px 26px #4637190a}
+.history-status{display:inline-block;padding:6px 9px;background:#eee8dc;color:#786342;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.history-card h3{font:500 26px/1.15 "Playfair Display",serif;margin:17px 0 8px}
+.history-meta{font-size:11px;line-height:1.8;color:var(--muted)}
+.history-card .visit{margin-top:18px}
+@media(max-width:580px){.history-section{margin-top:52px;padding-top:30px}.history-grid{grid-template-columns:1fr}}
 @media(max-width:900px){.hero{min-height:auto}.hero-layout{min-height:0;grid-template-columns:1fr  .8fr;gap:24px;padding:80px 0 65px}.hero-visual{min-height:430px}.hero-frame{height:430px}.hero-stamp{left:-20px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.preview{height:360px}}
 @media(max-width:580px){.catalog-proof{margin-bottom:44px}.proof-item{padding:17px 8px}.proof-item strong{font-size:16px}.proof-item span{font-size:8px;letter-spacing:.1em}.hero{padding:22px 20px 58px;min-height:auto}.topline{padding-bottom:0}.topnote{display:none}.hero-layout{display:flex;flex-direction:column;align-items:stretch;gap:20px;padding:64px 0 35px}.hero-copy h1{font-size:clamp(51px,14vw,76px)}.hero-copy p{font-size:13px}.hero-actions{gap:9px;margin-top:24px}.hero-primary,.hero-secondary{min-height:45px;padding:0 13px;font-size:9px}.hero-visual{min-height:390px;margin:5px 18px 0}.hero-frame{width:min(78%,310px);height:390px}.hero-stamp{left:-15px;bottom:34px;font-size:16px;padding:13px 15px}.hero-index{right:-10px;top:22px;font-size:11px}.scroll-cue{bottom:12px;font-size:8px}.wrap{padding:24px 15px 65px}.collection-lead{margin:12px auto 52px;padding-top:20px}.collection-lead h2{font-size:36px}.intro-row{display:block}.intro-note{margin-top:12px}.controls{align-items:stretch}.filters{flex-wrap:nowrap;overflow:auto;padding-bottom:5px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap}.search{width:100%}.grid{grid-template-columns:1fr;gap:17px}.preview{height:420px}.card-info{padding:17px}.closing{margin-top:44px;padding:42px 20px}.closing:before{left:4%;top:8%}.closing:after{right:4%;bottom:8%}.back-top{right:14px;bottom:14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
@@ -118,6 +126,10 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
   <div class="controls"><div class="filters" id="filters" aria-label="Filter kategori tema"><button class="filter" data-filter="all" aria-pressed="true">Semua</button><button class="filter" data-filter="classic" aria-pressed="false">Klasik</button><button class="filter" data-filter="floral" aria-pressed="false">Floral</button><button class="filter" data-filter="modern" aria-pressed="false">Modern</button><button class="filter" data-filter="dark" aria-pressed="false">Dark &amp; Luxe</button><button class="filter" data-filter="cultural" aria-pressed="false">Tradisional</button><button class="filter" data-filter="minimal" aria-pressed="false">Minimal</button></div><input class="search" id="search" type="search" placeholder="Cari nama atau suasana tema…" aria-label="Cari tema"></div>
   <p class="count" id="count" aria-live="polite">Menyiapkan koleksi tema…</p>
   <section id="themes" class="grid" aria-live="polite"><div class="empty">Sedang menyiapkan preview koleksi…</div></section>
+  <section class="history-section" id="riwayat-pesanan" aria-labelledby="historyTitle">
+    <div class="intro-row"><div><div class="section-kicker">Cerita yang telah dimulai</div><h2 id="historyTitle">Riwayat Pesanan</h2></div><p class="intro-note">Beberapa undangan yang telah menyertai hari istimewa klien kami. Tanggal acara yang sudah berlalu tetap menjadi bagian dari perjalanan Omah Aksara.</p></div>
+    <div class="history-grid" id="orderHistory" aria-live="polite"><div class="empty">Memuat riwayat pesanan…</div></div>
+  </section>
   <section class="closing" id="tentang"><small>More than an invitation</small><h2>Hari istimewa layak dimulai dengan kesan yang istimewa.</h2><p>Pilih desain yang paling mewakili kalian. Setiap detail nantinya bisa disesuaikan dengan cerita dan kebutuhan acara.</p></section>
 </main>
 <button class="back-top" id="backTop" type="button" aria-label="Kembali ke atas">↑</button>
@@ -181,6 +193,18 @@ footer{padding:28px 22px;text-align:center;color:#8c877b;font-size:10px;letter-s
       count.textContent='Katalog belum tersambung';
     }
   }
+  async function loadHistory(){
+    const target=document.getElementById('orderHistory');
+    if(!target)return;
+    try{
+      const response=await fetch('./riwayat-pesanan.json',{cache:'no-store'});
+      if(!response.ok)throw new Error('Riwayat belum dapat dimuat.');
+      const payload=await response.json();
+      const orders=Array.isArray(payload.orders)?payload.orders.filter(order=>order&&order.status==='completed'&&/^[a-z0-9][a-z0-9-]*$/.test(order.slug)&&typeof order.coupleName==='string'&&typeof order.dateLabel==='string'):[];
+      target.innerHTML=orders.length?orders.map(order=>'<article class="history-card"><span class="history-status">Pesanan selesai</span><h3>'+esc(order.coupleName)+'</h3><div class="history-meta">Hari istimewa · '+esc(order.dateLabel)+'<br>Tema · '+esc(order.themeName||'Omah Aksara')+'</div><a class="visit" href="../?c='+encodeURIComponent(order.slug)+'" target="_blank" rel="noopener">LIHAT UNDANGAN <span>↗</span></a></article>').join(''):'<div class="empty">Riwayat pesanan akan ditampilkan di sini.</div>';
+    }catch(error){target.innerHTML='<div class="empty">Riwayat pesanan belum dapat dimuat.</div>';}
+  }
+  loadHistory();
   const backTop=document.getElementById('backTop');
   window.addEventListener('scroll',()=>backTop.classList.toggle('visible',window.scrollY>520),{passive:true});
   backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
