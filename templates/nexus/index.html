@@ -628,6 +628,38 @@
   .nexus-page .gallery-section .gallery-grid img:hover{transform:translateY(-5px) scale(1.018)}
 }
 
+
+/* NEXUS cover media layer repair: keep the photograph as the true background
+   layer on narrow screens; decorative frames and text must sit above it. */
+.nexus-cover{isolation:isolate;position:fixed}
+.nexus-cover__visual{position:relative;z-index:0;min-width:0}
+.nexus-cover__visual img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  object-fit:cover!important;object-position:center center;
+  opacity:1!important;visibility:visible!important;backface-visibility:visible!important;
+}
+.nexus-cover__visual:after{z-index:1!important;pointer-events:none}
+.nexus-cover__visual:before{z-index:2!important;pointer-events:none}
+.nexus-cover__panel{z-index:4!important;pointer-events:auto}
+.nexus-cover:before,.nexus-cover:after{pointer-events:none}
+@media(max-width:700px){
+  .nexus-cover__visual{
+    position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+    min-height:100svh!important;z-index:0!important;clip-path:none!important;
+    transform:none!important;backface-visibility:visible!important;
+  }
+  .nexus-cover__visual img{
+    width:100%!important;height:100%!important;object-fit:cover!important;
+    object-position:center 38%;filter:brightness(.94) saturate(.9)!important;
+    transform:scale(1.015)!important;
+  }
+  .nexus-cover__panel{
+    position:relative!important;z-index:4!important;width:100%;min-height:100svh;
+    margin:0!important;justify-content:flex-end;
+    background:linear-gradient(180deg,rgba(8,8,10,.04) 0%,rgba(8,8,10,.12) 34%,rgba(8,8,10,.72) 68%,#100e12 100%)!important;
+  }
+}
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
