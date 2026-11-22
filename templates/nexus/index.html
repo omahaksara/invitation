@@ -1,6 +1,6 @@
 <!-- NEXUS — Cinematic Portal | presentation-only theme; shared engine contract preserved -->
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap');
 :root{--nx-bg:#0f1115;--nx-card:#171b22;--nx-accent:#d4af37;--nx-text:#f8f3e8;--nx-muted:#b8b6b0;--nx-line:rgba(255,255,255,.13);--nx-glass:rgba(255,255,255,.07);--nx-radius:24px}
 #app{min-height:100vh}.nexus-page,.nexus-cover{font-family:'DM Sans',system-ui,sans-serif;color:var(--nx-text)}.nexus-page *,.nexus-cover *{box-sizing:border-box}.nexus-page{min-height:100vh;background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb,var(--nx-accent) 18%,transparent),transparent 46%),var(--nx-bg);overflow:hidden}.nexus-page img{display:block;max-width:100%}.nexus-page h1,.nexus-page h2,.nexus-page h3,.nexus-cover h1{font-family:'Playfair Display',Georgia,serif;font-weight:500;line-height:1.08}.nexus-cover{position:fixed;inset:0;z-index:9999;display:grid;grid-template-columns:1fr 1fr;min-height:100svh;background:var(--nx-bg);overflow:hidden}.nexus-cover__visual{position:relative;min-height:100svh;overflow:hidden;background:#171b22}.nexus-cover__visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,var(--nx-bg)),linear-gradient(0deg,rgba(0,0,0,.45),transparent 55%)}.nexus-cover__visual img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;filter:saturate(.78);animation:nx-drift 18s ease-in-out infinite alternate}.nexus-cover__panel{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:clamp(24px,6vw,76px);margin-left:-8vw;background:linear-gradient(115deg,transparent,rgba(15,17,21,.88) 18%,var(--nx-bg) 42%)}.nexus-eyebrow,.nexus-kicker{font-size:.65rem;letter-spacing:.24em;text-transform:uppercase;color:var(--nx-accent);font-weight:700}.nexus-cover h1{font-size:clamp(2.6rem,6vw,5.8rem);margin:20px 0 14px;max-width:720px;overflow-wrap:anywhere}.nexus-cover h1 span{color:var(--nx-accent);font-style:italic}.nexus-cover__date{color:var(--nx-muted);letter-spacing:.13em;font-size:.76rem}.nexus-cover__guest{color:var(--nx-muted);font-size:.85rem;line-height:1.8;margin:28px 0}.nexus-open,.nexus-button{border:1px solid var(--nx-accent);border-radius:999px;background:var(--nx-accent);color:#151515;padding:13px 22px;font:700 .72rem 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .25s,box-shadow .25s}.nexus-open:hover,.nexus-button:hover{transform:translateY(-3px);box-shadow:0 12px 32px color-mix(in srgb,var(--nx-accent) 25%,transparent)}.nexus-cover__line{width:64px;height:1px;background:var(--nx-accent);margin:28px 0}
 .nexus-page[data-skin="emerald"],.nexus-cover[data-skin="emerald"]{--nx-bg:#081c15;--nx-card:#1b4332;--nx-accent:#95d5b2;--nx-text:#f8f6f0;--nx-muted:#c1d1c7}.nexus-page[data-skin="amethyst"],.nexus-cover[data-skin="amethyst"]{--nx-bg:#1c1635;--nx-card:#2c224d;--nx-accent:#cdb4ff;--nx-text:#fff;--nx-muted:#d4cbe6}
@@ -393,6 +393,48 @@
 @keyframes nx-head-focus{from{filter:blur(6px);opacity:.4;transform:translateY(8px)}to{filter:none;opacity:1;transform:none}}
 @keyframes nx-closing-glow{from{opacity:.65;filter:blur(8px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
 @media(prefers-reduced-motion:reduce){.nexus-cover,.nexus-cover.is-opening,.nexus-page.nx-entered .nexus-page__top,.nexus-page.nx-entered .nexus-orbit,.nexus-page .nx-photo-enter,.nexus-page .nx-card-enter{animation:none!important;transition:none!important;opacity:1;filter:none;transform:none}}
+
+
+/* NEXUS editorial typography: softer romance, less corporate geometry. */
+.nexus-page,.nexus-cover{font-family:'Manrope',sans-serif;letter-spacing:0}
+.nexus-page h1,.nexus-page h2,.nexus-page h3,.nexus-cover h1,
+.nexus-orbit span,.nexus-count__grid b,.nexus-person strong,
+.nexus-page .quote-text,.nexus-footer strong{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-weight:500;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.nexus-cover h1{
+  font-size:clamp(3.25rem,7.4vw,7rem);
+  line-height:.88;
+  letter-spacing:-.055em;
+  font-weight:500;
+  margin:24px 0 18px;
+}
+.nexus-cover h1 span{font-weight:400;font-style:italic;letter-spacing:-.065em}
+.nexus-page__top h2{font-size:clamp(3.4rem,9vw,6.4rem);line-height:.88;letter-spacing:-.055em;font-weight:400}
+.nexus-section__head h2{font-size:clamp(2.55rem,7vw,4.1rem);line-height:.94;letter-spacing:-.045em;font-weight:500}
+.nexus-page .event-card h3,.nexus-page .story-content h3{font-size:1.65rem;line-height:1.02;font-weight:500;letter-spacing:-.025em}
+.nexus-page .quote-text{font-size:clamp(2rem,5vw,3.1rem);line-height:1.08;font-weight:400;letter-spacing:-.035em}
+.nexus-orbit span{font-size:3.4rem;font-weight:400}
+.nexus-count__grid b{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:500}
+.nexus-person strong{font-size:clamp(1.25rem,3vw,1.65rem);font-weight:600;line-height:1}
+.nexus-lead,.nexus-page .event-card p,.nexus-page .story-content p,
+.nexus-person small,.nexus-cover__guest{font-family:'Manrope',sans-serif;font-size:.88rem;line-height:1.9;letter-spacing:.005em}
+.nexus-eyebrow,.nexus-kicker{font-family:'Manrope',sans-serif;font-size:.62rem;letter-spacing:.17em;font-weight:600}
+.nexus-cover__date{font-family:'Manrope',sans-serif;font-size:.72rem;letter-spacing:.1em;font-weight:500}
+.nexus-open,.nexus-button,.nexus-skins button{font-family:'Manrope',sans-serif;font-weight:600;letter-spacing:.055em;text-transform:none}
+.nexus-open{font-size:.78rem;padding:15px 27px}
+.nexus-cover__line{width:48px;margin:24px 0}
+.nexus-page .story-date{font-family:'Manrope',sans-serif;font-size:.66rem;letter-spacing:.08em}
+.nexus-page .event-index{letter-spacing:.14em}
+@media(max-width:700px){
+  .nexus-cover h1{font-size:clamp(3.5rem,15vw,5.3rem);line-height:.86}
+  .nexus-page__top h2{font-size:clamp(3.25rem,14vw,5rem)}
+  .nexus-section__head h2{font-size:clamp(2.7rem,11vw,3.7rem)}
+  .nexus-page .quote-text{font-size:2.25rem}
+}
 
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
