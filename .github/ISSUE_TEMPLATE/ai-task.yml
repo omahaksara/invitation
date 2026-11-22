@@ -1,0 +1,65 @@
+name: AI team task
+description: Create a scoped task for ChatGPT, Claude, Copilot, or a human contributor
+title: "[AI Task]: "
+labels: ["ai-task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [AGENTS.md](../../AGENTS.md) before starting. Do not include secrets, guest data, payment details, or production credentials.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What outcome is required?
+      placeholder: Describe the expected result.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Allowed scope
+      description: List the files, modules, or behaviors that may be changed.
+    validations:
+      required: true
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: Explicit exclusions
+      description: List what must not be touched. The Venni–Rama / Army locked zone is always excluded.
+      value: |
+        - Venni–Rama / Army invitation and all related assets/configuration
+        - Client data, slugs, public URLs
+        - Production RSVP, guestbook, Apps Script, spreadsheets, and endpoints
+    validations:
+      required: true
+  - type: dropdown
+    id: implementer
+    attributes:
+      label: Implementer
+      options:
+        - ChatGPT
+        - Claude
+        - GitHub Copilot
+        - Human
+    validations:
+      required: true
+  - type: dropdown
+    id: reviewer
+    attributes:
+      label: Independent reviewer
+      options:
+        - ChatGPT
+        - Claude
+        - GitHub Copilot
+        - Human
+        - None yet
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and QA evidence
+      description: Define how completion will be verified.
+    validations:
+      required: true
