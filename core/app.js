@@ -118,10 +118,75 @@
       }
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
       renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl, params.get("view") === "portfolio");
+      localizeTemplateCopy(app, data);
     } catch (error) {
       console.error("Gagal memuat undangan:", error);
       showError(app, "Undangan tidak dapat dimuat", error instanceof Error ? error.message : "Periksa koneksi internet lalu coba lagi.");
     }
+  }
+
+
+  // Indonesian is the default invitation language. Explicit "en" in client JSON
+  // preserves English copy; only shared interface phrases are normalized here.
+  function localizeTemplateCopy(root, data) {
+    const configuredLanguage = String(data?.language || data?.site?.language || "id").toLowerCase();
+    if (configuredLanguage.startsWith("en")) return;
+    const dictionary = [
+      [/\\bThe Wedding Of\\b/gi, "Pernikahan"],
+      [/\\bWedding Invitation\\b/gi, "Undangan Pernikahan"],
+      [/\\bWedding Day\\b/gi, "Hari Pernikahan"],
+      [/\\bSave The Date\\b/gi, "Simpan Tanggal"],
+      [/\\bOur Story\\b/gi, "Kisah Kami"],
+      [/\\bOur Journey\\b/gi, "Perjalanan Kami"],
+      [/\\bWedding Gift\\b/gi, "Hadiah Pernikahan"],
+      [/\\bDigital Gift\\b/gi, "Hadiah Digital"],
+      [/\\bSend Wishes\\b/gi, "Kirim Ucapan"],
+      [/\\bOpen Invitation\\b/gi, "Buka Undangan"],
+      [/\\bOpen Invite\\b/gi, "Buka Undangan"],
+      [/\\bHoly Matrimony\\b/gi, "Akad Nikah"],
+      [/\\bReception\\b/gi, "Resepsi"],
+      [/\\bGallery\\b/gi, "Galeri"],
+      [/\\bOur Gallery\\b/gi, "Galeri Kami"],
+      [/\\bWishes\\b/gi, "Ucapan"],
+      [/\\bWedding Wishes\\b/gi, "Ucapan Pernikahan"],
+      [/\\bAttendance Confirmation\\b/gi, "Konfirmasi Kehadiran"],
+      [/\\bConfirm Attendance\\b/gi, "Konfirmasi Kehadiran"],
+      [/\\bAttendance\\b/gi, "Kehadiran"],
+      [/\\bBride\\b/gi, "Mempelai Wanita"],
+      [/\\bGroom\\b/gi, "Mempelai Pria"],
+      [/\\bThe Couple\\b/gi, "Kedua Mempelai"],
+      [/\\bCountdown\\b/gi, "Hitung Mundur"],
+      [/\\bLocation\\b/gi, "Lokasi"],
+      [/\\bVenue\\b/gi, "Tempat Acara"],
+      [/\\bGift\\b/gi, "Hadiah"],
+      [/\\bDear\\b/gi, "Kepada Yth."],
+      [/\\bSend\\b/gi, "Kirim"],
+      [/\\bSubmit\\b/gi, "Kirim"],
+      [/\\bName\\b/gi, "Nama"],
+      [/\\bMessage\\b/gi, "Pesan"],
+      [/\\bGuest Name\\b/gi, "Nama Tamu"],
+      [/\\bYour Name\\b/gi, "Nama Anda"],
+      [/\\bYour Wishes\\b/gi, "Ucapan Anda"],
+      [/\\bThank You\\b/gi, "Terima Kasih"],
+      [/\\bThank you for your presence\\b/gi, "Terima kasih atas kehadiran Anda"]
+    ];
+    const translate = value => dictionary.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      if (!node.nodeValue || !node.nodeValue.trim()) return;
+      const parent = node.parentElement;
+      if (parent && /^(SCRIPT|STYLE|TEXTAREA|CODE|PRE)$/i.test(parent.tagName)) return;
+      node.nodeValue = translate(node.nodeValue);
+    });
+    root.querySelectorAll("[aria-label],[placeholder],[title],[alt]").forEach(element => {
+      ["aria-label", "placeholder", "title", "alt"].forEach(attribute => {
+        const value = element.getAttribute(attribute);
+        if (value) element.setAttribute(attribute, translate(value));
+      });
+    });
+    root.setAttribute("lang", "id");
   }
 
   // Demo assets are defined by clients/demo-katalog/data.json.
