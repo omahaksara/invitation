@@ -25,12 +25,12 @@ body:
   - type: textarea
     id: exclusions
     attributes:
-      label: Explicit exclusions
-      description: List what must not be touched. The Venni–Rama / Army locked zone is always excluded.
+      label: Safety boundaries
+      description: State data, integrations, or destructive actions that require explicit approval.
       value: |
-        - Venni–Rama / Army invitation and all related assets/configuration
-        - Client data, slugs, public URLs
-        - Production RSVP, guestbook, Apps Script, spreadsheets, and endpoints
+        - Do not delete client records or production data without explicit approval and a verified backup.
+        - Use demo/mock/TEST services for testing; never submit dummy RSVP or guestbook data to production.
+        - Preserve public URLs/slugs and provide a tested migration if changes are necessary.
     validations:
       required: true
   - type: dropdown
