@@ -1,0 +1,264 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root{--sw-night:#f5f0e8;--sw-night2:#e7e6d9;--sw-gold:#a8b89e;--sw-goldd:#71866f;--sw-ivory:#344238;--sw-paper:#fffdf8;--sw-ink:#344238;--sw-muted:#778276;--sw-line:rgba(133,158,130,.38)}
+#app{--oa-font-display:'Cormorant Garamond',Georgia,serif;--oa-font-body:'DM Sans',system-ui,sans-serif;--oa-theme-display:'Cormorant Garamond',Georgia,serif;--oa-theme-body:'DM Sans',system-ui,sans-serif;min-height:100vh;background:var(--sw-night);color:var(--sw-ivory);font-family:'DM Sans',system-ui,sans-serif;overflow-x:clip}
+#app *{box-sizing:border-box}
+#main-content{display:none;background:var(--sw-night);color:var(--sw-ivory)}
+.sw-batik{background-color:var(--sw-night);background-image:radial-gradient(circle at 50% 0,transparent 0 11px,rgba(133,158,130,.2) 11.5px 12.5px,transparent 13px),radial-gradient(circle at 0 50%,transparent 0 11px,rgba(133,158,130,.2) 11.5px 12.5px,transparent 13px),radial-gradient(circle at 100% 50%,transparent 0 11px,rgba(133,158,130,.2) 11.5px 12.5px,transparent 13px),radial-gradient(circle at 50% 100%,transparent 0 11px,rgba(133,158,130,.2) 11.5px 12.5px,transparent 13px);background-size:34px 34px}
+.sw-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border:1px solid var(--sw-gold);border-radius:999px;background:var(--sw-gold);color:#241d0c;font:600 15px 'DM Sans',sans-serif;cursor:pointer;text-decoration:none}
+.sw-btn:hover{background:#f0d08e}
+.sw-cover{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;text-align:center;color:var(--sw-ivory);padding:20px 20px calc(20px + env(safe-area-inset-bottom))}
+.sw-door{position:absolute;top:0;bottom:0;width:50.5%;z-index:0;transition:transform .5s cubic-bezier(.7,0,.3,1);box-shadow:inset 0 0 0 10px var(--sw-night),inset 0 0 0 11px var(--sw-gold)}
+.sw-door.l{left:0}.sw-door.r{right:0}
+.sw-door::after{content:"";position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--sw-gold);box-shadow:0 0 18px var(--sw-gold)}
+.sw-door.l::after{right:26px}.sw-door.r::after{left:26px}
+.sw-cover.is-opening{animation:none!important;opacity:1}
+.sw-cover.is-opening .sw-door.l{transform:translateX(-101%)}
+.sw-cover.is-opening .sw-door.r{transform:translateX(101%)}
+.sw-cover.is-opening .sw-seal-box{opacity:0;transform:scale(.92);transition:opacity .3s,transform .3s}
+.sw-seal-box{position:relative;z-index:2;max-width:380px;padding:40px 28px;background:radial-gradient(circle,rgba(18,17,43,.97) 62%,rgba(18,17,43,0) 100%)}
+.sw-seal{width:96px;height:96px;margin:0 auto 22px;border:1px solid var(--sw-gold);border-radius:50% 50% 8px 8px;display:grid;place-items:center;font:28px 'Cormorant Garamond',serif;color:var(--sw-gold);box-shadow:0 0 0 6px var(--sw-night),0 0 0 7px rgba(133,158,130,.5)}
+.sw-cover p{font-size:14px;color:#cfc8e6;margin:0}
+.sw-cover .sw-names{font:clamp(30px,9vw,40px)/1.1 'Cormorant Garamond',serif;color:var(--sw-ivory);margin:10px 0}
+.sw-guest{font:24px 'Cormorant Garamond',serif;color:var(--sw-gold);margin:4px 0 22px}
+.sw-hero{min-height:100svh;display:grid;place-items:center;text-align:center;position:relative;overflow:hidden;padding:80px 24px}
+.sw-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,rgba(18,17,43,0) 0,rgba(18,17,43,.88) 70%)}
+.sw-moon{position:absolute;left:50%;top:50%;width:min(78vw,420px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-62%);background:radial-gradient(circle at 35% 30%,#fff4d2,#a8b89e 55%,#a8782c);box-shadow:0 0 90px 30px rgba(133,158,130,.35),0 0 220px 90px rgba(133,158,130,.15)}
+.sw-in{position:relative;z-index:2}
+.oa-main-opening .sw-moon{animation:gcRise 2.6s cubic-bezier(.2,.8,.2,1) .2s both}
+.oa-main-opening .sw-in{animation:gcFade 1.4s ease 1.6s both}
+@keyframes gcRise{from{transform:translate(-50%,40%) scale(.7);opacity:0}to{transform:translate(-50%,-62%) scale(1);opacity:1}}
+@keyframes gcFade{from{opacity:0}to{opacity:1}}
+.sw-hero h1{font:400 clamp(54px,15vw,120px)/1.05 'Cormorant Garamond',serif;margin:0;text-shadow:0 2px 30px rgba(18,17,43,.9)}
+.sw-hero h1 em{display:block;font-style:normal;font-size:.38em;color:var(--sw-gold);margin:.15em 0}
+.sw-hero p{margin:20px 0 0;font-size:15px;color:#e5def4;text-shadow:0 1px 12px #f5f0e8}
+.sw-page{max-width:900px;margin:0 auto;padding:0 20px 130px}
+.sw-section{padding:72px 4px 8px;text-align:center}
+.sw-kicker{margin:0 0 10px;color:var(--sw-gold);font-size:13px;letter-spacing:.04em}
+.sw-h2{font:400 clamp(32px,7vw,48px)/1.1 'Cormorant Garamond',serif;margin:0 0 18px;color:var(--sw-ivory)}
+.sw-lead{max-width:34em;margin:0 auto 18px;color:var(--sw-muted);font-size:15px}
+.sw-quote{font:italic 19px/1.8 Georgia,serif;color:var(--sw-gold);margin:0 auto}
+.sw-couple{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:700px;margin:34px auto 0}
+.sw-arch{position:relative;width:min(176px,100%);aspect-ratio:176/224;margin:0 auto 16px;border:1px solid var(--sw-gold);border-radius:88px 88px 6px 6px;padding:7px}
+.sw-arch>span{display:grid;place-items:center;width:100%;height:100%;border-radius:82px 82px 2px 2px;background:var(--sw-night2);font:54px 'Cormorant Garamond',serif;color:var(--sw-gold)}
+.sw-arch img{position:absolute;inset:7px;width:calc(100% - 14px);height:calc(100% - 14px);object-fit:cover;border-radius:82px 82px 2px 2px}
+.sw-person h3{font:400 clamp(20px,5vw,28px)/1.15 'Cormorant Garamond',serif;margin:0 0 8px;color:var(--sw-gold);overflow-wrap:anywhere}
+.sw-person p{margin:0;font-size:13px;line-height:1.7;color:var(--sw-muted)}
+.countdown,.sw-cd{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;max-width:620px;margin:26px auto 0}
+.sw-cd>div{padding:14px 4px;border:1px solid var(--sw-line);border-radius:6px 6px 24px 24px;background:var(--sw-night2)}
+.sw-cd b{display:block;font:400 clamp(26px,8vw,40px)/1 'Cormorant Garamond',serif;color:var(--sw-gold)}
+.sw-cd span{font-size:12px;color:var(--sw-muted)}
+.sw-light{margin:56px -20px 0;padding:60px 20px 56px;background:var(--sw-paper);color:var(--sw-ink);border-radius:28px 28px 8px 8px}
+.sw-light .sw-h2{color:var(--sw-ink)}.sw-light .sw-kicker{color:var(--sw-goldd)}
+.sw-events{display:grid;gap:14px;max-width:560px;margin:24px auto 0}
+#event-list .event-card{padding:28px 20px;border:1px solid rgba(113,134,111,.4);border-radius:8px 8px 32px 32px;background:#fffaf0;color:#2e2a4a;text-align:center}
+#event-list .event-index{margin:0 0 6px;font-size:12px;color:var(--sw-goldd)}
+#event-list .event-card h3{font:400 28px/1.1 'Cormorant Garamond',serif;color:var(--sw-ink);margin:0 0 12px}
+#event-list .event-card p{margin:6px 0;font-size:14px;line-height:1.7;color:#4a4668}
+#event-list .oa-event-schedule-item{margin:10px 0;padding:10px 0;border-top:1px solid rgba(113,134,111,.25)}
+#event-list .oa-event-schedule-item h4{font:400 20px 'Cormorant Garamond',serif;color:var(--sw-ink);margin:0}
+#event-list .event-card a{display:inline-block;margin:8px 6px 0;color:var(--sw-goldd);font-size:13px;font-weight:600}
+.sw-story{max-width:620px;margin:28px auto 0;text-align:left;border-left:1px solid var(--sw-gold);padding-left:22px;display:grid;gap:22px}
+.story-card{position:relative}
+.story-card::before{content:"";position:absolute;left:-28px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--sw-gold);box-shadow:0 0 0 5px var(--sw-night)}
+.story-card .story-date{font-size:13px;color:var(--sw-gold);font-weight:600}
+.story-card h3{font:400 24px 'Cormorant Garamond',serif;color:var(--sw-gold2);margin:6px 0}
+.story-card p{margin:0;font-size:14px;line-height:1.8;color:var(--sw-muted)}
+.story-card .oa-story-photo{width:min(100%,340px);max-height:260px;object-fit:cover;margin:12px 0;border:1px solid var(--sw-line);border-radius:8px}
+.sw-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:760px;margin:24px auto 0}
+.sw-gallery .gallery-item{margin:0;overflow:hidden;border:1px solid rgba(113,134,111,.4);border-radius:6px 6px 28px 28px}
+.sw-gallery img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;cursor:pointer}
+@media(min-width:760px){.sw-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.sw-events{max-width:620px}}
+.gift-section .sw-h2{color:var(--sw-ivory)}
+.sw-gifts{display:grid;gap:14px;max-width:420px;margin:22px auto 0}
+.gift-card{padding:24px;border:1px solid var(--sw-gold);border-radius:14px;background:var(--sw-night2);color:var(--sw-ivory);text-align:center}
+.gift-card .gift-bank{margin:0;font-size:13px;color:var(--sw-muted)}
+.gift-card h3{font:400 22px 'Cormorant Garamond',serif;margin:6px 0;color:var(--sw-ivory)}
+.gift-card .gift-number{font:26px 'Cormorant Garamond',serif;letter-spacing:.06em;color:var(--sw-gold);margin:4px 0 12px}
+.gift-card button{min-height:44px;padding:0 20px;border:1px solid var(--sw-gold);border-radius:999px;background:var(--sw-gold);color:#241d0c;font:600 14px 'DM Sans',sans-serif;cursor:pointer}
+.gift-message{color:var(--sw-muted);font-size:14px}
+#rsvp-section,#guestbook-section{max-width:640px!important;margin:44px auto 0!important;padding:44px 18px!important;border:1px solid var(--sw-line);border-radius:8px 8px 28px 28px;background:var(--sw-night2);color:var(--sw-ivory)!important}
+#rsvp-section h2,#guestbook-section h2{font:400 clamp(30px,7vw,42px)/1.1 'Cormorant Garamond',serif!important;color:var(--sw-gold);text-align:center;margin:0 0 18px}
+#rsvp-form,#wishes-form{background:var(--sw-paper)!important;color:var(--sw-ink)!important;border-color:var(--sw-line)!important}
+#rsvp-form button,#wishes-form button{background:var(--sw-goldd)!important}
+#wishes-list .wish-card{padding:14px;border:1px solid var(--sw-line);border-radius:10px;background:var(--sw-night);color:var(--sw-ivory)}
+#wishes-list .wish-card h3{font:400 18px 'Cormorant Garamond',serif;margin:0 0 4px;color:var(--sw-gold)}
+.sw-footer{padding:60px 10px 30px;text-align:center;color:var(--sw-muted);font-size:13px;line-height:1.8}
+.sw-footer strong{display:block;font:400 clamp(30px,8vw,48px)/1.1 'Cormorant Garamond',serif;color:var(--sw-gold)}
+:focus-visible{outline:2px solid var(--sw-gold);outline-offset:3px}
+@media(max-width:520px){.sw-couple{gap:12px}.sw-light{margin-left:-17px;margin-right:-17px}.sw-page{padding-left:17px;padding-right:17px}}
+@media(prefers-reduced-motion:reduce){.oa-main-opening .sw-moon,.oa-main-opening .sw-in{animation:none!important}.sw-door,.sw-seal-box{transition:none!important}}
+
+/* Sunda Watercolor — original visual layer: paper, pigments, botanical linework and page-turn motion. */
+:root{--sw-paper:#f7f3e9;--sw-paper2:#fffdf8;--sw-sage:#a8b89e;--sw-sage-deep:#71866f;--sw-blue:#a9bbc0;--sw-rose:#d9b9b1;--sw-ink:#344238;--sw-muted:#778276;--sw-line:rgba(113,134,111,.28);--sw-gold:#c8b58d}
+#app{--oa-font-display:'Cormorant Garamond',Georgia,serif;--oa-font-body:'DM Sans',system-ui,sans-serif;--oa-theme-display:'Cormorant Garamond',Georgia,serif;--oa-theme-body:'DM Sans',system-ui,sans-serif;min-height:100vh;background:var(--sw-paper);color:var(--sw-ink);font-family:'DM Sans',sans-serif;overflow-x:clip}
+#main-content{background:var(--sw-paper);color:var(--sw-ink)}
+.sw-paper-texture,.sw-cover,.sw-hero,.sw-section{background-color:var(--sw-paper);background-image:radial-gradient(ellipse at 12% 18%,rgba(169,187,192,.22),transparent 34%),radial-gradient(ellipse at 88% 78%,rgba(168,184,158,.24),transparent 36%),radial-gradient(ellipse at 52% 48%,rgba(255,255,255,.76),transparent 68%),repeating-linear-gradient(0deg,rgba(108,91,67,.018) 0 1px,transparent 1px 4px)}
+.sw-cover{isolation:isolate;overflow:hidden;color:var(--sw-ink);padding:24px}
+.sw-cover:before,.sw-cover:after{content:"";position:absolute;inset:18px;border:1px solid rgba(113,134,111,.24);border-radius:48% 12% 46% 14%;pointer-events:none;z-index:1}
+.sw-cover:after{inset:28px;border-color:rgba(200,181,141,.42);border-radius:12% 48% 14% 46%}
+.sw-paper-panel{position:absolute;inset:0 50% 0 0;z-index:0;background:radial-gradient(ellipse at 20% 20%,rgba(217,185,177,.36),transparent 48%),linear-gradient(145deg,#f7f3e9,#eee9dc);transition:transform 1.15s cubic-bezier(.76,0,.24,1)}
+.sw-paper-panel--right{left:50%;right:0;background:radial-gradient(ellipse at 80% 75%,rgba(168,184,158,.36),transparent 48%),linear-gradient(145deg,#f1eee4,#fffdf8)}
+.sw-cover.is-opening .sw-paper-panel--left{transform:translateX(-102%) rotate(-1.5deg)}
+.sw-cover.is-opening .sw-paper-panel--right{transform:translateX(102%) rotate(1.5deg)}
+.sw-floral-frame{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.65;background:radial-gradient(ellipse at 0 0,rgba(168,184,158,.4),transparent 24%),radial-gradient(ellipse at 100% 100%,rgba(217,185,177,.34),transparent 25%);filter:blur(14px)}
+.sw-seal-box{z-index:3;max-width:430px;padding:34px 28px;background:rgba(255,253,248,.74);border:1px solid rgba(113,134,111,.22);border-radius:48% 48% 18px 18px;box-shadow:0 24px 80px rgba(76,87,69,.12),inset 0 0 0 7px rgba(255,255,255,.38);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.sw-seal{width:72px;height:72px;border:1px solid var(--sw-sage-deep);border-radius:50%;color:var(--sw-sage-deep);box-shadow:0 0 0 5px rgba(255,253,248,.8),0 0 0 6px rgba(113,134,111,.28);font-size:25px}
+.sw-cover p{color:#69766b}.sw-cover .sw-names{color:var(--sw-ink);font-size:clamp(34px,9vw,48px)}
+.sw-guest{color:var(--sw-sage-deep);font-size:25px}
+.sw-btn{background:var(--sw-sage-deep);border-color:var(--sw-sage-deep);color:#fffdf8;border-radius:999px;box-shadow:0 8px 22px rgba(113,134,111,.22)}
+.sw-btn:hover{background:#5f765f}
+.sw-hero{min-height:94svh;position:relative;isolation:isolate;color:var(--sw-ink);overflow:hidden}
+.sw-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(247,243,233,.42),rgba(247,243,233,.88));z-index:0}
+.sw-hero-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.24;filter:saturate(.72) contrast(.92);z-index:-1}
+.sw-watercolor-orb{position:absolute;width:min(90vw,520px);aspect-ratio:1;left:50%;top:48%;transform:translate(-50%,-50%);border-radius:44% 56% 62% 38%;background:radial-gradient(ellipse at 35% 35%,rgba(255,255,255,.8),rgba(168,184,158,.32) 38%,rgba(169,187,192,.2) 62%,transparent 72%);filter:blur(8px);animation:sw-pigment-float 14s ease-in-out infinite alternate;z-index:0}
+.sw-hero-wash{position:absolute;inset:8% 4%;border:1px solid rgba(113,134,111,.22);border-radius:48% 12% 46% 14%;z-index:1;pointer-events:none}
+.sw-in{z-index:2}.sw-hero h1{color:var(--sw-ink);text-shadow:none;font-size:clamp(52px,13vw,104px)}
+.sw-hero h1 em{color:var(--sw-sage-deep)}
+.sw-hero p{color:#58695c;text-shadow:none}
+.sw-page{max-width:920px;padding-bottom:140px;position:relative}
+.sw-atmosphere{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;background:radial-gradient(ellipse at 0 20%,rgba(169,187,192,.18),transparent 30%),radial-gradient(ellipse at 100% 48%,rgba(217,185,177,.16),transparent 28%);mask-image:linear-gradient(#000,transparent 90%);overflow:hidden}
+.sw-atmosphere:before,.sw-atmosphere:after{content:"";position:fixed;top:-24px;width:10px;height:15px;border-radius:90% 0 90% 0;background:rgba(217,185,177,.42);pointer-events:none;animation:sw-petal-drift 24s linear infinite}
+.sw-atmosphere:before{left:17%;box-shadow:34vw 28vh 0 -2px rgba(168,184,158,.38),-8vw 58vh 0 -1px rgba(217,185,177,.35);animation-delay:-8s}
+.sw-atmosphere:after{right:18%;width:7px;height:12px;background:rgba(168,184,158,.42);animation-duration:29s;animation-delay:-16s}
+.sw-section,.sw-page>section,.sw-footer{position:relative;z-index:1}
+.sw-section{padding:76px 18px 18px}
+.sw-kicker{color:var(--sw-sage-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px}
+.sw-h2{color:var(--sw-ink);font-weight:500;font-size:clamp(34px,8vw,54px);letter-spacing:-.025em}
+.sw-lead{color:#69766b;line-height:1.9}
+.sw-quote{color:#71866f;font:italic clamp(20px,5vw,25px)/1.8 'Cormorant Garamond',serif}
+.sw-couple{gap:28px}
+.sw-arch{border:1px solid rgba(113,134,111,.45);border-radius:46% 46% 12px 12px;padding:8px;background:rgba(255,253,248,.8);box-shadow:0 16px 38px rgba(76,87,69,.08)}
+.sw-arch>span{background:linear-gradient(145deg,#e5e8dc,#e7edef);color:var(--sw-sage-deep);border-radius:42% 42% 6px 6px}
+.sw-arch img{border-radius:42% 42% 6px 6px}
+.sw-person h3{color:var(--sw-sage-deep)}
+.sw-cd>div{background:rgba(255,253,248,.76);border:1px solid var(--sw-line);border-radius:16px 16px 5px 5px;box-shadow:0 10px 28px rgba(76,87,69,.06)}
+.sw-cd b{color:var(--sw-sage-deep)}.sw-cd span{color:#718076}
+.sw-light{background:linear-gradient(135deg,rgba(255,253,248,.94),rgba(237,239,229,.9));border:1px solid rgba(113,134,111,.14);border-radius:38px 8px 38px 8px;box-shadow:0 18px 55px rgba(76,87,69,.06)}
+.sw-light .sw-h2{color:var(--sw-ink)}.sw-light .sw-kicker{color:var(--sw-sage-deep)}
+#event-list .event-card{background:rgba(255,253,248,.92);border:1px solid var(--sw-line);border-radius:22px 6px 22px 6px;box-shadow:0 12px 34px rgba(76,87,69,.06);color:var(--sw-ink)}
+#event-list .event-card h3{color:var(--sw-ink)}#event-list .event-card p{color:#69766b}
+#event-list .event-card a{color:var(--sw-sage-deep)}
+.sw-story{border-left:1px solid rgba(113,134,111,.45)}
+.sw-story .story-card:before{background:var(--sw-sage);box-shadow:0 0 0 5px var(--sw-paper)}
+.sw-story .story-card .story-date{color:var(--sw-sage-deep)}
+.sw-story .story-card h3{color:var(--sw-ink)}.sw-story .story-card p{color:#69766b}
+.sw-gallery{gap:12px}.sw-gallery .gallery-item{border:1px solid rgba(113,134,111,.28);border-radius:48% 48% 8px 8px;padding:6px;background:rgba(255,253,248,.84);box-shadow:0 12px 32px rgba(76,87,69,.08)}
+.sw-gallery img{border-radius:46% 46% 5px 5px;transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .9s}
+.sw-gallery .gallery-item:hover img{transform:scale(1.045);filter:saturate(1.08)}
+.sw-gifts .gift-card{background:rgba(255,253,248,.92);border:1px solid var(--sw-line);border-radius:18px 4px 18px 4px;color:var(--sw-ink);box-shadow:0 12px 30px rgba(76,87,69,.06)}
+.sw-gifts .gift-card h3,.sw-gifts .gift-card .gift-number{color:var(--sw-sage-deep)}
+.sw-gifts .gift-card button{background:var(--sw-sage-deep);border-color:var(--sw-sage-deep);color:#fff}
+#rsvp-section,#guestbook-section{background:rgba(255,253,248,.88)!important;border:1px solid var(--sw-line)!important;border-radius:26px 8px 26px 8px!important;color:var(--sw-ink)!important;box-shadow:0 18px 48px rgba(76,87,69,.07)}
+#rsvp-section h2,#guestbook-section h2{color:var(--sw-sage-deep)!important}
+#rsvp-form,#wishes-form{background:#fffdf8!important;color:var(--sw-ink)!important;border:1px solid var(--sw-line)!important;border-radius:16px!important;box-shadow:0 8px 24px rgba(76,87,69,.05)}
+#rsvp-form input,#rsvp-form textarea,#rsvp-form select,#wishes-form input,#wishes-form textarea{border-color:rgba(113,134,111,.28)!important;border-radius:10px!important}
+#rsvp-form button,#wishes-form button{background:var(--sw-sage-deep)!important;border-radius:999px!important}
+#wishes-list .wish-card{background:#fffdf8;border:1px solid var(--sw-line);border-left:3px solid var(--sw-sage);border-radius:4px 16px 16px 16px;color:var(--sw-ink)}
+#wishes-list .wish-card h3{color:var(--sw-sage-deep)}
+.sw-footer{padding:68px 12px 34px;text-align:center;color:#718076;font-size:13px;line-height:1.9}
+.sw-footer strong{display:block;color:var(--sw-ink);font:500 clamp(32px,8vw,52px)/1.1 'Cormorant Garamond',serif}
+.sw-paper-panel,.sw-seal-box,.sw-watercolor-orb{will-change:transform,opacity}
+.sw-cover.is-opening .sw-seal-box{opacity:0;transform:translateY(-10px) scale(.98);transition:opacity .45s ease,transform .6s ease}
+.sw-reveal,.reveal{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease}
+.sw-reveal.is-visible,.reveal.active,.reveal.is-visible{filter:blur(0);transform:translateY(0);opacity:1}
+@keyframes sw-pigment-float{from{transform:translate(-52%,-48%) rotate(-5deg) scale(.94)}to{transform:translate(-47%,-52%) rotate(6deg) scale(1.06)}}
+@keyframes sw-petal-drift{0%{transform:translate3d(0,-8vh,0) rotate(0);opacity:0}12%{opacity:.5}85%{opacity:.32}100%{transform:translate3d(7vw,108vh,0) rotate(240deg);opacity:0}}
+.sw-petal{position:fixed;top:-12px;z-index:2;width:9px;height:13px;border-radius:90% 0 90% 0;background:rgba(217,185,177,.48);pointer-events:none;animation:sw-petal-drift 18s linear infinite}
+.sw-petal:nth-child(2n){background:rgba(168,184,158,.5);width:7px;height:11px;animation-duration:22s}
+@media(max-width:560px){.sw-section{padding:64px 14px 14px}.sw-cover:before{inset:12px}.sw-cover:after{inset:22px}.sw-seal-box{padding:28px 20px}.sw-couple{gap:16px}.sw-light{margin-left:-10px;margin-right:-10px;padding-inline:14px}.sw-gallery{gap:8px}.sw-page{padding-left:12px;padding-right:12px}}
+@media(prefers-reduced-motion:reduce){.sw-paper-panel,.sw-seal-box,.sw-watercolor-orb,.sw-hero-art,.sw-petal,.sw-atmosphere:before,.sw-atmosphere:after{animation:none!important;transition:none!important;display:none!important}.sw-reveal,.reveal{opacity:1!important;transform:none!important;filter:none!important}}
+
+</style>
+
+<div id="cover-section" class="sw-cover">
+  <div class="sw-door l sw-batik"></div><div class="sw-door r sw-batik"></div>
+  <div class="sw-seal-box">
+    <div class="sw-seal" data-bind="couple.initials">AR</div><p class="sw-cover-kicker">A watercolor love story</p>
+    <p data-bind="cover.eyebrow">The Wedding Of</p>
+    <h1 class="sw-names"><span data-bind="couple.groom.nickname">Mempelai Pria</span> &amp; <span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
+    <p data-bind="cover.dateLabel">Tanggal acara</p>
+    <p style="margin-top:18px">Kepada Yth.</p>
+    <h2 id="nama-tamu" class="sw-guest">Tamu Undangan</h2>
+    <button id="open-invitation-btn" class="sw-btn" type="button">Buka undangan</button>
+  </div>
+</div>
+
+<main id="main-content" style="display:none">
+  <header class="sw-hero sw-batik">
+    <img class="sw-hero-art" data-bind="cover.heroImage" alt="" aria-hidden="true" loading="eager" decoding="async"><div class="sw-watercolor-orb" aria-hidden="true"></div><div class="sw-hero-wash" aria-hidden="true"></div>
+    <div class="sw-in">
+      <p style="margin:0 0 14px">Pernikahan</p>
+      <h1><span data-bind="couple.groom.nickname">Mempelai Pria</span><em>dan</em><span data-bind="couple.bride.nickname">Mempelai Wanita</span></h1>
+      <p data-bind="cover.dateLabel"></p>
+    </div>
+  </header>
+
+  <div class="sw-atmosphere" aria-hidden="true"></div><div class="sw-page">
+    <section class="sw-section quote-section">
+      <p class="sw-kicker">Dengan penuh syukur</p>
+      <h2 class="sw-h2">Dua keluarga, satu rumah baru</h2>
+      <p class="sw-lead" data-bind="opening.text"></p>
+      <p class="sw-quote" data-bind="quote.text"></p>
+      <p class="sw-lead" data-bind="quote.source"></p>
+    </section>
+
+    <section id="couple-section" class="sw-section">
+      <p class="sw-kicker">Mempelai</p>
+      <h2 class="sw-h2">Dua hati, satu tujuan</h2>
+      <div class="sw-couple">
+        <article class="sw-person reveal">
+          <div class="sw-arch"><span data-bind="couple.groom.initial">A</span><img data-bind="couple.groom.photo" alt="Foto mempelai pria" loading="lazy" decoding="async" onerror="this.remove()"></div>
+          <h3 data-bind="couple.groom.fullName">Nama Mempelai Pria</h3>
+          <p>Putra dari <span data-bind="couple.groom.parents"></span></p>
+        </article>
+        <article class="sw-person reveal">
+          <div class="sw-arch"><span data-bind="couple.bride.initial">S</span><img data-bind="couple.bride.photo" alt="Foto mempelai wanita" loading="lazy" decoding="async" onerror="this.remove()"></div>
+          <h3 data-bind="couple.bride.fullName">Nama Mempelai Wanita</h3>
+          <p>Putri dari <span data-bind="couple.bride.parents"></span></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="countdown-section" class="sw-section">
+      <p class="sw-kicker">Menuju hari bahagia</p>
+      <h2 class="sw-h2">Hitung mundur</h2>
+      <div id="countdown" class="sw-cd countdown">
+        <div><b id="cd-days">00</b><span>Hari</span></div><div><b id="cd-hours">00</b><span>Jam</span></div><div><b id="cd-minutes">00</b><span>Menit</span></div><div><b id="cd-seconds">00</b><span>Detik</span></div>
+      </div>
+    </section>
+
+    <section class="sw-section sw-light event-section">
+      <p class="sw-kicker">Rangkaian acara</p>
+      <h2 class="sw-h2">Hari istimewa kami</h2>
+      <div id="event-list" class="sw-events"></div>
+    </section>
+
+    <section class="sw-section story-section">
+      <p class="sw-kicker">Jejak perjalanan</p>
+      <h2 class="sw-h2">Kisah kami</h2>
+      <div id="story-list" class="sw-story story-list"></div>
+    </section>
+
+    <section class="sw-section sw-light gallery-section">
+      <p class="sw-kicker">Potret kenangan</p>
+      <h2 class="sw-h2">Momen yang kami jaga</h2>
+      <div id="gallery-grid" class="sw-gallery gallery-grid"></div>
+    </section>
+
+    <section id="gift-section" class="sw-section gift-section">
+      <p class="sw-kicker">Tanda kasih</p>
+      <h2 class="sw-h2">Hadiah digital</h2>
+      <div id="gift-list" class="sw-gifts gift-grid"></div>
+    </section>
+
+    <footer class="sw-footer">
+      <p class="sw-kicker">Terima kasih</p>
+      <strong><span data-bind="couple.groom.nickname">Mempelai Pria</span> &amp; <span data-bind="couple.bride.nickname">Mempelai Wanita</span></strong>
+      <p>Atas doa dan kehadiran Anda, kami ucapkan terima kasih.</p>
+      <span>Omah Aksara · Undangan Digital</span>
+    </footer>
+  </div>
+</main>
+<button id="music-toggle" class="oa-legacy-music-control" type="button" hidden aria-label="Kontrol musik bersama">Musik</button>
+<audio id="bg-music" loop></audio>
