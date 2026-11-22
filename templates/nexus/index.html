@@ -340,7 +340,7 @@
 
 /* NEXUS atmosphere: cinematic overlays, soft bokeh, light leaks and scene fades */
 .nexus-cover,.nexus-page{isolation:isolate}
-.nexus-cover .nx-atmosphere,.nexus-page .nx-atmosphere{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.nexus-cover .nx-atmosphere,.nexus-page .nx-atmosphere{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .nexus-cover .nx-atmosphere:before,.nexus-page .nx-atmosphere:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 34%,rgba(0,0,0,.2) 72%,rgba(0,0,0,.62) 100%),linear-gradient(115deg,rgba(255,255,255,.025),transparent 30%,rgba(214,166,91,.045) 72%,transparent);mix-blend-mode:screen}
 .nexus-cover .nx-atmosphere:after,.nexus-page .nx-atmosphere:after{content:"";position:absolute;inset:-20%;background:linear-gradient(115deg,transparent 35%,rgba(238,191,120,.08) 48%,rgba(255,255,255,.04) 51%,transparent 63%);filter:blur(22px);transform:translateX(-65%);animation:nx-light-leak 18s ease-in-out infinite}
 .nx-bokeh{position:absolute;left:var(--nx-x);top:var(--nx-y);width:var(--nx-size);height:var(--nx-size);border-radius:50%;background:radial-gradient(circle,rgba(255,230,187,.7) 0%,rgba(222,171,100,.22) 28%,transparent 72%);opacity:var(--nx-opacity);filter:blur(var(--nx-blur));animation:nx-bokeh-drift var(--nx-duration) ease-in-out var(--nx-delay) infinite alternate}
@@ -361,9 +361,9 @@
 
 
 /* NEXUS scene choreography: gentle focus, cross-scene atmosphere and image reveal */
-.nexus-page .nexus-section{opacity:.56;transform:translateY(14px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.7,.2,1),filter .85s ease}
-.nexus-page .nexus-section.nx-scene-active{opacity:1;transform:translateY(0);filter:none}
-.nexus-page .nexus-section.nx-scene-dim{opacity:.56;transform:translateY(10px);filter:blur(.35px)}
+.nexus-page .nexus-section{opacity:1;transform:none;filter:none;transition:transform .65s cubic-bezier(.2,.7,.2,1),filter .65s ease}
+.nexus-page .nexus-section.nx-scene-active{opacity:1;transform:none;filter:none}
+.nexus-page .nexus-section.nx-scene-dim{opacity:1;transform:none;filter:none}
 .nexus-page .nx-atmosphere{transition:opacity 1s ease}
 .nexus-page .nexus-section.nx-scene-active .nexus-section__head h2{animation:nx-title-focus .85s both}
 .nexus-page .gallery-grid img{clip-path:inset(0 0 0 0 round 18px);transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .8s ease,clip-path .8s ease}
@@ -456,7 +456,7 @@
     const sceneObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         entry.target.classList.toggle('nx-scene-active',entry.isIntersecting);
-        entry.target.classList.toggle('nx-scene-dim',!entry.isIntersecting);
+        
       });
     },{threshold:0.16});
     scenes.forEach(section => sceneObserver.observe(section));
