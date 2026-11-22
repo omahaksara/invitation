@@ -1314,16 +1314,41 @@
 
     if (open) {
       open.addEventListener("click", async () => {
-        if (cover) cover.classList.add("is-opening");
+        // Guard against rapid taps while the cover is transitioning.
+        if (open.dataset.oaOpening === "true") return;
+        open.dataset.oaOpening = "true";
+        open.setAttribute("aria-busy", "true");
+        const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let coverFallback = null;
+        const finishCover = () => {
+          if (coverFallback !== null) window.clearTimeout(coverFallback);
+          if (cover) {
+            cover.removeEventListener("animationend", onCoverAnimationEnd);
+            cover.hidden = true;
+            cover.style.display = "none";
+            cover.classList.remove("is-opening");
+          }
+          open.removeAttribute("aria-busy");
+        };
+        const onCoverAnimationEnd = event => {
+          if (event.target === cover && event.animationName === "oa-cover-exit") finishCover();
+        };
+        if (cover) {
+          if (reducedMotionPreference) {
+            finishCover();
+          } else {
+            cover.addEventListener("animationend", onCoverAnimationEnd);
+            coverFallback = window.setTimeout(finishCover, 1900);
+            cover.classList.add("is-opening");
+          }
+        } else {
+          open.removeAttribute("aria-busy");
+        }
         if (main) { main.hidden = false; main.style.display = "block"; main.classList.add("oa-main-opening"); }
         document.body.classList.add("oa-invitation-opened");
         document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
-        const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        window.setTimeout(() => {
-          if (cover) { cover.hidden = true; cover.style.display = "none"; }
-        }, reducedMotionPreference ? 0 : 680);
         if (audio && hasMusic) {
           try {
             await audio.play();
@@ -2213,16 +2238,25 @@
         .story-content { min-width:0; }
         .story-date { display:block; margin-bottom:6px; }
         #cover.is-opening, #cover-section.is-opening, .sirein-cover.is-opening {
-          animation: oa-cover-exit .64s cubic-bezier(.22,.7,.2,1) forwards;
-          transform-origin: center top;
+          animation: oa-cover-exit var(--oa-cover-exit-duration, 1.18s) var(--oa-cover-exit-ease, cubic-bezier(.2,.72,.18,1)) both;
+          transform-origin: center center;
+          pointer-events: none;
+          will-change: opacity, transform;
         }
         @keyframes oa-cover-exit {
-          0% { opacity:1; transform:scale(1); filter:blur(0); }
-          45% { opacity:.72; transform:scale(1.012); filter:blur(1px); }
-          100% { opacity:0; transform:scale(1.025); filter:blur(3px); }
+          0% { opacity:1; transform:translate3d(0,0,0) scale(1); filter:blur(0); }
+          62% { opacity:.92; transform:translate3d(0,-.35%,0) scale(1.008); filter:blur(.35px); }
+          100% { opacity:0; transform:translate3d(0,-1.2%,0) scale(1.018); filter:blur(1.2px); }
         }
-        #main-content.oa-main-opening, #app-inner.oa-main-opening { animation: oa-main-enter .9s cubic-bezier(.2,.72,.18,1) both; }
-        @keyframes oa-main-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        #main-content.oa-main-opening, #app-inner.oa-main-opening {
+          animation: oa-main-enter var(--oa-main-enter-duration, 1.28s) var(--oa-main-enter-ease, cubic-bezier(.2,.72,.18,1)) both;
+          will-change: opacity, transform;
+        }
+        @keyframes oa-main-enter {
+          0% { opacity:0; transform:translate3d(0,18px,0); }
+          68% { opacity:1; transform:translate3d(0,-2px,0); }
+          100% { opacity:1; transform:translate3d(0,0,0); }
+        }
         .oa-floating-controls { scrollbar-width:none; }
         .oa-floating-controls::-webkit-scrollbar { display:none; }
         .oa-floating-controls button { flex:0 0 auto; }
