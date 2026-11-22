@@ -1331,7 +1331,7 @@
           open.removeAttribute("aria-busy");
         };
         const onCoverAnimationEnd = event => {
-          if (event.target === cover && event.animationName === "oa-cover-exit") finishCover();
+          if (event.target === cover && event.animationName.startsWith("oa-cover-")) finishCover();
         };
         if (cover) {
           if (reducedMotionPreference) {
