@@ -703,9 +703,11 @@
     });
   },{threshold:.12,rootMargin:'0px 0px -5% 0px'}) : null;
   const revealTargets = root => {
-    if (!revealObserver || !root) return;
+    if (!root) return;
     root.querySelectorAll('.gallery-grid img,.nexus-person img,.oa-story-photo,.story-card,.event-card,.gift-card').forEach(el => {
-      if (!el.classList.contains('nx-photo-enter') && !el.classList.contains('nx-card-enter')) revealObserver.observe(el);
+      if (el.classList.contains('nx-photo-enter') || el.classList.contains('nx-card-enter')) return;
+      if (revealObserver) revealObserver.observe(el);
+      else el.classList.add(el.matches('.story-card,.event-card,.gift-card') ? 'nx-card-enter' : 'nx-photo-enter');
     });
   };
   revealTargets(page);
@@ -737,7 +739,7 @@
     lightbox.setAttribute('aria-modal','true');
     lightbox.setAttribute('aria-label','Album foto');
     lightbox.innerHTML = '<button class="nx-gallery-lightbox__close" type="button" aria-label="Tutup galeri">×</button><div class="nx-gallery-lightbox__frame"><button class="nx-gallery-lightbox__nav nx-gallery-lightbox__prev" type="button" aria-label="Foto sebelumnya">‹</button><img class="nx-gallery-lightbox__image" alt=""><button class="nx-gallery-lightbox__nav nx-gallery-lightbox__next" type="button" aria-label="Foto berikutnya">›</button><div class="nx-gallery-lightbox__meta" aria-live="polite"></div></div>';
-    page.appendChild(lightbox);
+    document.body.appendChild(lightbox);
     const viewerImage = lightbox.querySelector('.nx-gallery-lightbox__image');
     const meta = lightbox.querySelector('.nx-gallery-lightbox__meta');
     const closeButton = lightbox.querySelector('.nx-gallery-lightbox__close');
