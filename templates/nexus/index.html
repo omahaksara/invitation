@@ -337,6 +337,28 @@
   .nexus-page__top .nexus-orbit:after {animation:none!important}
   .nexus-page .gallery-grid img,.nexus-person {transform:none!important}
 }
+
+/* NEXUS atmosphere: cinematic overlays, soft bokeh, light leaks and scene fades */
+.nexus-cover,.nexus-page{isolation:isolate}
+.nexus-cover .nx-atmosphere,.nexus-page .nx-atmosphere{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.nexus-cover .nx-atmosphere:before,.nexus-page .nx-atmosphere:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 34%,rgba(0,0,0,.2) 72%,rgba(0,0,0,.62) 100%),linear-gradient(115deg,rgba(255,255,255,.025),transparent 30%,rgba(214,166,91,.045) 72%,transparent);mix-blend-mode:screen}
+.nexus-cover .nx-atmosphere:after,.nexus-page .nx-atmosphere:after{content:"";position:absolute;inset:-20%;background:linear-gradient(115deg,transparent 35%,rgba(238,191,120,.08) 48%,rgba(255,255,255,.04) 51%,transparent 63%);filter:blur(22px);transform:translateX(-65%);animation:nx-light-leak 18s ease-in-out infinite}
+.nx-bokeh{position:absolute;left:var(--nx-x);top:var(--nx-y);width:var(--nx-size);height:var(--nx-size);border-radius:50%;background:radial-gradient(circle,rgba(255,230,187,.7) 0%,rgba(222,171,100,.22) 28%,transparent 72%);opacity:var(--nx-opacity);filter:blur(var(--nx-blur));animation:nx-bokeh-drift var(--nx-duration) ease-in-out var(--nx-delay) infinite alternate}
+.nexus-page .nx-atmosphere{position:absolute;inset:0;z-index:0}
+.nexus-page .nx-atmosphere:before{position:fixed;inset:0;opacity:.65}
+.nexus-page .nx-atmosphere:after{position:fixed;opacity:.28}
+.nexus-page .nexus-section,.nexus-page__top,.nexus-wrap{position:relative;z-index:1}
+.nexus-page .nexus-section{transition:opacity .7s ease,filter .7s ease}
+.nexus-page .nexus-section.nx-scene-dim{opacity:.72;filter:blur(1.2px)}
+.nexus-page .nexus-section.nx-scene-active{opacity:1;filter:none}
+.nexus-page .reveal{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease;filter:blur(5px)}
+.nexus-page .reveal.active,.nexus-page .reveal.is-visible{filter:blur(0)}
+.nexus-page .story-card,.nexus-page .event-card,.nexus-page .gift-card,.nexus-page .nexus-glass{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+@keyframes nx-light-leak{0%,100%{transform:translateX(-65%) rotate(-8deg);opacity:.3}50%{transform:translateX(55%) rotate(8deg);opacity:.8}}
+@keyframes nx-bokeh-drift{from{transform:translate3d(-4px,8px,0) scale(.85);opacity:calc(var(--nx-opacity)*.65)}to{transform:translate3d(14px,-18px,0) scale(1.18);opacity:var(--nx-opacity)}}
+@media(max-width:700px){.nexus-cover .nx-atmosphere:after,.nexus-page .nx-atmosphere:after{filter:blur(30px);animation-duration:24s}.nx-bokeh{filter:blur(calc(var(--nx-blur) + 1px))}.nexus-page .nexus-section.nx-scene-dim{opacity:.88;filter:none}}
+@media(prefers-reduced-motion:reduce){.nexus-cover .nx-atmosphere:after,.nexus-page .nx-atmosphere:after,.nx-bokeh{animation:none!important}.nexus-page .reveal{filter:none!important}}
+
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
@@ -388,5 +410,40 @@
     const syncHero = () => { if (coverImage.currentSrc || coverImage.src) hero.style.setProperty('--nx-hero', 'url("' + (coverImage.currentSrc || coverImage.src).replace(/["\\]/g, '') + '")'); };
     if (coverImage.complete) syncHero(); else coverImage.addEventListener('load', syncHero, {once:true});
   }
+
+// Atmospheric layers are decorative and do not alter invitation data or controls.
+  const makeAtmosphere = root => {
+    if (!root || root.querySelector('.nx-atmosphere')) return;
+    const layer = document.createElement('div');
+    layer.className = 'nx-atmosphere';
+    layer.setAttribute('aria-hidden','true');
+    const count = window.matchMedia('(max-width:700px)').matches ? 8 : 14;
+    for (let i=0;i<count;i++){
+      const orb=document.createElement('i');
+      orb.className='nx-bokeh';
+      orb.style.setProperty('--nx-x',((i*37)%97)+'%');
+      orb.style.setProperty('--nx-y',((i*53)%91)+'%');
+      orb.style.setProperty('--nx-size',(8+(i*17)%34)+'px');
+      orb.style.setProperty('--nx-opacity',(0.18+(i%5)*0.08).toFixed(2));
+      orb.style.setProperty('--nx-blur',(2+(i%4)*2)+'px');
+      orb.style.setProperty('--nx-duration',(9+(i%8)*2)+'s');
+      orb.style.setProperty('--nx-delay',(-i*1.1)+'s');
+      layer.appendChild(orb);
+    }
+    root.appendChild(layer);
+  };
+  makeAtmosphere(cover);
+  makeAtmosphere(page);
+  const scenes = page.querySelectorAll('.nexus-section');
+  if ('IntersectionObserver' in window) {
+    const sceneObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle('nx-scene-active',entry.isIntersecting);
+        entry.target.classList.toggle('nx-scene-dim',!entry.isIntersecting);
+      });
+    },{threshold:0.16});
+    scenes.forEach(section => sceneObserver.observe(section));
+  }
+
 })();
 </script>
