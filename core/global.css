@@ -1060,3 +1060,8 @@ html[data-oa-theme="luma"] #app .luma-open {
   box-shadow: 0 12px 34px rgba(0,0,0,.34), inset 0 0 0 1px rgba(245,239,228,.08);
 }
 .oa-floating-controls[data-theme="luma"] button { border-radius: 999px; }
+
+html[data-oa-theme="gebyok-candra"] {
+  --oa-motion-duration: 820ms;
+  --oa-motion-ease: cubic-bezier(.16,.8,.22,1);
+}
