@@ -529,6 +529,88 @@
  .nexus-page .nexus-section,.nexus-page .nexus-section:not(.nx-scene-active),.nexus-page .gallery-grid img,.nexus-page .story-card,.nexus-page .event-card,.nexus-page .gift-card{opacity:1!important;filter:none!important;transform:none!important;transition:none!important}
 }
 
+
+/* Cinematic editorial album — staggered grid + immersive lightbox */
+.nexus-page .gallery-section{isolation:isolate}
+.nexus-page .gallery-section .nexus-section__head{margin-bottom:30px}
+.nexus-page .gallery-grid{align-items:stretch;grid-auto-flow:dense}
+.nexus-page .gallery-grid img{
+  cursor:zoom-in;object-fit:cover;min-width:0;
+  border:1px solid rgba(231,207,167,.16);
+  outline:1px solid rgba(255,255,255,.025);outline-offset:-5px;
+  transform:translateY(18px) scale(.985);opacity:0;
+  filter:blur(8px) saturate(.82) brightness(.88);
+  transition:opacity .85s ease,transform .95s cubic-bezier(.2,.72,.2,1),filter .9s ease,box-shadow .9s ease,border-color .6s ease;
+}
+.nexus-page .gallery-grid img.nx-photo-enter{opacity:1;transform:none;filter:none}
+.nexus-page .gallery-grid img:hover{cursor:zoom-in;transform:translateY(-5px) scale(1.018);border-color:rgba(231,207,167,.48)}
+.nx-gallery-lightbox{
+  position:fixed;inset:0;z-index:10020;display:grid;place-items:center;
+  padding:clamp(16px,4vw,48px);padding-bottom:calc(clamp(16px,4vw,48px) + env(safe-area-inset-bottom));
+  background:rgba(8,7,10,.0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .42s ease,background .5s ease,backdrop-filter .5s ease,visibility .42s;
+}
+.nx-gallery-lightbox.is-open{
+  opacity:1;visibility:visible;pointer-events:auto;background:rgba(8,7,10,.91);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+}
+.nx-gallery-lightbox:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,rgba(216,184,121,.10),transparent 58%);
+}
+.nx-gallery-lightbox__frame{
+  position:relative;z-index:1;width:min(100%,1100px);height:min(82svh,850px);
+  display:grid;place-items:center;transform:translateY(22px) scale(.965);
+  opacity:0;filter:blur(10px);
+  transition:transform .62s cubic-bezier(.2,.75,.2,1),opacity .5s ease,filter .62s ease;
+}
+.nx-gallery-lightbox.is-open .nx-gallery-lightbox__frame{transform:none;opacity:1;filter:none}
+.nx-gallery-lightbox__image{
+  display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  border:1px solid rgba(231,207,167,.28);border-radius:5px;
+  box-shadow:0 35px 100px rgba(0,0,0,.62),0 0 50px rgba(216,184,121,.08);
+  transition:opacity .22s ease,transform .42s ease,filter .32s ease;
+}
+.nx-gallery-lightbox__image.is-changing{opacity:.2;transform:scale(.985);filter:blur(8px)}
+.nx-gallery-lightbox__close,.nx-gallery-lightbox__nav{
+  position:absolute;z-index:3;display:grid;place-items:center;
+  width:44px;height:44px;border:1px solid rgba(231,207,167,.32);border-radius:50%;
+  color:#f7f0e6;background:rgba(24,20,24,.62);font:300 25px/1 'Manrope',sans-serif;
+  cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:background .25s ease,border-color .25s ease,transform .25s ease;
+}
+.nx-gallery-lightbox__close{top:clamp(14px,3vw,30px);right:clamp(14px,3vw,30px)}
+.nx-gallery-lightbox__nav{top:50%;transform:translateY(-50%);font-size:30px}
+.nx-gallery-lightbox__prev{left:clamp(12px,3vw,30px)}
+.nx-gallery-lightbox__next{right:clamp(12px,3vw,30px)}
+.nx-gallery-lightbox__close:hover,.nx-gallery-lightbox__nav:hover{
+  background:rgba(216,184,121,.2);border-color:#d8b879
+}
+.nx-gallery-lightbox__prev:hover{transform:translate(-2px,-50%)}
+.nx-gallery-lightbox__next:hover{transform:translate(2px,-50%)}
+.nx-gallery-lightbox__meta{
+  position:absolute;left:50%;bottom:clamp(8px,2vh,22px);transform:translateX(-50%);
+  color:#d7c7ad;font:500 .68rem 'Manrope',sans-serif;letter-spacing:.18em;
+  text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 14px #000
+}
+.nx-gallery-lightbox__close:focus-visible,.nx-gallery-lightbox__nav:focus-visible{outline:2px solid #e8d2a5;outline-offset:4px}
+@media(max-width:700px){
+ .nx-gallery-lightbox{padding:12px;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+ .nx-gallery-lightbox__frame{height:78svh;width:100%}
+ .nx-gallery-lightbox__image{max-width:100%;max-height:100%;border-radius:3px}
+ .nx-gallery-lightbox__nav{top:auto;bottom:calc(12px + env(safe-area-inset-bottom));width:42px;height:42px}
+ .nx-gallery-lightbox__prev{left:calc(50% - 54px)}
+ .nx-gallery-lightbox__next{right:calc(50% - 54px)}
+ .nx-gallery-lightbox__meta{bottom:calc(24px + env(safe-area-inset-bottom));font-size:.58rem}
+ .nx-gallery-lightbox__close{top:12px;right:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .nexus-page .gallery-grid img,.nx-gallery-lightbox,.nx-gallery-lightbox__frame,.nx-gallery-lightbox__image,
+ .nx-gallery-lightbox__close,.nx-gallery-lightbox__nav{transition:none!important;animation:none!important;filter:none!important}
+ .nexus-page .gallery-grid img{opacity:1;transform:none}
+}
+
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
@@ -643,6 +725,80 @@
       });
     },{threshold:0.16});
     scenes.forEach(section => sceneObserver.observe(section));
+  }
+
+
+  // Immersive gallery viewer: delegated so it also supports images rendered later by the shared engine.
+  const gallery = page.querySelector('#gallery-grid');
+  if (gallery) {
+    const lightbox = document.createElement('div');
+    lightbox.className = 'nx-gallery-lightbox';
+    lightbox.setAttribute('role','dialog');
+    lightbox.setAttribute('aria-modal','true');
+    lightbox.setAttribute('aria-label','Album foto');
+    lightbox.innerHTML = '<button class="nx-gallery-lightbox__close" type="button" aria-label="Tutup galeri">×</button><div class="nx-gallery-lightbox__frame"><button class="nx-gallery-lightbox__nav nx-gallery-lightbox__prev" type="button" aria-label="Foto sebelumnya">‹</button><img class="nx-gallery-lightbox__image" alt=""><button class="nx-gallery-lightbox__nav nx-gallery-lightbox__next" type="button" aria-label="Foto berikutnya">›</button><div class="nx-gallery-lightbox__meta" aria-live="polite"></div></div>';
+    page.appendChild(lightbox);
+    const viewerImage = lightbox.querySelector('.nx-gallery-lightbox__image');
+    const meta = lightbox.querySelector('.nx-gallery-lightbox__meta');
+    const closeButton = lightbox.querySelector('.nx-gallery-lightbox__close');
+    const previousButton = lightbox.querySelector('.nx-gallery-lightbox__prev');
+    const nextButton = lightbox.querySelector('.nx-gallery-lightbox__next');
+    let photos = [], activeIndex = 0, returnFocus = null, touchStartX = 0;
+    const refreshPhotos = () => photos = Array.from(gallery.querySelectorAll('img')).filter(img => img.currentSrc || img.src);
+    const showPhoto = index => {
+      refreshPhotos();
+      if (!photos.length) return;
+      activeIndex = (index + photos.length) % photos.length;
+      const photo = photos[activeIndex];
+      viewerImage.classList.add('is-changing');
+      const source = photo.currentSrc || photo.src;
+      const preload = new Image();
+      preload.onload = () => {
+        viewerImage.src = source;
+        viewerImage.alt = photo.alt || 'Foto kenangan';
+        meta.textContent = String(activeIndex + 1).padStart(2,'0') + ' / ' + String(photos.length).padStart(2,'0');
+        requestAnimationFrame(() => viewerImage.classList.remove('is-changing'));
+      };
+      preload.onerror = () => { viewerImage.src = source; viewerImage.alt = photo.alt || 'Foto kenangan'; viewerImage.classList.remove('is-changing'); };
+      preload.src = source;
+      [photos[(activeIndex + 1) % photos.length],photos[(activeIndex - 1 + photos.length) % photos.length]].forEach(item => {
+        if (item) { const warm = new Image(); warm.src = item.currentSrc || item.src; }
+      });
+    };
+    const openViewer = photo => {
+      refreshPhotos();
+      const index = photos.indexOf(photo);
+      if (index < 0) return;
+      returnFocus = photo;
+      document.documentElement.style.overflow = 'hidden';
+      showPhoto(index);
+      lightbox.classList.add('is-open');
+      closeButton.focus({preventScroll:true});
+    };
+    const closeViewer = () => {
+      lightbox.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+      if (returnFocus && returnFocus.isConnected) returnFocus.focus({preventScroll:true});
+    };
+    gallery.addEventListener('click', event => {
+      const photo = event.target.closest('img');
+      if (photo && gallery.contains(photo)) openViewer(photo);
+    });
+    closeButton.addEventListener('click',closeViewer);
+    previousButton.addEventListener('click',() => showPhoto(activeIndex - 1));
+    nextButton.addEventListener('click',() => showPhoto(activeIndex + 1));
+    lightbox.addEventListener('click',event => { if (event.target === lightbox) closeViewer(); });
+    document.addEventListener('keydown',event => {
+      if (!lightbox.classList.contains('is-open')) return;
+      if (event.key === 'Escape') closeViewer();
+      if (event.key === 'ArrowLeft') showPhoto(activeIndex - 1);
+      if (event.key === 'ArrowRight') showPhoto(activeIndex + 1);
+    });
+    lightbox.addEventListener('touchstart',event => { touchStartX = event.changedTouches[0].clientX; },{passive:true});
+    lightbox.addEventListener('touchend',event => {
+      const delta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) > 48) showPhoto(activeIndex + (delta < 0 ? 1 : -1));
+    },{passive:true});
   }
 
 })();
