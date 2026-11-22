@@ -396,6 +396,11 @@
       } else el.textContent = String(value);
     });
 
+    // Keep the NEXUS cover portrait visible even when the theme's decorative
+    // 3D stacking contexts are unsupported or reordered by mobile browsers.
+    // This is presentation-only and does not change the shared invitation data.
+    stabilizeCoverImage();
+
     const safeGuest = guestName || valueAt(data, "guest.defaultName") || "Tamu Undangan";
     const guestEl = document.getElementById("nama-tamu");
     if (guestEl) guestEl.textContent = safeGuest;
@@ -423,6 +428,49 @@
     setupReveal();
   }
 
+
+
+  function stabilizeCoverImage() {
+    const cover = document.getElementById("cover-section");
+    const visual = cover && cover.querySelector(".nexus-cover__visual");
+    const image = visual && visual.querySelector('img[data-bind="cover.image"]');
+    if (!cover || !visual || !image || !image.getAttribute("src")) return;
+
+    const mobile = window.matchMedia && window.matchMedia("(max-width: 700px)").matches;
+    cover.style.setProperty("isolation", "isolate", "important");
+    cover.style.setProperty("position", "fixed", "important");
+    cover.style.setProperty("inset", "0", "important");
+    cover.style.setProperty("overflow", "hidden", "important");
+
+    visual.style.setProperty("overflow", "hidden", "important");
+    visual.style.setProperty("z-index", "0", "important");
+    visual.style.setProperty("transform", "none", "important");
+    visual.style.setProperty("backface-visibility", "visible", "important");
+    if (mobile) {
+      visual.style.setProperty("position", "absolute", "important");
+      visual.style.setProperty("inset", "0", "important");
+      visual.style.setProperty("width", "100%", "important");
+      visual.style.setProperty("height", "100%", "important");
+      visual.style.setProperty("min-height", "100svh", "important");
+    } else {
+      visual.style.setProperty("position", "relative", "important");
+      visual.style.setProperty("min-height", "100svh", "important");
+    }
+
+    image.style.setProperty("display", "block", "important");
+    image.style.setProperty("position", "absolute", "important");
+    image.style.setProperty("inset", "0", "important");
+    image.style.setProperty("width", "100%", "important");
+    image.style.setProperty("height", "100%", "important");
+    image.style.setProperty("max-width", "none", "important");
+    image.style.setProperty("object-fit", "cover", "important");
+    image.style.setProperty("opacity", "1", "important");
+    image.style.setProperty("visibility", "visible", "important");
+    image.style.setProperty("backface-visibility", "visible", "important");
+
+    const panel = cover.querySelector(".nexus-cover__panel");
+    if (panel) panel.style.setProperty("z-index", "4", "important");
+  }
 
   function applyFeatureFlags(data) {
     const flags = data && data.features && typeof data.features === "object" ? data.features : {};
