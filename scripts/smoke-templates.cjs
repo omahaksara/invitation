@@ -78,6 +78,7 @@ const themes = [
   { slug: "earty", marker: "#cover", open: "#open-btn", cover: "#cover" },
   { slug: "jendela-senja", marker: ".js-theme", open: "#open-btn", cover: "#cover" },
   { slug: "nexus", marker: ".nexus-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "luma", marker: ".luma-cover", open: "#open-invitation-btn", cover: "#cover-section" },
 ];
 
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
