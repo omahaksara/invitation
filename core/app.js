@@ -130,7 +130,10 @@
   // preserves English copy; only shared interface phrases are normalized here.
   function localizeTemplateCopy(root, data) {
     const configuredLanguage = String(data?.language || data?.site?.language || "id").toLowerCase();
-    if (configuredLanguage.startsWith("en")) return;
+    const language = configuredLanguage.startsWith("en") ? "en" : "id";
+    root.setAttribute("lang", language);
+    document.documentElement.setAttribute("lang", language);
+    if (language === "en") return;
     const dictionary = [
       [/\bThe Wedding Of\b/gi, "Pernikahan"],
       [/\bWedding Invitation\b/gi, "Undangan Pernikahan"],
@@ -186,7 +189,6 @@
         if (value) element.setAttribute(attribute, translate(value));
       });
     });
-    document.documentElement.setAttribute("lang", "id");
   }
 
   // Demo assets are defined by clients/demo-katalog/data.json.
