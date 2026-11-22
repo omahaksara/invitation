@@ -84,7 +84,7 @@
 .luma-footer{text-align:center;padding:55px 0 20px;color:var(--lm-muted);font-size:.72rem;letter-spacing:.08em}
 .luma-footer strong{font:500 1.5rem 'Cormorant Garamond',serif;color:var(--lm-ivory)}
 .luma-page [hidden]{display:none!important}
-.luma-reveal{opacity:0;transform:translate3d(0,30px,0) scale(.985);filter:blur(9px);transition:opacity .82s var(--lm-ease),transform .95s var(--lm-ease),filter .82s ease;will-change:opacity,transform,filter}
+.luma-reveal{opacity:0;transform:translate3d(0,30px,0) scale(.985);filter:blur(9px);transition:opacity .82s var(--lm-ease),transform .95s var(--lm-ease),filter .82s ease;transition-delay:var(--luma-delay,0ms);will-change:opacity,transform,filter}
 .luma-reveal.is-in-view{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
 .luma-depth{transform-style:preserve-3d;transition:box-shadow .9s ease}
 .luma-depth.is-in-view{box-shadow:0 24px 70px rgba(0,0,0,.22)}
