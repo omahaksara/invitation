@@ -84,15 +84,15 @@
 .luma-footer{text-align:center;padding:55px 0 20px;color:var(--lm-muted);font-size:.72rem;letter-spacing:.08em}
 .luma-footer strong{font:500 1.5rem 'Cormorant Garamond',serif;color:var(--lm-ivory)}
 .luma-page [hidden]{display:none!important}
-.luma-reveal{opacity:0;transform:translate3d(0,30px,0) scale(.985);filter:blur(9px);transition:opacity .82s var(--lm-ease),transform .95s var(--lm-ease),filter .82s ease;transition-delay:var(--luma-delay,0ms);will-change:opacity,transform,filter}
-.luma-reveal.is-in-view{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+#app .luma-page .luma-reveal:not(.is-in-view){opacity:0!important;transform:translate3d(0,30px,0) scale(.985)!important;filter:blur(9px)!important;transition:opacity .82s var(--lm-ease),transform .95s var(--lm-ease),filter .82s ease;transition-delay:var(--luma-delay,0ms);will-change:opacity,transform,filter}
+#app .luma-page .luma-reveal.is-in-view{opacity:1!important;transform:translate3d(0,0,0) scale(1)!important;filter:blur(0)!important}
 .luma-depth{transform-style:preserve-3d;transition:box-shadow .9s ease}
 .luma-depth.is-in-view{box-shadow:0 24px 70px rgba(0,0,0,.22)}
 @keyframes luma-cover-drift{to{transform:scale(1.095) translate3d(0,-1.2%,0)}}
 @media(max-width:640px){.luma-window{width:min(88vw,420px);min-height:min(72svh,610px);padding:26px 19px;border-radius:48% 48% 7px 7px/25% 25% 7px 7px}.luma-hero{min-height:82svh;padding-top:55px}.luma-hero__frame{width:min(72vw,270px)}.luma-wrap{padding-left:16px;padding-right:16px}.luma-section{padding-top:52px}.luma-couple{gap:10px}.luma-person{padding:6px}.luma-person figcaption{padding:13px 2px 7px}.luma-countdown{padding:18px 12px;gap:4px}.luma-page .gallery-grid img:nth-child(3n+2){margin-top:17px}}
 @media(max-width:360px){.luma-window{width:91vw;padding:22px 15px}.luma-cover h1{font-size:2.65rem}.luma-couple{grid-template-columns:1fr;max-width:310px;margin:auto}.luma-person__photo{max-height:390px}.luma-countdown span{font-size:.5rem}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.luma-glass,.luma-window,.luma-page .event-card,.luma-page .gift-card{background:rgba(35,30,25,.96)}}
-@media(prefers-reduced-motion:reduce){.luma-cover *,.luma-page *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.luma-reveal{opacity:1!important;transform:none!important;filter:none!important}}
+@media(prefers-reduced-motion:reduce){.luma-cover *,.luma-page *{animation:none!important;transition:none!important;scroll-behavior:auto!important}#app .luma-page .luma-reveal{opacity:1!important;transform:none!important;filter:none!important}}
 </style>
 <div id="cover-section" class="luma-cover">
   <img class="luma-cover__photo" data-bind="cover.image" alt="Sampul undangan" fetchpriority="high">
@@ -140,28 +140,40 @@
   const root = document.getElementById('main-content');
   if (!root) return;
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const targets = root.querySelectorAll('[data-luma-reveal],.luma-depth,.luma-person,.luma-page .story-card,.luma-page .event-card,.luma-page .gift-card,.luma-page #gallery-grid img');
-  targets.forEach((el,index) => {
+  const selector = '[data-luma-reveal],.luma-depth,.luma-person,.story-card,.event-card,.gift-card,#gallery-grid img';
+  const observed = new WeakSet();
+  let observer = null;
+  const reveal = el => {
+    if (!(el instanceof Element) || observed.has(el)) return;
+    observed.add(el);
     el.classList.add('luma-reveal');
-    el.style.setProperty('--luma-delay', Math.min(index % 4, 3) * 65 + 'ms');
-  });
-  if (reduce) {
-    targets.forEach(el => el.classList.add('is-in-view'));
+    if (reduce || !('IntersectionObserver' in window)) {
+      el.classList.add('is-in-view');
+      return;
+    }
+    observer.observe(el);
+  };
+  const scan = node => {
+    if (!(node instanceof Element)) return;
+    if (node.matches(selector)) reveal(node);
+    node.querySelectorAll(selector).forEach(reveal);
+  };
+  if (reduce || !('IntersectionObserver' in window)) {
+    root.querySelectorAll(selector).forEach(el => el.classList.add('luma-reveal','is-in-view'));
     return;
   }
-  if (!('IntersectionObserver' in window)) {
-    targets.forEach(el => el.classList.add('is-in-view'));
-    return;
-  }
-  // Bidirectional reveal: entering the viewport reveals; leaving it fades out again.
-  // Unlike one-shot observers, this intentionally keeps observing for reverse scroll.
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      entry.target.classList.toggle('is-in-view', entry.isIntersecting);
-    });
+  // Observe both entering and leaving edges; reverse scrolling replays the same reveal.
+  observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => entry.target.classList.toggle('is-in-view', entry.isIntersecting));
   }, {root:null,rootMargin:'-8% 0px -8% 0px',threshold:0.06});
-  targets.forEach(el => observer.observe(el));
-  // A very restrained depth shift on the hero frame; no device-orientation permission is requested.
+  root.querySelectorAll(selector).forEach(reveal);
+  // Shared renderers insert event/story/gallery/gift nodes after the template loads.
+  // Watch additions so generated cards receive the same reversible transition.
+  const mutations = new MutationObserver(records => {
+    records.forEach(record => record.addedNodes.forEach(scan));
+  });
+  mutations.observe(root, {childList:true,subtree:true});
+  // Subtle desktop pointer parallax only; no motion/orientation permission prompt.
   const hero = root.querySelector('.luma-hero');
   const frame = root.querySelector('.luma-hero__frame');
   if (hero && frame && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
@@ -171,9 +183,7 @@
       const y = (event.clientY - rect.top) / rect.height - .5;
       frame.style.transform = 'perspective(900px) rotateY(' + (-5 + x * 5) + 'deg) rotateX(' + (2 - y * 4) + 'deg)';
     }, {passive:true});
-    hero.addEventListener('pointerleave', () => {
-      frame.style.transform = '';
-    }, {passive:true});
+    hero.addEventListener('pointerleave', () => { frame.style.transform = ''; }, {passive:true});
   }
 })();
 </script>
