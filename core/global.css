@@ -1065,3 +1065,145 @@ html[data-oa-theme="gebyok-candra"] {
   --oa-motion-duration: 820ms;
   --oa-motion-ease: cubic-bezier(.16,.8,.22,1);
 }
+
+
+/* Cover opening choreography — elegant, theme-led and deliberately light.
+   Only opacity/transform are animated; blur stays subtle to avoid mobile GPU spikes. */
+html[data-oa-theme] {
+  --oa-cover-exit-duration: 1.18s;
+  --oa-main-enter-duration: 1.28s;
+  --oa-cover-exit-ease: cubic-bezier(.2,.72,.18,1);
+  --oa-main-enter-ease: cubic-bezier(.2,.72,.18,1);
+}
+html[data-oa-theme="kencana-jawa"],
+html[data-oa-theme="gebyok-candra"],
+html[data-oa-theme="royal-vintage"],
+html[data-oa-theme="karsa"] {
+  --oa-cover-exit-duration: 1.42s;
+  --oa-main-enter-duration: 1.48s;
+  --oa-cover-exit-ease: cubic-bezier(.16,.84,.22,1);
+  --oa-main-enter-ease: cubic-bezier(.16,.84,.22,1);
+}
+html[data-oa-theme="kencana-jawa"] #cover.is-opening,
+html[data-oa-theme="kencana-jawa"] #cover-section.is-opening,
+html[data-oa-theme="gebyok-candra"] #cover.is-opening,
+html[data-oa-theme="gebyok-candra"] #cover-section.is-opening,
+html[data-oa-theme="royal-vintage"] #cover.is-opening,
+html[data-oa-theme="royal-vintage"] #cover-section.is-opening,
+html[data-oa-theme="karsa"] #cover.is-opening,
+html[data-oa-theme="karsa"] #cover-section.is-opening {
+  animation-name: oa-cover-royal-exit;
+}
+@keyframes oa-cover-royal-exit {
+  0% { opacity:1; transform:translate3d(0,0,0) scale(1); clip-path:inset(0 0 0 0); }
+  58% { opacity:1; transform:translate3d(0,-.5%,0) scale(1.006); clip-path:inset(0 0 0 0); }
+  100% { opacity:0; transform:translate3d(0,-1%,0) scale(1.012); clip-path:inset(0 0 100% 0); }
+}
+html[data-oa-theme="botanical-garden"],
+html[data-oa-theme="romantic-floral"],
+html[data-oa-theme="lumiere-bloom"],
+html[data-oa-theme="serena-ivory"],
+html[data-oa-theme="sunda-watercolor"] {
+  --oa-cover-exit-duration: 1.48s;
+  --oa-main-enter-duration: 1.52s;
+  --oa-cover-exit-ease: cubic-bezier(.18,.78,.2,1);
+  --oa-main-enter-ease: cubic-bezier(.18,.78,.2,1);
+}
+html[data-oa-theme="botanical-garden"] #cover.is-opening,
+html[data-oa-theme="botanical-garden"] #cover-section.is-opening,
+html[data-oa-theme="romantic-floral"] #cover.is-opening,
+html[data-oa-theme="romantic-floral"] #cover-section.is-opening,
+html[data-oa-theme="lumiere-bloom"] #cover.is-opening,
+html[data-oa-theme="lumiere-bloom"] #cover-section.is-opening,
+html[data-oa-theme="serena-ivory"] #cover.is-opening,
+html[data-oa-theme="serena-ivory"] #cover-section.is-opening,
+html[data-oa-theme="sunda-watercolor"] #cover.is-opening,
+html[data-oa-theme="sunda-watercolor"] #cover-section.is-opening {
+  animation-name: oa-cover-floral-exit;
+}
+@keyframes oa-cover-floral-exit {
+  0% { opacity:1; transform:translate3d(0,0,0) scale(1); }
+  48% { opacity:.96; transform:translate3d(0,-.4%,0) scale(1.006); }
+  100% { opacity:0; transform:translate3d(0,-1.5%,0) scale(1.018); }
+}
+html[data-oa-theme="nexus"],
+html[data-oa-theme="luma"],
+html[data-oa-theme="nox"],
+html[data-oa-theme="aksara-nocturne"],
+html[data-oa-theme="aurelia-noir"] {
+  --oa-cover-exit-duration: 1.32s;
+  --oa-main-enter-duration: 1.42s;
+  --oa-cover-exit-ease: cubic-bezier(.2,.76,.18,1);
+  --oa-main-enter-ease: cubic-bezier(.2,.76,.18,1);
+}
+html[data-oa-theme="nexus"] #cover.is-opening,
+html[data-oa-theme="nexus"] #cover-section.is-opening,
+html[data-oa-theme="luma"] #cover.is-opening,
+html[data-oa-theme="luma"] #cover-section.is-opening,
+html[data-oa-theme="nox"] #cover.is-opening,
+html[data-oa-theme="nox"] #cover-section.is-opening,
+html[data-oa-theme="aksara-nocturne"] #cover.is-opening,
+html[data-oa-theme="aksara-nocturne"] #cover-section.is-opening,
+html[data-oa-theme="aurelia-noir"] #cover.is-opening,
+html[data-oa-theme="aurelia-noir"] #cover-section.is-opening {
+  animation-name: oa-cover-cinematic-exit;
+}
+@keyframes oa-cover-cinematic-exit {
+  0% { opacity:1; transform:translate3d(0,0,0) scale(1); filter:blur(0); }
+  54% { opacity:.94; transform:translate3d(0,0,0) scale(1.012); filter:blur(.35px); }
+  100% { opacity:0; transform:translate3d(0,0,0) scale(1.035); filter:blur(1.4px); }
+}
+html[data-oa-theme="atelier-editorial"],
+html[data-oa-theme="aksara-signature"],
+html[data-oa-theme="earty"],
+html[data-oa-theme="taupe"],
+html[data-oa-theme="elegance"] {
+  --oa-cover-exit-duration: 1.36s;
+  --oa-main-enter-duration: 1.42s;
+  --oa-cover-exit-ease: cubic-bezier(.18,.78,.2,1);
+  --oa-main-enter-ease: cubic-bezier(.18,.78,.2,1);
+}
+html[data-oa-theme="atelier-editorial"] #cover.is-opening,
+html[data-oa-theme="atelier-editorial"] #cover-section.is-opening,
+html[data-oa-theme="aksara-signature"] #cover.is-opening,
+html[data-oa-theme="aksara-signature"] #cover-section.is-opening,
+html[data-oa-theme="earty"] #cover.is-opening,
+html[data-oa-theme="earty"] #cover-section.is-opening,
+html[data-oa-theme="taupe"] #cover.is-opening,
+html[data-oa-theme="taupe"] #cover-section.is-opening,
+html[data-oa-theme="elegance"] #cover.is-opening,
+html[data-oa-theme="elegance"] #cover-section.is-opening {
+  animation-name: oa-cover-editorial-exit;
+}
+@keyframes oa-cover-editorial-exit {
+  0% { opacity:1; transform:translate3d(0,0,0) scale(1); }
+  55% { opacity:.94; transform:translate3d(0,0,0) scale(.996); }
+  100% { opacity:0; transform:translate3d(0,1%,0) scale(.985); }
+}
+html[data-oa-theme="aksara-velora"],
+html[data-oa-theme="aksav"],
+html[data-oa-theme="army"],
+html[data-oa-theme="calestial"],
+html[data-oa-theme="groom"],
+html[data-oa-theme="jendela-senja"],
+html[data-oa-theme="kinze"],
+html[data-oa-theme="lume"],
+html[data-oa-theme="lumina"],
+html[data-oa-theme="sagara"],
+html[data-oa-theme="sirein"],
+html[data-oa-theme="velvet-romance"] {
+  --oa-cover-exit-duration: 1.22s;
+  --oa-main-enter-duration: 1.32s;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-oa-theme] {
+    --oa-cover-exit-duration: 1ms !important;
+    --oa-main-enter-duration: 1ms !important;
+  }
+  html[data-oa-theme] #cover.is-opening,
+  html[data-oa-theme] #cover-section.is-opening,
+  html[data-oa-theme] .sirein-cover.is-opening {
+    animation-duration: 1ms !important;
+    filter:none !important;
+  }
+}
