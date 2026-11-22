@@ -1397,15 +1397,3 @@ html[data-oa-theme="velvet-romance"] .sirein-cover.is-opening { animation-name: 
     filter:none !important;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  html[data-oa-theme] {
-    --oa-cover-exit-duration: 1ms !important;
-    --oa-main-enter-duration: 1ms !important;
-  }
-  html[data-oa-theme] #cover.is-opening,
-  html[data-oa-theme] #cover-section.is-opening,
-  html[data-oa-theme] .sirein-cover.is-opening {
-    animation-duration: 1ms !important;
-    filter:none !important;
-  }
-}
