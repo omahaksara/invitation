@@ -134,46 +134,54 @@
     root.setAttribute("lang", language);
     document.documentElement.setAttribute("lang", language);
     if (language === "en") return;
-    const dictionary = [
-      [/\bThe Wedding Of\b/gi, "Pernikahan"],
-      [/\bWedding Invitation\b/gi, "Undangan Pernikahan"],
-      [/\bWedding Day\b/gi, "Hari Pernikahan"],
-      [/\bSave The Date\b/gi, "Simpan Tanggal"],
-      [/\bOur Story\b/gi, "Kisah Kami"],
-      [/\bOur Journey\b/gi, "Perjalanan Kami"],
-      [/\bOur Gallery\b/gi, "Galeri Kami"],
-      [/\bWedding Gift\b/gi, "Hadiah Pernikahan"],
-      [/\bDigital Gift\b/gi, "Hadiah Digital"],
-      [/\bWedding Wishes\b/gi, "Ucapan Pernikahan"],
-      [/\bSend Wishes\b/gi, "Kirim Ucapan"],
-      [/\bOpen Invitation\b/gi, "Buka Undangan"],
-      [/\bOpen Invite\b/gi, "Buka Undangan"],
-      [/\bHoly Matrimony\b/gi, "Akad Nikah"],
-      [/\bAttendance Confirmation\b/gi, "Konfirmasi Kehadiran"],
-      [/\bConfirm Attendance\b/gi, "Konfirmasi Kehadiran"],
-      [/\bGuest Name\b/gi, "Nama Tamu"],
-      [/\bYour Name\b/gi, "Nama Anda"],
-      [/\bYour Wishes\b/gi, "Ucapan Anda"],
-      [/\bThank you for your presence\b/gi, "Terima kasih atas kehadiran Anda"],
-      [/\bThank You\b/gi, "Terima Kasih"],
-      [/\bThe Couple\b/gi, "Kedua Mempelai"],
-      [/\bReception\b/gi, "Resepsi"],
-      [/\bGallery\b/gi, "Galeri"],
-      [/\bWishes\b/gi, "Ucapan"],
-      [/\bAttendance\b/gi, "Kehadiran"],
-      [/\bBride\b/gi, "Mempelai Wanita"],
-      [/\bGroom\b/gi, "Mempelai Pria"],
-      [/\bCountdown\b/gi, "Hitung Mundur"],
-      [/\bLocation\b/gi, "Lokasi"],
-      [/\bVenue\b/gi, "Tempat Acara"],
-      [/\bGift\b/gi, "Hadiah"],
-      [/\bDear\b/gi, "Kepada Yth."],
-      [/\bSend\b/gi, "Kirim"],
-      [/\bSubmit\b/gi, "Kirim"],
-      [/\bName\b/gi, "Nama"],
-      [/\bMessage\b/gi, "Pesan"]
-    ];
-    const translate = value => dictionary.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
+
+    // Translate only complete interface labels. Avoid substring/word replacement
+    // in personal stories, names, quotes, prayers, or client-authored copy.
+    const dictionary = new Map([
+      ["The Wedding Of", "Pernikahan"],
+      ["Wedding Invitation", "Undangan Pernikahan"],
+      ["Wedding Day", "Hari Pernikahan"],
+      ["Save The Date", "Simpan Tanggal"],
+      ["Our Story", "Kisah Kami"],
+      ["Our Journey", "Perjalanan Kami"],
+      ["Our Gallery", "Galeri Kami"],
+      ["Wedding Gift", "Hadiah Pernikahan"],
+      ["Digital Gift", "Hadiah Digital"],
+      ["Wedding Wishes", "Ucapan Pernikahan"],
+      ["Send Wishes", "Kirim Ucapan"],
+      ["Open Invitation", "Buka Undangan"],
+      ["Open Invite", "Buka Undangan"],
+      ["Holy Matrimony", "Akad Nikah"],
+      ["Attendance Confirmation", "Konfirmasi Kehadiran"],
+      ["Confirm Attendance", "Konfirmasi Kehadiran"],
+      ["Guest Name", "Nama Tamu"],
+      ["Your Name", "Nama Anda"],
+      ["Your Wishes", "Ucapan Anda"],
+      ["Thank you for your presence", "Terima kasih atas kehadiran Anda"],
+      ["Thank You", "Terima Kasih"],
+      ["The Couple", "Kedua Mempelai"],
+      ["Reception", "Resepsi"],
+      ["Gallery", "Galeri"],
+      ["Wishes", "Ucapan"],
+      ["Attendance", "Kehadiran"],
+      ["Bride", "Mempelai Wanita"],
+      ["Groom", "Mempelai Pria"],
+      ["Countdown", "Hitung Mundur"],
+      ["Location", "Lokasi"],
+      ["Venue", "Tempat Acara"],
+      ["Gift", "Hadiah"],
+      ["Dear", "Kepada Yth."],
+      ["Send", "Kirim"],
+      ["Submit", "Kirim"],
+      ["Name", "Nama"],
+      ["Message", "Pesan"]
+    ]);
+    const translateExact = value => {
+      const trimmed = value.trim();
+      const translated = dictionary.get(trimmed);
+      if (!translated) return value;
+      return value.replace(trimmed, translated);
+    };
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -181,12 +189,12 @@
       if (!node.nodeValue || !node.nodeValue.trim()) return;
       const parent = node.parentElement;
       if (parent && /^(SCRIPT|STYLE|TEXTAREA|CODE|PRE)$/i.test(parent.tagName)) return;
-      node.nodeValue = translate(node.nodeValue);
+      node.nodeValue = translateExact(node.nodeValue);
     });
     root.querySelectorAll("[aria-label],[placeholder],[title],[alt]").forEach(element => {
       ["aria-label", "placeholder", "title", "alt"].forEach(attribute => {
         const value = element.getAttribute(attribute);
-        if (value) element.setAttribute(attribute, translate(value));
+        if (value) element.setAttribute(attribute, translateExact(value));
       });
     });
   }
