@@ -1,5 +1,5 @@
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant Garamond&family=DM Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=DM+Sans:wght@400;500;600;700&display=swap');
 :root{--sw-night:#f5f0e8;--sw-night2:#e7e6d9;--sw-gold:#a8b89e;--sw-goldd:#71866f;--sw-ivory:#344238;--sw-paper:#fffdf8;--sw-ink:#344238;--sw-muted:#778276;--sw-line:rgba(133,158,130,.38)}
 #app{--oa-font-display:'Cormorant Garamond',Georgia,serif;--oa-font-body:'DM Sans',system-ui,sans-serif;--oa-theme-display:'Cormorant Garamond',Georgia,serif;--oa-theme-body:'DM Sans',system-ui,sans-serif;min-height:100vh;background:var(--sw-night);color:var(--sw-ivory);font-family:'DM Sans',system-ui,sans-serif;overflow-x:clip}
 #app *{box-sizing:border-box}
@@ -90,7 +90,6 @@
 @media(prefers-reduced-motion:reduce){.oa-main-opening .sw-moon,.oa-main-opening .sw-in{animation:none!important}.sw-door,.sw-seal-box{transition:none!important}}
 
 /* Sunda Watercolor — original visual layer: paper, pigments, botanical linework and page-turn motion. */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
 :root{--sw-paper:#f7f3e9;--sw-paper2:#fffdf8;--sw-sage:#a8b89e;--sw-sage-deep:#71866f;--sw-blue:#a9bbc0;--sw-rose:#d9b9b1;--sw-ink:#344238;--sw-muted:#778276;--sw-line:rgba(113,134,111,.28);--sw-gold:#c8b58d}
 #app{--oa-font-display:'Cormorant Garamond',Georgia,serif;--oa-font-body:'DM Sans',system-ui,sans-serif;--oa-theme-display:'Cormorant Garamond',Georgia,serif;--oa-theme-body:'DM Sans',system-ui,sans-serif;min-height:100vh;background:var(--sw-paper);color:var(--sw-ink);font-family:'DM Sans',sans-serif;overflow-x:clip}
 #main-content{background:var(--sw-paper);color:var(--sw-ink)}
@@ -118,7 +117,10 @@
 .sw-hero h1 em{color:var(--sw-sage-deep)}
 .sw-hero p{color:#58695c;text-shadow:none}
 .sw-page{max-width:920px;padding-bottom:140px;position:relative}
-.sw-atmosphere{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;background:radial-gradient(ellipse at 0 20%,rgba(169,187,192,.18),transparent 30%),radial-gradient(ellipse at 100% 48%,rgba(217,185,177,.16),transparent 28%);mask-image:linear-gradient(#000,transparent 90%)}
+.sw-atmosphere{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;background:radial-gradient(ellipse at 0 20%,rgba(169,187,192,.18),transparent 30%),radial-gradient(ellipse at 100% 48%,rgba(217,185,177,.16),transparent 28%);mask-image:linear-gradient(#000,transparent 90%);overflow:hidden}
+.sw-atmosphere:before,.sw-atmosphere:after{content:"";position:fixed;top:-24px;width:10px;height:15px;border-radius:90% 0 90% 0;background:rgba(217,185,177,.42);pointer-events:none;animation:sw-petal-drift 24s linear infinite}
+.sw-atmosphere:before{left:17%;box-shadow:34vw 28vh 0 -2px rgba(168,184,158,.38),-8vw 58vh 0 -1px rgba(217,185,177,.35);animation-delay:-8s}
+.sw-atmosphere:after{right:18%;width:7px;height:12px;background:rgba(168,184,158,.42);animation-duration:29s;animation-delay:-16s}
 .sw-section,.sw-page>section,.sw-footer{position:relative;z-index:1}
 .sw-section{padding:76px 18px 18px}
 .sw-kicker{color:var(--sw-sage-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px}
@@ -165,7 +167,7 @@
 .sw-petal{position:fixed;top:-12px;z-index:2;width:9px;height:13px;border-radius:90% 0 90% 0;background:rgba(217,185,177,.48);pointer-events:none;animation:sw-petal-drift 18s linear infinite}
 .sw-petal:nth-child(2n){background:rgba(168,184,158,.5);width:7px;height:11px;animation-duration:22s}
 @media(max-width:560px){.sw-section{padding:64px 14px 14px}.sw-cover:before{inset:12px}.sw-cover:after{inset:22px}.sw-seal-box{padding:28px 20px}.sw-couple{gap:16px}.sw-light{margin-left:-10px;margin-right:-10px;padding-inline:14px}.sw-gallery{gap:8px}.sw-page{padding-left:12px;padding-right:12px}}
-@media(prefers-reduced-motion:reduce){.sw-paper-panel,.sw-seal-box,.sw-watercolor-orb,.sw-hero-art,.sw-petal{animation:none!important;transition:none!important}.sw-petal{display:none!important}.sw-reveal,.reveal{opacity:1!important;transform:none!important;filter:none!important}}
+@media(prefers-reduced-motion:reduce){.sw-paper-panel,.sw-seal-box,.sw-watercolor-orb,.sw-hero-art,.sw-petal,.sw-atmosphere:before,.sw-atmosphere:after{animation:none!important;transition:none!important;display:none!important}.sw-reveal,.reveal{opacity:1!important;transform:none!important;filter:none!important}}
 
 </style>
 
