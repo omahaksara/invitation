@@ -982,3 +982,9 @@ html[data-oa-theme] .oa-event-map-fallback a{
 /* Army — forest green, ivory and champagne shared dock. */
 .oa-floating-controls[data-theme="army"]{--oa-dock-bg:#102b23f5;--oa-dock-border:#c9ad73;--oa-dock-ink:#f4f0e5;--oa-dock-accent:#d4b979;--oa-dock-active:#c9ad73;--oa-dock-active-ink:#102b23;}
 html[data-oa-theme="army"]{--oa-font-display:"Cormorant Garamond",Georgia,serif;--oa-font-body:"Montserrat",Arial,sans-serif;--oa-reveal-time:.48s;--oa-reveal-ease:cubic-bezier(.18,.78,.22,1);--oa-theme-display:"Cormorant Garamond",Georgia,serif;--oa-theme-body:"Montserrat",Arial,sans-serif;}
+
+
+/* Gebyok Candra — midnight indigo, ivory and Javanese champagne gold. */
+.oa-floating-controls[data-theme="gebyok-candra"]{--oa-dock-bg:#12112bf7;--oa-dock-border:#e2bd72;--oa-dock-ink:#f4ecda;--oa-dock-accent:#4a3f86;border-radius:999px 999px 10px 10px;box-shadow:0 10px 30px #0009,inset 0 0 0 1px #e2bd7222}
+.oa-floating-controls[data-theme="gebyok-candra"] button{border-radius:999px 999px 6px 6px}
+html[data-oa-theme="gebyok-candra"]{--oa-font-display:"Marcellus",Georgia,serif;--oa-font-body:"Figtree",system-ui,sans-serif;--oa-theme-display:"Marcellus",Georgia,serif;--oa-theme-body:"Figtree",system-ui,sans-serif;--oa-reveal-time:.45s;--oa-reveal-ease:cubic-bezier(.16,.8,.22,1)}
