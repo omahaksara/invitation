@@ -376,6 +376,24 @@
 @keyframes nx-title-focus{from{opacity:0;filter:blur(9px);transform:translateY(12px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.nexus-page .nexus-section,.nexus-page .gallery-grid img,.nexus-page .story-card,.nexus-page .event-card,.nexus-page .gift-card,.nexus-page .nexus-closing:after{transition:none!important;animation:none!important;opacity:1;transform:none;filter:none}}
 
+
+/* NEXUS cinematic sequence: opening, chapter focus, photo transitions and soft close */
+.nexus-cover{transition:opacity .9s ease,filter .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.nexus-cover.is-opening{opacity:0;filter:blur(12px) brightness(1.35);transform:scale(1.035);pointer-events:none}
+.nexus-page.nx-entered .nexus-page__top{animation:nx-page-arrive 1.35s cubic-bezier(.2,.7,.2,1) both}
+.nexus-page.nx-entered .nexus-orbit{animation:nx-orbit-arrive 1.2s ease both,nx-orbit-float 7s 1.2s ease-in-out infinite}
+.nexus-page .nx-photo-enter{animation:nx-photo-focus 1.15s cubic-bezier(.2,.7,.2,1) both}
+.nexus-page .nx-card-enter{animation:nx-card-rise .85s cubic-bezier(.2,.7,.2,1) both}
+.nexus-page .nx-scene-active .nexus-section__head{animation:nx-head-focus .75s ease both}
+.nexus-page .nexus-closing.nx-scene-active .nexus-glass{animation:nx-closing-glow 1.2s ease both}
+@keyframes nx-page-arrive{from{opacity:0;filter:blur(10px);transform:translateY(28px)}to{opacity:1;filter:none;transform:none}}
+@keyframes nx-orbit-arrive{from{opacity:0;transform:scale(.68) rotate(-24deg);filter:blur(8px)}to{opacity:1;transform:scale(1) rotate(0);filter:none}}
+@keyframes nx-photo-focus{0%{opacity:0;filter:blur(14px) brightness(1.25);clip-path:inset(12% 8% 12% 8%)}65%{opacity:1;clip-path:inset(0)}100%{filter:none;clip-path:inset(0)}}
+@keyframes nx-card-rise{from{opacity:0;transform:translateY(24px) scale(.985);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@keyframes nx-head-focus{from{filter:blur(6px);opacity:.4;transform:translateY(8px)}to{filter:none;opacity:1;transform:none}}
+@keyframes nx-closing-glow{from{opacity:.65;filter:blur(8px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
+@media(prefers-reduced-motion:reduce){.nexus-cover,.nexus-cover.is-opening,.nexus-page.nx-entered .nexus-page__top,.nexus-page.nx-entered .nexus-orbit,.nexus-page .nx-photo-enter,.nexus-page .nx-card-enter{animation:none!important;transition:none!important;opacity:1;filter:none;transform:none}}
+
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
@@ -451,6 +469,36 @@
   };
   makeAtmosphere(cover);
   makeAtmosphere(page);
+
+  // Coordinated cinematic entrance/reveal. Uses theme-local classes only.
+  const openButton = cover.querySelector('#open-invitation-btn');
+  if (openButton) openButton.addEventListener('click', () => cover.classList.add('is-opening'), {once:true});
+  const pageEntryObserver = new MutationObserver(() => {
+    if (page.style.display !== 'none') page.classList.add('nx-entered');
+  });
+  pageEntryObserver.observe(page,{attributes:true,attributeFilter:['style']});
+  if (page.style.display !== 'none') page.classList.add('nx-entered');
+  const revealObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add(entry.target.matches('.story-card,.event-card,.gift-card') ? 'nx-card-enter' : 'nx-photo-enter');
+      revealObserver.unobserve(entry.target);
+    });
+  },{threshold:.12,rootMargin:'0px 0px -5% 0px'}) : null;
+  const revealTargets = root => {
+    if (!revealObserver || !root) return;
+    root.querySelectorAll('.gallery-grid img,.nexus-person img,.oa-story-photo,.story-card,.event-card,.gift-card').forEach(el => {
+      if (!el.classList.contains('nx-photo-enter') && !el.classList.contains('nx-card-enter')) revealObserver.observe(el);
+    });
+  };
+  revealTargets(page);
+  const contentObserver = new MutationObserver(mutations => mutations.forEach(m => m.addedNodes.forEach(node => {
+    if (node.nodeType !== 1) return;
+    if (node.matches && node.matches('.gallery-grid img,.nexus-person img,.oa-story-photo,.story-card,.event-card,.gift-card')) revealObserver && revealObserver.observe(node);
+    revealTargets(node);
+  })));
+  contentObserver.observe(page,{childList:true,subtree:true});
+
   const scenes = page.querySelectorAll('.nexus-section');
   if ('IntersectionObserver' in window) {
     const sceneObserver = new IntersectionObserver(entries => {
