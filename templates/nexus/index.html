@@ -743,7 +743,7 @@
     const closeButton = lightbox.querySelector('.nx-gallery-lightbox__close');
     const previousButton = lightbox.querySelector('.nx-gallery-lightbox__prev');
     const nextButton = lightbox.querySelector('.nx-gallery-lightbox__next');
-    let photos = [], activeIndex = 0, returnFocus = null, touchStartX = 0;
+    let photos = [], activeIndex = 0, returnFocus = null, touchStartX = 0, previousOverflow = '';
     const refreshPhotos = () => photos = Array.from(gallery.querySelectorAll('img')).filter(img => img.currentSrc || img.src);
     const showPhoto = index => {
       refreshPhotos();
@@ -770,6 +770,8 @@
       const index = photos.indexOf(photo);
       if (index < 0) return;
       returnFocus = photo;
+      if (!photo.hasAttribute('tabindex')) photo.tabIndex = 0;
+      previousOverflow = document.documentElement.style.overflow;
       document.documentElement.style.overflow = 'hidden';
       showPhoto(index);
       lightbox.classList.add('is-open');
@@ -777,12 +779,18 @@
     };
     const closeViewer = () => {
       lightbox.classList.remove('is-open');
-      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflow = previousOverflow;
       if (returnFocus && returnFocus.isConnected) returnFocus.focus({preventScroll:true});
     };
     gallery.addEventListener('click', event => {
       const photo = event.target.closest('img');
       if (photo && gallery.contains(photo)) openViewer(photo);
+    });
+    gallery.addEventListener('keydown', event => {
+      const photo = event.target.closest('img');
+      if (photo && gallery.contains(photo) && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault(); openViewer(photo);
+      }
     });
     closeButton.addEventListener('click',closeViewer);
     previousButton.addEventListener('click',() => showPhoto(activeIndex - 1));
