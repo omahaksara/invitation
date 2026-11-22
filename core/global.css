@@ -1397,3 +1397,49 @@ html[data-oa-theme="velvet-romance"] .sirein-cover.is-opening { animation-name: 
     filter:none !important;
   }
 }
+
+
+/* Theme typography system: intentional display/body pairing for every active theme. */
+html[data-oa-theme="aksara-nocturne"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="aksara-signature"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="aksara-velora"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Cormorant Garamond',serif; }
+html[data-oa-theme="aksav"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Marcellus',serif; }
+html[data-oa-theme="army"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="atelier-editorial"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="aurelia-noir"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="botanical-garden"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Lora',serif; }
+html[data-oa-theme="calestial"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="earty"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Marcellus',serif; }
+html[data-oa-theme="elegance"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="gebyok-candra"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Marcellus',serif; }
+html[data-oa-theme="groom"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="jendela-senja"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Cormorant Garamond',serif; }
+html[data-oa-theme="karsa"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Marcellus',serif; }
+html[data-oa-theme="kencana-jawa"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="kinze"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="luma"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="lume"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Playfair Display',serif; }
+html[data-oa-theme="lumiere-bloom"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="lumina"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Marcellus',serif; }
+html[data-oa-theme="nexus"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="nox"] #app { --oa-font-body:'Montserrat',sans-serif; --oa-font-display:'Cinzel',serif; }
+html[data-oa-theme="romantic-floral"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Cormorant Garamond',serif; }
+html[data-oa-theme="royal-vintage"] #app { --oa-font-body:'Lora',serif; --oa-font-display:'Bodoni Moda',serif; }
+html[data-oa-theme="sagara"] #app { --oa-font-body:'DM Sans',sans-serif; --oa-font-display:'Marcellus',serif; }
+html[data-oa-theme="serena-ivory"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Cormorant Garamond',serif; }
+html[data-oa-theme="sirein"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Cormorant Garamond',serif; }
+html[data-oa-theme="sunda-watercolor"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Lora',serif; }
+html[data-oa-theme="taupe"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Playfair Display',serif; }
+html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
+
+/* Keep typography inherited consistently across template fragments, including legacy inline styles. */
+html[data-oa-theme] #app { font-family:var(--oa-font-body,'Lato',sans-serif); }
+html[data-oa-theme] #app :is(p,li,small,label,input,textarea,select,button,a,figcaption,.eyebrow,.subtitle,.description,.caption,.meta,.event-meta,.story-text,.wishes-text,.nav-label) {
+  font-family:var(--oa-font-body,'Lato',sans-serif) !important;
+}
+html[data-oa-theme] #app :is(h1,h2,h3,h4,h5,h6,.couple-name,.bride-name,.groom-name,.hero-title,.section-title,.section-heading,.quote-text,.display-title,.names) {
+  font-family:var(--oa-font-display,'Cormorant Garamond',serif) !important;
+}
+html[data-oa-theme] #app :is([lang="ar"],.arabic,.arabic-text,.quran-text,.ayat,.bismillah) {
+  font-family:'Scheherazade New',serif !important;
+}
