@@ -1006,3 +1006,57 @@ html[data-oa-theme="sunda-watercolor"] {
   box-shadow: 0 12px 34px rgba(76,87,69,.14), inset 0 1px rgba(255,255,255,.8);
 }
 .oa-floating-controls[data-theme="sunda-watercolor"] button { border-radius: 16px 16px 5px 5px; }
+
+
+/* Theme motion audit — keep the shared reveal engine, tune its cadence per visual identity. */
+html[data-oa-theme="aksara-nocturne"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
+html[data-oa-theme="aksara-signature"] { --oa-motion-duration:760ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="aksara-velora"] { --oa-motion-duration:680ms; --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="aksav"] { --oa-motion-duration:740ms; --oa-motion-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="army"] { --oa-motion-duration:780ms; --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
+html[data-oa-theme="atelier-editorial"] { --oa-motion-duration:920ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="aurelia-noir"] { --oa-motion-duration:840ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="botanical-garden"] { --oa-motion-duration:980ms; --oa-motion-ease:cubic-bezier(.18,.78,.2,1); }
+html[data-oa-theme="calestial"] { --oa-motion-duration:880ms; --oa-motion-ease:cubic-bezier(.18,.76,.2,1); }
+html[data-oa-theme="earty"] { --oa-motion-duration:720ms; --oa-motion-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="elegance"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
+html[data-oa-theme="groom"] { --oa-motion-duration:700ms; --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="jendela-senja"] { --oa-motion-duration:960ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="karsa"] { --oa-motion-duration:720ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="kencana-jawa"] { --oa-motion-duration:860ms; --oa-motion-ease:cubic-bezier(.16,.8,.22,1); }
+html[data-oa-theme="kinze"] { --oa-motion-duration:780ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="luma"] { --oa-motion-duration:1050ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="lume"] { --oa-motion-duration:760ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="lumiere-bloom"] { --oa-motion-duration:980ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="lumina"] { --oa-motion-duration:520ms; --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="nexus"] { --oa-motion-duration:900ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="nox"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="romantic-floral"] { --oa-motion-duration:1020ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="royal-vintage"] { --oa-motion-duration:880ms; --oa-motion-ease:cubic-bezier(.16,.8,.22,1); }
+html[data-oa-theme="sagara"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.17,.8,.24,1); }
+html[data-oa-theme="serena-ivory"] { --oa-motion-duration:920ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="sirein"] { --oa-motion-duration:900ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="taupe"] { --oa-motion-duration:760ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="velvet-romance"] { --oa-motion-duration:940ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+
+/* Luma's cinematic glass layers retain a restrained blur; the shared performance guard
+   disables backdrop-filter globally, so explicitly restore only these small surfaces. */
+html[data-oa-theme="luma"] #app .luma-window {
+  -webkit-backdrop-filter: blur(3px) !important;
+  backdrop-filter: blur(3px) !important;
+}
+html[data-oa-theme="luma"] #app .luma-open {
+  -webkit-backdrop-filter: blur(4px) !important;
+  backdrop-filter: blur(4px) !important;
+}
+.oa-floating-controls[data-theme="luma"] {
+  --oa-dock-bg: rgba(27,25,22,.96);
+  --oa-dock-border: rgba(201,168,121,.48);
+  --oa-dock-ink: #f5efe4;
+  --oa-dock-accent: #c9a879;
+  --oa-dock-active: #c9a879;
+  --oa-dock-active-ink: #171614;
+  border-radius: 999px 999px 12px 12px;
+  box-shadow: 0 12px 34px rgba(0,0,0,.34), inset 0 0 0 1px rgba(245,239,228,.08);
+}
+.oa-floating-controls[data-theme="luma"] button { border-radius: 999px; }
