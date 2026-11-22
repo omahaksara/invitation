@@ -359,6 +359,23 @@
 @media(max-width:700px){.nexus-cover .nx-atmosphere:after,.nexus-page .nx-atmosphere:after{filter:blur(30px);animation-duration:24s}.nx-bokeh{filter:blur(calc(var(--nx-blur) + 1px))}.nexus-page .nexus-section.nx-scene-dim{opacity:.88;filter:none}}
 @media(prefers-reduced-motion:reduce){.nexus-cover .nx-atmosphere:after,.nexus-page .nx-atmosphere:after,.nx-bokeh{animation:none!important}.nexus-page .reveal{filter:none!important}}
 
+
+/* NEXUS scene choreography: gentle focus, cross-scene atmosphere and image reveal */
+.nexus-page .nexus-section{opacity:.56;transform:translateY(14px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.7,.2,1),filter .85s ease}
+.nexus-page .nexus-section.nx-scene-active{opacity:1;transform:translateY(0);filter:none}
+.nexus-page .nexus-section.nx-scene-dim{opacity:.56;transform:translateY(10px);filter:blur(.35px)}
+.nexus-page .nx-atmosphere{transition:opacity 1s ease}
+.nexus-page .nexus-section.nx-scene-active .nexus-section__head h2{animation:nx-title-focus .85s both}
+.nexus-page .gallery-grid img{clip-path:inset(0 0 0 0 round 18px);transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .8s ease,clip-path .8s ease}
+.nexus-page .gallery-grid img:hover{filter:brightness(1.06) saturate(1.04)}
+.nexus-page .story-card{transition:opacity .75s ease,transform .75s ease,filter .75s ease,box-shadow .75s ease}
+.nexus-page .event-card,.nexus-page .gift-card{transition:transform .6s ease,background .6s ease,box-shadow .6s ease}
+.nexus-page .nexus-closing{overflow:hidden}
+.nexus-page .nexus-closing:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,color-mix(in srgb,var(--nx-accent) 12%,transparent),transparent 60%);opacity:0;transition:opacity 1.2s ease}
+.nexus-page .nexus-closing.nx-scene-active:after{opacity:1}
+@keyframes nx-title-focus{from{opacity:0;filter:blur(9px);transform:translateY(12px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.nexus-page .nexus-section,.nexus-page .gallery-grid img,.nexus-page .story-card,.nexus-page .event-card,.nexus-page .gift-card,.nexus-page .nexus-closing:after{transition:none!important;animation:none!important;opacity:1;transform:none;filter:none}}
+
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
