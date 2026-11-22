@@ -174,7 +174,28 @@
       ["Send", "Kirim"],
       ["Submit", "Kirim"],
       ["Name", "Nama"],
-      ["Message", "Pesan"]
+      ["Message", "Pesan"],
+      ["A Day To Remember", "Hari yang Tak Terlupakan"],
+      ["Two Souls, One Story", "Dua Jiwa, Satu Kisah"],
+      ["A Note From Our Hearts", "Ungkapan dari Hati"],
+      ["The Happy Couple", "Pasangan Bahagia"],
+      ["The Groom", "Mempelai Pria"],
+      ["The Bride", "Mempelai Wanita"],
+      ["Our Little Journey", "Perjalanan Kisah Kami"],
+      ["The Celebration", "Perayaan"],
+      ["Our Memories", "Kenangan Kami"],
+      ["Moving Memories", "Video Kenangan"],
+      ["Your Presence Matters", "Kehadiran Anda Berarti"],
+      ["A Token of Love", "Tanda Kasih"],
+      ["Luxury Invitation", "Undangan Eksklusif"],
+      ["The Wedding Celebration", "Perayaan Pernikahan"],
+      ["A New Chapter Begins", "Babak Baru Dimulai"],
+      ["Our Wedding", "Pernikahan Kami"],
+      ["With full gratitude", "Dengan penuh rasa syukur"],
+      ["With gratitude", "Dengan penuh rasa syukur"],
+      ["Save the Date", "Simpan Tanggal"],
+      ["Our Story", "Kisah Kami"],
+      ["Our Memories", "Kenangan Kami"]
     ]);
     const translateExact = value => {
       const trimmed = value.trim();
