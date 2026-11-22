@@ -89,6 +89,31 @@
 .luma-depth{transform-style:preserve-3d;transition:box-shadow .9s ease}
 .luma-depth.is-in-view{box-shadow:0 24px 70px rgba(0,0,0,.22)}
 @keyframes luma-cover-drift{to{transform:scale(1.095) translate3d(0,-1.2%,0)}}
+
+/* Real cover opening: two hinged 3D leaves reveal the scene behind the arch. */
+.luma-window{transform-style:preserve-3d}
+.luma-shutter{position:absolute;z-index:1;top:0;bottom:0;width:50%;pointer-events:none;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(135deg,rgba(31,26,21,.68),rgba(106,82,55,.22) 48%,rgba(20,18,16,.7));box-shadow:inset 0 0 0 1px rgba(245,239,228,.18),inset 0 0 34px rgba(0,0,0,.28);transition:filter .6s ease}
+.luma-shutter--left{left:0;transform-origin:left center;border-radius:inherit;border-top-right-radius:0;border-bottom-right-radius:0}
+.luma-shutter--right{right:0;transform-origin:right center;border-radius:inherit;border-top-left-radius:0;border-bottom-left-radius:0}
+.luma-cover__content{z-index:2}
+.luma-cover.is-opening .luma-shutter--left{animation:luma-shutter-left .72s cubic-bezier(.18,.78,.16,1) forwards}
+.luma-cover.is-opening .luma-shutter--right{animation:luma-shutter-right .72s cubic-bezier(.18,.78,.16,1) forwards}
+.luma-cover.is-opening .luma-cover__content{animation:luma-cover-copy-out .28s ease forwards}
+@keyframes luma-shutter-left{0%{transform:rotateY(0);opacity:1}100%{transform:perspective(900px) rotateY(-108deg);opacity:.08}}
+@keyframes luma-shutter-right{0%{transform:rotateY(0);opacity:1}100%{transform:perspective(900px) rotateY(108deg);opacity:.08}}
+@keyframes luma-cover-copy-out{to{opacity:0;transform:translateY(-10px);filter:blur(5px)}}
+
+/* LUMA's scene reveal is layered on the shared engine's real observer states. */
+#app .luma-page .oa-scroll-reveal{opacity:0;transform:translate3d(0,42px,0) scale(.985);filter:blur(8px);transition:opacity .78s var(--lm-ease),transform .92s var(--lm-ease),filter .78s ease}
+#app .luma-page .oa-scroll-reveal.oa-visible{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+#app .luma-page .oa-motion-item{opacity:0;transform:translate3d(0,25px,0);filter:blur(5px);transition:opacity .72s var(--lm-ease),transform .86s var(--lm-ease),filter .72s ease;transition-delay:var(--oa-motion-delay,0ms)}
+#app .luma-page .oa-motion-item.oa-motion-visible{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+#app .luma-page img.oa-motion-photo{opacity:0;transform:scale(.94);clip-path:inset(0 8% 0 8% round 12px);filter:blur(6px);transition:opacity .82s var(--lm-ease),transform 1.05s var(--lm-ease),clip-path 1.05s var(--lm-ease),filter .82s ease}
+#app .luma-page img.oa-motion-photo.oa-motion-visible{opacity:1;transform:scale(1);clip-path:inset(0 0 0 0 round 12px);filter:blur(0)}
+#app .luma-page .story-card,#app .luma-page .event-card,#app .luma-page .gift-card{transform-style:preserve-3d;transition:transform .85s var(--lm-ease),box-shadow .85s ease,opacity .7s ease}
+#app .luma-page .story-card.oa-motion-visible,#app .luma-page .event-card.oa-motion-visible,#app .luma-page .gift-card.oa-motion-visible{transform:translateY(0) rotateX(0);box-shadow:0 24px 58px rgba(0,0,0,.26)}
+@media(prefers-reduced-motion:reduce){.luma-shutter{display:none!important}#app .luma-page .oa-scroll-reveal,#app .luma-page .oa-motion-item,#app .luma-page img.oa-motion-photo{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important;transition:none!important}}
+
 @media(max-width:640px){.luma-window{width:min(88vw,420px);min-height:min(72svh,610px);padding:26px 19px;border-radius:48% 48% 7px 7px/25% 25% 7px 7px}.luma-hero{min-height:82svh;padding-top:55px}.luma-hero__frame{width:min(72vw,270px)}.luma-wrap{padding-left:16px;padding-right:16px}.luma-section{padding-top:52px}.luma-couple{gap:10px}.luma-person{padding:6px}.luma-person figcaption{padding:13px 2px 7px}.luma-countdown{padding:18px 12px;gap:4px}.luma-page .gallery-grid img:nth-child(3n+2){margin-top:17px}}
 @media(max-width:360px){.luma-window{width:91vw;padding:22px 15px}.luma-cover h1{font-size:2.65rem}.luma-couple{grid-template-columns:1fr;max-width:310px;margin:auto}.luma-person__photo{max-height:390px}.luma-countdown span{font-size:.5rem}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.luma-glass,.luma-window,.luma-page .event-card,.luma-page .gift-card{background:rgba(35,30,25,.96)}}
@@ -98,6 +123,8 @@
   <img class="luma-cover__photo" data-bind="cover.image" alt="Sampul undangan" fetchpriority="high">
   <div class="luma-bokeh" aria-hidden="true"></div>
   <div class="luma-window">
+    <span class="luma-shutter luma-shutter--left" aria-hidden="true"></span>
+    <span class="luma-shutter luma-shutter--right" aria-hidden="true"></span>
     <div class="luma-cover__content">
       <p class="luma-eyebrow">A CINEMATIC LOVE STORY</p>
       <h1><span data-bind="couple.bride.nickname">Mempelai Wanita</span><br><em>&amp;</em><br><span data-bind="couple.groom.nickname">Mempelai Pria</span></h1>
