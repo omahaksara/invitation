@@ -95,8 +95,8 @@
 #app .luma-page .reveal:not(.active){opacity:0!important;transform:translate3d(0,44px,0) scale(.985)!important;filter:blur(8px)!important;transition:opacity .82s var(--lm-ease),transform .95s var(--lm-ease),filter .82s ease}
 #app .luma-page .reveal.active{opacity:1!important;transform:translate3d(0,0,0) scale(1)!important;filter:blur(0)!important}
 @supports (animation-timeline:view()){
-  #app .luma-page .luma-section.reveal,#app .luma-page .luma-hero.reveal{animation:luma-scroll-scene linear both;animation-timeline:view(block);animation-range:entry 0% cover 36%}
-  @keyframes luma-scroll-scene{from{opacity:.28;transform:translate3d(0,48px,0) scale(.975);filter:blur(11px)}to{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}}
+  #app .luma-page .luma-section > *,#app .luma-page .luma-hero > div{animation:luma-scroll-scene linear both;animation-timeline:view(block);animation-range:entry 0% cover 42%}
+  @keyframes luma-scroll-scene{from{opacity:.24;transform:translate3d(0,42px,0) scale(.975);filter:blur(10px)}to{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}}
 }
 
 /* Real cover opening: two hinged 3D leaves reveal the scene behind the arch. */
