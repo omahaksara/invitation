@@ -18,6 +18,89 @@
 @media(max-width:700px){.nexus-cover{grid-template-columns:1fr;display:flex;flex-direction:column;justify-content:flex-end}.nexus-cover__visual{position:absolute;inset:0;min-height:100%;height:100%}.nexus-cover__visual:after{background:linear-gradient(180deg,rgba(0,0,0,.04) 10%,rgba(15,17,21,.35) 38%,var(--nx-bg) 100%)}.nexus-cover__panel{margin:0;min-height:100svh;justify-content:flex-end;padding:30px 24px calc(42px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--nx-bg) 0%,rgba(15,17,21,.88) 28%,transparent 78%)}.nexus-cover h1{font-size:clamp(2.8rem,13vw,4.5rem)}.nexus-page__top{min-height:60vh}.nexus-wrap{padding-left:16px;padding-right:16px}.nexus-section{padding-top:48px}.nexus-orbit{width:150px;height:150px}.nexus-page .gallery-grid img:nth-child(3n+1){min-height:210px}}
 @media(max-width:360px){.nexus-couple{gap:9px}.nexus-person{padding:7px}.nexus-count{padding:17px 10px}}
 @media(prefers-reduced-motion:reduce){.nexus-page *,.nexus-cover *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.nexus-page .reveal{opacity:1;transform:none}}
+
+/* Omah Aksara NEXUS — dimensional portal opening.
+   Presentation-only: the shared engine still owns the open action and timing. */
+.nexus-cover {
+  perspective: 1600px;
+  perspective-origin: 52% 48%;
+  transform-style: preserve-3d;
+}
+.nexus-cover__visual {
+  transform: translateZ(0);
+  transform-origin: 100% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 760ms cubic-bezier(.18,.76,.18,1), filter 760ms ease;
+  will-change: transform;
+}
+.nexus-cover__visual:before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid rgba(232,210,166,.28);
+  box-shadow: inset -22px 0 48px rgba(0,0,0,.24), inset 0 0 0 12px rgba(255,255,255,.025);
+  transform-origin: 100% 50%;
+  transition: transform 760ms cubic-bezier(.18,.76,.18,1), opacity 500ms ease;
+}
+.nexus-cover__visual img {
+  transform: scale(1.035);
+  transition: transform 1100ms cubic-bezier(.18,.76,.18,1), filter 760ms ease;
+}
+.nexus-cover__panel {
+  transform: translateZ(28px);
+  transform-origin: 0 50%;
+  transition: transform 680ms cubic-bezier(.18,.76,.18,1), opacity 420ms ease, filter 680ms ease;
+}
+.nexus-cover.is-opening .nexus-cover__visual {
+  transform: perspective(1100px) rotateY(-72deg) translateX(-3.5vw) scale(.94);
+  filter: brightness(1.18) saturate(.82);
+}
+.nexus-cover.is-opening .nexus-cover__visual:before {
+  transform: rotateY(-24deg) translateZ(18px);
+  opacity: .18;
+}
+.nexus-cover.is-opening .nexus-cover__visual img {
+  transform: scale(1.12);
+  filter: brightness(1.12);
+}
+.nexus-cover.is-opening .nexus-cover__panel {
+  transform: translate3d(5vw,0,80px) scale(.985);
+  opacity: .72;
+  filter: blur(2px);
+}
+.nexus-cover .nexus-open {
+  box-shadow: 0 0 0 5px rgba(212,175,55,.08), 0 14px 38px rgba(0,0,0,.28);
+}
+.nexus-cover .nexus-open:focus-visible,
+.nexus-page button:focus-visible,
+.nexus-page a:focus-visible {
+  outline: 2px solid var(--nx-accent);
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .nexus-cover { perspective: 1200px; }
+  .nexus-cover__visual { min-height: 100svh; }
+  .nexus-cover.is-opening .nexus-cover__visual {
+    transform: perspective(900px) rotateY(-58deg) translateX(-8vw) scale(.92);
+  }
+  .nexus-cover.is-opening .nexus-cover__panel {
+    transform: translate3d(2vw,0,48px) scale(.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nexus-cover__visual,
+  .nexus-cover__visual:before,
+  .nexus-cover__visual img,
+  .nexus-cover__panel {
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
