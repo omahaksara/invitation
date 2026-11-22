@@ -611,6 +611,23 @@
  .nexus-page .gallery-grid img{opacity:1;transform:none}
 }
 
+
+/* NEXUS image safety fallback: media must never depend on the optional
+   template reveal script to become visible after the shared engine mounts it. */
+.nexus-cover__visual{isolation:isolate;background:#171b22}
+.nexus-cover__visual img{z-index:0;display:block;opacity:1!important;visibility:visible!important}
+.nexus-cover__visual:after{z-index:1;pointer-events:none}
+.nexus-cover__visual:before{z-index:2;pointer-events:none}
+.nexus-page .gallery-section .gallery-item.reveal,
+.nexus-page .gallery-section .gallery-grid img{
+  opacity:1!important;visibility:visible!important;filter:none!important;transform:none;
+}
+.nexus-page .gallery-section .gallery-grid img{display:block;min-height:1px}
+@media(prefers-reduced-motion:no-preference){
+  .nexus-page .gallery-section .gallery-grid img{transition:transform .7s ease,filter .7s ease,box-shadow .7s ease}
+  .nexus-page .gallery-section .gallery-grid img:hover{transform:translateY(-5px) scale(1.018)}
+}
+
 </style>
 <div id="cover-section" class="nexus-cover" data-skin="gold">
   <div class="nexus-cover__visual"><img data-bind="cover.image" alt="Sampul undangan" fetchpriority="high"></div>
