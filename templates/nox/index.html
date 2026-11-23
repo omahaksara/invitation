@@ -16,6 +16,28 @@
 #rsvp-form,#wishes-form{max-width:580px;margin:24px auto;display:grid;gap:12px;text-align:left}#rsvp-form input,#rsvp-form select,#wishes-form input,#wishes-form textarea{width:100%;padding:14px;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--text-main);font:inherit;font-size:.85rem}#rsvp-form button,#wishes-form button{padding:14px;border:0;background:var(--accent);color:#fff;font:.65rem Cinzel,serif;letter-spacing:.15em;cursor:pointer}#wishes-list{max-width:580px;margin:auto;text-align:left}.wish-card{padding:16px;background:#fff;border:1px solid var(--line);margin:10px 0}
 footer{text-align:center;background:#30251f;color:#f7f1eb;padding:72px 20px}footer h2{font-size:clamp(2rem,5vw,3rem)}.reveal{opacity:0;transform:translateY(22px);transition:opacity .85s ease,transform .9s ease}.reveal.active{opacity:1;transform:none}
 @media(max-width:640px){.couple-grid,.event-grid,.gift-grid{grid-template-columns:1fr}.section{padding:62px 18px}.story-item{grid-template-columns:1fr;gap:7px}.gallery-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}.gallery-grid img{grid-column:span 3}.gallery-grid img:nth-child(5n){grid-column:span 6}#countdown{gap:6px}.count-cell{padding:12px 3px}.count-cell b{font-size:1.5rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
+
+/* NOX — stripped cinematic split, removing the decorative frame entirely. */
+#cover{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:clamp(24px,6vw,76px);background:#171411}
+#cover>img{opacity:.76;filter:grayscale(.25) contrast(1.08);object-position:78% center}
+#cover:after{background:linear-gradient(90deg,#171411f2 0%,#171411d8 34%,#17141155 68%,#17141118 100%)}
+.cover-frame{width:min(100%,560px);padding:0;border:0;outline:0;background:transparent;box-shadow:none;position:relative;text-align:left}
+.cover-frame:before{content:"";display:block;width:44px;height:1px;background:#d9774d;margin:0 0 24px}
+.cover-frame h1{font-size:clamp(3.2rem,8.4vw,6.8rem);line-height:.94;letter-spacing:-.045em;margin:18px 0 22px}
+.cover-frame .amp{font-size:.58em;color:#d9774d}
+.cover-frame .guest{font-size:1.18rem;color:#f1e8dc;margin:28px 0 12px}
+.cover-frame .cover-date{color:#d9b59d}
+#cover .btn-open{border-radius:0;border:1px solid #d9774d;background:transparent;color:#f2e2d4;letter-spacing:.16em;padding:14px 20px}
+#cover .btn-open:hover{background:#d9774d;color:#1c1713}
+@media(max-width:640px){
+ #cover{align-items:flex-end;padding:24px 20px calc(32px + env(safe-area-inset-bottom))}
+ #cover>img{object-position:72% center}
+ #cover:after{background:linear-gradient(0deg,#171411f5 0%,#171411c0 48%,#17141130 100%)}
+ .cover-frame{width:100%}
+ .cover-frame:before{margin-bottom:18px}
+ .cover-frame h1{font-size:clamp(3rem,14vw,4.6rem)}
+}
+
 </style></head><body><div class="nox">
 <section id="cover"><img data-bind="cover.image" src="" alt="Foto sampul"><div class="cover-frame"><p class="eyebrow" style="color:#e6a080">Nocturne Terracotta · Omah Aksara</p><p class="cinzel" style="font-size:.7rem;letter-spacing:.25em;color:#f2d9cb">THE WEDDING OF</p><h1><span data-bind="couple.bride.nickname">Mempelai Wanita</span><br><span class="amp">&amp;</span><br><span data-bind="couple.groom.nickname">Mempelai Pria</span></h1><p class="eyebrow" style="color:#f2d9cb">Kepada Yth.</p><h2 id="nama-tamu" class="guest">Tamu Undangan</h2><p class="cover-date" data-bind="cover.dateLabel"></p><div style="margin-top:28px"><button id="open-btn" class="open-btn"><span data-bind="cover.buttonText">Buka Undangan</span> ✦</button></div></div></section>
 <main id="main-content" hidden><section class="section"><div class="inner"><p class="eyebrow">A sacred promise</p><div class="ornament">✦</div><p class="quote" data-bind="quote.arab"></p><p class="quote" data-bind="quote.text"></p><p class="detail" data-bind="quote.source"></p><p class="intro" data-bind="opening.text"></p></div></section>
