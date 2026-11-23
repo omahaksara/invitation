@@ -56,6 +56,32 @@ html{scroll-behavior:smooth;scroll-padding-top:18px}
 .gallery-item img{content-visibility:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cover-orbit,.cover-monogram{animation:none!important}.reveal{opacity:1;transform:none;will-change:auto}}
 
+
+/* Cover art direction: botanical editorial, asymmetrical photo/text split. */
+.cover{align-items:flex-end;text-align:left;padding:clamp(24px,5vw,64px);background:#252d25}
+.cover-photo{opacity:.82;filter:saturate(.78);object-position:65% center}
+.cover:after{background:linear-gradient(90deg,rgba(27,32,26,.86) 0%,rgba(27,32,26,.55) 48%,rgba(27,32,26,.04) 100%)}
+.cover-orbit{left:auto;right:-18%;top:18%;width:min(76vw,520px);border-radius:50%;opacity:.55}
+.orbit-one{transform:rotate(-18deg) scaleY(.76)}
+.orbit-two{right:-8%;top:24%;width:min(60vw,420px);transform:rotate(24deg) scaleY(.72)}
+.cover-monogram{margin:0 0 18px 0;text-align:left}
+.cover-kicker{margin:0 0 8px}
+.cover h1{justify-content:flex-start;text-align:left;max-width:680px;line-height:.92;margin:14px 0 18px}
+.cover-line{margin:0 0 18px}
+.cover-date{letter-spacing:.12em}
+.guest-label{margin:24px 0 5px}
+.open-button{align-self:flex-start}
+.cover-foot{position:relative;bottom:auto;left:auto;margin:34px 0 0}
+@media(max-width:650px){
+ .cover{padding:24px 22px calc(32px + env(safe-area-inset-bottom))}
+ .cover-photo{object-position:62% center}
+ .cover:after{background:linear-gradient(0deg,rgba(27,32,26,.92) 0%,rgba(27,32,26,.55) 58%,rgba(27,32,26,.05) 100%)}
+ .cover-orbit{right:-45%;top:8%;width:105vw}
+ .orbit-two{right:-28%;top:14%;width:85vw}
+ .cover h1{font-size:clamp(2.6rem,12vw,4.4rem)}
+ .cover-monogram{font-size:clamp(3.8rem,13vw,6rem)}
+}
+
 </style>
 
 <div class="invite-shell">
