@@ -424,8 +424,8 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": metode pembayaran nonaktif ikut tampil atau urutannya berubah " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.disabledPaymentActions, true,
           theme.slug + ": tombol pembayaran demo harus nonaktif " + JSON.stringify(demoFeatureAudit));
-        assert.equal(demoFeatureAudit.hasDemoNotice, true,
-          theme.slug + ": peringatan simulasi pembayaran tidak tampil " + JSON.stringify(demoFeatureAudit));
+        assert.ok(demoFeatureAudit.paymentCardNames.some(name => name.toLowerCase().includes("simulasi")),
+          theme.slug + ": label metode simulasi tidak tampil " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.eventCards, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": jumlah kartu acara tidak sesuai mode JSON " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.scheduleRows, demoFeatureAudit.expectedScheduleRows,
