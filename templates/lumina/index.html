@@ -95,3 +95,23 @@
   <button id="music-toggle" class="oa-legacy-music-control" type="button" hidden aria-label="Kontrol musik bersama">Musik</button>
   <audio id="bg-music" loop></audio>
 </main>
+
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("lumina", {
+    activate({ navigation, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "lumina";
+      style.textContent = `#oa-floating-controls.oa-nav-lumina{left:50%!important;right:auto!important;top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:8px 12px!important;gap:7px!important;border-radius:18px!important;background:rgba(20,16,31,.96)!important;border:1px solid #ff5da2!important;box-shadow:0 0 28px #ff5da244,0 12px 32px #08051299!important;backdrop-filter:blur(18px)!important}#oa-floating-controls.oa-nav-lumina button{min-width:42px!important;min-height:40px!important;border-radius:12px!important;color:#fff9f2!important;font:700 9px/1.1 Manrope,sans-serif!important}#oa-floating-controls.oa-nav-lumina button.is-active{background:#ff5da2!important;color:#1b1024!important}@media(max-width:600px){#oa-floating-controls.oa-nav-lumina{left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;width:auto!important;justify-content:space-around!important}}
+.oa-gallery-lightbox[data-oa-theme="lumina"]{background:rgba(11,8,20,.98)!important;backdrop-filter:blur(22px)}.oa-gallery-lightbox[data-oa-theme="lumina"] img{border:2px solid #ff5da2;border-radius:18px!important;box-shadow:0 0 36px #ff5da255,0 22px 60px #000b}`;
+      if (navigation) navigation.classList.add("oa-nav-lumina");
+      document.head.append(style);
+      addCleanup(() => {
+        if (navigation) navigation.classList.remove("oa-nav-lumina");
+        style.remove();
+      });
+    }
+  });
+})();
+</script>
