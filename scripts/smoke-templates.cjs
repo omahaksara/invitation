@@ -96,11 +96,13 @@ const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"
 for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
-  const themeTokenBlocks = [...sharedThemeCss.matchAll(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\][^{]*\\{[^}]*\\}`, "gm"))]
-    .map(match => match[0]);
-  assert.ok(themeTokenBlocks.some(block => block.includes("--oa-font-display") && block.includes("--oa-font-body")),
+  // Parse selector lines directly. The previous escaped RegExp matched literal backslashes,
+  // so valid CSS tokens were falsely reported missing for themes such as LUMA.
+  const themeTokenLines = sharedThemeCss.split("\\n")
+    .filter(line => line.includes(`html[data-oa-theme="${slug}"]`));
+  assert.ok(themeTokenLines.some(line => line.includes("--oa-font-display") && line.includes("--oa-font-body")),
     slug + ": token tipografi tema belum lengkap.");
-  assert.ok(themeTokenBlocks.some(block => block.includes("--oa-reveal-time") && block.includes("--oa-reveal-ease")),
+  assert.ok(themeTokenLines.some(line => line.includes("--oa-reveal-time") && line.includes("--oa-reveal-ease")),
     slug + ": token animasi reveal tema belum lengkap.");
 }
 
