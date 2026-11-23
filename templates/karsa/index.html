@@ -265,3 +265,49 @@ body {
 </div>
 
 <audio id="bg-music" loop data-bind="media.music"></audio>
+
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("karsa", {
+    activate({ root, observe, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "karsa";
+      style.textContent = `
+        [data-oa-karsa-motion="ready"] .editorial-frame,
+        [data-oa-karsa-motion="ready"] .quote-section,
+        [data-oa-karsa-motion="ready"] .btn-editorial { transition: opacity 900ms ease, transform 1100ms cubic-bezier(.2,.75,.2,1), filter 900ms ease; }
+        [data-oa-karsa-motion="ready"] .oa-karsa-reveal { opacity:0; transform:translate3d(0,28px,0); filter:blur(3px); }
+        [data-oa-karsa-motion="ready"] .oa-karsa-reveal.oa-karsa-visible { opacity:1; transform:none; filter:none; }
+        [data-oa-karsa-motion="ready"] .editorial-frame.oa-karsa-reveal { transform:translate3d(0,22px,0) scale(.965); }
+        [data-oa-karsa-motion="ready"] .editorial-frame.oa-karsa-reveal.oa-karsa-visible { transform:translate3d(0,0,0) scale(1); }
+        @media(prefers-reduced-motion:reduce){[data-oa-karsa-motion="ready"] .oa-karsa-reveal{opacity:1;transform:none;filter:none;transition:none}}
+      `;
+      document.head.append(style);
+      root.dataset.oaKarsaMotion = "ready";
+      const targets = root.querySelectorAll(".editorial-frame, .quote-section, .profile-card, .event-card, .gallery-item, .gift-card");
+      targets.forEach((node, index) => {
+        node.classList.add("oa-karsa-reveal");
+        node.style.setProperty("--oa-karsa-order", String(index));
+      });
+      observe(targets, "oa-karsa-visible", { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
+      const names = root.querySelectorAll("#cover h1 span");
+      if (!reducedMotion) names.forEach((node, index) => {
+        node.style.display = "inline-block";
+        node.style.animation = "oaKarsaName 850ms cubic-bezier(.2,.7,.2,1) both";
+        node.style.animationDelay = (index * 180) + "ms";
+      });
+      const nameStyle = document.createElement("style");
+      nameStyle.dataset.oaThemeProgram = "karsa-names";
+      nameStyle.textContent = "@keyframes oaKarsaName{from{opacity:0;transform:translateY(14px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}";
+      document.head.append(nameStyle);
+      addCleanup(() => {
+        root.removeAttribute("data-oa-karsa-motion");
+        root.querySelectorAll(".oa-karsa-reveal").forEach(node => { node.classList.remove("oa-karsa-reveal","oa-karsa-visible"); node.style.removeProperty("--oa-karsa-order"); });
+        names.forEach(node => { node.style.removeProperty("display"); node.style.removeProperty("animation"); node.style.removeProperty("animation-delay"); });
+        style.remove(); nameStyle.remove();
+      });
+    }
+  });
+})();
+</script>
