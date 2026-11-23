@@ -61,7 +61,7 @@ Untuk tes browser lokal, jalankan server statis di port 4173, pastikan Playwrigh
 node scripts/smoke-templates.cjs
 ```
 
-GitHub Actions memeriksa sintaks JavaScript, data V2, seluruh tema aktif pada registry, binding pasangan, musik, nama tamu, dan alur pembukaan. Tes otomatis tetap harus dilengkapi uji RSVP/buku tamu end-to-end pada deployment backend uji dan pemeriksaan visual di ponsel/desktop.
+GitHub Actions menjalankan validasi statis, data V2, backend mock terisolasi, serta browser smoke Playwright untuk seluruh tema aktif pada registry. Browser smoke memeriksa cover, tombol buka, nama tamu, formulir, kontrak data, navigasi, galeri, dan alur pembukaan; screenshot disimpan sebagai artifact ketika tersedia. Tes otomatis tetap harus dilengkapi uji RSVP/buku tamu end-to-end pada deployment backend uji dan pemeriksaan visual manual di ponsel/desktop.
 
 Smoke test produksi `node scripts/smoke-production.cjs` menggunakan browser untuk membaca katalog, undangan, dan buku tamu. Jangan menjalankannya sembarangan: permintaan GET buku tamu dapat mendaftarkan slug published yang belum tercatat pada tab `Settings`. Script ini tidak mengirim formulir RSVP atau buku tamu.
 
