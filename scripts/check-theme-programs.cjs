@@ -60,5 +60,7 @@ for (const slug of programs) {
   assert.ok(navClass, slug + ": program tema belum memasang kelas navigasi.");
   assert.ok(template.includes("#oa-floating-controls." + navClass),
     slug + ": kelas navigasi tidak memiliki aturan presentasi khusus.");
+  assert.ok(template.includes("prefers-reduced-motion:reduce"),
+    slug + ": navigasi atau overlay belum menyediakan fallback gerak minim.");
 }
 console.log("Theme program contract passed for " + programs.length + " themes.");
