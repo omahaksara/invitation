@@ -356,11 +356,6 @@
 
     // New invitations may opt into one combined event card. Legacy JSON without
     // eventMode keeps its original rendering and calendar behavior unchanged.
-    if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
-      const resepsi = data.events.resepsi;
-      if (resepsi && typeof resepsi === "object") data.__renderEvents = { resepsi };
-    }
-
     if (data.eventMode === "combined" && data.events && !Array.isArray(data.events)) {
       const akad = data.events.akad;
       const resepsi = data.events.resepsi;
@@ -535,6 +530,7 @@
 
     renderStory(data.story, clientBase);
     renderEvents(data.__renderEvents || data.events, data, clientBase);
+    setupCalendarLinks(data, slug);
     bindMapLinks(data);
     renderGallery(data.gallery, clientBase);
     renderClosing(data);
@@ -960,6 +956,20 @@
         }
       });
     }
+  }
+
+  function setupCalendarLinks(data, slug) {
+    const source = data.__renderEvents || data.events;
+    const events = Array.isArray(source) ? source : Object.values(source || {});
+    const event = events.find(item => item && (item.dateISO || item.date));
+    document.querySelectorAll("#calendar-link").forEach(link => {
+      if (link.dataset.oaCalendarBound === "true") return;
+      link.dataset.oaCalendarBound = "true";
+      link.addEventListener("click", click => {
+        click.preventDefault();
+        if (event) downloadCalendarEvent(event, data, slug);
+      });
+    });
   }
 
   function buildGoogleCalendarUrl(event, data) {
