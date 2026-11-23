@@ -2,6 +2,32 @@
   "use strict";
   document.addEventListener("DOMContentLoaded", initInvitation);
 
+  async function activateTemplateScripts(root) {
+    const scripts = Array.from(root.querySelectorAll("script"));
+    for (const original of scripts) {
+      const script = document.createElement("script");
+      Array.from(original.attributes).forEach(attribute => script.setAttribute(attribute.name, attribute.value));
+      if (original.getAttribute("src")) {
+        script.async = false;
+        await new Promise(resolve => {
+          script.addEventListener("load", resolve, { once: true });
+          script.addEventListener("error", resolve, { once: true });
+          original.replaceWith(script);
+        });
+      } else if (script.type === "module") {
+        await new Promise(resolve => {
+          script.addEventListener("load", resolve, { once: true });
+          script.addEventListener("error", resolve, { once: true });
+          script.textContent = original.textContent;
+          original.replaceWith(script);
+        });
+      } else {
+        script.textContent = original.textContent;
+        original.replaceWith(script);
+      }
+    }
+  }
+
   async function initInvitation() {
     const app = document.getElementById("app");
     if (!app) return;
@@ -116,6 +142,8 @@
       } else {
         app.innerHTML = templateHtml;
       }
+      // Recreate inert scripts inserted by innerHTML after the theme DOM exists.
+      await activateTemplateScripts(app);
       document.title = (data.seo && data.seo.title) || (data.cover && data.cover.title) || "Undangan Pernikahan | Omah Aksara";
       renderInvitation(data, clientBase, slug, guestName, buildShortInvitationUrl, params.get("view") === "portfolio");
       localizeTemplateCopy(app, data);
@@ -300,8 +328,8 @@
       event.dateISO = event.dateISO || event.isoDate || event.tanggalISO || "";
       event.date = event.date || event.tanggal || (event.dateISO
         ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : "");
-      event.startTime = event.startTime || event.timeStart || event.jamMulai || "";
-      event.endTime = event.endTime || event.timeEnd || event.jamSelesai || "";
+      event.startTime = normalizeClockTime(event.startTime || event.timeStart || event.jamMulai || "") || "";
+      event.endTime = normalizeClockTime(event.endTime || event.timeEnd || event.jamSelesai || "") || "";
       event.time = event.time || event.waktu || [event.startTime, event.endTime].filter(Boolean).join("–");
       event.timezone = event.timezone || event.timeZone || data.site?.timezone || "Asia/Makassar";
       event.mapQuery = event.mapQuery || event.mapSearch || [event.location, event.address].filter(Boolean).join(", ");
@@ -328,6 +356,11 @@
 
     // New invitations may opt into one combined event card. Legacy JSON without
     // eventMode keeps its original rendering and calendar behavior unchanged.
+    if (data.eventMode === "resepsi-only" && data.events && !Array.isArray(data.events)) {
+      const resepsi = data.events.resepsi;
+      if (resepsi && typeof resepsi === "object") data.__renderEvents = { resepsi };
+    }
+
     if (data.eventMode === "combined" && data.events && !Array.isArray(data.events)) {
       const akad = data.events.akad;
       const resepsi = data.events.resepsi;
@@ -492,11 +525,6 @@
       } else el.textContent = String(value);
     });
 
-    // Keep the NEXUS cover portrait visible even when the theme's decorative
-    // 3D stacking contexts are unsupported or reordered by mobile browsers.
-    // This is presentation-only and does not change the shared invitation data.
-    stabilizeCoverImage();
-
     const safeGuest = guestName || valueAt(data, "guest.defaultName") || "Tamu Undangan";
     const guestEl = document.getElementById("nama-tamu");
     if (guestEl) guestEl.textContent = safeGuest;
@@ -525,48 +553,6 @@
   }
 
 
-
-  function stabilizeCoverImage() {
-    const cover = document.getElementById("cover-section");
-    const visual = cover && cover.querySelector(".nexus-cover__visual");
-    const image = visual && visual.querySelector('img[data-bind="cover.image"]');
-    if (!cover || !visual || !image || !image.getAttribute("src")) return;
-
-    const mobile = window.matchMedia && window.matchMedia("(max-width: 700px)").matches;
-    cover.style.setProperty("isolation", "isolate", "important");
-    cover.style.setProperty("position", "fixed", "important");
-    cover.style.setProperty("inset", "0", "important");
-    cover.style.setProperty("overflow", "hidden", "important");
-
-    visual.style.setProperty("overflow", "hidden", "important");
-    visual.style.setProperty("z-index", "0", "important");
-    visual.style.setProperty("transform", "none", "important");
-    visual.style.setProperty("backface-visibility", "visible", "important");
-    if (mobile) {
-      visual.style.setProperty("position", "absolute", "important");
-      visual.style.setProperty("inset", "0", "important");
-      visual.style.setProperty("width", "100%", "important");
-      visual.style.setProperty("height", "100%", "important");
-      visual.style.setProperty("min-height", "100svh", "important");
-    } else {
-      visual.style.setProperty("position", "relative", "important");
-      visual.style.setProperty("min-height", "100svh", "important");
-    }
-
-    image.style.setProperty("display", "block", "important");
-    image.style.setProperty("position", "absolute", "important");
-    image.style.setProperty("inset", "0", "important");
-    image.style.setProperty("width", "100%", "important");
-    image.style.setProperty("height", "100%", "important");
-    image.style.setProperty("max-width", "none", "important");
-    image.style.setProperty("object-fit", "cover", "important");
-    image.style.setProperty("opacity", "1", "important");
-    image.style.setProperty("visibility", "visible", "important");
-    image.style.setProperty("backface-visibility", "visible", "important");
-
-    const panel = cover.querySelector(".nexus-cover__panel");
-    if (panel) panel.style.setProperty("z-index", "4", "important");
-  }
 
   function applyFeatureFlags(data) {
     const flags = data && data.features && typeof data.features === "object" ? data.features : {};
@@ -977,20 +963,22 @@
   }
 
   function buildGoogleCalendarUrl(event, data) {
-    const date = String(event.dateISO || event.date || "");
+    let date = String(event.dateISO || event.date || "");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "";
-    const startTime = String(event.startTime || "09:00");
-    let endTime = String(event.endTime || "");
+    const startTime = normalizeClockTime(event.startTime || "09:00");
+    if (!startTime) return "";
+    let endTime = normalizeClockTime(event.endTime || "");
     const hasEndTime = !!endTime;
+    let endDate = date;
     if (!endTime) {
-      const [hour, minute] = startTime.split(":").map(Number);
-      const totalMinutes = hour * 60 + (minute || 0) + 60;
-      endTime = String(Math.floor(totalMinutes / 60) % 24).padStart(2, "0") + ":" +
-        String(totalMinutes % 60).padStart(2, "0");
+      const [year, month, day] = date.split("-").map(Number);
+      const end = new Date(Date.UTC(year, month - 1, day, Number(startTime.slice(0, 2)) + 1, Number(startTime.slice(3, 5))));
+      endDate = end.toISOString().slice(0, 10);
+      endTime = String(end.getUTCHours()).padStart(2, "0") + ":" + String(end.getUTCMinutes()).padStart(2, "0");
     }
     const stamp = (dateValue, timeValue) => dateValue.replace(/-/g, "") + "T" +
-      timeValue.replace(":", "").padEnd(4, "0") + "00";
-    const dates = stamp(date, startTime) + "/" + stamp(date, endTime);
+      timeValue.replace(":", "") + "00";
+    const dates = stamp(date, startTime) + "/" + stamp(endDate, endTime);
     const location = [event.location || event.venue, event.address].filter(Boolean).join(", ");
     const params = new URLSearchParams({
       action: "TEMPLATE",
@@ -1266,10 +1254,16 @@
 
   function formatEventDate(date, timezone) {
     if (!date) return "";
-    const parsed = /^\d{4}-\d{2}-\d{2}$/.test(date) ? new Date(date + "T12:00:00") : new Date(date);
-    if (Number.isNaN(parsed.getTime())) return date;
-    try { return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: timezone || "Asia/Makassar" }).format(parsed); }
-    catch { return date; }
+    const zone = timezone || "Asia/Makassar";
+    try {
+      const parsed = /^\d{4}-\d{2}-\d{2}$/.test(String(date))
+        ? zonedDateTimeToUtc(String(date), "12:00", zone)
+        : new Date(date);
+      if (Number.isNaN(parsed.getTime())) return date;
+      return new Intl.DateTimeFormat("id-ID", {
+        day: "numeric", month: "long", year: "numeric", timeZone: zone
+      }).format(parsed);
+    } catch { return date; }
   }
 
   function renderGallery(gallery, clientBase) {
@@ -1400,6 +1394,19 @@
     });
   }
 
+  function getAnimationTotalMs(element) {
+    if (!element) return 0;
+    const style = getComputedStyle(element);
+    const parseTimes = value => String(value || "0s").split(",").map(part => {
+      const raw = part.trim();
+      const number = parseFloat(raw) || 0;
+      return raw.endsWith("ms") ? number : number * 1000;
+    });
+    const durations = parseTimes(style.animationDuration);
+    const delays = parseTimes(style.animationDelay);
+    return Math.max(0, ...durations.map((duration, index) => duration + (delays[index % delays.length] || 0)));
+  }
+
   function setupCover() {
     const cover = document.getElementById("cover-section") || document.getElementById("cover");
     const main = document.getElementById("main-content") || document.getElementById("app-inner");
@@ -1427,20 +1434,29 @@
           open.removeAttribute("aria-busy");
         };
         const onCoverAnimationEnd = event => {
-          if (event.target === cover && event.animationName.startsWith("oa-cover-")) finishCover();
+          if (event.target === cover && event.animationName) finishCover();
         };
+        let coverDuration = 0;
         if (cover) {
           if (reducedMotionPreference) {
             finishCover();
           } else {
             cover.addEventListener("animationend", onCoverAnimationEnd);
-            coverFallback = window.setTimeout(finishCover, 1900);
             cover.classList.add("is-opening");
+            coverDuration = getAnimationTotalMs(cover);
+            coverFallback = window.setTimeout(finishCover, Math.max(350, coverDuration + 280));
           }
         } else {
           open.removeAttribute("aria-busy");
         }
-        if (main) { main.hidden = false; main.style.display = "block"; main.classList.add("oa-main-opening"); }
+        if (main) {
+          main.hidden = false;
+          main.style.display = "block";
+          if (!(cover && main.contains(cover))) {
+            main.style.setProperty("--oa-main-enter-delay", reducedMotionPreference ? "0ms" : Math.round(coverDuration * 0.52) + "ms");
+            main.classList.add("oa-main-opening");
+          }
+        }
         document.body.classList.add("oa-invitation-opened");
         document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
@@ -1538,22 +1554,50 @@
     return new Date(timestamp);
   }
 
+  function normalizeClockTime(value) {
+    const match = String(value || "").trim().match(/^(\d{1,2})[:.](\d{2})$/);
+    if (!match) return "";
+    const hour = Number(match[1]), minute = Number(match[2]);
+    if (!Number.isInteger(hour) || !Number.isInteger(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return "";
+    return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
+  }
+
   function setupCountdown(data) {
     const eventSource = data.__renderEvents || data.events;
     const target = (Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {})).find(e => e && (e.date || e.dateISO));
-    let targetDate;
-    if (data.countdown && data.countdown.targetDate) {
-      targetDate = new Date(data.countdown.targetDate);
-    } else if (target) {
-      const date = target.dateISO || target.date;
-      const time = target.startTime || "00:00";
-      try {
-        targetDate = /^\d{4}-\d{2}-\d{2}$/.test(date)
-          ? zonedDateTimeToUtc(date, time, target.timezone || "Asia/Makassar")
-          : new Date(date + "T" + time + ":00");
-      } catch { targetDate = null; }
+    let targetDate = null;
+    const countdown = data.countdown || {};
+    const zone = countdown.timezone || target?.timezone || data.site?.timezone || "Asia/Makassar";
+    const explicitTarget = String(countdown.targetDate || "").trim();
+    try {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(explicitTarget)) {
+        const time = normalizeClockTime(countdown.targetTime || target?.startTime || "00:00");
+        if (time) targetDate = zonedDateTimeToUtc(explicitTarget, time, zone);
+      } else if (explicitTarget) {
+        const localMatch = explicitTarget.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{1,2}[:.]\d{2})(?::\d{2})?$/);
+        if (localMatch) {
+          const time = normalizeClockTime(localMatch[2]);
+          if (time) targetDate = zonedDateTimeToUtc(localMatch[1], time, zone);
+        } else {
+          const parsed = new Date(explicitTarget);
+          if (!Number.isNaN(parsed.getTime())) targetDate = parsed;
+        }
+      }
+      if (!targetDate && target) {
+        const date = target.dateISO || target.date;
+        const time = normalizeClockTime(target.startTime || "00:00");
+        if (time && /^\d{4}-\d{2}-\d{2}$/.test(String(date))) {
+          targetDate = zonedDateTimeToUtc(String(date), time, target.timezone || zone);
+        } else if (date && time) {
+          const parsed = new Date(date + "T" + time + ":00");
+          if (!Number.isNaN(parsed.getTime())) targetDate = parsed;
+        }
+      }
+    } catch { targetDate = null; }
+    if (!targetDate || Number.isNaN(targetDate.getTime())) {
+      document.querySelectorAll("#countdown, .countdown").forEach(section => { section.hidden = true; });
+      return;
     }
-    if (!targetDate || Number.isNaN(targetDate.getTime())) return;
     const tick = () => {
       let diff = Math.max(0, targetDate.getTime() - Date.now());
       const days = Math.floor(diff / 86400000); diff %= 86400000;
@@ -2227,11 +2271,15 @@
     }
 
     let autoTimer = null;
+    let autoFrame = null;
+    let autoLastFrame = 0;
     let autoStartDelay = null;
     const stopAutoScroll = () => {
-      if (autoTimer !== null) window.clearInterval(autoTimer);
+      if (autoTimer !== null) autoTimer = null;
+      if (autoFrame !== null) cancelAnimationFrame(autoFrame);
       if (autoStartDelay !== null) window.clearTimeout(autoStartDelay);
-      autoTimer = null;
+      autoFrame = null;
+      autoLastFrame = 0;
       autoStartDelay = null;
       autoButton.textContent = "↧";
       autoButton.setAttribute("aria-pressed", "false");
@@ -2244,12 +2292,20 @@
       autoButton.classList.add("is-running");
       autoButton.setAttribute("aria-pressed", "true");
       autoButton.setAttribute("aria-label", "Jeda gulir otomatis");
-      autoTimer = window.setInterval(() => {
+      autoTimer = true;
+      autoLastFrame = 0;
+      const step = timestamp => {
+        if (!autoTimer) return;
         if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
           stopAutoScroll(); return;
         }
-        window.scrollBy(0, 1);
-      }, 24);
+        const delta = autoLastFrame ? Math.min(48, timestamp - autoLastFrame) : 16;
+        autoLastFrame = timestamp;
+        const nextTop = Math.min(document.documentElement.scrollHeight - window.innerHeight, window.scrollY + delta * 0.035);
+        window.scrollTo({ top: nextTop, behavior: "instant" });
+        autoFrame = requestAnimationFrame(step);
+      };
+      autoFrame = requestAnimationFrame(step);
     };
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       autoButton.disabled = true;
@@ -2345,8 +2401,8 @@
           100% { opacity:0; transform:translate3d(0,-1.2%,0) scale(1.018); filter:blur(1.2px); }
         }
         #main-content.oa-main-opening, #app-inner.oa-main-opening {
-          animation: oa-main-enter var(--oa-main-enter-duration, 1.28s) var(--oa-main-enter-ease, cubic-bezier(.2,.72,.18,1)) both;
-          will-change: opacity, transform;
+          animation: oa-main-enter var(--oa-main-enter-duration, 1.28s) var(--oa-main-enter-ease, cubic-bezier(.2,.72,.18,1)) backwards;
+          animation-delay: var(--oa-main-enter-delay, .65s);
         }
         @keyframes oa-main-enter {
           0% { opacity:0; transform:translate3d(0,18px,0); }
