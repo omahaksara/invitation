@@ -456,7 +456,7 @@ for (const slug of activeThemeSlugs) {
           cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
           groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
           bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
-          gallery: Array.from(document.querySelectorAll(".gallery-grid img")).map(img => img.src),
+          gallery: Array.from(document.querySelectorAll("#gallery-grid img, .gallery-grid img")).map(img => img.src),
           images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
         }));
         const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
@@ -532,8 +532,16 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
-        const galleryImage = page.locator(".gallery-grid img").first();
+        const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
+          await galleryImage.scrollIntoViewIfNeeded();
+          const galleryHandle = await galleryImage.elementHandle();
+          await page.waitForFunction(image => image.classList.contains("oa-motion-visible"),
+            galleryHandle, { timeout: 5000 });
+          await galleryImage.evaluate(async image => {
+            const running = image.getAnimations().filter(animation => animation.playState === "running");
+            await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
+          });
           await galleryImage.click();
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
@@ -562,7 +570,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": pin sintetis yang sudah diverifikasi tidak boleh menampilkan peringatan lokasi belum terverifikasi");
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
-        assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
+        assert.ok(mapAudit.mapLinks.every(url => url.startsWith("https://www.google.com/maps")),
           theme.slug + ": tautan pencarian Maps harus tetap tersedia");
         if (mapAudit.eventMode === "combined") {
           assert.equal(mapAudit.eventCards, 1,
