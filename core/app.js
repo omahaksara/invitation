@@ -548,6 +548,14 @@
     ensureFloatingControls(data, buildShortInvitationUrl);
     // Forms, navigation, and fallback sections are created above; observe them too.
     setupReveal();
+    // Theme-owned choreography runs after the shared content/data lifecycle is ready.
+    // A missing or failing theme program never blocks invitation rendering or forms.
+    if (window.OAThemePrograms && typeof window.OAThemePrograms.activate === "function") {
+      window.OAThemePrograms.activate(document.documentElement.dataset.oaTheme || "karsa", {
+        root: document.getElementById("app"),
+        data
+      });
+    }
   }
 
 
