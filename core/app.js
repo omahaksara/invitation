@@ -328,8 +328,10 @@
       event.dateISO = event.dateISO || event.isoDate || event.tanggalISO || "";
       event.date = event.date || event.tanggal || (event.dateISO
         ? formatEventDate(event.dateISO, event.timezone || data.site?.timezone) : "");
-      event.startTime = normalizeClockTime(event.startTime || event.timeStart || event.jamMulai || "") || "";
-      event.endTime = normalizeClockTime(event.endTime || event.timeEnd || event.jamSelesai || "") || "";
+      const rawStartTime = event.startTime || event.timeStart || event.jamMulai || "";
+      const rawEndTime = event.endTime || event.timeEnd || event.jamSelesai || "";
+      event.startTime = normalizeClockTime(rawStartTime) || rawStartTime;
+      event.endTime = normalizeClockTime(rawEndTime) || rawEndTime;
       event.time = event.time || event.waktu || [event.startTime, event.endTime].filter(Boolean).join("–");
       event.timezone = event.timezone || event.timeZone || data.site?.timezone || "Asia/Makassar";
       event.mapQuery = event.mapQuery || event.mapSearch || [event.location, event.address].filter(Boolean).join(", ");
@@ -1010,8 +1012,8 @@
     const date = String(event.dateISO || event.date || "");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
     const timezone = event.timezone || (data.site && data.site.timezone) || "Asia/Makassar";
-    const startTime = event.startTime || "00:00";
-    const endTime = event.endTime || (startTime === "00:00" ? "01:00" : startTime);
+    const startTime = normalizeClockTime(event.startTime || "00:00") || "00:00";
+    const endTime = normalizeClockTime(event.endTime || "") || (startTime === "00:00" ? "01:00" : startTime);
     const toUtc = (dateValue, timeValue, zone) => {
       const [year, month, day] = dateValue.split("-").map(Number);
       const [hour, minute] = timeValue.split(":").map(Number);
