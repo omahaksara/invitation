@@ -176,10 +176,10 @@
       style.dataset.oaThemeProgram = "kencana-jawa";
       style.textContent = `#oa-floating-controls.oa-nav-kencana{left:50%!important;right:auto!important;top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:8px 12px!important;gap:4px!important;border-radius:5px!important;background:linear-gradient(180deg,#17130eF7,#090806F7)!important;border:1px solid #c6a15b!important;box-shadow:0 10px 32px #000a,inset 0 0 0 2px #c6a15b22!important}#oa-floating-controls.oa-nav-kencana button{min-width:44px!important;min-height:40px!important;border-radius:3px!important;color:#ecd9a8!important;font:600 9px/1.1 Georgia,serif!important;letter-spacing:.04em!important}#oa-floating-controls.oa-nav-kencana button.is-active{background:#c6a15b!important;color:#17130e!important}@media(max-width:600px){#oa-floating-controls.oa-nav-kencana{left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;width:auto!important;justify-content:space-around!important}}
 .oa-gallery-lightbox[data-oa-theme="kencana-jawa"]{background:rgba(10,8,5,.98)!important}.oa-gallery-lightbox[data-oa-theme="kencana-jawa"] img{border:3px double #c6a15b;border-radius:2px!important;box-shadow:0 0 0 8px #c6a15b12,0 24px 60px #000b}`;
-      if (navigation) navigation.classList.add("oa-nav-kencana-jawa");
+      if (navigation) navigation.classList.add("oa-nav-kencana");
       document.head.append(style);
       addCleanup(() => {
-        if (navigation) navigation.classList.remove("oa-nav-kencana-jawa");
+        if (navigation) navigation.classList.remove("oa-nav-kencana");
         style.remove();
       });
     }
