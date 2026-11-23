@@ -98,7 +98,7 @@ for (const slug of activeThemeSlugs) {
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
   // Parse selector lines directly. The previous escaped RegExp matched literal backslashes,
   // so valid CSS tokens were falsely reported missing for themes such as LUMA.
-  const themeTokenLines = sharedThemeCss.split("\\n")
+  const themeTokenLines = sharedThemeCss.split("\n")
     .filter(line => line.includes(`html[data-oa-theme="${slug}"]`));
   assert.ok(themeTokenLines.some(line => line.includes("--oa-font-display") && line.includes("--oa-font-body")),
     slug + ": token tipografi tema belum lengkap.");
