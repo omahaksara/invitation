@@ -103,6 +103,14 @@ A theme is not complete because it renders or passes static validation. Review t
 5. Refine existing themes' art direction and motion identity; do not add new themes until the current set has meaningful differentiation.
 6. Keep each change scoped, reversible, and covered by demo/TEST verification.
 
+## Implemented foundation (PR #141)
+
+- Added `core/theme-programs.js` with slug-based registration, activation, cleanup, cancellation signal, reduced-motion context, and reveal observation.
+- Theme programs receive invitation data through a recursive read-only view; they cannot mutate the shared invitation object through the program API.
+- The shared renderer activates the selected theme program only after the template scripts and invitation content are ready. A missing or failing optional program does not block the base invitation renderer.
+- Independent motion programs are currently implemented for Karsa, Royal Vintage, Aksara Nocturne, Sirein, Botanical Garden, and Nexus. Their visual treatments are intentionally different: editorial stagger, framed cover/card reveal, dark panel depth, sage editorial mask, botanical orbit/reveal, and cinematic portal treatment.
+- The syntax check now includes the theme runtime. Browser visual QA remains a separate release gate; static/backend success is not evidence of visual correctness.
+
 ## Definition of success
 
 One reliable platform, one preserved data/connectivity contract, and genuinely different theme experiences. Shared infrastructure must not force shared appearance.
