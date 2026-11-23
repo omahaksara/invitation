@@ -96,11 +96,11 @@ const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"
 for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
-  const themeFontTokens = sharedThemeCss.match(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\]\\s*\\{[^}]*\\}`, "m"))?.[0] || "";
-  const themeRevealTokens = sharedThemeCss.match(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\]\\s*\\{[^}]*--oa-reveal-time:[^}]*\\}`, "m"))?.[0] || "";
-  assert.ok(themeFontTokens.includes("--oa-font-display") && themeFontTokens.includes("--oa-font-body"),
+  const themeTokenBlocks = [...sharedThemeCss.matchAll(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\][^{]*\\{[^}]*\\}`, "gm"))]
+    .map(match => match[0]);
+  assert.ok(themeTokenBlocks.some(block => block.includes("--oa-font-display") && block.includes("--oa-font-body")),
     slug + ": token tipografi tema belum lengkap.");
-  assert.ok(themeRevealTokens.includes("--oa-reveal-ease"),
+  assert.ok(themeTokenBlocks.some(block => block.includes("--oa-reveal-time") && block.includes("--oa-reveal-ease")),
     slug + ": token animasi reveal tema belum lengkap.");
 }
 
