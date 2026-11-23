@@ -177,3 +177,22 @@
   <button id="music-toggle" class="oa-legacy-music-control" type="button" hidden aria-label="Putar musik">Musik</button>
   <audio id="bg-music" preload="none" loop></audio>
 </main>
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("aksara-velora", {
+    activate({ navigation, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "aksara-velora";
+      style.textContent = `#oa-floating-controls.oa-nav-velora{left:18px!important;right:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;flex-direction:column!important;width:64px!important;max-width:calc(100vw - 24px)!important;padding:8px 6px!important;gap:6px!important;border-radius:32px 32px 12px 12px!important;background:rgba(250,247,242,.96)!important;border:1px solid #a3705c!important;box-shadow:0 12px 34px #3a353233!important;backdrop-filter:blur(14px)!important}#oa-floating-controls.oa-nav-velora button{min-width:0!important;width:100%!important;min-height:42px!important;border-radius:22px!important;color:#5b514a!important;font:600 9px/1.1 'Plus Jakarta Sans',sans-serif!important}#oa-floating-controls.oa-nav-velora button.is-active{background:#a3705c!important;color:#fff!important}@media(max-width:600px){#oa-floating-controls.oa-nav-velora{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;border-radius:22px!important}#oa-floating-controls.oa-nav-velora button{width:auto!important;min-width:40px!important}}
+.oa-gallery-lightbox[data-oa-theme="aksara-velora"]{background:rgba(38,34,31,.96)!important;backdrop-filter:blur(14px)}.oa-gallery-lightbox[data-oa-theme="aksara-velora"] img{border:1px solid #d9c7b6;border-radius:28px 6px 28px 6px!important;box-shadow:0 22px 58px #0008}`;
+      if (navigation) navigation.classList.add("oa-nav-aksara-velora");
+      document.head.append(style);
+      addCleanup(() => {
+        if (navigation) navigation.classList.remove("oa-nav-aksara-velora");
+        style.remove();
+      });
+    }
+  });
+})();
+</script>
