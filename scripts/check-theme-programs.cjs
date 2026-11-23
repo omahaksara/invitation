@@ -72,7 +72,7 @@ for (const slug of programs) {
   assert.ok(template.includes("navigation.classList.add(\"oa-nav-"),
     slug + ": tema belum memasang presentasi navigasi independen.");
   const overlaySelector = ".oa-gallery-lightbox[data-oa-theme=\"" + slug + "\"]";
-  const escapedOverlaySelector = ".oa-gallery-lightbox[data-oa-theme=\\\"" + slug + "\\]";
+  const escapedOverlaySelector = ".oa-gallery-lightbox[data-oa-theme=\\\"" + slug + "\\\"]";
   assert.ok(template.includes(overlaySelector) || template.includes(escapedOverlaySelector),
     slug + ": overlay galeri belum memiliki presentasi khusus tema.");
   const navClass = (template.match(/navigation\.classList\.add\("(oa-nav-[a-z0-9-]+)"\)/) || [])[1];
