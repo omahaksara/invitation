@@ -328,6 +328,7 @@ for (const slug of activeThemeSlugs) {
             themeRoots: document.querySelectorAll(".js-theme").length,
             bodyBackground: getComputedStyle(document.body).backgroundColor,
             displayFont: getComputedStyle(document.querySelector(".cover-title")).fontFamily,
+          displayFontToken: getComputedStyle(document.documentElement).getPropertyValue("--js-serif").trim(),
             coverImageBound: !!document.querySelector(".cover-image")?.getAttribute("src"),
             eventCards: document.querySelectorAll("#event-list .event-card").length,
             galleryImages: document.querySelectorAll("#gallery-grid img").length,
@@ -338,7 +339,7 @@ for (const slug of activeThemeSlugs) {
           assert.equal(visualAudit.appRoots, 1, "jendela-senja: ditemukan ID #app ganda.");
           assert.equal(visualAudit.themeRoots, 1, "jendela-senja: root tema tidak tunggal.");
           assert.equal(visualAudit.bodyBackground, "rgb(20, 22, 31)", "jendela-senja: CSS tema tidak termuat.");
-          assert.ok(visualAudit.displayFont.includes("Bodoni Moda"), "jendela-senja: font display tidak terpasang.");
+          assert.ok(visualAudit.displayFontToken.includes("Bodoni Moda"), "jendela-senja: token font display Bodoni Moda tidak terpasang " + JSON.stringify(visualAudit));
           assert.ok(visualAudit.coverImageBound, "jendela-senja: foto cover belum terikat dari JSON.");
           assert.ok(visualAudit.eventCards > 0 && visualAudit.galleryImages > 0 && visualAudit.giftCards > 0,
             "jendela-senja: renderer acara/galeri/hadiah tidak mengisi data demo " + JSON.stringify(visualAudit));
