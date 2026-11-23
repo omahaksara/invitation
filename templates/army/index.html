@@ -374,16 +374,16 @@ html[data-oa-theme] #app .army .oa-scroll-reveal.oa-visible{
   filter:blur(0);
 }
 html[data-oa-theme] #app .army .oa-motion-item{
-  transition-duration:.68s!important;
-  transition-timing-function:cubic-bezier(.2,.72,.18,1)!important;
+  transition-duration:var(--oa-motion-duration,720ms)!important;
+  transition-timing-function:var(--oa-motion-ease,cubic-bezier(.2,.72,.18,1))!important;
 }
 html[data-oa-theme] #app .army img.oa-motion-photo,
 html[data-oa-theme] #app .army .oa-motion-photo img{
-  transition-duration:.82s!important;
-  transition-timing-function:cubic-bezier(.2,.72,.18,1)!important;
+  transition-duration:var(--oa-motion-duration,720ms)!important;
+  transition-timing-function:var(--oa-motion-ease,cubic-bezier(.2,.72,.18,1))!important;
 }
 html[data-oa-theme] #app .army #cover.is-opening{
-  animation:army-cover-exit .72s cubic-bezier(.22,.72,.2,1) forwards!important;
+  animation:army-cover-exit 1.42s cubic-bezier(.22,.72,.2,1) forwards!important;
   pointer-events:none;
 }
 @keyframes army-cover-exit{
