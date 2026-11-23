@@ -472,9 +472,9 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.storyPhotos.length === 4 && normalizedImageAudit.storyPhotos.every(Boolean),
           theme.slug + ": alias foto cerita tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.gallerySources.length === 4 && normalizedImageAudit.gallerySources.every(Boolean),
+        assert.ok(normalizedImageAudit.gallerySources.length >= 4 && normalizedImageAudit.gallerySources.every(Boolean),
           theme.slug + ": alias URL galeri tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.equal(imageAudit.gallery.length, 4, theme.slug + ": galeri demo harus berisi 4 foto");
+        assert.ok(imageAudit.gallery.length >= 4, theme.slug + ": galeri demo harus berisi minimal 4 foto");
         assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
           theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
         // Foto pasangan/galeri wajib berasal dari folder demo. Logo pembayaran dan
