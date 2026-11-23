@@ -401,6 +401,28 @@ html[data-oa-theme] #app .army #cover.is-opening{
   }
 }
 
+
+/* ARMY — architectural invitation cover, not a centered arch card. */
+.army .cover{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:clamp(20px,5vw,64px);background:#102b23}
+.army .cover>img{opacity:.68;filter:saturate(.65);object-position:70% center;animation:none}
+.army .cover:after{background:linear-gradient(90deg,#102b23f5 0%,#102b23c9 42%,#102b2340 100%)}
+.army .arch{width:min(100%,560px);padding:clamp(22px,4vw,48px) 0 28px;border:0;border-radius:0;box-shadow:none;text-align:left;position:relative}
+.army .arch:before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(transparent,var(--gold),transparent)}
+.army .cover-kicker{color:#d8c29a;letter-spacing:.25em}
+.army .cover h1{color:#f3e8d8;font-size:clamp(2.8rem,7vw,5.6rem);line-height:.95}
+.army .cover-ampersand{display:block;color:var(--gold);font-size:.65em;margin:.15em 0}
+.army .cover-date{color:#d8c29a}
+.army .cover-recipient{color:#e8d7ad;display:grid;gap:5px;margin:24px 0}
+.army .cover-recipient strong{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400}
+.army .cover .btn-open{border-radius:3px;background:#c9ad73;color:#102b23;border-color:#c9ad73}
+@media(max-width:650px){
+ .army .cover{align-items:flex-end;padding:24px 20px calc(30px + env(safe-area-inset-bottom))}
+ .army .cover>img{object-position:66% center}
+ .army .cover:after{background:linear-gradient(0deg,#102b23f2 0%,#102b23a8 55%,#102b2320 100%)}
+ .army .arch{width:100%;padding:0 0 0 20px}
+ .army .cover h1{font-size:clamp(2.7rem,12vw,4.4rem)}
+}
+
 </style>
 <div class="army" id="main-content">
 <section id="cover" class="cover">
