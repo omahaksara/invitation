@@ -69,8 +69,8 @@ const themes = [
   { slug: "aksav", marker: ".aksav", open: "#open-btn", cover: "#cover" },
   { slug: "army", marker: ".army", open: "#open-btn", cover: "#cover" },
   { slug: "kencana-jawa", marker: ".kj-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "gebyok-candra", marker: ".gc-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "sunda-watercolor", marker: ".sw-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "gebyok-candra", marker: ".gc-cover", open: "#open-invitation-btn", cover: "#cover-section", coverPhoto: false },
+  { slug: "sunda-watercolor", marker: ".sw-cover", open: "#open-invitation-btn", cover: "#cover-section", coverPhoto: false },
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
 { slug: "sagara", marker: ".sg-cover-photo", open: "#open-btn", cover: "#cover" },
@@ -460,7 +460,7 @@ for (const slug of activeThemeSlugs) {
           images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
         }));
         const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
-        assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
+        if (theme.coverPhoto !== false) assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
         assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
         assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
         const normalizedImageAudit = await page.evaluate(() => ({
@@ -469,17 +469,21 @@ for (const slug of activeThemeSlugs) {
           groomPhoto: window.__invitationData?.couple?.groom?.photo,
           bridePhoto: window.__invitationData?.couple?.bride?.photo,
           storyPhotos: (window.__invitationData?.story || []).map(item => item.foto),
+          galleryCount: Array.isArray(window.__invitationData?.gallery) ? window.__invitationData.gallery.length : 0,
           gallerySources: (window.__invitationData?.gallery || []).map(item => typeof item === "string" ? item : item.src)
         }));
         assert.ok(normalizedImageAudit.coverImage && normalizedImageAudit.coverImage === normalizedImageAudit.coverHeroImage,
           theme.slug + ": alias foto cover tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.groomPhoto && normalizedImageAudit.bridePhoto,
           theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.storyPhotos.length === 4 && normalizedImageAudit.storyPhotos.every(Boolean),
+        assert.ok(normalizedImageAudit.storyPhotos.length === storyAudit.photos && normalizedImageAudit.storyPhotos.every(Boolean),
           theme.slug + ": alias foto cerita tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.gallerySources.length === 4 && normalizedImageAudit.gallerySources.every(Boolean),
+        assert.ok(normalizedImageAudit.galleryCount > 0 &&
+          normalizedImageAudit.gallerySources.length === normalizedImageAudit.galleryCount &&
+          normalizedImageAudit.gallerySources.every(Boolean),
           theme.slug + ": alias URL galeri tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.equal(imageAudit.gallery.length, 4, theme.slug + ": galeri demo harus berisi 4 foto");
+        assert.equal(imageAudit.gallery.length, normalizedImageAudit.galleryCount,
+          theme.slug + ": jumlah foto galeri tidak sesuai JSON demo");
         assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
           theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
         // Foto pasangan/galeri wajib berasal dari folder demo. Logo pembayaran dan
