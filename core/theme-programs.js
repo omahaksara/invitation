@@ -54,6 +54,7 @@
     const api = Object.freeze({
       slug,
       root: context.root || document.getElementById("app") || document,
+      navigation: context.navigation || document.getElementById("oa-floating-controls"),
       data: readonlyData(context.data || window.__invitationData || {}),
       reducedMotion: reducedMotion(),
       signal: controller.signal,
