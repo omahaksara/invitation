@@ -42,8 +42,6 @@
     "akad": {
       "location": "Lokasi Acara Arkan & Arunika",
       "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/LNqjwkDgGuZeNLXD9?g_st=ac",
-      "mapQuery": "0.584505,120.768477",
       "timezone": "Asia/Makassar",
       "title": "Akad Nikah",
       "date": "Sabtu, 12 Juni 2027",
@@ -51,28 +49,18 @@
       "startTime": "08:00",
       "endTime": "10:00",
       "time": "08.00 – 10.00 WITA",
-      "coordinates": {
-        "lat": 0.584505,
-        "lng": 120.768477
-      },
-      "mapEmbedUrl": "https://www.google.com/maps?q=0.584505%2C120.768477&t=k&z=18&output=embed"
+      "mapNote": "Lokasi pada demo ini hanya simulasi; titik peta belum diverifikasi."
     },
     "resepsi": {
       "location": "Lokasi Acara Arkan & Arunika",
       "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
-      "mapsUrl": "https://maps.app.goo.gl/LNqjwkDgGuZeNLXD9?g_st=ac",
-      "mapQuery": "0.584505,120.768477",
       "timezone": "Asia/Makassar",
       "title": "Resepsi Pernikahan",
       "date": "Sabtu, 12 Juni 2027",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
       "time": "11.00 – 14.00 WITA",
-      "coordinates": {
-        "lat": 0.584505,
-        "lng": 120.768477
-      },
-      "mapEmbedUrl": "https://www.google.com/maps?q=0.584505%2C120.768477&t=k&z=18&output=embed"
+      "mapNote": "Lokasi pada demo ini hanya simulasi; titik peta belum diverifikasi."
     }
   },
   "countdown": {
