@@ -932,7 +932,7 @@
             ...item, ...entry,
             id: entry.id || (item.id || "event") + "-" + (index + 1),
             title: entry.title || item.title || "Acara Pernikahan",
-            dateISO: entry.dateISO || (/\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date || "")) ? entry.date : (item.dateISO || (/\d{4}-\\d{2}-\\d{2}$/.test(String(item.date || "")) ? item.date : ""))),
+            dateISO: entry.dateISO || (/^\d{4}-\d{2}-\d{2}$/.test(String(entry.date || "")) ? entry.date : (item.dateISO || (/^\d{4}-\d{2}-\d{2}$/.test(String(item.date || "")) ? item.date : ""))),
             location: entry.location || item.location || item.venue,
             address: entry.address || item.address || "",
             mapsUrl: entry.mapsUrl || item.mapsUrl || "",
