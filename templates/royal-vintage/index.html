@@ -182,7 +182,7 @@
 (() => {
   if (!window.OAThemePrograms) return;
   window.OAThemePrograms.register("royal-vintage", {
-    activate({ root, observe, addCleanup, reducedMotion }) {
+    activate({ root, navigation, observe, addCleanup, reducedMotion }) {
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "royal-vintage";
       style.textContent = `
@@ -196,6 +196,11 @@
         [data-oa-royal-motion="ready"] .profile-card.oa-royal-reveal.oa-royal-visible { box-shadow:0 14px 34px rgba(55,8,13,.07); }
         @media(prefers-reduced-motion:reduce){[data-oa-royal-motion="ready"] .oa-royal-reveal{opacity:1;transform:none;transition:none}[data-oa-royal-motion="ready"] .hero::after{transform:none;transition:none}}
       `;
+      if (navigation) navigation.classList.add("oa-nav-royal");
+      style.textContent += `
+        #oa-floating-controls.oa-nav-royal{left:18px!important;right:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;flex-direction:column!important;align-items:stretch!important;width:76px!important;max-width:calc(100vw - 24px)!important;border-radius:10px!important;padding:12px 8px!important;gap:7px!important;background:linear-gradient(155deg,#4a0d16f7,#26070bf7)!important;border:1px solid #d0ad66!important;box-shadow:0 14px 42px #21060988,inset 0 0 0 2px #d0ad6622!important}#oa-floating-controls.oa-nav-royal button{width:100%!important;min-width:0!important;min-height:42px!important;padding:4px!important;border-radius:4px!important;border:1px solid #d0ad6638!important;color:#f0dba9!important;font:600 9px/1.2 Georgia,serif!important;white-space:normal!important}#oa-floating-controls.oa-nav-royal button.is-active{background:#d0ad66!important;color:#37080d!important}@media(max-width:600px){#oa-floating-controls.oa-nav-royal{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;padding:5px!important;border-radius:8px!important}#oa-floating-controls.oa-nav-royal button{min-height:40px!important;font-size:9px!important}}
+        .oa-gallery-lightbox[data-oa-theme="royal-vintage"]{background:rgba(37,5,10,.97)!important;backdrop-filter:blur(10px)}.oa-gallery-lightbox[data-oa-theme="royal-vintage"] img{border:1px solid #d0ad66;border-radius:2px!important;box-shadow:0 18px 60px #000b}
+      `;
       document.head.append(style);
       root.dataset.oaRoyalMotion = "ready";
       const cover = root.querySelector(".hero");
@@ -204,6 +209,7 @@
       targets.forEach(node => node.classList.add("oa-royal-reveal"));
       observe(targets, "oa-royal-visible", { threshold: 0.16, rootMargin: "0px 0px -9% 0px" });
       addCleanup(() => {
+        if (navigation) navigation.classList.remove("oa-nav-royal");
         root.removeAttribute("data-oa-royal-motion");
         if (cover) cover.classList.remove("oa-royal-cover-ready");
         root.querySelectorAll(".oa-royal-reveal").forEach(node => node.classList.remove("oa-royal-reveal","oa-royal-visible"));
