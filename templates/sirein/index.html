@@ -148,3 +148,29 @@
   <audio id="bg-music" data-bind="media.music" loop></audio>
   <button id="music-toggle" class="music-float-btn" type="button" aria-label="Putar atau jeda musik" style="display:none"><i class="fa-solid fa-compact-disc fa-spin"></i></button>
 </main>
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("sirein", {
+    activate({ root, observe, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "sirein";
+      style.textContent = "\n[data-oa-sirein-motion=\"ready\"] .sirein-cover__veil{transform:scaleY(0);transform-origin:bottom;transition:transform 1250ms cubic-bezier(.7,0,.2,1)}\n[data-oa-sirein-motion=\"ready\"] .sirein-cover.oa-sirein-cover-ready .sirein-cover__veil{transform:scaleY(1)}\n[data-oa-sirein-motion=\"ready\"] .oa-sirein-reveal{opacity:0;transform:translate3d(0,32px,0);clip-path:inset(0 0 12% 0);transition:opacity 900ms ease,transform 1050ms cubic-bezier(.2,.75,.2,1),clip-path 1050ms ease}\n[data-oa-sirein-motion=\"ready\"] .oa-sirein-reveal.oa-sirein-visible{opacity:1;transform:none;clip-path:inset(0)}\n[data-oa-sirein-motion=\"ready\"] .person-photo-frame img{transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}\n[data-oa-sirein-motion=\"ready\"] .person-card.oa-sirein-visible .person-photo-frame img{transform:scale(1.035)}\n@media(prefers-reduced-motion:reduce){[data-oa-sirein-motion=\"ready\"] .oa-sirein-reveal{opacity:1;transform:none;clip-path:none;transition:none}[data-oa-sirein-motion=\"ready\"] .sirein-cover__veil{transform:none;transition:none}}";
+      document.head.append(style);
+      root.dataset.oaSireinMotion = "ready";
+      const targets = root.querySelectorAll(".sirein-section, .sirein-hero, .person-card, .story-item, .event-card, .gallery-section, .gift-card");
+      targets.forEach(node => node.classList.add("oa-sirein-reveal"));
+      observe(targets, "oa-sirein-visible", { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
+      const cover = root.querySelector(".sirein-cover");
+      if (cover && !reducedMotion) requestAnimationFrame(() => cover.classList.add("oa-sirein-cover-ready"));
+      
+      addCleanup(() => {
+        delete root.dataset.oaSireinMotion;
+        if (cover) cover.classList.remove("oa-sirein-cover-ready");
+        root.querySelectorAll(".oa-sirein-reveal, .oa-sirein-visible").forEach(node => node.classList.remove("oa-sirein-reveal","oa-sirein-visible"));
+        style.remove();
+      });
+    }
+  });
+})();
+</script>
