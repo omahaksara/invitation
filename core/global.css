@@ -1432,14 +1432,15 @@ html[data-oa-theme="sunda-watercolor"] #app { --oa-font-body:'Lato',sans-serif; 
 html[data-oa-theme="taupe"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Playfair Display',serif; }
 html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --oa-font-display:'Bodoni Moda',serif; }
 
-/* Keep typography inherited consistently across template fragments, including legacy inline styles. */
-html[data-oa-theme] #app { font-family:var(--oa-font-body,'Lato',sans-serif); }
-html[data-oa-theme] #app :is(p,li,small,label,input,textarea,select,button,a,figcaption,.eyebrow,.subtitle,.description,.caption,.meta,.event-meta,.story-text,.wishes-text,.nav-label) {
-  font-family:var(--oa-font-body,'Lato',sans-serif) !important;
+/* Shared typography tokens are low-specificity fallbacks. Theme selectors keep ownership
+   of their own display/body fonts instead of being overridden by the engine. */
+#app { font-family:var(--oa-font-body,'Lato',sans-serif); }
+:where(#app) :where(p,li,small,label,input,textarea,select,button,a,figcaption,.eyebrow,.subtitle,.description,.caption,.meta,.event-meta,.story-text,.wishes-text,.nav-label) {
+  font-family:var(--oa-font-body,'Lato',sans-serif);
 }
-html[data-oa-theme] #app :is(h1,h2,h3,h4,h5,h6,.couple-name,.bride-name,.groom-name,.hero-title,.section-title,.section-heading,.quote-text,.display-title,.names) {
-  font-family:var(--oa-font-display,'Cormorant Garamond',serif) !important;
+:where(#app) :where(h1,h2,h3,h4,h5,h6,.couple-name,.bride-name,.groom-name,.hero-title,.section-title,.section-heading,.quote-text,.display-title,.names) {
+  font-family:var(--oa-font-display,'Cormorant Garamond',serif);
 }
-html[data-oa-theme] #app :is([lang="ar"],.arabic,.arabic-text,.quran-text,.ayat,.bismillah) {
-  font-family:'Scheherazade New',serif !important;
+:where(#app) :where([lang="ar"],.arabic,.arabic-text,.quran-text,.ayat,.bismillah) {
+  font-family:'Scheherazade New',serif;
 }
