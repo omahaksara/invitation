@@ -71,7 +71,9 @@ for (const slug of programs) {
     slug + ": program tema tidak membersihkan resource saat dilepas.");
   assert.ok(template.includes("navigation.classList.add(\"oa-nav-"),
     slug + ": tema belum memasang presentasi navigasi independen.");
-  assert.ok(template.includes(".oa-gallery-lightbox[data-oa-theme=\"" + slug + "\"]"),
+  const overlaySelector = ".oa-gallery-lightbox[data-oa-theme=\"" + slug + "\"]";
+  const escapedOverlaySelector = ".oa-gallery-lightbox[data-oa-theme=\\\"" + slug + "\\]";
+  assert.ok(template.includes(overlaySelector) || template.includes(escapedOverlaySelector),
     slug + ": overlay galeri belum memiliki presentasi khusus tema.");
   const navClass = (template.match(/navigation\.classList\.add\("(oa-nav-[a-z0-9-]+)"\)/) || [])[1];
   assert.ok(navClass, slug + ": program tema belum memasang kelas navigasi.");
