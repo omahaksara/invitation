@@ -553,6 +553,7 @@
     if (window.OAThemePrograms && typeof window.OAThemePrograms.activate === "function") {
       window.OAThemePrograms.activate(document.documentElement.dataset.oaTheme || "karsa", {
         root: document.getElementById("app"),
+        navigation: document.getElementById("oa-floating-controls"),
         data
       });
     }
@@ -2592,6 +2593,7 @@
       lastFocusedImage = sourceImage || images[activeIndex];
       overlay = document.createElement("div");
       overlay.className = "oa-gallery-lightbox";
+      overlay.dataset.oaTheme = document.documentElement.dataset.oaTheme || "default";
       overlay.setAttribute("role", "dialog");
       overlay.setAttribute("aria-modal", "true");
       overlay.setAttribute("aria-label", "Galeri foto pernikahan");
