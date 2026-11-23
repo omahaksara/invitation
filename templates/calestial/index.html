@@ -700,6 +700,34 @@ body{
  .celestial-royale .cover .btn{padding:10px 25px}
  .celestial-royale .royal-arch:before,.celestial-royale .royal-arch:after{width:52px;height:52px;top:12px}
 }
+
+/* Calestial — observatory horizon: cinematic sky, panoramic photo band, open typographic field. */
+.celestial-royale .cover{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-height:100svh;padding:clamp(28px,6vh,70px) 24px;background:radial-gradient(ellipse at 50% 10%,#26366e 0%,#121a42 42%,#080c22 100%);text-align:center}
+.celestial-royale .cover>img{inset:0 0 auto;height:48%;opacity:.82;filter:brightness(.72) saturate(.75);clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%);mask-image:linear-gradient(#000 0%,#000 75%,transparent 100%);animation:none}
+.celestial-royale .cover:after{background:linear-gradient(180deg,rgba(10,14,39,.02) 0%,rgba(10,14,39,.04) 28%,rgba(10,14,39,.86) 54%,#0a0e27 100%)}
+.celestial-royale .royal-arch{width:min(100%,820px);max-width:820px;margin:0 auto;padding:18px 20px 8px;border:0;border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none}
+.celestial-royale .royal-arch:before,.celestial-royale .royal-arch:after{display:none}
+.celestial-royale .cover .eyebrow{letter-spacing:.42em;font-size:.62rem}
+.celestial-royale .cover h1{font-size:clamp(3rem,8.5vw,6.8rem);line-height:.82;letter-spacing:-.045em;margin:14px 0;color:#f4e5b0;text-shadow:0 8px 36px #0009}
+.celestial-royale .cover h1 br{display:none}
+.celestial-royale .cover h1 span{display:inline-block;margin:0 .08em}
+.celestial-royale .cover .ornament{margin:15px auto;font-size:1rem}
+.celestial-royale .cover .sub{font-size:.68rem;letter-spacing:.2em}
+.celestial-royale .cover #nama-tamu{font-size:clamp(1.35rem,3vw,2rem)!important;margin:5px 0 10px!important}
+.celestial-royale .cover .btn{border-radius:2px;padding:13px 28px;background:linear-gradient(90deg,rgba(212,175,55,.2),rgba(212,175,55,.04));backdrop-filter:none}
+.celestial-royale .cover .btn:before{display:none}
+.celestial-royale .cover .btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px #d4af3733}
+@media(max-width:600px){
+ .celestial-royale .cover{padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+ .celestial-royale .cover>img{height:44%;clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%)}
+ .celestial-royale .royal-arch{padding:14px 4px 4px}
+ .celestial-royale .cover h1{font-size:clamp(2.5rem,11vw,4.2rem);margin:10px 0}
+ .celestial-royale .cover h1 span{display:block;margin:0}
+ .celestial-royale .cover .sub{font-size:.62rem}
+ .celestial-royale .cover #nama-tamu{font-size:1.45rem!important}
+ .celestial-royale .cover .btn{padding:11px 23px}
+}
+@media(prefers-reduced-motion:reduce){.celestial-royale .starfield{animation:none!important}.celestial-royale .cover>img{animation:none!important}}
 </style>
 
 <div class="celestial-royale" id="main-content">
