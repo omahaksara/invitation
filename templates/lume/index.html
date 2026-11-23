@@ -31,6 +31,28 @@ footer{text-align:center;background:#4a3728;color:#f7eee4;padding:65px 20px}foot
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease}.reveal.active{opacity:1;transform:none}
 @media(max-width:640px){.couple-grid,.event-grid,.gift-grid{grid-template-columns:1fr}.section{padding:62px 18px}.story-item{grid-template-columns:1fr;gap:6px}.gallery-grid{gap:7px}.gallery-grid img{border-radius:9px}#countdown{gap:6px}.count-cell{padding:12px 3px}.count-cell b{font-size:1.55rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
+
+/* Lume — editorial cover, deliberately not the shared centered-card silhouette. */
+.cover{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:clamp(28px,6vw,80px);background:#47372b}
+.cover>img{opacity:.78;filter:saturate(.82);object-position:62% center}
+.cover:after{background:linear-gradient(90deg,rgba(35,27,22,.86) 0%,rgba(35,27,22,.62) 42%,rgba(35,27,22,.08) 100%)}
+.cover-card{width:min(100%,560px);margin:0;padding:clamp(22px,4vw,48px) 0 28px;border:0;border-left:1px solid #f2e5d5a8;border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none;text-align:left}
+.cover-card .eyebrow{letter-spacing:.18em}
+.cover-card .script{font-size:1.55rem!important;opacity:.9}
+.cover h1{font-size:clamp(2.8rem,6vw,5rem);line-height:.98;margin:14px 0 18px}
+.cover h1 .amp{display:inline-block;margin:2px 0;font-size:.68em}
+.cover-date{margin:0 0 18px}
+.guest{font-size:1.2rem;margin:6px 0 18px}
+.open-btn{border-radius:3px;padding:13px 24px}
+@media(max-width:640px){
+ .cover{align-items:flex-end;padding:28px 22px calc(34px + env(safe-area-inset-bottom))}
+ .cover>img{object-position:58% center}
+ .cover:after{background:linear-gradient(0deg,rgba(35,27,22,.9) 0%,rgba(35,27,22,.55) 50%,rgba(35,27,22,.06) 100%)}
+ .cover-card{width:100%;padding:0 0 0 18px}
+ .cover h1{font-size:clamp(2.9rem,13vw,4.3rem);line-height:.92}
+ .cover-card .script{font-size:1.35rem!important}
+}
+
 </style></head>
 <body><div class="lume">
 <section id="cover" class="cover"><img data-bind="cover.image" src="" alt="Foto sampul"><div class="cover-card">
