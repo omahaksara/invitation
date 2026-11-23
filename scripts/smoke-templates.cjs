@@ -534,7 +534,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
-          await galleryImage.scrollIntoViewIfNeeded();
+          await galleryImage.evaluate(image => image.scrollIntoView({ block: "center", behavior: "instant" }));
           const galleryHandle = await galleryImage.elementHandle();
           await page.waitForFunction(image => image.classList.contains("oa-motion-visible"),
             galleryHandle, { timeout: 5000 });
@@ -542,7 +542,16 @@ for (const slug of activeThemeSlugs) {
             const running = image.getAnimations().filter(animation => animation.playState === "running" && typeof animation.transitionProperty === "string");
             await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
           });
-          await galleryImage.click();
+          const galleryBox = await galleryImage.boundingBox();
+          assert.ok(galleryBox && galleryBox.width > 0 && galleryBox.height > 0,
+            theme.slug + ": foto galeri tidak memiliki area interaksi.");
+          const galleryHitTarget = await galleryImage.evaluate(image => {
+            const rect = image.getBoundingClientRect();
+            const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            return hit === image || image.contains(hit);
+          });
+          assert.ok(galleryHitTarget, theme.slug + ": foto galeri tertutup elemen lain.");
+          await page.mouse.click(galleryBox.x + galleryBox.width / 2, galleryBox.y + galleryBox.height / 2);
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
             theme.slug + ": tombol foto berikutnya tidak tersedia");
