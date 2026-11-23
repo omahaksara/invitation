@@ -56,5 +56,9 @@ for (const slug of programs) {
     slug + ": tema belum memasang presentasi navigasi independen.");
   assert.ok(template.includes(".oa-gallery-lightbox[data-oa-theme=\"" + slug + "\"]"),
     slug + ": overlay galeri belum memiliki presentasi khusus tema.");
+  const navClass = (template.match(/navigation\.classList\.add\("(oa-nav-[a-z0-9-]+)"\)/) || [])[1];
+  assert.ok(navClass, slug + ": program tema belum memasang kelas navigasi.");
+  assert.ok(template.includes("#oa-floating-controls." + navClass),
+    slug + ": kelas navigasi tidak memiliki aturan presentasi khusus.");
 }
 console.log("Theme program contract passed for " + programs.length + " themes.");
