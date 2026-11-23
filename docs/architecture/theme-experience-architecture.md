@@ -114,3 +114,19 @@ A theme is not complete because it renders or passes static validation. Review t
 ## Definition of success
 
 One reliable platform, one preserved data/connectivity contract, and genuinely different theme experiences. Shared infrastructure must not force shared appearance.
+
+## Navigasi dan overlay: pemisahan mekanik vs presentasi
+
+Engine tetap menjadi pemilik perilaku navigasi: pemetaan bagian, scroll, status aktif, auto-scroll, musik, menu overflow, dan aksesibilitas. Program tema menerima handle navigasi yang sama melalui konteks aktivasi; tema tidak membuat ulang listener atau kontrol fungsi yang sama.
+
+Setiap program tema memasang kelas presentasi dan stylesheet miliknya sendiri. Pilot enam tema saat ini memiliki komposisi berbeda:
+- Karsa: dock kapsul gelap di tengah bawah.
+- Royal Vintage: rail vertikal burgundy-emas di desktop, dock horizontal pada layar kecil.
+- Aksara Nocturne: rail vertikal di sisi kanan, berubah menjadi dock pada layar kecil.
+- Sirein: dock ringan di kanan atas, berubah menjadi dock bawah pada layar kecil.
+- Botanical Garden: tray organik di kiri bawah.
+- Nexus: bar editorial di tengah atas, berubah menjadi dock bawah pada layar kecil.
+
+Lightbox tetap dibuat dan dikendalikan engine, termasuk dialog, navigasi foto, Escape, dan pengembalian fokus. Engine memberi identitas tema pada overlay; program tema mengatur atmosfer, warna, bentuk foto, dan treatment visual tanpa menggandakan mekanik overlay.
+
+Perubahan ini hanya menyentuh lapisan presentasi. Kontrak RSVP/guestbook, data undangan, endpoint, aset pembayaran, dan integrasi backend tidak diubah.
