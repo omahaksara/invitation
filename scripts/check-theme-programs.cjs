@@ -27,6 +27,8 @@ assert.ok(runtime.includes("navigation: context.navigation || document.getElemen
   "Program tema harus menerima handle navigasi bersama tanpa mengambil alih perilakunya.");
 assert.ok(engine.includes("overlay.dataset.oaTheme"),
   "Overlay galeri harus mengekspos identitas tema untuk presentasi khusus.");
+assert.ok(engine.includes('document.documentElement.style.overflow = "hidden"') && engine.includes("previousOverflow.html"),
+  "Dialog galeri harus mengunci scroll sementara dan memulihkan nilai overflow sebelumnya.");
 
 const programs = [
   "karsa",
