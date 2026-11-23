@@ -2575,6 +2575,7 @@
     let lastFocusedImage = null;
     let overlay = null;
     let keyHandler = null;
+    let previousOverflow = null;
 
     const close = () => {
       if (!overlay) return;
@@ -2583,6 +2584,11 @@
       overlay = null;
       keyHandler = null;
       document.body.classList.remove("oa-lightbox-open");
+      if (previousOverflow) {
+        document.documentElement.style.overflow = previousOverflow.html;
+        document.body.style.overflow = previousOverflow.body;
+        previousOverflow = null;
+      }
       if (lastFocusedImage && lastFocusedImage.isConnected) lastFocusedImage.focus({ preventScroll: true });
     };
 
@@ -2639,6 +2645,12 @@
       panel.append(toolbar, stage, caption);
       overlay.append(panel);
       overlay.addEventListener("click", event => { if (event.target === overlay) close(); });
+      previousOverflow = {
+        html: document.documentElement.style.overflow,
+        body: document.body.style.overflow
+      };
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
       document.body.append(overlay);
       document.body.classList.add("oa-lightbox-open");
 
