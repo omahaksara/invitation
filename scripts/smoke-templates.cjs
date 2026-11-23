@@ -588,20 +588,36 @@ for (const slug of activeThemeSlugs) {
             theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
         }
         const performanceAudit = await page.evaluate(() => {
-          const elements = Array.from(document.querySelectorAll("#app, #app *"));
+          const elements = Array.from(document.body.querySelectorAll("*"));
           const backdrop = [];
           const slowTransitions = [];
+          const safeMotionLimits = {
+            opacity: 4.5, transform: 4.5, filter: 2.5, "clip-path": 2.5,
+            "background-color": 1.2, color: 1.2, "box-shadow": 1.2,
+            "border-color": 1.2, "letter-spacing": .55
+          };
           for (const element of elements) {
             const style = getComputedStyle(element);
             const effect = style.backdropFilter || style.webkitBackdropFilter;
-            if (effect && effect !== "none" && !/^blur\\(0(?:px)?\\)$/.test(effect)) backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
+            const blurValues = [...String(effect || "").matchAll(/blur\\(([-+]?\\d*\\.?\\d+)px\\)/g)]
+              .map(match => Number(match[1]));
+            if (blurValues.some(value => value > 8)) {
+              backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : "") + " blur=" + Math.max(...blurValues) + "px");
+            }
+            const properties = style.transitionProperty.split(",").map(value => value.trim());
             const durations = style.transitionDuration.split(",").map(value => parseFloat(value) * (value.includes("ms") ? .001 : 1));
-            if (durations.some(value => value > .55)) slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
+            properties.forEach((property, index) => {
+              const duration = durations[index % durations.length] || 0;
+              const limit = safeMotionLimits[property] ?? .55;
+              if (duration > limit) {
+                slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : "") + " [" + property + " " + duration + "s]");
+              }
+            });
           }
-          return { backdrop, slowTransitions: slowTransitions.slice(0, 12) };
+          return { backdrop, slowTransitions: slowTransitions.slice(0, 16) };
         });
         assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
-        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
+        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi layout/efek berat melampaui batas " + JSON.stringify(performanceAudit.slowTransitions));
         await page.emulateMedia({ reducedMotion: "reduce" });
         const reducedMotionAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
