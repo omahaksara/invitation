@@ -50,6 +50,28 @@
 @media(min-width:760px){.lumina-section{padding-top:76px}.lumina-wrap{padding-left:24px;padding-right:24px}.lumina-page .gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.lumina-page .gallery-grid img:nth-child(3n+1){min-height:320px}}
 @media(max-width:390px){.lumina-couple{gap:11px}.lumina-person{padding:7px 7px 12px}.lumina-person strong{font-size:.7rem}.lumina-section{padding-top:46px}}
 @media(prefers-reduced-motion:reduce){.lumina-page *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* LUMINA — playful Swiss-poster composition; deliberately unlike the cinematic themes. */
+.lumina-cover{align-items:center;justify-content:flex-start;padding:clamp(24px,6vw,88px);background:#f3edff;color:#20172f}
+.lumina-cover__image{inset:8% 5% 8% auto;width:53%;height:84%;border-radius:2px;object-position:center;filter:saturate(.82) contrast(1.04);box-shadow:18px 20px 0 #ffcf45}
+.lumina-cover:after{inset:0 42% 0 0;background:linear-gradient(90deg,#f3edff 72%,#f3edff00);pointer-events:none}
+.lumina-cover__inner{width:min(48%,590px);margin:0;padding:0;z-index:2}
+.lumina-pill{background:#ffcf45;color:#20172f;border-radius:2px;transform:rotate(-3deg);box-shadow:4px 4px 0 #20172f}
+.lumina-title{font-size:clamp(3rem,7.4vw,7rem);line-height:.88;letter-spacing:-.065em;margin:30px 0 20px;overflow-wrap:anywhere}
+.lumina-title em{display:inline-block;color:#e83e83;font-size:.7em;transform:rotate(-10deg)}
+.lumina-date{display:inline-block;background:#20172f;color:#fff;padding:8px 12px;font-weight:800}
+.lumina-cover__guest{color:#40344e}
+.lumina-sticker{display:inline-block;padding:7px 10px;background:#e83e83;color:#fff;transform:rotate(2deg)}
+.lumina-open-button{border-radius:2px;box-shadow:5px 5px 0 #20172f}
+.lumina-open-button:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #20172f}
+@media(max-width:700px){
+ .lumina-cover{align-items:flex-end;padding:0 18px calc(30px + env(safe-area-inset-bottom))}
+ .lumina-cover__image{inset:0 0 auto;width:100%;height:58%;border-radius:0;box-shadow:none;object-position:center 38%}
+ .lumina-cover:after{inset:28% 0 0;background:linear-gradient(180deg,#f3edff00 0%,#f3edff 42%,#f3edff 100%)}
+ .lumina-cover__inner{width:100%;padding:0 2px;max-width:560px}
+ .lumina-title{font-size:clamp(3.1rem,14vw,5.1rem);margin:18px 0 12px}
+}
+
 </style>
 <div id="cover-section" class="lumina-cover">
   <img class="lumina-cover__image" data-bind="cover.image" alt="Sampul undangan">
