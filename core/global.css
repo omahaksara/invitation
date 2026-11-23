@@ -497,6 +497,7 @@ html[data-oa-theme="kinze"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-fon
 html[data-oa-theme="aksara-signature"] { --oa-font-display:"EB Garamond",Georgia,serif; --oa-font-body:"Lato",Arial,sans-serif; }
 html[data-oa-theme="botanical-garden"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
 html[data-oa-theme="velvet-romance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="luma"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezier(.2,.72,.18,1); }
 html[data-oa-theme="romantic-floral"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
 html[data-oa-theme="elegance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
 html[data-oa-theme="aurelia-noir"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
