@@ -96,7 +96,7 @@ A theme is not complete because it renders or passes static validation. Review t
 
 ## Delivery sequence
 
-1. Close the current browser-smoke-only PR and replace it with a coherent theme-experience workstream.
+1. Keep the theme-experience workstream in one reviewable PR; do not split it into overlapping implementation branches.
 2. Stabilize shared lifecycle services without changing their visual defaults for every theme.
 3. Extract theme-owned programs behind explicit lifecycle boundaries.
 4. Prove the architecture on a small number of contrasting existing themes before broad rollout.
@@ -108,7 +108,8 @@ A theme is not complete because it renders or passes static validation. Review t
 - Added `core/theme-programs.js` with slug-based registration, activation, cleanup, cancellation signal, reduced-motion context, and reveal observation.
 - Theme programs receive invitation data through a recursive read-only view; they cannot mutate the shared invitation object through the program API.
 - The shared renderer activates the selected theme program only after the template scripts and invitation content are ready. A missing or failing optional program does not block the base invitation renderer.
-- Independent motion programs are currently implemented for Karsa, Royal Vintage, Aksara Nocturne, Sirein, Botanical Garden, and Nexus. Their visual treatments are intentionally different: editorial stagger, framed cover/card reveal, dark panel depth, sage editorial mask, botanical orbit/reveal, and cinematic portal treatment.
+- Independent motion programs are implemented for Karsa, Royal Vintage, Aksara Nocturne, Sirein, Botanical Garden, and Nexus. Their visual treatments differ: editorial stagger, framed cover/card reveal, dark panel depth, sage editorial mask, botanical orbit/reveal, and cinematic portal treatment.
+- Twelve existing themes now have independently registered navigation and gallery-overlay presentation programs. The six additional programs cover Aksara Signature, Aksara Velora, Atelier Editorial, Lumina, Kencana Jawa, and Sagara. This is a staged pilot, not yet a claim that all active themes have completed visual differentiation.
 - The syntax check now includes the theme runtime. Browser visual QA remains a separate release gate; static/backend success is not evidence of visual correctness.
 
 ## Definition of success
@@ -119,13 +120,19 @@ One reliable platform, one preserved data/connectivity contract, and genuinely d
 
 Engine tetap menjadi pemilik perilaku navigasi: pemetaan bagian, scroll, status aktif, auto-scroll, musik, menu overflow, dan aksesibilitas. Program tema menerima handle navigasi yang sama melalui konteks aktivasi; tema tidak membuat ulang listener atau kontrol fungsi yang sama.
 
-Setiap program tema memasang kelas presentasi dan stylesheet miliknya sendiri. Pilot enam tema saat ini memiliki komposisi berbeda:
+Setiap program tema memasang kelas presentasi dan stylesheet miliknya sendiri. Pilot dua belas tema saat ini memiliki komposisi berbeda:
 - Karsa: dock kapsul gelap di tengah bawah.
 - Royal Vintage: rail vertikal burgundy-emas di desktop, dock horizontal pada layar kecil.
 - Aksara Nocturne: rail vertikal di sisi kanan, berubah menjadi dock pada layar kecil.
 - Sirein: dock ringan di kanan atas, berubah menjadi dock bawah pada layar kecil.
 - Botanical Garden: tray organik di kiri bawah.
 - Nexus: bar editorial di tengah atas, berubah menjadi dock bawah pada layar kecil.
+- Aksara Signature: tray ivory berbentuk medali dengan treatment foto arch.
+- Aksara Velora: rail ivory vertikal dengan sudut lembut, beralih ke dock pada layar kecil.
+- Atelier Editorial: bar editorial gelap di atas dengan pemisah tipis.
+- Lumina: dock gelap neon-pink dengan tombol geometris.
+- Kencana Jawa: dock hitam-emas berlapis dengan garis ganda.
+- Sagara: rail teal di sisi kanan, beralih ke dock pada layar kecil.
 
 Lightbox tetap dibuat dan dikendalikan engine, termasuk dialog, navigasi foto, Escape, dan pengembalian fokus. Engine memberi identitas tema pada overlay; program tema mengatur atmosfer, warna, bentuk foto, dan treatment visual tanpa menggandakan mekanik overlay.
 
