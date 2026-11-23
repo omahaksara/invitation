@@ -525,6 +525,16 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         const galleryImage = page.locator(".gallery-grid img").first();
         if (await galleryImage.count()) {
+          // Decorative reveal/parallax loops may continuously transform the image.
+          // Freeze the current visual frame only for the pointer-interaction assertion;
+          // animation behavior is covered independently by theme/reduced-motion checks.
+          await galleryImage.scrollIntoViewIfNeeded();
+          await page.evaluate(() => {
+            document.getAnimations({ subtree: true }).forEach(animation => {
+              if (animation.playState === "running") animation.pause();
+            });
+          });
+          await page.waitForTimeout(60);
           await galleryImage.click();
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
@@ -895,7 +905,8 @@ for (const slug of activeThemeSlugs) {
 
     // Responsive and demo-interaction pass at a common mobile viewport.
     for (const theme of themes) {
-      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+      // Exercise the narrowest supported mobile width first; resize to 390px below.
+      const page = await browser.newPage({ viewport: { width: 360, height: 800 }, isMobile: true, deviceScaleFactor: 1 });
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
       await page.emulateMedia({ reducedMotion: "reduce" });
@@ -942,19 +953,36 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": gulir otomatis harus nonaktif saat reduced-motion aktif");
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
-        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
-        const layout = await page.evaluate(() => ({
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-360.png`));
+        const layout360 = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           page: document.documentElement.scrollWidth,
           rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
           guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
         }));
-        assert.ok(layout.page <= layout.viewport + 2,
-          theme.slug + ": horizontal overflow di mobile " + JSON.stringify(layout));
-        assert.ok(layout.rsvp > 0 && layout.rsvp <= layout.viewport,
-          theme.slug + ": formulir RSVP tidak responsif " + JSON.stringify(layout));
-        assert.ok(layout.guestbook > 0 && layout.guestbook <= layout.viewport,
-          theme.slug + ": buku tamu tidak responsif " + JSON.stringify(layout));
+        assert.equal(layout360.viewport, 360, theme.slug + ": viewport 360px tidak diterapkan.");
+        assert.ok(layout360.page <= layout360.viewport + 2,
+          theme.slug + ": horizontal overflow pada 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.rsvp > 0 && layout360.rsvp <= layout360.viewport,
+          theme.slug + ": formulir RSVP tidak responsif pada 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.guestbook > 0 && layout360.guestbook <= layout360.viewport,
+          theme.slug + ": buku tamu tidak responsif pada 360px " + JSON.stringify(layout360));
+
+        await page.setViewportSize({ width: 390, height: 844 });
+        const layout390 = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          page: document.documentElement.scrollWidth,
+          rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
+          guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
+        }));
+        assert.equal(layout390.viewport, 390, theme.slug + ": viewport 390px tidak diterapkan.");
+        assert.ok(layout390.page <= layout390.viewport + 2,
+          theme.slug + ": horizontal overflow pada 390px " + JSON.stringify(layout390));
+        assert.ok(layout390.rsvp > 0 && layout390.rsvp <= layout390.viewport,
+          theme.slug + ": formulir RSVP tidak responsif pada 390px " + JSON.stringify(layout390));
+        assert.ok(layout390.guestbook > 0 && layout390.guestbook <= layout390.viewport,
+          theme.slug + ": buku tamu tidak responsif pada 390px " + JSON.stringify(layout390));
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
