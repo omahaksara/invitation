@@ -1,0 +1,65 @@
+name: AI team task
+description: Create a scoped task for ChatGPT, Claude, Copilot, or a human contributor
+title: "[AI Task]: "
+labels: ["ai-task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [AGENTS.md](../../AGENTS.md) before starting. Do not include secrets, guest data, payment details, or production credentials.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What outcome is required?
+      placeholder: Describe the expected result.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Allowed scope
+      description: List the files, modules, or behaviors that may be changed.
+    validations:
+      required: true
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: Safety boundaries
+      description: State data, integrations, or destructive actions that require explicit approval.
+      value: |
+        - Do not delete client records or production data without explicit approval and a verified backup.
+        - Use demo/mock/TEST services for testing; never submit dummy RSVP or guestbook data to production.
+        - Preserve public URLs/slugs and provide a tested migration if changes are necessary.
+    validations:
+      required: true
+  - type: dropdown
+    id: implementer
+    attributes:
+      label: Implementer
+      options:
+        - ChatGPT
+        - Claude
+        - GitHub Copilot
+        - Human
+    validations:
+      required: true
+  - type: dropdown
+    id: reviewer
+    attributes:
+      label: Independent reviewer
+      options:
+        - ChatGPT
+        - Claude
+        - GitHub Copilot
+        - Human
+        - None yet
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and QA evidence
+      description: Define how completion will be verified.
+    validations:
+      required: true
