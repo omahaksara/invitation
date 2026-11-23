@@ -48,7 +48,20 @@ const programs = [
   "kinze",
   "aurelia-noir",
   "lumiere-bloom",
-  "romantic-floral"
+  "romantic-floral",
+  "aksav",
+  "army",
+  "earty",
+  "lume",
+  "nox",
+  "taupe",
+  "calestial",
+  "elegance",
+  "gebyok-candra",
+  "jendela-senja",
+  "luma",
+  "sunda-watercolor",
+  "velvet-romance"
 ];
 for (const slug of programs) {
   const template = read("templates/" + slug + "/index.html");
