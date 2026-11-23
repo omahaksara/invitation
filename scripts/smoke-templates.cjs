@@ -539,7 +539,7 @@ for (const slug of activeThemeSlugs) {
           await page.waitForFunction(image => image.classList.contains("oa-motion-visible"),
             galleryHandle, { timeout: 5000 });
           await galleryImage.evaluate(async image => {
-            const running = image.getAnimations().filter(animation => animation.playState === "running");
+            const running = image.getAnimations().filter(animation => animation.playState === "running" && typeof animation.transitionProperty === "string");
             await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
           });
           await galleryImage.click();
