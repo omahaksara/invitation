@@ -224,10 +224,10 @@
       style.dataset.oaThemeProgram = "atelier-editorial";
       style.textContent = `#oa-floating-controls.oa-nav-atelier{left:50%!important;right:auto!important;top:16px!important;bottom:auto!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:5px 8px!important;gap:2px!important;border-radius:2px!important;background:rgba(37,33,34,.96)!important;border:1px solid #b99c8d!important;box-shadow:0 8px 28px #1c151533!important}#oa-floating-controls.oa-nav-atelier button{min-width:44px!important;min-height:38px!important;border-radius:0!important;border-right:1px solid #b99c8d55!important;color:#f3e9e2!important;font:600 9px/1.1 'DM Sans',sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase!important}#oa-floating-controls.oa-nav-atelier button.is-active{background:#9b6d63!important;color:#fff!important}@media(max-width:600px){#oa-floating-controls.oa-nav-atelier{top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;left:8px!important;right:8px!important;transform:none!important;width:auto!important;justify-content:space-around!important}}
 .oa-gallery-lightbox[data-oa-theme="atelier-editorial"]{background:rgba(28,25,26,.98)!important}.oa-gallery-lightbox[data-oa-theme="atelier-editorial"] img{border:1px solid #d9c9c2;border-radius:0!important;box-shadow:0 22px 60px #000b}`;
-      if (navigation) navigation.classList.add("oa-nav-atelier-editorial");
+      if (navigation) navigation.classList.add("oa-nav-atelier");
       document.head.append(style);
       addCleanup(() => {
-        if (navigation) navigation.classList.remove("oa-nav-atelier-editorial");
+        if (navigation) navigation.classList.remove("oa-nav-atelier");
         style.remove();
       });
     }
