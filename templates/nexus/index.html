@@ -862,3 +862,29 @@
 
 })();
 </script>
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("nexus", {
+    activate({ root, observe, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "nexus";
+      style.textContent = "\n[data-oa-nexus-motion=\"ready\"] .nexus-cover__visual{clip-path:inset(0 0 0 0);transition:clip-path 1400ms cubic-bezier(.75,0,.2,1)}\n[data-oa-nexus-motion=\"ready\"] .nexus-cover.oa-nexus-cover-ready .nexus-cover__visual{clip-path:inset(0 0 0 0)}\n[data-oa-nexus-motion=\"ready\"] .oa-nexus-reveal{opacity:0;transform:translate3d(0,18px,0) scale(.975);filter:blur(6px);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.2,.8,.2,1),filter 850ms ease}\n[data-oa-nexus-motion=\"ready\"] .oa-nexus-reveal.oa-nexus-visible{opacity:1;transform:none;filter:none}\n[data-oa-nexus-motion=\"ready\"] .nexus-section.oa-nexus-visible .nexus-section__head{letter-spacing:.12em;transition:letter-spacing 1s ease}\n@media(prefers-reduced-motion:reduce){[data-oa-nexus-motion=\"ready\"] .oa-nexus-reveal{opacity:1;transform:none;filter:none;transition:none}}";
+      document.head.append(style);
+      root.dataset.oaNexusMotion = "ready";
+      const targets = root.querySelectorAll(".nexus-section, .nexus-page__top, .couple-section, .event-section, .story-section, .gallery-section, .gift-section");
+      targets.forEach(node => node.classList.add("oa-nexus-reveal"));
+      observe(targets, "oa-nexus-visible", { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+      const cover = root.querySelector(".nexus-cover");
+      if (cover && !reducedMotion) requestAnimationFrame(() => cover.classList.add("oa-nexus-cover-ready"));
+      
+      addCleanup(() => {
+        delete root.dataset.oaNexusMotion;
+        if (cover) cover.classList.remove("oa-nexus-cover-ready");
+        root.querySelectorAll(".oa-nexus-reveal, .oa-nexus-visible").forEach(node => node.classList.remove("oa-nexus-reveal","oa-nexus-visible"));
+        style.remove();
+      });
+    }
+  });
+})();
+</script>
