@@ -67,7 +67,7 @@ for (const slug of programs) {
   const template = read("templates/" + slug + "/index.html");
   assert.ok(template.includes('register("' + slug + '"'),
     slug + ": program tema belum terdaftar pada template.");
-  assert.ok(template.includes("addCleanup(") || template.includes("return () =>"),
+  assert.ok(template.includes("addCleanup(") || /return\\s*\\(\\s*\\)\\s*=>/.test(template),
     slug + ": program tema tidak membersihkan resource saat dilepas.");
   assert.ok(template.includes("navigation.classList.add(\"oa-nav-"),
     slug + ": tema belum memasang presentasi navigasi independen.");
