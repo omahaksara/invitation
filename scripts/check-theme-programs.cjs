@@ -36,7 +36,13 @@ const programs = [
   "aksara-nocturne",
   "sirein",
   "botanical-garden",
-  "nexus"
+  "nexus",
+  "aksara-signature",
+  "aksara-velora",
+  "atelier-editorial",
+  "lumina",
+  "kencana-jawa",
+  "sagara"
 ];
 for (const slug of programs) {
   const template = read("templates/" + slug + "/index.html");
