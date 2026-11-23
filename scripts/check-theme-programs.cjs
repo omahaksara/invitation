@@ -23,6 +23,10 @@ assert.ok(engine.includes("window.OAThemePrograms.activate("),
   "Engine belum mengaktifkan program tema setelah render.");
 assert.ok(engine.includes("await activateTemplateScripts(app)"),
   "Script tema harus diaktifkan sebelum render dan registrasi program.");
+assert.ok(runtime.includes("navigation: context.navigation || document.getElementById(\"oa-floating-controls\")"),
+  "Program tema harus menerima handle navigasi bersama tanpa mengambil alih perilakunya.");
+assert.ok(engine.includes("overlay.dataset.oaTheme"),
+  "Overlay galeri harus mengekspos identitas tema untuk presentasi khusus.");
 
 const programs = [
   "karsa",
@@ -40,5 +44,9 @@ for (const slug of programs) {
     slug + ": program tema tidak membersihkan resource saat dilepas.");
   assert.ok(template.includes("reducedMotion"),
     slug + ": program tema belum menerima preferensi reduced-motion.");
+  assert.ok(template.includes("navigation.classList.add(\"oa-nav-"),
+    slug + ": tema belum memasang presentasi navigasi independen.");
+  assert.ok(template.includes(".oa-gallery-lightbox[data-oa-theme=\"" + slug + "\"]"),
+    slug + ": overlay galeri belum memiliki presentasi khusus tema.");
 }
 console.log("Theme program contract passed for " + programs.length + " themes.");
