@@ -118,3 +118,36 @@ body,#app{background:#f2ecdf;color:#3e4738}
 <footer><div class="ornament">✧</div><h2 class="serif" style="font-size:2.5rem">Terima Kasih</h2><p>Atas doa dan kehadiran Anda, menjadi bagian dari kebahagiaan kami.</p><p class="serif gold" style="font-size:1.5rem"><span data-bind="couple.groom.nickname">Mempelai</span> &amp; <span data-bind="couple.bride.nickname">Mempelai</span></p></footer>
 <button id="music-toggle" type="button" hidden aria-label="Kontrol musik bersama"></button><audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
+
+<script>
+(() => {
+ "use strict";
+ if (!window.OAThemePrograms) return;
+ window.OAThemePrograms.register("earty", {
+  activate({root,navigation,observe}) {
+   const cover=root.querySelector("#cover, #cover-section, .hero, .cover, [class*='-cover']");
+   const title=cover&&cover.querySelector("h1,h2");
+   const photo=cover&&cover.querySelector("img");
+   if(cover) cover.dataset.oaExperienceCover="earty";
+   if(title) title.dataset.oaExperienceTitle="earty";
+   if(photo) photo.dataset.oaExperiencePhoto="earty";
+   if(navigation) navigation.classList.add("oa-nav-earty");
+   const targets=root.querySelectorAll(".person-card,.event-card,.story-card,.gallery-grid img,.gallery-item,.person-photo-frame,.hero-photo");
+   targets.forEach(node=>node.classList.add("oa-experience-reveal-earty"));
+   const style=document.createElement("style");
+   style.dataset.oaThemeProgram="earty";
+   style.textContent="@keyframes oaEartyTitle{from{opacity:0;transform:translate3d(0,18px,0) scale(.96);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}\nhtml[data-oa-theme=\"earty\"] [data-oa-experience-cover=\"earty\"] [data-oa-experience-title=\"earty\"]{animation:oaEartyTitle 1050ms cubic-bezier(.2,.75,.2,1) both}\nhtml[data-oa-theme=\"earty\"] [data-oa-experience-cover=\"earty\"] [data-oa-experience-photo=\"earty\"]{transform:scale(1.12);transition:transform 1250ms cubic-bezier(.2,.7,.2,1)}\nhtml[data-oa-theme=\"earty\"] #app .oa-experience-reveal-earty{opacity:0;transform:translate3d(0,18px,0) scale(.96);filter:blur(5px);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.2,.75,.2,1),filter 850ms ease}\nhtml[data-oa-theme=\"earty\"] #app .oa-experience-reveal-earty.oa-experience-visible-earty{opacity:1;transform:none;filter:none}\n#oa-floating-controls.oa-nav-earty{left:14px!important;right:auto!important;top:auto!important;bottom:max(14px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:7px 11px!important;gap:4px!important;border-radius:22px 22px 22px 6px!important;background:#f1e8d8!important;border:1px solid #8b7554!important;box-shadow:0 10px 28px #382b1e33!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}\n#oa-floating-controls.oa-nav-earty button{color:#514632!important;border-color:#8b7554!important}\n.oa-gallery-lightbox[data-oa-theme=\"earty\"]{background:rgba(244,237,222,.97)!important;color:#514632!important}\n.oa-gallery-lightbox[data-oa-theme=\"earty\"] img{border:1px solid #8b7554!important;border-radius:14px!important;box-shadow:0 24px 70px rgba(0,0,0,.25)!important}\n@media(max-width:600px){#oa-floating-controls.oa-nav-earty{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;max-width:none!important;justify-content:space-around!important;border-radius:999px!important}}\n@media(prefers-reduced-motion:reduce){html[data-oa-theme=\"earty\"] [data-oa-experience-cover=\"earty\"] [data-oa-experience-title=\"earty\"],html[data-oa-theme=\"earty\"] [data-oa-experience-cover=\"earty\"] [data-oa-experience-photo=\"earty\"]{animation:none!important;transition:none!important;transform:none!important;filter:none!important}html[data-oa-theme=\"earty\"] #app .oa-experience-reveal-earty{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}";
+   document.head.append(style);
+   observe(targets,"oa-experience-visible-earty",{threshold:.1,rootMargin:"0px 0px -6% 0px"});
+   return ()=>{
+    if(navigation) navigation.classList.remove("oa-nav-earty");
+    if(cover) delete cover.dataset.oaExperienceCover;
+    if(title) delete title.dataset.oaExperienceTitle;
+    if(photo) delete photo.dataset.oaExperiencePhoto;
+    targets.forEach(node=>node.classList.remove("oa-experience-reveal-earty","oa-experience-visible-earty"));
+    style.remove();
+   };
+  }
+ });
+})();
+</script>
