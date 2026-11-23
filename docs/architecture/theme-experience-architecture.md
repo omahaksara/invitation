@@ -134,6 +134,8 @@ Setiap program tema memasang kelas presentasi dan stylesheet miliknya sendiri. P
 - Kencana Jawa: dock hitam-emas berlapis dengan garis ganda.
 - Sagara: rail teal di sisi kanan, beralih ke dock pada layar kecil.
 
+Semua 12 program navigasi menambahkan transisi interaksi milik tema dan menyediakan fallback eksplisit `prefers-reduced-motion: reduce`; uji kontrak memeriksa keberadaan fallback tersebut.
+
 Lightbox tetap dibuat dan dikendalikan engine, termasuk dialog, navigasi foto, Escape, dan pengembalian fokus. Engine memberi identitas tema pada overlay; program tema mengatur atmosfer, warna, bentuk foto, dan treatment visual tanpa menggandakan mekanik overlay.
 
 Perubahan ini hanya menyentuh lapisan presentasi. Kontrak RSVP/guestbook, data undangan, endpoint, aset pembayaran, dan integrasi backend tidak diubah.
