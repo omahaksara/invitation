@@ -352,8 +352,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": jumlah Love Story tidak sesuai data.json");
         assert.equal(await page.locator("#story-list .oa-story-photo, .story-list .oa-story-photo").count(), storyAudit.photos,
           theme.slug + ": foto Love Story tidak sesuai data.json");
-        assert.equal((await page.locator("#story-list article, .story-list article").first().textContent()).includes("Pertemuan yang Sederhana"), true,
-          theme.slug + ": judul Love Story tidak terbaca");
+        const expectedFirstStoryTitle = String(await page.evaluate(() => window.__invitationData?.story?.[0]?.judul || "")).trim();
+        const renderedFirstStory = (await page.locator("#story-list article, .story-list article").first().textContent()).trim();
+        assert.ok(expectedFirstStoryTitle && renderedFirstStory.includes(expectedFirstStoryTitle),
+          theme.slug + ": judul Love Story tidak sesuai data demo (expected=" + expectedFirstStoryTitle + ")");
 
         // Regression coverage for the curated demo payment methods and map controls.
         // These assertions run against every active theme using the same demo JSON.
