@@ -392,11 +392,15 @@ for (const slug of activeThemeSlugs) {
           const scheduleRows = Array.from(document.querySelectorAll("#event-list .oa-event-schedule-item"));
           return {
             expectedPayments: enabledAccounts.length,
-            paymentNames: enabledAccounts.map(item => item.bank || "HADIAH DIGITAL"),
+            paymentNames: enabledAccounts.map(item => {
+              const type = String(item.paymentType || item.type || "bank").toLowerCase();
+              return item.provider || item.bank || item.name ||
+                (type === "qris" ? "QRIS" : type === "ewallet" ? "Dompet Digital" : "HADIAH DIGITAL");
+            }),
             paymentCards: giftCards.length,
             paymentCardNames: giftCards.map(card => card.querySelector(".gift-bank")?.textContent?.trim() || ""),
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
-            hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.includes("data simulasi")),
+            hasDemoNotice: /simulasi/i.test(document.querySelector("#gift-list .gift-message")?.textContent || "") && /tidak dapat digunakan untuk transaksi/i.test(document.querySelector("#gift-list .gift-message")?.textContent || ""),
             expectedMappedEvents: mappedEvents.length,
             eventCards: eventCards.length,
             scheduleRows: scheduleRows.length,
