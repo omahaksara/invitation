@@ -72,7 +72,7 @@ The shared navigation contract must remain usable and consistent in function. It
 
 This architecture is a presentation and interaction refactor only.
 
-- Do not edit `clients/*/data.json`, client slugs, client mappings, or production invitation records.
+- Do not edit production `clients/*/data.json`, client slugs, client mappings, or production invitation records. The only exception in this PR is the synthetic `clients/demo-katalog/data.json` fixture, used solely for public demo/isolated browser verification.
 - Do not change RSVP or guestbook payload fields, endpoint URLs, Apps Script IDs, sheet mappings, or submission semantics.
 - Do not migrate, recreate, or ask clients to reconnect Google Sheets.
 - Do not change gifts, bank details, QR assets, production links, or storage/backend contracts.
@@ -99,7 +99,7 @@ A theme is not complete because it renders or passes static validation. Review t
 1. Keep the theme-experience workstream in one reviewable PR; do not split it into overlapping implementation branches.
 2. Stabilize shared lifecycle services without changing their visual defaults for every theme.
 3. Extract theme-owned programs behind explicit lifecycle boundaries.
-4. Prove the architecture on a small number of contrasting existing themes before broad rollout.
+4. Register each existing active theme as an independent program, then validate the full active set with automated smoke tests and theme-by-theme visual review.
 5. Refine existing themes' art direction and motion identity; do not add new themes until the current set has meaningful differentiation.
 6. Keep each change scoped, reversible, and covered by demo/TEST verification.
 
@@ -109,8 +109,8 @@ A theme is not complete because it renders or passes static validation. Review t
 - Theme programs receive invitation data through a recursive read-only view; they cannot mutate the shared invitation object through the program API.
 - The shared renderer activates the selected theme program only after the template scripts and invitation content are ready. A missing or failing optional program does not block the base invitation renderer.
 - Independent motion programs are implemented for Karsa, Royal Vintage, Aksara Nocturne, Sirein, Botanical Garden, and Nexus. Their visual treatments differ: editorial stagger, framed cover/card reveal, dark panel depth, sage editorial mask, botanical orbit/reveal, and cinematic portal treatment.
-- Twelve existing themes now have independently registered navigation and gallery-overlay presentation programs. The six additional programs cover Aksara Signature, Aksara Velora, Atelier Editorial, Lumina, Kencana Jawa, and Sagara. This is a staged pilot, not yet a claim that all active themes have completed visual differentiation.
-- The syntax check now includes the theme runtime. Browser visual QA remains a separate release gate; static/backend success is not evidence of visual correctness.
+- All 31 active themes now have their own slug-based program registration. The original six motion pilots remain distinct; 19 additional themes now have independent cover-title/photo choreography, reveal lifecycle, navigation presentation, and gallery-overlay styling. Six other existing themes retain their dedicated navigation/overlay programs while awaiting deeper cover-specific art-direction passes. Registration is complete; aesthetic review is still a separate gate.
+- The syntax check includes the theme runtime, and `scripts/check-theme-programs.cjs` verifies all 31 registrations, cleanup paths, reduced-motion rules, navigation classes, and overlay selectors. Playwright smoke tests cover all 31 active themes at desktop and mobile widths. Human visual review remains a separate release gate; automated success is not evidence of aesthetic quality.
 
 ## Definition of success
 
@@ -134,7 +134,7 @@ Setiap program tema memasang kelas presentasi dan stylesheet miliknya sendiri. P
 - Kencana Jawa: dock hitam-emas berlapis dengan garis ganda.
 - Sagara: rail teal di sisi kanan, beralih ke dock pada layar kecil.
 
-Semua 12 program navigasi menambahkan transisi interaksi milik tema dan menyediakan fallback eksplisit `prefers-reduced-motion: reduce`; uji kontrak memeriksa keberadaan fallback tersebut.
+Seluruh 31 program navigasi memasang kelas presentasi khusus tema; program yang memiliki choreography tambahan juga mengatur reveal cover/foto dan konten. Setiap program menyediakan fallback `prefers-reduced-motion: reduce`; uji kontrak memeriksa seluruh 31 registrasi dan aturan presentasinya.
 
 Lightbox tetap dibuat dan dikendalikan engine, termasuk dialog, navigasi foto, Escape, dan pengembalian fokus. Engine memberi identitas tema pada overlay; program tema mengatur atmosfer, warna, bentuk foto, dan treatment visual tanpa menggandakan mekanik overlay.
 
