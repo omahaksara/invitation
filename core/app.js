@@ -598,6 +598,11 @@
     if (!(data.quote && (data.quote.text || data.quote.arab))) hide(".quote-section, .quote");
     if (!(data.closing && (data.closing.title || data.closing.text || data.closing.signature))) hide("[data-oa-closing], .oa-closing-section");
     if (!(data.video && (data.video.src || data.video.url))) hide(".video-section, #video-section");
+    const dresscodeNote = String(data.dresscode?.note || "").trim();
+    document.querySelectorAll('[data-bind="dresscode.note"]').forEach(node => {
+      const tile = node.closest(".lumina-bento__dress");
+      if (tile) tile.hidden = !dresscodeNote;
+    });
     const eventSource = data.__renderEvents || data.events;
     const eventValues = Array.isArray(eventSource) ? eventSource : Object.values(eventSource || {});
     if (!eventValues.some(item => item && (item.mapsUrl || item.mapUrl))) document.querySelectorAll("#link-akad-maps, #link-resepsi-maps").forEach(el => { el.hidden = true; });
