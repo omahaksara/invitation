@@ -327,6 +327,7 @@ for (const slug of activeThemeSlugs) {
             themeRoots: document.querySelectorAll(".js-theme").length,
             bodyBackground: getComputedStyle(document.body).backgroundColor,
             displayFont: getComputedStyle(document.querySelector(".cover-title")).fontFamily,
+            declaredDisplayFont: getComputedStyle(document.documentElement).getPropertyValue("--js-serif").trim(),
             coverImageBound: !!document.querySelector(".cover-image")?.getAttribute("src"),
             eventCards: document.querySelectorAll("#event-list .event-card").length,
             galleryImages: document.querySelectorAll("#gallery-grid img").length,
@@ -337,7 +338,9 @@ for (const slug of activeThemeSlugs) {
           assert.equal(visualAudit.appRoots, 1, "jendela-senja: ditemukan ID #app ganda.");
           assert.equal(visualAudit.themeRoots, 1, "jendela-senja: root tema tidak tunggal.");
           assert.equal(visualAudit.bodyBackground, "rgb(20, 22, 31)", "jendela-senja: CSS tema tidak termuat.");
-          assert.ok(visualAudit.displayFont.includes("Bodoni Moda"), "jendela-senja: font display tidak terpasang.");
+          const expectedDisplayFamily = visualAudit.declaredDisplayFont.split(",")[0].replace(/["']/g, "").trim();
+          assert.ok(expectedDisplayFamily && visualAudit.displayFont.includes(expectedDisplayFamily),
+            "jendela-senja: font display tidak sesuai token tema " + JSON.stringify(visualAudit));
           assert.ok(visualAudit.coverImageBound, "jendela-senja: foto cover belum terikat dari JSON.");
           assert.ok(visualAudit.eventCards > 0 && visualAudit.galleryImages > 0 && visualAudit.giftCards > 0,
             "jendela-senja: renderer acara/galeri/hadiah tidak mengisi data demo " + JSON.stringify(visualAudit));
@@ -345,14 +348,16 @@ for (const slug of activeThemeSlugs) {
         }
         const storyAudit = await page.evaluate(() => ({
           total: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.length : 0,
-          photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0
+          photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0,
+          firstTitle: Array.isArray(window.__invitationData?.story) ? String(window.__invitationData.story[0]?.judul || "") : ""
         }));
         assert.equal(await page.locator("#story-list article, .story-list article").count(), storyAudit.total,
           theme.slug + ": jumlah Love Story tidak sesuai data.json");
         assert.equal(await page.locator("#story-list .oa-story-photo, .story-list .oa-story-photo").count(), storyAudit.photos,
           theme.slug + ": foto Love Story tidak sesuai data.json");
-        assert.equal((await page.locator("#story-list article, .story-list article").first().textContent()).includes("Pertemuan yang Sederhana"), true,
-          theme.slug + ": judul Love Story tidak terbaca");
+        assert.ok(storyAudit.firstTitle &&
+          (await page.locator("#story-list article, .story-list article").first().textContent()).includes(storyAudit.firstTitle),
+          theme.slug + ": judul Love Story tidak sesuai data demo " + JSON.stringify(storyAudit));
 
         // Regression coverage for the curated demo payment methods and map controls.
         // These assertions run against every active theme using the same demo JSON.
