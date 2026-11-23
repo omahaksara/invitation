@@ -7,6 +7,22 @@
 
   const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  function readonlyData(value, cache = new WeakMap()) {
+    if (!value || typeof value !== "object") return value;
+    if (cache.has(value)) return cache.get(value);
+    const view = new Proxy(value, {
+      get(target, key, receiver) {
+        return readonlyData(Reflect.get(target, key, receiver), cache);
+      },
+      set() { throw new TypeError("Program tema tidak boleh mengubah data undangan."); },
+      deleteProperty() { throw new TypeError("Program tema tidak boleh menghapus data undangan."); },
+      defineProperty() { throw new TypeError("Program tema tidak boleh mengubah struktur data undangan."); },
+      setPrototypeOf() { throw new TypeError("Program tema tidak boleh mengubah prototipe data undangan."); }
+    });
+    cache.set(value, view);
+    return view;
+  }
+
   function register(slug, program) {
     if (!/^[a-z0-9][a-z0-9-]*$/i.test(slug) || !program || typeof program.activate !== "function") {
       throw new TypeError("Program tema harus memiliki slug dan fungsi activate().");
@@ -38,7 +54,7 @@
     const api = Object.freeze({
       slug,
       root: context.root || document.getElementById("app") || document,
-      data: context.data || window.__invitationData || {},
+      data: readonlyData(context.data || window.__invitationData || {}),
       reducedMotion: reducedMotion(),
       signal: controller.signal,
       addCleanup(fn) { if (typeof fn === "function") cleanups.push(fn); },
