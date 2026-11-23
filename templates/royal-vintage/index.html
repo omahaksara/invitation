@@ -177,3 +177,39 @@
     <button id="music-toggle" class="royal-music-toggle" type="button" aria-label="Putar atau jeda musik" aria-pressed="false"><i class="fa-solid fa-compact-disc" aria-hidden="true"></i></button>
     </main>
 </div>
+
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("royal-vintage", {
+    activate({ root, observe, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "royal-vintage";
+      style.textContent = `
+        [data-oa-royal-motion="ready"] .hero { isolation:isolate; }
+        [data-oa-royal-motion="ready"] .hero::after { transform:scaleX(.0); transform-origin:center; transition:transform 1200ms cubic-bezier(.7,0,.2,1); }
+        [data-oa-royal-motion="ready"] .hero.oa-royal-cover-ready::after { transform:scaleX(1); }
+        [data-oa-royal-motion="ready"] .profile-card,
+        [data-oa-royal-motion="ready"] .event-card { transition:opacity 850ms ease, transform 950ms cubic-bezier(.2,.7,.2,1), box-shadow 850ms ease; }
+        [data-oa-royal-motion="ready"] .oa-royal-reveal { opacity:0; transform:translateY(20px) scale(.985); }
+        [data-oa-royal-motion="ready"] .oa-royal-reveal.oa-royal-visible { opacity:1; transform:none; }
+        [data-oa-royal-motion="ready"] .profile-card.oa-royal-reveal.oa-royal-visible { box-shadow:0 14px 34px rgba(55,8,13,.07); }
+        @media(prefers-reduced-motion:reduce){[data-oa-royal-motion="ready"] .oa-royal-reveal{opacity:1;transform:none;transition:none}[data-oa-royal-motion="ready"] .hero::after{transform:none;transition:none}}
+      `;
+      document.head.append(style);
+      root.dataset.oaRoyalMotion = "ready";
+      const cover = root.querySelector(".hero");
+      if (cover) requestAnimationFrame(() => cover.classList.add("oa-royal-cover-ready"));
+      const targets = root.querySelectorAll(".profile-card, .event-card, .quote-section");
+      targets.forEach(node => node.classList.add("oa-royal-reveal"));
+      observe(targets, "oa-royal-visible", { threshold: 0.16, rootMargin: "0px 0px -9% 0px" });
+      addCleanup(() => {
+        root.removeAttribute("data-oa-royal-motion");
+        if (cover) cover.classList.remove("oa-royal-cover-ready");
+        root.querySelectorAll(".oa-royal-reveal").forEach(node => node.classList.remove("oa-royal-reveal","oa-royal-visible"));
+        style.remove();
+      });
+    }
+  });
+})();
+</script>
