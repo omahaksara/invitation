@@ -218,8 +218,9 @@ for (const slug of activeThemeSlugs) {
             "atelier-editorial: tombol cover dengan namespace mandiri tidak ditemukan");
         }
         await page.waitForFunction(() => {
+          const groom = window.__invitationData?.couple?.groom?.nickname;
           const el = document.querySelector('[data-bind="couple.groom.nickname"]');
-          return el && el.textContent.trim() === "Arkan";
+          return Boolean(groom && el && el.textContent.trim() === String(groom).trim());
         }, undefined, { timeout: 10000 });
 
         assert.equal((await page.locator("#nama-tamu").textContent()).trim(), "Nama Tamu",
@@ -232,8 +233,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
-        assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
-          theme.slug + ": nama mempelai wanita tidak terbaca");
+        const renderedBride = (await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim();
+        const expectedBride = String(await page.evaluate(() => window.__invitationData?.couple?.bride?.nickname || "")).trim();
+        assert.ok(expectedBride && renderedBride === expectedBride,
+          theme.slug + ": nama mempelai wanita tidak sesuai data demo (expected=" + expectedBride + ", actual=" + renderedBride + ")");
 
         const initialAudit = await page.evaluate(() => {
           const couple = window.__invitationData?.couple || {};
