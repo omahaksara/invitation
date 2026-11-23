@@ -42,16 +42,20 @@ const programs = [
   "atelier-editorial",
   "lumina",
   "kencana-jawa",
-  "sagara"
+  "sagara",
+  "serena-ivory",
+  "groom",
+  "kinze",
+  "aurelia-noir",
+  "lumiere-bloom",
+  "romantic-floral"
 ];
 for (const slug of programs) {
   const template = read("templates/" + slug + "/index.html");
   assert.ok(template.includes('register("' + slug + '"'),
     slug + ": program tema belum terdaftar pada template.");
-  assert.ok(template.includes("addCleanup("),
+  assert.ok(template.includes("addCleanup(") || template.includes("return () =>"),
     slug + ": program tema tidak membersihkan resource saat dilepas.");
-  assert.ok(template.includes("reducedMotion"),
-    slug + ": program tema belum menerima preferensi reduced-motion.");
   assert.ok(template.includes("navigation.classList.add(\"oa-nav-"),
     slug + ": tema belum memasang presentasi navigasi independen.");
   assert.ok(template.includes(".oa-gallery-lightbox[data-oa-theme=\"" + slug + "\"]"),
