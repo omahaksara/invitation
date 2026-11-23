@@ -61,10 +61,10 @@
       style.dataset.oaThemeProgram = "aksara-signature";
       style.textContent = `#oa-floating-controls.oa-nav-signature{left:50%!important;right:auto!important;top:auto!important;bottom:max(18px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:8px 14px!important;gap:7px!important;border-radius:50px!important;background:rgba(250,247,240,.96)!important;border:1px solid #b89b79!important;box-shadow:0 10px 34px #69543d30!important;backdrop-filter:blur(16px)!important}#oa-floating-controls.oa-nav-signature button{min-width:44px!important;min-height:40px!important;border-radius:50%!important;color:#69543d!important;font:600 9px/1.1 Georgia,serif!important}#oa-floating-controls.oa-nav-signature button.is-active{background:#8e735b!important;color:#fffaf1!important}@media(max-width:600px){#oa-floating-controls.oa-nav-signature{left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;width:auto!important;justify-content:space-around!important}}
 .oa-gallery-lightbox[data-oa-theme="aksara-signature"]{background:rgba(40,34,29,.96)!important;backdrop-filter:blur(18px)}.oa-gallery-lightbox[data-oa-theme="aksara-signature"] img{border:7px solid #f7f0e5;border-radius:48% 48% 8px 8px!important;box-shadow:0 18px 50px #0008}`;
-      if (navigation) navigation.classList.add("oa-nav-aksara-signature");
+      if (navigation) navigation.classList.add("oa-nav-signature");
       document.head.append(style);
       addCleanup(() => {
-        if (navigation) navigation.classList.remove("oa-nav-aksara-signature");
+        if (navigation) navigation.classList.remove("oa-nav-signature");
         style.remove();
       });
     }
