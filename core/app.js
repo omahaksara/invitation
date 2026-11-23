@@ -930,7 +930,7 @@
             ...item, ...entry,
             id: entry.id || (item.id || "event") + "-" + (index + 1),
             title: entry.title || item.title || "Acara Pernikahan",
-            dateISO: entry.dateISO || (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date || "")) ? entry.date : (item.dateISO || (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(item.date || "")) ? item.date : ""))),
+            dateISO: entry.dateISO || (/\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date || "")) ? entry.date : (item.dateISO || (/\d{4}-\\d{2}-\\d{2}$/.test(String(item.date || "")) ? item.date : ""))),
             location: entry.location || item.location || item.venue,
             address: entry.address || item.address || "",
             mapsUrl: entry.mapsUrl || item.mapsUrl || "",
@@ -2392,12 +2392,12 @@
         .oa-scroll-reveal.oa-visible { opacity: 1; transform: translateY(0); }
         #app .reveal:not(.active) { opacity: 0 !important; transform: translate3d(0,22px,0); transition: opacity var(--oa-motion-duration) ease, transform var(--oa-motion-duration) var(--oa-motion-ease); }
         #app .reveal.active { opacity: 1 !important; transform: none; }
-        .oa-motion-item { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .68s ease, transform .76s var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
+        .oa-motion-item { opacity: 0; transform: translate3d(0,18px,0); transition: opacity var(--oa-motion-duration, 720ms) ease, transform var(--oa-motion-duration, 720ms) var(--oa-motion-ease); transition-delay: var(--oa-motion-delay, 0ms); }
         .oa-motion-item[data-oa-motion="left"] { transform: translate3d(-16px,0,0); }
         .oa-motion-item[data-oa-motion="right"] { transform: translate3d(16px,0,0); }
         .oa-motion-item[data-oa-motion="up"] { transform: translate3d(0,16px,0); }
         .oa-motion-item.oa-motion-visible { opacity: 1; transform: translate3d(0,0,0); }
-        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); transition: opacity .78s ease, transform .9s var(--oa-motion-ease); }
+        img.oa-motion-photo, .oa-motion-photo img { opacity: 0; transform: scale(.965); transition: opacity var(--oa-motion-duration, 720ms) ease, transform var(--oa-motion-duration, 720ms) var(--oa-motion-ease); }
         img.oa-motion-photo[data-oa-motion="left"], .oa-motion-photo[data-oa-motion="left"] img { transform: translate3d(-16px,0,0) scale(.99); }
         img.oa-motion-photo[data-oa-motion="right"], .oa-motion-photo[data-oa-motion="right"] img { transform: translate3d(16px,0,0) scale(.99); }
         img.oa-motion-photo.oa-motion-visible, .oa-motion-photo.oa-motion-visible img { opacity: 1; transform: translate3d(0,0,0) scale(1); filter:none; }
