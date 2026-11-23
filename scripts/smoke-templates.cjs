@@ -232,8 +232,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
-        assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), "Sekar",
-          theme.slug + ": nama mempelai wanita tidak terbaca");
+        const expectedBrideNickname = await page.evaluate(() => window.__invitationData?.couple?.bride?.nickname || "");
+        assert.ok(expectedBrideNickname, theme.slug + ": nama mempelai wanita tidak tersedia pada data demo.");
+        assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), expectedBrideNickname,
+          theme.slug + ": nama mempelai wanita tidak sesuai data demo.");
 
         const initialAudit = await page.evaluate(() => {
           const couple = window.__invitationData?.couple || {};
