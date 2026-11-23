@@ -1,0 +1,44 @@
+# Visual audit — 31 active theme covers
+
+**Evidence:** Playwright cover screenshots from GitHub Actions run 90, head `c2aab114e55d241722980e85eedcf98c7077a0c8`. This audit is based on a contact sheet of desktop cover screenshots, not full subjective review of every viewport. It is an evidence-based triage, not a claim of final visual approval.
+
+## Findings
+
+### P0 — shared demo photo is masking theme identity
+The same Arkan–Arunika demo photo is used across most covers. This is intentional fixture reuse for functional QA, but it makes it impossible to judge the themes' photo art direction and creates an impression of theme sameness. Do not change client photos. For visual QA, create a theme-neutral photo set or varied synthetic assets isolated to the demo fixture.
+
+### P1 — cover composition converges on the same pattern
+Many themes repeat the centered couple-name treatment over a darkened full-bleed photo, with a similar small metadata block and CTA. Color, ornament and font changes alone do not sufficiently differentiate them. Avoid mass CSS changes; redesign each cover around a distinct composition.
+
+### P1 — typography hierarchy and photo legibility
+Some screenshot variants show names or small metadata overlapping visually with the photo subjects or background texture. The first screen needs clear hierarchy: names, event label, supporting details, CTA. Check contrast over both bright and dark portions of each photo and avoid ornamental text collisions.
+
+### P2 — decorative frame is overused or too subtle to carry identity
+Frames and borders appear in several covers but are not always meaningful. A theme should either use a distinctive frame as part of its concept or intentionally omit one. Avoid applying a generic border to every cover.
+
+### P2 — themes that should remain illustration/card based
+Sunda Watercolor and Gebyok Candra use illustrated or card-style covers. Do not force full-bleed photo composition into them; preserve their concept and refine their own reveal.
+
+## Visual redesign groups (not final theme assignments)
+
+Use these as directions for individual theme concepts, and confirm the design against the actual template before editing:
+- **Editorial / asymmetric split:** photo on one side, typography and event metadata on the other; intentional whitespace.
+- **Full-bleed cinematic:** photo fills the screen, title uses controlled placement, subtle vignette and slow reveal.
+- **Invitation card / paper object:** layered paper, embossed typography, restrained shadows, invitation-like composition.
+- **Arch / portrait gallery:** photo framed by an arch, portrait crop and generous margins.
+- **Botanical / organic:** soft organic masks, leaf-inspired details, restrained motion; never overlay ornaments on text.
+- **No-frame modern minimal:** typography and composition carry the identity; no unnecessary border or panel.
+- **Traditional craft / heritage:** specific texture and layout inspired by the theme; not merely gold color applied to a common layout.
+- **Illustrated / watercolor:** artwork remains the main visual; use scene transitions and typography that support the illustration.
+
+## Remediation sequence
+
+1. Make a dedicated visual QA fixture with varied synthetic/stock-safe photos and no production data; test a couple/portrait/full-bleed and bright/dark image conditions.
+2. Select the most visually repetitive covers first and give each a genuinely different composition (layout, crop, typography hierarchy, frame/no-frame, motion entrance), rather than changing colors only.
+3. Review mobile first: safe areas, name legibility, CTA placement, nav unobtrusiveness, and scroll/reveal behavior.
+4. Audit motion per theme: entrance, title, photo, section reveal, and overlay should be a coherent choreography. Use animation only where it reinforces the concept; support reduced motion.
+5. After each small group of theme redesigns, rerun static/backend/browser checks and inspect screenshot evidence. Keep PR #141 Draft until human visual QA is complete.
+
+## Safety boundary
+
+This audit does not authorize changes to client invitation records, client photos, slugs, production links, RSVP/guestbook endpoints or contracts, Apps Script/Sheet mappings, gift/payment details, QR assets, or backend behavior. Changes must remain limited to theme presentation and isolated demo fixtures.
