@@ -880,6 +880,7 @@
       const targets = root.querySelectorAll(".nexus-section, .nexus-page__top, .couple-section, .event-section, .story-section, .gallery-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nexus-reveal"));
       observe(targets, "oa-nexus-visible", { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+      depthMotion({ surface: ".nexus-cover", layers: [{ selector: ".nexus-cover__visual", z: 14, factor: 0.3 }, { selector: ".nexus-cover__panel", z: 42, factor: 0.75 }, { selector: ".nexus-cover__line", z: 24, factor: 0.5 }] });
       const cover = root.querySelector(".nexus-cover");
       if (cover && !reducedMotion) requestAnimationFrame(() => cover.classList.add("oa-nexus-cover-ready"));
       
