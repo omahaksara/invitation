@@ -1456,3 +1456,19 @@ html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --
 .oa-floating-controls button.oa-music-control.is-running {
   color: var(--oa-dock-active-ink, #fff) !important;
 }
+
+/* Render music as a CSS glyph so theme button text rules cannot hide it. */
+.oa-floating-controls button.oa-music-control {
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+.oa-floating-controls button.oa-music-control::before {
+  content: "♪";
+  display: inline-block;
+  font: 700 19px/1 "Segoe UI Symbol", "Noto Music", "Arial Unicode MS", sans-serif;
+  color: var(--oa-dock-ink, #514735);
+}
+.oa-floating-controls button.oa-music-control.is-playing::before,
+.oa-floating-controls button.oa-music-control.is-running::before {
+  color: var(--oa-dock-active-ink, #fff);
+}
