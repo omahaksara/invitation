@@ -73,8 +73,14 @@ The 31/31 browser result from run #103 is the baseline, not proof that the two n
 
 These changes affect only theme CSS presentation. The next browser run must be on the final combined branch head; run #107 does not verify these later commits.
 
+### Verification from browser run #110 — 24 November 2026
+
+**Evidence:** [run #110](https://github.com/omahaksara/invitation/actions/runs/45304201130), source-code HEAD `582aa1624b798cc365b1de03533d577b6ef9b8a8`. Static validation, backend mocks, and browser smoke all completed successfully. The browser artifact `theme-browser-visual-evidence` contains desktop/mobile screenshots for the active themes.
+
+A visual review of the four redesigned cover pairs (Aksara Signature, Aksara Velora, Army, Karsa) confirms their intended distinct compositions are present at desktop and mobile sizes. The invitation CTA is visible in the captured covers; no obvious title clipping or horizontal overflow is apparent in these eight cover captures. This is a targeted cover review, not full aesthetic approval of all 31 themes.
+
 ### Remaining release gate
-- Inspect the next run's screenshots for all four redesigned covers on desktop and mobile, and confirm CTA visibility, text contrast, no horizontal overflow, and no reduced-motion regression.
-- Recheck duplicate music/navigation controls in Karsa and Army against the shared navigation behavior.
+- Inspect the full-page desktop/mobile captures for duplicate music/navigation controls, especially Karsa and Army; cover-only captures do not prove dock behavior.
+- Review reduced-motion behavior and section/reveal transitions beyond the cover.
 - Continue the wider 31-theme aesthetic review; passing smoke tests is not equivalent to subjective design approval.
-- Keep PR #141 Draft until final-head checks and visual QA are complete.
+- Keep PR #141 Draft until these remaining visual checks are complete.
