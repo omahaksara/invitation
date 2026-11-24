@@ -96,6 +96,10 @@
 
         const previousSurfaceMarker = surface.getAttribute("data-oa-depth-surface");
         const hadEnteredClass = surface.classList.contains("oa-depth-entered");
+        const previousSurfaceVars = {
+          axis: surface.style.getPropertyValue("--oa-depth-axis"),
+          angle: surface.style.getPropertyValue("--oa-depth-angle")
+        };
         const style = document.createElement("style");
         style.dataset.oaDepthMotion = slug;
         style.textContent = `
@@ -135,7 +139,7 @@
           }`;
         document.head.append(style);
         surface.setAttribute("data-oa-depth-surface", slug);
-        surface.classList.add("oa-depth-entered");
+        if (!hadEnteredClass) surface.classList.remove("oa-depth-entered");
 
         const layerNodes = (options.layers || []).flatMap(item =>
           Array.from(root.querySelectorAll(item.selector || "")).map(node => ({ node, item }))
@@ -157,7 +161,12 @@
         });
 
         let frame = 0;
-        const entranceFrame = window.requestAnimationFrame(() => surface.classList.add("oa-depth-entered"));
+        // Commit the hidden 3D layer state before revealing it on the next frame.
+        // Without this layout boundary, browsers may skip the entrance transition.
+        if (!hadEnteredClass) void surface.offsetWidth;
+        const entranceFrame = window.requestAnimationFrame(() => {
+          if (!hadEnteredClass) surface.classList.add("oa-depth-entered");
+        });
         let pointerX = 0;
         let pointerY = 0;
         const render = () => {
@@ -219,8 +228,13 @@
           if (previousSurfaceMarker === null) surface.removeAttribute("data-oa-depth-surface");
           else surface.setAttribute("data-oa-depth-surface", previousSurfaceMarker);
           if (!hadEnteredClass) surface.classList.remove("oa-depth-entered");
-          surface.style.removeProperty("--oa-depth-axis");
-          surface.style.removeProperty("--oa-depth-angle");
+          [
+            ["--oa-depth-axis", previousSurfaceVars.axis],
+            ["--oa-depth-angle", previousSurfaceVars.angle]
+          ].forEach(([key, value]) => {
+            if (value) surface.style.setProperty(key, value);
+            else surface.style.removeProperty(key);
+          });
 
           layerNodes.forEach(({ node }) => {
             const marker = previousLayerMarkers.get(node);
