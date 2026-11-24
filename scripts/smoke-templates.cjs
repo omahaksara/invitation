@@ -448,14 +448,17 @@ for (const slug of activeThemeSlugs) {
         // The shared controls appear only after the invitation is opened.
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
-          cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
+          cover: Array.from(document.querySelectorAll('img[data-bind="cover.image"], img[data-bind="cover.heroImage"]'))
+            .map(img => img.currentSrc || img.src),
           groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
           bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
-          gallery: Array.from(document.querySelectorAll(".gallery-grid img")).map(img => img.src),
-          images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
+          gallery: Array.from(document.querySelectorAll("#gallery-grid img, .gallery-grid img"))
+            .map(img => img.currentSrc || img.src),
+          images: Array.from(document.querySelectorAll("img[src]")).map(img => img.currentSrc || img.src)
         }));
         const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
-        assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
+        assert.ok(imageAudit.cover.every(src => src.startsWith(localPrefix)),
+          theme.slug + ": foto sampul bukan aset lokal " + JSON.stringify(imageAudit.cover));
         assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
         assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
         const normalizedImageAudit = await page.evaluate(() => ({
@@ -468,6 +471,8 @@ for (const slug of activeThemeSlugs) {
         }));
         assert.ok(normalizedImageAudit.coverImage && normalizedImageAudit.coverImage === normalizedImageAudit.coverHeroImage,
           theme.slug + ": alias foto cover tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
+        assert.ok(normalizedImageAudit.coverHeroImage && !/^(?:https?:)?\\/\\//i.test(normalizedImageAudit.coverHeroImage),
+          theme.slug + ": sumber cover demo harus berupa path aset relatif lokal " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.groomPhoto && normalizedImageAudit.bridePhoto,
           theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.storyPhotos.length === 4 && normalizedImageAudit.storyPhotos.every(Boolean),
@@ -523,18 +528,24 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
-        const galleryImage = page.locator(".gallery-grid img").first();
+        const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
-          // Decorative reveal/parallax loops may continuously transform the image.
-          // Freeze the current visual frame only for the pointer-interaction assertion;
-          // animation behavior is covered independently by theme/reduced-motion checks.
-          await galleryImage.scrollIntoViewIfNeeded();
+          // Smooth scrolling is verified above as a product behavior. Disable only
+          // the scroll animation used to position Playwright at the gallery; otherwise
+          // its actionability check sees a continuously moving bounding box.
           await page.evaluate(() => {
-            document.getAnimations({ subtree: true }).forEach(animation => {
-              if (animation.playState === "running") animation.pause();
-            });
+            document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
           });
-          await page.waitForTimeout(60);
+          await galleryImage.scrollIntoViewIfNeeded();
+          // Let the real reveal transitions finish before testing the pointer action.
+          await page.waitForFunction(() => {
+            const image = document.querySelector("#gallery-grid img, .gallery-grid img");
+            if (!image) return false;
+            for (let node = image; node && node !== document.body; node = node.parentElement) {
+              if (node.getAnimations().some(animation => animation.playState === "running")) return false;
+            }
+            return true;
+          }, undefined, { timeout: 5000 });
           await galleryImage.click();
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
@@ -546,10 +557,13 @@ for (const slug of activeThemeSlugs) {
         const mapAudit = await page.evaluate(() => {
           const frames = Array.from(document.querySelectorAll(".oa-event-map iframe"));
           const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
+          const eventSource = window.__invitationData?.__renderEvents || window.__invitationData?.events || {};
+          const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource);
           return {
             frames: frames.map(frame => frame.src),
             notes: notes.map(note => note.textContent),
             mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
+            expectedMapLinks: events.map(event => event.mapsUrl).filter(Boolean),
             eventMode: window.__invitationData?.eventMode || "",
             eventCards: document.querySelectorAll("#event-list .event-card").length,
             scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
@@ -563,8 +577,8 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": pin sintetis yang sudah diverifikasi tidak boleh menampilkan peringatan lokasi belum terverifikasi");
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
-        assert.ok(mapAudit.mapLinks.every(url => url.includes("google.com/maps/search/")),
-          theme.slug + ": tautan pencarian Maps harus tetap tersedia");
+        assert.deepEqual(mapAudit.mapLinks, mapAudit.expectedMapLinks,
+          theme.slug + ": tautan lokasi harus mempertahankan URL Maps eksplisit dari fixture uji");
         if (mapAudit.eventMode === "combined") {
           assert.equal(mapAudit.eventCards, 1,
             theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
