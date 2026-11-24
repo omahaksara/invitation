@@ -110,6 +110,7 @@ body{background:var(--nocturne);color:var(--ivory);font-family:Montserrat, sans-
       const targets = root.querySelectorAll(".panel, .quote-section, .story-section, .event-grid, .gallery-section, .guestbook-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nocturne-reveal"));
       observe(targets, "oa-nocturne-visible", { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+      depthMotion({ surface: ".cover", layers: [{ selector: ".cover > img", z: 12, factor: 0.3 }, { selector: ".arch", z: 40, factor: 0.75 }] });
       
       
       addCleanup(() => {
