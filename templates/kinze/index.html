@@ -17,6 +17,28 @@
 @media(max-width:480px){.kinze-cover{padding:22px}.kinze-cover__content{padding:28px 17px}.cover-note{font-size:.88rem}.kinze-section{padding:62px 18px}.couple-grid{grid-template-columns:minmax(0,1fr);gap:28px}.person-card{max-width:320px;margin:0 auto;width:100%}.person-photo-frame{max-height:380px}.couple-and{line-height:1;margin:-5px 0}.story-item{grid-template-columns:58px 1fr;gap:13px}.event-card{padding:30px 18px}.hero-photo-wrap{height:58vh}.gallery-grid{gap:8px}}
 @media(prefers-reduced-motion:reduce){.kinze-button{transition:none}}
 
+
+/* Kinze cover art direction: asymmetric editorial split, not a centered photo overlay. */
+@media (min-width:760px){
+ .kinze-cover{justify-content:flex-start;text-align:left;padding:clamp(34px,7vw,92px);background:#101b2b}
+ .kinze-cover__image{left:auto;right:0;top:0;width:54%;height:100%;opacity:.94;filter:saturate(.78);object-position:center 38%}
+ .kinze-cover__veil{background:linear-gradient(90deg,#101b2b 0%,#101b2b 40%,rgba(16,27,43,.82) 48%,rgba(16,27,43,.08) 78%,rgba(16,27,43,.12) 100%)}
+ .kinze-cover__content{width:min(48%,590px);margin:0 auto 0 0;padding:0;border:0;outline:0;max-width:590px}
+ .kinze-cover .eyebrow{letter-spacing:.34em;color:#d8b76a}
+ .kinze-cover .script-title{font-size:clamp(3.4rem,6vw,6.2rem);line-height:.91;letter-spacing:-.035em;margin:22px 0 28px}
+ .kinze-cover .script-title span:not(.ampersand){display:block;max-width:100%;overflow-wrap:anywhere}
+ .kinze-cover .script-title .ampersand{display:inline-block;margin:.08em 0;color:#d8b76a;font-size:.58em}
+ .kinze-cover .cover-rule{margin:26px 0;width:72px}
+ .kinze-cover .cover-to,.kinze-cover .guest-name,.kinze-cover .cover-note{margin-left:0;margin-right:0;text-align:left}
+ .kinze-cover .cover-note{max-width:360px}
+ .kinze-cover .kinze-button{margin-top:4px;padding:15px 26px;letter-spacing:.13em}
+}
+@media(max-width:759px){
+ .kinze-cover__content{background:linear-gradient(145deg,rgba(16,27,43,.2),rgba(16,27,43,.42));backdrop-filter:blur(2px);border-color:rgba(216,183,106,.72);outline-color:rgba(216,183,106,.24)}
+ .kinze-cover__image{object-position:center 34%;opacity:.52}
+}
+@media(prefers-reduced-motion:reduce){.kinze-cover__image{animation:none!important;transform:none!important}}
+
 </style>
 <!-- Template Kinze — adaptasi desain editorial lembut untuk sistem Omah Aksara -->
 <div id="cover-section" class="kinze-cover">
