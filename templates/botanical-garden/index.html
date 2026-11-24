@@ -32,6 +32,28 @@
 .footer{background:#26372d}
 @media(prefers-reduced-motion:reduce){.cover-orbit,.cover-monogram{animation:none!important}}
 .cover h1{flex-direction:column;gap:0}.cover h1 i{display:block;line-height:1;margin:.12em 0;font-size:.48em}
+
+/* Art direction: botanical conservatory — organic portrait arch against a calm paper field. */
+.cover{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);grid-template-rows:repeat(10,auto);align-content:center;align-items:center;text-align:left;padding:clamp(28px,6vw,84px);background:linear-gradient(135deg,#edf0e5 0%,#e2e8da 56%,#f5f1e6 100%);color:#34483b}
+.cover-photo{position:relative;inset:auto;grid-column:2;grid-row:1/span 10;width:100%;height:min(78svh,760px);object-fit:cover;opacity:1;z-index:0;border:1px solid #82977a;border-radius:48% 48% 8px 8px/24% 24% 8px 8px;box-shadow:0 24px 58px rgba(49,62,48,.18)}
+.cover-grain{display:none}
+.cover>.eyebrow,.cover>.cover-monogram,.cover>.cover-kicker,.cover>h1,.cover>.cover-line,.cover>.cover-date,.cover>.guest-label,.cover>.guest-name,.cover>.open-button,.cover>.cover-foot{grid-column:1;position:relative;z-index:2;width:100%;text-align:left;margin-left:0;margin-right:0}
+.cover>.eyebrow{align-self:end;color:#687b61;letter-spacing:.22em}
+.cover-monogram{justify-self:start;margin:8px 0 12px;color:#8b7951}
+.cover .cover-kicker{color:#8b7951;letter-spacing:.24em}
+.cover h1{align-items:flex-start;justify-content:flex-start;text-align:left;color:#34483b;font-size:clamp(3rem,6.4vw,5.8rem);line-height:.9;margin:14px 0}
+.cover h1 i{color:#9a7b58}
+.cover-line{margin:16px 0;background:#82977a}
+.cover-date,.guest-label,.guest-name{color:#526653}
+.cover .open-button{justify-self:start;width:max-content;background:#526953;color:#fffdf6;border-color:#526953;border-radius:2px}
+.cover-foot{color:#687b61;letter-spacing:.14em}
+.cover:before{left:auto;right:4%;top:7%;border-color:rgba(130,151,122,.28)}
+.cover:after{right:0;bottom:6%;border-color:rgba(214,189,139,.42)}
+#cover-section.is-opening{animation:oaBotanicalPetalClose 1020ms cubic-bezier(.72,0,.2,1) both;pointer-events:none}
+@keyframes oaBotanicalPetalClose{0%{opacity:1;clip-path:ellipse(100% 100% at 50% 50%);transform:scale(1) rotate(0)}52%{opacity:1;clip-path:ellipse(64% 70% at 50% 50%);transform:scale(.97) rotate(-1deg)}100%{opacity:0;clip-path:ellipse(0% 0% at 50% 50%);transform:scale(.9) rotate(-3deg)}}
+@media(max-width:700px){.cover{grid-template-columns:1fr;grid-template-rows:minmax(0,48svh) auto;align-content:start;min-height:100svh;padding:0 22px 34px}.cover-photo{position:absolute;inset:0 0 auto;grid-column:1;grid-row:1;width:100%;height:48svh;border:0;border-bottom:1px solid #82977a;border-radius:0 0 48% 48%/0 0 12% 12%;box-shadow:none;object-position:center 30%}.cover>.eyebrow{margin-top:calc(48svh + 18px)}.cover>.eyebrow,.cover>.cover-monogram,.cover>.cover-kicker,.cover>h1,.cover>.cover-line,.cover>.cover-date,.cover>.guest-label,.cover>.guest-name,.cover>.open-button,.cover>.cover-foot{grid-column:1;text-align:center}.cover-monogram{justify-self:center;margin:4px 0 8px}.cover h1{align-items:center;justify-content:center;font-size:clamp(2.8rem,12vw,4.3rem);margin:10px 0}.cover-line{margin:10px auto}.cover .open-button{justify-self:center;margin:12px auto 0}.cover-foot{display:none}}
+@media(prefers-reduced-motion:reduce){#cover-section.is-opening{animation:none!important;transform:none!important;clip-path:none!important}.cover-photo{transition:none!important}}
+
 </style>
 
 <div class="invite-shell">
@@ -80,6 +102,12 @@
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "botanical-garden";
       style.textContent = "\n[data-oa-botanical-motion=\"ready\"] .cover-orbit{animation:oaBotanicalOrbit 28s linear 1 both}\n[data-oa-botanical-motion=\"ready\"] .oa-botanical-reveal{opacity:0;transform:translate3d(0,26px,0) rotate(-.6deg);transition:opacity 1000ms ease,transform 1200ms cubic-bezier(.16,.8,.2,1)}\n[data-oa-botanical-motion=\"ready\"] .oa-botanical-reveal.oa-botanical-visible{opacity:1;transform:none}\n[data-oa-botanical-motion=\"ready\"] .person-card img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}\n[data-oa-botanical-motion=\"ready\"] .person-card.oa-botanical-visible img{transform:scale(1.045)}\n@keyframes oaBotanicalOrbit{to{transform:rotate(360deg)}}\n@media(prefers-reduced-motion:reduce){[data-oa-botanical-motion=\"ready\"] .cover-orbit{animation:none}[data-oa-botanical-motion=\"ready\"] .oa-botanical-reveal{opacity:1;transform:none;transition:none}}";
+      style.textContent += `
+[data-oa-botanical-motion="ready"] .oa-botanical-reveal{opacity:0;transform:translate3d(0,28px,0) rotate(-1.2deg) scale(.96);clip-path:ellipse(76% 0% at 50% 100%);transition:opacity 1000ms ease,transform 1200ms cubic-bezier(.16,.8,.2,1),clip-path 1100ms cubic-bezier(.16,.8,.2,1)}
+[data-oa-botanical-motion="ready"] .oa-botanical-reveal.oa-botanical-visible{opacity:1;transform:none;clip-path:ellipse(100% 100% at 50% 50%)}
+@media(prefers-reduced-motion:reduce){[data-oa-botanical-motion="ready"] .oa-botanical-reveal{opacity:1;transform:none;clip-path:none;transition:none}}
+`;
+
       if (navigation) navigation.classList.add("oa-nav-botanical");
       style.textContent += `
         #oa-floating-controls.oa-nav-botanical{left:16px!important;right:auto!important;top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 32px)!important;padding:8px 12px!important;gap:6px!important;border-radius:26px 26px 8px 8px!important;background:rgba(235,239,224,.96)!important;border:1px solid #82977a!important;box-shadow:0 12px 30px #344b3533!important;backdrop-filter:blur(12px)!important}#oa-floating-controls.oa-nav-botanical button{min-width:44px!important;min-height:40px!important;border-radius:18px 18px 5px 5px!important;color:#405541!important;font:600 10px/1.1 Georgia,serif!important}#oa-floating-controls.oa-nav-botanical button.is-active{background:#82977a!important;color:#fff!important}@media(max-width:600px){#oa-floating-controls.oa-nav-botanical{left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;width:auto!important;justify-content:space-around!important}}
