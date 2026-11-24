@@ -284,7 +284,7 @@ body {
 (() => {
   if (!window.OAThemePrograms) return;
   window.OAThemePrograms.register("karsa", {
-    activate({ root, navigation, observe, addCleanup, reducedMotion }) {
+    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "karsa";
       style.textContent = `
