@@ -423,6 +423,24 @@ html[data-oa-theme] #app .army #cover.is-opening{
  .army .cover h1{font-size:clamp(2.7rem,12vw,4.4rem)}
 }
 
+
+/* Army: deep forest ceremonial cover, disciplined left editorial block. */
+.army .cover{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:clamp(24px,8vw,120px);background:#17251e;min-height:100svh}
+.army .cover>img{opacity:.34;filter:grayscale(.45) saturate(.55);object-position:center 38%;}
+.army .cover:after{background:linear-gradient(90deg,rgba(13,28,21,.96) 0%,rgba(18,39,29,.88) 44%,rgba(18,39,29,.18) 100%)}
+.army .arch{width:min(100%,620px);margin:0;padding:clamp(28px,5vw,62px);border:0;border-left:2px solid #b59a65;border-radius:0;box-shadow:none;text-align:left;background:linear-gradient(90deg,rgba(13,28,21,.3),transparent)}
+.army .cover .cover-kicker{color:#d4c49c;letter-spacing:.28em}
+.army .cover h1{color:#f4ead5;font-size:clamp(3rem,7vw,5.8rem);line-height:.94;margin:22px 0}
+.army .cover h1 span{display:block}
+.army .cover h1 .cover-ampersand{font-size:.5em;color:#bda36d;margin:8px 0}
+.army .cover .cover-date{color:#d7c8a6;letter-spacing:.16em}
+.army .cover .cover-recipient{margin-top:26px;color:#e4d9c2;display:grid;gap:4px}
+.army .cover .cover-recipient strong{font:1.35rem 'Cormorant Garamond',serif;color:#fff}
+.army .cover .btn{margin-top:24px;border-radius:2px;background:#b69b66;color:#17251e;border-color:#b69b66;font-weight:600}
+.army .cover .btn:hover{background:#e0cfaa}
+@media(max-width:650px){.army .cover{padding:18px;align-items:flex-end;min-height:100svh}.army .cover>img{object-position:58% center;opacity:.4}.army .cover:after{background:linear-gradient(180deg,rgba(13,28,21,.08) 0%,rgba(13,28,21,.22) 32%,rgba(13,28,21,.97) 72%)}.army .arch{width:100%;padding:24px 16px 28px;border-left:1px solid #b59a65;background:linear-gradient(90deg,rgba(13,28,21,.45),transparent)}.army .cover h1{font-size:clamp(2.8rem,13vw,4.2rem);margin:12px 0}.army .cover .cover-recipient{margin-top:14px}}
+@media(prefers-reduced-motion:reduce){.army .cover>img{animation:none!important}}
+
 </style>
 <div class="army" id="main-content">
 <section id="cover" class="cover">
