@@ -1443,7 +1443,7 @@
 
     if (open) {
       // Delegated fallback covers themes that replace their opening button after render.
-      document.addEventListener("click", event => {
+      window.addEventListener("click", event => {
         const clickedOpen = event.target && event.target.closest
           ? event.target.closest("#open-invitation-btn, #open-btn")
           : null;
