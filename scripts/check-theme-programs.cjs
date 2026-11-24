@@ -132,4 +132,8 @@ assert.ok(runtime.includes("pointermove") && runtime.includes("pointerleave"),
   "Runtime tidak mengelola tilt pointer dan reset saat pointer keluar.");
 assert.ok(runtime.includes("cancelAnimationFrame(frame)"),
   "Runtime tidak membatalkan frame animasi saat cleanup.");
+assert.ok(runtime.includes("void surface.offsetWidth"),
+  "Entrance 3D harus mengunci state awal sebelum transisi reveal.");
+assert.ok(runtime.includes("previousSurfaceVars"),
+  "Cleanup 3D harus memulihkan custom properties surface sebelumnya.");
 console.log("Theme program contract passed for " + programs.length + " themes and " + Object.keys(depthPilots).length + " 3D depth pilots.");
