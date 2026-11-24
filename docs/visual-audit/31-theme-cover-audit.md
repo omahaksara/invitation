@@ -111,3 +111,16 @@ A second source audit found seven more covers where the name separator was inlin
 - Jendela Senja (source review showed the cover separator was inline, so it was refined in this pass)
 
 These are scoped to the cover title only. Footer signatures, section headings, guestbook labels, and other ordinary prose using “&” remain unchanged. The edits preserve the existing name data bindings and do not alter invitation data, slugs, links, RSVP/guestbook, or Apps Script contracts. Static/backend validation must be checked against the latest branch head; browser smoke remains intentionally skipped for PR #141, so rendered visual confirmation is still a separate release gate.
+
+
+## Verification status correction — 24 November 2026
+
+The earlier notes saying browser smoke was intentionally skipped describe a temporary historical workflow state and are no longer current. Browser smoke has been re-enabled for PR #141 and runs across active themes on desktop and mobile. Latest PR-head run for commit `1041b7f57fd73ef1c036c86ba8d2df1eed774f88`:
+- Static validation and backend mock tests: passed.
+- Browser smoke: still running at last check; no new visual artifact available yet.
+- PR #141 remains Draft and unmerged.
+
+
+## Luma cover composition refinement
+
+Luma's cover presentation CSS now shifts from a full-bleed cinematic photo with a centered arched glass panel to a paper-and-portrait layout: desktop uses a warm paper field with a portrait panel on the right and typography on the left; mobile stacks the portrait above the invitation text panel. This is a presentation-only override. Rendered confirmation is pending the current browser smoke artifact.
