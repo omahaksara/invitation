@@ -182,7 +182,7 @@
 (() => {
   if (!window.OAThemePrograms) return;
   window.OAThemePrograms.register("royal-vintage", {
-    activate({ root, navigation, observe, addCleanup, reducedMotion }) {
+    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "royal-vintage";
       style.textContent = `
