@@ -40,8 +40,8 @@
   },
   "events": {
     "akad": {
-      "location": "Lokasi Acara Arkan & Arunika",
-      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
+      "location": "Lokasi Omah Aksara",
+      "address": "Titik lokasi demo: 0.584450, 120.768525",
       "timezone": "Asia/Makassar",
       "title": "Akad Nikah",
       "date": "Sabtu, 12 Juni 2027",
@@ -49,18 +49,30 @@
       "startTime": "08:00",
       "endTime": "10:00",
       "time": "08.00 – 10.00 WITA",
-      "mapNote": "Lokasi ini hanya contoh; titik peta belum diverifikasi."
+      "mapsUrl": "https://maps.app.goo.gl/4zP4sVujTVvj7Ybj8?g_st=ac",
+      "mapQuery": "0.584450,120.768525",
+      "coordinates": {
+        "lat": 0.58445,
+        "lng": 120.768525
+      },
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.584450%2C120.768525&z=17&output=embed"
     },
     "resepsi": {
-      "location": "Lokasi Acara Arkan & Arunika",
-      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
+      "location": "Lokasi Omah Aksara",
+      "address": "Titik lokasi demo: 0.584450, 120.768525",
       "timezone": "Asia/Makassar",
       "title": "Resepsi Pernikahan",
       "date": "Sabtu, 12 Juni 2027",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
       "time": "11.00 – 14.00 WITA",
-      "mapNote": "Lokasi ini hanya contoh; titik peta belum diverifikasi."
+      "mapsUrl": "https://maps.app.goo.gl/4zP4sVujTVvj7Ybj8?g_st=ac",
+      "mapQuery": "0.584450,120.768525",
+      "coordinates": {
+        "lat": 0.58445,
+        "lng": 120.768525
+      },
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.584450%2C120.768525&z=17&output=embed"
     }
   },
   "countdown": {
@@ -205,7 +217,7 @@
   },
   "seo": {
     "title": "Arkan & Arunika — Undangan Pernikahan",
-    "description": "Demo undangan digital Omah Aksara. Seluruh nama, cerita, foto, acara, dan hadiah pada halaman ini merupakan materi contoh yang dapat disesuaikan untuk setiap pemesan."
+    "description": "Demo undangan digital Omah Aksara. Nama, cerita, foto, acara, dan hadiah merupakan materi contoh yang dapat disesuaikan untuk setiap pemesan."
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari hari bahagia pernikahan kami.\n\nKehadiran serta doa restu yang diberikan akan menjadi kebahagiaan dan kenangan berharga bagi kami.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
