@@ -66,7 +66,7 @@ body{background:var(--army);color:var(--ivory);font-family:Montserrat, sans-seri
 .army-nav a,.army-nav button{min-width:48px;padding:5px 7px;color:var(--gold);text-decoration:none;text-align:center;font-size:.62rem;background:transparent;border:0}
 .army-nav a span,.army-nav button span{display:block;font-size:1.1rem}
 .army #cover.is-opening{opacity:0;transform:translateY(-100%);pointer-events:none}
-.army .reveal,.army .oa-scroll-reveal{transition:opacity .8s ease,transform .8s ease}
+.army .reveal,.army .oa-scroll-reveal{transition:opacity var(--oa-reveal-time,.48s) ease,transform var(--oa-reveal-time,.48s) ease}
 @keyframes armyZoom{from{transform:scale(1)}to{transform:scale(1.08)}}
 @media(max-width:650px){.army .couple-grid,.army .event-grid,.army .gift-grid{grid-template-columns:1fr}.army .panel{margin:14px 12px;padding:25px 18px;border-radius:24px}.army .army-nav{gap:0;padding:6px}.army-nav a,.army-nav button{min-width:40px;font-size:.55rem;padding:4px 3px}.army-nav a span,.army-nav button span{font-size:1rem}}
 @media(prefers-reduced-motion:reduce){.army *, .army *:before,.army *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -364,7 +364,7 @@ html[data-oa-theme] #app .army .oa-scroll-reveal{
   transform:translate3d(0,26px,0) scale(.99);
   filter:blur(1.5px);
   transition-property:opacity,transform,filter!important;
-  transition-duration:.76s!important;
+  transition-duration:var(--oa-motion-duration,.48s)!important;
   transition-timing-function:cubic-bezier(.2,.72,.18,1)!important;
 }
 html[data-oa-theme] #app .army .reveal.active,
