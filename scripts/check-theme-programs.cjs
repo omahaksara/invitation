@@ -103,4 +103,33 @@ assert.ok(nexus.includes("depthMotion })"), "nexus: API depthMotion belum diteri
 const aksaranocturne = read("templates/aksara-nocturne/index.html");
 assert.ok(aksaranocturne.includes("depthMotion({ surface:"), "aksara-nocturne: 3D depth motion belum dipasang.");
 assert.ok(aksaranocturne.includes("depthMotion })"), "aksara-nocturne: API depthMotion belum diterima oleh program tema.");
-console.log("Theme program contract passed for " + programs.length + " themes.");
+
+// The 3D runtime is a progressive enhancement: each pilot must declare a
+// real cover surface and at least one independently layered visual element.
+const depthPilots = {
+  karsa: { surface: ".cover", layers: [".cover-gradient", ".cover-ampersand"] },
+  "royal-vintage": { surface: ".hero", layers: [".hero-cover-image", ".hero-content"] },
+  sirein: { surface: ".sirein-cover", layers: [".sirein-cover__image", ".sirein-cover__veil", ".sirein-cover__content"] },
+  "botanical-garden": { surface: ".cover", layers: [".cover-photo", ".cover-grain", ".cover-orbit"] },
+  nexus: { surface: ".nexus-cover", layers: [".nexus-cover__visual", ".nexus-cover__panel", ".nexus-cover__line"] },
+  "aksara-nocturne": { surface: ".cover", layers: [".cover > img", ".arch"] }
+};
+for (const [slug, contract] of Object.entries(depthPilots)) {
+  const template = read("templates/" + slug + "/index.html");
+  const declaration = template.match(/depthMotion\\(\\{ surface: "([^"]+)", layers: \\[([\\s\\S]*?)\\] \\}\\)/);
+  assert.ok(declaration, slug + ": konfigurasi 3D harus mendeklarasikan surface dan layers secara eksplisit.");
+  assert.equal(declaration[1], contract.surface, slug + ": surface 3D berubah tanpa memperbarui kontrak uji.");
+  for (const selector of contract.layers) {
+    assert.ok(declaration[2].includes('selector: "' + selector + '"'),
+      slug + ": layer 3D tidak terdaftar: " + selector);
+    const token = selector.split(/\\s|>/)[0].replace(/^\\./, "").replace(/^#/, "");
+    assert.ok(template.includes(token), slug + ": selector layer tidak ditemukan di template: " + selector);
+  }
+}
+assert.ok(runtime.includes("data-oa-depth-surface"), "Runtime tidak menandai surface 3D aktif.");
+assert.ok(runtime.includes("data-oa-depth-layer"), "Runtime tidak menandai layer 3D aktif.");
+assert.ok(runtime.includes("pointermove") && runtime.includes("pointerleave"),
+  "Runtime tidak mengelola tilt pointer dan reset saat pointer keluar.");
+assert.ok(runtime.includes("cancelAnimationFrame(frame)"),
+  "Runtime tidak membatalkan frame animasi saat cleanup.");
+console.log("Theme program contract passed for " + programs.length + " themes and " + Object.keys(depthPilots).length + " 3D depth pilots.");
