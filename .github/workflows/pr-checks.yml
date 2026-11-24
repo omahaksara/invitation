@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           git fetch origin main
-          forbidden="$(git diff --name-only origin/main...HEAD | grep -E '^clients/.*/data[.]json$' | grep -Ev '^clients/demo-katalog/data[.]json$' || true)"
+          forbidden="$(git diff --name-only origin/main...HEAD | grep -E '^clients/.*/data[.]json$' || true)"
           if [ -n "$forbidden" ]; then
             echo "::error::Client invitation JSON is protected and must not be changed:"
             echo "$forbidden"
