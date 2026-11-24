@@ -107,7 +107,7 @@ assert.ok(aksaranocturne.includes("depthMotion })"), "aksara-nocturne: API depth
 // The 3D runtime is a progressive enhancement: each pilot must declare a
 // real cover surface and at least one independently layered visual element.
 const depthPilots = {
-  karsa: { surface: ".cover", layers: [".cover-gradient", ".cover-ampersand"] },
+  karsa: { surface: "#cover", layers: ["#cover-image", ".cover-gradient", ".cover-ampersand"] },
   "royal-vintage": { surface: ".hero", layers: [".hero-cover-image", ".hero .hero-content"] },
   sirein: { surface: ".sirein-cover", layers: [".sirein-cover__image", ".sirein-cover__veil", ".sirein-cover__content"] },
   "botanical-garden": { surface: ".cover", layers: [".cover-photo", ".cover-grain", ".cover-orbit"] },
