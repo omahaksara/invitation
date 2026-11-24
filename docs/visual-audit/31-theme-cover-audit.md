@@ -84,3 +84,13 @@ A visual review of the four redesigned cover pairs (Aksara Signature, Aksara Vel
 - Review reduced-motion behavior and section/reveal transitions beyond the cover.
 - Continue the wider 31-theme aesthetic review; passing smoke tests is not equivalent to subjective design approval.
 - Keep PR #141 Draft until these remaining visual checks are complete.
+
+## Follow-up typography refinement — ampersand placement
+
+Four cover templates received a presentation-only refinement so the ampersand sits on its own centered line between the two names, rather than reading as an inline separator:
+- Aksara Signature
+- Romantic Floral
+- Kinze
+- Karsa
+
+The Karsa cover now has an explicit ampersand element so its position can be styled independently. These changes affect only cover typography/layout; invitation data, links, forms, and backend contracts are unchanged. Static/backend CI should be checked on the resulting branch head. Browser smoke is intentionally skipped for PR #141 per the temporary workflow condition; visual confirmation on real rendered screenshots remains outstanding for this follow-up.
