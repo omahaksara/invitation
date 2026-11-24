@@ -101,7 +101,7 @@ for (const slug of activeThemeSlugs) {
   // Read CSS rule bodies, not only selector lines: multiline rules are valid CSS too.
   const themeTokenRules = [...sharedThemeCss.matchAll(
     new RegExp(`html\\[data-oa-theme="${slug}"\\][^{]*\\{([^}]*)\\}`, "g")
-  )].map(match => match[1]).join("\\n");
+  )].map(match => match[1]).join("\n");
   assert.ok(themeTokenRules.includes("--oa-font-display") && themeTokenRules.includes("--oa-font-body"),
     slug + ": token tipografi tema belum lengkap.");
   assert.ok(themeTokenRules.includes("--oa-reveal-time") && themeTokenRules.includes("--oa-reveal-ease"),
