@@ -135,6 +135,7 @@
           }`;
         document.head.append(style);
         surface.setAttribute("data-oa-depth-surface", slug);
+        surface.classList.add("oa-depth-entered");
 
         const layerNodes = (options.layers || []).flatMap(item =>
           Array.from(root.querySelectorAll(item.selector || "")).map(node => ({ node, item }))
@@ -217,6 +218,7 @@
 
           if (previousSurfaceMarker === null) surface.removeAttribute("data-oa-depth-surface");
           else surface.setAttribute("data-oa-depth-surface", previousSurfaceMarker);
+          if (!hadEnteredClass) surface.classList.remove("oa-depth-entered");
           surface.style.removeProperty("--oa-depth-axis");
           surface.style.removeProperty("--oa-depth-angle");
 
