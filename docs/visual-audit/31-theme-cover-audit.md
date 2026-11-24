@@ -59,3 +59,22 @@ This audit does not authorize changes to client invitation records, client photo
 4. Keep the PR Draft until the new screenshots are reviewed and all functional checks pass.
 
 The 31/31 browser result from run #103 is the baseline, not proof that the two new cover changes have already passed. Their verification belongs to the next run.
+
+
+## Re-audit after browser run #107 and cover pass — 24 November 2026
+
+**Baseline evidence:** [run #107](https://github.com/omahaksara/invitation/actions/runs/45302954615), head `e132b42ea241f624dc5088efea97355eda32e256`, passed static validation, backend mocks, and the 31-theme desktop/mobile browser smoke. Its artifact contains 124 screenshots. This verifies the pre-redesign baseline, including the Taupe split-cover update.
+
+### New presentation-only cover redesigns
+- **Aksara Signature:** warm botanical editorial split; portrait occupies the right side on desktop and the upper portion on mobile, with ink typography on paper below/alongside it.
+- **Aksara Velora:** atelier portrait arch paired with an ivory typographic column; mobile stacks portrait above the invitation text.
+- **Army:** deep forest ceremonial cover with a left-aligned title block and muted portrait; mobile anchors the title block at the lower edge.
+- **Karsa:** restrained forest-green typographic cover with a slim gold corner frame and subdued background photo; name hierarchy is stacked instead of centered as a single line.
+
+These changes affect only theme CSS presentation. The next browser run must be on the final combined branch head; run #107 does not verify these later commits.
+
+### Remaining release gate
+- Inspect the next run's screenshots for all four redesigned covers on desktop and mobile, and confirm CTA visibility, text contrast, no horizontal overflow, and no reduced-motion regression.
+- Recheck duplicate music/navigation controls in Karsa and Army against the shared navigation behavior.
+- Continue the wider 31-theme aesthetic review; passing smoke tests is not equivalent to subjective design approval.
+- Keep PR #141 Draft until final-head checks and visual QA are complete.
