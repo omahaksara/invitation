@@ -48,8 +48,7 @@
       "dateISO": "2027-06-12",
       "startTime": "08:00",
       "endTime": "10:00",
-      "time": "08.00 – 10.00 WITA",
-      "mapNote": "Lokasi ini hanya simulasi katalog. Titik dan alamat acara sebenarnya akan ditambahkan oleh pemesan."
+      "time": "08.00 – 10.00 WITA"
     },
     "resepsi": {
       "location": "Lokasi Acara Arkan & Arunika",
@@ -59,8 +58,7 @@
       "date": "Sabtu, 12 Juni 2027",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
-      "time": "11.00 – 14.00 WITA",
-      "mapNote": "Lokasi ini hanya simulasi katalog. Titik dan alamat acara sebenarnya akan ditambahkan oleh pemesan."
+      "time": "11.00 – 14.00 WITA"
     }
   },
   "countdown": {
@@ -189,7 +187,7 @@
     "loveStory": true,
     "gallery": true,
     "video": false,
-    "maps": true,
+    "maps": false,
     "music": true,
     "gifts": true,
     "rsvp": true,
@@ -200,8 +198,8 @@
     "bank": true,
     "ewallet": true,
     "qris": true,
-    "mapEmbed": true,
-    "mapNavigation": true
+    "mapEmbed": false,
+    "mapNavigation": false
   },
   "seo": {
     "title": "Arkan Mahendra & Arunika Prameswari | Undangan Pernikahan",
