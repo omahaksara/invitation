@@ -139,3 +139,9 @@ Seluruh 31 program navigasi memasang kelas presentasi khusus tema; program yang 
 Lightbox tetap dibuat dan dikendalikan engine, termasuk dialog, navigasi foto, Escape, dan pengembalian fokus. Engine memberi identitas tema pada overlay; program tema mengatur atmosfer, warna, bentuk foto, dan treatment visual tanpa menggandakan mekanik overlay.
 
 Perubahan ini hanya menyentuh lapisan presentasi. Kontrak RSVP/guestbook, data undangan, endpoint, aset pembayaran, dan integrasi backend tidak diubah.
+
+## Layered 3D depth motion
+
+The shared theme-program API exposes `depthMotion({ surface, layers })`. A theme declares its own cover surface and visual layers with per-layer depth and parallax factors; the runtime supplies pointer-driven perspective on fine-pointer devices, scroll-linked depth offsets, frame scheduling, and deterministic cleanup when the active theme changes. It uses CSS individual `rotate` and `translate` properties so it does not overwrite a theme's existing `transform` choreography.
+
+The first six art-direction pilots are Karsa (editorial paper/ornament), Royal Vintage (photograph and title plane), Sirein (image/veil/content), Botanical Garden (photo/grain/orbits), Nexus (visual/panel/line), and Aksara Nocturne (cover image/arch). Touch layouts disable pointer tilt but retain restrained scroll depth. `prefers-reduced-motion` disables the enhancement; missing selectors simply leave the theme's original cover intact. This is a CSS 3D/parallax foundation, not a WebGL scene or a claim that every theme already has a finished cinematic 3D sequence.
