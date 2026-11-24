@@ -1,5 +1,23 @@
 (() => {
   "use strict";
+
+  // Register before invitation templates inject their own scripts/listeners.
+  // A window-capture fallback cannot be blocked by theme handlers on document/target.
+  window.addEventListener("click", event => {
+    const clickedOpen = event.target && event.target.closest
+      ? event.target.closest("#open-invitation-btn, #open-btn")
+      : null;
+    if (!clickedOpen) return;
+    const activeCover = document.getElementById("cover-section") || document.getElementById("cover");
+    window.setTimeout(() => {
+      if (!activeCover || activeCover.hidden || getComputedStyle(activeCover).display === "none") return;
+      activeCover.hidden = true;
+      activeCover.style.display = "none";
+      activeCover.classList.remove("is-opening");
+      clickedOpen.removeAttribute("aria-busy");
+    }, 1800);
+  }, true);
+
   document.addEventListener("DOMContentLoaded", initInvitation);
 
   async function activateTemplateScripts(root) {
@@ -1442,23 +1460,6 @@
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
-      // Delegated fallback covers themes that replace their opening button after render.
-      window.addEventListener("click", event => {
-        const clickedOpen = event.target && event.target.closest
-          ? event.target.closest("#open-invitation-btn, #open-btn")
-          : null;
-        if (!clickedOpen) return;
-        const activeCover = document.getElementById("cover-section") || document.getElementById("cover");
-        // Independent hard deadline: even if the theme's own opening lifecycle
-        // starts but never dispatches animationend, the cover cannot trap the visitor.
-        window.setTimeout(() => {
-          if (!activeCover || activeCover.hidden || getComputedStyle(activeCover).display === "none") return;
-          activeCover.hidden = true;
-          activeCover.style.display = "none";
-          activeCover.classList.remove("is-opening");
-          clickedOpen.removeAttribute("aria-busy");
-        }, 1800);
-      }, true);
       open.addEventListener("click", async event => {
         // Run before theme-level bubble handlers so the shared cover lifecycle
         // cannot be cancelled by a theme-specific click listener.
