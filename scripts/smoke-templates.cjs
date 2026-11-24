@@ -432,6 +432,8 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": tombol pembayaran demo harus nonaktif " + JSON.stringify(demoFeatureAudit));
         assert.ok(demoFeatureAudit.paymentCardNames.some(name => name.toLowerCase().includes("simulasi")),
           theme.slug + ": label metode simulasi tidak tampil " + JSON.stringify(demoFeatureAudit));
+        assert.equal(demoFeatureAudit.hasDemoNotice, true,
+          theme.slug + ": catatan simulasi demo pada bagian hadiah tidak tampil " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.eventCards, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": jumlah kartu acara tidak sesuai mode JSON " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.scheduleRows, demoFeatureAudit.expectedScheduleRows,
