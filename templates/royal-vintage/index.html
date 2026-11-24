@@ -208,6 +208,7 @@
       const targets = root.querySelectorAll(".profile-card, .event-card, .quote-section");
       targets.forEach(node => node.classList.add("oa-royal-reveal"));
       observe(targets, "oa-royal-visible", { threshold: 0.16, rootMargin: "0px 0px -9% 0px" });
+      depthMotion({ surface: ".hero", layers: [{ selector: ".hero-cover-image", z: 12, factor: 0.3 }, { selector: ".hero .hero-content", z: 30, factor: 0.65 }] });
       addCleanup(() => {
         if (navigation) navigation.classList.remove("oa-nav-royal");
         root.removeAttribute("data-oa-royal-motion");
