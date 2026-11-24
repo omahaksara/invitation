@@ -1444,3 +1444,15 @@ html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --
 :where(#app) :where([lang="ar"],.arabic,.arabic-text,.quran-text,.ayat,.bismillah) {
   font-family:'Scheherazade New',serif;
 }
+
+
+/* Ensure the shared music glyph remains readable when theme fonts lack symbol coverage. */
+.oa-floating-controls button.oa-music-control {
+  font-family: "Segoe UI Symbol", "Noto Music", "Arial Unicode MS", sans-serif !important;
+  font-size: 16px !important;
+  color: var(--oa-dock-ink, #514735) !important;
+}
+.oa-floating-controls button.oa-music-control.is-playing,
+.oa-floating-controls button.oa-music-control.is-running {
+  color: var(--oa-dock-active-ink, #fff) !important;
+}
