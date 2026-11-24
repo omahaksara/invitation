@@ -1442,6 +1442,20 @@
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
+      // Delegated fallback covers themes that replace their opening button after render.
+      document.addEventListener("click", event => {
+        const clickedOpen = event.target && event.target.closest
+          ? event.target.closest("#open-invitation-btn, #open-btn")
+          : null;
+        if (!clickedOpen || clickedOpen.dataset.oaOpening === "true") return;
+        const activeCover = document.getElementById("cover-section") || document.getElementById("cover");
+        window.setTimeout(() => {
+          if (!activeCover || activeCover.hidden || getComputedStyle(activeCover).display === "none") return;
+          activeCover.hidden = true;
+          activeCover.style.display = "none";
+          clickedOpen.removeAttribute("aria-busy");
+        }, 1800);
+      }, true);
       open.addEventListener("click", async event => {
         // Run before theme-level bubble handlers so the shared cover lifecycle
         // cannot be cancelled by a theme-specific click listener.
