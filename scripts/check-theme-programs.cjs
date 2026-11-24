@@ -116,13 +116,13 @@ const depthPilots = {
 };
 for (const [slug, contract] of Object.entries(depthPilots)) {
   const template = read("templates/" + slug + "/index.html");
-  const declaration = template.match(/depthMotion\\(\\{ surface: "([^"]+)", layers: \\[([\\s\\S]*?)\\] \\}\\)/);
+  const declaration = template.match(/depthMotion\(\{ surface: "([^"]+)", layers: \[([\s\S]*?)\] \}\)/);
   assert.ok(declaration, slug + ": konfigurasi 3D harus mendeklarasikan surface dan layers secara eksplisit.");
   assert.equal(declaration[1], contract.surface, slug + ": surface 3D berubah tanpa memperbarui kontrak uji.");
   for (const selector of contract.layers) {
     assert.ok(declaration[2].includes('selector: "' + selector + '"'),
       slug + ": layer 3D tidak terdaftar: " + selector);
-    const token = selector.split(/\\s|>/)[0].replace(/^\\./, "").replace(/^#/, "");
+    const token = selector.split(/\s|>/)[0].replace(/^\./, "").replace(/^#/, "");
     assert.ok(template.includes(token), slug + ": selector layer tidak ditemukan di template: " + selector);
   }
 }
