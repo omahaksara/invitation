@@ -1032,6 +1032,10 @@ for (const slug of activeThemeSlugs) {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        // Reload after a prior bottom-of-page audit can restore the old scroll offset.
+        // Reset before measuring the fixed cover at the narrower viewport.
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await auditCover(page, theme, "mobile");
         if (theme.open) {
           const reducedMotionOpenStarted = Date.now();
@@ -1114,6 +1118,8 @@ for (const slug of activeThemeSlugs) {
         await page.setViewportSize({ width: 360, height: 780 });
         await page.reload({ waitUntil: "commit", timeout: 15000 });
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await auditCover(page, theme, "mobile-360");
         await page.locator(theme.open).click();
         await page.waitForFunction(() => {
