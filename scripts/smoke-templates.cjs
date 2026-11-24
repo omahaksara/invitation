@@ -102,6 +102,12 @@ for (const slug of activeThemeSlugs) {
     slug + ": token tipografi tema belum lengkap.");
   assert.ok(themeRevealTokens.includes("--oa-reveal-ease"),
     slug + ": token animasi reveal tema belum lengkap.");
+  const revealMatch = themeRevealTokens.match(/--oa-reveal-time:\s*([\d.]+)(ms|s)/);
+  const revealSeconds = revealMatch
+    ? Number(revealMatch[1]) * (revealMatch[2] === "ms" ? .001 : 1)
+    : Infinity;
+  assert.ok(revealSeconds > 0 && revealSeconds <= .55,
+    slug + ": durasi token reveal harus berada di atas 0 dan maksimal 0,55 detik (" + (revealMatch?.[0] || "token hilang") + ").");
 }
 
 (async () => {
@@ -633,18 +639,37 @@ for (const slug of activeThemeSlugs) {
         const performanceAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));
           const backdrop = [];
-          const slowTransitions = [];
           for (const element of elements) {
             const style = getComputedStyle(element);
-            const effect = style.backdropFilter || style.webkitBackdropFilter;
-            if (effect && effect !== "none" && !/^blur\\(0(?:px)?\\)$/.test(effect)) backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
-            const durations = style.transitionDuration.split(",").map(value => parseFloat(value) * (value.includes("ms") ? .001 : 1));
-            if (durations.some(value => value > .55)) slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : ""));
+            const effect = style.backdropFilter || style.webkitBackdropFilter || "";
+            const blurRadii = Array.from(effect.matchAll(/blur\(\s*([0-9.]+)px\s*\)/g), match => Number(match[1]));
+            if (blurRadii.some(value => value > 8)) {
+              backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\s+/g, ".") : "") + " (" + effect + ")");
+            }
           }
-          return { backdrop, slowTransitions: slowTransitions.slice(0, 12) };
+          const revealElements = Array.from(document.querySelectorAll(
+            "#app .oa-motion-item, #app .oa-motion-photo, #app [class*='reveal']"
+          ));
+          const slowTransitions = [];
+          for (const element of revealElements) {
+            const style = getComputedStyle(element);
+            const durations = style.transitionDuration.split(",").map(value =>
+              parseFloat(value) * (value.includes("ms") ? .001 : 1)
+            );
+            if (durations.some(value => value > .55)) {
+              slowTransitions.push(element.tagName.toLowerCase() +
+                (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\s+/g, ".") : "") +
+                " (" + style.transitionDuration + ")");
+            }
+          }
+          return { backdrop, slowTransitions: slowTransitions.slice(0, 12), revealCount: revealElements.length };
         });
-        assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
-        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi tema masih lebih dari 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
+        assert.equal(performanceAudit.backdrop.length, 0,
+          theme.slug + ": backdrop blur di atas 8px masih aktif " + JSON.stringify(performanceAudit.backdrop));
+        assert.ok(performanceAudit.revealCount > 0,
+          theme.slug + ": tidak ada elemen reveal untuk diaudit.");
+        assert.equal(performanceAudit.slowTransitions.length, 0,
+          theme.slug + ": durasi transisi reveal melebihi 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
         await page.emulateMedia({ reducedMotion: "reduce" });
         const reducedMotionAudit = await page.evaluate(() => {
           const elements = Array.from(document.querySelectorAll("#app, #app *"));

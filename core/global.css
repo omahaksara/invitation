@@ -529,7 +529,7 @@ html[data-oa-theme] select {
   font-family:var(--oa-font-body,Inter,sans-serif);
 }
 
-html[data-oa-theme="jendela-senja"] { --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="jendela-senja"] { --oa-reveal-time:.48s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
 
 /* Theme motion tokens: each visual identity gets its own reveal rhythm. */
 html[data-oa-theme="aksara-nocturne"] { --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
@@ -547,6 +547,17 @@ html[data-oa-theme="royal-vintage"] { --oa-reveal-time:.41s; --oa-reveal-ease:cu
 html[data-oa-theme="serena-ivory"] { --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.2,.72,.25,1); }
 html[data-oa-theme="sirein"] { --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.18,.76,.25,1); }
 html[data-oa-theme="velvet-romance"] { --oa-reveal-time:.42s; --oa-reveal-ease:cubic-bezier(.25,.7,.25,1); }
+/* Theme-owned reveal motion has a strict, mobile-friendly duration budget.
+   Per-theme tokens keep distinct easing/timing; long cover and hover transitions remain theme-owned. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-oa-theme] #app .oa-motion-item,
+  html[data-oa-theme] #app .oa-motion-photo,
+  html[data-oa-theme] #app [class*="reveal"] {
+    transition-duration: var(--oa-reveal-time, .44s) !important;
+    transition-timing-function: var(--oa-reveal-ease, cubic-bezier(.2,.72,.18,1)) !important;
+  }
+}
+
 html[data-oa-theme] .oa-scroll-reveal {
   transition:opacity var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1)),
              transform var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1));
@@ -995,7 +1006,7 @@ html[data-oa-theme="gebyok-candra"]{--oa-font-display:"Marcellus",Georgia,serif;
 html[data-oa-theme="sunda-watercolor"] {
   --oa-font-display: "Cormorant Garamond", Georgia, serif;
   --oa-font-body: "DM Sans", system-ui, sans-serif;
-  --oa-reveal-time: .9s;
+  --oa-reveal-time: .48s;
   --oa-reveal-ease: cubic-bezier(.2,.7,.2,1);
 }
 .oa-floating-controls[data-theme="sunda-watercolor"] {
