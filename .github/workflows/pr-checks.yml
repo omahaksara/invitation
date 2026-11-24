@@ -23,6 +23,54 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reject changes to client invitation JSON
+        shell: bash
+        run: |
+          git fetch origin main
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden="$(printf '%s\\n' "$changed" | grep -E '^clients/.*/data\\.json
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax and invitation data
+        run: npm run test:static
+      - name: Test backend with isolated mocks
+        run: npm run test:backend
+
+  browser-smoke:
+    name: Browser smoke across active themes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run isolated browser smoke tests
+        run: node scripts/smoke-templates.cjs
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-browser-visual-evidence
+          path: artifacts/visual/
+          if-no-files-found: ignore
+          retention-days: 7
+ || true)"
+          if [[ -n "$forbidden" ]]; then
+            echo "::error::Client invitation JSON is protected and must not be changed:"
+            printf '%s\\n' "$forbidden"
+            exit 1
+          fi
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
