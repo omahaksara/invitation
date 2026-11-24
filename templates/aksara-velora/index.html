@@ -78,6 +78,22 @@
 @media(min-width:760px){.velora-section{padding:100px 30px}.velora-gallery #gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.velora-gallery #gallery-grid .gallery-item:nth-child(even){transform:translateY(22px)}}
 @media(max-width:560px){.velora-section{padding:62px 18px}.velora-couple{grid-template-columns:1fr;gap:24px;max-width:330px}.velora-amp{line-height:.7}.velora-events #event-list{grid-template-columns:1fr}.velora-countdown__grid{gap:6px}.velora-countdown__item{padding:13px 3px}.velora-countdown__item b{font-size:1.65rem}.velora-hero__frame{height:58vh}}
 @media(prefers-reduced-motion:reduce){.velora-cover,.velora-btn,.velora-gallery #gallery-grid img{transition:none!important;scroll-behavior:auto!important}}
+
+/* Velora: warm atelier cover with a framed portrait column and ink typography. */
+.velora-cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);grid-template-rows:1fr;align-items:center;justify-items:stretch;padding:clamp(24px,6vw,80px);gap:clamp(22px,5vw,70px);background:#eee7dc;color:#40352e;text-align:left}
+.velora-cover__photo{position:relative;inset:auto;width:100%;height:min(76vh,720px);min-height:420px;object-fit:cover;opacity:1;filter:saturate(.78);border-radius:48% 48% 4px 4px;box-shadow:0 20px 60px rgba(65,49,38,.16)}
+.velora-cover:after{display:none}
+.velora-cover__panel{grid-column:2;grid-row:1;align-self:center;width:100%;max-width:520px;padding:clamp(26px,5vw,64px);border:0;outline:0;border-left:1px solid #b99b83;color:#40352e;text-align:left}
+.velora-cover .velora-eyebrow{color:#98755f;letter-spacing:.3em}
+.velora-cover__names{color:#40352e;font-size:clamp(3rem,6vw,5.5rem);margin:26px 0;line-height:.9}
+.velora-cover__names span{display:inline}
+.velora-cover__names .velora-amp{display:block;margin:12px 0;color:#a77e68;font-size:.48em}
+.velora-cover__guest{color:#65574c;font-size:1.15rem}
+.velora-cover__note{color:#76675d;margin:0 0 24px}
+.velora-cover .velora-btn{background:#8e6c59;border-color:#8e6c59;border-radius:2px;color:#fff;letter-spacing:.12em}
+@media(max-width:650px){.velora-cover{grid-template-columns:1fr;grid-template-rows:minmax(0,46svh) auto;gap:0;padding:0 24px 28px;align-content:start;overflow-y:auto}.velora-cover__photo{grid-row:1;width:calc(100% + 48px);height:46svh;min-height:0;max-height:none;margin:0 -24px 22px;border-radius:0 0 48% 48%/0 0 9% 9%}.velora-cover__panel{grid-column:1;grid-row:2;padding:8px 8px 24px;border-left:0;border-top:1px solid #b99b83;text-align:center}.velora-cover__names{font-size:clamp(2.8rem,12vw,4rem);margin:14px 0}.velora-cover__names span{display:block}.velora-cover__names .velora-amp{margin:4px 0}.velora-cover__note{margin-bottom:16px}}
+@media(prefers-reduced-motion:reduce){.velora-cover__photo{transition:none!important}}
+
 </style>
 <div class="velora-cover" id="cover-section">
   <img class="velora-cover__photo" data-bind="cover.image" alt="Sampul undangan">
