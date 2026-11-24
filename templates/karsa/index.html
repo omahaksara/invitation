@@ -310,7 +310,7 @@ body {
         node.style.setProperty("--oa-karsa-order", String(index));
       });
       observe(targets, "oa-karsa-visible", { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
-      depthMotion({ surface: ".cover", layers: [{ selector: ".cover-gradient", z: 18, factor: 0.35 }, { selector: ".cover-ampersand", z: 34, factor: 0.7 }] });
+      depthMotion({ surface: "#cover", layers: [{ selector: "#cover-image", z: 18, factor: 0.35 }, { selector: ".cover-gradient", z: 26, factor: 0.5 }, { selector: ".cover-ampersand", z: 34, factor: 0.7 }] });
       const names = root.querySelectorAll("#cover h1 span");
       if (!reducedMotion) names.forEach((node, index) => {
         node.style.display = "inline-block";
