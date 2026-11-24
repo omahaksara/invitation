@@ -1442,7 +1442,10 @@
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
-      open.addEventListener("click", async () => {
+      open.addEventListener("click", async event => {
+        // Run before theme-level bubble handlers so the shared cover lifecycle
+        // cannot be cancelled by a theme-specific click listener.
+        event.preventDefault();
         // Guard against rapid taps while the cover is transitioning.
         if (open.dataset.oaOpening === "true") return;
         open.dataset.oaOpening = "true";
@@ -1498,7 +1501,7 @@
           }
         }
         setupReveal();
-      });
+      }, { capture: true });
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
       document.body.classList.add("oa-invitation-opened");
