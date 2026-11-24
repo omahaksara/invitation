@@ -98,7 +98,7 @@
 .atelier-cover__content .cover-to,.atelier-cover__content .guest-name,.atelier-cover__content .cover-note{text-align:left;color:#f5eae4}
 .atelier-cover__content .cover-note{max-width:500px}
 .atelier-cover__content .atelier-button{border-radius:2px;background:#9b6d63;border-color:#9b6d63;color:#fffaf6}
-#cover-section.is-opening{transform-origin:bottom center;transform-style:preserve-3d;backface-visibility:hidden;animation:oaAtelierPageTurn 940ms cubic-bezier(.7,0,.2,1) both;pointer-events:none}
+html[data-oa-theme="atelier-editorial"] #cover-section.is-opening{transform-origin:bottom center;transform-style:preserve-3d;backface-visibility:hidden;animation:oaAtelierPageTurn 940ms cubic-bezier(.7,0,.2,1) both;pointer-events:none}
 @keyframes oaAtelierPageTurn{0%{opacity:1;transform:perspective(1500px) rotateX(0deg);filter:blur(0)}58%{opacity:1;transform:perspective(1500px) rotateX(38deg) translateY(-2%);filter:blur(1px)}100%{opacity:0;transform:perspective(1500px) rotateX(84deg) translateY(-8%);filter:blur(7px)}}
 .atelier-page .reveal{opacity:0;transform:translate3d(-24px,28px,0) rotateY(-2deg);clip-path:inset(0 0 9% 0);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.16,.8,.2,1),clip-path 900ms ease}
 .atelier-page .reveal.active{opacity:1;transform:none;clip-path:inset(0)}
