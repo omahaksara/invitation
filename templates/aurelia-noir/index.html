@@ -180,6 +180,22 @@ img{display:block;max-width:100%}
  .cover-foot{margin-top:16px;font-size:.46rem}
 }
 @media(prefers-reduced-motion:reduce){.cover-photo{animation:none!important;transition:none!important}}
+
+/* Compact desktop cover: keep the invitation action inside short laptop viewports. */
+@media (min-width:681px) and (max-height:800px){
+ .cover{min-height:100svh;padding-top:24px;padding-bottom:24px}
+ .cover .eyebrow{margin-bottom:.4rem}
+ .cover-monogram{width:58px;height:58px;margin-bottom:12px}
+ .cover-kicker{margin-bottom:6px}
+ .cover h1{font-size:clamp(3rem,6vw,5rem);margin:4px 0 10px;line-height:.8}
+ .cover-line{margin-bottom:8px}
+ .cover-date{margin-bottom:10px}
+ .guest-label{margin-top:12px}
+ .guest-name{font-size:1.35rem;margin-bottom:.5rem}
+ .open-button{margin-top:4px}
+ .cover-foot{margin-top:12px}
+}
+
 </style>
 
 <div class="invite-shell">
