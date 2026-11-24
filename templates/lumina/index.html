@@ -72,12 +72,13 @@
  .lumina-title{font-size:clamp(3.1rem,14vw,5.1rem);margin:18px 0 12px}
 }
 
+.lumina-title{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0}.lumina-title>span,.lumina-title>.lumina-ampersand{display:block;width:100%}.lumina-title>.lumina-ampersand{font-size:.58em;line-height:1;margin:.12em 0}
 </style>
 <div id="cover-section" class="lumina-cover">
   <img class="lumina-cover__image" data-bind="cover.image" alt="Sampul undangan">
   <div class="lumina-cover__inner">
     <span class="lumina-pill">✦ UNDANGAN PERNIKAHAN ✦</span>
-    <h1 class="lumina-title"><span data-bind="couple.bride.nickname">Mempelai</span> <em>&amp;</em> <span data-bind="couple.groom.nickname">Mempelai</span></h1>
+    <h1 class="lumina-title"><span data-bind="couple.bride.nickname">Mempelai</span><em class="lumina-ampersand">&amp;</em><span data-bind="couple.groom.nickname">Mempelai</span></h1>
     <p class="lumina-date" data-bind="cover.dateLabel">SAVE THE DATE</p>
     <p class="lumina-cover__guest">Kepada Yth.<br><strong id="nama-tamu">Tamu Undangan</strong></p>
     <p><span class="lumina-sticker">LET'S CELEBRATE ↓</span></p>
