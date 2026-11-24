@@ -95,6 +95,7 @@
         if (!surface || reducedMotion()) return false;
 
         const previousSurfaceMarker = surface.getAttribute("data-oa-depth-surface");
+        const hadEnteredClass = surface.classList.contains("oa-depth-entered");
         const style = document.createElement("style");
         style.dataset.oaDepthMotion = slug;
         style.textContent = `
@@ -105,16 +106,26 @@
             transition:rotate 520ms cubic-bezier(.2,.7,.2,1);
           }
           [data-oa-depth-layer="${slug}"] {
-            translate:var(--oa-depth-x, 0px) calc(var(--oa-depth-y, 0px) + var(--oa-depth-scroll, 0px)) var(--oa-depth-z, 0px);
+            opacity:0;
+            translate:var(--oa-depth-x, 0px) calc(var(--oa-depth-y, 0px) + 18px) calc(var(--oa-depth-z, 0px) - 28px);
             transform-style:preserve-3d;
-            transition:translate 520ms cubic-bezier(.2,.7,.2,1);
+            transition:translate 1050ms cubic-bezier(.2,.75,.2,1),opacity 820ms ease;
+            transition-delay:calc(var(--oa-depth-order, 0) * 110ms);
             backface-visibility:hidden;
+          }
+          [data-oa-depth-surface="${slug}"].oa-depth-entered [data-oa-depth-layer="${slug}"] {
+            opacity:1;
+            translate:var(--oa-depth-x, 0px) calc(var(--oa-depth-y, 0px) + var(--oa-depth-scroll, 0px)) var(--oa-depth-z, 0px);
           }
           @media (hover:none),(max-width:700px) {
             [data-oa-depth-surface="${slug}"] { rotate:none; }
             [data-oa-depth-layer="${slug}"] {
+              translate:0 14px calc(var(--oa-depth-z, 0px) - 18px);
+              transition:translate 900ms cubic-bezier(.2,.7,.2,1),opacity 700ms ease;
+            }
+            [data-oa-depth-surface="${slug}"].oa-depth-entered [data-oa-depth-layer="${slug}"] {
+              opacity:1;
               translate:0 var(--oa-depth-scroll, 0px) var(--oa-depth-z, 0px);
-              transition:translate 700ms cubic-bezier(.2,.7,.2,1);
             }
           }
           @media (prefers-reduced-motion:reduce) {
@@ -136,13 +147,16 @@
             z: node.style.getPropertyValue("--oa-depth-z"),
             x: node.style.getPropertyValue("--oa-depth-x"),
             y: node.style.getPropertyValue("--oa-depth-y"),
-            scroll: node.style.getPropertyValue("--oa-depth-scroll")
+            scroll: node.style.getPropertyValue("--oa-depth-scroll"),
+            order: node.style.getPropertyValue("--oa-depth-order")
           });
           node.setAttribute("data-oa-depth-layer", slug);
+          node.style.setProperty("--oa-depth-order", String(layerNodes.findIndex(entry => entry.node === node)));
           node.style.setProperty("--oa-depth-z", (Number(item.z) || 0) + "px");
         });
 
         let frame = 0;
+        const entranceFrame = window.requestAnimationFrame(() => surface.classList.add("oa-depth-entered"));
         let pointerX = 0;
         let pointerY = 0;
         const render = () => {
@@ -198,6 +212,8 @@
           window.removeEventListener("scroll", scheduleRender);
           window.removeEventListener("resize", scheduleRender);
           if (frame) window.cancelAnimationFrame(frame);
+          window.cancelAnimationFrame(entranceFrame);
+          if (!hadEnteredClass) surface.classList.remove("oa-depth-entered");
 
           if (previousSurfaceMarker === null) surface.removeAttribute("data-oa-depth-surface");
           else surface.setAttribute("data-oa-depth-surface", previousSurfaceMarker);
@@ -213,7 +229,8 @@
               ["--oa-depth-z", vars.z],
               ["--oa-depth-x", vars.x],
               ["--oa-depth-y", vars.y],
-              ["--oa-depth-scroll", vars.scroll]
+              ["--oa-depth-scroll", vars.scroll],
+              ["--oa-depth-order", vars.order]
             ].forEach(([key, value]) => {
               if (value) node.style.setProperty(key, value);
               else node.style.removeProperty(key);
