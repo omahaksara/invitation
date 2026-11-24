@@ -1447,12 +1447,15 @@
         const clickedOpen = event.target && event.target.closest
           ? event.target.closest("#open-invitation-btn, #open-btn")
           : null;
-        if (!clickedOpen || clickedOpen.dataset.oaOpening === "true") return;
+        if (!clickedOpen) return;
         const activeCover = document.getElementById("cover-section") || document.getElementById("cover");
+        // Independent hard deadline: even if the theme's own opening lifecycle
+        // starts but never dispatches animationend, the cover cannot trap the visitor.
         window.setTimeout(() => {
           if (!activeCover || activeCover.hidden || getComputedStyle(activeCover).display === "none") return;
           activeCover.hidden = true;
           activeCover.style.display = "none";
+          activeCover.classList.remove("is-opening");
           clickedOpen.removeAttribute("aria-busy");
         }, 1800);
       }, true);
