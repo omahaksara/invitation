@@ -108,7 +108,7 @@ assert.ok(aksaranocturne.includes("depthMotion })"), "aksara-nocturne: API depth
 // real cover surface and at least one independently layered visual element.
 const depthPilots = {
   karsa: { surface: ".cover", layers: [".cover-gradient", ".cover-ampersand"] },
-  "royal-vintage": { surface: ".hero", layers: [".hero-cover-image", ".hero-content"] },
+  "royal-vintage": { surface: ".hero", layers: [".hero-cover-image", ".hero .hero-content"] },
   sirein: { surface: ".sirein-cover", layers: [".sirein-cover__image", ".sirein-cover__veil", ".sirein-cover__content"] },
   "botanical-garden": { surface: ".cover", layers: [".cover-photo", ".cover-grain", ".cover-orbit"] },
   nexus: { surface: ".nexus-cover", layers: [".nexus-cover__visual", ".nexus-cover__panel", ".nexus-cover__line"] },
