@@ -142,6 +142,9 @@ Perubahan ini hanya menyentuh lapisan presentasi. Kontrak RSVP/guestbook, data u
 
 ## Layered 3D depth motion
 
-The shared theme-program API exposes `depthMotion({ surface, layers })`. A theme declares its own cover surface and visual layers with per-layer depth and parallax factors; the runtime supplies pointer-driven perspective on fine-pointer devices, scroll-linked depth offsets, frame scheduling, and deterministic cleanup when the active theme changes. It uses CSS individual `rotate` and `translate` properties so it does not overwrite a theme's existing `transform` choreography.
+The shared theme-program API exposes `depthMotion({ surface, layers })`. A theme declares its own cover surface and visual layers with per-layer depth and parallax factors; the runtime supplies a staggered depth entrance, pointer-driven perspective on fine-pointer devices, scroll-linked depth offsets, frame scheduling, and deterministic cleanup when the active theme changes. Each layer enters from a restrained Z/Y offset with a small per-layer delay, then settles at its declared depth. It uses CSS individual `rotate` and `translate` properties so it does not overwrite a theme's existing `transform` choreography.
 
 The first six art-direction pilots are Karsa (editorial paper/ornament), Royal Vintage (photograph and title plane), Sirein (image/veil/content), Botanical Garden (photo/grain/orbits), Nexus (visual/panel/line), and Aksara Nocturne (cover image/arch). Touch layouts disable pointer tilt but retain restrained scroll depth. `prefers-reduced-motion` disables the enhancement; missing selectors simply leave the theme's original cover intact. This is a CSS 3D/parallax foundation, not a WebGL scene or a claim that every theme already has a finished cinematic 3D sequence.
+
+
+The browser smoke suite now asserts that all six pilot themes actually mount a 3D surface, at least one depth layer, the scoped runtime stylesheet, and the entrance-ready state. A passing generic theme render is not counted as proof of 3D activation.
