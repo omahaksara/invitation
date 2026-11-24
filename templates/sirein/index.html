@@ -17,6 +17,36 @@
 @media(max-width:480px){.sirein-cover{padding:22px}.sirein-cover__content{padding:28px 17px}.cover-note{font-size:.88rem}.sirein-section{padding:62px 18px}.couple-grid{grid-template-columns:minmax(0,1fr);gap:28px}.person-card{max-width:320px;margin:0 auto;width:100%}.person-photo-frame{max-height:380px}.couple-and{line-height:1;margin:-5px 0}.story-item{grid-template-columns:58px 1fr;gap:13px}.event-card{padding:30px 18px}.hero-photo-wrap{height:58vh}.gallery-grid{gap:8px}}
 @media(prefers-reduced-motion:reduce){.sirein-button{transition:none}}
 
+
+/* Sirein cover art direction: quiet portrait arch with a generous ivory surround. */
+.sirein-cover{background:#e9e6dc;color:#343a32;padding:28px 20px}
+.sirein-cover__image{inset:5vh auto auto 50%;transform:translateX(-50%);width:min(72vw,390px);height:min(48vh,440px);object-fit:cover;object-position:center 34%;opacity:.78;filter:saturate(.72);border-radius:190px 190px 8px 8px;border:1px solid #d7c7a5;box-shadow:0 22px 65px rgba(36,39,32,.18)}
+.sirein-cover__veil{inset:0;background:linear-gradient(180deg,rgba(233,230,220,.04) 0%,rgba(233,230,220,.12) 38%,#e9e6dc 67%,#e9e6dc 100%)}
+.sirein-cover__content{width:min(100%,650px);margin-top:clamp(210px,34vh,310px);padding:20px 24px 12px;border:0;outline:0;color:#343a32}
+.sirein-cover .eyebrow,.sirein-cover .cover-to,.sirein-cover .guest-name,.sirein-cover .cover-note{color:#555b50}
+.sirein-cover .script-title{font-size:clamp(2.6rem,7vw,5rem);line-height:.98;margin:0 auto 14px;color:#343a32}
+.sirein-cover .script-title .ampersand{color:#8b947f}
+.sirein-cover .cover-rule{background:#a9a58e;margin:14px auto}
+.sirein-cover .sirein-button{background:#343a32;color:#f8f6f0;border-color:#343a32;margin-top:12px;padding:13px 26px}
+.sirein-cover .sirein-button:hover{background:#65705f}
+@media(min-width:760px){
+ .sirein-cover__image{width:min(31vw,390px);height:min(48vh,430px);top:4vh}
+ .sirein-cover__content{margin-top:min(37vh,310px)}
+}
+@media(max-height:720px){
+ .sirein-cover__image{height:40vh;top:3vh}
+ .sirein-cover__content{margin-top:clamp(180px,30vh,230px);padding-top:10px}
+ .sirein-cover .script-title{font-size:clamp(2.3rem,6vw,3.7rem);margin-bottom:8px}
+ .sirein-cover .cover-rule{margin:8px auto}
+ .sirein-cover .cover-note{margin-bottom:10px}
+ .sirein-cover .sirein-button{margin-top:6px}
+}
+@media(max-width:420px){
+ .sirein-cover__image{width:76vw;height:39vh}
+ .sirein-cover__content{margin-top:clamp(190px,31vh,250px);padding-inline:10px}
+}
+@media(prefers-reduced-motion:reduce){.sirein-cover__image{transform:translateX(-50%)!important;animation:none!important}}
+
 </style>
 <!-- Template Sirein — adaptasi desain editorial lembut untuk sistem Omah Aksara -->
 <div id="cover-section" class="sirein-cover">
