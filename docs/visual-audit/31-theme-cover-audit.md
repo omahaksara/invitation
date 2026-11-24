@@ -93,4 +93,7 @@ Four cover templates received a presentation-only refinement so the ampersand si
 - Kinze
 - Karsa
 
-The Karsa cover now has an explicit ampersand element so its position can be styled independently. These changes affect only cover typography/layout; invitation data, links, forms, and backend contracts are unchanged. Static/backend CI should be checked on the resulting branch head. Browser smoke is intentionally skipped for PR #141 per the temporary workflow condition; visual confirmation on real rendered screenshots remains outstanding for this follow-up.
+The Karsa cover now has an explicit ampersand element so its position can be styled independently.
+- Botanical Garden: its cover name row also now stacks the groom, centered ampersand, and bride vertically; this is a cover-only CSS adjustment.
+- A source review of nearby themes found several already had a dedicated centered ampersand line (including Aksara Nocturne, Calestial, Earty, Jendela Senja, and Kencana Jawa), so those were left unchanged.
+ These changes affect only cover typography/layout; invitation data, links, forms, and backend contracts are unchanged. Static/backend CI should be checked on the resulting branch head. Browser smoke is intentionally skipped for PR #141 per the temporary workflow condition; visual confirmation on real rendered screenshots remains outstanding for this follow-up.
