@@ -109,7 +109,7 @@
             opacity:0;
             translate:var(--oa-depth-x, 0px) calc(var(--oa-depth-y, 0px) + 18px) calc(var(--oa-depth-z, 0px) - 28px);
             transform-style:preserve-3d;
-            transition:translate 1050ms cubic-bezier(.2,.75,.2,1),opacity 820ms ease;
+            transition:translate 980ms cubic-bezier(.2,.75,.2,1),opacity 820ms ease;
             transition-delay:calc(var(--oa-depth-order, 0) * 110ms);
             backface-visibility:hidden;
           }
