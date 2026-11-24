@@ -196,6 +196,7 @@
       const targets = root.querySelectorAll(".sirein-section, .sirein-hero, .person-card, .story-item, .event-card, .gallery-section, .gift-card");
       targets.forEach(node => node.classList.add("oa-sirein-reveal"));
       observe(targets, "oa-sirein-visible", { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
+      depthMotion({ surface: ".sirein-cover", layers: [{ selector: ".sirein-cover__image", z: 12, factor: 0.3 }, { selector: ".sirein-cover__veil", z: 24, factor: 0.45 }, { selector: ".sirein-cover__content", z: 38, factor: 0.7 }] });
       const cover = root.querySelector(".sirein-cover");
       if (cover && !reducedMotion) requestAnimationFrame(() => cover.classList.add("oa-sirein-cover-ready"));
       
