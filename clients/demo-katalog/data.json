@@ -8,7 +8,7 @@
   },
   "cover": {
     "title": "Undangan Pernikahan",
-    "subtitle": "Pernikahan",
+    "subtitle": "The Wedding of",
     "image": "cover.jpg",
     "heroImage": "cover.jpg",
     "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
@@ -40,8 +40,8 @@
   },
   "events": {
     "akad": {
-      "location": "Lokasi Omah Aksara",
-      "address": "Titik lokasi demo: 0.584450, 120.768525",
+      "location": "Lokasi Acara Arkan & Arunika",
+      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
       "timezone": "Asia/Makassar",
       "title": "Akad Nikah",
       "date": "Sabtu, 12 Juni 2027",
@@ -49,30 +49,18 @@
       "startTime": "08:00",
       "endTime": "10:00",
       "time": "08.00 – 10.00 WITA",
-      "mapsUrl": "https://maps.app.goo.gl/4zP4sVujTVvj7Ybj8?g_st=ac",
-      "mapQuery": "0.584450,120.768525",
-      "coordinates": {
-        "lat": 0.58445,
-        "lng": 120.768525
-      },
-      "mapEmbedUrl": "https://www.google.com/maps?q=0.584450%2C120.768525&z=17&output=embed"
+      "mapNote": "Lokasi ini hanya contoh; titik peta belum diverifikasi."
     },
     "resepsi": {
-      "location": "Lokasi Omah Aksara",
-      "address": "Titik lokasi demo: 0.584450, 120.768525",
+      "location": "Lokasi Acara Arkan & Arunika",
+      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
       "timezone": "Asia/Makassar",
       "title": "Resepsi Pernikahan",
       "date": "Sabtu, 12 Juni 2027",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
       "time": "11.00 – 14.00 WITA",
-      "mapsUrl": "https://maps.app.goo.gl/4zP4sVujTVvj7Ybj8?g_st=ac",
-      "mapQuery": "0.584450,120.768525",
-      "coordinates": {
-        "lat": 0.58445,
-        "lng": 120.768525
-      },
-      "mapEmbedUrl": "https://www.google.com/maps?q=0.584450%2C120.768525&z=17&output=embed"
+      "mapNote": "Lokasi ini hanya contoh; titik peta belum diverifikasi."
     }
   },
   "countdown": {
@@ -81,37 +69,37 @@
   "story": [
     {
       "tanggal": "2022",
-      "judul": "Awal yang Sederhana",
-      "cerita": "Kami bertemu lewat hal-hal sederhana. Percakapan yang awalnya biasa perlahan menjadi ruang untuk saling mengenal, memahami kebiasaan, dan menemukan banyak kesamaan.",
+      "judul": "Sebuah Pertemuan",
+      "cerita": "Tidak semua hal indah datang dengan rencana. Dari pertemuan sederhana, tumbuh rasa ingin mengenal lebih dekat. Percakapan kecil menjadi awal dari kisah yang perlahan menemukan maknanya.",
       "foto": "foto-01.jpg"
     },
     {
       "tanggal": "2023–2024",
-      "judul": "Tumbuh Bersama",
-      "cerita": "Waktu mengajarkan kami bahwa hubungan bukan tentang selalu sama, melainkan tentang belajar mendengar, menghargai perbedaan, dan tetap memilih berjalan berdampingan.",
+      "judul": "Belajar Saling Mengenal",
+      "cerita": "Hari demi hari mengajarkan kami bahwa kedekatan dibangun lewat kejujuran, kesediaan mendengarkan, dan perhatian pada hal-hal sederhana. Kami belajar menerima perbedaan, saling menghargai, dan bertumbuh bersama.",
       "foto": "foto-02.jpg"
     },
     {
       "tanggal": "2025–2026",
       "judul": "Memantapkan Niat",
-      "cerita": "Dengan doa keluarga dan niat yang semakin kuat, kami mempersiapkan langkah menuju kehidupan baru. Setiap proses menjadi pengingat untuk saling menjaga dan bertanggung jawab.",
-      "foto": "foto-06.jpg"
+      "cerita": "Dengan niat yang semakin teguh, kami melibatkan keluarga dalam langkah yang lebih serius. Doa dan restu orang-orang terkasih menguatkan keyakinan kami untuk melangkah menuju masa depan bersama.",
+      "foto": "foto-03.jpg"
     },
     {
       "tanggal": "12 Juni 2027",
-      "judul": "Hari yang Dinanti",
-      "cerita": "Dengan memohon ridha Allah SWT, kami ingin mengikat janji dan memulai perjalanan sebagai keluarga. Semoga rumah yang dibangun kelak selalu dipenuhi kasih, ketenangan, dan keberkahan.",
-      "foto": "foto-08.jpg"
+      "judul": "Menuju Hari Bahagia",
+      "cerita": "Kini, dengan memohon ridha Allah SWT, kami bersiap mengikat janji dalam pernikahan. Semoga perjalanan baru ini menjadi ruang untuk saling menjaga, menguatkan, dan menghadirkan ketenangan sepanjang usia.",
+      "foto": "foto-04.jpg"
     }
   ],
   "gallery": [
-    "cover.jpg",
     "foto-01.jpg",
     "foto-02.jpg",
     "foto-03.jpg",
     "foto-04.jpg",
     "foto-05.jpg",
     "foto-06.jpg",
+    "foto-07.jpg",
     "foto-08.jpg",
     "foto-09.jpg",
     "foto-10.jpg"
@@ -216,8 +204,8 @@
     "mapNavigation": true
   },
   "seo": {
-    "title": "Arkan & Arunika — Undangan Pernikahan",
-    "description": "Demo undangan digital Omah Aksara. Nama, cerita, foto, acara, dan hadiah merupakan materi contoh yang dapat disesuaikan untuk setiap pemesan."
+    "title": "Arkan Mahendra & Arunika Prameswari | Undangan Pernikahan",
+    "description": "Pratinjau demo undangan digital Arkan dan Arunika dari Omah Aksara."
   },
   "opening": {
     "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari hari bahagia pernikahan kami.\n\nKehadiran serta doa restu yang diberikan akan menjadi kebahagiaan dan kenangan berharga bagi kami.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
