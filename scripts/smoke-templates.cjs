@@ -14,6 +14,51 @@ async function captureScreenshot(page, file) {
 }
 
 
+async function installThemeDemoFixture(page) {
+  await page.route("**/clients/demo-katalog/data.json*", async route => {
+    const fixturePath = path.join(__dirname, "../tests/fixtures/theme-demo.json");
+    const fixture = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
+    const originalEvents = Object.values(fixture.events || {});
+    assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
+      event && !event.coordinates && event.latitude == null && event.longitude == null &&
+      typeof event.mapNote === "string" && event.mapNote.length > 0
+    ), "Isolated browser fixture must keep its synthetic venue unpinned until the test injects coordinates.");
+    fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
+    delete fixture.cover.image;
+    fixture.couple.groom.foto = fixture.couple.groom.photo;
+    delete fixture.couple.groom.photo;
+    fixture.couple.bride.image = fixture.couple.bride.photo;
+    delete fixture.couple.bride.photo;
+    fixture.gallery = (fixture.gallery || []).map((src, index) => ({ url: src, alt: "Foto uji " + (index + 1) }));
+    fixture.story = (fixture.story || []).map(item => {
+      const legacy = { ...item, image: item.foto || item.photo || item.image || "" };
+      delete legacy.foto;
+      delete legacy.photo;
+      return legacy;
+    });
+    fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
+    for (const event of originalEvents) {
+      event.mapQuery = "0.123456,120.654321";
+      event.mapUrl = "https://www.google.com/maps?q=0.123456,120.654321";
+      delete event.mapsUrl;
+      event.embedUrl = "https://www.google.com/maps?q=0.123456%2C120.654321&t=k&z=17&output=embed";
+      delete event.mapEmbedUrl;
+      event.coordinates = { lat: 0.123456, lng: 120.654321 };
+      event.mapNote = "";
+    }
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(fixture) });
+  });
+}
+
+async function captureMotionScreenshot(page, file) {
+  try {
+    await page.screenshot({ path: file, fullPage: false, timeout: 5000 });
+  } catch (error) {
+    console.warn("WARN motion screenshot skipped " + file + ": " + (error?.message || error));
+  }
+}
+
+
 async function auditCover(page, theme, device) {
   const cover = page.locator(theme.cover).first();
   assert.equal(await cover.count(), 1, theme.slug + ": elemen cover utama tidak ditemukan");
@@ -83,6 +128,16 @@ const themes = [
   { slug: "luma", marker: ".luma-cover", open: "#open-invitation-btn", cover: "#cover-section" },
 ];
 
+
+const openingMotionNames = {
+  "aksara-nocturne": "oaNocturnePortalClose",
+  "aksav": "oaAksavCurtainClose",
+  "atelier-editorial": "oaAtelierPageTurn",
+  "botanical-garden": "oaBotanicalPetalClose",
+  "elegance": "oaEleganceIrisClose",
+  "sagara": "oaSagaraTideRetreat"
+};
+
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
 const themeRegistry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
 const activeThemeSlugs = (themeRegistry.themes || [])
@@ -129,6 +184,11 @@ for (const slug of activeThemeSlugs) {
       return;
     }
     const target = path.resolve(root, "." + pathname);
+    if (/^\\/clients\\/[^/]+\\/data\\.json$/i.test(pathname)) {
+      response.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
+      response.end("Protected client JSON is not served by browser smoke.");
+      return;
+    }
     if (target !== root && !target.startsWith(root + path.sep)) {
       response.writeHead(403).end("Forbidden");
       return;
@@ -173,41 +233,7 @@ for (const slug of activeThemeSlugs) {
       page.on("pageerror", error => pageErrors.push(error.message));
       // Synthetic coordinates are injected only into this browser test.
       // The public demo retains its unverified-location notice and no fake pin.
-      await page.route("**/clients/demo-katalog/data.json*", async route => {
-        const response = await route.fetch();
-        const fixture = await response.json();
-        const originalEvents = Object.values(fixture.events || {});
-        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
-          event && !event.coordinates && event.latitude == null && event.longitude == null &&
-          typeof event.mapNote === "string" && event.mapNote.length > 0
-        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
-        // Exercise legacy image aliases through the real shared normalizer.
-        fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
-        delete fixture.cover.image;
-        fixture.couple.groom.foto = fixture.couple.groom.photo;
-        delete fixture.couple.groom.photo;
-        fixture.couple.bride.image = fixture.couple.bride.photo;
-        delete fixture.couple.bride.photo;
-        fixture.gallery = (fixture.gallery || []).map((src, index) => ({ url: src, alt: "Foto uji " + (index + 1) }));
-        fixture.story = (fixture.story || []).map(item => {
-          const legacy = { ...item, image: item.foto || item.photo || item.image || "" };
-          delete legacy.foto;
-          delete legacy.photo;
-          return legacy;
-        });
-        fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
-        for (const event of originalEvents) {
-          // Exercise legacy map aliases while keeping every synthetic point isolated
-          // to this intercepted browser fixture; never write these values to demo/client JSON.
-          event.mapUrl = "https://www.google.com/maps?q=0.123456,120.654321";
-          delete event.mapsUrl;
-          event.embedUrl = "https://www.google.com/maps?q=0.123456%2C120.654321&t=k&z=17&output=embed";
-          delete event.mapEmbedUrl;
-          event.coordinates = { lat: 0.123456, lng: 120.654321 };
-          event.mapNote = "";
-        }
-        await route.fulfill({ response, body: JSON.stringify(fixture) });
-      });
+      await installThemeDemoFixture(page);
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
@@ -550,6 +576,16 @@ for (const slug of activeThemeSlugs) {
             theme.slug + ": kontrol cepat terpisah tidak boleh menduplikasi dock bersama.");
           const reducedMotionOpenStarted = Date.now();
           await page.locator(theme.open).click();
+          const expectedOpeningMotion = openingMotionNames[theme.slug];
+          if (expectedOpeningMotion) {
+            await page.waitForFunction(({ selector, name }) => {
+              const cover = document.querySelector(selector);
+              return !!cover && getComputedStyle(cover).animationName.split(",").some(value => value.trim() === name);
+            }, { selector: theme.cover, name: expectedOpeningMotion }, { timeout: 1500 });
+            await page.waitForTimeout(160);
+            await captureMotionScreenshot(page, path.join(screenshotDir, `${theme.slug}-opening-motion-desktop.png`));
+          }
+
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
             return !cover || cover.hidden || getComputedStyle(cover).display === "none";
@@ -990,6 +1026,7 @@ for (const slug of activeThemeSlugs) {
         }
         await route.fulfill({ status: 405, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: false }) });
       });
+      await installThemeDemoFixture(page);
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
@@ -1071,7 +1108,38 @@ for (const slug of activeThemeSlugs) {
         assert.equal(mockGuestbook.length, 0, theme.slug + ": demo tidak boleh menulis ke mock database");
         assert.equal(mockApiPosts.length, 0, theme.slug + ": demo tidak boleh mengirim RSVP/ucapan ke API");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
-        console.log("PASS mobile + demo forms " + theme.slug);
+
+        // A second responsive pass at 360px catches narrow-device collisions without
+        // replacing the 390px form interaction coverage above.
+        await page.setViewportSize({ width: 360, height: 780 });
+        await page.reload({ waitUntil: "commit", timeout: 15000 });
+        await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        await auditCover(page, theme, "mobile-360");
+        await page.locator(theme.open).click();
+        await page.waitForFunction(() => {
+          const cover = document.getElementById("cover") || document.getElementById("cover-section");
+          return !cover || cover.hidden || getComputedStyle(cover).display === "none";
+        }, undefined, { timeout: 5000 });
+        const layout360 = await page.evaluate(() => {
+          const width = document.documentElement.clientWidth;
+          const dockRect = document.querySelector("#oa-floating-controls")?.getBoundingClientRect();
+          return {
+            viewport: width,
+            page: document.documentElement.scrollWidth,
+            rsvp: document.querySelector("#rsvp-form")?.getBoundingClientRect().width || 0,
+            guestbook: document.querySelector("#wishes-form")?.getBoundingClientRect().width || 0,
+            dockLeft: dockRect?.left ?? 0,
+            dockRight: dockRect?.right ?? width
+          };
+        });
+        assert.ok(layout360.page <= layout360.viewport + 2,
+          theme.slug + ": horizontal overflow at 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.rsvp > 0 && layout360.rsvp <= layout360.viewport &&
+          layout360.guestbook > 0 && layout360.guestbook <= layout360.viewport,
+          theme.slug + ": RSVP/Ucapan form width is invalid at 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.dockLeft >= -1 && layout360.dockRight <= layout360.viewport + 1,
+          theme.slug + ": shared dock exceeds 360px viewport " + JSON.stringify(layout360));
+        console.log("PASS mobile 390px + 360px + demo forms " + theme.slug);
       } catch (error) {
         const message = error && error.message ? error.message : String(error);
         failures.push(theme.slug + " mobile: " + message);
