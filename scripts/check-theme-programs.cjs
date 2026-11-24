@@ -104,6 +104,40 @@ const aksaranocturne = read("templates/aksara-nocturne/index.html");
 assert.ok(aksaranocturne.includes("depthMotion({ surface:"), "aksara-nocturne: 3D depth motion belum dipasang.");
 assert.ok(aksaranocturne.includes("depthMotion })"), "aksara-nocturne: API depthMotion belum diterima oleh program tema.");
 
+
+const openingMotionContracts = {
+  "aksara-nocturne": "oaNocturnePortalClose",
+  "aksav": "oaAksavCurtainClose",
+  "atelier-editorial": "oaAtelierPageTurn",
+  "botanical-garden": "oaBotanicalPetalClose",
+  "elegance": "oaEleganceIrisClose",
+  "sagara": "oaSagaraTideRetreat"
+};
+for (const [slug, animationName] of Object.entries(openingMotionContracts)) {
+  const template = read("templates/" + slug + "/index.html");
+  assert.ok(template.includes("@keyframes " + animationName),
+    slug + ": opening choreography must have its own named keyframe.");
+  assert.ok(template.includes("animation:" + animationName),
+    slug + ": cover does not invoke its theme-specific opening choreography.");
+  assert.ok(template.includes("prefers-reduced-motion:reduce"),
+    slug + ": opening choreography lacks reduced-motion handling.");
+}
+const browserSmoke = read("scripts/smoke-templates.cjs");
+assert.ok(browserSmoke.includes("../tests/fixtures/theme-demo.json"),
+  "Browser smoke must load the isolated test fixture, not client JSON.");
+assert.ok(!browserSmoke.includes("route.fetch()"),
+  "Browser smoke must not fetch clients/*/data.json from the static server.");
+assert.ok(browserSmoke.includes("Protected client JSON is not served by browser smoke."),
+  "Browser smoke server must reject direct client JSON reads.");
+assert.ok(browserSmoke.includes("mobile-360"),
+  "Browser smoke must capture the 360px cover pass.");
+const isolatedFixture = JSON.parse(read("tests/fixtures/theme-demo.json"));
+assert.ok(Object.values(isolatedFixture.events || {}).length > 0 &&
+  Object.values(isolatedFixture.events || {}).every(event =>
+    !event.coordinates && event.latitude == null && event.longitude == null &&
+    typeof event.mapNote === "string" && event.mapNote.length > 0
+  ), "Isolated browser fixture must keep synthetic event locations unpinned before interception.");
+
 // The 3D runtime is a progressive enhancement: each pilot must declare a
 // real cover surface and at least one independently layered visual element.
 const depthPilots = {
