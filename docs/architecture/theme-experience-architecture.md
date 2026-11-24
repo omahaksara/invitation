@@ -72,7 +72,7 @@ The shared navigation contract must remain usable and consistent in function. It
 
 This architecture is a presentation and interaction refactor only.
 
-- Do not edit production `clients/*/data.json`, client slugs, client mappings, or production invitation records. The only exception in this PR is the synthetic `clients/demo-katalog/data.json` fixture, used solely for public demo/isolated browser verification.
+- Do not edit, generate into, or use as a mutable test fixture any `clients/*/data.json` file, including `clients/demo-katalog/data.json`. Browser smoke tests must load a sanitized synthetic fixture from `tests/fixtures/theme-demo.json`; the static test server rejects direct reads of client JSON.
 - Do not change RSVP or guestbook payload fields, endpoint URLs, Apps Script IDs, sheet mappings, or submission semantics.
 - Do not migrate, recreate, or ask clients to reconnect Google Sheets.
 - Do not change gifts, bank details, QR assets, production links, or storage/backend contracts.
@@ -110,7 +110,7 @@ A theme is not complete because it renders or passes static validation. Review t
 - The shared renderer activates the selected theme program only after the template scripts and invitation content are ready. A missing or failing optional program does not block the base invitation renderer.
 - Independent motion programs are implemented for Karsa, Royal Vintage, Aksara Nocturne, Sirein, Botanical Garden, and Nexus. Their visual treatments differ: editorial stagger, framed cover/card reveal, dark panel depth, sage editorial mask, botanical orbit/reveal, and cinematic portal treatment.
 - All 31 active themes now have their own slug-based program registration. The original six motion pilots remain distinct; 19 additional themes now have independent cover-title/photo choreography, reveal lifecycle, navigation presentation, and gallery-overlay styling. Six other existing themes retain their dedicated navigation/overlay programs while awaiting deeper cover-specific art-direction passes. Registration is complete; aesthetic review is still a separate gate.
-- The syntax check includes the theme runtime, and `scripts/check-theme-programs.cjs` verifies all 31 registrations, cleanup paths, reduced-motion rules, navigation classes, and overlay selectors. Playwright smoke tests cover all 31 active themes at desktop and mobile widths. Human visual review remains a separate release gate; automated success is not evidence of aesthetic quality.
+- The syntax check includes the theme runtime, and `scripts/check-theme-programs.cjs` verifies all 31 registrations, cleanup paths, reduced-motion rules, navigation classes, and overlay selectors. Playwright smoke tests cover all 31 active themes at desktop, 390px, and 360px widths using only `tests/fixtures/theme-demo.json` plus mock endpoints. Six themes now have deliberately different cover compositions and opening choreography; the new browser assertions verify the named motion is actually applied. Human visual review remains a separate release gate; automated success is not evidence of aesthetic quality.
 
 ## Definition of success
 
