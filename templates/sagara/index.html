@@ -71,13 +71,14 @@
 @keyframes sg-drift{from{transform:scale(1.08)}to{transform:scale(1)}}
 @media(min-width:560px){.sg-couple{grid-template-columns:1fr 1fr;gap:18px}.sg-person figcaption{display:block}.sg-pill{display:inline-flex;margin-top:8px}}
 @media(prefers-reduced-motion:reduce){#app *,#cover{animation:none!important;transition:none!important;scroll-behavior:auto!important}.sg-reveal{opacity:1;transform:none}}
+.sg-cover-title em{display:block;text-align:center;line-height:1;margin:.12em 0}
 </style>
 
 <section id="cover" aria-label="Sampul undangan">
   <img class="sg-cover-photo" data-bind="cover.image" alt="Sampul pasangan" fetchpriority="high">
   <div class="sg-cover-inner">
     <span class="sg-eyebrow">✦ UNDANGAN PERNIKAHAN ✦</span>
-    <h1 class="sg-cover-title"><span data-bind="couple.bride.nickname">Mempelai</span> <em>&amp;</em><br><span data-bind="couple.groom.nickname">Mempelai</span></h1>
+    <h1 class="sg-cover-title"><span data-bind="couple.bride.nickname">Mempelai</span><br><em>&amp;</em><br><span data-bind="couple.groom.nickname">Mempelai</span></h1>
     <p class="sg-date" data-bind="cover.dateLabel">HARI BAHAGIA KAMI</p>
     <p class="sg-cover-copy">Kepada Yth.<br><span class="sg-guest" id="nama-tamu">Tamu Undangan</span><br>Dengan penuh sukacita, kami mengundang Anda untuk hadir dan berbagi kebahagiaan bersama.</p>
     <button id="open-btn" class="sg-open" type="button"><span>BUKA UNDANGAN</span><span>↓</span></button>
