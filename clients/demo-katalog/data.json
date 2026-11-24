@@ -41,24 +41,38 @@
   "events": {
     "akad": {
       "location": "Lokasi Acara Arkan & Arunika",
-      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
+      "address": "Lokasi sesuai titik Google Maps",
       "timezone": "Asia/Makassar",
       "title": "Akad Nikah",
       "date": "Sabtu, 12 Juni 2027",
       "dateISO": "2027-06-12",
       "startTime": "08:00",
       "endTime": "10:00",
-      "time": "08.00 – 10.00 WITA"
+      "time": "08.00 – 10.00 WITA",
+      "coordinates": {
+        "lat": 0.58445,
+        "lng": 120.768525
+      },
+      "mapQuery": "0.58445,120.768525",
+      "mapsUrl": "https://maps.app.goo.gl/4zP4sVujTVvj7Ybj8?g_st=ac",
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.58445,120.768525&t=k&z=17&output=embed"
     },
     "resepsi": {
       "location": "Lokasi Acara Arkan & Arunika",
-      "address": "Lokasi simulasi undangan Arkan & Arunika, Palu, Sulawesi Tengah",
+      "address": "Lokasi sesuai titik Google Maps",
       "timezone": "Asia/Makassar",
       "title": "Resepsi Pernikahan",
       "date": "Sabtu, 12 Juni 2027",
       "dateISO": "2027-06-12",
       "startTime": "11:00",
-      "time": "11.00 – 14.00 WITA"
+      "time": "11.00 – 14.00 WITA",
+      "coordinates": {
+        "lat": 0.58445,
+        "lng": 120.768525
+      },
+      "mapQuery": "0.58445,120.768525",
+      "mapsUrl": "https://maps.app.goo.gl/4zP4sVujTVvj7Ybj8?g_st=ac",
+      "mapEmbedUrl": "https://www.google.com/maps?q=0.58445,120.768525&t=k&z=17&output=embed"
     }
   },
   "countdown": {
@@ -187,7 +201,7 @@
     "loveStory": true,
     "gallery": true,
     "video": false,
-    "maps": false,
+    "maps": true,
     "music": true,
     "gifts": true,
     "rsvp": true,
@@ -198,8 +212,8 @@
     "bank": true,
     "ewallet": true,
     "qris": true,
-    "mapEmbed": false,
-    "mapNavigation": false
+    "mapEmbed": true,
+    "mapNavigation": true
   },
   "seo": {
     "title": "Arkan Mahendra & Arunika Prameswari | Undangan Pernikahan",
