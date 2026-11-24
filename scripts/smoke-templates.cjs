@@ -236,12 +236,13 @@ for (const slug of activeThemeSlugs) {
             const style = document.querySelector('style[data-oa-depth-motion="' + slug + '"]');
             return {
               surface: !!surface,
+              entered: !!surface?.classList.contains("oa-depth-entered"),
               perspective: surface ? getComputedStyle(surface).perspective : "",
               layers: layers.length,
               stylesheet: !!style
             };
           }, theme.slug);
-          assert.ok(depthAudit.surface && depthAudit.stylesheet && depthAudit.layers > 0,
+          assert.ok(depthAudit.surface && depthAudit.entered && depthAudit.stylesheet && depthAudit.layers > 0,
             theme.slug + ": 3D depth runtime belum mengikat surface/layer " + JSON.stringify(depthAudit));
           assert.notEqual(depthAudit.perspective, "none",
             theme.slug + ": perspektif 3D tidak aktif " + JSON.stringify(depthAudit));
