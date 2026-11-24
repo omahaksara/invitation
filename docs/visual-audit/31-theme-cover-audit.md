@@ -42,3 +42,20 @@ Use these as directions for individual theme concepts, and confirm the design ag
 ## Safety boundary
 
 This audit does not authorize changes to client invitation records, client photos, slugs, production links, RSVP/guestbook endpoints or contracts, Apps Script/Sheet mappings, gift/payment details, QR assets, or backend behavior. Changes must remain limited to theme presentation and isolated demo fixtures.
+
+## Re-audit after browser run #103 — 24 November 2026
+
+**Evidence:** 31 desktop cover screenshots and 31 mobile screenshots from [run #103](https://github.com/omahaksara/invitation/actions/runs/45296070941), head `0f0913239a876c9650bd4c708b1e79253e67900e`. The full contact sheet confirms that the shared demo couple photo is still masking some of the differences, but it also exposes a cluster of covers using near-identical centered text over a full-bleed photo.
+
+### Completed in the current follow-up
+- **Kinze:** desktop cover changed to an asymmetric editorial split: quiet typographic column on the left and full-height portrait on the right. Mobile retains a centered cover treatment with a restrained frame.
+- **Sirein:** cover changed to an ivory portrait-arch composition with a compact editorial text block below the portrait. Short-height viewport rules reduce the portrait and spacing so the open action remains reachable.
+- These are presentation-only changes. No invitation data, feature contracts, links, or backend behavior were changed.
+
+### Next visual pass
+1. Review the new Kinze and Sirein screenshots from the next CI run at desktop, mobile, and short-height desktop sizes.
+2. Give the remaining repeated full-bleed compositions their own layouts in small groups. Prioritize Romantic Floral, Taupe, Aksara Signature, Aksara Velora, Army, and Karsa, but do not force every theme into a different layout if its existing composition is already distinctive.
+3. Replace the one-photo demo limitation only with explicitly isolated visual QA assets; never change client photos or production fixture references.
+4. Keep the PR Draft until the new screenshots are reviewed and all functional checks pass.
+
+The 31/31 browser result from run #103 is the baseline, not proof that the two new cover changes have already passed. Their verification belongs to the next run.
