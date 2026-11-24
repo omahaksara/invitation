@@ -76,7 +76,7 @@
 (() => {
   if (!window.OAThemePrograms) return;
   window.OAThemePrograms.register("botanical-garden", {
-    activate({ root, navigation, observe, addCleanup, reducedMotion }) {
+    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "botanical-garden";
       style.textContent = "\n[data-oa-botanical-motion=\"ready\"] .cover-orbit{animation:oaBotanicalOrbit 28s linear 1 both}\n[data-oa-botanical-motion=\"ready\"] .oa-botanical-reveal{opacity:0;transform:translate3d(0,26px,0) rotate(-.6deg);transition:opacity 1000ms ease,transform 1200ms cubic-bezier(.16,.8,.2,1)}\n[data-oa-botanical-motion=\"ready\"] .oa-botanical-reveal.oa-botanical-visible{opacity:1;transform:none}\n[data-oa-botanical-motion=\"ready\"] .person-card img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}\n[data-oa-botanical-motion=\"ready\"] .person-card.oa-botanical-visible img{transform:scale(1.045)}\n@keyframes oaBotanicalOrbit{to{transform:rotate(360deg)}}\n@media(prefers-reduced-motion:reduce){[data-oa-botanical-motion=\"ready\"] .cover-orbit{animation:none}[data-oa-botanical-motion=\"ready\"] .oa-botanical-reveal{opacity:1;transform:none;transition:none}}";
