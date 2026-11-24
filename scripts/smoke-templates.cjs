@@ -184,7 +184,7 @@ for (const slug of activeThemeSlugs) {
       return;
     }
     const target = path.resolve(root, "." + pathname);
-    if (/^\\/clients\\/[^/]+\\/data\\.json$/i.test(pathname)) {
+    if (/^\/clients\/[^/]+\/data\.json$/i.test(pathname)) {
       response.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
       response.end("Protected client JSON is not served by browser smoke.");
       return;
