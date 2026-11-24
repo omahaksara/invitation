@@ -124,3 +124,14 @@ The earlier notes saying browser smoke was intentionally skipped describe a temp
 ## Luma cover composition refinement
 
 Luma's cover presentation CSS now shifts from a full-bleed cinematic photo with a centered arched glass panel to a paper-and-portrait layout: desktop uses a warm paper field with a portrait panel on the right and typography on the left; mobile stacks the portrait above the invitation text panel. This is a presentation-only override. Rendered confirmation is pending the current browser smoke artifact.
+
+
+## Cinematic re-art direction — 24 November 2026
+
+- **Romantic Floral** now uses a full-bleed cinematic cover with left-aligned stacked name hierarchy, a controlled image vignette, restrained orbital linework, photo/name reveal choreography, and a curtain-style exit.
+- Desktop keeps the photo immersive; mobile transitions to a top-photo/lower-copy composition with a diagonal image edge and safe-area-aware CTA.
+- Reduced-motion disables the cover choreography and restores a static presentation.
+- The change is CSS-only in `templates/romantic-floral/index.html`; no markup bindings, links, IDs, forms, data, or backend contracts changed.
+- Commit: `86f941dfd17548e4277df5618e456af5fec292d8`.
+
+**Verification status:** the previous screenshot artifact from run #62 / HEAD `13ce40c5c7104256d7985c523376b35112fc4fa4` predates this change and is not evidence for the new composition. The current PR head has no PR-triggered workflow run or commit status reported by the available GitHub checks at this checkpoint. Browser screenshots, runtime checks, and CI for the new SHA remain pending; do not treat this theme as visually verified yet.
