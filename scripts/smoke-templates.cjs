@@ -226,6 +226,27 @@ for (const slug of activeThemeSlugs) {
           return el && el.textContent.trim() === "Arkan";
         }, undefined, { timeout: 10000 });
 
+        const depthMotionPilots = new Set([
+          "karsa", "royal-vintage", "sirein", "botanical-garden", "nexus", "aksara-nocturne"
+        ]);
+        if (depthMotionPilots.has(theme.slug)) {
+          const depthAudit = await page.evaluate(slug => {
+            const surface = document.querySelector('[data-oa-depth-surface="' + slug + '"]');
+            const layers = document.querySelectorAll('[data-oa-depth-layer="' + slug + '"]');
+            const style = document.querySelector('style[data-oa-depth-motion="' + slug + '"]');
+            return {
+              surface: !!surface,
+              perspective: surface ? getComputedStyle(surface).perspective : "",
+              layers: layers.length,
+              stylesheet: !!style
+            };
+          }, theme.slug);
+          assert.ok(depthAudit.surface && depthAudit.stylesheet && depthAudit.layers > 0,
+            theme.slug + ": 3D depth runtime belum mengikat surface/layer " + JSON.stringify(depthAudit));
+          assert.notEqual(depthAudit.perspective, "none",
+            theme.slug + ": perspektif 3D tidak aktif " + JSON.stringify(depthAudit));
+        }
+
         assert.equal((await page.locator("#nama-tamu").textContent()).trim(), "Nama Tamu",
           theme.slug + ": nama tamu tidak terbaca");
         assert.equal(await page.locator("#rsvp-form").count(), 1,
