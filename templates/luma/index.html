@@ -92,6 +92,41 @@
 @media(max-width:360px){.luma-window{width:91vw;padding:22px 15px}.luma-cover h1{font-size:2.65rem}.luma-couple{grid-template-columns:1fr;max-width:310px;margin:auto}.luma-person__photo{max-height:390px}.luma-countdown span{font-size:.5rem}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.luma-glass,.luma-window,.luma-page .event-card,.luma-page .gift-card{background:rgba(35,30,25,.96)}}
 @media(prefers-reduced-motion:reduce){.luma-cover *,.luma-page *{animation:none!important;transition:none!important;scroll-behavior:auto!important}#app .luma-page .luma-reveal{opacity:1!important;transform:none!important;filter:none!important}}
+
+/* LUMA — paper-and-portrait composition: the photograph becomes an architectural panel, not a full-screen backdrop. */
+.luma-cover{display:flex;align-items:center;justify-content:flex-start;padding:clamp(34px,7vw,108px);background:#eee7db;color:#29241f}
+.luma-cover__photo{inset:5% 4% 5% auto;width:42%;height:90%;opacity:1;filter:saturate(.72) contrast(1.02);transform:none;animation:none;object-position:center 38%;border-radius:48% 48% 3px 3px;box-shadow:0 28px 76px rgba(48,38,27,.22)}
+.luma-cover:before,.luma-cover:after{display:none}
+.luma-bokeh{inset:auto 3% 4% auto;width:44%;height:90%;border:1px solid rgba(157,126,88,.42);border-radius:48% 48% 3px 3px;background:none;filter:none}
+.luma-window{width:min(49%,590px);min-height:0;display:block;margin:0 auto 0 0;padding:0;border:0;border-radius:0;outline:0;box-shadow:none;transform:none;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.luma-window:before,.luma-window:after{display:none}
+.luma-cover__content{max-width:520px;text-align:left;text-shadow:none}
+.luma-eyebrow,.luma-kicker{color:#92734d}
+.luma-cover h1{color:#342b23;font-size:clamp(3.4rem,6vw,6.4rem);line-height:.9;letter-spacing:-.035em;margin:22px 0 18px}
+.luma-cover h1 em{color:#a37d50}
+.luma-cover__date{color:#80684d}
+.luma-cover__guest{color:#6d6256;margin:26px 0 20px}
+.luma-open{background:#342b23;color:#f7efe4;border-color:#342b23;border-radius:2px;box-shadow:none}
+.luma-open:hover{background:#80684d;box-shadow:none}
+@media(max-width:640px){
+ .luma-cover{display:block;padding:0;background:#eee7db}
+ .luma-cover__photo{inset:4% 10% auto;width:80%;height:47%;border-radius:48% 48% 2px 2px;object-position:center 36%;box-shadow:0 18px 42px rgba(48,38,27,.18)}
+ .luma-bokeh{inset:3% 8% auto;width:84%;height:49%;border-radius:48% 48% 2px 2px}
+ .luma-window{position:absolute;left:7%;right:7%;bottom:3%;width:auto;min-height:0;margin:0;padding:22px 20px 24px;background:#f8f3e9;border:1px solid rgba(157,126,88,.34);box-shadow:0 14px 40px rgba(48,38,27,.12)}
+ .luma-cover__content{max-width:none;text-align:center}
+ .luma-cover h1{font-size:clamp(2.8rem,11vw,4.3rem);margin:12px 0}
+ .luma-cover__guest{margin:13px 0 14px;font-size:.72rem}
+ .luma-cover__date{font-size:.62rem}
+ .luma-open{padding:11px 19px}
+}
+@media(max-height:720px) and (min-width:641px){
+ .luma-cover{padding:22px 5vw}
+ .luma-cover__photo{inset:3% 3% 3% auto;height:94%}
+ .luma-cover h1{font-size:clamp(2.7rem,5.2vw,4.8rem);margin:14px 0}
+ .luma-cover__guest{margin:15px 0}
+}
+@media(prefers-reduced-motion:reduce){.luma-cover__photo{animation:none!important;transform:none!important}.luma-window,.luma-cover__content{transition:none!important}}
+
 </style>
 <div id="cover-section" class="luma-cover">
   <img class="luma-cover__photo" data-bind="cover.image" alt="Sampul undangan" fetchpriority="high">
