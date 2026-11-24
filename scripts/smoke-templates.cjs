@@ -530,6 +530,49 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
+        // Verify the scheduled auto-scroll before gallery interaction, then leave it paused.
+        // This keeps Playwright's gallery actionability checks deterministic without skipping the scroll test.
+        const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
+        if (await autoScroll.isEnabled()) {
+          // The invitation should begin scrolling automatically after it is opened.
+          await page.waitForFunction(() => {
+            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
+            // A short invitation may reach its end before the assertion runs.
+            // Accept either an active control or proof that the page has begun moving.
+            return button?.getAttribute("aria-pressed") === "true" || window.scrollY > 24;
+          }, undefined, { timeout: 3500 });
+          const autoState = await page.evaluate(() => ({
+            pressed: document.querySelector('#oa-floating-controls [data-oa-action="auto"]')?.getAttribute("aria-pressed"),
+            scrollY: window.scrollY
+          }));
+          assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
+            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
+          // A short invitation can already have reached the bottom and stopped
+          // automatically. In that case, first start it manually, then test pause.
+          if (autoState.pressed === "true") {
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          } else {
+            assert.ok(autoState.scrollY > 24,
+              theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
+            await autoScroll.click();
+            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
+          }
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
+          await page.waitForTimeout(120);
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
+            theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": tombol auto-scroll tidak berhenti");
+        }
         const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
           // Smooth scrolling is verified above as a product behavior. Disable only
@@ -623,47 +666,6 @@ for (const slug of activeThemeSlugs) {
         }));
         assert.ok(motionAudit.left + motionAudit.right > 0 && motionAudit.up > 0,
           theme.slug + ": animasi arah samping dan naik belum diterapkan");
-        const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
-        if (await autoScroll.isEnabled()) {
-          // The invitation should begin scrolling automatically after it is opened.
-          await page.waitForFunction(() => {
-            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
-            // A short invitation may reach its end before the assertion runs.
-            // Accept either an active control or proof that the page has begun moving.
-            return button?.getAttribute("aria-pressed") === "true" || window.scrollY > 24;
-          }, undefined, { timeout: 3500 });
-          const autoState = await page.evaluate(() => ({
-            pressed: document.querySelector('#oa-floating-controls [data-oa-action="auto"]')?.getAttribute("aria-pressed"),
-            scrollY: window.scrollY
-          }));
-          assert.ok(autoState.pressed === "true" || autoState.scrollY > 24,
-            theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-          // A short invitation can already have reached the bottom and stopped
-          // automatically. In that case, first start it manually, then test pause.
-          if (autoState.pressed === "true") {
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          } else {
-            assert.ok(autoState.scrollY > 24,
-              theme.slug + ": auto-scroll tidak mulai otomatis setelah undangan dibuka");
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-              theme.slug + ": auto-scroll tidak dapat dimulai manual setelah mencapai akhir");
-            await autoScroll.click();
-            assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-              theme.slug + ": tombol auto-scroll tidak menjeda gulir otomatis");
-          }
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": tombol auto-scroll tidak dapat dimulai manual");
-          await page.waitForTimeout(120);
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "true",
-            theme.slug + ": auto-scroll berhenti tanpa interaksi pengguna");
-          await autoScroll.click();
-          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
-            theme.slug + ": tombol auto-scroll tidak berhenti");
-        }
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-desktop.png`));
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
