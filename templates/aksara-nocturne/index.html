@@ -96,7 +96,7 @@ body{background:var(--nocturne);color:var(--ivory);font-family:Montserrat, sans-
 (() => {
   if (!window.OAThemePrograms) return;
   window.OAThemePrograms.register("aksara-nocturne", {
-    activate({ root, navigation, observe, addCleanup, reducedMotion }) {
+    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "aksara-nocturne";
       style.textContent = "\n[data-oa-nocturne-motion=\"ready\"] .panel,[data-oa-nocturne-motion=\"ready\"] .cover{will-change:transform,opacity}\n[data-oa-nocturne-motion=\"ready\"] .oa-nocturne-reveal{opacity:0;transform:translate3d(0,24px,0) scale(.985);filter:blur(5px);transition:opacity 950ms ease,transform 1100ms cubic-bezier(.16,.8,.2,1),filter 950ms ease}\n[data-oa-nocturne-motion=\"ready\"] .oa-nocturne-reveal.oa-nocturne-visible{opacity:1;transform:none;filter:none}\n[data-oa-nocturne-motion=\"ready\"] .panel.oa-nocturne-reveal.oa-nocturne-visible{box-shadow:0 24px 72px rgba(0,0,0,.32),0 0 32px rgba(214,188,135,.07)}\n@media(prefers-reduced-motion:reduce){[data-oa-nocturne-motion=\"ready\"] .oa-nocturne-reveal{opacity:1;transform:none;filter:none;transition:none}}";
