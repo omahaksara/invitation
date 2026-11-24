@@ -15,6 +15,9 @@ for (const contract of [
   "new AbortController()",
   "prefers-reduced-motion",
   "IntersectionObserver",
+  "depthMotion(options = {})",
+  "requestAnimationFrame(render)",
+  "prefers-reduced-motion:reduce",
   "pagehide"
 ]) {
   assert.ok(runtime.includes(contract), "Runtime theme program kehilangan kontrak: " + contract);
@@ -82,4 +85,22 @@ for (const slug of programs) {
   assert.ok(template.includes("prefers-reduced-motion:reduce"),
     slug + ": navigasi atau overlay belum menyediakan fallback gerak minim.");
 }
+const karsa = read("templates/karsa/index.html");
+assert.ok(karsa.includes("depthMotion({ surface:"), "karsa: 3D depth motion belum dipasang.");
+assert.ok(karsa.includes("depthMotion })"), "karsa: API depthMotion belum diterima oleh program tema.");
+const royalvintage = read("templates/royal-vintage/index.html");
+assert.ok(royalvintage.includes("depthMotion({ surface:"), "royal-vintage: 3D depth motion belum dipasang.");
+assert.ok(royalvintage.includes("depthMotion })"), "royal-vintage: API depthMotion belum diterima oleh program tema.");
+const sirein = read("templates/sirein/index.html");
+assert.ok(sirein.includes("depthMotion({ surface:"), "sirein: 3D depth motion belum dipasang.");
+assert.ok(sirein.includes("depthMotion })"), "sirein: API depthMotion belum diterima oleh program tema.");
+const botanicalgarden = read("templates/botanical-garden/index.html");
+assert.ok(botanicalgarden.includes("depthMotion({ surface:"), "botanical-garden: 3D depth motion belum dipasang.");
+assert.ok(botanicalgarden.includes("depthMotion })"), "botanical-garden: API depthMotion belum diterima oleh program tema.");
+const nexus = read("templates/nexus/index.html");
+assert.ok(nexus.includes("depthMotion({ surface:"), "nexus: 3D depth motion belum dipasang.");
+assert.ok(nexus.includes("depthMotion })"), "nexus: API depthMotion belum diterima oleh program tema.");
+const aksaranocturne = read("templates/aksara-nocturne/index.html");
+assert.ok(aksaranocturne.includes("depthMotion({ surface:"), "aksara-nocturne: 3D depth motion belum dipasang.");
+assert.ok(aksaranocturne.includes("depthMotion })"), "aksara-nocturne: API depthMotion belum diterima oleh program tema.");
 console.log("Theme program contract passed for " + programs.length + " themes.");
