@@ -1,0 +1,234 @@
+{
+  "slug": "demo-katalog",
+  "status": "published",
+  "theme": "lumiere-bloom",
+  "demoMode": true,
+  "guest": {
+    "defaultName": "Tamu Undangan"
+  },
+  "cover": {
+    "title": "Undangan Pernikahan",
+    "subtitle": "The Wedding of",
+    "image": "cover.jpg",
+    "heroImage": "cover.jpg",
+    "eyebrow": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+    "dateLabel": "Sabtu, 12 Juni 2027",
+    "buttonText": "Buka Undangan"
+  },
+  "couple": {
+    "groom": {
+      "nickname": "Arkan",
+      "fullName": "Arkan Mahendra",
+      "parents": "Putra dari Bapak Fajar Mahendra dan Ibu Ratih Puspitasari",
+      "photo": "mempelai-pria.jpg",
+      "instagram": "",
+      "initial": "A"
+    },
+    "bride": {
+      "nickname": "Arunika",
+      "fullName": "Arunika Prameswari",
+      "parents": "Putri dari Bapak Arya Pratama dan Ibu Larasati Wulandari",
+      "photo": "mempelai-wanita.jpg",
+      "instagram": "",
+      "initial": "A"
+    }
+  },
+  "quote": {
+    "arab": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "text": "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
+    "source": "Al-Qur'an, QS. Ar-Rum: 21"
+  },
+  "events": {
+    "akad": {
+      "location": "Lokasi Acara Arkan & Arunika",
+      "address": "Lokasi sesuai titik Google Maps",
+      "timezone": "Asia/Makassar",
+      "title": "Akad Nikah",
+      "date": "Sabtu, 12 Juni 2027",
+      "dateISO": "2027-06-12",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "time": "08.00 – 10.00 WITA",
+      "mapQuery": "0.123456,120.654321",
+      "mapNote": "Lokasi sintetis untuk pengujian browser; bukan alamat acara produksi."
+    },
+    "resepsi": {
+      "location": "Lokasi Acara Arkan & Arunika",
+      "address": "Lokasi sesuai titik Google Maps",
+      "timezone": "Asia/Makassar",
+      "title": "Resepsi Pernikahan",
+      "date": "Sabtu, 12 Juni 2027",
+      "dateISO": "2027-06-12",
+      "startTime": "11:00",
+      "time": "11.00 – 14.00 WITA",
+      "mapQuery": "0.123456,120.654321",
+      "mapNote": "Lokasi sintetis untuk pengujian browser; bukan alamat acara produksi."
+    }
+  },
+  "countdown": {
+    "targetDate": "2027-06-12T08:00:00+08:00"
+  },
+  "story": [
+    {
+      "tanggal": "2022",
+      "judul": "Sebuah Pertemuan",
+      "cerita": "Tidak semua hal indah datang dengan rencana. Dari pertemuan sederhana, tumbuh rasa ingin mengenal lebih dekat. Percakapan kecil menjadi awal dari kisah yang perlahan menemukan maknanya.",
+      "foto": "foto-01.jpg"
+    },
+    {
+      "tanggal": "2023–2024",
+      "judul": "Belajar Saling Mengenal",
+      "cerita": "Hari demi hari mengajarkan kami bahwa kedekatan dibangun lewat kejujuran, kesediaan mendengarkan, dan perhatian pada hal-hal sederhana. Kami belajar menerima perbedaan, saling menghargai, dan bertumbuh bersama.",
+      "foto": "foto-02.jpg"
+    },
+    {
+      "tanggal": "2025–2026",
+      "judul": "Memantapkan Niat",
+      "cerita": "Dengan niat yang semakin teguh, kami melibatkan keluarga dalam langkah yang lebih serius. Doa dan restu orang-orang terkasih menguatkan keyakinan kami untuk melangkah menuju masa depan bersama.",
+      "foto": "foto-03.jpg"
+    },
+    {
+      "tanggal": "12 Juni 2027",
+      "judul": "Menuju Hari Bahagia",
+      "cerita": "Kini, dengan memohon ridha Allah SWT, kami bersiap mengikat janji dalam pernikahan. Semoga perjalanan baru ini menjadi ruang untuk saling menjaga, menguatkan, dan menghadirkan ketenangan sepanjang usia.",
+      "foto": "foto-04.jpg"
+    }
+  ],
+  "gallery": [
+    "foto-01.jpg",
+    "foto-02.jpg",
+    "foto-03.jpg",
+    "foto-04.jpg",
+    "foto-05.jpg",
+    "foto-06.jpg",
+    "foto-07.jpg",
+    "foto-08.jpg",
+    "foto-09.jpg",
+    "foto-10.jpg"
+  ],
+  "gifts": {
+    "message": "Doa restu dan kehadiran Anda merupakan hadiah terindah bagi kami. Bagian hadiah digital ini hanya simulasi tampilan dan tidak dapat digunakan untuk transaksi.",
+    "accounts": [
+      {
+        "paymentType": "bank",
+        "provider": "Bank BCA",
+        "accountHolder": "Arkan Mahendra • DEMO",
+        "accountNumber": "DEMO-BCA-0001",
+        "copyable": false,
+        "demoOnly": true,
+        "demoNote": "Data rekening simulasi — bukan rekening aktif.",
+        "enabled": true
+      },
+      {
+        "paymentType": "bank",
+        "provider": "Bank BRI",
+        "accountHolder": "Arunika Prameswari • DEMO",
+        "accountNumber": "DEMO-BRI-0002",
+        "copyable": false,
+        "demoOnly": true,
+        "demoNote": "Data rekening simulasi — bukan rekening aktif.",
+        "enabled": true
+      },
+      {
+        "paymentType": "ewallet",
+        "provider": "DANA",
+        "accountHolder": "Arkan Mahendra • DEMO",
+        "accountNumber": "08XX-XXXX-0001",
+        "copyable": false,
+        "demoOnly": true,
+        "demoNote": "Nomor dompet digital disamarkan — bukan akun aktif.",
+        "enabled": true
+      },
+      {
+        "paymentType": "ewallet",
+        "provider": "GoPay",
+        "accountHolder": "Arunika Prameswari • DEMO",
+        "accountNumber": "08XX-XXXX-0002",
+        "copyable": false,
+        "demoOnly": true,
+        "demoNote": "Nomor dompet digital disamarkan — bukan akun aktif.",
+        "enabled": true
+      },
+      {
+        "paymentType": "qris",
+        "provider": "QRIS • Simulasi",
+        "accountHolder": "Omah Aksara • DEMO",
+        "accountNumber": "DEMO — BUKAN KODE PEMBAYARAN",
+        "copyable": false,
+        "demoOnly": true,
+        "demoNote": "QRIS ilustrasi untuk pratinjau katalog. Tidak untuk dipindai atau digunakan bertransaksi.",
+        "enabled": true,
+        "qrCode": "qris-demo.jpg"
+      }
+    ]
+  },
+  "rsvp": {
+    "link": "",
+    "enabled": true,
+    "whatsappNumber": "",
+    "contactName": "",
+    "maxGuestCount": 2,
+    "demoOnly": true
+  },
+  "demoGreetings": [
+    {
+      "name": "Keluarga Arkan",
+      "message": "Barakallahu laka wa baraka ‘alaika wa jama‘a bainakuma fii khair. Semoga menjadi keluarga yang sakinah, mawaddah, dan rahmah."
+    },
+    {
+      "name": "Keluarga Arunika",
+      "message": "Selamat menempuh kehidupan baru. Semoga rumah tangga selalu dipenuhi ketenangan, kasih sayang, dan keberkahan."
+    },
+    {
+      "name": "Sahabat",
+      "message": "Semoga Arkan dan Arunika selalu saling menjaga, menguatkan, dan bertumbuh bersama dalam setiap keadaan."
+    }
+  ],
+  "schemaVersion": 2,
+  "features": {
+    "countdown": true,
+    "calendar": true,
+    "loveStory": true,
+    "gallery": true,
+    "video": false,
+    "maps": true,
+    "music": true,
+    "gifts": true,
+    "rsvp": true,
+    "guestbook": true,
+    "guestName": true,
+    "hashtag": true,
+    "quotes": true,
+    "bank": true,
+    "ewallet": true,
+    "qris": true,
+    "mapEmbed": true,
+    "mapNavigation": true
+  },
+  "seo": {
+    "title": "Arkan Mahendra & Arunika Prameswari | Undangan Pernikahan",
+    "description": "Pratinjau demo undangan digital Arkan dan Arunika dari Omah Aksara."
+  },
+  "opening": {
+    "text": "Assalamu’alaikum warahmatullahi wabarakatuh.\n\nDengan memohon rahmat dan ridha Allah SWT, serta penuh rasa syukur atas karunia-Nya, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari hari bahagia pernikahan kami.\n\nKehadiran serta doa restu yang diberikan akan menjadi kebahagiaan dan kenangan berharga bagi kami.\n\nWassalamu’alaikum warahmatullahi wabarakatuh."
+  },
+  "hashtag": "#ArkanArunikaWedding",
+  "guestbook": {
+    "enabled": true,
+    "maxMessageLength": 500,
+    "demoOnly": true
+  },
+  "integrations": {},
+  "media": {
+    "music": {
+      "id": "wedding-demo-existing",
+      "title": "Musik Undangan Arkan & Arunika",
+      "category": "instrumental",
+      "src": "../../assets/music/library/wedding-demo-existing.mp3"
+    }
+  },
+  "eventMode": "combined",
+  "site": {
+    "timezone": "Asia/Makassar"
+  }
+}
