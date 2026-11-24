@@ -97,3 +97,17 @@ The Karsa cover now has an explicit ampersand element so its position can be sty
 - Botanical Garden: its cover name row also now stacks the groom, centered ampersand, and bride vertically; this is a cover-only CSS adjustment.
 - A source review of nearby themes found several already had a dedicated centered ampersand line (including Aksara Nocturne, Calestial, Earty, Jendela Senja, and Kencana Jawa), so those were left unchanged.
  These changes affect only cover typography/layout; invitation data, links, forms, and backend contracts are unchanged. Static/backend CI should be checked on the resulting branch head. Browser smoke is intentionally skipped for PR #141 per the temporary workflow condition; visual confirmation on real rendered screenshots remains outstanding for this follow-up.
+
+
+### Second ampersand pass — additional cover templates
+
+A second source audit found seven more covers where the name separator was inline or visually attached to one name. Their cover markup/styles now give the ampersand its own centered line:
+- Aurelia Noir
+- Elegance
+- Gebyok Candra
+- Sagara
+- Sunda Watercolor
+- Lumina
+- Jendela Senja (source review showed the cover separator was inline, so it was refined in this pass)
+
+These are scoped to the cover title only. Footer signatures, section headings, guestbook labels, and other ordinary prose using “&” remain unchanged. The edits preserve the existing name data bindings and do not alter invitation data, slugs, links, RSVP/guestbook, or Apps Script contracts. Static/backend validation must be checked against the latest branch head; browser smoke remains intentionally skipped for PR #141, so rendered visual confirmation is still a separate release gate.
