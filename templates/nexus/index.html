@@ -866,7 +866,7 @@
 (() => {
   if (!window.OAThemePrograms) return;
   window.OAThemePrograms.register("nexus", {
-    activate({ root, navigation, observe, addCleanup, reducedMotion }) {
+    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
       const style = document.createElement("style");
       style.dataset.oaThemeProgram = "nexus";
       style.textContent = "\n[data-oa-nexus-motion=\"ready\"] .nexus-cover__visual{clip-path:inset(0 0 0 0);transition:clip-path 1400ms cubic-bezier(.75,0,.2,1)}\n[data-oa-nexus-motion=\"ready\"] .nexus-cover.oa-nexus-cover-ready .nexus-cover__visual{clip-path:inset(0 0 0 0)}\n[data-oa-nexus-motion=\"ready\"] .oa-nexus-reveal{opacity:0;transform:translate3d(0,18px,0) scale(.975);filter:blur(6px);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.2,.8,.2,1),filter 850ms ease}\n[data-oa-nexus-motion=\"ready\"] .oa-nexus-reveal.oa-nexus-visible{opacity:1;transform:none;filter:none}\n[data-oa-nexus-motion=\"ready\"] .nexus-section.oa-nexus-visible .nexus-section__head{letter-spacing:.12em;transition:letter-spacing .45s ease}\n@media(prefers-reduced-motion:reduce){[data-oa-nexus-motion=\"ready\"] .oa-nexus-reveal{opacity:1;transform:none;filter:none;transition:none}}";
