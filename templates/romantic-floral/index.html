@@ -82,6 +82,28 @@ html{scroll-behavior:smooth;scroll-padding-top:18px}
  .cover-monogram{font-size:clamp(3.8rem,13vw,6rem)}
 }
 
+
+/* Romantic Floral — ivory botanical editorial cover */
+@media(min-width:760px){
+ .cover{min-height:100svh;align-items:flex-start;justify-content:center;text-align:left;padding:clamp(34px,7vw,104px);padding-right:52%;background:radial-gradient(ellipse at 8% 12%,#fff9ec 0,transparent 45%),linear-gradient(135deg,#f7f0e5,#e8dccb)!important;color:#514438}
+ .cover-photo{inset:5% 4% 5% auto;width:43%;height:90%;opacity:1;filter:saturate(.82);object-position:center;border-radius:48% 48% 3px 3px;box-shadow:0 26px 70px rgba(67,52,37,.2);z-index:-1}
+ .cover:before{left:auto;right:3%;top:2%;width:12rem;height:12rem;border-color:rgba(151,119,77,.38);z-index:-1}
+ .cover:after{right:2.5%;top:3.5%;bottom:3.5%;width:46%;height:93%;border:1px solid rgba(151,119,77,.45);border-radius:48% 48% 3px 3px;pointer-events:none;background:none;z-index:-1}
+ .cover .eyebrow,.cover-kicker,.cover-foot{color:#8d7658}
+ .cover-monogram{color:#9a7950;text-align:left;margin:0 0 14px;font-size:clamp(4rem,8vw,6.5rem)}
+ .cover h1{justify-content:flex-start;color:#514438;font-size:clamp(3rem,6vw,5.4rem);max-width:620px}
+ .cover h1 i{color:#b58b58}.cover-line{margin-left:0;background:#b58b58}
+ .cover-date{color:#82694d}.guest-label,.guest-name{color:#6c5c4a}
+ .open-button{align-self:flex-start;background:#8d7658;color:#fffaf1;border-color:#8d7658;border-radius:2px}
+ .cover-foot{position:absolute;left:clamp(34px,7vw,104px);bottom:22px}
+}
+@media(max-width:759px){
+ .cover{background:linear-gradient(0deg,rgba(42,35,28,.82),rgba(42,35,28,.22)),#40362e!important}
+ .cover-photo{inset:0;width:100%;height:100%;opacity:.58;filter:saturate(.78);border-radius:0;object-position:center}
+ .cover:after{display:none}
+}
+@media(prefers-reduced-motion:reduce){.cover-photo{transition:none!important;transform:none!important}}
+
 </style>
 
 <div class="invite-shell">
