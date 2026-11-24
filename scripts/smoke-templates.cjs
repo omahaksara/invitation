@@ -471,7 +471,9 @@ for (const slug of activeThemeSlugs) {
         }));
         assert.ok(normalizedImageAudit.coverImage && normalizedImageAudit.coverImage === normalizedImageAudit.coverHeroImage,
           theme.slug + ": alias foto cover tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.coverHeroImage && !/^(?:https?:)?\\/\\//i.test(normalizedImageAudit.coverHeroImage),
+        assert.ok(normalizedImageAudit.coverHeroImage &&
+          !/^https?:/i.test(normalizedImageAudit.coverHeroImage) &&
+          !normalizedImageAudit.coverHeroImage.startsWith("//"),
           theme.slug + ": sumber cover demo harus berupa path aset relatif lokal " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.groomPhoto && normalizedImageAudit.bridePhoto,
           theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
