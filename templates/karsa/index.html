@@ -107,6 +107,22 @@ body {
 .disk-text-wrap.paused { animation-play-state: paused; }
 @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+
+/* Karsa: forest-green typographic invitation with a slim gold frame, not a generic photo overlay. */
+#cover{background:#18231d!important;color:#f1eadb!important;justify-content:flex-end!important;align-items:flex-start!important;padding:clamp(32px,8vw,110px)!important}
+#cover-image{opacity:.2!important;filter:grayscale(.7) saturate(.45)!important;transform:scale(1.02)!important}
+#cover .cover-gradient{background:linear-gradient(90deg,rgba(18,31,24,.97),rgba(18,31,24,.82) 58%,rgba(18,31,24,.28))!important}
+#cover>div.relative.z-10{width:min(100%,650px)!important;max-width:650px!important;text-align:left!important;padding:clamp(24px,5vw,56px)!important;border-left:1px solid #b89b6a!important;border-top:1px solid #b89b6a!important;background:linear-gradient(135deg,rgba(255,255,255,.045),transparent)!important}
+#cover>div.relative.z-10 h1{font-size:clamp(3.2rem,8vw,6rem)!important;line-height:.95!important;margin:24px 0 28px!important;color:#f4ecdc!important}
+#cover>div.relative.z-10 h1 span{display:block!important}
+#cover>div.relative.z-10 h1 span+span{margin-top:8px!important;color:#d2bd91!important;font-size:.7em!important}
+#cover>div.relative.z-10 .h-\[1px\]{margin-left:0!important;background:#b89b6a!important}
+#cover>div.relative.z-10 #nama-tamu{margin-bottom:28px!important;color:#e5d9c1!important}
+#cover .btn-open{border-color:#b89b6a!important;color:#f4ecdc!important;padding:15px 28px!important;letter-spacing:.22em!important;background:transparent!important}
+#cover .btn-open:hover{background:#b89b6a!important;color:#18231d!important}
+@media(max-width:600px){#cover{justify-content:flex-end!important;padding:22px!important}#cover>div.relative.z-10{padding:22px!important;width:100%!important}#cover>div.relative.z-10 h1{font-size:clamp(2.8rem,12vw,4.2rem)!important;margin:16px 0 20px!important}}
+@media(prefers-reduced-motion:reduce){#cover,#cover-image,#cover .btn-open{transition:none!important;animation:none!important}}
+
 </style>
 <!-- LUXURY COVER LAYER -->
 <section id="cover" class="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#111411]">
