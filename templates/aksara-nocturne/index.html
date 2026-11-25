@@ -127,6 +127,15 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       `;
       style.textContent += "\n.nocturne #cover.is-opening{animation:oaNocturnePortalClose 980ms cubic-bezier(.76,0,.18,1) both!important;pointer-events:none}\n@media(prefers-reduced-motion:reduce){.nocturne #cover.is-opening{animation:none!important;transform:none!important;clip-path:none!important}}";
       document.head.append(style);
+      // Match the shared invitation opener contract: start the theme's own
+      // cover exit before the core handler reveals the invitation content.
+      const openButton = root.querySelector("#open-btn");
+      const cover = root.querySelector("#cover");
+      const beginCoverExit = () => {
+        if (reducedMotion || !cover) return;
+        cover.classList.add("is-opening");
+      };
+      openButton?.addEventListener("click", beginCoverExit, { capture: true });
       root.dataset.oaNocturneMotion = "ready";
       const targets = root.querySelectorAll(".panel, .quote-section, .story-section, .event-grid, .gallery-section, .guestbook-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nocturne-reveal"));
@@ -135,6 +144,7 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       
       
       addCleanup(() => {
+        openButton?.removeEventListener("click", beginCoverExit, { capture: true });
         if (navigation) navigation.classList.remove("oa-nav-nocturne");
         delete root.dataset.oaNocturneMotion;
         
