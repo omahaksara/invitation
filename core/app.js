@@ -1,23 +1,6 @@
 (() => {
   "use strict";
 
-  // Register before invitation templates inject their own scripts/listeners.
-  // A window-capture fallback cannot be blocked by theme handlers on document/target.
-  window.addEventListener("click", event => {
-    const clickedOpen = event.target && event.target.closest
-      ? event.target.closest("#open-invitation-btn, #open-btn")
-      : null;
-    if (!clickedOpen) return;
-    const activeCover = document.getElementById("cover-section") || document.getElementById("cover");
-    window.setTimeout(() => {
-      if (!activeCover || activeCover.hidden || getComputedStyle(activeCover).display === "none") return;
-      activeCover.hidden = true;
-      activeCover.style.display = "none";
-      activeCover.classList.remove("is-opening");
-      clickedOpen.removeAttribute("aria-busy");
-    }, 1800);
-  }, true);
-
   document.addEventListener("DOMContentLoaded", initInvitation);
 
   async function activateTemplateScripts(root) {
@@ -1532,6 +1515,8 @@
         }
         setupReveal();
       }, { capture: true });
+      // Browser QA waits for this marker so it never races the shared click binding.
+      open.dataset.oaCoverReady = "true";
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
       document.body.classList.add("oa-invitation-opened");
