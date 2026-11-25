@@ -1469,6 +1469,11 @@
         open.dataset.oaOpening = "true";
         open.setAttribute("aria-busy", "true");
         const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        // Themes may opt into a named opening animation without changing the shared
+        // cover lifecycle or its legacy fallback behavior.
+        const customOpeningAnimation = cover?.dataset.oaOpeningAnimation || "";
+        const previousAnimation = cover?.style.getPropertyValue("animation") || "";
+        const previousAnimationPriority = cover?.style.getPropertyPriority("animation") || "";
         let coverFallback = null;
         const finishCover = () => {
           if (coverFallback !== null) window.clearTimeout(coverFallback);
@@ -1477,6 +1482,10 @@
             cover.hidden = true;
             cover.style.display = "none";
             cover.classList.remove("is-opening");
+            if (customOpeningAnimation) {
+              if (previousAnimation) cover.style.setProperty("animation", previousAnimation, previousAnimationPriority);
+              else cover.style.removeProperty("animation");
+            }
           }
           open.removeAttribute("aria-busy");
         };
@@ -1490,6 +1499,9 @@
           } else {
             cover.addEventListener("animationend", onCoverAnimationEnd);
             cover.classList.add("is-opening");
+            if (customOpeningAnimation) {
+              cover.style.setProperty("animation", customOpeningAnimation, "important");
+            }
             coverDuration = getAnimationTotalMs(cover);
             coverFallback = window.setTimeout(finishCover, Math.max(350, coverDuration + 280));
           }
