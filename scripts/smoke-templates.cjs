@@ -1122,6 +1122,10 @@ for (const slug of activeThemeSlugs) {
         await page.setViewportSize({ width: 360, height: 780 });
         await page.reload({ waitUntil: "commit", timeout: 15000 });
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        await page.waitForFunction(selector => {
+          const cover = document.querySelector(selector);
+          return !!cover && !cover.hidden && getComputedStyle(cover).display !== "none";
+        }, theme.cover, { timeout: 10000 });
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await auditCover(page, theme, "mobile-360");
