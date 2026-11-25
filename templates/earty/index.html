@@ -93,6 +93,24 @@ body,#app{background:#f2ecdf;color:#3e4738}
 .earty .wish-card{border-color:rgba(104,115,78,.34)}
 @media(max-width:650px){.earty .earty-card{padding:28px 18px 32px;border-radius:18px 18px 18px 5px}}
 
+
+/* Earthy Collection — architectural portrait crop with a grounded editorial text rail. */
+@media(min-width:761px){
+ .earty .cover{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:clamp(34px,7vw,100px);background:var(--earty)}
+ .earty .cover>img{inset:0 0 0 auto;width:54%;height:100%;object-fit:cover;object-position:center 34%;opacity:1;z-index:-2;filter:saturate(.72) contrast(1.08);clip-path:ellipse(105% 100% at 100% 50%);animation:eartyZoom 22s ease-in-out infinite alternate}
+ .earty .cover:after{background:linear-gradient(90deg,#071827 0%,#071827 36%,rgba(7,24,39,.92) 47%,rgba(7,24,39,.12) 100%)}
+ .earty .earty-card{width:min(46%,600px);max-width:600px;padding:0 28px 0 0;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left}
+ .earty .cover .eyebrow,.earty .cover .sub{text-align:left}
+ .earty .cover h1{font-size:clamp(3.4rem,6.4vw,6.3rem);line-height:.9;text-align:left}
+ .earty .cover .ornament{justify-content:flex-start;margin:20px 0}
+ .earty .cover .btn{border-radius:3px;padding:14px 24px}
+}
+@media(max-width:760px){
+ .earty .cover:after{background:linear-gradient(180deg,rgba(7,24,39,.04) 0%,rgba(7,24,39,.14) 32%,rgba(7,24,39,.9) 58%,#071827 100%)}
+ .earty .earty-card{background:rgba(7,24,39,.76);border-color:rgba(214,188,135,.78);box-shadow:0 16px 42px #0005}
+ .earty .cover h1{text-shadow:0 3px 20px #0008}
+}
+
 </style>
 <div class="earty" id="main-content">
 <section id="cover" class="cover">
