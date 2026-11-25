@@ -24,7 +24,8 @@ async function installThemeDemoFixture(page) {
       typeof event.mapNote === "string" && event.mapNote.length > 0
     ), "Isolated browser fixture must keep its synthetic venue unpinned until the test injects coordinates.");
     const requestUrl = new URL(route.request().url());
-    const requestedTheme = requestUrl.searchParams.get("theme") || "";
+    const frameUrl = route.request().frame().url() || page.url();
+    const requestedTheme = new URL(frameUrl).searchParams.get("theme") || "";
     const themeIndex = themes.findIndex(item => item.slug === requestedTheme);
     const coverPhotos = ["cover.jpg", "foto-01.jpg", "foto-02.jpg", "foto-03.jpg", "foto-04.jpg", "foto-05.jpg", "foto-06.jpg", "foto-07.jpg", "foto-08.jpg", "foto-09.jpg", "foto-10.jpg"];
     const coverAsset = coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
@@ -704,7 +705,7 @@ for (const slug of activeThemeSlugs) {
         }
         const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
-          await galleryImage.evaluate(image => image.scrollIntoView({ block: "center", behavior: "instant" }));
+          await galleryImage.scrollIntoViewIfNeeded();
           const galleryHandle = await galleryImage.elementHandle();
           await page.waitForFunction(image => {
             if (image.classList.contains("oa-motion-visible")) return true;
@@ -742,7 +743,7 @@ for (const slug of activeThemeSlugs) {
             frames: frames.map(frame => frame.src),
             notes: notes.map(note => note.textContent),
             mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
-            expectedMapLinks: events.map(event => event.mapUrl).filter(Boolean),
+            expectedMapLinks: events.map(event => event.mapsUrl).filter(Boolean),
             eventMode: window.__invitationData?.eventMode || "",
             eventCards: document.querySelectorAll("#event-list .event-card").length,
             scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
