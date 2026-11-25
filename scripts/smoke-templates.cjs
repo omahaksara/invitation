@@ -23,6 +23,13 @@ async function installThemeDemoFixture(page) {
       event && !event.coordinates && event.latitude == null && event.longitude == null &&
       typeof event.mapNote === "string" && event.mapNote.length > 0
     ), "Isolated browser fixture must keep its synthetic venue unpinned until the test injects coordinates.");
+    const requestUrl = new URL(route.request().url());
+    const requestedTheme = requestUrl.searchParams.get("theme") || "";
+    const themeIndex = themes.findIndex(item => item.slug === requestedTheme);
+    const coverPhotos = ["cover.jpg", "foto-01.jpg", "foto-02.jpg", "foto-03.jpg", "foto-04.jpg", "foto-05.jpg", "foto-06.jpg", "foto-07.jpg", "foto-08.jpg", "foto-09.jpg", "foto-10.jpg"];
+    const coverAsset = coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
+    fixture.cover.image = coverAsset;
+    fixture.cover.heroImage = coverAsset;
     fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
     delete fixture.cover.image;
     fixture.couple.groom.foto = fixture.couple.groom.photo;
@@ -215,6 +222,7 @@ for (const slug of activeThemeSlugs) {
   let browser;
   const failures = [];
   const motionEvidence = [];
+  const coverEvidence = [];
   try {
     await new Promise((resolve, reject) => {
       server.once("error", reject);
@@ -253,6 +261,10 @@ for (const slug of activeThemeSlugs) {
           return Array.from(counts.entries()).filter(([, count]) => count > 1).map(([id, count]) => ({ id, count }));
         });
         assert.deepEqual(duplicateIds, [], theme.slug + ": duplicate HTML IDs " + JSON.stringify(duplicateIds));
+        const coverAsset = await page.evaluate(() =>
+          window.__invitationData?.cover?.heroImage || window.__invitationData?.cover?.image || ""
+        );
+        coverEvidence.push({ theme: theme.slug, asset: String(coverAsset).split("/").pop() });
         if (theme.slug === "atelier-editorial") {
           assert.equal(await page.locator(".atelier-page").count(), 1,
             "atelier-editorial: namespace halaman mandiri tidak ditemukan");
@@ -723,14 +735,11 @@ for (const slug of activeThemeSlugs) {
           const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
           const eventSource = window.__invitationData?.__renderEvents || window.__invitationData?.events || {};
           const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource);
-          const eventSource = window.__invitationData?.__renderEvents || window.__invitationData?.events || {};
-          const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource);
           return {
             frames: frames.map(frame => frame.src),
             notes: notes.map(note => note.textContent),
             mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
             expectedMapLinks: events.map(event => event.mapUrl).filter(Boolean),
-            expectedMapLinks: events.map(event => event.mapsUrl).filter(Boolean),
             eventMode: window.__invitationData?.eventMode || "",
             eventCards: document.querySelectorAll("#event-list .event-card").length,
             scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
@@ -1251,6 +1260,13 @@ for (const slug of activeThemeSlugs) {
     if (server.listening) await new Promise(resolve => server.close(resolve));
   }
   fs.writeFileSync(path.join(screenshotDir, "motion-evidence.json"), JSON.stringify({ themes: motionEvidence }, null, 2));
+  const uniqueCoverAssets = new Set(coverEvidence.map(item => item.asset).filter(Boolean));
+  fs.writeFileSync(path.join(screenshotDir, "cover-photo-evidence.json"), JSON.stringify({
+    themes: coverEvidence,
+    uniqueCoverAssetCount: uniqueCoverAssets.size
+  }, null, 2));
+  assert.ok(uniqueCoverAssets.size >= 10,
+    "Visual QA fixture must exercise at least 10 distinct demo cover photos; found " + uniqueCoverAssets.size);
   assert.equal(failures.length, 0, failures.join("\n"));
 })().catch(error => {
   console.error(error);
