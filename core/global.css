@@ -1459,22 +1459,3 @@ html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezie
   }
 }
 
-
-/* Mobile dock: keep controls inside the visible pill while preserving
-   horizontal access to secondary actions on narrow screens. */
-@media (max-width: 600px) {
-  .oa-floating-controls {
-    box-sizing: border-box;
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
-    padding-inline: 6px;
-  }
-  .oa-floating-controls::-webkit-scrollbar { display: none; }
-  .oa-floating-controls button {
-    flex: 0 0 auto;
-    min-width: 40px;
-    padding-inline: 8px;
-  }
-}
