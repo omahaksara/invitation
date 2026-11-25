@@ -1448,7 +1448,7 @@ html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezie
     width:auto!important;
     min-width:0!important;
   }
-  #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap > button {
+  #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap > button.oa-nav-more {
     flex:1 1 0!important;
     width:100%!important;
     min-width:0!important;
