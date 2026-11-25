@@ -60,6 +60,7 @@ Programs must be independently removable. Removing a decorative or motion progra
 - Prefer transform and opacity for continuous motion; avoid layout-thrashing animation.
 - Respect `prefers-reduced-motion` and provide a meaningful static/reduced alternative.
 - Pause or clean up offscreen/inactive animation loops.
+- The shared runtime may provide a subtle 3D cover-depth fallback only when a theme has not supplied its own depth choreography; it must not override the theme's transforms or composition.
 - Never make content visibility depend solely on an animation successfully running.
 
 ## Overlay and navigation principles
@@ -72,7 +73,7 @@ The shared navigation contract must remain usable and consistent in function. It
 
 This architecture is a presentation and interaction refactor only.
 
-- Do not edit, generate into, or use as a mutable test fixture any `clients/*/data.json` file, including `clients/demo-katalog/data.json`. Browser smoke tests must load a sanitized synthetic fixture from `tests/fixtures/theme-demo.json`; the static test server rejects direct reads of client JSON.
+- Never alter live client invitations under `clients/*/data.json`. `clients/demo-katalog/data.json` is the separately managed public catalog demo and may be updated only for explicitly approved demo content, such as the verified Omah Aksara demo location; it is never a browser-test fixture. Browser smoke tests must load the sanitized synthetic fixture from `tests/fixtures/theme-demo.json`, and the static test server rejects direct reads of client JSON.
 - Do not change RSVP or guestbook payload fields, endpoint URLs, Apps Script IDs, sheet mappings, or submission semantics.
 - Do not migrate, recreate, or ask clients to reconnect Google Sheets.
 - Do not change gifts, bank details, QR assets, production links, or storage/backend contracts.
@@ -105,7 +106,7 @@ A theme is not complete because it renders or passes static validation. Review t
 
 ## Implemented foundation (PR #141)
 
-- Added `core/theme-programs.js` with slug-based registration, activation, cleanup, cancellation signal, reduced-motion context, and reveal observation.
+- Added `core/theme-programs.js` with slug-based registration, activation, cleanup, cancellation signal, reduced-motion context, reveal observation, and a guarded 3D cover-depth fallback for themes without custom depth choreography.
 - Theme programs receive invitation data through a recursive read-only view; they cannot mutate the shared invitation object through the program API.
 - The shared renderer activates the selected theme program only after the template scripts and invitation content are ready. A missing or failing optional program does not block the base invitation renderer.
 - Independent motion programs are implemented for Karsa, Royal Vintage, Aksara Nocturne, Sirein, Botanical Garden, and Nexus. Their visual treatments differ: editorial stagger, framed cover/card reveal, dark panel depth, sage editorial mask, botanical orbit/reveal, and cinematic portal treatment.
