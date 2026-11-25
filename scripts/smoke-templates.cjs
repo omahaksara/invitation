@@ -27,7 +27,14 @@ async function installThemeDemoFixture(page) {
     const requestedTheme = new URL(frameUrl).searchParams.get("theme") || "";
     const themeIndex = themes.findIndex(item => item.slug === requestedTheme);
     const coverPhotos = ["cover.jpg", "foto-01.jpg", "foto-02.jpg", "foto-03.jpg", "foto-04.jpg", "foto-05.jpg", "foto-06.jpg", "foto-07.jpg", "foto-08.jpg", "foto-09.jpg", "foto-10.jpg"];
-    const coverAsset = coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
+    // Avoid the novelty-costume photo on formal invitation covers. These three
+    // compositions use formal/heritage portraits from the isolated demo set.
+    const coverPhotosByTheme = {
+      "aksara-signature": "foto-06.jpg",
+      "kencana-jawa": "foto-08.jpg",
+      "nexus": "foto-01.jpg"
+    };
+    const coverAsset = coverPhotosByTheme[theme.slug] || coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
     fixture.cover.image = coverAsset;
     fixture.cover.heroImage = coverAsset;
     fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
