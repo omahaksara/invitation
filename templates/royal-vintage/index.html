@@ -109,6 +109,34 @@
 #main-content{padding-bottom:90px}
 #couple-section,#events-section{scroll-margin-top:18px}
 @media(prefers-reduced-motion:no-preference){#open-invitation-btn{transition:transform .25s ease,box-shadow .25s ease}#open-invitation-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px #17030766}}
+
+/* Royal Vintage — a full-width letterpress spread, not a narrow centered poster. */
+.invitation-container{width:100%;max-width:none;margin:0;border-radius:0;overflow:hidden}
+#cover-section.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;padding:clamp(34px,7vw,100px);background:#f4eee3;color:#3c2b1d;border:0;isolation:isolate;overflow:hidden}
+#cover-section.hero .hero-cover-image{position:absolute;inset:0 0 0 auto;width:52%;height:100%;object-fit:cover;object-position:center 34%;opacity:1;z-index:-1;filter:saturate(.82) contrast(1.04)}
+#cover-section.hero:before{content:"";position:absolute;inset:0 48% 0 0;background:linear-gradient(145deg,#fbf6ec,#e8dcc9);z-index:-2}
+#cover-section.hero:after{content:"";position:absolute;top:8%;bottom:8%;left:48%;width:1px;background:linear-gradient(transparent,#a98b5b,transparent);z-index:0;pointer-events:none}
+#cover-section.hero>:not(.hero-cover-image){position:relative;z-index:2;max-width:500px;margin-left:clamp(0px,3vw,42px);text-align:left}
+#cover-section.hero .date{margin:0 0 22px;color:#8b5a2b;font-size:.72rem;letter-spacing:.2em}
+#cover-section.hero .names{margin:0 0 25px}
+#cover-section.hero .names h1{display:flex;flex-direction:column;align-items:flex-start;gap:0;font-size:clamp(3.1rem,7vw,6.1rem);line-height:.9;color:#6e482b}
+#cover-section.hero .names h1>span{font-size:inherit;color:inherit}
+#cover-section.hero .names h1>span:nth-child(2){font-size:.42em;color:#b38a53;margin:.1em 0 .14em .12em}
+#cover-section.hero .guest-box{margin:0 0 22px!important}
+#cover-section.hero .guest-box p{font-size:.64rem!important;letter-spacing:.15em;text-transform:uppercase;color:#7a6a58!important}
+#cover-section.hero .guest-box h3{font:400 1.45rem Georgia,serif;color:#3c2b1d!important;margin:6px 0}
+#cover-section.hero #open-invitation-btn{margin:0;align-self:flex-start}
+#main-content{max-width:1080px;margin:0 auto}
+@media(max-width:760px){
+ #cover-section.hero{min-height:100svh;justify-content:flex-end;padding:58svh 22px 34px;background:#f4eee3}
+ #cover-section.hero .hero-cover-image{inset:0 0 auto;width:100%;height:60%;object-position:center 34%}
+ #cover-section.hero:before{inset:48% 0 0;background:#f4eee3}
+ #cover-section.hero:after{inset:60% 22px auto;width:auto;height:1px}
+ #cover-section.hero>:not(.hero-cover-image){width:100%;max-width:none;margin-left:0}
+ #cover-section.hero .names h1{font-size:clamp(2.9rem,13vw,4.2rem)}
+ #cover-section.hero #open-invitation-btn{margin:0}
+}
+
 </style>
 <div class="invitation-container">
     <!-- Cover / Sampul -->
