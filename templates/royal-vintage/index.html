@@ -137,6 +137,11 @@
  #cover-section.hero #open-invitation-btn{margin:0}
 }
 
+
+@keyframes rvLetterpressClose{0%{opacity:1;clip-path:inset(0);transform:translateX(0)}100%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-24px)}}
+#cover-section.hero.is-opening{animation:rvLetterpressClose 820ms cubic-bezier(.7,0,.2,1) both;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#cover-section.hero.is-opening{animation:none!important;transform:none!important}}
+
 </style>
 <div class="invitation-container">
     <!-- Cover / Sampul -->
