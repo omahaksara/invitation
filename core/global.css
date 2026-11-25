@@ -1418,21 +1418,43 @@ html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezie
     text-overflow: ellipsis;
   }
 }
-/* Keep the overflow trigger inside compact docks on narrow phones. */
+/* Fit all shared dock controls on narrow phones without horizontal overflow. */
 @media (max-width:600px) {
+  #oa-floating-controls[class*="oa-nav-"] {
+    gap:2px!important;
+    padding-inline:5px!important;
+    box-sizing:border-box!important;
+    overflow:visible;
+  }
+  #oa-floating-controls[class*="oa-nav-"] > button:not(.oa-dock-action) {
+    flex:1 1 0!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding-inline:2px!important;
+    font-size:8px!important;
+    letter-spacing:0!important;
+    white-space:nowrap!important;
+  }
+  #oa-floating-controls[class*="oa-nav-"] > button.oa-dock-action {
+    flex:0 0 34px!important;
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+    padding:0!important;
+  }
   #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap {
-    flex:0 1 40px!important;
-    width:40px!important;
+    flex:1 1 0!important;
+    width:auto!important;
     min-width:0!important;
   }
-  #oa-floating-controls[class*="oa-nav-"] button.oa-nav-more {
-    flex:0 1 40px!important;
-    width:40px!important;
-    min-width:40px!important;
-    max-width:40px!important;
+  #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap > button {
+    flex:1 1 0!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
     padding-inline:2px!important;
-    overflow:hidden;
-    font-size:9px!important;
+    font-size:8px!important;
     letter-spacing:0!important;
   }
 }
