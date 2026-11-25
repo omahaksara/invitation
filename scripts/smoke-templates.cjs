@@ -195,11 +195,11 @@ const openingMotionNames = {
   "aksara-nocturne": "oaNocturnePortalClose",
   "atelier-editorial": "oaAtelierPageTurn",
   "botanical-garden": "oaBotanicalPetalClose",
-  "earty": "eartyArchRetreat",
+  "earty": "oa-cover-earty-exit",
   "elegance": "oaEleganceIrisClose",
-  "jendela-senja": "jsFilmFade",
-  "lumiere-bloom": "lumiereBloomClose",
-  "royal-vintage": "rvLetterpressClose",
+  "jendela-senja": "oa-cover-jendela-senja-exit",
+  "lumiere-bloom": "oa-cover-lumiere-bloom-exit",
+  "royal-vintage": "oa-cover-royal-vintage-exit",
   "sagara": "oaSagaraTideRetreat"
 };
 
