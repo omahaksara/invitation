@@ -35,6 +35,7 @@ async function installThemeDemoFixture(page) {
       "nexus": "foto-01.jpg"
     };
     const coverAsset = coverPhotosByTheme[requestedTheme] || coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
+    assert.notEqual(coverAsset, "foto-07.jpg", "Novelty-costume photo must not be used as a wedding cover.");
     fixture.cover.image = coverAsset;
     fixture.cover.heroImage = coverAsset;
     fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
