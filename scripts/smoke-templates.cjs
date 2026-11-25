@@ -1132,12 +1132,18 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-360.png`));
-        const layout360 = await page.evaluate(() => ({
-          viewport: document.documentElement.clientWidth,
-          page: document.documentElement.scrollWidth,
-          rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
-          guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
-        }));
+        const layout360 = await page.evaluate(() => {
+          const width = document.documentElement.clientWidth;
+          const dockRect = document.querySelector("#oa-floating-controls")?.getBoundingClientRect();
+          return {
+            viewport: width,
+            page: document.documentElement.scrollWidth,
+            rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
+            guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width,
+            dockLeft: dockRect?.left ?? 0,
+            dockRight: dockRect?.right ?? width
+          };
+        });
         assert.equal(layout360.viewport, 360, theme.slug + ": viewport 360px tidak diterapkan.");
         assert.ok(layout360.page <= layout360.viewport + 2,
           theme.slug + ": horizontal overflow pada 360px " + JSON.stringify(layout360));
@@ -1145,6 +1151,8 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": formulir RSVP tidak responsif pada 360px " + JSON.stringify(layout360));
         assert.ok(layout360.guestbook > 0 && layout360.guestbook <= layout360.viewport,
           theme.slug + ": buku tamu tidak responsif pada 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.dockLeft >= -1 && layout360.dockRight <= layout360.viewport + 1,
+          theme.slug + ": shared dock exceeds 360px viewport " + JSON.stringify(layout360));
 
         await page.setViewportSize({ width: 390, height: 844 });
         const layout390 = await page.evaluate(() => ({
@@ -1160,6 +1168,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": formulir RSVP tidak responsif pada 390px " + JSON.stringify(layout390));
         assert.ok(layout390.guestbook > 0 && layout390.guestbook <= layout390.viewport,
           theme.slug + ": buku tamu tidak responsif pada 390px " + JSON.stringify(layout390));
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
@@ -1210,42 +1219,6 @@ for (const slug of activeThemeSlugs) {
         assert.equal(mockApiPosts.length, 0, theme.slug + ": demo tidak boleh mengirim RSVP/ucapan ke API");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
 
-        // A second responsive pass at 360px catches narrow-device collisions without
-        // replacing the 390px form interaction coverage above.
-        await page.setViewportSize({ width: 360, height: 780 });
-        await page.reload({ waitUntil: "commit", timeout: 15000 });
-        await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
-        await page.waitForFunction(selector => {
-          const cover = document.querySelector(selector);
-          return !!cover && !cover.hidden && getComputedStyle(cover).display !== "none";
-        }, theme.cover, { timeout: 10000 });
-        await page.evaluate(() => window.scrollTo(0, 0));
-        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await auditCover(page, theme, "mobile-360");
-        await page.locator(theme.open).click();
-        await page.waitForFunction(() => {
-          const cover = document.getElementById("cover") || document.getElementById("cover-section");
-          return !cover || cover.hidden || getComputedStyle(cover).display === "none";
-        }, undefined, { timeout: 5000 });
-        const layout360 = await page.evaluate(() => {
-          const width = document.documentElement.clientWidth;
-          const dockRect = document.querySelector("#oa-floating-controls")?.getBoundingClientRect();
-          return {
-            viewport: width,
-            page: document.documentElement.scrollWidth,
-            rsvp: document.querySelector("#rsvp-form")?.getBoundingClientRect().width || 0,
-            guestbook: document.querySelector("#wishes-form")?.getBoundingClientRect().width || 0,
-            dockLeft: dockRect?.left ?? 0,
-            dockRight: dockRect?.right ?? width
-          };
-        });
-        assert.ok(layout360.page <= layout360.viewport + 2,
-          theme.slug + ": horizontal overflow at 360px " + JSON.stringify(layout360));
-        assert.ok(layout360.rsvp > 0 && layout360.rsvp <= layout360.viewport &&
-          layout360.guestbook > 0 && layout360.guestbook <= layout360.viewport,
-          theme.slug + ": RSVP/Ucapan form width is invalid at 360px " + JSON.stringify(layout360));
-        assert.ok(layout360.dockLeft >= -1 && layout360.dockRight <= layout360.viewport + 1,
-          theme.slug + ": shared dock exceeds 360px viewport " + JSON.stringify(layout360));
         console.log("PASS mobile 390px + 360px + demo forms " + theme.slug);
       } catch (error) {
         const message = error && error.message ? error.message : String(error);
