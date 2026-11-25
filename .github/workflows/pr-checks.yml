@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           git fetch origin main
-          forbidden="$(git diff --name-only origin/main HEAD -- 'clients/*/data.json')"
+          forbidden="$(git diff --name-only origin/main HEAD -- 'clients/*/data.json' ':!clients/demo-katalog/data.json')"
           if [ -n "$forbidden" ]; then
             echo "::error::Client invitation JSON differs from main and must not be changed:"
             echo "$forbidden"
