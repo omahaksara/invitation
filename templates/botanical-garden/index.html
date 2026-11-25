@@ -31,7 +31,7 @@
 .wish-card{border-left-color:#d6bd8b}
 .footer{background:#26372d}
 @media(prefers-reduced-motion:reduce){.cover-orbit,.cover-monogram{animation:none!important}}
-.cover h1{flex-direction:column;gap:0}.cover h1 i{display:block;line-height:1;margin:.12em 0;font-size:.48em}
+
 
 /* Art direction: botanical conservatory — organic portrait arch against a calm paper field. */
 .cover{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);grid-template-rows:repeat(10,auto);align-content:center;align-items:center;text-align:left;padding:clamp(28px,6vw,84px);background:linear-gradient(135deg,#edf0e5 0%,#e2e8da 56%,#f5f1e6 100%);color:#34483b}
@@ -53,7 +53,6 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
 @keyframes oaBotanicalPetalClose{0%{opacity:1;clip-path:ellipse(100% 100% at 50% 50%);transform:scale(1) rotate(0)}52%{opacity:1;clip-path:ellipse(64% 70% at 50% 50%);transform:scale(.97) rotate(-1deg)}100%{opacity:0;clip-path:ellipse(0% 0% at 50% 50%);transform:scale(.9) rotate(-3deg)}}
 @media(max-width:700px){.cover{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:100svh;padding:calc(42svh + 8px) 22px 18px;text-align:center}.cover-photo{position:absolute;inset:0 0 auto;width:100%;height:42svh;border:0;border-bottom:1px solid #82977a;border-radius:0 0 48% 48%/0 0 12% 12%;box-shadow:none;object-position:center 30%}.cover>.eyebrow,.cover>.cover-monogram,.cover>.cover-kicker,.cover>h1,.cover>.cover-line,.cover>.cover-date,.cover>.guest-label,.cover>.guest-name,.cover>.open-button,.cover>.cover-foot{width:100%;text-align:center}.cover-monogram{margin:4px auto 8px}.cover h1{align-items:center;justify-content:center;font-size:clamp(2.8rem,12vw,4.3rem);margin:10px 0}.cover-line{margin:10px auto}.cover .open-button{margin:12px auto 0}.cover-foot{display:none}}
 @media(prefers-reduced-motion:reduce){#cover-section.is-opening{animation:none!important;transform:none!important;clip-path:none!important}.cover-photo{transition:none!important}}
-
 </style>
 
 <div class="invite-shell">
@@ -93,153 +92,6 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
   <button id="music-toggle" class="music-toggle" type="button" aria-label="Putar atau jeda musik" aria-pressed="false" hidden>♫</button>
   <audio id="bg-music" loop preload="none"></audio>
 </div>
-</body></html>
-<script>
-(() => {
-  if (!window.OAThemePrograms) return;
-  window.OAThemePrograms.register("botanical-garden", {
-    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
-      const style = document.createElement("style");
-      style.dataset.oaThemeProgram = "botanical-garden";
-      style.textContent = `
-[data-oa-botanical-motion="ready"] .cover-orbit{animation:oaBotanicalOrbit 28s linear 1 both}
-[data-oa-botanical-motion="ready"] .oa-botanical-reveal{opacity:0;transform:translate3d(0,28px,0) rotate(-1.2deg) scale(.96);clip-path:ellipse(76% 0% at 50% 100%);transition:opacity 1000ms ease,transform 1200ms cubic-bezier(.16,.8,.2,1),clip-path 1100ms cubic-bezier(.16,.8,.2,1)}
-[data-oa-botanical-motion="ready"] .oa-botanical-reveal.oa-botanical-visible{opacity:1;transform:none;clip-path:ellipse(100% 100% at 50% 50%)}
-[data-oa-botanical-motion="ready"] .person-card img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
-[data-oa-botanical-motion="ready"] .person-card.oa-botanical-visible img{transform:scale(1.045)}
-@keyframes oaBotanicalOrbit{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){[data-oa-botanical-motion="ready"] .cover-orbit,[data-oa-botanical-motion="ready"] .oa-botanical-reveal{animation:none;opacity:1;transform:none;clip-path:none;transition:none}}
-`;
-      if (navigation) navigation.classList.add("oa-nav-botanical");
-      style.textContent += `
-        #oa-floating-controls.oa-nav-botanical{left:16px!important;right:auto!important;top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 32px)!important;padding:8px 12px!important;gap:6px!important;border-radius:26px 26px 8px 8px!important;background:rgba(235,239,224,.96)!important;border:1px solid #82977a!important;box-shadow:0 12px 30px #344b3533!important;backdrop-filter:blur(12px)!important}#oa-floating-controls.oa-nav-botanical button{min-width:44px!important;min-height:40px!important;border-radius:18px 18px 5px 5px!important;color:#405541!important;font:600 10px/1.1 Georgia,serif!important}#oa-floating-controls.oa-nav-botanical button.is-active{background:#82977a!important;color:#fff!important}@media(max-width:600px){#oa-floating-controls.oa-nav-botanical{left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;width:auto!important;justify-content:space-around!important}}
-        .oa-gallery-lightbox[data-oa-theme="botanical-garden"]{background:rgba(30,43,31,.94)!important;backdrop-filter:blur(14px)}.oa-gallery-lightbox[data-oa-theme="botanical-garden"] img{border:5px solid #ebefe0;border-radius:44% 44% 10px 10px!important;box-shadow:0 20px 55px #101c10aa}
-      `;
-      document.head.append(style);
-      root.dataset.oaBotanicalMotion = "ready";
-      const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-grid img, .gallery-item img, .form-card");
-      targets.forEach(node => node.classList.add("oa-botanical-reveal"));
-      observe(targets, "oa-botanical-visible", { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
-      // Gallery images are populated asynchronously by the shared data renderer.
-      // Observe late-added images too, so the reveal program never leaves them hidden.
-      const galleryGrid = root.querySelector("#gallery-grid");
-      if (galleryGrid && "MutationObserver" in window) {
-        const attachGalleryImages = nodes => {
-          const images = nodes.flatMap(node => {
-            if (node.nodeType !== 1) return [];
-            return [
-              ...(node.matches("img") ? [node] : []),
-              ...node.querySelectorAll("img")
-            ];
-          }).filter(image => !image.classList.contains("oa-botanical-reveal"));
-          images.forEach(image => image.classList.add("oa-botanical-reveal"));
-          if (images.length) observe(images, "oa-botanical-visible", { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
-        };
-        const galleryObserver = new MutationObserver(records => {
-          attachGalleryImages(records.flatMap(record => Array.from(record.addedNodes)));
-        });
-        galleryObserver.observe(galleryGrid, { childList: true, subtree: true });
-        attachGalleryImages(Array.from(galleryGrid.children));
-        addCleanup(() => galleryObserver.disconnect());
-      }
-      depthMotion({ surface: ".cover", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
-      
-      const orbit = root.querySelector(".cover-orbit");
-      if (orbit && reducedMotion) orbit.style.animation = "none";
-      addCleanup(() => {
-        if (navigation) navigation.classList.remove("oa-nav-botanical");
-        delete root.dataset.oaBotanicalMotion;
-        
-        root.querySelectorAll(".oa-botanical-reveal, .oa-botanical-visible").forEach(node => node.classList.remove("oa-botanical-reveal","oa-botanical-visible"));
-        style.remove();
-      });
-    }
-  });
-})();
-</script>      style.textContent = "\n[data-oa-botanical-motion=\"ready\"] .cover-orbit{animation:oaBotanicalOrbit 28s linear 1 both}\n[data-oa-botanical-motion=\"ready\"] .person-card img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}\n[data-oa-botanical-motion=\"ready\"] .person-card.oa-botanical-visible img{transform:scale(1.045)}\n@keyframes oaBotanicalOrbit{to{transform:rotate(360deg)}}\n@media(prefers-reduced-motion:reduce){[data-oa-botanical-motion=\"ready\"] .cover-orbit{animation:none}}";position:absolute;width:8px;height:8px;left:-4.5px;top:29px;border-radius:50%;background:var(--sage)}.story-card time{font-size:.62rem;letter-spacing:.15em;color:var(--sage)}.story-card h3{font:500 1.8rem var(--serif);margin:8px 0}.story-card p{font-size:.82rem;color:var(--muted);line-height:1.8;margin:0}.event-section{background:#30392f;color:#f8f2e8}.event-section .eyebrow{color:#c4c7b5}.countdown{display:flex;justify-content:center;gap:clamp(12px,5vw,40px);margin:38px 0 48px}.countdown div{display:flex;flex-direction:column;gap:6px;min-width:48px;text-align:center}.countdown b{font:500 clamp(2rem,7vw,3rem) var(--serif);color:#e3cda4}.countdown span{font-size:.58rem;letter-spacing:.12em;color:#c6c8bc}.event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:850px;margin:auto}.event-card{padding:28px 22px;border:1px solid #a9a88e55;text-align:center;background:#ffffff05}.event-card .event-index{font-size:.58rem;letter-spacing:.2em;color:#c4c7b5}.event-card h3{font:500 2rem var(--serif);margin:12px 0}.event-card p{font-size:.78rem;line-height:1.8;color:#d5d4c8}.event-card a{display:inline-block;margin-top:10px;padding:10px 16px;border:1px solid #b8b79a;color:#f8f2e8;text-decoration:none;font-size:.68rem;letter-spacing:.06em}.gallery-section{background:var(--paper)}.gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:900px;margin:auto}.gallery-item{margin:0;overflow:hidden;aspect-ratio:3/4;background:#e4ddcf;position:relative}.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1);cursor:zoom-in}.gallery-item:hover img{transform:scale(1.06)}.gift-section{background:#e9e8de}.gift-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:760px;margin:32px auto 0}.gift-card{background:#fffdf7;padding:24px;border:1px solid var(--line);text-align:center}.gift-card .gift-bank{font-size:.6rem;letter-spacing:.16em;color:var(--sage)}.gift-card h3{font:500 1.7rem var(--serif);margin:10px 0}.gift-card p{font-size:.82rem;color:var(--muted)}.gift-card button{padding:10px 16px;border:1px solid var(--sage);background:transparent;color:var(--ink);cursor:pointer;font-size:.7rem}.form-card{max-width:520px;margin:auto;background:var(--paper);border:1px solid var(--line);padding:26px;display:grid;gap:17px}.form-card label{display:grid;gap:8px;color:var(--muted);font-size:.72rem}.form-card input,.form-card select,.form-card textarea{width:100%;border:1px solid var(--line);background:#fffdf8;color:var(--ink);padding:13px 12px;font:inherit;font-size:.82rem;border-radius:0}.form-card textarea{resize:vertical}.solid-button{border:0;background:#485445;color:white;padding:14px 18px;font:500 .74rem var(--sans);letter-spacing:.06em;cursor:pointer}.solid-button:disabled{opacity:.55;cursor:wait}.form-status{font-size:.75rem;line-height:1.6;color:var(--sage);margin:0;text-align:center}.guestbook-section{background:var(--cream)}.wishes-list{max-width:620px;margin:28px auto 0;display:grid;gap:12px}.wish-card{padding:18px 20px;background:var(--paper);border-left:2px solid var(--sage)}.wish-card h3{font:500 1.35rem var(--serif);margin:0 0 8px}.wish-card p{font-size:.82rem;color:var(--muted);line-height:1.8;margin:0;overflow-wrap:anywhere}.wish-card time{display:block;margin-top:10px;font-size:.62rem;color:#aaa092}.empty-wishes{text-align:center;color:var(--muted);font-size:.8rem}.closing{text-align:center;background:#30392f;color:#f8f2e8;padding-top:75px;padding-bottom:75px}.closing-flower{font-size:2.3rem;color:#d4bd91}.closing>p:not(.eyebrow){max-width:560px;margin:20px auto 28px;color:#d4d4c8;font:italic 1.4rem/1.5 var(--serif)}.closing h2{margin:4px 0;font-size:2.6rem}.closing-amp{color:#c4aa7a}.closing .eyebrow{margin-top:34px;color:#c4c7b5}.footer{text-align:center;padding:22px;background:#222a22;color:#bfc1b4;font-size:.65rem;letter-spacing:.05em}.footer strong{color:#e0d0ae}.music-toggle{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:1px solid #d7c6a5;background:#30392f;color:#f6eddd;font-size:1.25rem;z-index:30;box-shadow:0 8px 24px #0002;cursor:pointer;animation:musicPulse 3s infinite}.music-toggle.playing{animation:spin 5s linear infinite}.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}.reveal.active{opacity:1;transform:translateY(0)}@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes coverOut{to{opacity:0;transform:scale(1.035);visibility:hidden}}@keyframes orbit{to{rotate:360deg}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes musicPulse{0%,100%{box-shadow:0 8px 24px #0002}50%{box-shadow:0 8px 30px #b89b6a55}}@media(min-width:900px){.cover{min-height:100vh}.section-pad{padding:100px 32px}.gallery-grid{gap:18px}}@media(max-width:600px){.section-pad{padding:68px 20px}.couple-grid{grid-template-columns:1fr;gap:28px}.ampersand{font-size:2rem}.person-card{max-width:330px;margin:auto}.portrait{max-width:230px}.event-grid,.gift-grid{grid-template-columns:1fr}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.form-card{padding:20px 16px}.cover h1{gap:8px}.cover-monogram{margin-top:26px}.cover-foot{font-size:.45rem}.countdown{gap:18px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
-.cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.24;filter:saturate(.72);z-index:-2;pointer-events:none}
-
-/* Botanical Garden: soft botanical silhouettes and champagne details. */
-.cover{background:radial-gradient(ellipse at 18% 20%,rgba(214,189,139,.19),transparent 32%),radial-gradient(ellipse at 82% 78%,rgba(143,166,135,.2),transparent 35%),linear-gradient(145deg,#34483b,#26372d 70%,#475342)}
-.cover:before,.cover:after{content:"";position:absolute;width:min(62vw,390px);height:min(62vw,390px);border:1px solid rgba(214,189,139,.3);border-radius:8% 92% 8% 92%;transform:rotate(35deg);pointer-events:none;z-index:-1}
-.cover:before{left:-23%;top:7%;box-shadow:22px 22px 0 -21px rgba(214,189,139,.65),44px 44px 0 -43px rgba(214,189,139,.55),66px 66px 0 -65px rgba(214,189,139,.45)}
-.cover:after{right:-24%;bottom:2%;transform:rotate(215deg);border-color:rgba(185,199,170,.42)}
-.cover-orbit{border-color:rgba(214,189,139,.23);border-radius:46% 54% 48% 52%}
-.cover-monogram,.cover-date,.closing-flower{color:#e5d0a7}
-.open-button{border-color:rgba(214,189,139,.8);border-radius:3px;letter-spacing:.08em}
-.open-button:hover{background:rgba(214,189,139,.15)}
-.portrait{border-color:#d6bd8b;background:#fffdf6;box-shadow:0 16px 42px rgba(49,62,48,.09)}
-.portrait-left{transform:rotate(-1deg)}.portrait-right{transform:rotate(1deg)}
-.quote-section{background:#e9eadf}.event-section{background:#34483b}
-.event-card{border-color:rgba(214,189,139,.42)}
-.solid-button{background:#526953}.solid-button:hover{background:#3e5543}
-.form-card{border-color:#d6bd8b;box-shadow:0 18px 48px rgba(49,62,48,.05)}
-.wish-card{border-left-color:#d6bd8b}
-.footer{background:#26372d}
-@media(prefers-reduced-motion:reduce){.cover-orbit,.cover-monogram{animation:none!important}}
-.cover h1{flex-direction:column;gap:0}.cover h1 i{display:block;line-height:1;margin:.12em 0;font-size:.48em}
-
-/* Art direction: botanical conservatory — organic portrait arch against a calm paper field. */
-.cover{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);grid-template-rows:repeat(10,auto);align-content:center;align-items:center;text-align:left;padding:clamp(28px,6vw,84px);background:linear-gradient(135deg,#edf0e5 0%,#e2e8da 56%,#f5f1e6 100%);color:#34483b}
-.cover-photo{position:relative;inset:auto;grid-column:2;grid-row:1/span 10;width:100%;height:min(78svh,760px);object-fit:cover;opacity:1;z-index:0;border:1px solid #82977a;border-radius:48% 48% 8px 8px/24% 24% 8px 8px;box-shadow:0 24px 58px rgba(49,62,48,.18)}
-.cover-grain{display:none}
-.cover>.eyebrow,.cover>.cover-monogram,.cover>.cover-kicker,.cover>h1,.cover>.cover-line,.cover>.cover-date,.cover>.guest-label,.cover>.guest-name,.cover>.open-button,.cover>.cover-foot{grid-column:1;position:relative;z-index:2;width:100%;text-align:left;margin-left:0;margin-right:0}
-.cover>.eyebrow{align-self:end;color:#687b61;letter-spacing:.22em}
-.cover-monogram{justify-self:start;margin:8px 0 12px;color:#8b7951}
-.cover .cover-kicker{color:#8b7951;letter-spacing:.24em}
-.cover h1{align-items:flex-start;justify-content:flex-start;text-align:left;color:#34483b;font-size:clamp(3rem,6.4vw,5.8rem);line-height:.9;margin:14px 0}
-.cover h1 i{color:#9a7b58}
-.cover-line{margin:16px 0;background:#82977a}
-.cover-date,.guest-label,.guest-name{color:#526653}
-.cover .open-button{justify-self:start;width:max-content;background:#526953;color:#fffdf6;border-color:#526953;border-radius:2px}
-.cover-foot{color:#687b61;letter-spacing:.14em}
-.cover:before{left:auto;right:4%;top:7%;border-color:rgba(130,151,122,.28)}
-.cover:after{right:0;bottom:6%;border-color:rgba(214,189,139,.42)}
-html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBotanicalPetalClose 1020ms cubic-bezier(.72,0,.2,1) both;pointer-events:none}
-@keyframes oaBotanicalPetalClose{0%{opacity:1;clip-path:ellipse(100% 100% at 50% 50%);transform:scale(1) rotate(0)}52%{opacity:1;clip-path:ellipse(64% 70% at 50% 50%);transform:scale(.97) rotate(-1deg)}100%{opacity:0;clip-path:ellipse(0% 0% at 50% 50%);transform:scale(.9) rotate(-3deg)}}
-@media(max-width:700px){.cover{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:100svh;padding:calc(42svh + 8px) 22px 18px;text-align:center}.cover-photo{position:absolute;inset:0 0 auto;width:100%;height:42svh;border:0;border-bottom:1px solid #82977a;border-radius:0 0 48% 48%/0 0 12% 12%;box-shadow:none;object-position:center 30%}.cover>.eyebrow,.cover>.cover-monogram,.cover>.cover-kicker,.cover>h1,.cover>.cover-line,.cover>.cover-date,.cover>.guest-label,.cover>.guest-name,.cover>.open-button,.cover>.cover-foot{width:100%;text-align:center}.cover-monogram{margin:4px auto 8px}.cover h1{align-items:center;justify-content:center;font-size:clamp(2.8rem,12vw,4.3rem);margin:10px 0}.cover-line{margin:10px auto}.cover .open-button{margin:12px auto 0}.cover-foot{display:none}}
-@media(prefers-reduced-motion:reduce){#cover-section.is-opening{animation:none!important;transform:none!important;clip-path:none!important}.cover-photo{transition:none!important}}
-
-</style>
-
-<div class="invite-shell">
-  <section class="cover" id="cover-section">
-<img class="cover-photo" data-bind="cover.image" alt="Foto sampul undangan">
-    <div class="cover-grain"></div><div class="cover-orbit orbit-one"></div><div class="cover-orbit orbit-two"></div>
-    <p class="eyebrow" data-bind="cover.eyebrow">The Wedding Celebration</p>
-    <div class="cover-monogram" aria-hidden="true"><span data-bind="couple.groom.initial" style="font:inherit;font-style:normal">R</span> <span>&amp;</span> <span data-bind="couple.bride.initial" style="font:inherit;font-style:normal">V</span></div>
-    <p class="cover-kicker">A NEW CHAPTER BEGINS</p>
-    <h1><span data-bind="couple.groom.nickname">Andi</span><i>&</i><span data-bind="couple.bride.nickname">Siti</span></h1>
-    <div class="cover-line"></div>
-    <p class="cover-date" data-bind="cover.dateLabel">12 Juni 2027</p>
-    <p class="guest-label">Kepada Yth.</p><p class="guest-name" id="nama-tamu">Tamu Undangan</p>
-    <button class="open-button" id="open-invitation-btn" type="button"><span data-bind="cover.buttonText">Buka Undangan</span><b>↗</b></button>
-    <p class="cover-foot">DENGAN HORMAT, KAMI MENGUNDANG ANDA</p>
-  </section>
-  <main id="main-content" class="main-content" hidden>
-    <section class="intro section-pad reveal"><p class="eyebrow">ASSALAMUALAIKUM WARAHMATULLAHI WABARAKATUH</p><h2>Dengan memohon rahmat dan ridha Allah SWT</h2><p class="body-copy" data-bind="opening.text">Dengan penuh rasa syukur, kami mengundang Bapak/Ibu/Saudara untuk hadir di hari bahagia kami.</p><div class="ornament">✦　❦　✦</div></section>
-    <section class="couple section-pad">
-      <div class="section-heading reveal"><p class="eyebrow">TWO HEARTS, ONE STORY</p><h2>Pasangan Mempelai</h2></div>
-      <div class="couple-grid">
-        <article class="person-card reveal"><div class="portrait portrait-left"><img data-bind="couple.groom.photo" alt="Foto mempelai pria"></div><p class="person-role">THE GROOM</p><h3 data-bind="couple.groom.fullName">Andi Pratama</h3><p data-bind="couple.groom.parents">Putra dari keluarga</p><a data-bind="couple.groom.instagram" class="social-link" id="groom-social" hidden>Instagram ↗</a></article>
-        <div class="ampersand reveal">&</div>
-        <article class="person-card reveal"><div class="portrait portrait-right"><img data-bind="couple.bride.photo" alt="Foto mempelai wanita"></div><p class="person-role">THE BRIDE</p><h3 data-bind="couple.bride.fullName">Siti Rahma</h3><p data-bind="couple.bride.parents">Putri dari keluarga</p><a data-bind="couple.bride.instagram" class="social-link" id="bride-social" hidden>Instagram ↗</a></article>
-      </div>
-    </section>
-    <section class="quote-section section-pad reveal"><span class="quote-mark">“</span><p data-bind="quote.text">Cinta tumbuh dalam ketulusan dan kebaikan.</p><small data-bind="quote.source">—</small></section>
-    <section class="story-section section-pad"><div class="section-heading reveal"><p class="eyebrow">OUR JOURNEY</p><h2>Sepenggal Kisah</h2></div><div class="story-list" id="story-list"></div></section>
-    <section class="event-section section-pad"><div class="section-heading reveal"><p class="eyebrow">SAVE THE DATE</p><h2>Hari Bahagia Kami</h2></div><div class="countdown" id="countdown"><div><b id="cd-days">00</b><span>Hari</span></div><div><b id="cd-hours">00</b><span>Jam</span></div><div><b id="cd-minutes">00</b><span>Menit</span></div><div><b id="cd-seconds">00</b><span>Detik</span></div></div><div class="event-grid" id="event-list"></div></section>
-    <section class="gallery-section section-pad"><div class="section-heading reveal"><p class="eyebrow">CAPTURED MOMENTS</p><h2>Galeri Kenangan</h2></div><div class="gallery-grid" id="gallery-grid"></div></section>
-    <section class="gift-section section-pad"><div class="section-heading reveal"><p class="eyebrow">A TOKEN OF LOVE</p><h2>Kirim Hadiah</h2></div><div class="gift-grid" id="gift-list"></div></section>
-    <section class="rsvp-section section-pad" id="rsvp-section"><div class="section-heading reveal"><p class="eyebrow">KINDLY RESPOND</p><h2>Konfirmasi Kehadiran</h2><p class="body-copy">Bantu kami mempersiapkan hari bahagia dengan mengisi konfirmasi berikut.</p></div><form id="rsvp-form" class="form-card"><label>Nama<input name="name" id="rsvp-name" required maxlength="100" autocomplete="name"></label><label>Konfirmasi<select name="attendance" required><option value="">Pilih jawaban</option><option value="hadir">Insyaallah hadir</option><option value="tidak_hadir">Mohon maaf, belum bisa hadir</option></select></label><label>Jumlah tamu<select name="guestCount"><option value="1">1 orang</option><option value="2">2 orang</option></select></label><button class="solid-button" type="submit">Kirim Konfirmasi</button><p id="rsvp-status" class="form-status" role="status"></p></form></section>
-    <section class="guestbook-section section-pad" id="guestbook-section"><div class="section-heading reveal"><p class="eyebrow">WORDS FROM THE HEART</p><h2>Ucapan & Doa</h2></div><form id="wishes-form" class="form-card"><label>Nama<input name="name" id="wishes-name" required maxlength="100" autocomplete="name"></label><label>Ucapan<textarea name="message" required maxlength="500" rows="4" placeholder="Tuliskan doa terbaik untuk kedua mempelai..."></textarea></label><button class="solid-button" type="submit">Kirim Ucapan</button><p id="wishes-status" class="form-status" role="status"></p></form><div class="wishes-list" id="wishes-list" aria-live="polite"><p class="empty-wishes">Jadilah yang pertama mengirim doa.</p></div></section>
-    <section class="closing section-pad reveal"><div class="closing-flower">✿</div><p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara berkenan hadir dan memberikan doa restu.</p><h2 data-bind="couple.groom.nickname">Andi</h2><span class="closing-amp">&</span><h2 data-bind="couple.bride.nickname">Siti</h2><p class="eyebrow">TERIMA KASIH</p></section>
-    <footer class="footer">Dibuat dengan sepenuh hati oleh <strong>Omah Aksara</strong></footer>
-  </main>
-  <button id="music-toggle" class="music-toggle" type="button" aria-label="Putar atau jeda musik" aria-pressed="false" hidden>♫</button>
-  <audio id="bg-music" loop preload="none"></audio>
-</div>
-</body></html>
 <script>
 (() => {
   if (!window.OAThemePrograms) return;
@@ -281,3 +133,4 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
   });
 })();
 </script>
+</body></html>

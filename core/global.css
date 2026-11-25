@@ -406,6 +406,7 @@ html[data-oa-theme="kinze"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-fon
 html[data-oa-theme="aksara-signature"] { --oa-font-display:"EB Garamond",Georgia,serif; --oa-font-body:"Lato",Arial,sans-serif; }
 html[data-oa-theme="botanical-garden"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
 html[data-oa-theme="velvet-romance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
+html[data-oa-theme="luma"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezier(.2,.72,.18,1); }
 html[data-oa-theme="romantic-floral"] { --oa-font-display:"Cormorant Garamond",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; }
 html[data-oa-theme="elegance"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"Montserrat",sans-serif; }
 html[data-oa-theme="aurelia-noir"] { --oa-font-display:"Cinzel",Georgia,serif; --oa-font-body:"Lora",Georgia,serif; }
@@ -437,7 +438,7 @@ html[data-oa-theme] select {
   font-family:var(--oa-font-body,Inter,sans-serif);
 }
 
-html[data-oa-theme="jendela-senja"] { --oa-reveal-time:.78s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="jendela-senja"] { --oa-reveal-time:.48s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
 
 /* Theme motion tokens: each visual identity gets its own reveal rhythm. */
 html[data-oa-theme="aksara-nocturne"] { --oa-reveal-time:.44s; --oa-reveal-ease:cubic-bezier(.2,.75,.25,1); }
@@ -455,6 +456,16 @@ html[data-oa-theme="royal-vintage"] { --oa-reveal-time:.41s; --oa-reveal-ease:cu
 html[data-oa-theme="serena-ivory"] { --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.2,.72,.25,1); }
 html[data-oa-theme="sirein"] { --oa-reveal-time:.43s; --oa-reveal-ease:cubic-bezier(.18,.76,.25,1); }
 html[data-oa-theme="velvet-romance"] { --oa-reveal-time:.42s; --oa-reveal-ease:cubic-bezier(.25,.7,.25,1); }
+/* Theme-owned reveal motion has a strict, mobile-friendly duration budget.
+   Per-theme tokens keep distinct easing/timing; long cover and hover transitions remain theme-owned. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-oa-theme] #app .oa-motion-item,
+  html[data-oa-theme] #app .oa-motion-photo,
+  html[data-oa-theme] #app [class*="reveal"] {
+    transition-duration: var(--oa-reveal-time, .44s) !important;
+  }
+}
+
 html[data-oa-theme] .oa-scroll-reveal {
   transition:opacity var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1)),
              transform var(--oa-reveal-time,.9s) var(--oa-reveal-ease,cubic-bezier(.2,.7,.2,1));
@@ -902,7 +913,7 @@ html[data-oa-theme="gebyok-candra"]{--oa-font-display:"Marcellus",Georgia,serif;
 html[data-oa-theme="sunda-watercolor"] {
   --oa-font-display: "Cormorant Garamond", Georgia, serif;
   --oa-font-body: "DM Sans", system-ui, sans-serif;
-  --oa-reveal-time: .9s;
+  --oa-reveal-time: .48s;
   --oa-reveal-ease: cubic-bezier(.2,.7,.2,1);
 }
 .oa-floating-controls[data-theme="sunda-watercolor"] {
@@ -917,35 +928,35 @@ html[data-oa-theme="sunda-watercolor"] {
 
 
 /* Theme motion audit — keep the shared reveal engine, tune its cadence per visual identity. */
-html[data-oa-theme="aksara-nocturne"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
-html[data-oa-theme="aksara-signature"] { --oa-motion-duration:760ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="aksara-velora"] { --oa-motion-duration:680ms; --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
-html[data-oa-theme="aksav"] { --oa-motion-duration:740ms; --oa-motion-ease:cubic-bezier(.2,.75,.25,1); }
-html[data-oa-theme="army"] { --oa-motion-duration:780ms; --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
-html[data-oa-theme="atelier-editorial"] { --oa-motion-duration:920ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
-html[data-oa-theme="aurelia-noir"] { --oa-motion-duration:840ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="botanical-garden"] { --oa-motion-duration:980ms; --oa-motion-ease:cubic-bezier(.18,.78,.2,1); }
-html[data-oa-theme="calestial"] { --oa-motion-duration:880ms; --oa-motion-ease:cubic-bezier(.18,.76,.2,1); }
-html[data-oa-theme="earty"] { --oa-motion-duration:720ms; --oa-motion-ease:cubic-bezier(.2,.75,.25,1); }
-html[data-oa-theme="elegance"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
-html[data-oa-theme="groom"] { --oa-motion-duration:700ms; --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
-html[data-oa-theme="jendela-senja"] { --oa-motion-duration:960ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
-html[data-oa-theme="karsa"] { --oa-motion-duration:720ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="kencana-jawa"] { --oa-motion-duration:860ms; --oa-motion-ease:cubic-bezier(.16,.8,.22,1); }
-html[data-oa-theme="kinze"] { --oa-motion-duration:780ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="luma"] { --oa-font-display:"Bodoni Moda",Georgia,serif; --oa-font-body:"DM Sans",sans-serif; --oa-motion-duration:1050ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezier(.18,.78,.22,1); }
-html[data-oa-theme="lume"] { --oa-motion-duration:760ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="lumiere-bloom"] { --oa-motion-duration:980ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
-html[data-oa-theme="lumina"] { --oa-motion-duration:520ms; --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
-html[data-oa-theme="nexus"] { --oa-motion-duration:900ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="nox"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="romantic-floral"] { --oa-motion-duration:1020ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
-html[data-oa-theme="royal-vintage"] { --oa-motion-duration:880ms; --oa-motion-ease:cubic-bezier(.16,.8,.22,1); }
-html[data-oa-theme="sagara"] { --oa-motion-duration:820ms; --oa-motion-ease:cubic-bezier(.17,.8,.24,1); }
-html[data-oa-theme="serena-ivory"] { --oa-motion-duration:920ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
-html[data-oa-theme="sirein"] { --oa-motion-duration:900ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
-html[data-oa-theme="taupe"] { --oa-motion-duration:760ms; --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
-html[data-oa-theme="velvet-romance"] { --oa-motion-duration:940ms; --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="aksara-nocturne"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
+html[data-oa-theme="aksara-signature"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="aksara-velora"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="aksav"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="army"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
+html[data-oa-theme="atelier-editorial"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="aurelia-noir"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="botanical-garden"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.18,.78,.2,1); }
+html[data-oa-theme="calestial"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.18,.76,.2,1); }
+html[data-oa-theme="earty"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.75,.25,1); }
+html[data-oa-theme="elegance"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.18,.78,.22,1); }
+html[data-oa-theme="groom"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="jendela-senja"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="karsa"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="kencana-jawa"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.22,1); }
+html[data-oa-theme="kinze"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="luma"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="lume"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="lumiere-bloom"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="lumina"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.7,.25,1); }
+html[data-oa-theme="nexus"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="nox"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="romantic-floral"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="royal-vintage"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.22,1); }
+html[data-oa-theme="sagara"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.17,.8,.24,1); }
+html[data-oa-theme="serena-ivory"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="sirein"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
+html[data-oa-theme="taupe"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.2,.72,.18,1); }
+html[data-oa-theme="velvet-romance"] { --oa-motion-duration:var(--oa-reveal-time,.44s); --oa-motion-ease:cubic-bezier(.16,.8,.2,1); }
 
 /* Luma's cinematic glass layers retain a restrained blur; the shared performance guard
    disables backdrop-filter globally, so explicitly restore only these small surfaces. */
@@ -970,7 +981,7 @@ html[data-oa-theme="luma"] #app .luma-open {
 .oa-floating-controls[data-theme="luma"] button { border-radius: 999px; }
 
 html[data-oa-theme="gebyok-candra"] {
-  --oa-motion-duration: 820ms;
+  --oa-motion-duration:var(--oa-reveal-time,.44s);
   --oa-motion-ease: cubic-bezier(.16,.8,.22,1);
 }
 
@@ -1352,6 +1363,8 @@ html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --
 :where(#app) :where([lang="ar"],.arabic,.arabic-text,.quran-text,.ayat,.bismillah) {
   font-family:'Scheherazade New',serif;
 }
+/* Bind engine motion duration to the active theme's validated reveal token. */
+html[data-oa-theme] { --oa-motion-duration: var(--oa-reveal-time, .44s); }
 
 
 /* Ensure the shared music glyph remains readable when theme fonts lack symbol coverage. */
@@ -1380,3 +1393,7 @@ html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --
 .oa-floating-controls button.oa-music-control.is-running::before {
   color: var(--oa-dock-active-ink, #fff);
 }
+
+
+/* Luma keeps its quieter editorial reveal cadence. */
+html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezier(.18,.78,.22,1); }

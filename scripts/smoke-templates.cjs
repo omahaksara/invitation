@@ -161,6 +161,12 @@ for (const slug of activeThemeSlugs) {
     slug + ": token tipografi tema belum lengkap.");
   assert.ok(themeTokenRules.includes("--oa-reveal-time") && themeTokenRules.includes("--oa-reveal-ease"),
     slug + ": token animasi reveal tema belum lengkap.");
+  const revealMatch = themeRevealTokens.match(/--oa-reveal-time:\s*([\d.]+)(ms|s)/);
+  const revealSeconds = revealMatch
+    ? Number(revealMatch[1]) * (revealMatch[2] === "ms" ? .001 : 1)
+    : Infinity;
+  assert.ok(revealSeconds > 0 && revealSeconds <= .55,
+    slug + ": durasi token reveal harus berada di atas 0 dan maksimal 0,55 detik (" + (revealMatch?.[0] || "token hilang") + ").");
 }
 
 (async () => {
@@ -208,6 +214,7 @@ for (const slug of activeThemeSlugs) {
   });
   let browser;
   const failures = [];
+  const motionEvidence = [];
   try {
     await new Promise((resolve, reject) => {
       server.once("error", reject);
@@ -216,6 +223,7 @@ for (const slug of activeThemeSlugs) {
     browser = await chromium.launch({ headless: true });
     for (const theme of themes) {
       const page = await browser.newPage();
+      await page.emulateMedia({ reducedMotion: "no-preference" });
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
       const pageErrors = [];
@@ -239,6 +247,12 @@ for (const slug of activeThemeSlugs) {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        const duplicateIds = await page.evaluate(() => {
+          const counts = new Map();
+          document.querySelectorAll("[id]").forEach(element => counts.set(element.id, (counts.get(element.id) || 0) + 1));
+          return Array.from(counts.entries()).filter(([, count]) => count > 1).map(([id, count]) => ({ id, count }));
+        });
+        assert.deepEqual(duplicateIds, [], theme.slug + ": duplicate HTML IDs " + JSON.stringify(duplicateIds));
         if (theme.slug === "atelier-editorial") {
           assert.equal(await page.locator(".atelier-page").count(), 1,
             "atelier-editorial: namespace halaman mandiri tidak ditemukan");
@@ -248,8 +262,9 @@ for (const slug of activeThemeSlugs) {
             "atelier-editorial: tombol cover dengan namespace mandiri tidak ditemukan");
         }
         await page.waitForFunction(() => {
+          const groom = window.__invitationData?.couple?.groom?.nickname;
           const el = document.querySelector('[data-bind="couple.groom.nickname"]');
-          return el && el.textContent.trim() === "Arkan";
+          return Boolean(groom && el && el.textContent.trim() === String(groom).trim());
         }, undefined, { timeout: 10000 });
 
         const depthMotionPilots = new Set([
@@ -481,8 +496,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": metode pembayaran nonaktif ikut tampil atau urutannya berubah " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.disabledPaymentActions, true,
           theme.slug + ": tombol pembayaran demo harus nonaktif " + JSON.stringify(demoFeatureAudit));
+        assert.ok(demoFeatureAudit.paymentCardNames.some(name => name.toLowerCase().includes("simulasi")),
+          theme.slug + ": label metode simulasi tidak tampil " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.hasDemoNotice, true,
-          theme.slug + ": peringatan simulasi pembayaran tidak tampil " + JSON.stringify(demoFeatureAudit));
+          theme.slug + ": catatan simulasi demo pada bagian hadiah tidak tampil " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.eventCards, demoFeatureAudit.expectedMappedEvents,
           theme.slug + ": jumlah kartu acara tidak sesuai mode JSON " + JSON.stringify(demoFeatureAudit));
         assert.equal(demoFeatureAudit.scheduleRows, demoFeatureAudit.expectedScheduleRows,
@@ -505,14 +522,17 @@ for (const slug of activeThemeSlugs) {
         // The shared controls appear only after the invitation is opened.
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
-          cover: document.querySelector('img[data-bind="cover.image"]')?.src || "",
-          groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
-          bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
-          gallery: Array.from(document.querySelectorAll("#gallery-grid img, .gallery-grid img")).map(img => img.src),
-          images: Array.from(document.querySelectorAll("img[src]")).map(img => img.src)
+          cover: Array.from(document.querySelectorAll('img[data-bind="cover.image"], img[data-bind="cover.heroImage"]'))
+            .map(img => img.currentSrc || img.src).filter(Boolean),
+          groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.currentSrc || document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
+          bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.currentSrc || document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
+          gallery: Array.from(document.querySelectorAll("#gallery-grid img, .gallery-grid img"))
+            .map(img => img.currentSrc || img.src),
+          images: Array.from(document.querySelectorAll("img[src]")).map(img => img.currentSrc || img.src)
         }));
         const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
-        if (theme.coverPhoto !== false) assert.ok(imageAudit.cover.startsWith(localPrefix), theme.slug + ": foto sampul bukan aset lokal " + imageAudit.cover);
+        if (theme.coverPhoto !== false) assert.ok(imageAudit.cover.length > 0 && imageAudit.cover.every(src => src.startsWith(localPrefix)),
+          theme.slug + ": foto sampul bukan aset lokal " + JSON.stringify(imageAudit.cover));
         assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
         assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
         const normalizedImageAudit = await page.evaluate(() => ({
@@ -526,15 +546,19 @@ for (const slug of activeThemeSlugs) {
         }));
         assert.ok(normalizedImageAudit.coverImage && normalizedImageAudit.coverImage === normalizedImageAudit.coverHeroImage,
           theme.slug + ": alias foto cover tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
+        assert.ok(normalizedImageAudit.coverHeroImage &&
+          !/^https?:/i.test(normalizedImageAudit.coverHeroImage) &&
+          !normalizedImageAudit.coverHeroImage.startsWith("//"),
+          theme.slug + ": sumber cover demo harus berupa path aset relatif lokal " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.groomPhoto && normalizedImageAudit.bridePhoto,
           theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.storyPhotos.length === storyAudit.photos && normalizedImageAudit.storyPhotos.every(Boolean),
           theme.slug + ": alias foto cerita tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.galleryCount > 0 &&
+        assert.ok(normalizedImageAudit.galleryCount >= 4 &&
           normalizedImageAudit.gallerySources.length === normalizedImageAudit.galleryCount &&
           normalizedImageAudit.gallerySources.every(Boolean),
           theme.slug + ": alias URL galeri tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.equal(imageAudit.gallery.length, normalizedImageAudit.galleryCount,
+        assert.ok(imageAudit.gallery.length >= 4 && imageAudit.gallery.length === normalizedImageAudit.galleryCount,
           theme.slug + ": jumlah foto galeri tidak sesuai JSON demo");
         assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
           theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
@@ -575,13 +599,39 @@ for (const slug of activeThemeSlugs) {
           assert.equal(await page.locator("#oa-quick-controls").count(), 0,
             theme.slug + ": kontrol cepat terpisah tidak boleh menduplikasi dock bersama.");
           const reducedMotionOpenStarted = Date.now();
-          await page.locator(theme.open).click();
           const expectedOpeningMotion = openingMotionNames[theme.slug];
           if (expectedOpeningMotion) {
-            await page.waitForFunction(({ selector, name }) => {
+            await page.evaluate(selector => {
               const cover = document.querySelector(selector);
-              return !!cover && getComputedStyle(cover).animationName.split(",").some(value => value.trim() === name);
-            }, { selector: theme.cover, name: expectedOpeningMotion }, { timeout: 1500 });
+              window.__oaMotionEvents = [];
+              if (cover) cover.addEventListener("animationstart", event => {
+                window.__oaMotionEvents.push({ name: event.animationName, elapsedTime: event.elapsedTime });
+              });
+            }, theme.cover);
+          }
+          await page.locator(theme.open).click();
+          if (expectedOpeningMotion) {
+            try {
+              await page.waitForFunction(name =>
+                Array.isArray(window.__oaMotionEvents) && window.__oaMotionEvents.some(event => event.name === name),
+                expectedOpeningMotion,
+                { timeout: 1500 }
+              );
+            } catch (error) {
+              const diagnostic = await page.evaluate(selector => {
+                const cover = document.querySelector(selector);
+                return {
+                  className: cover?.className || "",
+                  animationName: cover ? getComputedStyle(cover).animationName : "",
+                  reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+                  theme: document.documentElement.dataset.oaTheme || "",
+                  events: window.__oaMotionEvents || []
+                };
+              }, theme.cover);
+              throw new Error(theme.slug + ": opening animation did not start " + JSON.stringify(diagnostic));
+            }
+            const events = await page.evaluate(() => window.__oaMotionEvents || []);
+            motionEvidence.push({ theme: theme.slug, expected: expectedOpeningMotion, events });
             await page.waitForTimeout(160);
             await captureMotionScreenshot(page, path.join(screenshotDir, `${theme.slug}-opening-motion-desktop.png`));
           }
@@ -594,117 +644,8 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
-        const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
-        if (await galleryImage.count()) {
-          await galleryImage.evaluate(image => image.scrollIntoView({ block: "center", behavior: "instant" }));
-          const galleryHandle = await galleryImage.elementHandle();
-          await page.waitForFunction(image => {
-            if (image.classList.contains("oa-motion-visible")) return true;
-            return ["oa-botanical-visible", "oa-nocturne-visible"].some(className =>
-              image.classList.contains(className) || Boolean(image.closest("." + className))
-            );
-          }, galleryHandle, { timeout: 5000 });
-          await galleryImage.evaluate(async image => {
-            const running = image.getAnimations().filter(animation => animation.playState === "running" && typeof animation.transitionProperty === "string");
-            await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
-          });
-          const galleryBox = await galleryImage.boundingBox();
-          assert.ok(galleryBox && galleryBox.width > 0 && galleryBox.height > 0,
-            theme.slug + ": foto galeri tidak memiliki area interaksi.");
-          const galleryHitTarget = await galleryImage.evaluate(image => {
-            const rect = image.getBoundingClientRect();
-            const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-            return hit === image || image.contains(hit);
-          });
-          assert.ok(galleryHitTarget, theme.slug + ": foto galeri tertutup elemen lain.");
-          await page.mouse.click(galleryBox.x + galleryBox.width / 2, galleryBox.y + galleryBox.height / 2);
-          await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
-          assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
-            theme.slug + ": tombol foto berikutnya tidak tersedia");
-          await page.keyboard.press("ArrowRight");
-          await page.keyboard.press("Escape");
-          await page.waitForSelector(".oa-gallery-lightbox", { state: "detached", timeout: 3000 });
-        }
-        const mapAudit = await page.evaluate(() => {
-          const frames = Array.from(document.querySelectorAll(".oa-event-map iframe"));
-          const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
-          return {
-            frames: frames.map(frame => frame.src),
-            notes: notes.map(note => note.textContent),
-            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
-            eventMode: window.__invitationData?.eventMode || "",
-            eventCards: document.querySelectorAll("#event-list .event-card").length,
-            scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
-          };
-        });
-        // The public demo fixture is asserted unpinned before interception above.
-        // This browser-only fixture intentionally adds verified synthetic coordinates,
-        // so the iframe count is validated below against the exact satellite URL.
-        const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
-        assert.equal(mapAudit.notes.length, 0,
-          theme.slug + ": pin sintetis yang sudah diverifikasi tidak boleh menampilkan peringatan lokasi belum terverifikasi");
-        assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
-          theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
-        assert.ok(mapAudit.mapLinks.every(url => url.startsWith("https://www.google.com/maps")),
-          theme.slug + ": tautan pencarian Maps harus tetap tersedia");
-        if (mapAudit.eventMode === "combined") {
-          assert.equal(mapAudit.eventCards, 1,
-            theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
-          assert.equal(mapAudit.scheduleRows, 2,
-            theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
-        }
-        const performanceAudit = await page.evaluate(() => {
-          const elements = Array.from(document.body.querySelectorAll("*"));
-          const backdrop = [];
-          const slowTransitions = [];
-          const safeMotionLimits = {
-            opacity: 4.5, transform: 4.5, filter: 2.5, "clip-path": 2.5,
-            "background-color": 1.2, color: 1.2, "box-shadow": 1.2,
-            "border-color": 1.2, "letter-spacing": .55
-          };
-          for (const element of elements) {
-            const style = getComputedStyle(element);
-            const effect = style.backdropFilter || style.webkitBackdropFilter;
-            const blurValues = [...String(effect || "").matchAll(/blur\\(([-+]?\\d*\\.?\\d+)px\\)/g)]
-              .map(match => Number(match[1]));
-            if (blurValues.some(value => value > 8)) {
-              backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : "") + " blur=" + Math.max(...blurValues) + "px");
-            }
-            const properties = style.transitionProperty.split(",").map(value => value.trim());
-            const durations = style.transitionDuration.split(",").map(value => parseFloat(value) * (value.includes("ms") ? .001 : 1));
-            properties.forEach((property, index) => {
-              const duration = durations[index % durations.length] || 0;
-              const limit = safeMotionLimits[property] ?? .55;
-              if (duration > limit) {
-                slowTransitions.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\\s+/g, ".") : "") + " [" + property + " " + duration + "s]");
-              }
-            });
-          }
-          return { backdrop, slowTransitions: slowTransitions.slice(0, 16) };
-        });
-        assert.equal(performanceAudit.backdrop.length, 0, theme.slug + ": efek backdrop blur berat masih aktif " + JSON.stringify(performanceAudit.backdrop));
-        assert.equal(performanceAudit.slowTransitions.length, 0, theme.slug + ": transisi layout/efek berat melampaui batas " + JSON.stringify(performanceAudit.slowTransitions));
-        await page.emulateMedia({ reducedMotion: "reduce" });
-        const reducedMotionAudit = await page.evaluate(() => {
-          const elements = Array.from(document.querySelectorAll("#app, #app *"));
-          const seconds = value => Math.max(0, ...String(value || "0s").split(",").map(part => parseFloat(part) * (part.includes("ms") ? .001 : 1)).filter(Number.isFinite));
-          return {
-            transition: Math.max(0, ...elements.map(element => seconds(getComputedStyle(element).transitionDuration))),
-            animation: Math.max(0, ...elements.map(element => seconds(getComputedStyle(element).animationDuration))),
-            scroll: getComputedStyle(document.documentElement).scrollBehavior
-          };
-        });
-        assert.ok(reducedMotionAudit.transition <= .001 && reducedMotionAudit.animation <= .001 && reducedMotionAudit.scroll === "auto",
-          theme.slug + ": preferensi reduced-motion belum dihormati " + JSON.stringify(reducedMotionAudit));
-        await page.emulateMedia({ reducedMotion: "no-preference" });
-        const motionAudit = await page.evaluate(() => ({
-          left: document.querySelectorAll('#app [data-oa-motion="left"]').length,
-          right: document.querySelectorAll('#app [data-oa-motion="right"]').length,
-          up: document.querySelectorAll('#app [data-oa-motion="up"]').length,
-          photos: document.querySelectorAll('#app img.oa-motion-photo').length
-        }));
-        assert.ok(motionAudit.left + motionAudit.right > 0 && motionAudit.up > 0,
-          theme.slug + ": animasi arah samping dan naik belum diterapkan");
+        // Verify the scheduled auto-scroll before gallery interaction, then leave it paused.
+        // This keeps Playwright's gallery actionability checks deterministic without skipping the scroll test.
         const autoScroll = page.locator('#oa-floating-controls [data-oa-action="auto"]');
         if (await autoScroll.isEnabled()) {
           // The invitation should begin scrolling automatically after it is opened.
@@ -746,6 +687,126 @@ for (const slug of activeThemeSlugs) {
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
             theme.slug + ": tombol auto-scroll tidak berhenti");
         }
+        const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
+        if (await galleryImage.count()) {
+          await galleryImage.evaluate(image => image.scrollIntoView({ block: "center", behavior: "instant" }));
+          const galleryHandle = await galleryImage.elementHandle();
+          await page.waitForFunction(image => {
+            if (image.classList.contains("oa-motion-visible")) return true;
+            return ["oa-botanical-visible", "oa-nocturne-visible"].some(className =>
+              image.classList.contains(className) || Boolean(image.closest("." + className))
+            );
+          }, galleryHandle, { timeout: 5000 });
+          await galleryImage.evaluate(async image => {
+            const running = image.getAnimations().filter(animation => animation.playState === "running" && typeof animation.transitionProperty === "string");
+            await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
+          });
+          const galleryBox = await galleryImage.boundingBox();
+          assert.ok(galleryBox && galleryBox.width > 0 && galleryBox.height > 0,
+            theme.slug + ": foto galeri tidak memiliki area interaksi.");
+          const galleryHitTarget = await galleryImage.evaluate(image => {
+            const rect = image.getBoundingClientRect();
+            const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            return hit === image || image.contains(hit);
+          });
+          assert.ok(galleryHitTarget, theme.slug + ": foto galeri tertutup elemen lain.");
+          await page.mouse.click(galleryBox.x + galleryBox.width / 2, galleryBox.y + galleryBox.height / 2);
+          await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
+          assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
+            theme.slug + ": tombol foto berikutnya tidak tersedia");
+          await page.keyboard.press("ArrowRight");
+          await page.keyboard.press("Escape");
+          await page.waitForSelector(".oa-gallery-lightbox", { state: "detached", timeout: 3000 });
+        }
+        const mapAudit = await page.evaluate(() => {
+          const frames = Array.from(document.querySelectorAll(".oa-event-map iframe"));
+          const notes = Array.from(document.querySelectorAll(".oa-event-map-note"));
+          const eventSource = window.__invitationData?.__renderEvents || window.__invitationData?.events || {};
+          const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource);
+          const eventSource = window.__invitationData?.__renderEvents || window.__invitationData?.events || {};
+          const events = Array.isArray(eventSource) ? eventSource : Object.values(eventSource);
+          return {
+            frames: frames.map(frame => frame.src),
+            notes: notes.map(note => note.textContent),
+            mapLinks: Array.from(document.querySelectorAll(".oa-event-location")).map(link => link.href),
+            expectedMapLinks: events.map(event => event.mapUrl).filter(Boolean),
+            expectedMapLinks: events.map(event => event.mapsUrl).filter(Boolean),
+            eventMode: window.__invitationData?.eventMode || "",
+            eventCards: document.querySelectorAll("#event-list .event-card").length,
+            scheduleRows: document.querySelectorAll("#event-list .oa-event-schedule-item").length
+          };
+        });
+        // The public demo fixture is asserted unpinned before interception above.
+        // This browser-only fixture intentionally adds verified synthetic coordinates,
+        // so the iframe count is validated below against the exact satellite URL.
+        const expectedLocationCards = mapAudit.eventMode === "combined" ? 1 : 2;
+        assert.equal(mapAudit.notes.length, 0,
+          theme.slug + ": pin sintetis yang sudah diverifikasi tidak boleh menampilkan peringatan lokasi belum terverifikasi");
+        assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
+          theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
+        assert.deepEqual(mapAudit.mapLinks, mapAudit.expectedMapLinks,
+          theme.slug + ": tautan lokasi harus sama persis dengan URL Maps pada fixture uji");
+        if (mapAudit.eventMode === "combined") {
+          assert.equal(mapAudit.eventCards, 1,
+            theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
+          assert.equal(mapAudit.scheduleRows, 2,
+            theme.slug + ": kartu gabungan harus memuat dua baris jadwal akad dan resepsi");
+        }
+        const performanceAudit = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll("#app, #app *"));
+          const backdrop = [];
+          for (const element of elements) {
+            const style = getComputedStyle(element);
+            const effect = style.backdropFilter || style.webkitBackdropFilter || "";
+            const blurRadii = Array.from(effect.matchAll(/blur\(\s*([0-9.]+)px\s*\)/g), match => Number(match[1]));
+            if (blurRadii.some(value => value > 8)) {
+              backdrop.push(element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\s+/g, ".") : "") + " (" + effect + ")");
+            }
+          }
+          const revealElements = Array.from(document.querySelectorAll(
+            "#app .oa-motion-item, #app .oa-motion-photo, #app [class*='reveal']"
+          ));
+          const slowTransitions = [];
+          for (const element of revealElements) {
+            const style = getComputedStyle(element);
+            const durations = style.transitionDuration.split(",").map(value =>
+              parseFloat(value) * (value.includes("ms") ? .001 : 1)
+            );
+            if (durations.some(value => value > .55)) {
+              slowTransitions.push(element.tagName.toLowerCase() +
+                (element.className && typeof element.className === "string" ? "." + element.className.trim().replace(/\s+/g, ".") : "") +
+                " (" + style.transitionDuration + ")");
+            }
+          }
+          return { backdrop, slowTransitions: slowTransitions.slice(0, 12), revealCount: revealElements.length };
+        });
+        assert.equal(performanceAudit.backdrop.length, 0,
+          theme.slug + ": backdrop blur di atas 8px masih aktif " + JSON.stringify(performanceAudit.backdrop));
+        assert.ok(performanceAudit.revealCount > 0,
+          theme.slug + ": tidak ada elemen reveal untuk diaudit.");
+        assert.equal(performanceAudit.slowTransitions.length, 0,
+          theme.slug + ": durasi transisi reveal melebihi 0,55 detik " + JSON.stringify(performanceAudit.slowTransitions));
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        const reducedMotionAudit = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll("#app, #app *"));
+          const seconds = value => Math.max(0, ...String(value || "0s").split(",").map(part => parseFloat(part) * (part.includes("ms") ? .001 : 1)).filter(Number.isFinite));
+          return {
+            transition: Math.max(0, ...elements.map(element => seconds(getComputedStyle(element).transitionDuration))),
+            animation: Math.max(0, ...elements.map(element => seconds(getComputedStyle(element).animationDuration))),
+            scroll: getComputedStyle(document.documentElement).scrollBehavior
+          };
+        });
+        assert.ok(reducedMotionAudit.transition <= .001 && reducedMotionAudit.animation <= .001 && reducedMotionAudit.scroll === "auto",
+          theme.slug + ": preferensi reduced-motion belum dihormati " + JSON.stringify(reducedMotionAudit));
+        await page.emulateMedia({ reducedMotion: "no-preference" });
+        const motionAudit = await page.evaluate(() => ({
+          left: document.querySelectorAll('#app [data-oa-motion="left"]').length,
+          right: document.querySelectorAll('#app [data-oa-motion="right"]').length,
+          up: document.querySelectorAll('#app [data-oa-motion="up"]').length,
+          photos: document.querySelectorAll('#app img.oa-motion-photo').length
+        }));
+        assert.ok(motionAudit.left + motionAudit.right > 0 && motionAudit.up > 0,
+          theme.slug + ": animasi arah samping dan naik belum diterapkan");
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-desktop.png`));
         assert.equal(await page.locator('#oa-floating-controls [data-oa-action="top"]').count(), 1,
           theme.slug + ": tombol kembali ke atas tidak tersedia");
@@ -1003,7 +1064,8 @@ for (const slug of activeThemeSlugs) {
 
     // Responsive and demo-interaction pass at a common mobile viewport.
     for (const theme of themes) {
-      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+      // Exercise the narrowest supported mobile width first; resize to 390px below.
+      const page = await browser.newPage({ viewport: { width: 360, height: 800 }, isMobile: true, deviceScaleFactor: 1 });
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
       await page.emulateMedia({ reducedMotion: "reduce" });
@@ -1060,19 +1122,36 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": gulir otomatis harus nonaktif saat reduced-motion aktif");
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
-        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile.png`));
-        const layout = await page.evaluate(() => ({
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-360.png`));
+        const layout360 = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           page: document.documentElement.scrollWidth,
           rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
           guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
         }));
-        assert.ok(layout.page <= layout.viewport + 2,
-          theme.slug + ": horizontal overflow di mobile " + JSON.stringify(layout));
-        assert.ok(layout.rsvp > 0 && layout.rsvp <= layout.viewport,
-          theme.slug + ": formulir RSVP tidak responsif " + JSON.stringify(layout));
-        assert.ok(layout.guestbook > 0 && layout.guestbook <= layout.viewport,
-          theme.slug + ": buku tamu tidak responsif " + JSON.stringify(layout));
+        assert.equal(layout360.viewport, 360, theme.slug + ": viewport 360px tidak diterapkan.");
+        assert.ok(layout360.page <= layout360.viewport + 2,
+          theme.slug + ": horizontal overflow pada 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.rsvp > 0 && layout360.rsvp <= layout360.viewport,
+          theme.slug + ": formulir RSVP tidak responsif pada 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.guestbook > 0 && layout360.guestbook <= layout360.viewport,
+          theme.slug + ": buku tamu tidak responsif pada 360px " + JSON.stringify(layout360));
+
+        await page.setViewportSize({ width: 390, height: 844 });
+        const layout390 = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          page: document.documentElement.scrollWidth,
+          rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
+          guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
+        }));
+        assert.equal(layout390.viewport, 390, theme.slug + ": viewport 390px tidak diterapkan.");
+        assert.ok(layout390.page <= layout390.viewport + 2,
+          theme.slug + ": horizontal overflow pada 390px " + JSON.stringify(layout390));
+        assert.ok(layout390.rsvp > 0 && layout390.rsvp <= layout390.viewport,
+          theme.slug + ": formulir RSVP tidak responsif pada 390px " + JSON.stringify(layout390));
+        assert.ok(layout390.guestbook > 0 && layout390.guestbook <= layout390.viewport,
+          theme.slug + ": buku tamu tidak responsif pada 390px " + JSON.stringify(layout390));
+        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
@@ -1171,6 +1250,7 @@ for (const slug of activeThemeSlugs) {
     if (browser) await browser.close();
     if (server.listening) await new Promise(resolve => server.close(resolve));
   }
+  fs.writeFileSync(path.join(screenshotDir, "motion-evidence.json"), JSON.stringify({ themes: motionEvidence }, null, 2));
   assert.equal(failures.length, 0, failures.join("\n"));
 })().catch(error => {
   console.error(error);
