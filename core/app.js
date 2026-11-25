@@ -1526,6 +1526,8 @@
           : null;
         if (target === open) handleOpenClick(event);
       };
+      // Keep a target-level fallback for older browser/theme event stacks.
+      open.addEventListener("click", handleOpenClick, true);
       document.addEventListener("click", delegatedOpenClick, true);
       // Browser QA waits for this marker so it never races the shared click binding.
       open.dataset.oaCoverReady = "true";
