@@ -698,6 +698,10 @@ for (const slug of activeThemeSlugs) {
             }, { openSelector: theme.open, coverSelector: theme.cover });
             console.log("DEBUG nocturne before-open " + JSON.stringify(beforeOpen));
           }
+          await page.waitForFunction(selector => {
+            const button = document.querySelector(selector);
+            return button?.dataset.oaCoverReady === "true";
+          }, theme.open, { timeout: 5000 });
           await page.locator(theme.open).click();
           if (theme.slug === "aksara-nocturne") {
             const afterOpen = await page.evaluate(({ openSelector, coverSelector }) => {
