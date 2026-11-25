@@ -1397,3 +1397,26 @@ html[data-oa-theme] { --oa-motion-duration: var(--oa-reveal-time, .44s); }
 
 /* Luma keeps its quieter editorial reveal cadence. */
 html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezier(.18,.78,.22,1); }
+
+
+/* Mobile dock: the overflow trigger is wrapped for its popup, so size the
+   wrapper as a flex item too; sizing only its child lets "Lainnya" escape
+   the dock on narrow screens. Keep the popup anchored to this wrapper. */
+@media (max-width: 600px) {
+  html.oa-invitation-opened > #oa-floating-controls > .oa-nav-more-wrap {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    align-items: stretch;
+  }
+  html.oa-invitation-opened > #oa-floating-controls > .oa-nav-more-wrap > .oa-nav-more {
+    flex: 1 1 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding-inline: 2px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
