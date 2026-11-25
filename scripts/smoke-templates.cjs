@@ -1216,6 +1216,10 @@ for (const slug of activeThemeSlugs) {
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await auditCover(page, theme, "mobile");
         if (theme.open) {
+          await page.waitForFunction(selector => {
+            const button = document.querySelector(selector);
+            return button?.dataset.oaCoverReady === "true";
+          }, theme.open, { timeout: 5000 });
           const reducedMotionOpenStarted = Date.now();
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
