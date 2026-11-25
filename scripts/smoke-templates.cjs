@@ -349,12 +349,19 @@ for (const slug of activeThemeSlugs) {
             const surface = document.querySelector('[data-oa-depth-surface="' + slug + '"]');
             const layers = document.querySelectorAll('[data-oa-depth-layer="' + slug + '"]');
             const style = document.querySelector('style[data-oa-depth-motion="' + slug + '"]');
+            const appRoot = document.getElementById("app");
             return {
               surface: !!surface,
               entered: !!surface?.classList.contains("oa-depth-entered"),
               perspective: surface ? getComputedStyle(surface).perspective : "",
               layers: layers.length,
-              stylesheet: !!style
+              stylesheet: !!style,
+              programRegistered: window.OAThemePrograms?.has(slug) ?? null,
+              programActive: window.OAThemePrograms?.active || "",
+              themeProgram: document.documentElement.dataset.oaThemeProgram || "",
+              appRoot: !!appRoot,
+              rootHasCover: !!appRoot?.querySelector("#cover, #cover-section, .cover"),
+              documentHasCover: !!document.querySelector("#cover, #cover-section, .cover")
             };
           }, theme.slug);
           assert.ok(depthAudit.surface && depthAudit.entered && depthAudit.stylesheet && depthAudit.layers > 0,
@@ -678,6 +685,13 @@ for (const slug of activeThemeSlugs) {
             await page.evaluate(selector => {
               const cover = document.querySelector(selector);
               window.__oaMotionEvents = [];
+              window.__oaOpenClicks = [];
+              document.addEventListener("click", event => {
+                const target = event.target instanceof Element
+                  ? event.target.closest("#open-invitation-btn, #open-btn")
+                  : null;
+                if (target) window.__oaOpenClicks.push({ id: target.id, ready: target.dataset.oaCoverReady === "true" });
+              }, true);
               if (cover) cover.addEventListener("animationstart", event => {
                 window.__oaMotionEvents.push({ name: event.animationName, elapsedTime: event.elapsedTime });
               });
@@ -735,7 +749,10 @@ for (const slug of activeThemeSlugs) {
                   animationName: cover ? getComputedStyle(cover).animationName : "",
                   reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
                   theme: document.documentElement.dataset.oaTheme || "",
-                  events: window.__oaMotionEvents || []
+                  events: window.__oaMotionEvents || [],
+                  clicks: window.__oaOpenClicks || [],
+                  ready: document.querySelector("#open-invitation-btn, #open-btn")?.dataset.oaCoverReady || "",
+                  activeOpenInApp: !!document.getElementById("app")?.contains(document.querySelector("#open-invitation-btn, #open-btn"))
                 };
               }, theme.cover);
               throw new Error(theme.slug + ": opening animation did not start " + JSON.stringify(diagnostic));
