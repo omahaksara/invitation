@@ -101,7 +101,7 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       style.dataset.oaThemeProgram = "botanical-garden";
       style.textContent = `
 [data-oa-botanical-motion="ready"] .cover-orbit{animation:oaBotanicalOrbit 28s linear 1 both}
-[data-oa-botanical-motion="ready"] .oa-botanical-reveal{opacity:0;transform:translate3d(0,28px,0) rotate(-1.2deg) scale(.96);clip-path:ellipse(76% 0% at 50% 100%);transition:opacity 1000ms ease,transform 1200ms cubic-bezier(.16,.8,.2,1),clip-path 1100ms cubic-bezier(.16,.8,.2,1)}
+[data-oa-botanical-motion="ready"] .oa-botanical-reveal{opacity:0;transform:translate3d(0,28px,0) rotate(-1.2deg) scale(.96);clip-path:ellipse(76% 26% at 50% 100%);transition:opacity 1000ms ease,transform 1200ms cubic-bezier(.16,.8,.2,1),clip-path 1100ms cubic-bezier(.16,.8,.2,1)}
 [data-oa-botanical-motion="ready"] .oa-botanical-reveal.oa-botanical-visible{opacity:1;transform:none;clip-path:ellipse(100% 100% at 50% 50%)}
 [data-oa-botanical-motion="ready"] .person-card img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
 [data-oa-botanical-motion="ready"] .person-card.oa-botanical-visible img{transform:scale(1.045)}
@@ -117,7 +117,7 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       root.dataset.oaBotanicalMotion = "ready";
       const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-grid img, .gallery-item img, .form-card");
       targets.forEach(node => node.classList.add("oa-botanical-reveal"));
-      observe(targets, "oa-botanical-visible", { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+      observe(targets, "oa-botanical-visible", { threshold: 0.01, rootMargin: "0px 0px -4% 0px" });
       depthMotion({ surface: ".cover", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
       
       const orbit = root.querySelector(".cover-orbit");
