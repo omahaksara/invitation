@@ -194,7 +194,11 @@ const openingMotionNames = {
   "aksara-nocturne": "oaNocturnePortalClose",
   "atelier-editorial": "oaAtelierPageTurn",
   "botanical-garden": "oaBotanicalPetalClose",
+  "earty": "eartyArchRetreat",
   "elegance": "oaEleganceIrisClose",
+  "jendela-senja": "jsFilmFade",
+  "lumiere-bloom": "lumiereBloomClose",
+  "royal-vintage": "rvLetterpressClose",
   "sagara": "oaSagaraTideRetreat"
 };
 
