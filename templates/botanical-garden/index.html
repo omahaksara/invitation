@@ -115,7 +115,7 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       `;
       document.head.append(style);
       root.dataset.oaBotanicalMotion = "ready";
-      const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .form-card");
+      const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-item img, .form-card");
       targets.forEach(node => node.classList.add("oa-botanical-reveal"));
       observe(targets, "oa-botanical-visible", { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
       depthMotion({ surface: ".cover", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
