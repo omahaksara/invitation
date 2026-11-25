@@ -47,14 +47,12 @@
 
   function activate(slug, context = {}) {
     deactivate();
-    const program = programs.get(slug);
+    const registeredProgram = programs.get(slug);
+    // Keep the shared motion fallback available even when a legacy theme has no
+    // registered choreography program; invitation rendering must never depend on it.
+    const program = registeredProgram || { activate() {} };
+    const hasProgram = Boolean(registeredProgram);
     document.documentElement.dataset.oaThemeProgram = slug || "default";
-    if (!program) {
-      document.dispatchEvent(new CustomEvent("oa:theme-program-ready", {
-        detail: { slug, enhanced: false }
-      }));
-      return false;
-    }
 
     const current = generation;
     const controller = new AbortController();
@@ -298,9 +296,9 @@
         });
       };
       document.dispatchEvent(new CustomEvent("oa:theme-program-ready", {
-        detail: { slug, enhanced: true }
+        detail: { slug, enhanced: hasProgram }
       }));
-      return true;
+      return hasProgram;
     } catch (error) {
       controller.abort();
       cleanups.reverse().forEach(fn => { try { fn(); } catch (_) {} });
