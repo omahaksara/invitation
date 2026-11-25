@@ -1435,11 +1435,14 @@
   }
 
   function setupCover() {
-    const cover = document.getElementById("cover-section") || document.getElementById("cover");
-    const main = document.getElementById("main-content") || document.getElementById("app-inner");
-    const open = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
-    const musicToggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
-    const audio = document.getElementById("bg-music");
+    // Scope every cover control to the currently rendered invitation. Legacy pages
+    // may retain similarly named controls outside the active theme root.
+    const appRoot = document.getElementById("app") || document;
+    const cover = appRoot.querySelector("#cover-section") || appRoot.querySelector("#cover");
+    const main = appRoot.querySelector("#main-content") || appRoot.querySelector("#app-inner");
+    const open = appRoot.querySelector("#open-invitation-btn") || appRoot.querySelector("#open-btn");
+    const musicToggle = appRoot.querySelector("#music-toggle") || appRoot.querySelector("#music-btn");
+    const audio = appRoot.querySelector("#bg-music");
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
