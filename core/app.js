@@ -1443,7 +1443,7 @@
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
-      open.addEventListener("click", async event => {
+      const handleOpenClick = async event => {
         // Run before theme-level bubble handlers so the shared cover lifecycle
         // cannot be cancelled by a theme-specific click listener.
         event.preventDefault();
@@ -1514,7 +1514,16 @@
           }
         }
         setupReveal();
-      }, { capture: true });
+      };
+      // Delegate at document capture so legacy theme handlers cannot swallow the
+      // shared cover lifecycle and nested label/span taps behave identically.
+      const delegatedOpenClick = event => {
+        const target = event.target instanceof Element
+          ? event.target.closest("#open-invitation-btn, #open-btn")
+          : null;
+        if (target === open) handleOpenClick(event);
+      };
+      document.addEventListener("click", delegatedOpenClick, true);
       // Browser QA waits for this marker so it never races the shared click binding.
       open.dataset.oaCoverReady = "true";
     } else {
