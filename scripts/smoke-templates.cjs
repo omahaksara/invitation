@@ -1169,7 +1169,6 @@ for (const slug of activeThemeSlugs) {
         assert.ok(layout390.guestbook > 0 && layout390.guestbook <= layout390.viewport,
           theme.slug + ": buku tamu tidak responsif pada 390px " + JSON.stringify(layout390));
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
-        await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
