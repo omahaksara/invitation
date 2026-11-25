@@ -257,22 +257,6 @@ body,#app{background:#f3e8d8!important;color:#4c392b!important}
   }
 }
 
-
-/* Art direction: sunlit portrait gallery — image and names occupy separate planes. */
-.aksav .cover{display:grid;grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);align-items:center;place-items:stretch;text-align:left;padding:clamp(24px,5vw,76px);background:#f3e8d8}
-.aksav .cover>img{position:relative;inset:auto;grid-column:1;grid-row:1;width:100%;height:min(78svh,820px);object-fit:cover;opacity:1;z-index:0;border:1px solid #a77b52;border-radius:48% 48% 8px 8px/23% 23% 8px 8px;box-shadow:0 24px 60px rgba(91,61,38,.2);animation:none}
-.aksav .cover-shade{display:none}
-.aksav .cover:after{inset:0;z-index:1;background:linear-gradient(90deg,transparent 0%,rgba(243,232,216,.08) 40%,#f3e8d8 55%,#f3e8d8 100%)}
-.aksav .arch{grid-column:2;grid-row:1;align-self:center;position:relative;z-index:2;width:100%;max-width:620px;padding:clamp(22px,4vw,60px);border:0;border-left:1px solid #a77b52;border-radius:0;box-shadow:none;text-align:left}
-.aksav .cover h1{font-size:clamp(3rem,6.4vw,5.6rem);line-height:.9;margin:20px 0;text-align:left}
-.aksav .cover .cover-ampersand{display:block;margin:7px 0;text-align:left}
-.aksav .cover .cover-kicker,.aksav .cover .cover-date,.aksav .cover .cover-recipient{text-align:left}
-.aksav .cover .btn{border-radius:2px;background:#5b392c;color:#fffaf3;border-color:#5b392c}
-html[data-oa-theme="aksav"] .aksav #cover.is-opening{animation:oaAksavCurtainClose 920ms cubic-bezier(.72,0,.22,1) both;transform-origin:left center;pointer-events:none}
-@keyframes oaAksavCurtainClose{0%{opacity:1;clip-path:inset(0 0 0 0);transform:translateX(0)}62%{opacity:1;clip-path:inset(0 0 0 42%);transform:translateX(2%)}100%{opacity:0;clip-path:inset(0 0 0 100%);transform:translateX(7%)}}
-@media(max-width:700px){.aksav .cover{grid-template-columns:1fr;grid-template-rows:minmax(0,48svh) auto;min-height:100svh;padding:0 0 30px}.aksav .cover>img{grid-column:1;grid-row:1;width:100%;height:48svh;border:0;border-bottom:1px solid #a77b52;border-radius:0 0 46% 46%/0 0 12% 12%;box-shadow:none;object-position:center 30%}.aksav .cover:after{background:linear-gradient(180deg,transparent 30%,rgba(243,232,216,.08) 43%,#f3e8d8 56%,#f3e8d8 100%)}.aksav .arch{grid-column:1;grid-row:2;width:auto;max-width:none;margin:-8px 22px 0;padding:22px 8px 0;border-left:0;border-top:1px solid #a77b52;text-align:center}.aksav .cover h1{text-align:center;font-size:clamp(2.7rem,11vw,4.2rem);margin:12px 0}.aksav .cover .cover-ampersand,.aksav .cover .cover-kicker,.aksav .cover .cover-date,.aksav .cover .cover-recipient{text-align:center}.aksav .cover .btn{margin-top:14px}}
-@media(prefers-reduced-motion:reduce){.aksav #cover.is-opening{animation:none!important;transform:none!important;clip-path:none!important}}
-
 </style>
 <div class="aksav" id="main-content">
 <section id="cover" class="cover">
@@ -300,41 +284,3 @@ html[data-oa-theme="aksav"] .aksav #cover.is-opening{animation:oaAksavCurtainClo
 <nav class="aksav-nav" aria-label="Navigasi undangan"><a href="#cover"><span>⌂</span>Home</a><a href="#couple"><span>♡</span>Mempelai</a><a href="#events"><span>▦</span>Acara</a><a href="#gallery"><span>▧</span>Galeri</a><a href="#guestbook-section"><span>✉</span>Ucapan</a><a href="#gift-section"><span>♧</span>Hadiah</a><button id="music-toggle" type="button" aria-label="Putar atau jeda musik"><span>♫</span>Musik</button></nav>
 <audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
-<script>
-(() => {
- "use strict";
- if (!window.OAThemePrograms) return;
- window.OAThemePrograms.register("aksav", {
-  activate({root,navigation,observe}) {
-   const cover=root.querySelector("#cover, #cover-section, .hero, .cover, [class*='-cover']");
-   const title=cover&&cover.querySelector("h1,h2");
-   const photo=cover&&cover.querySelector("img");
-   if(cover) cover.dataset.oaExperienceCover="aksav";
-   if(title) title.dataset.oaExperienceTitle="aksav";
-   if(photo) photo.dataset.oaExperiencePhoto="aksav";
-      style.textContent += `
-html[data-oa-theme="aksav"] #app .oa-experience-reveal-aksav{opacity:0;transform:perspective(900px) translate3d(42px,0,0) rotateY(-5deg) scale(.98);filter:blur(4px);clip-path:inset(0 0 0 16%);transition:opacity 820ms ease,transform 1050ms cubic-bezier(.16,.8,.2,1),filter 820ms ease,clip-path 900ms ease}
-html[data-oa-theme="aksav"] #app .oa-experience-reveal-aksav.oa-experience-visible-aksav{opacity:1;transform:none;filter:none;clip-path:inset(0)}
-@media(prefers-reduced-motion:reduce){html[data-oa-theme="aksav"] #app .oa-experience-reveal-aksav{opacity:1;transform:none;filter:none;clip-path:none;transition:none}}
-`;
-
-   if(navigation) navigation.classList.add("oa-nav-aksav");
-   const targets=root.querySelectorAll(".person-card,.event-card,.story-card,.gallery-grid img,.gallery-item,.person-photo-frame,.hero-photo");
-   targets.forEach(node=>node.classList.add("oa-experience-reveal-aksav"));
-   const style=document.createElement("style");
-   style.dataset.oaThemeProgram="aksav";
-   style.textContent = "@keyframes oaAksav{from{opacity:.72;transform:scale(1.08) rotate(-1deg);filter:blur(4px);clip-path:inset(0 0 12% 0)}to{opacity:1;transform:none;filter:none;clip-path:inset(0)}}\n@keyframes oaAksavTitle{from{opacity:0;transform:translate3d(-24px,0,0);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}\nhtml[data-oa-theme=\"aksav\"] [data-oa-experience-cover=\"aksav\"] [data-oa-experience-title=\"aksav\"]{animation:oaAksavTitle 1050ms cubic-bezier(.2,.75,.2,1) both}\nhtml[data-oa-theme=\"aksav\"] [data-oa-experience-cover=\"aksav\"] [data-oa-experience-photo=\"aksav\"]{animation:oaAksav 1350ms cubic-bezier(.2,.7,.2,1) both}\nhtml[data-oa-theme=\"aksav\"] #app .oa-experience-reveal-aksav{opacity:0;transform:translate3d(-24px,0,0);filter:blur(4px);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.2,.75,.2,1),filter 850ms ease}\nhtml[data-oa-theme=\"aksav\"] #app .oa-experience-reveal-aksav.oa-experience-visible-aksav{opacity:1;transform:none;filter:none}\n#oa-floating-controls.oa-nav-aksav{left:50%!important;right:auto!important;top:auto!important;bottom:max(12px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 22px)!important;padding:7px 11px!important;gap:4px!important;border-radius:4px!important;background:#250d10!important;border:1px solid #c99a65!important;box-shadow:0 12px 32px #0009!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}\n#oa-floating-controls.oa-nav-aksav button{color:#f0d9b6!important;border-color:#c99a65!important}\n.oa-gallery-lightbox[data-oa-theme=\"aksav\"]{background:rgba(24,9,12,.97)!important;color:#f0d9b6!important}\n.oa-gallery-lightbox[data-oa-theme=\"aksav\"] img{border:1px solid #c99a65!important;border-radius:2px!important;box-shadow:0 24px 70px rgba(0,0,0,.25)!important}\n@media(max-width:600px){#oa-floating-controls.oa-nav-aksav{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;max-width:none!important;justify-content:space-around!important;border-radius:999px!important}}\n@media(prefers-reduced-motion:reduce){html[data-oa-theme=\"aksav\"] [data-oa-experience-cover=\"aksav\"] [data-oa-experience-title=\"aksav\"],html[data-oa-theme=\"aksav\"] [data-oa-experience-cover=\"aksav\"] [data-oa-experience-photo=\"aksav\"]{animation:none!important;transition:none!important;transform:none!important;filter:none!important}html[data-oa-theme=\"aksav\"] #app .oa-experience-reveal-aksav{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}";
-   document.head.append(style);
-   observe(targets,"oa-experience-visible-aksav",{threshold:.1,rootMargin:"0px 0px -6% 0px"});
-   return ()=>{
-    if(navigation) navigation.classList.remove("oa-nav-aksav");
-    if(cover) delete cover.dataset.oaExperienceCover;
-    if(title) delete title.dataset.oaExperienceTitle;
-    if(photo) delete photo.dataset.oaExperiencePhoto;
-    targets.forEach(node=>node.classList.remove("oa-experience-reveal-aksav","oa-experience-visible-aksav"));
-    style.remove();
-   };
-  }
- });
-})();
-</script>

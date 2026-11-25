@@ -52,7 +52,6 @@ const programs = [
   "aurelia-noir",
   "lumiere-bloom",
   "romantic-floral",
-  "aksav",
   "army",
   "earty",
   "lume",
@@ -107,7 +106,6 @@ assert.ok(aksaranocturne.includes("depthMotion })"), "aksara-nocturne: API depth
 
 const openingMotionContracts = {
   "aksara-nocturne": "oaNocturnePortalClose",
-  "aksav": "oaAksavCurtainClose",
   "atelier-editorial": "oaAtelierPageTurn",
   "botanical-garden": "oaBotanicalPetalClose",
   "elegance": "oaEleganceIrisClose",

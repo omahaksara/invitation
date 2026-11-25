@@ -138,7 +138,6 @@ const themes = [
 
 const openingMotionNames = {
   "aksara-nocturne": "oaNocturnePortalClose",
-  "aksav": "oaAksavCurtainClose",
   "atelier-editorial": "oaAtelierPageTurn",
   "botanical-garden": "oaBotanicalPetalClose",
   "elegance": "oaEleganceIrisClose",
