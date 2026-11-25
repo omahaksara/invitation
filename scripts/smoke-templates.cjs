@@ -1036,9 +1036,14 @@ for (const slug of activeThemeSlugs) {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
-        // Reload after a prior bottom-of-page audit can restore the old scroll offset.
-        // Reset before measuring the fixed cover at the narrower viewport.
-        await page.evaluate(() => window.scrollTo(0, 0));
+        // Prevent browser scroll restoration and smooth-scroll CSS from leaving
+        // the mobile cover partially outside the viewport before layout auditing.
+        await page.evaluate(() => {
+          history.scrollRestoration = "manual";
+          document.documentElement.style.scrollBehavior = "auto";
+          document.body.style.scrollBehavior = "auto";
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        });
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await auditCover(page, theme, "mobile");
         if (theme.open) {
