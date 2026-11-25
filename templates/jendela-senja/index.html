@@ -147,6 +147,11 @@ button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:t
  .open-button{margin-top:.6rem}
 }
 
+
+@keyframes jsFilmFade{0%{opacity:1;clip-path:inset(0);transform:translateY(0)}100%{opacity:0;clip-path:inset(0 0 100% 0);transform:translateY(-18px)}}
+#cover.is-opening{animation:jsFilmFade 760ms cubic-bezier(.7,0,.2,1) both;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#cover.is-opening{animation:none!important;transform:none!important;clip-path:none!important}}
+
 </style>
 </head>
 <body>
