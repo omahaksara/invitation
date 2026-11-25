@@ -598,8 +598,12 @@ for (const slug of activeThemeSlugs) {
         if (await galleryImage.count()) {
           await galleryImage.evaluate(image => image.scrollIntoView({ block: "center", behavior: "instant" }));
           const galleryHandle = await galleryImage.elementHandle();
-          await page.waitForFunction(image => image.classList.contains("oa-motion-visible"),
-            galleryHandle, { timeout: 5000 });
+          await page.waitForFunction(image => {
+            if (image.classList.contains("oa-motion-visible")) return true;
+            return ["oa-botanical-visible", "oa-nocturne-visible"].some(className =>
+              image.classList.contains(className) || Boolean(image.closest("." + className))
+            );
+          }, galleryHandle, { timeout: 5000 });
           await galleryImage.evaluate(async image => {
             const running = image.getAnimations().filter(animation => animation.playState === "running" && typeof animation.transitionProperty === "string");
             await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
