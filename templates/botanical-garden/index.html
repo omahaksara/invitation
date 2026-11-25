@@ -118,7 +118,7 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-grid img, .gallery-item img, .form-card");
       targets.forEach(node => node.classList.add("oa-botanical-reveal"));
       observe(targets, "oa-botanical-visible", { threshold: 0, rootMargin: "0px" });
-      depthMotion({ surface: ".cover", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
+      depthMotion({ surface: "#cover-section", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
       
       const orbit = root.querySelector(".cover-orbit");
       if (orbit && reducedMotion()) orbit.style.animation = "none";
