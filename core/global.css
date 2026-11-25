@@ -1418,3 +1418,21 @@ html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezie
     text-overflow: ellipsis;
   }
 }
+/* Keep the overflow trigger inside compact docks on narrow phones. */
+@media (max-width:600px) {
+  #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap {
+    flex:0 1 40px!important;
+    width:40px!important;
+    min-width:0!important;
+  }
+  #oa-floating-controls[class*="oa-nav-"] button.oa-nav-more {
+    flex:0 1 40px!important;
+    width:40px!important;
+    min-width:40px!important;
+    max-width:40px!important;
+    padding-inline:2px!important;
+    overflow:hidden;
+    font-size:9px!important;
+    letter-spacing:0!important;
+  }
+}
