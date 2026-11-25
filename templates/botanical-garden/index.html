@@ -56,7 +56,7 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
 </style>
 
 <div class="invite-shell">
-  <section class="cover" id="cover-section">
+  <section class="cover" id="cover-section" data-oa-opening-animation="oa-cover-botanical-garden-exit 980ms cubic-bezier(.76,0,.18,1) both">
 <img class="cover-photo" data-bind="cover.image" alt="Foto sampul undangan">
     <div class="cover-grain"></div><div class="cover-orbit orbit-one"></div><div class="cover-orbit orbit-two"></div>
     <p class="eyebrow" data-bind="cover.eyebrow">The Wedding Celebration</p>
@@ -118,7 +118,16 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-grid img, .gallery-item img, .form-card");
       targets.forEach(node => node.classList.add("oa-botanical-reveal"));
       observe(targets, "oa-botanical-visible", { threshold: 0, rootMargin: "0px" });
-      depthMotion({ surface: "#cover-section", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
+      const applyCoverDepth = () => depthMotion({ surface: "#cover-section", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
+      // The invitation shell can mount just after this program activates.
+      if (!applyCoverDepth() && "MutationObserver" in window) {
+        const mountObserver = new MutationObserver(() => {
+          if (!applyCoverDepth()) return;
+          mountObserver.disconnect();
+        });
+        mountObserver.observe(document.documentElement, { childList: true, subtree: true });
+        addCleanup(() => mountObserver.disconnect());
+      }
       
       const orbit = root.querySelector(".cover-orbit");
       if (orbit && reducedMotion()) orbit.style.animation = "none";
