@@ -194,12 +194,12 @@ const themes = [
 const openingMotionNames = {
   "aksara-nocturne": "oaNocturnePortalClose",
   "atelier-editorial": "oaAtelierPageTurn",
-  "botanical-garden": "oaBotanicalPetalClose",
-  "earty": "oa-cover-earty-exit",
+  "botanical-garden": "oa-cover-botanical-garden-exit",
+  "earty": "eartyArchRetreat",
   "elegance": "oaEleganceIrisClose",
-  "jendela-senja": "oa-cover-jendela-senja-exit",
-  "lumiere-bloom": "oa-cover-lumiere-bloom-exit",
-  "royal-vintage": "oa-cover-royal-vintage-exit",
+  "jendela-senja": "jsFilmFade",
+  "lumiere-bloom": "lumiereBloomClose",
+  "royal-vintage": "rvLetterpressClose",
   "sagara": "oaSagaraTideRetreat"
 };
 
