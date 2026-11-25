@@ -34,7 +34,7 @@ async function installThemeDemoFixture(page) {
       "kencana-jawa": "foto-08.jpg",
       "nexus": "foto-01.jpg"
     };
-    const coverAsset = coverPhotosByTheme[theme.slug] || coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
+    const coverAsset = coverPhotosByTheme[requestedTheme] || coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
     fixture.cover.image = coverAsset;
     fixture.cover.heroImage = coverAsset;
     fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
