@@ -60,6 +60,7 @@
     const controller = new AbortController();
     const cleanups = [];
     const root = context.root || document.getElementById("app") || document;
+    let depthMotionApplied = false;
     const api = Object.freeze({
       slug,
       root,
@@ -91,6 +92,7 @@
       },
 
       depthMotion(options = {}) {
+        if (depthMotionApplied) return false;
         const surface = root.querySelector(options.surface || "");
         if (!surface || reducedMotion()) return false;
 
@@ -254,6 +256,7 @@
           });
           style.remove();
         });
+        depthMotionApplied = true;
         return true;
       }
     });
@@ -261,6 +264,21 @@
     try {
       const cleanup = program.activate(api);
       if (typeof cleanup === "function") cleanups.push(cleanup);
+
+      // Supply shared 3D cover depth when a theme has no custom choreography.
+      if (!depthMotionApplied && !reducedMotion()) {
+        const coverSelector = "#cover, #cover-section, .cover, .cover-section, .sirein-cover, .velora-cover, .nexus-cover";
+        if (root.querySelector(coverSelector)) {
+          api.depthMotion({
+            surface: coverSelector,
+            layers: [
+              { selector: 'img[data-bind="cover.image"], img[data-bind="cover.heroImage"], .cover-photo, .cover-image, .hero-photo', z: 18, factor: 0.34 },
+              { selector: ".arch, .cover-frame, .cover-orbit, .cover-decoration, .cover-monogram", z: 36, factor: 0.62 },
+              { selector: ".cover h1, .cover-section h1, #cover h1, #cover-section h1", z: 48, factor: 0.78 }
+            ]
+          });
+        }
+      }
       if (current !== generation) {
         controller.abort();
         cleanups.reverse().forEach(fn => { try { fn(); } catch (_) {} });
