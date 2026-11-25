@@ -93,8 +93,13 @@
 
       depthMotion(options = {}) {
         if (depthMotionApplied) return false;
-        const surface = root.querySelector(options.surface || "");
-        if (!surface || reducedMotion()) return false;
+        const surfaceSelector = options.surface || "";
+        if (!surfaceSelector || reducedMotion()) return false;
+        // Some legacy templates mount their theme shell beside #app rather than inside it.
+        // Keep the 3D layer scoped to the active document when the supplied root misses it.
+        const surface = root.querySelector(surfaceSelector) || document.querySelector(surfaceSelector);
+        if (!surface) return false;
+        const queryRoot = root.contains(surface) ? root : document;
 
         const previousSurfaceMarker = surface.getAttribute("data-oa-depth-surface");
         const hadEnteredClass = surface.classList.contains("oa-depth-entered");
@@ -144,7 +149,7 @@
         if (!hadEnteredClass) surface.classList.remove("oa-depth-entered");
 
         const layerNodes = (options.layers || []).flatMap(item =>
-          Array.from(root.querySelectorAll(item.selector || "")).map(node => ({ node, item }))
+          Array.from(queryRoot.querySelectorAll(item.selector || "")).map(node => ({ node, item }))
         );
         const previousLayerMarkers = new Map();
         const previousLayerVars = new Map();
