@@ -261,6 +261,32 @@ body,.invite-shell,.main-content{background:var(--an-paper);color:var(--an-obsid
  .cover-date{margin-bottom:.8rem}
  .cover-foot{margin:1rem 0 0}
 }
+
+/* Lumiere Bloom — soft-paper editorial spread with a full-height portrait panel. */
+@media(min-width:761px){
+ .cover{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:100svh;padding:clamp(38px,6vw,84px);text-align:left;background:linear-gradient(90deg,#f7e8e4 0%,#f7e8e4 47%,#38252e 47%,#38252e 100%);color:#583b46}
+ .cover-photo{inset:0 0 0 47%;width:53%;height:100%;object-position:center 34%;opacity:1;filter:saturate(.92) contrast(1.08);mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 100%)}
+ .cover:before{inset:24px 53% 24px 24px;border:1px solid rgba(155,83,103,.42);border-radius:3px;z-index:0}
+ .cover:after{inset:40px 55% 40px 40px;border:1px solid rgba(201,168,106,.3);border-radius:0;z-index:0}
+ .cover .eyebrow,.cover .cover-monogram,.cover .cover-kicker,.cover h1,.cover .cover-line,.cover .cover-date,.cover .guest-label,.cover .guest-name,.cover .open-button,.cover .cover-foot{width:min(100%,520px);max-width:520px;margin-left:clamp(0px,3vw,38px);text-align:left}
+ .cover .eyebrow{color:#805968;margin-bottom:.65rem}
+ .cover-monogram{width:76px;height:76px;margin-top:0;margin-bottom:1rem;border-radius:50%;color:#805968;border-color:#b88491;outline-color:#b8849155}
+ .cover-kicker{color:#936c68;margin-bottom:.35rem}
+ .cover h1{align-items:flex-start;font-size:clamp(3.5rem,6.4vw,6rem);line-height:.9;color:#583b46;margin:.2rem 0 .8rem}
+ .cover h1 i{color:#b98570}
+ .cover-line{margin:.8rem 0 1rem;background:linear-gradient(90deg,#b98570,transparent);width:92px}
+ .cover-date{color:#795764;margin-bottom:1.1rem}
+ .guest-label{color:#806d70}
+ .guest-name{color:#583b46;margin-bottom:1rem}
+ .open-button{align-self:flex-start;min-width:190px;background:#654554;color:#fff8f1;border-color:#654554}
+ .cover-foot{color:#896f73;margin-top:1.1rem}
+}
+@media(max-width:760px){
+ .cover:after{background:linear-gradient(180deg,rgba(37,21,28,.08) 0%,rgba(37,21,28,.22) 34%,rgba(37,21,28,.88) 76%,#33232c 100%)}
+ .cover h1{text-shadow:0 3px 18px rgba(35,18,28,.55)}
+ .cover .guest-label,.cover .guest-name{color:#fff8f3}
+}
+
 </style>
 
 <div class="invite-shell">
