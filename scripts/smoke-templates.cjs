@@ -23,7 +23,6 @@ async function installThemeDemoFixture(page) {
       event && !event.coordinates && event.latitude == null && event.longitude == null &&
       typeof event.mapNote === "string" && event.mapNote.length > 0
     ), "Isolated browser fixture must keep its synthetic venue unpinned until the test injects coordinates.");
-    const requestUrl = new URL(route.request().url());
     const frameUrl = route.request().frame().url() || page.url();
     const requestedTheme = new URL(frameUrl).searchParams.get("theme") || "";
     const themeIndex = themes.findIndex(item => item.slug === requestedTheme);
@@ -100,6 +99,53 @@ async function auditCover(page, theme, device) {
     metrics.button.y >= -2 && metrics.button.y + metrics.button.height <= metrics.viewportHeight + 2,
     theme.slug + ": tombol buka terpotong/keluar viewport " + JSON.stringify(metrics));
   await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-cover-${device}.png`));
+}
+
+async function auditMobileDock(page, theme, width) {
+  const audit = await page.evaluate(() => {
+    const nav = document.querySelector("#oa-floating-controls");
+    if (!nav) return { missingNav: true };
+    const navRect = nav.getBoundingClientRect();
+    const requiredSections = ["home", "couple", "event", "gallery"];
+    const requiredActions = ["auto", "music", "more"];
+    const missingSections = requiredSections.filter(id =>
+      !nav.querySelector('[data-oa-section="' + id + '"]')
+    );
+    const missingActions = requiredActions.filter(action =>
+      !nav.querySelector('[data-oa-action="' + action + '"]')
+    );
+    const controls = [
+      ...requiredSections.map(id => nav.querySelector('[data-oa-section="' + id + '"]')),
+      ...requiredActions.map(action => nav.querySelector('[data-oa-action="' + action + '"]'))
+    ].filter(Boolean);
+    const outsideDock = controls.filter(element => {
+      const rect = element.getBoundingClientRect();
+      return rect.width <= 0 || rect.left < navRect.left - 1 || rect.right > navRect.right + 1;
+    }).map(element => ({
+      label: element.getAttribute("aria-label") || element.textContent.trim(),
+      left: Math.round(element.getBoundingClientRect().left),
+      right: Math.round(element.getBoundingClientRect().right)
+    }));
+    return {
+      missingNav: false,
+      missingSections,
+      missingActions,
+      outsideDock,
+      scrollWidth: nav.scrollWidth,
+      clientWidth: nav.clientWidth,
+      left: Math.round(navRect.left),
+      right: Math.round(navRect.right)
+    };
+  });
+  assert.equal(audit.missingNav, false, theme.slug + ": shared mobile dock tidak ditemukan.");
+  assert.deepEqual(audit.missingSections, [],
+    theme.slug + ": tombol navigasi utama hilang pada " + width + "px " + JSON.stringify(audit));
+  assert.deepEqual(audit.missingActions, [],
+    theme.slug + ": kontrol auto-scroll/musik/lebih tidak lengkap pada " + width + "px " + JSON.stringify(audit));
+  assert.deepEqual(audit.outsideDock, [],
+    theme.slug + ": tombol dock terpotong/tergeser di luar area pada " + width + "px " + JSON.stringify(audit));
+  assert.ok(audit.scrollWidth <= audit.clientWidth + 2,
+    theme.slug + ": dock membutuhkan scroll horizontal pada " + width + "px " + JSON.stringify(audit));
 }
 
 const themes = [
@@ -625,7 +671,39 @@ for (const slug of activeThemeSlugs) {
               });
             }, theme.cover);
           }
+          if (theme.slug === "aksara-nocturne") {
+            const beforeOpen = await page.evaluate(({ openSelector, coverSelector }) => {
+              const open = document.querySelector(openSelector);
+              const cover = document.querySelector(coverSelector);
+              return {
+                openId: open?.id || "",
+                openState: open?.dataset.oaOpening || "",
+                coverId: cover?.id || "",
+                openingAttribute: cover?.getAttribute("data-oa-opening-animation") || "",
+                openingDataset: cover?.dataset.oaOpeningAnimation || "",
+                coverAnimation: cover ? getComputedStyle(cover).animationName : ""
+              };
+            }, { openSelector: theme.open, coverSelector: theme.cover });
+            console.log("DEBUG nocturne before-open " + JSON.stringify(beforeOpen));
+          }
           await page.locator(theme.open).click();
+          if (theme.slug === "aksara-nocturne") {
+            const afterOpen = await page.evaluate(({ openSelector, coverSelector }) => {
+              const open = document.querySelector(openSelector);
+              const cover = document.querySelector(coverSelector);
+              return {
+                openState: open?.dataset.oaOpening || "",
+                ariaBusy: open?.getAttribute("aria-busy") || "",
+                coverClass: cover?.className || "",
+                openingDataset: cover?.dataset.oaOpeningAnimation || "",
+                inlineAnimation: cover?.style.getPropertyValue("animation") || "",
+                animationPriority: cover?.style.getPropertyPriority("animation") || "",
+                computedAnimation: cover ? getComputedStyle(cover).animationName : "",
+                duration: cover ? getComputedStyle(cover).animationDuration : ""
+              };
+            }, { openSelector: theme.open, coverSelector: theme.cover });
+            console.log("DEBUG nocturne after-open " + JSON.stringify(afterOpen));
+          }
           if (expectedOpeningMotion) {
             try {
               await page.waitForFunction(name =>
@@ -1157,6 +1235,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": buku tamu tidak responsif pada 360px " + JSON.stringify(layout360));
         assert.ok(layout360.dockLeft >= -1 && layout360.dockRight <= layout360.viewport + 1,
           theme.slug + ": shared dock exceeds 360px viewport " + JSON.stringify(layout360));
+        await auditMobileDock(page, theme, 360);
 
         await page.setViewportSize({ width: 390, height: 844 });
         const layout390 = await page.evaluate(() => ({
@@ -1172,6 +1251,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": formulir RSVP tidak responsif pada 390px " + JSON.stringify(layout390));
         assert.ok(layout390.guestbook > 0 && layout390.guestbook <= layout390.viewport,
           theme.slug + ": buku tamu tidak responsif pada 390px " + JSON.stringify(layout390));
+        await auditMobileDock(page, theme, 390);
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
