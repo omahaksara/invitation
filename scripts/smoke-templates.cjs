@@ -167,7 +167,7 @@ for (const slug of activeThemeSlugs) {
     slug + ": token tipografi tema belum lengkap.");
   assert.ok(themeTokenRules.includes("--oa-reveal-time") && themeTokenRules.includes("--oa-reveal-ease"),
     slug + ": token animasi reveal tema belum lengkap.");
-  const revealMatch = themeRevealTokens.match(/--oa-reveal-time:\s*([\d.]+)(ms|s)/);
+  const revealMatch = themeTokenRules.match(/--oa-reveal-time:\s*([\d.]+)(ms|s)/);
   const revealSeconds = revealMatch
     ? Number(revealMatch[1]) * (revealMatch[2] === "ms" ? .001 : 1)
     : Infinity;
@@ -260,6 +260,10 @@ for (const slug of activeThemeSlugs) {
           return Array.from(counts.entries()).filter(([, count]) => count > 1).map(([id, count]) => ({ id, count }));
         });
         assert.deepEqual(duplicateIds, [], theme.slug + ": duplicate HTML IDs " + JSON.stringify(duplicateIds));
+        await page.waitForFunction(() =>
+          Boolean(window.__invitationData?.cover?.heroImage || window.__invitationData?.cover?.image),
+          undefined, { timeout: 10000 }
+        );
         const coverAsset = await page.evaluate(() =>
           window.__invitationData?.cover?.heroImage || window.__invitationData?.cover?.image || ""
         );
