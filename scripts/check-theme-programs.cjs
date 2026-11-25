@@ -142,7 +142,7 @@ const depthPilots = {
   karsa: { surface: "#cover", layers: ["#cover-image", ".cover-gradient", ".cover-ampersand"] },
   "royal-vintage": { surface: ".hero", layers: [".hero-cover-image", ".hero .hero-content"] },
   sirein: { surface: ".sirein-cover", layers: [".sirein-cover__image", ".sirein-cover__veil", ".sirein-cover__content"] },
-  "botanical-garden": { surface: ".cover", layers: [".cover-photo", ".cover-grain", ".cover-orbit"] },
+  "botanical-garden": { surface: "#cover-section", layers: [".cover-photo", ".cover-grain", ".cover-orbit"] },
   nexus: { surface: ".nexus-cover", layers: [".nexus-cover__visual", ".nexus-cover__panel", ".nexus-cover__line"] },
   "aksara-nocturne": { surface: ".cover", layers: [".cover > img", ".arch"] }
 };
