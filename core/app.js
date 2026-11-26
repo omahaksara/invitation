@@ -1444,6 +1444,8 @@
     const musicToggle = appRoot.querySelector("#music-toggle") || appRoot.querySelector("#music-btn");
     const audio = appRoot.querySelector("#bg-music");
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
+    const themeSlug = (document.documentElement.dataset.oaTheme || "").toLowerCase();
+    const preserveLegacyMusic = ["army", "aksav"].includes(themeSlug);
 
     if (open) {
       const handleOpenClick = async event => {
@@ -1506,7 +1508,8 @@
         document.documentElement.classList.add("oa-invitation-opened");
         document.dispatchEvent(new Event("oa:invitation-opened"));
         if (musicToggle && hasMusic) { musicToggle.hidden = false; musicToggle.style.display = "flex"; }
-        if (audio && hasMusic) {
+        if (audio && hasMusic && preserveLegacyMusic) {
+          // Keep the established cover-to-music behavior on protected legacy themes.
           try {
             await audio.play();
             musicToggle?.classList.add("playing");
@@ -1515,6 +1518,13 @@
           } catch {
             musicToggle?.setAttribute("aria-pressed", "false");
           }
+        } else if (audio && hasMusic) {
+          // Other themes wait for an explicit music-button click after the cover opens.
+          audio.pause();
+          audio.muted = true;
+          musicToggle?.classList.remove("playing");
+          musicToggle?.setAttribute("aria-pressed", "false");
+          musicToggle?.setAttribute("aria-label", "Putar musik");
         }
         setupReveal();
       };
@@ -1544,6 +1554,8 @@
     const audio = document.getElementById("bg-music");
     const button = document.getElementById("music-toggle") || document.getElementById("music-btn");
     const actualMusic = music || (window.__invitationData && window.__invitationData.media && window.__invitationData.media.music);
+    const themeSlug = (document.documentElement.dataset.oaTheme || "").toLowerCase();
+    const preserveLegacyMusic = ["army", "aksav"].includes(themeSlug);
     if (!audio || !button) return;
     if (!actualMusic || !(actualMusic.src || typeof actualMusic === "string")) {
       button.hidden = true;
@@ -1551,6 +1563,13 @@
       return;
     }
 
+    if (!preserveLegacyMusic) {
+      audio.autoplay = false;
+      audio.removeAttribute("autoplay");
+      audio.preload = "none";
+      audio.muted = true;
+      audio.pause();
+    }
     audio.src = assetUrl(typeof actualMusic === "string" ? actualMusic : actualMusic.src, clientBase);
     if (button.tagName !== "BUTTON") {
       button.setAttribute("role", "button");
@@ -1572,10 +1591,15 @@
 
     const toggle = async () => {
       if (audio.paused) {
+        if (!preserveLegacyMusic) audio.muted = false;
         try { await audio.play(); syncMusicState(true); }
-        catch { syncMusicState(false); }
+        catch {
+          if (!preserveLegacyMusic) audio.muted = true;
+          syncMusicState(false);
+        }
       } else {
         audio.pause();
+        if (!preserveLegacyMusic) audio.muted = true;
         syncMusicState(false);
       }
     };
@@ -2046,6 +2070,7 @@
     if (document.getElementById("oa-floating-controls")) return;
     const features = data && data.features && typeof data.features === "object" ? data.features : {};
     const theme = document.documentElement.dataset.oaTheme || data.theme || "karsa";
+    const preserveLegacyMusic = ["army", "aksav"].includes(String(theme).toLowerCase());
     const getShareUrl = typeof buildShortInvitationUrl === "function" ? buildShortInvitationUrl : () => location.href;
     const makeButton = (action, label, ariaLabel, feature) => {
       const button = document.createElement("button");
@@ -2346,6 +2371,11 @@
     };
     const startAutoScroll = () => {
       if (autoTimer !== null || autoButton.hidden || autoButton.disabled) return;
+      // A manual restart at the bottom begins a fresh pass instead of stopping
+      // on the next animation frame.
+      const reachedPageEnd =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3;
+      if (reachedPageEnd) window.scrollTo({ top: 0, behavior: "auto" });
       autoButton.textContent = "Ⅱ";
       autoButton.classList.add("is-running");
       autoButton.setAttribute("aria-pressed", "true");
@@ -2390,7 +2420,12 @@
         if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
       });
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
+        if (autoTimer !== null) { stopAutoScroll(); return; }
+        // A guest's manual start wins over the delayed start scheduled on cover open.
+        if (autoStartDelay !== null) {
+          window.clearTimeout(autoStartDelay);
+          autoStartDelay = null;
+        }
         startAutoScroll();
       });
       document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
@@ -2405,9 +2440,16 @@
       };
       musicButton.addEventListener("click", async () => {
         if (audio.paused) {
+          if (!preserveLegacyMusic) audio.muted = false;
           try { await audio.play(); }
-          catch { musicButton.title = "Musik belum dapat diputar. Coba lagi."; }
-        } else audio.pause();
+          catch {
+            if (!preserveLegacyMusic) audio.muted = true;
+            musicButton.title = "Musik belum dapat diputar. Coba lagi.";
+          }
+        } else {
+          audio.pause();
+          if (!preserveLegacyMusic) audio.muted = true;
+        }
         syncMusic();
       });
       audio.addEventListener("play", syncMusic);
