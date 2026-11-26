@@ -4,9 +4,11 @@ on:
   pull_request:
     branches:
       - main
+      - rebuild/theme-experience-foundation
   push:
     branches:
       - main
+      - rebuild/theme-experience-foundation
 
 permissions:
   contents: read
@@ -22,18 +24,35 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reject changes to all client invitation JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          changed="$(git diff --name-only origin/main HEAD)"
+          forbidden_data="$(printf '%s\n' "$changed" | grep -E '^clients/.*/data[.]json$' || true)"
+          forbidden_live="$(printf '%s\n' "$changed" | grep -E '^clients/venni-rama/' || true)"
+          forbidden_theme="$(printf '%s\n' "$changed" | grep -E '^templates/(aksav|army)/index[.]html$' || true)"
+          if [ -n "$forbidden_data" ] || [ -n "$forbidden_live" ] || [ -n "$forbidden_theme" ]; then
+            echo "::error::Client data, Venni-Rama assets, and the protected Army/Aksav themes must remain identical to main:"
+            printf '%s\n' "$forbidden_data" "$forbidden_live" "$forbidden_theme"
+            exit 1
+          fi
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Check JavaScript syntax and invitation data
+      - name: Run static and theme contract checks
         run: npm run test:static
-      - name: Test backend with isolated mocks
+      - name: Run isolated backend unit tests
         run: npm run test:backend
 
-  browser-visual:
-    name: Browser visual and interaction smoke (all active themes)
+  browser-smoke:
+    name: Browser smoke across active themes
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -41,17 +60,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Playwright and Chromium
-        run: |
-          npm install --no-save --no-package-lock playwright
-          npx playwright install --with-deps chromium
-      - name: Run desktop and mobile theme smoke tests
-        run: npm run test:browser
-      - name: Upload per-theme screenshots and diagnostics
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run isolated browser smoke tests
+        run: node scripts/smoke-templates.cjs
+      - name: Upload screenshots and motion evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: omah-aksara-theme-visual-evidence
+          name: theme-browser-visual-evidence
           path: artifacts/visual/
-          if-no-files-found: warn
-          retention-days: 14
+          if-no-files-found: ignore
+          retention-days: 7

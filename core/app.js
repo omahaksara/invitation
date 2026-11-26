@@ -1,5 +1,6 @@
 (() => {
   "use strict";
+
   document.addEventListener("DOMContentLoaded", initInvitation);
 
   async function activateTemplateScripts(root) {
@@ -548,6 +549,15 @@
     ensureFloatingControls(data, buildShortInvitationUrl);
     // Forms, navigation, and fallback sections are created above; observe them too.
     setupReveal();
+    // Theme-owned choreography runs after the shared content/data lifecycle is ready.
+    // A missing or failing theme program never blocks invitation rendering or forms.
+    if (window.OAThemePrograms && typeof window.OAThemePrograms.activate === "function") {
+      window.OAThemePrograms.activate(document.documentElement.dataset.oaTheme || "karsa", {
+        root: document.getElementById("app"),
+        navigation: document.getElementById("oa-floating-controls"),
+        data
+      });
+    }
   }
 
 
@@ -1425,20 +1435,31 @@
   }
 
   function setupCover() {
-    const cover = document.getElementById("cover-section") || document.getElementById("cover");
-    const main = document.getElementById("main-content") || document.getElementById("app-inner");
-    const open = document.getElementById("open-invitation-btn") || document.getElementById("open-btn");
-    const musicToggle = document.getElementById("music-toggle") || document.getElementById("music-btn");
-    const audio = document.getElementById("bg-music");
+    // Scope every cover control to the currently rendered invitation. Legacy pages
+    // may retain similarly named controls outside the active theme root.
+    const appRoot = document.getElementById("app") || document;
+    const cover = appRoot.querySelector("#cover-section") || appRoot.querySelector("#cover");
+    const main = appRoot.querySelector("#main-content") || appRoot.querySelector("#app-inner");
+    const open = appRoot.querySelector("#open-invitation-btn") || appRoot.querySelector("#open-btn");
+    const musicToggle = appRoot.querySelector("#music-toggle") || appRoot.querySelector("#music-btn");
+    const audio = appRoot.querySelector("#bg-music");
     const hasMusic = !!(audio && audio.getAttribute("src") && !(window.__invitationData?.features && window.__invitationData.features.music === false));
 
     if (open) {
-      open.addEventListener("click", async () => {
+      const handleOpenClick = async event => {
+        // Run before theme-level bubble handlers so the shared cover lifecycle
+        // cannot be cancelled by a theme-specific click listener.
+        event.preventDefault();
         // Guard against rapid taps while the cover is transitioning.
         if (open.dataset.oaOpening === "true") return;
         open.dataset.oaOpening = "true";
         open.setAttribute("aria-busy", "true");
         const reducedMotionPreference = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        // Themes may opt into a named opening animation without changing the shared
+        // cover lifecycle or its legacy fallback behavior.
+        const customOpeningAnimation = cover?.dataset.oaOpeningAnimation || "";
+        const previousAnimation = cover?.style.getPropertyValue("animation") || "";
+        const previousAnimationPriority = cover?.style.getPropertyPriority("animation") || "";
         let coverFallback = null;
         const finishCover = () => {
           if (coverFallback !== null) window.clearTimeout(coverFallback);
@@ -1447,6 +1468,10 @@
             cover.hidden = true;
             cover.style.display = "none";
             cover.classList.remove("is-opening");
+            if (customOpeningAnimation) {
+              if (previousAnimation) cover.style.setProperty("animation", previousAnimation, previousAnimationPriority);
+              else cover.style.removeProperty("animation");
+            }
           }
           open.removeAttribute("aria-busy");
         };
@@ -1460,6 +1485,9 @@
           } else {
             cover.addEventListener("animationend", onCoverAnimationEnd);
             cover.classList.add("is-opening");
+            if (customOpeningAnimation) {
+              cover.style.setProperty("animation", customOpeningAnimation, "important");
+            }
             coverDuration = getAnimationTotalMs(cover);
             coverFallback = window.setTimeout(finishCover, Math.max(350, coverDuration + 280));
           }
@@ -1489,7 +1517,20 @@
           }
         }
         setupReveal();
-      });
+      };
+      // Delegate at document capture so legacy theme handlers cannot swallow the
+      // shared cover lifecycle and nested label/span taps behave identically.
+      const delegatedOpenClick = event => {
+        const target = event.target instanceof Element
+          ? event.target.closest("#open-invitation-btn, #open-btn")
+          : null;
+        if (target === open) handleOpenClick(event);
+      };
+      // Keep a target-level fallback for older browser/theme event stacks.
+      open.addEventListener("click", handleOpenClick, true);
+      document.addEventListener("click", delegatedOpenClick, true);
+      // Browser QA waits for this marker so it never races the shared click binding.
+      open.dataset.oaCoverReady = "true";
     } else {
       // Tema tanpa cover pembuka langsung mengaktifkan kontrol setelah konten siap.
       document.body.classList.add("oa-invitation-opened");
@@ -2566,6 +2607,7 @@
     let lastFocusedImage = null;
     let overlay = null;
     let keyHandler = null;
+    let previousOverflow = null;
 
     const close = () => {
       if (!overlay) return;
@@ -2574,6 +2616,11 @@
       overlay = null;
       keyHandler = null;
       document.body.classList.remove("oa-lightbox-open");
+      if (previousOverflow) {
+        document.documentElement.style.overflow = previousOverflow.html;
+        document.body.style.overflow = previousOverflow.body;
+        previousOverflow = null;
+      }
       if (lastFocusedImage && lastFocusedImage.isConnected) lastFocusedImage.focus({ preventScroll: true });
     };
 
@@ -2584,6 +2631,7 @@
       lastFocusedImage = sourceImage || images[activeIndex];
       overlay = document.createElement("div");
       overlay.className = "oa-gallery-lightbox";
+      overlay.dataset.oaTheme = document.documentElement.dataset.oaTheme || "default";
       overlay.setAttribute("role", "dialog");
       overlay.setAttribute("aria-modal", "true");
       overlay.setAttribute("aria-label", "Galeri foto pernikahan");
@@ -2629,6 +2677,12 @@
       panel.append(toolbar, stage, caption);
       overlay.append(panel);
       overlay.addEventListener("click", event => { if (event.target === overlay) close(); });
+      previousOverflow = {
+        html: document.documentElement.style.overflow,
+        body: document.body.style.overflow
+      };
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
       document.body.append(overlay);
       document.body.classList.add("oa-lightbox-open");
 

@@ -84,6 +84,27 @@
 }
 @media(prefers-reduced-motion:reduce){.atelier-page *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
+
+/* Art direction: fashion editorial — full-bleed photograph with a low, typographic masthead. */
+.atelier-cover{display:flex;align-items:flex-end;justify-content:flex-start;min-height:100svh;padding:clamp(30px,7vw,100px);text-align:left;background:#302a30;color:#fffaf6;isolation:isolate}
+.atelier-cover__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:.66;filter:saturate(.62) contrast(1.08);clip-path:polygon(0 0,100% 0,100% 78%,0 100%)}
+.atelier-cover__veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(41,36,43,.84) 0%,rgba(41,36,43,.42) 48%,rgba(41,36,43,.05) 100%),linear-gradient(0deg,rgba(41,36,43,.92) 0%,rgba(41,36,43,.22) 62%,transparent 100%)}
+.atelier-cover__content{position:relative;z-index:2;width:min(100%,780px);max-width:780px;margin:0;padding:0 0 22px;text-align:left;background:transparent;border:0;outline:0;box-shadow:none;backdrop-filter:none}
+.atelier-cover__content .eyebrow{color:#e0b6a5;letter-spacing:.3em}
+.atelier-cover__content .script-title{display:grid;gap:0;font-size:clamp(3.7rem,8vw,7.2rem);line-height:.82;letter-spacing:-.045em;margin:18px 0;max-width:760px}
+.atelier-cover__content .script-title span{display:block}
+.atelier-cover__content .ampersand{font-size:.55em;color:#e0b6a5;margin:.06em 0}
+.atelier-cover__content .cover-rule{width:72px;margin:18px 0;background:#e0b6a5}
+.atelier-cover__content .cover-to,.atelier-cover__content .guest-name,.atelier-cover__content .cover-note{text-align:left;color:#f5eae4}
+.atelier-cover__content .cover-note{max-width:500px}
+.atelier-cover__content .atelier-button{border-radius:2px;background:#9b6d63;border-color:#9b6d63;color:#fffaf6}
+html[data-oa-theme="atelier-editorial"] #cover-section.is-opening{transform-origin:bottom center;transform-style:preserve-3d;backface-visibility:hidden;animation:oaAtelierPageTurn 940ms cubic-bezier(.7,0,.2,1) both;pointer-events:none}
+@keyframes oaAtelierPageTurn{0%{opacity:1;transform:perspective(1500px) rotateX(0deg);filter:blur(0)}58%{opacity:1;transform:perspective(1500px) rotateX(38deg) translateY(-2%);filter:blur(1px)}100%{opacity:0;transform:perspective(1500px) rotateX(84deg) translateY(-8%);filter:blur(7px)}}
+.atelier-page .reveal{opacity:0;transform:translate3d(-24px,28px,0) rotateY(-2deg);clip-path:inset(0 0 9% 0);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.16,.8,.2,1),clip-path 900ms ease}
+.atelier-page .reveal.active{opacity:1;transform:none;clip-path:inset(0)}
+@media(max-width:650px){.atelier-cover{align-items:flex-end;padding:26px 22px calc(34px + env(safe-area-inset-bottom))}.atelier-cover__image{clip-path:none;object-position:58% center}.atelier-cover__veil{background:linear-gradient(0deg,rgba(41,36,43,.96) 0%,rgba(41,36,43,.68) 46%,rgba(41,36,43,.06) 100%)}.atelier-cover__content{padding:0 0 8px}.atelier-cover__content .script-title{font-size:clamp(3rem,13vw,4.8rem);line-height:.88}.atelier-cover__content .cover-note{font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){#cover-section.is-opening{animation:none!important;transform:none!important}.atelier-page .reveal{opacity:1;transform:none;clip-path:none;transition:none}}
+
 </style>
 <!-- Template atelier — adaptasi desain editorial lembut untuk sistem Omah Aksara -->
 <div id="cover-section" class="atelier-cover">
@@ -215,3 +236,27 @@
   <audio id="bg-music" data-bind="media.music" loop></audio>
   <button id="music-toggle" class="music-float-btn" type="button" aria-label="Putar atau jeda musik" style="display:none"><i class="fa-solid fa-compact-disc fa-spin"></i></button>
 </main>
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("atelier-editorial", {
+    activate({ navigation, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "atelier-editorial";
+      style.textContent = `#oa-floating-controls.oa-nav-atelier{left:50%!important;right:auto!important;top:16px!important;bottom:auto!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:5px 8px!important;gap:2px!important;border-radius:2px!important;background:rgba(37,33,34,.96)!important;border:1px solid #b99c8d!important;box-shadow:0 8px 28px #1c151533!important}#oa-floating-controls.oa-nav-atelier button{min-width:44px!important;min-height:38px!important;border-radius:0!important;border-right:1px solid #b99c8d55!important;color:#f3e9e2!important;font:600 9px/1.1 'DM Sans',sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase!important}#oa-floating-controls.oa-nav-atelier button.is-active{background:#9b6d63!important;color:#fff!important}@media(max-width:600px){#oa-floating-controls.oa-nav-atelier{top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;left:8px!important;right:8px!important;transform:none!important;width:auto!important;justify-content:space-around!important}}
+.oa-gallery-lightbox[data-oa-theme="atelier-editorial"]{background:rgba(28,25,26,.98)!important}.oa-gallery-lightbox[data-oa-theme="atelier-editorial"] img{border:1px solid #d9c9c2;border-radius:0!important;box-shadow:0 22px 60px #000b}`;
+      style.textContent += `\n        #oa-floating-controls.oa-nav-atelier button{transition:transform 180ms ease-out,background-color 180ms ease,color 180ms ease,box-shadow 180ms ease}\n        #oa-floating-controls.oa-nav-atelier button:active{transform:scale(.94)}\n        @media(prefers-reduced-motion:reduce){#oa-floating-controls.oa-nav-atelier button{transition:none!important}#oa-floating-controls.oa-nav-atelier button:active{transform:none}}\n      `;
+      style.textContent += `
+@media(prefers-reduced-motion:reduce){.atelier-page .reveal{opacity:1;transform:none;clip-path:none;transition:none}}
+`;
+
+      if (navigation) navigation.classList.add("oa-nav-atelier");
+      document.head.append(style);
+      addCleanup(() => {
+        if (navigation) navigation.classList.remove("oa-nav-atelier");
+        style.remove();
+      });
+    }
+  });
+})();
+</script>

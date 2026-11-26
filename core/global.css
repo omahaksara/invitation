@@ -142,98 +142,215 @@ body {
 .oa-shared-section button {
   font-family: var(--oa-font-body);
 }
+/* One shared dock contract: one layout, one responsive layer, theme-owned finish. */
+.oa-legacy-navigation,
+.oa-legacy-music-control {
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
 .oa-floating-controls {
-  position: fixed;
-  z-index: 89;
-  left: 50%;
-  bottom: max(14px, env(safe-area-inset-bottom));
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  width: max-content;
-  max-width: calc(100vw - 112px);
-  padding: 7px;
-  border: 1px solid rgba(255,255,255,.72);
-  border-radius: 999px;
-  background: rgba(250,248,242,.88);
-  box-shadow: 0 8px 28px rgba(34,29,22,.16);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  --oa-dock-bg:rgba(250,248,242,.94);
+  --oa-dock-border:rgba(115,96,68,.24);
+  --oa-dock-ink:#514735;
+  --oa-dock-accent:#9a8057;
+  position:fixed;
+  z-index:2147483000;
+  left:50%;
+  right:auto;
+  top:auto;
+  bottom:max(12px,env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(3px,.8vw,8px);
+  width:max-content;
+  max-width:calc(100vw - 28px);
+  padding:7px 9px;
+  border:1px solid var(--oa-dock-border,rgba(255,255,255,.55));
+  border-radius:999px;
+  background:var(--oa-dock-bg,rgba(248,246,240,.88));
+  box-shadow:0 9px 30px rgba(20,18,16,.16);
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  isolation:isolate;
+  pointer-events:auto;
+  transition:opacity .28s ease,transform .28s ease;
 }
-.oa-floating-controls[hidden] { display: none !important; }
+.oa-floating-controls[hidden],
+.oa-nav-overflow[hidden] { display:none!important; }
 .oa-floating-controls button {
-  appearance: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  padding: 0 13px;
-  border: 1px solid rgba(115,96,68,.18);
-  border-radius: 999px;
-  background: rgba(255,255,255,.82);
-  color: #514735;
-  font: 600 11px/1 var(--oa-font-body);
-  letter-spacing: .025em;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-width:clamp(48px,7vw,66px);
+  min-height:43px;
+  padding:0 12px;
+  border:1px solid transparent;
+  border-radius:999px;
+  background:transparent;
+  color:var(--oa-dock-ink,#514735);
+  font:600 clamp(10px,.78rem,12px)/1 var(--oa-theme-body,var(--oa-font-body,Arial,sans-serif));
+  letter-spacing:.015em;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease;
 }
-.oa-floating-controls button:hover {
-  background: #fff;
-  box-shadow: 0 3px 12px rgba(34,29,22,.10);
-  transform: translateY(-1px);
+.oa-floating-controls button:hover,
+.oa-floating-controls button[aria-pressed="true"] {
+  background:var(--oa-dock-accent,#9a8057);
+  color:var(--oa-dock-ink,#514735);
+  border-color:var(--oa-dock-accent,#9a8057);
 }
-.oa-floating-controls button:active { transform: scale(.97); }
+.oa-floating-controls button:active { transform:scale(.94); }
 .oa-floating-controls button:focus-visible {
-  outline: 2px solid #9a8057;
-  outline-offset: 3px;
+  outline:2px solid var(--oa-dock-accent,#9a8057);
+  outline-offset:3px;
 }
-.oa-floating-controls button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
+.oa-floating-controls button:disabled { opacity:.55;cursor:not-allowed; }
+.oa-floating-controls button.is-active,
+.oa-floating-controls button[aria-pressed="true"] {
+  background:var(--oa-dock-active,var(--oa-dock-accent,var(--oa-dock-ink,#514735)));
+  color:var(--oa-dock-active-ink,#fff);
+  border-color:var(--oa-dock-active,var(--oa-dock-accent,var(--oa-dock-ink,#514735)));
 }
-@media (max-width: 480px) {
+.oa-floating-controls button.is-active {
+  box-shadow:0 3px 10px color-mix(in srgb,var(--oa-dock-accent,#8a7656) 28%,transparent);
+}
+.oa-floating-controls > button.oa-dock-action {
+  flex:0 0 40px;
+  min-width:40px;
+  width:40px;
+  min-height:40px;
+  padding:0;
+  font-size:16px;
+  border-radius:50%;
+}
+.oa-floating-controls > button.oa-dock-action.is-running,
+.oa-floating-controls > button.oa-dock-action.is-playing {
+  background:var(--oa-dock-active,var(--oa-dock-ink,#514735));
+  color:var(--oa-dock-active-ink,#fff);
+}
+.oa-nav-more-wrap { position:relative; }
+.oa-floating-controls .oa-nav-more { min-width:72px;font-weight:700; }
+.oa-nav-overflow {
+  position:fixed;
+  right:max(12px,env(safe-area-inset-right));
+  bottom:calc(max(12px,env(safe-area-inset-bottom)) + 62px);
+  z-index:2147483001;
+  min-width:164px;
+  max-height:min(55vh,360px);
+  overflow-y:auto;
+  display:grid;
+  gap:3px;
+  padding:9px;
+  border:1px solid var(--oa-dock-border,rgba(255,255,255,.5));
+  border-radius:18px;
+  background:var(--oa-dock-bg,rgba(248,246,240,.96));
+  box-shadow:0 12px 36px rgba(0,0,0,.18);
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+.oa-nav-overflow button {
+  width:100%;
+  min-height:40px;
+  justify-content:flex-start;
+  padding-inline:12px;
+  text-align:left;
+}
+body:not(.oa-invitation-opened) .oa-floating-controls,
+body:not(.oa-invitation-opened) [data-oa-native-navigation],
+body:not(.oa-invitation-opened) #music-toggle,
+body:not(.oa-invitation-opened) #music-btn,
+body:not(.oa-invitation-opened) .music-toggle,
+body:not(.oa-invitation-opened) .music-float-btn,
+body:not(.oa-invitation-opened) .royal-music-toggle,
+html:not(.oa-invitation-opened) > #oa-floating-controls {
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body.oa-form-focus .oa-floating-controls,
+body.oa-form-focus [data-oa-native-navigation],
+body.oa-lightbox-open .oa-floating-controls,
+body.oa-lightbox-open [data-oa-native-navigation] {
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body #app { position:relative;z-index:0;isolation:isolate; }
+html.oa-invitation-opened > #oa-floating-controls {
+  position:fixed!important;
+  z-index:2147483000!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:max(12px,env(safe-area-inset-bottom))!important;
+  transform:translateX(-50%)!important;
+  isolation:isolate!important;
+  pointer-events:auto!important;
+}
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-more-wrap { position:static!important; }
+html.oa-invitation-opened > #oa-floating-controls button { pointer-events:auto!important; }
+html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+  position:fixed!important;
+  right:max(12px,env(safe-area-inset-right))!important;
+  bottom:calc(max(12px,env(safe-area-inset-bottom)) + 62px)!important;
+  z-index:2147483001!important;
+  max-height:min(55vh,360px);
+  overflow-y:auto;
+}
+@media(max-width:600px) {
   .oa-floating-controls {
-    left: 10px;
-    right: 78px;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    transform: none;
-    width: auto;
-    max-width: none;
-    gap: 5px;
-    padding: 6px;
+    left:8px;
+    right:8px;
+    bottom:max(8px,env(safe-area-inset-bottom));
+    transform:none;
+    width:auto;
+    max-width:none;
+    justify-content:space-around;
+    gap:2px;
+    padding:5px;
   }
   .oa-floating-controls button {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 36px;
-    padding: 0 8px;
-    font-size: 10px;
+    flex:1 1 0;
+    min-width:0;
+    min-height:42px;
+    padding:0 5px;
+    font-size:10px;
+  }
+  .oa-floating-controls > button.oa-dock-action {
+    flex:0 0 40px;
+    min-width:40px;
+    width:40px;
+  }
+  .oa-floating-controls .oa-nav-more { min-width:0; }
+  .oa-nav-overflow {
+    right:0;
+    bottom:calc(100% + 10px);
+  }
+  html.oa-invitation-opened > #oa-floating-controls {
+    left:8px!important;
+    right:8px!important;
+    width:auto!important;
+    transform:none!important;
+  }
+  html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+    right:max(8px,env(safe-area-inset-right))!important;
+    bottom:calc(max(8px,env(safe-area-inset-bottom)) + 58px)!important;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .oa-floating-controls button { transition: none !important; }
+@media(prefers-reduced-motion:reduce) {
+  .oa-floating-controls,
+  .oa-floating-controls button { transition:none!important; }
 }
-
-
-/* Floating controls: thumb-friendly navigation on small screens. */
-.oa-floating-controls { overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none; }
-.oa-floating-controls::-webkit-scrollbar { display:none; }
-.oa-floating-controls button { flex:0 0 auto; }
-.oa-floating-controls button[aria-pressed="true"] { background:#514735; color:#fff; border-color:#514735; }
-@media (max-width:480px) {
-  .oa-floating-controls { left:9px; right:9px; width:auto; max-width:none; transform:none; justify-content:flex-start; overflow-x:auto; padding:6px; }
-  .oa-floating-controls button { flex:0 0 auto; min-width:62px; padding-inline:10px; }
-}
-
 
 /* Theme-specific fallback docks: one visual signature per registered theme.
    The engine shares behavior only; each theme owns its own palette, silhouette and interaction finish. */
-.oa-floating-controls { --oa-dock-bg:rgba(250,248,242,.94); --oa-dock-border:rgba(115,96,68,.24); --oa-dock-ink:#514735; --oa-dock-accent:#9a8057; background:var(--oa-dock-bg);border-color:var(--oa-dock-border); }
-.oa-floating-controls button { color:var(--oa-dock-ink);border-color:transparent;background:transparent; }
-.oa-floating-controls button:hover,.oa-floating-controls button[aria-pressed="true"] { color:var(--oa-dock-ink);background:var(--oa-dock-accent);border-color:var(--oa-dock-accent); }
+
 
 /* Aksara Nocturne: native .nocturne-nav is intentionally left to its template CSS. */
 .oa-floating-controls[data-theme="aksara-nocturne"] { --oa-dock-bg:#071827f5;--oa-dock-border:#d6bc87;--oa-dock-ink:#ead8ad;--oa-dock-accent:#765d35;border-radius:28px;box-shadow:0 12px 36px #0008,inset 0 1px #fff2; }
@@ -277,214 +394,6 @@ body {
 .oa-floating-controls[data-theme="sirein"] button { border-radius:16px 4px 16px 4px; }
 .oa-floating-controls[data-theme="taupe"] button { border-radius:3px 10px 3px 10px; }
 .oa-floating-controls[data-theme="velvet-romance"] button { border-radius:20px 20px 4px 4px; }
-
-
-/* Smart interaction layer: controls remain hidden until the invitation is opened. */
-body:not(.oa-invitation-opened) .oa-floating-controls,
-body:not(.oa-invitation-opened) [data-oa-native-navigation],
-body:not(.oa-invitation-opened) #music-toggle,
-body:not(.oa-invitation-opened) #music-btn,
-body:not(.oa-invitation-opened) .music-toggle,
-body:not(.oa-invitation-opened) .music-float-btn,
-body:not(.oa-invitation-opened) .royal-music-toggle {
-  opacity:0 !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
-}
-.oa-floating-controls {
-  position:fixed; z-index:89; left:50%; bottom:max(12px,env(safe-area-inset-bottom));
-  transform:translateX(-50%); display:flex; align-items:center; justify-content:center; gap:5px;
-  width:max-content; max-width:calc(100vw - 28px); padding:6px;
-  border:1px solid var(--oa-dock-border,rgba(255,255,255,.55));
-  border-radius:999px; background:var(--oa-dock-bg,rgba(248,246,240,.88));
-  box-shadow:0 9px 30px rgba(20,18,16,.16); backdrop-filter:none; -webkit-backdrop-filter:none;
-  transition:opacity .28s ease, transform .28s ease;
-}
-.oa-floating-controls[hidden],.oa-nav-overflow[hidden]{display:none!important}
-.oa-floating-controls button {
-  appearance:none; border:0; min-width:42px; min-height:42px; padding:0 12px; border-radius:999px;
-  background:transparent; color:var(--oa-dock-ink,#514735); font:600 11px/1 var(--oa-font-body,Arial,sans-serif);
-  cursor:pointer; white-space:nowrap; transition:background .2s ease,color .2s ease,transform .2s ease;
-}
-.oa-floating-controls button:active{transform:scale(.94)}
-.oa-floating-controls button.is-active {background:var(--oa-dock-active,var(--oa-dock-ink,#514735));color:var(--oa-dock-active-ink,#fff)}
-.oa-nav-more-wrap {position:relative}
-.oa-nav-overflow {
-  position:absolute; right:0; bottom:calc(100% + 12px); min-width:142px; max-height:min(55vh,360px); overflow:auto;
-  display:grid; gap:4px; padding:8px; border:1px solid var(--oa-dock-border,rgba(255,255,255,.5));
-  border-radius:18px; background:var(--oa-dock-bg,rgba(248,246,240,.96)); box-shadow:0 12px 36px rgba(0,0,0,.18);
-  backdrop-filter:none; -webkit-backdrop-filter:none;
-}
-.oa-nav-overflow button {width:100%;text-align:left;justify-content:flex-start}
-/* Shared media actions: compact, visible, and aligned with the main dock. */
-.oa-floating-controls > button.oa-dock-action {
-  flex:0 0 40px; min-width:40px; width:40px; padding:0; font-size:16px; border-radius:50%;
-}
-.oa-floating-controls > button.oa-dock-action.is-running,
-.oa-floating-controls > button.oa-dock-action.is-playing {
-  background:var(--oa-dock-active,var(--oa-dock-ink,#514735));
-  color:var(--oa-dock-active-ink,#fff);
-}
-@media(max-width:480px) {
-  .oa-floating-controls {left:10px;right:10px;bottom:max(9px,env(safe-area-inset-bottom));width:auto;max-width:none;transform:none;justify-content:space-around;gap:2px}
-  .oa-floating-controls button {min-width:0;min-height:40px;padding:0 9px;font-size:10px;flex:1 1 0}
-}
-@media(prefers-reduced-motion:reduce) {
-  .oa-floating-controls,.oa-floating-controls button{transition:none!important}
-}
-
-
-/* Context-aware controls: keep the dock clear of active forms and gallery previews. */
-body.oa-form-focus .oa-floating-controls,
-body.oa-form-focus [data-oa-native-navigation],
-body.oa-lightbox-open .oa-floating-controls,
-body.oa-lightbox-open [data-oa-native-navigation]{
-  opacity:0!important;
-  visibility:hidden!important;
-  pointer-events:none!important;
-}
-
-
-/* Omah Aksara unified navigation layer.
-   Same interaction model on every theme; palettes and silhouettes stay theme-aware. */
-.oa-legacy-navigation,
-.oa-legacy-music-control {
-  display:none!important;
-  visibility:hidden!important;
-  pointer-events:none!important;
-}
-.oa-floating-controls {
-  gap:clamp(3px,.8vw,8px);
-  padding:7px 9px;
-  border-width:1px;
-  isolation:isolate;
-}
-.oa-floating-controls button {
-  min-width:clamp(48px,7vw,66px);
-  min-height:43px;
-  padding:0 12px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  font-size:clamp(10px,.78rem,12px);
-  letter-spacing:.015em;
-}
-.oa-floating-controls button.is-active {
-  background:var(--oa-dock-accent,var(--oa-dock-ink));
-  color:var(--oa-dock-active-ink,#fff);
-  box-shadow:0 3px 10px color-mix(in srgb,var(--oa-dock-accent,#8a7656) 28%,transparent);
-}
-.oa-floating-controls .oa-nav-more {
-  min-width:72px;
-  font-weight:700;
-}
-.oa-nav-overflow {
-  min-width:164px;
-  padding:9px;
-  gap:3px;
-}
-.oa-nav-overflow button {
-  min-height:40px;
-  justify-content:flex-start;
-  padding-inline:12px;
-}
-@media(max-width:600px) {
-  .oa-floating-controls {
-    left:8px;
-    right:8px;
-    bottom:max(8px,env(safe-area-inset-bottom));
-    width:auto;
-    max-width:none;
-    transform:none;
-    justify-content:space-around;
-    gap:2px;
-    padding:5px;
-  }
-  .oa-floating-controls button {
-    flex:1 1 0;
-    min-width:0;
-    min-height:42px;
-    padding:0 5px;
-    font-size:10px;
-  }
-  .oa-floating-controls .oa-nav-more { min-width:0; }
-  .oa-nav-overflow { right:0; bottom:calc(100% + 10px); }
-}
-@media(prefers-reduced-motion:reduce) {
-  .oa-floating-controls,.oa-floating-controls button{
-    transition:none!important;
-  }
-}
-
-/* Keep the shared controls above theme sections and their reveal layers. */
-html.oa-invitation-opened > #oa-floating-controls{
-  z-index: 9999 !important;
-  isolation: isolate;
-}
-html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
-  z-index: 10000 !important;
-}
-
-
-/* Final stacking contract: the theme canvas is its own lower layer.
-   Shared navigation and its overflow menu must stay above every legacy theme section. */
-body #app {
-  position: relative;
-  z-index: 0;
-  isolation: isolate;
-}
-html.oa-invitation-opened > #oa-floating-controls{
-  position: fixed !important;
-  z-index: 2147483000 !important;
-  isolation: isolate !important;
-  pointer-events: auto !important;
-}
-html.oa-invitation-opened > #oa-floating-controls .oa-nav-more-wrap {
-  position: static !important;
-}
-html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
-  position: fixed !important;
-  right: max(12px, env(safe-area-inset-right)) !important;
-  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 62px) !important;
-  z-index: 2147483001 !important;
-  max-height: min(55vh, 360px);
-  overflow-y: auto;
-}
-html.oa-invitation-opened > #oa-floating-controls button{
-  pointer-events: auto !important;
-}
-
-
-/* Final control layer: the shared dock must win against transformed theme sections. */
-html.oa-invitation-opened > #oa-floating-controls{
-  position: fixed !important;
-  z-index: 2147483000 !important;
-  pointer-events: auto !important;
-  isolation: isolate !important;
-  transform: none !important;
-}
-html.oa-invitation-opened > #oa-floating-controls {
-  left: 50% !important;
-  bottom: max(12px, env(safe-area-inset-bottom)) !important;
-  top: auto !important;
-  transform: translateX(-50%) !important;
-}
-html.oa-invitation-opened > #oa-floating-controls button{
-  pointer-events: auto !important;
-}
-html.oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
-  z-index: 2147483001 !important;
-}
-@media (max-width: 600px) {
-  html.oa-invitation-opened > #oa-floating-controls {
-    left: 8px !important;
-    right: 8px !important;
-    width: auto !important;
-    transform: none !important;
-  }
-}
-
 
 /* Distinct editorial typography for every active invitation theme.
    Shared structure stays consistent; type personality remains theme-owned. */
@@ -620,8 +529,7 @@ html[data-oa-theme="serena-ivory"] { --oa-theme-display:"Cormorant Garamond",ser
 html[data-oa-theme="sirein"] { --oa-theme-display:"Lora",serif; --oa-theme-body:"Inter",sans-serif; }
 html[data-oa-theme="velvet-romance"] { --oa-theme-display:"Bodoni Moda",serif; --oa-theme-body:"DM Sans",sans-serif; }
 
-.oa-floating-controls{ font-family:var(--oa-theme-body,var(--oa-font-body)); }
-.oa-floating-controls button{ font-family:var(--oa-theme-body,var(--oa-font-body)); }
+
 .oa-shared-section { font-family:var(--oa-theme-body,var(--oa-font-body)); }
 .oa-shared-section > h2,
 .oa-shared-section h3 { font-family:var(--oa-theme-display,var(--oa-font-display)); }
@@ -1457,3 +1365,97 @@ html[data-oa-theme="velvet-romance"] #app { --oa-font-body:'Lato',sans-serif; --
 }
 /* Bind engine motion duration to the active theme's validated reveal token. */
 html[data-oa-theme] { --oa-motion-duration: var(--oa-reveal-time, .44s); }
+
+
+/* Ensure the shared music glyph remains readable when theme fonts lack symbol coverage. */
+.oa-floating-controls button.oa-music-control {
+  font-family: "Segoe UI Symbol", "Noto Music", "Arial Unicode MS", sans-serif !important;
+  font-size: 16px !important;
+  color: var(--oa-dock-ink, #514735) !important;
+}
+.oa-floating-controls button.oa-music-control.is-playing,
+.oa-floating-controls button.oa-music-control.is-running {
+  color: var(--oa-dock-active-ink, #fff) !important;
+}
+
+/* Render music as a CSS glyph so theme button text rules cannot hide it. */
+.oa-floating-controls button.oa-music-control {
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+.oa-floating-controls button.oa-music-control::before {
+  content: "♪";
+  display: inline-block;
+  font: 700 19px/1 "Segoe UI Symbol", "Noto Music", "Arial Unicode MS", sans-serif;
+  color: var(--oa-dock-ink, #514735);
+}
+.oa-floating-controls button.oa-music-control.is-playing::before,
+.oa-floating-controls button.oa-music-control.is-running::before {
+  color: var(--oa-dock-active-ink, #fff);
+}
+
+
+/* Luma keeps its quieter editorial reveal cadence. */
+html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezier(.18,.78,.22,1); }
+
+
+/* Mobile dock: flex the overflow wrapper itself so its label cannot push the dock wider. */
+@media (max-width: 600px) {
+  #oa-floating-controls > .oa-nav-more-wrap {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    align-items: stretch;
+  }
+  #oa-floating-controls > .oa-nav-more-wrap > .oa-nav-more {
+    flex: 1 1 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding-inline: 2px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+/* Fit all shared dock controls on narrow phones without horizontal overflow. */
+@media (max-width:600px) {
+  #oa-floating-controls[class*="oa-nav-"] {
+    gap:2px!important;
+    padding-inline:5px!important;
+    box-sizing:border-box!important;
+    overflow:visible;
+  }
+  #oa-floating-controls[class*="oa-nav-"] > button:not(.oa-dock-action) {
+    flex:1 1 0!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding-inline:2px!important;
+    font-size:8px!important;
+    letter-spacing:0!important;
+    white-space:nowrap!important;
+  }
+  #oa-floating-controls[class*="oa-nav-"] > button.oa-dock-action {
+    flex:0 0 34px!important;
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+    padding:0!important;
+  }
+  #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap {
+    flex:1 1 0!important;
+    width:auto!important;
+    min-width:0!important;
+  }
+  #oa-floating-controls[class*="oa-nav-"] .oa-nav-more-wrap > button.oa-nav-more {
+    flex:1 1 0!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding-inline:2px!important;
+    font-size:8px!important;
+    letter-spacing:0!important;
+  }
+}
+

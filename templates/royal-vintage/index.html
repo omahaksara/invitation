@@ -109,10 +109,43 @@
 #main-content{padding-bottom:90px}
 #couple-section,#events-section{scroll-margin-top:18px}
 @media(prefers-reduced-motion:no-preference){#open-invitation-btn{transition:transform .25s ease,box-shadow .25s ease}#open-invitation-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px #17030766}}
+
+/* Royal Vintage — a full-width letterpress spread, not a narrow centered poster. */
+.invitation-container{width:100%;max-width:none;margin:0;border-radius:0;overflow:hidden}
+#cover-section.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;padding:clamp(34px,7vw,100px);background:#f4eee3;color:#3c2b1d;border:0;isolation:isolate;overflow:hidden}
+#cover-section.hero .hero-cover-image{position:absolute;inset:0 0 0 auto;width:52%;height:100%;object-fit:cover;object-position:center 34%;opacity:1;z-index:-1;filter:saturate(.82) contrast(1.04)}
+#cover-section.hero:before{content:"";position:absolute;inset:0 48% 0 0;background:linear-gradient(145deg,#fbf6ec,#e8dcc9);z-index:-2}
+#cover-section.hero:after{content:"";position:absolute;top:8%;bottom:8%;left:48%;width:1px;background:linear-gradient(transparent,#a98b5b,transparent);z-index:0;pointer-events:none}
+#cover-section.hero>:not(.hero-cover-image){position:relative;z-index:2;max-width:500px;margin-left:clamp(0px,3vw,42px);text-align:left}
+#cover-section.hero .date{margin:0 0 22px;color:#8b5a2b;font-size:.72rem;letter-spacing:.2em}
+#cover-section.hero .names{margin:0 0 25px}
+#cover-section.hero .names h1{display:flex;flex-direction:column;align-items:flex-start;gap:0;font-size:clamp(3.1rem,7vw,6.1rem);line-height:.9;color:#6e482b}
+#cover-section.hero .names h1>span{font-size:inherit;color:inherit}
+#cover-section.hero .names h1>span:nth-child(2){font-size:.42em;color:#b38a53;margin:.1em 0 .14em .12em}
+#cover-section.hero .guest-box{margin:0 0 22px!important}
+#cover-section.hero .guest-box p{font-size:.64rem!important;letter-spacing:.15em;text-transform:uppercase;color:#7a6a58!important}
+#cover-section.hero .guest-box h3{font:400 1.45rem Georgia,serif;color:#3c2b1d!important;margin:6px 0}
+#cover-section.hero #open-invitation-btn{margin:0;align-self:flex-start}
+#main-content{max-width:1080px;margin:0 auto}
+@media(max-width:760px){
+ #cover-section.hero{min-height:100svh;justify-content:flex-end;padding:58svh 22px 34px;background:#f4eee3}
+ #cover-section.hero .hero-cover-image{inset:0 0 auto;width:100%;height:60%;object-position:center 34%}
+ #cover-section.hero:before{inset:48% 0 0;background:#f4eee3}
+ #cover-section.hero:after{inset:60% 22px auto;width:auto;height:1px}
+ #cover-section.hero>:not(.hero-cover-image){width:100%;max-width:none;margin-left:0}
+ #cover-section.hero .names h1{font-size:clamp(2.9rem,13vw,4.2rem)}
+ #cover-section.hero #open-invitation-btn{margin:0}
+}
+
+
+@keyframes rvLetterpressClose{0%{opacity:1;clip-path:inset(0);transform:translateX(0)}100%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-24px)}}
+#cover-section.hero.is-opening{animation:rvLetterpressClose 820ms cubic-bezier(.7,0,.2,1) both;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#cover-section.hero.is-opening{animation:none!important;transform:none!important}}
+
 </style>
 <div class="invitation-container">
     <!-- Cover / Sampul -->
-    <section class="hero" id="cover-section" aria-label="Sampul undangan">
+    <section class="hero" id="cover-section" aria-label="Sampul undangan" data-oa-opening-animation="rvLetterpressClose 820ms cubic-bezier(.7,0,.2,1) both">
         <img class="hero-cover-image" data-bind="cover.image" alt="Foto sampul undangan">
         <p class="date" data-bind="cover.title">Undangan Pernikahan</p>
         <div class="names">
@@ -177,3 +210,46 @@
     <button id="music-toggle" class="royal-music-toggle" type="button" aria-label="Putar atau jeda musik" aria-pressed="false"><i class="fa-solid fa-compact-disc" aria-hidden="true"></i></button>
     </main>
 </div>
+
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("royal-vintage", {
+    activate({ root, navigation, observe, addCleanup, reducedMotion, depthMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "royal-vintage";
+      style.textContent = `
+        [data-oa-royal-motion="ready"] .hero { isolation:isolate; }
+        [data-oa-royal-motion="ready"] .hero::after { transform:scaleX(.0); transform-origin:center; transition:transform 1200ms cubic-bezier(.7,0,.2,1); }
+        [data-oa-royal-motion="ready"] .hero.oa-royal-cover-ready::after { transform:scaleX(1); }
+        [data-oa-royal-motion="ready"] .profile-card,
+        [data-oa-royal-motion="ready"] .event-card { transition:opacity 850ms ease, transform 950ms cubic-bezier(.2,.7,.2,1), box-shadow 850ms ease; }
+        [data-oa-royal-motion="ready"] .oa-royal-reveal { opacity:0; transform:translateY(20px) scale(.985); }
+        [data-oa-royal-motion="ready"] .oa-royal-reveal.oa-royal-visible { opacity:1; transform:none; }
+        [data-oa-royal-motion="ready"] .profile-card.oa-royal-reveal.oa-royal-visible { box-shadow:0 14px 34px rgba(55,8,13,.07); }
+        @media(prefers-reduced-motion:reduce){[data-oa-royal-motion="ready"] .oa-royal-reveal{opacity:1;transform:none;transition:none}[data-oa-royal-motion="ready"] .hero::after{transform:none;transition:none}}
+      `;
+      if (navigation) navigation.classList.add("oa-nav-royal");
+      style.textContent += `
+        #oa-floating-controls.oa-nav-royal{left:18px!important;right:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;flex-direction:column!important;align-items:stretch!important;width:76px!important;max-width:calc(100vw - 24px)!important;border-radius:10px!important;padding:12px 8px!important;gap:7px!important;background:linear-gradient(155deg,#4a0d16f7,#26070bf7)!important;border:1px solid #d0ad66!important;box-shadow:0 14px 42px #21060988,inset 0 0 0 2px #d0ad6622!important}#oa-floating-controls.oa-nav-royal button{width:100%!important;min-width:0!important;min-height:42px!important;padding:4px!important;border-radius:4px!important;border:1px solid #d0ad6638!important;color:#f0dba9!important;font:600 9px/1.2 Georgia,serif!important;white-space:normal!important}#oa-floating-controls.oa-nav-royal button.is-active{background:#d0ad66!important;color:#37080d!important}@media(max-width:600px){#oa-floating-controls.oa-nav-royal{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;padding:5px!important;border-radius:8px!important}#oa-floating-controls.oa-nav-royal button{width:auto!important;flex:0 1 auto!important;min-width:38px!important;max-width:none!important;min-height:40px!important;padding:4px 5px!important;font-size:9px!important;white-space:nowrap!important}}
+        .oa-gallery-lightbox[data-oa-theme="royal-vintage"]{background:rgba(37,5,10,.97)!important;backdrop-filter:blur(10px)}.oa-gallery-lightbox[data-oa-theme="royal-vintage"] img{border:1px solid #d0ad66;border-radius:2px!important;box-shadow:0 18px 60px #000b}
+      `;
+      document.head.append(style);
+      root.dataset.oaRoyalMotion = "ready";
+      const cover = root.querySelector(".hero");
+      if (cover) requestAnimationFrame(() => cover.classList.add("oa-royal-cover-ready"));
+      const targets = root.querySelectorAll(".profile-card, .event-card, .quote-section");
+      targets.forEach(node => node.classList.add("oa-royal-reveal"));
+      observe(targets, "oa-royal-visible", { threshold: 0.16, rootMargin: "0px 0px -9% 0px" });
+      depthMotion({ surface: ".hero", layers: [{ selector: ".hero-cover-image", z: 12, factor: 0.3 }, { selector: ".hero .hero-content", z: 30, factor: 0.65 }] });
+      addCleanup(() => {
+        if (navigation) navigation.classList.remove("oa-nav-royal");
+        root.removeAttribute("data-oa-royal-motion");
+        if (cover) cover.classList.remove("oa-royal-cover-ready");
+        root.querySelectorAll(".oa-royal-reveal").forEach(node => node.classList.remove("oa-royal-reveal","oa-royal-visible"));
+        style.remove();
+      });
+    }
+  });
+})();
+</script>

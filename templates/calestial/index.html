@@ -390,7 +390,7 @@ body{
   border:2px solid var(--line);
   border-radius:25px;
   cursor:zoom-in;
-  transition:all .6s cubic-bezier(.4,0,.2,1);
+  transition:transform .6s cubic-bezier(.4,0,.2,1),filter .6s cubic-bezier(.4,0,.2,1),box-shadow .6s,border-color .6s;
   box-shadow:0 15px 35px rgba(0,0,0,.4);
 }
 
@@ -700,6 +700,34 @@ body{
  .celestial-royale .cover .btn{padding:10px 25px}
  .celestial-royale .royal-arch:before,.celestial-royale .royal-arch:after{width:52px;height:52px;top:12px}
 }
+
+/* Calestial — observatory horizon: cinematic sky, panoramic photo band, open typographic field. */
+.celestial-royale .cover{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-height:100svh;padding:clamp(28px,6vh,70px) 24px;background:radial-gradient(ellipse at 50% 10%,#26366e 0%,#121a42 42%,#080c22 100%);text-align:center}
+.celestial-royale .cover>img{inset:0 0 auto;height:48%;opacity:.82;filter:brightness(.72) saturate(.75);clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%);mask-image:linear-gradient(#000 0%,#000 75%,transparent 100%);animation:none}
+.celestial-royale .cover:after{background:linear-gradient(180deg,rgba(10,14,39,.02) 0%,rgba(10,14,39,.04) 28%,rgba(10,14,39,.86) 54%,#0a0e27 100%)}
+.celestial-royale .royal-arch{width:min(100%,820px);max-width:820px;margin:0 auto;padding:18px 20px 8px;border:0;border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none}
+.celestial-royale .royal-arch:before,.celestial-royale .royal-arch:after{display:none}
+.celestial-royale .cover .eyebrow{letter-spacing:.42em;font-size:.62rem}
+.celestial-royale .cover h1{font-size:clamp(3rem,8.5vw,6.8rem);line-height:.82;letter-spacing:-.045em;margin:14px 0;color:#f4e5b0;text-shadow:0 8px 36px #0009}
+.celestial-royale .cover h1 br{display:none}
+.celestial-royale .cover h1 span{display:inline-block;margin:0 .08em}
+.celestial-royale .cover .ornament{margin:15px auto;font-size:1rem}
+.celestial-royale .cover .sub{font-size:.68rem;letter-spacing:.2em}
+.celestial-royale .cover #nama-tamu{font-size:clamp(1.35rem,3vw,2rem)!important;margin:5px 0 10px!important}
+.celestial-royale .cover .btn{border-radius:2px;padding:13px 28px;background:linear-gradient(90deg,rgba(212,175,55,.2),rgba(212,175,55,.04));backdrop-filter:none}
+.celestial-royale .cover .btn:before{display:none}
+.celestial-royale .cover .btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px #d4af3733}
+@media(max-width:600px){
+ .celestial-royale .cover{padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+ .celestial-royale .cover>img{height:44%;clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%)}
+ .celestial-royale .royal-arch{padding:14px 4px 4px}
+ .celestial-royale .cover h1{font-size:clamp(2.5rem,11vw,4.2rem);margin:10px 0}
+ .celestial-royale .cover h1 span{display:block;margin:0}
+ .celestial-royale .cover .sub{font-size:.62rem}
+ .celestial-royale .cover #nama-tamu{font-size:1.45rem!important}
+ .celestial-royale .cover .btn{padding:11px 23px}
+}
+@media(prefers-reduced-motion:reduce){.celestial-royale .starfield{animation:none!important}.celestial-royale .cover>img{animation:none!important}}
 </style>
 
 <div class="celestial-royale" id="main-content">
@@ -846,3 +874,36 @@ body{
   <audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
 
+
+<script>
+(() => {
+ "use strict";
+ if (!window.OAThemePrograms) return;
+ window.OAThemePrograms.register("calestial", {
+  activate({root,navigation,observe}) {
+   const cover=root.querySelector("#cover, #cover-section, .hero, .cover, [class*='-cover']");
+   const title=cover&&cover.querySelector("h1,h2");
+   const photo=cover&&cover.querySelector("img");
+   if(cover) cover.dataset.oaExperienceCover="calestial";
+   if(title) title.dataset.oaExperienceTitle="calestial";
+   if(photo) photo.dataset.oaExperiencePhoto="calestial";
+   if(navigation) navigation.classList.add("oa-nav-calestial");
+   const targets=root.querySelectorAll(".person-card,.event-card,.story-card,.gallery-grid img,.gallery-item,.person-photo-frame,.hero-photo");
+   targets.forEach(node=>node.classList.add("oa-experience-reveal-calestial"));
+   const style=document.createElement("style");
+   style.dataset.oaThemeProgram="calestial";
+   style.textContent = "@keyframes oaCalestial{from{opacity:.72;transform:scale(1.08);filter:blur(4px);clip-path:inset(0 0 12% 0)}to{opacity:1;transform:none;filter:none;clip-path:inset(0)}}\n@keyframes oaCalestialTitle{from{opacity:0;transform:translate3d(0,20px,0) scale(.96);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}\nhtml[data-oa-theme=\"calestial\"] [data-oa-experience-cover=\"calestial\"] [data-oa-experience-title=\"calestial\"]{animation:oaCalestialTitle 1050ms cubic-bezier(.2,.75,.2,1) both}\nhtml[data-oa-theme=\"calestial\"] [data-oa-experience-cover=\"calestial\"] [data-oa-experience-photo=\"calestial\"]{animation:oaCalestial 1350ms cubic-bezier(.2,.7,.2,1) both}\nhtml[data-oa-theme=\"calestial\"] #app .oa-experience-reveal-calestial{opacity:0;transform:translate3d(0,20px,0) scale(.96);filter:blur(4px);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.2,.75,.2,1),filter 850ms ease}\nhtml[data-oa-theme=\"calestial\"] #app .oa-experience-reveal-calestial.oa-experience-visible-calestial{opacity:1;transform:none;filter:none}\n#oa-floating-controls.oa-nav-calestial{left:50%!important;right:auto!important;top:auto!important;bottom:max(12px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:7px 11px!important;gap:4px!important;border-radius:30px!important;background:#14131b!important;border:1px solid #d7b66d!important;box-shadow:0 12px 32px #0009!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}\n#oa-floating-controls.oa-nav-calestial button{color:#f2dca6!important;border-color:#d7b66d!important}\n.oa-gallery-lightbox[data-oa-theme=\"calestial\"]{background:rgba(15,14,21,.97)!important;color:#f2dca6!important}\n.oa-gallery-lightbox[data-oa-theme=\"calestial\"] img{border:1px solid #d7b66d!important;border-radius:10px!important;box-shadow:0 24px 70px rgba(0,0,0,.25)!important}\n@media(max-width:600px){#oa-floating-controls.oa-nav-calestial{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;max-width:none!important;justify-content:space-around!important;border-radius:999px!important}}\n@media(prefers-reduced-motion:reduce){html[data-oa-theme=\"calestial\"] [data-oa-experience-cover=\"calestial\"] [data-oa-experience-title=\"calestial\"],html[data-oa-theme=\"calestial\"] [data-oa-experience-cover=\"calestial\"] [data-oa-experience-photo=\"calestial\"]{animation:none!important;transition:none!important;transform:none!important;filter:none!important}html[data-oa-theme=\"calestial\"] #app .oa-experience-reveal-calestial{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}";
+   document.head.append(style);
+   observe(targets,"oa-experience-visible-calestial",{threshold:.1,rootMargin:"0px 0px -6% 0px"});
+   return ()=>{
+    if(navigation) navigation.classList.remove("oa-nav-calestial");
+    if(cover) delete cover.dataset.oaExperienceCover;
+    if(title) delete title.dataset.oaExperienceTitle;
+    if(photo) delete photo.dataset.oaExperiencePhoto;
+    targets.forEach(node=>node.classList.remove("oa-experience-reveal-calestial","oa-experience-visible-calestial"));
+    style.remove();
+   };
+  }
+ });
+})();
+</script>

@@ -81,6 +81,34 @@
 @media(min-width:760px){.kj-page{padding-left:34px;padding-right:34px}.kj-section{padding-top:82px}.kj-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.kj-gallery .gallery-item:nth-child(3n+1){grid-row:span 1}.kj-gallery .gallery-item:nth-child(4n+1){grid-row:span 2}}
 @media(max-width:520px){.kj-cover__content{padding:26px 16px}.kj-page{padding-left:17px;padding-right:17px}.kj-section{padding-top:55px}.kj-couple-grid{gap:12px}.kj-parents{font-size:.68rem}.kj-event-list,.kj-section--light .kj-gift-list,.kj-gift-list{grid-template-columns:1fr}.kj-section--light{margin-left:-17px;margin-right:-17px;padding-left:17px;padding-right:17px}.kj-countdown{gap:6px}.kj-countdown>div{padding:13px 2px}.kj-countdown span{font-size:.52rem}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.kj-gunungan{animation:none}}
+
+/* Kencana Jawa — editorial heritage cover: carved-paper geometry, asymmetric hierarchy. */
+.kj-cover{justify-content:flex-end;align-items:stretch;text-align:left;padding:clamp(28px,6vw,88px);background:#100f0c}
+.kj-cover:after{background:linear-gradient(90deg,rgba(14,13,11,.02) 0%,rgba(14,13,11,.12) 38%,rgba(14,13,11,.82) 62%,#0e0d0b 100%)}
+.kj-cover__image{width:64%;right:auto;object-position:center 38%;opacity:.9;clip-path:polygon(0 0,88% 0,100% 100%,0 100%)}
+.kj-cover__pattern{inset:0 0 0 auto;width:46%;opacity:.16;background-size:44px 44px}
+.kj-cover__content{align-self:center;width:min(48%,560px);margin-left:auto;padding:clamp(24px,4vw,52px) clamp(22px,3.5vw,46px);border:0;border-left:1px solid var(--kj-gold);outline:0;background:linear-gradient(90deg,rgba(14,13,11,.2),rgba(14,13,11,.78));box-shadow:none}
+.kj-cover__ornament{margin:0 0 18px}
+.kj-cover__names{font-size:clamp(3rem,7vw,6.4rem);line-height:.86;letter-spacing:-.045em}
+.kj-cover__names em{margin:4px 0;font-size:.42em}
+.kj-rule{margin:22px 0;width:110px}
+.kj-cover-date{letter-spacing:.18em}
+.kj-cover__recipient{margin-top:34px}
+.kj-open{margin-top:24px;padding:14px 22px}
+@media(max-width:700px){
+ .kj-cover{justify-content:flex-end;padding:0 22px calc(28px + env(safe-area-inset-bottom))}
+ .kj-cover:after{background:linear-gradient(180deg,rgba(14,13,11,0) 0%,rgba(14,13,11,.05) 24%,rgba(14,13,11,.72) 53%,#0e0d0b 100%)}
+ .kj-cover__image{width:100%;height:68%;inset:0 0 auto;clip-path:polygon(0 0,100% 0,100% 88%,0 100%);object-position:center 32%}
+ .kj-cover__pattern{width:100%;inset:auto 0 0;height:52%;background-size:38px 38px}
+ .kj-cover__content{width:100%;margin:0;padding:22px 8px 8px;border-left:0;border-top:1px solid var(--kj-gold);background:linear-gradient(180deg,rgba(14,13,11,.2),#0e0d0b 30%);text-align:left}
+ .kj-cover__ornament{width:44px;height:30px;margin:0 0 8px}
+ .kj-cover__names{font-size:clamp(2.7rem,13vw,4.4rem);margin:8px 0}
+ .kj-rule{margin:12px 0;width:82px}
+ .kj-cover__recipient{margin:14px 0 3px}
+ .kj-guest{font-size:1.3rem}
+ .kj-open{margin-top:14px}
+}
+@media(prefers-reduced-motion:reduce){.kj-cover__content,.kj-cover__image{animation:none!important;transition:none!important}}
 </style>
 
 <div id="cover-section" class="kj-cover">
@@ -166,3 +194,24 @@
 </main>
 <button id="music-toggle" class="oa-legacy-music-control" type="button" hidden aria-label="Kontrol musik bersama">Musik</button>
 <audio id="bg-music" loop></audio>
+
+<script>
+(() => {
+  if (!window.OAThemePrograms) return;
+  window.OAThemePrograms.register("kencana-jawa", {
+    activate({ navigation, addCleanup, reducedMotion }) {
+      const style = document.createElement("style");
+      style.dataset.oaThemeProgram = "kencana-jawa";
+      style.textContent = `#oa-floating-controls.oa-nav-kencana{left:50%!important;right:auto!important;top:auto!important;bottom:max(16px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:8px 12px!important;gap:4px!important;border-radius:5px!important;background:linear-gradient(180deg,#17130eF7,#090806F7)!important;border:1px solid #c6a15b!important;box-shadow:0 10px 32px #000a,inset 0 0 0 2px #c6a15b22!important}#oa-floating-controls.oa-nav-kencana button{min-width:44px!important;min-height:40px!important;border-radius:3px!important;color:#ecd9a8!important;font:600 9px/1.1 Georgia,serif!important;letter-spacing:.04em!important}#oa-floating-controls.oa-nav-kencana button.is-active{background:#c6a15b!important;color:#17130e!important}@media(max-width:600px){#oa-floating-controls.oa-nav-kencana{left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;width:auto!important;justify-content:space-around!important}}
+.oa-gallery-lightbox[data-oa-theme="kencana-jawa"]{background:rgba(10,8,5,.98)!important}.oa-gallery-lightbox[data-oa-theme="kencana-jawa"] img{border:3px double #c6a15b;border-radius:2px!important;box-shadow:0 0 0 8px #c6a15b12,0 24px 60px #000b}`;
+      style.textContent += `\n        #oa-floating-controls.oa-nav-kencana button{transition:transform 280ms cubic-bezier(.2,.65,.25,1),background-color 280ms ease,color 280ms ease,box-shadow 280ms ease}\n        #oa-floating-controls.oa-nav-kencana button:active{transform:scale(.94)}\n        @media(prefers-reduced-motion:reduce){#oa-floating-controls.oa-nav-kencana button{transition:none!important}#oa-floating-controls.oa-nav-kencana button:active{transform:none}}\n      `;
+      if (navigation) navigation.classList.add("oa-nav-kencana");
+      document.head.append(style);
+      addCleanup(() => {
+        if (navigation) navigation.classList.remove("oa-nav-kencana");
+        style.remove();
+      });
+    }
+  });
+})();
+</script>

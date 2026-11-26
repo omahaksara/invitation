@@ -14,6 +14,66 @@ async function captureScreenshot(page, file) {
 }
 
 
+async function installThemeDemoFixture(page) {
+  await page.route("**/clients/demo-katalog/data.json*", async route => {
+    const fixturePath = path.join(__dirname, "../tests/fixtures/theme-demo.json");
+    const fixture = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
+    const originalEvents = Object.values(fixture.events || {});
+    assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
+      event && !event.coordinates && event.latitude == null && event.longitude == null &&
+      typeof event.mapNote === "string" && event.mapNote.length > 0
+    ), "Isolated browser fixture must keep its synthetic venue unpinned until the test injects coordinates.");
+    const frameUrl = route.request().frame().url() || page.url();
+    const requestedTheme = new URL(frameUrl).searchParams.get("theme") || "";
+    const themeIndex = themes.findIndex(item => item.slug === requestedTheme);
+    const coverPhotos = ["cover.jpg", "foto-01.jpg", "foto-02.jpg", "foto-03.jpg", "foto-04.jpg", "foto-05.jpg", "foto-06.jpg", "foto-07.jpg", "foto-08.jpg", "foto-09.jpg", "foto-10.jpg"];
+    // Avoid the novelty-costume photo on formal invitation covers. These three
+    // compositions use formal/heritage portraits from the isolated demo set.
+    const coverPhotosByTheme = {
+      "aksara-signature": "foto-06.jpg",
+      "kencana-jawa": "foto-08.jpg",
+      "nexus": "foto-01.jpg"
+    };
+    const coverAsset = coverPhotosByTheme[requestedTheme] || coverPhotos[Math.max(0, themeIndex) % coverPhotos.length];
+    assert.notEqual(coverAsset, "foto-07.jpg", "Novelty-costume photo must not be used as a wedding cover.");
+    fixture.cover.image = coverAsset;
+    fixture.cover.heroImage = coverAsset;
+    fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
+    delete fixture.cover.image;
+    fixture.couple.groom.foto = fixture.couple.groom.photo;
+    delete fixture.couple.groom.photo;
+    fixture.couple.bride.image = fixture.couple.bride.photo;
+    delete fixture.couple.bride.photo;
+    fixture.gallery = (fixture.gallery || []).map((src, index) => ({ url: src, alt: "Foto uji " + (index + 1) }));
+    fixture.story = (fixture.story || []).map(item => {
+      const legacy = { ...item, image: item.foto || item.photo || item.image || "" };
+      delete legacy.foto;
+      delete legacy.photo;
+      return legacy;
+    });
+    fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
+    for (const event of originalEvents) {
+      event.mapQuery = "0.123456,120.654321";
+      event.mapUrl = "https://www.google.com/maps?q=0.123456,120.654321";
+      delete event.mapsUrl;
+      event.embedUrl = "https://www.google.com/maps?q=0.123456%2C120.654321&t=k&z=17&output=embed";
+      delete event.mapEmbedUrl;
+      event.coordinates = { lat: 0.123456, lng: 120.654321 };
+      event.mapNote = "";
+    }
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(fixture) });
+  });
+}
+
+async function captureMotionScreenshot(page, file) {
+  try {
+    await page.screenshot({ path: file, fullPage: false, timeout: 5000 });
+  } catch (error) {
+    console.warn("WARN motion screenshot skipped " + file + ": " + (error?.message || error));
+  }
+}
+
+
 async function auditCover(page, theme, device) {
   const cover = page.locator(theme.cover).first();
   assert.equal(await cover.count(), 1, theme.slug + ": elemen cover utama tidak ditemukan");
@@ -49,6 +109,53 @@ async function auditCover(page, theme, device) {
   await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-cover-${device}.png`));
 }
 
+async function auditMobileDock(page, theme, width) {
+  const audit = await page.evaluate(() => {
+    const nav = document.querySelector("#oa-floating-controls");
+    if (!nav) return { missingNav: true };
+    const navRect = nav.getBoundingClientRect();
+    const requiredSections = ["home", "couple", "event", "gallery"];
+    const requiredActions = ["auto", "music", "more"];
+    const missingSections = requiredSections.filter(id =>
+      !nav.querySelector('[data-oa-section="' + id + '"]')
+    );
+    const missingActions = requiredActions.filter(action =>
+      !nav.querySelector('[data-oa-action="' + action + '"]')
+    );
+    const controls = [
+      ...requiredSections.map(id => nav.querySelector('[data-oa-section="' + id + '"]')),
+      ...requiredActions.map(action => nav.querySelector('[data-oa-action="' + action + '"]'))
+    ].filter(Boolean);
+    const outsideDock = controls.filter(element => {
+      const rect = element.getBoundingClientRect();
+      return rect.width <= 0 || rect.left < navRect.left - 1 || rect.right > navRect.right + 1;
+    }).map(element => ({
+      label: element.getAttribute("aria-label") || element.textContent.trim(),
+      left: Math.round(element.getBoundingClientRect().left),
+      right: Math.round(element.getBoundingClientRect().right)
+    }));
+    return {
+      missingNav: false,
+      missingSections,
+      missingActions,
+      outsideDock,
+      scrollWidth: nav.scrollWidth,
+      clientWidth: nav.clientWidth,
+      left: Math.round(navRect.left),
+      right: Math.round(navRect.right)
+    };
+  });
+  assert.equal(audit.missingNav, false, theme.slug + ": shared mobile dock tidak ditemukan.");
+  assert.deepEqual(audit.missingSections, [],
+    theme.slug + ": tombol navigasi utama hilang pada " + width + "px " + JSON.stringify(audit));
+  assert.deepEqual(audit.missingActions, [],
+    theme.slug + ": kontrol auto-scroll/musik/lebih tidak lengkap pada " + width + "px " + JSON.stringify(audit));
+  assert.deepEqual(audit.outsideDock, [],
+    theme.slug + ": tombol dock terpotong/tergeser di luar area pada " + width + "px " + JSON.stringify(audit));
+  assert.ok(audit.scrollWidth <= audit.clientWidth + 2,
+    theme.slug + ": dock membutuhkan scroll horizontal pada " + width + "px " + JSON.stringify(audit));
+}
+
 const themes = [
   { slug: "karsa", marker: "#open-btn", open: "#open-btn", cover: "#cover" },
   { slug: "royal-vintage", marker: ".invitation-container", open: "#open-invitation-btn", cover: "#cover-section" },
@@ -69,8 +176,8 @@ const themes = [
   { slug: "aksav", marker: ".aksav", open: "#open-btn", cover: "#cover" },
   { slug: "army", marker: ".army", open: "#open-btn", cover: "#cover" },
   { slug: "kencana-jawa", marker: ".kj-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "gebyok-candra", marker: ".gc-cover", open: "#open-invitation-btn", cover: "#cover-section" },
-  { slug: "sunda-watercolor", marker: ".sw-cover", open: "#open-invitation-btn", cover: "#cover-section" },
+  { slug: "gebyok-candra", marker: ".gc-cover", open: "#open-invitation-btn", cover: "#cover-section", coverPhoto: false },
+  { slug: "sunda-watercolor", marker: ".sw-cover", open: "#open-invitation-btn", cover: "#cover-section", coverPhoto: false },
   { slug: "lumina", marker: ".lumina-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "calestial", marker: ".celestial-royale", open: "#open-btn", cover: "#cover" },
 { slug: "sagara", marker: ".sg-cover-photo", open: "#open-btn", cover: "#cover" },
@@ -82,6 +189,19 @@ const themes = [
   { slug: "nexus", marker: ".nexus-cover", open: "#open-invitation-btn", cover: "#cover-section" },
   { slug: "luma", marker: ".luma-cover", open: "#open-invitation-btn", cover: "#cover-section" },
 ];
+
+
+const openingMotionNames = {
+  "aksara-nocturne": "oaNocturnePortalClose",
+  "atelier-editorial": "oaAtelierPageTurn",
+  "botanical-garden": "oa-cover-botanical-garden-exit",
+  "earty": "eartyArchRetreat",
+  "elegance": "oaEleganceIrisClose",
+  "jendela-senja": "jsFilmFade",
+  "lumiere-bloom": "lumiereBloomClose",
+  "royal-vintage": "rvLetterpressClose",
+  "sagara": "oaSagaraTideRetreat"
+};
 
 // Keep the browser matrix and theme-specific dock styling synchronized with the registry.
 const themeRegistry = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates/registry.json"), "utf8"));
@@ -96,13 +216,17 @@ const sharedThemeCss = fs.readFileSync(path.join(__dirname, "../core/global.css"
 for (const slug of activeThemeSlugs) {
   assert.ok(sharedThemeCss.includes(`.oa-floating-controls[data-theme="${slug}"]`),
     slug + ": tema aktif belum memiliki identitas visual dock khusus.");
-  const themeFontTokens = sharedThemeCss.match(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\]\\s*\\{[^}]*\\}`, "m"))?.[0] || "";
-  const themeRevealTokens = sharedThemeCss.match(new RegExp(`html\\[data-oa-theme=["']${slug}["']\\]\\s*\\{[^}]*--oa-reveal-time:[^}]*\\}`, "m"))?.[0] || "";
-  assert.ok(themeFontTokens.includes("--oa-font-display") && themeFontTokens.includes("--oa-font-body"),
+  // Parse selector lines directly. The previous escaped RegExp matched literal backslashes,
+  // so valid CSS tokens were falsely reported missing for themes such as LUMA.
+  // Read CSS rule bodies, not only selector lines: multiline rules are valid CSS too.
+  const themeTokenRules = [...sharedThemeCss.matchAll(
+    new RegExp(`html\\[data-oa-theme="${slug}"\\][^{]*\\{([^}]*)\\}`, "g")
+  )].map(match => match[1]).join("\n");
+  assert.ok(themeTokenRules.includes("--oa-font-display") && themeTokenRules.includes("--oa-font-body"),
     slug + ": token tipografi tema belum lengkap.");
-  assert.ok(themeRevealTokens.includes("--oa-reveal-ease"),
+  assert.ok(themeTokenRules.includes("--oa-reveal-time") && themeTokenRules.includes("--oa-reveal-ease"),
     slug + ": token animasi reveal tema belum lengkap.");
-  const revealMatch = themeRevealTokens.match(/--oa-reveal-time:\s*([\d.]+)(ms|s)/);
+  const revealMatch = themeTokenRules.match(/--oa-reveal-time:\s*([\d.]+)(ms|s)/);
   const revealSeconds = revealMatch
     ? Number(revealMatch[1]) * (revealMatch[2] === "ms" ? .001 : 1)
     : Infinity;
@@ -131,6 +255,11 @@ for (const slug of activeThemeSlugs) {
       return;
     }
     const target = path.resolve(root, "." + pathname);
+    if (/^\/clients\/[^/]+\/data\.json$/i.test(pathname)) {
+      response.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
+      response.end("Protected client JSON is not served by browser smoke.");
+      return;
+    }
     if (target !== root && !target.startsWith(root + path.sep)) {
       response.writeHead(403).end("Forbidden");
       return;
@@ -150,6 +279,8 @@ for (const slug of activeThemeSlugs) {
   });
   let browser;
   const failures = [];
+  const motionEvidence = [];
+  const coverEvidence = [];
   try {
     await new Promise((resolve, reject) => {
       server.once("error", reject);
@@ -158,6 +289,7 @@ for (const slug of activeThemeSlugs) {
     browser = await chromium.launch({ headless: true });
     for (const theme of themes) {
       const page = await browser.newPage();
+      await page.emulateMedia({ reducedMotion: "no-preference" });
       page.setDefaultTimeout(5000);
       page.setDefaultNavigationTimeout(15000);
       const pageErrors = [];
@@ -175,46 +307,26 @@ for (const slug of activeThemeSlugs) {
       page.on("pageerror", error => pageErrors.push(error.message));
       // Synthetic coordinates are injected only into this browser test.
       // The public demo retains its unverified-location notice and no fake pin.
-      await page.route("**/clients/demo-katalog/data.json*", async route => {
-        const response = await route.fetch();
-        const fixture = await response.json();
-        const originalEvents = Object.values(fixture.events || {});
-        assert.ok(originalEvents.length > 0 && originalEvents.every(event =>
-          event && !event.coordinates && event.latitude == null && event.longitude == null &&
-          typeof event.mapNote === "string" && event.mapNote.length > 0
-        ), "Public demo fixture must keep its unverified venue unpinned and clearly labelled.");
-        // Exercise legacy image aliases through the real shared normalizer.
-        fixture.cover.heroImage = fixture.cover.image || fixture.cover.heroImage;
-        delete fixture.cover.image;
-        fixture.couple.groom.foto = fixture.couple.groom.photo;
-        delete fixture.couple.groom.photo;
-        fixture.couple.bride.image = fixture.couple.bride.photo;
-        delete fixture.couple.bride.photo;
-        fixture.gallery = (fixture.gallery || []).map((src, index) => ({ url: src, alt: "Foto uji " + (index + 1) }));
-        fixture.story = (fixture.story || []).map(item => {
-          const legacy = { ...item, image: item.foto || item.photo || item.image || "" };
-          delete legacy.foto;
-          delete legacy.photo;
-          return legacy;
-        });
-        fixture.features = { ...(fixture.features || {}), maps: true, mapEmbed: true, mapNavigation: true };
-        for (const event of originalEvents) {
-          // Exercise legacy map aliases while keeping every synthetic point isolated
-          // to this intercepted browser fixture; never write these values to demo/client JSON.
-          event.mapUrl = "https://www.google.com/maps?q=0.123456,120.654321";
-          delete event.mapsUrl;
-          event.embedUrl = "https://www.google.com/maps?q=0.123456%2C120.654321&t=k&z=17&output=embed";
-          delete event.mapEmbedUrl;
-          event.coordinates = { lat: 0.123456, lng: 120.654321 };
-          event.mapNote = "";
-        }
-        await route.fulfill({ response, body: JSON.stringify(fixture) });
-      });
+      await installThemeDemoFixture(page);
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman utama gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        const duplicateIds = await page.evaluate(() => {
+          const counts = new Map();
+          document.querySelectorAll("[id]").forEach(element => counts.set(element.id, (counts.get(element.id) || 0) + 1));
+          return Array.from(counts.entries()).filter(([, count]) => count > 1).map(([id, count]) => ({ id, count }));
+        });
+        assert.deepEqual(duplicateIds, [], theme.slug + ": duplicate HTML IDs " + JSON.stringify(duplicateIds));
+        await page.waitForFunction(() =>
+          Boolean(window.__invitationData?.cover?.heroImage || window.__invitationData?.cover?.image),
+          undefined, { timeout: 10000 }
+        );
+        const coverAsset = await page.evaluate(() =>
+          window.__invitationData?.cover?.heroImage || window.__invitationData?.cover?.image || ""
+        );
+        coverEvidence.push({ theme: theme.slug, asset: String(coverAsset).split("/").pop() });
         if (theme.slug === "atelier-editorial") {
           assert.equal(await page.locator(".atelier-page").count(), 1,
             "atelier-editorial: namespace halaman mandiri tidak ditemukan");
@@ -229,6 +341,35 @@ for (const slug of activeThemeSlugs) {
           return Boolean(groom && el && el.textContent.trim() === String(groom).trim());
         }, undefined, { timeout: 10000 });
 
+        const depthMotionPilots = new Set([
+          "karsa", "royal-vintage", "sirein", "botanical-garden", "nexus", "aksara-nocturne"
+        ]);
+        if (depthMotionPilots.has(theme.slug)) {
+          const depthAudit = await page.evaluate(slug => {
+            const surface = document.querySelector('[data-oa-depth-surface="' + slug + '"]');
+            const layers = document.querySelectorAll('[data-oa-depth-layer="' + slug + '"]');
+            const style = document.querySelector('style[data-oa-depth-motion="' + slug + '"]');
+            const appRoot = document.getElementById("app");
+            return {
+              surface: !!surface,
+              entered: !!surface?.classList.contains("oa-depth-entered"),
+              perspective: surface ? getComputedStyle(surface).perspective : "",
+              layers: layers.length,
+              stylesheet: !!style,
+              programRegistered: window.OAThemePrograms?.has(slug) ?? null,
+              programActive: window.OAThemePrograms?.active || "",
+              themeProgram: document.documentElement.dataset.oaThemeProgram || "",
+              appRoot: !!appRoot,
+              rootHasCover: !!appRoot?.querySelector("#cover, #cover-section, .cover"),
+              documentHasCover: !!document.querySelector("#cover, #cover-section, .cover")
+            };
+          }, theme.slug);
+          assert.ok(depthAudit.surface && depthAudit.entered && depthAudit.stylesheet && depthAudit.layers > 0,
+            theme.slug + ": 3D depth runtime belum mengikat surface/layer " + JSON.stringify(depthAudit));
+          assert.notEqual(depthAudit.perspective, "none",
+            theme.slug + ": perspektif 3D tidak aktif " + JSON.stringify(depthAudit));
+        }
+
         assert.equal((await page.locator("#nama-tamu").textContent()).trim(), "Nama Tamu",
           theme.slug + ": nama tamu tidak terbaca");
         assert.equal(await page.locator("#rsvp-form").count(), 1,
@@ -239,10 +380,10 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": smooth scrolling belum aktif");
         assert.ok(await page.locator(".oa-scroll-reveal").count() > 0,
           theme.slug + ": animasi saat scroll belum dipasang");
-        const renderedBride = (await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim();
-        const expectedBride = String(await page.evaluate(() => window.__invitationData?.couple?.bride?.nickname || "")).trim();
-        assert.ok(expectedBride && renderedBride === expectedBride,
-          theme.slug + ": nama mempelai wanita tidak sesuai data demo (expected=" + expectedBride + ", actual=" + renderedBride + ")");
+        const expectedBrideNickname = await page.evaluate(() => window.__invitationData?.couple?.bride?.nickname || "");
+        assert.ok(expectedBrideNickname, theme.slug + ": nama mempelai wanita tidak tersedia pada data demo.");
+        assert.equal((await page.locator('[data-bind="couple.bride.nickname"]').first().textContent()).trim(), expectedBrideNickname,
+          theme.slug + ": nama mempelai wanita tidak sesuai data demo.");
 
         const initialAudit = await page.evaluate(() => {
           const couple = window.__invitationData?.couple || {};
@@ -334,7 +475,7 @@ for (const slug of activeThemeSlugs) {
             themeRoots: document.querySelectorAll(".js-theme").length,
             bodyBackground: getComputedStyle(document.body).backgroundColor,
             displayFont: getComputedStyle(document.querySelector(".cover-title")).fontFamily,
-          displayFontToken: getComputedStyle(document.documentElement).getPropertyValue("--js-serif").trim(),
+            declaredDisplayFont: getComputedStyle(document.documentElement).getPropertyValue("--js-serif").trim(),
             coverImageBound: !!document.querySelector(".cover-image")?.getAttribute("src"),
             eventCards: document.querySelectorAll("#event-list .event-card").length,
             galleryImages: document.querySelectorAll("#gallery-grid img").length,
@@ -345,7 +486,9 @@ for (const slug of activeThemeSlugs) {
           assert.equal(visualAudit.appRoots, 1, "jendela-senja: ditemukan ID #app ganda.");
           assert.equal(visualAudit.themeRoots, 1, "jendela-senja: root tema tidak tunggal.");
           assert.equal(visualAudit.bodyBackground, "rgb(20, 22, 31)", "jendela-senja: CSS tema tidak termuat.");
-          assert.ok(visualAudit.displayFontToken.includes("Bodoni Moda"), "jendela-senja: token font display Bodoni Moda tidak terpasang " + JSON.stringify(visualAudit));
+          const expectedDisplayFamily = visualAudit.declaredDisplayFont.split(",")[0].replace(/["']/g, "").trim();
+          assert.ok(expectedDisplayFamily && visualAudit.displayFont.includes(expectedDisplayFamily),
+            "jendela-senja: font display tidak sesuai token tema " + JSON.stringify(visualAudit));
           assert.ok(visualAudit.coverImageBound, "jendela-senja: foto cover belum terikat dari JSON.");
           assert.ok(visualAudit.eventCards > 0 && visualAudit.galleryImages > 0 && visualAudit.giftCards > 0,
             "jendela-senja: renderer acara/galeri/hadiah tidak mengisi data demo " + JSON.stringify(visualAudit));
@@ -353,16 +496,16 @@ for (const slug of activeThemeSlugs) {
         }
         const storyAudit = await page.evaluate(() => ({
           total: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.length : 0,
-          photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0
+          photos: Array.isArray(window.__invitationData?.story) ? window.__invitationData.story.filter(item => item && (item.foto || item.photo || item.image)).length : 0,
+          firstTitle: Array.isArray(window.__invitationData?.story) ? String(window.__invitationData.story[0]?.judul || "") : ""
         }));
         assert.equal(await page.locator("#story-list article, .story-list article").count(), storyAudit.total,
           theme.slug + ": jumlah Love Story tidak sesuai data.json");
         assert.equal(await page.locator("#story-list .oa-story-photo, .story-list .oa-story-photo").count(), storyAudit.photos,
           theme.slug + ": foto Love Story tidak sesuai data.json");
-        const expectedFirstStoryTitle = String(await page.evaluate(() => window.__invitationData?.story?.[0]?.judul || "")).trim();
-        const renderedFirstStory = (await page.locator("#story-list article, .story-list article").first().textContent()).trim();
-        assert.ok(expectedFirstStoryTitle && renderedFirstStory.includes(expectedFirstStoryTitle),
-          theme.slug + ": judul Love Story tidak sesuai data demo (expected=" + expectedFirstStoryTitle + ")");
+        assert.ok(storyAudit.firstTitle &&
+          (await page.locator("#story-list article, .story-list article").first().textContent()).includes(storyAudit.firstTitle),
+          theme.slug + ": judul Love Story tidak sesuai data demo " + JSON.stringify(storyAudit));
 
         // Regression coverage for the curated demo payment methods and map controls.
         // These assertions run against every active theme using the same demo JSON.
@@ -397,11 +540,15 @@ for (const slug of activeThemeSlugs) {
           const scheduleRows = Array.from(document.querySelectorAll("#event-list .oa-event-schedule-item"));
           return {
             expectedPayments: enabledAccounts.length,
-            paymentNames: enabledAccounts.map(item => item.provider || item.bank || item.name || "HADIAH DIGITAL"),
+            paymentNames: enabledAccounts.map(item => {
+              const type = String(item.paymentType || item.type || "bank").toLowerCase();
+              return item.provider || item.bank || item.name ||
+                (type === "qris" ? "QRIS" : type === "ewallet" ? "Dompet Digital" : "HADIAH DIGITAL");
+            }),
             paymentCards: giftCards.length,
             paymentCardNames: giftCards.map(card => card.querySelector(".gift-bank")?.textContent?.trim() || ""),
             disabledPaymentActions: giftCards.every(card => card.querySelector("button")?.disabled === true),
-            hasDemoNotice: Boolean(document.querySelector("#gift-list .gift-message")?.textContent?.toLowerCase().includes("simulasi")),
+            hasDemoNotice: /simulasi/i.test(document.querySelector("#gift-list .gift-message")?.textContent || "") && /tidak dapat digunakan untuk transaksi/i.test(document.querySelector("#gift-list .gift-message")?.textContent || ""),
             expectedMappedEvents: mappedEvents.length,
             eventCards: eventCards.length,
             scheduleRows: scheduleRows.length,
@@ -457,15 +604,15 @@ for (const slug of activeThemeSlugs) {
         // The demo must use client-local image assets in every theme, never legacy remote photo URLs.
         const imageAudit = await page.evaluate(() => ({
           cover: Array.from(document.querySelectorAll('img[data-bind="cover.image"], img[data-bind="cover.heroImage"]'))
-            .map(img => img.currentSrc || img.src),
-          groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
-          bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
+            .map(img => img.currentSrc || img.src).filter(Boolean),
+          groom: document.querySelector('img[data-bind="couple.groom.photo"]')?.currentSrc || document.querySelector('img[data-bind="couple.groom.photo"]')?.src || "",
+          bride: document.querySelector('img[data-bind="couple.bride.photo"]')?.currentSrc || document.querySelector('img[data-bind="couple.bride.photo"]')?.src || "",
           gallery: Array.from(document.querySelectorAll("#gallery-grid img, .gallery-grid img"))
             .map(img => img.currentSrc || img.src),
           images: Array.from(document.querySelectorAll("img[src]")).map(img => img.currentSrc || img.src)
         }));
         const localPrefix = "http://127.0.0.1:4173/clients/demo-katalog/";
-        assert.ok(imageAudit.cover.every(src => src.startsWith(localPrefix)),
+        if (theme.coverPhoto !== false) assert.ok(imageAudit.cover.length > 0 && imageAudit.cover.every(src => src.startsWith(localPrefix)),
           theme.slug + ": foto sampul bukan aset lokal " + JSON.stringify(imageAudit.cover));
         assert.ok(imageAudit.groom.startsWith(localPrefix), theme.slug + ": foto pria bukan aset lokal " + imageAudit.groom);
         assert.ok(imageAudit.bride.startsWith(localPrefix), theme.slug + ": foto wanita bukan aset lokal " + imageAudit.bride);
@@ -475,6 +622,7 @@ for (const slug of activeThemeSlugs) {
           groomPhoto: window.__invitationData?.couple?.groom?.photo,
           bridePhoto: window.__invitationData?.couple?.bride?.photo,
           storyPhotos: (window.__invitationData?.story || []).map(item => item.foto),
+          galleryCount: Array.isArray(window.__invitationData?.gallery) ? window.__invitationData.gallery.length : 0,
           gallerySources: (window.__invitationData?.gallery || []).map(item => typeof item === "string" ? item : item.src)
         }));
         assert.ok(normalizedImageAudit.coverImage && normalizedImageAudit.coverImage === normalizedImageAudit.coverHeroImage,
@@ -485,11 +633,14 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": sumber cover demo harus berupa path aset relatif lokal " + JSON.stringify(normalizedImageAudit));
         assert.ok(normalizedImageAudit.groomPhoto && normalizedImageAudit.bridePhoto,
           theme.slug + ": alias foto mempelai tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.storyPhotos.length === 4 && normalizedImageAudit.storyPhotos.every(Boolean),
+        assert.ok(normalizedImageAudit.storyPhotos.length === storyAudit.photos && normalizedImageAudit.storyPhotos.every(Boolean),
           theme.slug + ": alias foto cerita tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(normalizedImageAudit.gallerySources.length >= 4 && normalizedImageAudit.gallerySources.every(Boolean),
+        assert.ok(normalizedImageAudit.galleryCount >= 4 &&
+          normalizedImageAudit.gallerySources.length === normalizedImageAudit.galleryCount &&
+          normalizedImageAudit.gallerySources.every(Boolean),
           theme.slug + ": alias URL galeri tidak dinormalisasi " + JSON.stringify(normalizedImageAudit));
-        assert.ok(imageAudit.gallery.length >= 4, theme.slug + ": galeri demo harus berisi minimal 4 foto");
+        assert.ok(imageAudit.gallery.length >= 4 && imageAudit.gallery.length === normalizedImageAudit.galleryCount,
+          theme.slug + ": jumlah foto galeri tidak sesuai JSON demo");
         assert.ok(imageAudit.gallery.every(src => src.startsWith(localPrefix)),
           theme.slug + ": galeri memakai URL lama " + JSON.stringify(imageAudit.gallery));
         // Foto pasangan/galeri wajib berasal dari folder demo. Logo pembayaran dan
@@ -529,7 +680,127 @@ for (const slug of activeThemeSlugs) {
           assert.equal(await page.locator("#oa-quick-controls").count(), 0,
             theme.slug + ": kontrol cepat terpisah tidak boleh menduplikasi dock bersama.");
           const reducedMotionOpenStarted = Date.now();
+          const expectedOpeningMotion = openingMotionNames[theme.slug];
+          if (expectedOpeningMotion) {
+            await page.evaluate(selector => {
+              const cover = document.querySelector(selector);
+              window.__oaMotionEvents = [];
+              window.__oaOpenClicks = [];
+              window.__oaPointerTrace = [];
+              ["pointerdown", "pointerup", "mousedown", "mouseup", "click"].forEach(type => {
+                document.addEventListener(type, event => {
+                  const target = event.target instanceof Element ? event.target : null;
+                  const path = event.composedPath().slice(0, 5).map(node => {
+                    if (!(node instanceof Element)) return String(node);
+                    return node.tagName.toLowerCase() + (node.id ? "#" + node.id : "") +
+                      (typeof node.className === "string" && node.className ? "." + node.className.trim().replace(/\\s+/g, ".") : "");
+                  });
+                  window.__oaPointerTrace.push({ type, target: target?.id || target?.tagName || "", path });
+                }, true);
+              });
+              document.addEventListener("click", event => {
+                const target = event.target instanceof Element
+                  ? event.target.closest("#open-invitation-btn, #open-btn")
+                  : null;
+                if (target) window.__oaOpenClicks.push({ id: target.id, ready: target.dataset.oaCoverReady === "true" });
+              }, true);
+              if (cover) cover.addEventListener("animationstart", event => {
+                window.__oaMotionEvents.push({ name: event.animationName, elapsedTime: event.elapsedTime });
+              });
+            }, theme.cover);
+          }
+          if (theme.slug === "aksara-nocturne") {
+            const beforeOpen = await page.evaluate(({ openSelector, coverSelector }) => {
+              const open = document.querySelector(openSelector);
+              const cover = document.querySelector(coverSelector);
+              const rect = open?.getBoundingClientRect();
+              const centerTarget = rect
+                ? document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
+                : null;
+              return {
+                openId: open?.id || "",
+                openState: open?.dataset.oaOpening || "",
+                openDisabled: Boolean(open?.disabled),
+                openPointerEvents: open ? getComputedStyle(open).pointerEvents : "",
+                openRect: rect ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null,
+                centerHit: centerTarget ? {
+                  tag: centerTarget.tagName,
+                  id: centerTarget.id || "",
+                  className: typeof centerTarget.className === "string" ? centerTarget.className : ""
+                } : null,
+                coverId: cover?.id || "",
+                openingAttribute: cover?.getAttribute("data-oa-opening-animation") || "",
+                openingDataset: cover?.dataset.oaOpeningAnimation || "",
+                coverAnimation: cover ? getComputedStyle(cover).animationName : "",
+                programRegistered: Boolean(window.OAThemePrograms?.has("aksara-nocturne")),
+                programActive: window.OAThemePrograms?.active || "",
+                programMotionReady: document.getElementById("app")?.dataset.oaNocturneMotion || ""
+              };
+            }, { openSelector: theme.open, coverSelector: theme.cover });
+            console.log("DEBUG nocturne before-open " + JSON.stringify(beforeOpen));
+          }
+          await page.waitForFunction(selector => {
+            const button = document.querySelector(selector);
+            return button?.dataset.oaCoverReady === "true";
+          }, theme.open, { timeout: 5000 });
           await page.locator(theme.open).click();
+          if (theme.slug === "aksara-nocturne") {
+            const afterOpen = await page.evaluate(({ openSelector, coverSelector }) => {
+              const open = document.querySelector(openSelector);
+              const cover = document.querySelector(coverSelector);
+              return {
+                openState: open?.dataset.oaOpening || "",
+                ariaBusy: open?.getAttribute("aria-busy") || "",
+                openDisabled: Boolean(open?.disabled),
+                openPointerEvents: open ? getComputedStyle(open).pointerEvents : "",
+                pointerTrace: window.__oaPointerTrace || [],
+                activeProgram: window.OAThemePrograms?.active || "",
+                programMotionReady: document.getElementById("app")?.dataset.oaNocturneMotion || "",
+                coverClass: cover?.className || "",
+                openingDataset: cover?.dataset.oaOpeningAnimation || "",
+                inlineAnimation: cover?.style.getPropertyValue("animation") || "",
+                animationPriority: cover?.style.getPropertyPriority("animation") || "",
+                computedAnimation: cover ? getComputedStyle(cover).animationName : "",
+                duration: cover ? getComputedStyle(cover).animationDuration : ""
+              };
+            }, { openSelector: theme.open, coverSelector: theme.cover });
+            console.log("DEBUG nocturne after-open " + JSON.stringify(afterOpen));
+          }
+          if (expectedOpeningMotion) {
+            try {
+              await page.waitForFunction(name =>
+                Array.isArray(window.__oaMotionEvents) && window.__oaMotionEvents.some(event => event.name === name),
+                expectedOpeningMotion,
+                { timeout: 1500 }
+              );
+            } catch (error) {
+              const diagnostic = await page.evaluate(selector => {
+                const cover = document.querySelector(selector);
+                return {
+                  className: cover?.className || "",
+                  animationName: cover ? getComputedStyle(cover).animationName : "",
+                  reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+                  theme: document.documentElement.dataset.oaTheme || "",
+                  events: window.__oaMotionEvents || [],
+                  clicks: window.__oaOpenClicks || [],
+                  pointerTrace: window.__oaPointerTrace || [],
+                  openDisabled: Boolean(document.querySelector("#open-invitation-btn, #open-btn")?.disabled),
+                  openPointerEvents: document.querySelector("#open-invitation-btn, #open-btn")
+                    ? getComputedStyle(document.querySelector("#open-invitation-btn, #open-btn")).pointerEvents : "",
+                  activeProgram: window.OAThemePrograms?.active || "",
+                  programMotionReady: document.getElementById("app")?.dataset.oaNocturneMotion || "",
+                  ready: document.querySelector("#open-invitation-btn, #open-btn")?.dataset.oaCoverReady || "",
+                  activeOpenInApp: !!document.getElementById("app")?.contains(document.querySelector("#open-invitation-btn, #open-btn"))
+                };
+              }, theme.cover);
+              throw new Error(theme.slug + ": opening animation did not start " + JSON.stringify(diagnostic));
+            }
+            const events = await page.evaluate(() => window.__oaMotionEvents || []);
+            motionEvidence.push({ theme: theme.slug, expected: expectedOpeningMotion, events });
+            await page.waitForTimeout(160);
+            await captureMotionScreenshot(page, path.join(screenshotDir, `${theme.slug}-opening-motion-desktop.png`));
+          }
+
           await page.waitForFunction(() => {
             const cover = document.getElementById("cover") || document.getElementById("cover-section");
             return !cover || cover.hidden || getComputedStyle(cover).display === "none";
@@ -583,23 +854,28 @@ for (const slug of activeThemeSlugs) {
         }
         const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
-          // Smooth scrolling is verified above as a product behavior. Disable only
-          // the scroll animation used to position Playwright at the gallery; otherwise
-          // its actionability check sees a continuously moving bounding box.
-          await page.evaluate(() => {
-            document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
-          });
           await galleryImage.scrollIntoViewIfNeeded();
-          // Let the real reveal transitions finish before testing the pointer action.
-          await page.waitForFunction(() => {
-            const image = document.querySelector("#gallery-grid img, .gallery-grid img");
-            if (!image) return false;
-            for (let node = image; node && node !== document.body; node = node.parentElement) {
-              if (node.getAnimations().some(animation => animation.playState === "running")) return false;
-            }
-            return true;
-          }, undefined, { timeout: 5000 });
-          await galleryImage.click();
+          const galleryHandle = await galleryImage.elementHandle();
+          await page.waitForFunction(image => {
+            if (image.classList.contains("oa-motion-visible")) return true;
+            return ["oa-botanical-visible", "oa-nocturne-visible"].some(className =>
+              image.classList.contains(className) || Boolean(image.closest("." + className))
+            );
+          }, galleryHandle, { timeout: 5000 });
+          await galleryImage.evaluate(async image => {
+            const running = image.getAnimations().filter(animation => animation.playState === "running" && typeof animation.transitionProperty === "string");
+            await Promise.all(running.map(animation => animation.finished.catch(() => undefined)));
+          });
+          const galleryBox = await galleryImage.boundingBox();
+          assert.ok(galleryBox && galleryBox.width > 0 && galleryBox.height > 0,
+            theme.slug + ": foto galeri tidak memiliki area interaksi.");
+          const galleryHitTarget = await galleryImage.evaluate(image => {
+            const rect = image.getBoundingClientRect();
+            const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            return hit === image || image.contains(hit);
+          });
+          assert.ok(galleryHitTarget, theme.slug + ": foto galeri tertutup elemen lain.");
+          await page.mouse.click(galleryBox.x + galleryBox.width / 2, galleryBox.y + galleryBox.height / 2);
           await page.waitForSelector(".oa-gallery-lightbox", { state: "visible", timeout: 3000 });
           assert.equal(await page.locator(".oa-gallery-lightbox [aria-label='Foto berikutnya']").count(), 1,
             theme.slug + ": tombol foto berikutnya tidak tersedia");
@@ -631,7 +907,7 @@ for (const slug of activeThemeSlugs) {
         assert.equal(mapAudit.mapLinks.length, expectedLocationCards,
           theme.slug + ": jumlah tautan lokasi harus mengikuti jumlah kartu acara");
         assert.deepEqual(mapAudit.mapLinks, mapAudit.expectedMapLinks,
-          theme.slug + ": tautan lokasi harus mempertahankan URL Maps eksplisit dari fixture uji");
+          theme.slug + ": tautan lokasi harus sama persis dengan URL Maps pada fixture uji");
         if (mapAudit.eventMode === "combined") {
           assert.equal(mapAudit.eventCards, 1,
             theme.slug + ": mode gabungan harus menghasilkan tepat satu kartu acara");
@@ -978,13 +1254,27 @@ for (const slug of activeThemeSlugs) {
         }
         await route.fulfill({ status: 405, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ ok: false }) });
       });
+      await installThemeDemoFixture(page);
       const url = `http://127.0.0.1:4173/?c=demo-katalog&theme=${theme.slug}&to=Nama+Tamu`;
       try {
         const response = await page.goto(url, { waitUntil: "commit", timeout: 15000 });
         assert.ok(response && response.ok(), theme.slug + ": halaman mobile gagal dimuat");
         await page.waitForSelector(theme.marker, { state: "attached", timeout: 10000 });
+        // Prevent browser scroll restoration and smooth-scroll CSS from leaving
+        // the mobile cover partially outside the viewport before layout auditing.
+        await page.evaluate(() => {
+          history.scrollRestoration = "manual";
+          document.documentElement.style.scrollBehavior = "auto";
+          document.body.style.scrollBehavior = "auto";
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        });
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         await auditCover(page, theme, "mobile");
         if (theme.open) {
+          await page.waitForFunction(selector => {
+            const button = document.querySelector(selector);
+            return button?.dataset.oaCoverReady === "true";
+          }, theme.open, { timeout: 5000 });
           const reducedMotionOpenStarted = Date.now();
           await page.locator(theme.open).click();
           await page.waitForFunction(() => {
@@ -999,12 +1289,18 @@ for (const slug of activeThemeSlugs) {
         await page.waitForSelector("#rsvp-form", { state: "attached", timeout: 10000 });
         await page.waitForSelector("#wishes-form", { state: "attached", timeout: 10000 });
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-360.png`));
-        const layout360 = await page.evaluate(() => ({
-          viewport: document.documentElement.clientWidth,
-          page: document.documentElement.scrollWidth,
-          rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
-          guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width
-        }));
+        const layout360 = await page.evaluate(() => {
+          const width = document.documentElement.clientWidth;
+          const dockRect = document.querySelector("#oa-floating-controls")?.getBoundingClientRect();
+          return {
+            viewport: width,
+            page: document.documentElement.scrollWidth,
+            rsvp: document.querySelector("#rsvp-form").getBoundingClientRect().width,
+            guestbook: document.querySelector("#wishes-form").getBoundingClientRect().width,
+            dockLeft: dockRect?.left ?? 0,
+            dockRight: dockRect?.right ?? width
+          };
+        });
         assert.equal(layout360.viewport, 360, theme.slug + ": viewport 360px tidak diterapkan.");
         assert.ok(layout360.page <= layout360.viewport + 2,
           theme.slug + ": horizontal overflow pada 360px " + JSON.stringify(layout360));
@@ -1012,6 +1308,9 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": formulir RSVP tidak responsif pada 360px " + JSON.stringify(layout360));
         assert.ok(layout360.guestbook > 0 && layout360.guestbook <= layout360.viewport,
           theme.slug + ": buku tamu tidak responsif pada 360px " + JSON.stringify(layout360));
+        assert.ok(layout360.dockLeft >= -1 && layout360.dockRight <= layout360.viewport + 1,
+          theme.slug + ": shared dock exceeds 360px viewport " + JSON.stringify(layout360));
+        await auditMobileDock(page, theme, 360);
 
         await page.setViewportSize({ width: 390, height: 844 });
         const layout390 = await page.evaluate(() => ({
@@ -1027,6 +1326,7 @@ for (const slug of activeThemeSlugs) {
           theme.slug + ": formulir RSVP tidak responsif pada 390px " + JSON.stringify(layout390));
         assert.ok(layout390.guestbook > 0 && layout390.guestbook <= layout390.viewport,
           theme.slug + ": buku tamu tidak responsif pada 390px " + JSON.stringify(layout390));
+        await auditMobileDock(page, theme, 390);
         await captureScreenshot(page, path.join(screenshotDir, `${theme.slug}-mobile-390.png`));
 
         // Verify that the final page content can scroll clear of the fixed shared dock.
@@ -1076,7 +1376,8 @@ for (const slug of activeThemeSlugs) {
         assert.equal(mockGuestbook.length, 0, theme.slug + ": demo tidak boleh menulis ke mock database");
         assert.equal(mockApiPosts.length, 0, theme.slug + ": demo tidak boleh mengirim RSVP/ucapan ke API");
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error pada mobile: " + pageErrors.join("; "));
-        console.log("PASS mobile + demo forms " + theme.slug);
+
+        console.log("PASS mobile 390px + 360px + demo forms " + theme.slug);
       } catch (error) {
         const message = error && error.message ? error.message : String(error);
         failures.push(theme.slug + " mobile: " + message);
@@ -1089,6 +1390,14 @@ for (const slug of activeThemeSlugs) {
     if (browser) await browser.close();
     if (server.listening) await new Promise(resolve => server.close(resolve));
   }
+  fs.writeFileSync(path.join(screenshotDir, "motion-evidence.json"), JSON.stringify({ themes: motionEvidence }, null, 2));
+  const uniqueCoverAssets = new Set(coverEvidence.map(item => item.asset).filter(Boolean));
+  fs.writeFileSync(path.join(screenshotDir, "cover-photo-evidence.json"), JSON.stringify({
+    themes: coverEvidence,
+    uniqueCoverAssetCount: uniqueCoverAssets.size
+  }, null, 2));
+  assert.ok(uniqueCoverAssets.size >= 10,
+    "Visual QA fixture must exercise at least 10 distinct demo cover photos; found " + uniqueCoverAssets.size);
   assert.equal(failures.length, 0, failures.join("\n"));
 })().catch(error => {
   console.error(error);
