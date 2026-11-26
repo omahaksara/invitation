@@ -182,3 +182,16 @@ assert.ok(runtime.includes('const protectedLegacyThemes = new Set(["army", "aksa
   "Protected legacy themes must be explicit in the shared theme runtime.");
 assert.ok(runtime.includes("!protectedLegacyThemes.has(slug)"),
   "Generic 3D depth fallback must skip protected legacy themes.");
+
+
+// Stage 1: shared theme reveals must replay on re-entry, and auto-scroll must
+// honor a manual start even while the opening delay is pending or the page is at its end.
+const appSource = read("core/app.js");
+assert.ok(runtime.includes("entry.target.classList.toggle(revealClass, entry.isIntersecting)"),
+  "Theme reveal observer must handle both entering and leaving the viewport.");
+assert.ok(!runtime.includes("observer.unobserve(entry.target)"),
+  "Theme reveal observer must remain active for reverse-scroll re-entry.");
+assert.ok(appSource.includes("const reachedPageEnd ="),
+  "Manual auto-scroll restart must detect the page end.");
+assert.ok(appSource.includes("if (autoStartDelay !== null) {") && appSource.includes("window.clearTimeout(autoStartDelay);"),
+  "Manual auto-scroll start must cancel the pending cover-open delay.");
