@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - rebuild/theme-experience-foundation
   push:
     branches:
       - main
