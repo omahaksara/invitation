@@ -137,7 +137,9 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       };
       // Delegate from the document so this still works when the shared app
       // mounts/replaces the template after the theme program is activated.
-      document.addEventListener("click", beginCoverExit, true);
+      // Window capture runs before document/target handlers installed by the
+      // shared renderer, so the theme exit class cannot be lost to handler order.
+      window.addEventListener("click", beginCoverExit, true);
       root.dataset.oaNocturneMotion = "ready";
       const targets = root.querySelectorAll(".panel, .quote-section, .story-section, .event-grid, .gallery-section, .guestbook-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nocturne-reveal"));
@@ -146,7 +148,7 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       
       
       addCleanup(() => {
-        document.removeEventListener("click", beginCoverExit, true);
+        window.removeEventListener("click", beginCoverExit, true);
         if (navigation) navigation.classList.remove("oa-nav-nocturne");
         delete root.dataset.oaNocturneMotion;
         
