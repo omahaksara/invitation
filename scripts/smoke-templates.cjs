@@ -686,6 +686,18 @@ for (const slug of activeThemeSlugs) {
               const cover = document.querySelector(selector);
               window.__oaMotionEvents = [];
               window.__oaOpenClicks = [];
+              window.__oaPointerTrace = [];
+              ["pointerdown", "pointerup", "mousedown", "mouseup", "click"].forEach(type => {
+                document.addEventListener(type, event => {
+                  const target = event.target instanceof Element ? event.target : null;
+                  const path = event.composedPath().slice(0, 5).map(node => {
+                    if (!(node instanceof Element)) return String(node);
+                    return node.tagName.toLowerCase() + (node.id ? "#" + node.id : "") +
+                      (typeof node.className === "string" && node.className ? "." + node.className.trim().replace(/\\s+/g, ".") : "");
+                  });
+                  window.__oaPointerTrace.push({ type, target: target?.id || target?.tagName || "", path });
+                }, true);
+              });
               document.addEventListener("click", event => {
                 const target = event.target instanceof Element
                   ? event.target.closest("#open-invitation-btn, #open-btn")
@@ -701,13 +713,28 @@ for (const slug of activeThemeSlugs) {
             const beforeOpen = await page.evaluate(({ openSelector, coverSelector }) => {
               const open = document.querySelector(openSelector);
               const cover = document.querySelector(coverSelector);
+              const rect = open?.getBoundingClientRect();
+              const centerTarget = rect
+                ? document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
+                : null;
               return {
                 openId: open?.id || "",
                 openState: open?.dataset.oaOpening || "",
+                openDisabled: Boolean(open?.disabled),
+                openPointerEvents: open ? getComputedStyle(open).pointerEvents : "",
+                openRect: rect ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null,
+                centerHit: centerTarget ? {
+                  tag: centerTarget.tagName,
+                  id: centerTarget.id || "",
+                  className: typeof centerTarget.className === "string" ? centerTarget.className : ""
+                } : null,
                 coverId: cover?.id || "",
                 openingAttribute: cover?.getAttribute("data-oa-opening-animation") || "",
                 openingDataset: cover?.dataset.oaOpeningAnimation || "",
-                coverAnimation: cover ? getComputedStyle(cover).animationName : ""
+                coverAnimation: cover ? getComputedStyle(cover).animationName : "",
+                programRegistered: Boolean(window.OAThemePrograms?.has("aksara-nocturne")),
+                programActive: window.OAThemePrograms?.active || "",
+                programMotionReady: document.getElementById("app")?.dataset.oaNocturneMotion || ""
               };
             }, { openSelector: theme.open, coverSelector: theme.cover });
             console.log("DEBUG nocturne before-open " + JSON.stringify(beforeOpen));
@@ -724,6 +751,11 @@ for (const slug of activeThemeSlugs) {
               return {
                 openState: open?.dataset.oaOpening || "",
                 ariaBusy: open?.getAttribute("aria-busy") || "",
+                openDisabled: Boolean(open?.disabled),
+                openPointerEvents: open ? getComputedStyle(open).pointerEvents : "",
+                pointerTrace: window.__oaPointerTrace || [],
+                activeProgram: window.OAThemePrograms?.active || "",
+                programMotionReady: document.getElementById("app")?.dataset.oaNocturneMotion || "",
                 coverClass: cover?.className || "",
                 openingDataset: cover?.dataset.oaOpeningAnimation || "",
                 inlineAnimation: cover?.style.getPropertyValue("animation") || "",
@@ -751,6 +783,12 @@ for (const slug of activeThemeSlugs) {
                   theme: document.documentElement.dataset.oaTheme || "",
                   events: window.__oaMotionEvents || [],
                   clicks: window.__oaOpenClicks || [],
+                  pointerTrace: window.__oaPointerTrace || [],
+                  openDisabled: Boolean(document.querySelector("#open-invitation-btn, #open-btn")?.disabled),
+                  openPointerEvents: document.querySelector("#open-invitation-btn, #open-btn")
+                    ? getComputedStyle(document.querySelector("#open-invitation-btn, #open-btn")).pointerEvents : "",
+                  activeProgram: window.OAThemePrograms?.active || "",
+                  programMotionReady: document.getElementById("app")?.dataset.oaNocturneMotion || "",
                   ready: document.querySelector("#open-invitation-btn, #open-btn")?.dataset.oaCoverReady || "",
                   activeOpenInApp: !!document.getElementById("app")?.contains(document.querySelector("#open-invitation-btn, #open-btn"))
                 };
