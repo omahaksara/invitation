@@ -743,6 +743,29 @@ for (const slug of activeThemeSlugs) {
             const button = document.querySelector(selector);
             return button?.dataset.oaCoverReady === "true";
           }, theme.open, { timeout: 5000 });
+          const legacyMusicTheme = ["army", "aksav"].includes(theme.slug);
+          await page.evaluate(() => {
+            const audio = document.getElementById("bg-music");
+            if (!audio) return;
+            audio.__playing = !audio.paused;
+            audio.__playCalls = 0;
+            audio.__pauseCalls = 0;
+            Object.defineProperty(audio, "paused", {
+              configurable: true,
+              get() { return !this.__playing; }
+            });
+            audio.play = function() {
+              this.__playCalls++;
+              this.__playing = true;
+              this.dispatchEvent(new Event("play"));
+              return Promise.resolve();
+            };
+            audio.pause = function() {
+              this.__pauseCalls++;
+              this.__playing = false;
+              this.dispatchEvent(new Event("pause"));
+            };
+          });
           await page.locator(theme.open).click();
           if (theme.slug === "aksara-nocturne") {
             const afterOpen = await page.evaluate(({ openSelector, coverSelector }) => {
@@ -807,6 +830,35 @@ for (const slug of activeThemeSlugs) {
           }, undefined, { timeout: 5000 });
         }
         await page.waitForSelector("#oa-floating-controls", { state: "visible", timeout: 5000 });
+        const initialAudio = await page.evaluate(() => {
+          const audio = document.getElementById("bg-music");
+          return audio ? {
+            playCalls: audio.__playCalls,
+            paused: audio.paused,
+            muted: audio.muted,
+            autoplay: audio.autoplay,
+            hasAutoplay: audio.hasAttribute("autoplay"),
+            preload: audio.preload
+          } : null;
+        });
+        assert.ok(initialAudio, theme.slug + ": elemen audio demo tidak ditemukan");
+        assert.equal(initialAudio.playCalls, legacyMusicTheme ? 1 : 0,
+          theme.slug + ": musik tidak mengikuti kebijakan autoplay tema");
+        if (!legacyMusicTheme) {
+          assert.equal(initialAudio.paused, true, theme.slug + ": musik harus tetap berhenti setelah cover dibuka");
+          assert.equal(initialAudio.muted, true, theme.slug + ": musik harus muted sampai tombol musik ditekan");
+          assert.equal(initialAudio.autoplay, false, theme.slug + ": atribut autoplay harus dinonaktifkan");
+          assert.equal(initialAudio.hasAutoplay, false, theme.slug + ": atribut autoplay HTML harus dihapus");
+          assert.equal(initialAudio.preload, "none", theme.slug + ": audio non-legacy tidak boleh pre-load otomatis");
+        }
+        if (theme.slug === "luma") {
+          const lumaDock = await page.locator("#oa-floating-controls").evaluate(element => {
+            const rect = element.getBoundingClientRect();
+            return { left: rect.left, right: rect.right, top: rect.top, width: window.innerWidth };
+          });
+          assert.ok(lumaDock.right >= lumaDock.width - 90 && lumaDock.top <= 40,
+            "luma: rail navigasi desktop harus berada di tepi kanan atas " + JSON.stringify(lumaDock));
+        }
         assert.ok(await page.locator(".oa-closing-section").count() <= 1,
           theme.slug + ": penutup bersama tidak boleh terduplikasi");
         // Verify the scheduled auto-scroll before gallery interaction, then leave it paused.
@@ -1207,30 +1259,33 @@ for (const slug of activeThemeSlugs) {
 
         await page.evaluate(() => {
           const audio = document.getElementById("bg-music");
-          audio.__playing = false;
           audio.__playCalls = 0;
           audio.__pauseCalls = 0;
-          Object.defineProperty(audio, "paused", { configurable: true, get() { return !this.__playing; } });
-          audio.play = function() {
-            this.__playCalls++;
-            this.__playing = true;
-            this.dispatchEvent(new Event("play"));
-            return Promise.resolve();
-          };
-          audio.pause = function() {
-            this.__pauseCalls++;
-            this.__playing = false;
-            this.dispatchEvent(new Event("pause"));
-          };
         });
-        await musicControl.click();
-        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "true", undefined, { timeout: 5000 });
-        assert.equal(await page.evaluate(() => document.getElementById("bg-music").__playCalls), 1,
-          theme.slug + ": tombol musik tidak memanggil play().");
-        await musicControl.click();
-        await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "false", undefined, { timeout: 5000 });
-        assert.equal(await page.evaluate(() => document.getElementById("bg-music").__pauseCalls), 1,
-          theme.slug + ": tombol musik tidak memanggil pause().");
+        if (legacyMusicTheme) {
+          // Protected legacy themes retain their existing cover-started music behavior.
+          await musicControl.click();
+          await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "false", undefined, { timeout: 5000 });
+          assert.equal(await page.evaluate(() => document.getElementById("bg-music").__pauseCalls), 1,
+            theme.slug + ": shared music control tidak menjeda legacy playback.");
+          await musicControl.click();
+          await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "true", undefined, { timeout: 5000 });
+          assert.equal(await page.evaluate(() => document.getElementById("bg-music").__playCalls), 1,
+            theme.slug + ": shared music control tidak melanjutkan legacy playback.");
+        } else {
+          await musicControl.click();
+          await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "true", undefined, { timeout: 5000 });
+          assert.equal(await page.evaluate(() => document.getElementById("bg-music").__playCalls), 1,
+            theme.slug + ": tombol musik tidak memanggil play().");
+          assert.equal(await page.evaluate(() => document.getElementById("bg-music").muted), false,
+            theme.slug + ": klik musik harus membuka mute.");
+          await musicControl.click();
+          await page.waitForFunction(() => document.querySelector('#oa-floating-controls [data-oa-action="music"]')?.getAttribute("aria-pressed") === "false", undefined, { timeout: 5000 });
+          assert.equal(await page.evaluate(() => document.getElementById("bg-music").__pauseCalls), 1,
+            theme.slug + ": tombol musik tidak memanggil pause().");
+          assert.equal(await page.evaluate(() => document.getElementById("bg-music").muted), true,
+            theme.slug + ": jeda musik harus mengembalikan mute.");
+        }
         assert.equal(pageErrors.length, 0, theme.slug + ": JavaScript error: " + pageErrors.join("; "));
         console.log("PASS " + theme.slug);
       } catch (error) {
