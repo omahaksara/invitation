@@ -401,24 +401,6 @@ html[data-oa-theme] #app .army #cover.is-opening{
   }
 }
 
-
-/* Army: deep forest ceremonial cover, disciplined left editorial block. */
-.army .cover{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:clamp(24px,8vw,120px);background:#17251e;min-height:100svh}
-.army .cover>img{opacity:.34;filter:grayscale(.45) saturate(.55);object-position:center 38%;}
-.army .cover:after{background:linear-gradient(90deg,rgba(13,28,21,.96) 0%,rgba(18,39,29,.88) 44%,rgba(18,39,29,.18) 100%)}
-.army .arch{width:min(100%,620px);margin:0;padding:clamp(28px,5vw,62px);border:0;border-left:2px solid #b59a65;border-radius:0;box-shadow:none;text-align:left;background:linear-gradient(90deg,rgba(13,28,21,.3),transparent)}
-.army .cover .cover-kicker{color:#d4c49c;letter-spacing:.28em}
-.army .cover h1{color:#f4ead5;font-size:clamp(3rem,7vw,5.8rem);line-height:.94;margin:22px 0}
-.army .cover h1 span{display:block}
-.army .cover h1 .cover-ampersand{font-size:.5em;color:#bda36d;margin:8px 0}
-.army .cover .cover-date{color:#d7c8a6;letter-spacing:.16em}
-.army .cover .cover-recipient{margin-top:26px;color:#e4d9c2;display:grid;gap:4px}
-.army .cover .cover-recipient strong{font:1.35rem 'Cormorant Garamond',serif;color:#fff}
-.army .cover .btn{margin-top:24px;border-radius:2px;background:#b69b66;color:#17251e;border-color:#b69b66;font-weight:600}
-.army .cover .btn:hover{background:#e0cfaa}
-@media(max-width:650px){.army .cover{padding:18px;align-items:flex-end;min-height:100svh}.army .cover>img{object-position:58% center;opacity:.4}.army .cover:after{background:linear-gradient(180deg,rgba(13,28,21,.08) 0%,rgba(13,28,21,.22) 32%,rgba(13,28,21,.97) 72%)}.army .arch{width:100%;padding:24px 16px 28px;border-left:1px solid #b59a65;background:linear-gradient(90deg,rgba(13,28,21,.45),transparent)}.army .cover h1{font-size:clamp(2.8rem,13vw,4.2rem);margin:12px 0}.army .cover .cover-recipient{margin-top:14px}}
-@media(prefers-reduced-motion:reduce){.army .cover>img{animation:none!important}}
-
 </style>
 <div class="army" id="main-content">
 <section id="cover" class="cover">
@@ -464,35 +446,3 @@ html[data-oa-theme] #app .army #cover.is-opening{
 <nav class="army-nav" aria-label="Navigasi undangan"><a href="#cover"><span>⌂</span>Home</a><a href="#couple"><span>♡</span>Mempelai</a><a href="#events"><span>▦</span>Acara</a><a href="#gallery"><span>▧</span>Galeri</a><a href="#guestbook-section"><span>✉</span>Ucapan</a><a href="#gift-section"><span>♧</span>Hadiah</a><button id="music-toggle" type="button" aria-label="Putar atau jeda musik"><span>♫</span>Musik</button></nav>
 <audio id="bg-music" data-bind="media.music" loop preload="none"></audio>
 </div>
-<script>
-(() => {
- "use strict";
- if (!window.OAThemePrograms) return;
- window.OAThemePrograms.register("army", {
-  activate({root,navigation,observe}) {
-   const cover=root.querySelector("#cover, #cover-section, .hero, .cover, [class*='-cover']");
-   const title=cover&&cover.querySelector("h1,h2");
-   const photo=cover&&cover.querySelector("img");
-   if(cover) cover.dataset.oaExperienceCover="army";
-   if(title) title.dataset.oaExperienceTitle="army";
-   if(photo) photo.dataset.oaExperiencePhoto="army";
-   if(navigation) navigation.classList.add("oa-nav-army");
-   const targets=root.querySelectorAll(".person-card,.event-card,.story-card,.gallery-grid img,.gallery-item,.person-photo-frame,.hero-photo");
-   targets.forEach(node=>node.classList.add("oa-experience-reveal-army"));
-   const style=document.createElement("style");
-   style.dataset.oaThemeProgram="army";
-   style.textContent = "@keyframes oaArmy{from{opacity:.72;transform:scale(1.1);filter:blur(4px);clip-path:inset(0 0 12% 0)}to{opacity:1;transform:none;filter:none;clip-path:inset(0)}}\n@keyframes oaArmyTitle{from{opacity:0;transform:translate3d(0,26px,0) scale(.96);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}\nhtml[data-oa-theme=\"army\"] [data-oa-experience-cover=\"army\"] [data-oa-experience-title=\"army\"]{animation:oaArmyTitle 1050ms cubic-bezier(.2,.75,.2,1) both}\nhtml[data-oa-theme=\"army\"] [data-oa-experience-cover=\"army\"] [data-oa-experience-photo=\"army\"]{animation:oaArmy 1350ms cubic-bezier(.2,.7,.2,1) both}\nhtml[data-oa-theme=\"army\"] #app .oa-experience-reveal-army{opacity:0;transform:translate3d(0,26px,0) scale(.96);filter:blur(3px);transition:opacity 850ms ease,transform 1050ms cubic-bezier(.2,.75,.2,1),filter 850ms ease}\nhtml[data-oa-theme=\"army\"] #app .oa-experience-reveal-army.oa-experience-visible-army{opacity:1;transform:none;filter:none}\n#oa-floating-controls.oa-nav-army{left:50%!important;right:auto!important;top:14px!important;bottom:auto!important;transform:translateX(-50%)!important;flex-direction:row!important;width:max-content!important;max-width:calc(100vw - 24px)!important;padding:6px 10px!important;gap:5px!important;border-radius:5px!important;background:#252c1e!important;border:1px solid #a79b70!important;box-shadow:0 10px 28px #0007!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}\n#oa-floating-controls.oa-nav-army button{color:#e9dfc1!important;border-color:#a79b70!important}\n.oa-gallery-lightbox[data-oa-theme=\"army\"]{background:rgba(24,29,20,.97)!important;color:#e9dfc1!important}\n.oa-gallery-lightbox[data-oa-theme=\"army\"] img{border:1px solid #a79b70!important;border-radius:4px!important;box-shadow:0 24px 70px rgba(0,0,0,.25)!important}\n@media(max-width:600px){#oa-floating-controls.oa-nav-army{left:8px!important;right:8px!important;top:auto!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;flex-direction:row!important;width:auto!important;max-width:none!important;justify-content:space-around!important;border-radius:999px!important}}\n@media(prefers-reduced-motion:reduce){html[data-oa-theme=\"army\"] [data-oa-experience-cover=\"army\"] [data-oa-experience-title=\"army\"],html[data-oa-theme=\"army\"] [data-oa-experience-cover=\"army\"] [data-oa-experience-photo=\"army\"]{animation:none!important;transition:none!important;transform:none!important;filter:none!important}html[data-oa-theme=\"army\"] #app .oa-experience-reveal-army{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}";
-   document.head.append(style);
-   observe(targets,"oa-experience-visible-army",{threshold:.1,rootMargin:"0px 0px -6% 0px"});
-   return ()=>{
-    if(navigation) navigation.classList.remove("oa-nav-army");
-    if(cover) delete cover.dataset.oaExperienceCover;
-    if(title) delete title.dataset.oaExperienceTitle;
-    if(photo) delete photo.dataset.oaExperiencePhoto;
-    targets.forEach(node=>node.classList.remove("oa-experience-reveal-army","oa-experience-visible-army"));
-    style.remove();
-   };
-  }
- });
-})();
-</script>
