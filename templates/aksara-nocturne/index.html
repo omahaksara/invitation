@@ -135,11 +135,14 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
         const cover = root.querySelector("#cover") || document.querySelector("#cover");
         if (cover) cover.classList.add("is-opening");
       };
-      // Delegate from the document so this still works when the shared app
-      // mounts/replaces the template after the theme program is activated.
-      // Window capture runs before document/target handlers installed by the
-      // shared renderer, so the theme exit class cannot be lost to handler order.
-      window.addEventListener("click", beginCoverExit, true);
+      // Bind directly to the live template button. The shared renderer also
+      // owns the click lifecycle; capture here guarantees the theme class is
+      // present before its handler computes the cover animation duration.
+      const openButton = root.querySelector("#open-btn") || document.querySelector("#open-btn");
+      if (openButton) {
+        openButton.addEventListener("pointerdown", beginCoverExit, true);
+        openButton.addEventListener("click", beginCoverExit, true);
+      }
       root.dataset.oaNocturneMotion = "ready";
       const targets = root.querySelectorAll(".panel, .quote-section, .story-section, .event-grid, .gallery-section, .guestbook-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nocturne-reveal"));
@@ -148,7 +151,10 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       
       
       addCleanup(() => {
-        window.removeEventListener("click", beginCoverExit, true);
+        if (openButton) {
+          openButton.removeEventListener("pointerdown", beginCoverExit, true);
+          openButton.removeEventListener("click", beginCoverExit, true);
+        }
         if (navigation) navigation.classList.remove("oa-nav-nocturne");
         delete root.dataset.oaNocturneMotion;
         
