@@ -195,3 +195,17 @@ assert.ok(appSource.includes("const reachedPageEnd ="),
   "Manual auto-scroll restart must detect the page end.");
 assert.ok(appSource.includes("if (autoStartDelay !== null) {") && appSource.includes("window.clearTimeout(autoStartDelay);"),
   "Manual auto-scroll start must cancel the pending cover-open delay.");
+
+
+// Stage 2: music stays silent until an explicit tap on every non-legacy theme.
+assert.ok(appSource.includes("audio.autoplay = false"),
+  "Non-legacy theme audio must disable autoplay.");
+assert.ok(appSource.includes("audio.removeAttribute(\"autoplay\")"),
+  "Non-legacy theme audio must remove the HTML autoplay attribute.");
+assert.ok(appSource.includes("if (!preserveLegacyMusic) audio.muted = false;"),
+  "Explicit music playback must unmute non-legacy themes.");
+assert.ok(appSource.includes("if (!preserveLegacyMusic) audio.muted = true;"),
+  "Pausing music must restore mute on non-legacy themes.");
+const globalCss = read("core/global.css");
+assert.ok(globalCss.includes('html[data-oa-theme="luma"] #oa-floating-controls'),
+  "Luma navigation rail must be anchored by its theme scope, not only by a runtime class.");
