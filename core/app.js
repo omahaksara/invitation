@@ -2346,6 +2346,11 @@
     };
     const startAutoScroll = () => {
       if (autoTimer !== null || autoButton.hidden || autoButton.disabled) return;
+      // A manual restart at the bottom begins a fresh pass instead of stopping
+      // on the next animation frame.
+      const reachedPageEnd =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3;
+      if (reachedPageEnd) window.scrollTo({ top: 0, behavior: "auto" });
       autoButton.textContent = "Ⅱ";
       autoButton.classList.add("is-running");
       autoButton.setAttribute("aria-pressed", "true");
@@ -2390,7 +2395,12 @@
         if (["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(event.key)) stopAutoScroll();
       });
       autoButton.addEventListener("click", () => {
-        if (autoTimer !== null || autoStartDelay !== null) { stopAutoScroll(); return; }
+        if (autoTimer !== null) { stopAutoScroll(); return; }
+        // A guest's manual start wins over the delayed start scheduled on cover open.
+        if (autoStartDelay !== null) {
+          window.clearTimeout(autoStartDelay);
+          autoStartDelay = null;
+        }
         startAutoScroll();
       });
       document.addEventListener("visibilitychange", () => { if (document.hidden) stopAutoScroll(); });
