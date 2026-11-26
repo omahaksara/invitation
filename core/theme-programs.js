@@ -30,6 +30,24 @@
       throw new TypeError("Program tema harus memiliki slug dan fungsi activate().");
     }
     programs.set(slug, program);
+
+    // Theme templates may be injected after the shared data renderer has
+    // already completed its first activation pass. In that case register()
+    // must attach the newly available choreography to the live invitation;
+    // otherwise the program is registered but never active (no depth layers,
+    // opening transition, or theme-specific reveal).
+    if (
+      document.documentElement.dataset.oaTheme === slug &&
+      window.__invitationData &&
+      document.getElementById("app")
+    ) {
+      activate(slug, {
+        root: document.getElementById("app"),
+        navigation: document.getElementById("oa-floating-controls"),
+        data: window.__invitationData
+      });
+    }
+
     return () => {
       if (programs.get(slug) === program) programs.delete(slug);
     };
