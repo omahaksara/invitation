@@ -127,22 +127,8 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       `;
       style.textContent += "\n.nocturne #cover.is-opening{animation:oaNocturnePortalClose 980ms cubic-bezier(.76,0,.18,1) both!important;pointer-events:none}\n@media(prefers-reduced-motion:reduce){.nocturne #cover.is-opening{animation:none!important;transform:none!important;clip-path:none!important}}";
       document.head.append(style);
-      // Match the shared invitation opener contract: start the theme's own
-      // cover exit before the core handler reveals the invitation content.
-      const beginCoverExit = event => {
-        const button = event.target instanceof Element ? event.target.closest("#open-btn") : null;
-        if (!button || document.documentElement.dataset.oaTheme !== "aksara-nocturne" || reducedMotion) return;
-        const cover = root.querySelector("#cover") || document.querySelector("#cover");
-        if (cover) cover.classList.add("is-opening");
-      };
-      // Bind directly to the live template button. The shared renderer also
-      // owns the click lifecycle; capture here guarantees the theme class is
-      // present before its handler computes the cover animation duration.
-      const openButton = root.querySelector("#open-btn") || document.querySelector("#open-btn");
-      if (openButton) {
-        openButton.addEventListener("pointerdown", beginCoverExit, true);
-        openButton.addEventListener("click", beginCoverExit, true);
-      }
+      // The shared cover lifecycle reads data-oa-opening-animation and owns
+      // the single click transition. Avoid a second pointer/click handler here.
       root.dataset.oaNocturneMotion = "ready";
       const targets = root.querySelectorAll(".panel, .quote-section, .story-section, .event-grid, .gallery-section, .guestbook-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nocturne-reveal"));
@@ -151,10 +137,6 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       
       
       addCleanup(() => {
-        if (openButton) {
-          openButton.removeEventListener("pointerdown", beginCoverExit, true);
-          openButton.removeEventListener("click", beginCoverExit, true);
-        }
         if (navigation) navigation.classList.remove("oa-nav-nocturne");
         delete root.dataset.oaNocturneMotion;
         
