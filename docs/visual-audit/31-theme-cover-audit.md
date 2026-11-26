@@ -135,3 +135,33 @@ Luma's cover presentation CSS now shifts from a full-bleed cinematic photo with 
 - Commit: `86f941dfd17548e4277df5618e456af5fec292d8`.
 
 **Verification status:** the previous screenshot artifact from run #62 / HEAD `13ce40c5c7104256d7985c523376b35112fc4fa4` predates this change and is not evidence for the new composition. The current PR head has no PR-triggered workflow run or commit status reported by the available GitHub checks at this checkpoint. Browser screenshots, runtime checks, and CI for the new SHA remain pending; do not treat this theme as visually verified yet.
+
+## Final combined visual pass — 26 November 2026
+
+**Verified PR head:** `a2fe8e4827c003e91d03e15129b3403f32e64056`  
+**GitHub Actions run:** [45840682317](https://github.com/omahaksara/invitation/actions/runs/45840682317)  
+**Artifact:** `theme-browser-visual-evidence` (artifact ID `15128047403`).
+
+### Checks on the exact PR head
+
+- Static validation and backend mock/unit tests: **passed**.
+- Browser smoke across the 31 active themes: **passed**.
+- Desktop pass: 31/31 themes.
+- Mobile pass: 31/31 themes at 360px and 390px, including demo form interactions and layout/dock checks.
+- Browser log: no `FAIL`, assertion failure, or Playwright error in the successful run.
+- Screenshot artifact includes 31 desktop cover captures, 31 mobile cover captures, 31 desktop page captures, 31 mobile captures at each tested width, and motion/cover-photo evidence.
+- Nine theme-specific opening transitions emitted their expected animation events in the motion evidence: Royal Vintage, Atelier Editorial, Botanical Garden, Elegance, Lumiere Bloom, Aksara Nocturne, Sagara, Earty, and Jendela Senja.
+
+### Visual review
+
+The 31-theme desktop and mobile cover contact sheets were reviewed, with full-resolution spot checks on representative editorial, botanical, cinematic, heritage/card, and colorful compositions. The cover set now spans distinct compositions rather than a single centered-text/full-bleed-photo template: asymmetric editorial split, portrait arch, paper invitation, dark portal, full-bleed cinematic, heritage pattern/card, restrained typographic, and illustrated/minimal directions. Mobile covers retain their own stacking/cropping decisions rather than simply shrinking desktop layouts.
+
+Examples checked at full resolution include Aksara Signature, Botanical Garden, Aksara Nocturne, Gebyok Candra, Romantic Floral, and Lumina. The screenshot set also confirms the shared dock remains within the tested mobile viewport; the 360px/390px assertions passed across all 31 themes.
+
+### Scope and remaining boundary
+
+The browser run used the isolated `tests/fixtures/theme-demo.json` fixture. Its cover-photo evidence lists 10 distinct demo image assets reused across the theme matrix; this is test material, not a replacement for each client's own photography. Per-client image crop/focal-point tuning remains a content-specific review, not a reason to alter live client data.
+
+The PR diff contains presentation/runtime/test/docs files only. No `clients/*/data.json`, live invitation slug/URL, RSVP or guestbook endpoint, Apps Script mapping, gift/payment asset, or production storage/backend file was changed. No theme was added. No merge or deploy was performed.
+
+This final evidence supersedes earlier historical notes in this audit that described browser verification as pending or temporarily skipped. The branch head above is the verified SHA; any later code commit must receive a new full CI run before it can be considered verified.
