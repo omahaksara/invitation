@@ -131,7 +131,7 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       // cover exit before the core handler reveals the invitation content.
       const beginCoverExit = event => {
         const button = event.target instanceof Element ? event.target.closest("#open-btn") : null;
-        if (!button || !root.contains(button) || reducedMotion) return;
+        if (!button || document.documentElement.dataset.oaTheme !== "aksara-nocturne" || reducedMotion) return;
         const cover = root.querySelector("#cover") || document.querySelector("#cover");
         if (cover) cover.classList.add("is-opening");
       };
