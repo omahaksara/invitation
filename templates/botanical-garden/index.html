@@ -116,7 +116,25 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       document.head.append(style);
       root.dataset.oaBotanicalMotion = "ready";
       const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-grid img, .gallery-item img, .form-card");
-      const revealNodes = new WeakSet();
+      const revealNodes = new Set();
+      let revealFrame = 0;
+      const revealInViewport = () => {
+        revealFrame = 0;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+        for (const node of revealNodes) {
+          if (!node.isConnected) {
+            revealNodes.delete(node);
+            continue;
+          }
+          const rect = node.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0 && rect.bottom >= 0 && rect.top <= viewportHeight) {
+            node.classList.add("oa-botanical-visible");
+          }
+        }
+      };
+      const scheduleReveal = () => {
+        if (!revealFrame) revealFrame = window.requestAnimationFrame(revealInViewport);
+      };
       const revealTargets = nodes => {
         const fresh = Array.from(nodes || []).filter(node =>
           node && node.nodeType === 1 && !revealNodes.has(node) &&
@@ -126,8 +144,15 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
           revealNodes.add(node);
           node.classList.add("oa-botanical-reveal");
         });
-        if (fresh.length) observe(fresh, "oa-botanical-visible", { threshold: 0, rootMargin: "0px" });
+        if (fresh.length) {
+          observe(fresh, "oa-botanical-visible", { threshold: 0, rootMargin: "0px" });
+          scheduleReveal();
+        }
       };
+      // IntersectionObserver is the primary trigger; this small viewport
+      // fallback keeps reveals deterministic in nested/overflowing theme shells.
+      window.addEventListener("scroll", scheduleReveal, { passive: true });
+      window.addEventListener("resize", scheduleReveal, { passive: true });
       revealTargets(targets);
       // Gallery/story cards are rendered asynchronously by the shared data
       // renderer, after the theme program has activated. Observe additions so
@@ -160,6 +185,9 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       const orbit = root.querySelector(".cover-orbit");
       if (orbit && reducedMotion) orbit.style.animation = "none";
       addCleanup(() => {
+        window.removeEventListener("scroll", scheduleReveal);
+        window.removeEventListener("resize", scheduleReveal);
+        if (revealFrame) window.cancelAnimationFrame(revealFrame);
         if (navigation) navigation.classList.remove("oa-nav-botanical");
         delete root.dataset.oaBotanicalMotion;
         const cover = root.querySelector("#cover-section") || document.querySelector("#cover-section");
