@@ -52,7 +52,6 @@ const programs = [
   "aurelia-noir",
   "lumiere-bloom",
   "romantic-floral",
-  "army",
   "earty",
   "lume",
   "nox",
