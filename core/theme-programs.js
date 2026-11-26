@@ -5,6 +5,8 @@
   let active = null;
   let activeCleanup = null;
   let generation = 0;
+  // Army and Aksav are protected legacy client themes; do not add adaptive depth to them.
+  const protectedLegacyThemes = new Set(["army", "aksav"]);
 
   const reducedMotion = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -288,7 +290,7 @@
 
       // Registered themes own their depth composition. Only legacy themes
       // without a choreography program receive the generic shared depth fallback.
-      if (!hasProgram && !depthMotionApplied && !reducedMotion()) {
+      if (!hasProgram && !depthMotionApplied && !reducedMotion() && !protectedLegacyThemes.has(slug)) {
         const coverSelector = "#cover, #cover-section, .cover, .cover-section, .sirein-cover, .velora-cover, .nexus-cover";
         if (root.querySelector(coverSelector)) {
           api.depthMotion({
