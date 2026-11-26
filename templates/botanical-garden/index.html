@@ -136,7 +136,7 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       }
       
       const orbit = root.querySelector(".cover-orbit");
-      if (orbit && reducedMotion()) orbit.style.animation = "none";
+      if (orbit && reducedMotion) orbit.style.animation = "none";
       addCleanup(() => {
         if (navigation) navigation.classList.remove("oa-nav-botanical");
         delete root.dataset.oaBotanicalMotion;
