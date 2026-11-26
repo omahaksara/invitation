@@ -268,8 +268,9 @@
       const cleanup = program.activate(api);
       if (typeof cleanup === "function") cleanups.push(cleanup);
 
-      // Supply shared 3D cover depth when a theme has no custom choreography.
-      if (!depthMotionApplied && !reducedMotion()) {
+      // Registered themes own their depth composition. Only legacy themes
+      // without a choreography program receive the generic shared depth fallback.
+      if (!hasProgram && !depthMotionApplied && !reducedMotion()) {
         const coverSelector = "#cover, #cover-section, .cover, .cover-section, .sirein-cover, .velora-cover, .nexus-cover";
         if (root.querySelector(coverSelector)) {
           api.depthMotion({
