@@ -118,8 +118,14 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       const targets = root.querySelectorAll(".section-pad, .person-card, .quote-section, .story-section, .event-section, .gallery-section, .gallery-grid img, .gallery-item img, .form-card");
       targets.forEach(node => node.classList.add("oa-botanical-reveal"));
       observe(targets, "oa-botanical-visible", { threshold: 0, rootMargin: "0px" });
-      const applyCoverDepth = () => depthMotion({ surface: "#cover-section", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
-      // The invitation shell can mount just after this program activates.
+      const applyCoverDepth = () => {
+        const cover = root.querySelector("#cover-section") || document.querySelector("#cover-section");
+        if (!cover || cover.dataset.oaBotanicalDepthReady === "true") return false;
+        const applied = depthMotion({ surface: "#cover-section", layers: [{ selector: ".cover-photo", z: 10, factor: 0.25 }, { selector: ".cover-grain", z: 20, factor: 0.35 }, { selector: ".cover-orbit", z: 36, factor: 0.65 }] });
+        if (applied) cover.dataset.oaBotanicalDepthReady = "true";
+        return applied;
+      };
+      // Wait for the shared renderer to mount the invitation into #app.
       if (!applyCoverDepth() && "MutationObserver" in window) {
         const mountObserver = new MutationObserver(() => {
           if (!applyCoverDepth()) return;
@@ -134,6 +140,8 @@ html[data-oa-theme="botanical-garden"] #cover-section.is-opening{animation:oaBot
       addCleanup(() => {
         if (navigation) navigation.classList.remove("oa-nav-botanical");
         delete root.dataset.oaBotanicalMotion;
+        const cover = root.querySelector("#cover-section") || document.querySelector("#cover-section");
+        if (cover) delete cover.dataset.oaBotanicalDepthReady;
         
         root.querySelectorAll(".oa-botanical-reveal, .oa-botanical-visible").forEach(node => node.classList.remove("oa-botanical-reveal","oa-botanical-visible"));
         style.remove();
