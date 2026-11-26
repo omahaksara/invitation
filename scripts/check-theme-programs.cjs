@@ -169,3 +169,17 @@ assert.ok(runtime.includes("void surface.offsetWidth"),
 assert.ok(runtime.includes("previousSurfaceVars"),
   "Cleanup 3D harus memulihkan custom properties surface sebelumnya.");
 console.log("Theme program contract passed for " + programs.length + " themes and " + Object.keys(depthPilots).length + " 3D depth pilots.");
+
+
+// Army / Aksav are protected legacy client themes: keep their templates out of
+// theme-owned motion programs and exclude them from the generic depth fallback.
+const protectedLegacyThemes = ["army", "aksav"];
+for (const slug of protectedLegacyThemes) {
+  const template = read("templates/" + slug + "/index.html");
+  assert.ok(!template.includes('OAThemePrograms.register("' + slug + '"'),
+    slug + ": protected legacy template must not register a new theme program.");
+}
+assert.ok(runtime.includes('const protectedLegacyThemes = new Set(["army", "aksav"]);'),
+  "Protected legacy themes must be explicit in the shared theme runtime.");
+assert.ok(runtime.includes("!protectedLegacyThemes.has(slug)"),
+  "Generic 3D depth fallback must skip protected legacy themes.");
