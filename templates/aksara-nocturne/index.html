@@ -21,6 +21,8 @@ body{background:var(--nocturne);color:var(--ivory);font-family:Montserrat, sans-
 .nocturne .cover .sub{font-size:.78rem;letter-spacing:.12em;color:#f0e7d8}
 .nocturne .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;color:var(--gold-bright);border:1px solid var(--gold);border-radius:99px;padding:12px 24px;font-size:.72rem;letter-spacing:.08em;background:#061827bb;transition:background .35s,transform .35s}
 .nocturne .btn:hover{background:#d6bc8722;transform:translateY(-2px)}
+/* Keep the cover CTA hit target stable while Playwright and touch pointers enter it. */
+.nocturne #open-btn:hover,.nocturne #open-btn:active{transform:none}
 .nocturne .section-title{text-align:center;font-size:clamp(2.3rem,6vw,3.6rem);margin:8px 0 24px}
 .nocturne .intro{text-align:center;max-width:760px;margin:auto;color:#d9dce0}
 .nocturne .couple-grid,.nocturne .event-grid,.nocturne .gift-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
