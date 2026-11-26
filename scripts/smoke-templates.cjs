@@ -671,6 +671,7 @@ for (const slug of activeThemeSlugs) {
 
         await auditCover(page, theme, "desktop");
 
+        const legacyMusicTheme = ["army", "aksav"].includes(theme.slug);
         if (theme.open) {
           // Shared navigation and quick controls must remain hidden behind the cover.
           assert.equal(await page.locator("#oa-floating-controls").count(), 1,
@@ -743,7 +744,6 @@ for (const slug of activeThemeSlugs) {
             const button = document.querySelector(selector);
             return button?.dataset.oaCoverReady === "true";
           }, theme.open, { timeout: 5000 });
-          const legacyMusicTheme = ["army", "aksav"].includes(theme.slug);
           await page.evaluate(() => {
             const audio = document.getElementById("bg-music");
             if (!audio) return;
