@@ -129,13 +129,15 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       document.head.append(style);
       // Match the shared invitation opener contract: start the theme's own
       // cover exit before the core handler reveals the invitation content.
-      const openButton = root.querySelector("#open-btn");
-      const cover = root.querySelector("#cover");
-      const beginCoverExit = () => {
-        if (reducedMotion || !cover) return;
-        cover.classList.add("is-opening");
+      const beginCoverExit = event => {
+        const button = event.target instanceof Element ? event.target.closest("#open-btn") : null;
+        if (!button || !root.contains(button) || reducedMotion) return;
+        const cover = root.querySelector("#cover") || document.querySelector("#cover");
+        if (cover) cover.classList.add("is-opening");
       };
-      openButton?.addEventListener("click", beginCoverExit, { capture: true });
+      // Delegate from the document so this still works when the shared app
+      // mounts/replaces the template after the theme program is activated.
+      document.addEventListener("click", beginCoverExit, true);
       root.dataset.oaNocturneMotion = "ready";
       const targets = root.querySelectorAll(".panel, .quote-section, .story-section, .event-grid, .gallery-section, .guestbook-section, .gift-section");
       targets.forEach(node => node.classList.add("oa-nocturne-reveal"));
@@ -144,7 +146,7 @@ html[data-oa-theme="aksara-nocturne"] .nocturne #cover.is-opening{animation:oaNo
       
       
       addCleanup(() => {
-        openButton?.removeEventListener("click", beginCoverExit, { capture: true });
+        document.removeEventListener("click", beginCoverExit, true);
         if (navigation) navigation.classList.remove("oa-nav-nocturne");
         delete root.dataset.oaNocturneMotion;
         
