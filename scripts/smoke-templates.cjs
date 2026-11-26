@@ -851,6 +851,38 @@ for (const slug of activeThemeSlugs) {
           await autoScroll.click();
           assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
             theme.slug + ": tombol auto-scroll tidak berhenti");
+          await page.evaluate(() => window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "instant"
+          }));
+          await autoScroll.click();
+          await page.waitForFunction(() => {
+            const button = document.querySelector('#oa-floating-controls [data-oa-action="auto"]');
+            return button?.getAttribute("aria-pressed") === "true" && window.scrollY < 120;
+          }, undefined, { timeout: 3000 });
+          await autoScroll.click();
+          assert.equal(await autoScroll.getAttribute("aria-pressed"), "false",
+            theme.slug + ": auto-scroll tidak dapat dimulai ulang dari akhir halaman");
+        }
+        if (theme.slug === "karsa") {
+          const revealTarget = page.locator("#app .oa-karsa-reveal").last();
+          assert.ok(await revealTarget.count(), "karsa: tidak ada target reveal untuk uji re-entry");
+          await revealTarget.scrollIntoViewIfNeeded();
+          await page.waitForFunction(() => {
+            const targets = document.querySelectorAll("#app .oa-karsa-reveal");
+            return targets.length > 0 && targets[targets.length - 1].classList.contains("oa-karsa-visible");
+          }, undefined, { timeout: 5000 });
+          await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+          await page.waitForFunction(() => {
+            const targets = document.querySelectorAll("#app .oa-karsa-reveal");
+            return targets.length > 0 && !targets[targets.length - 1].classList.contains("oa-karsa-visible");
+          }, undefined, { timeout: 5000 });
+          await revealTarget.scrollIntoViewIfNeeded();
+          await page.waitForFunction(() => {
+            const targets = document.querySelectorAll("#app .oa-karsa-reveal");
+            return targets.length > 0 && targets[targets.length - 1].classList.contains("oa-karsa-visible");
+          }, undefined, { timeout: 5000 });
+          console.log("PASS motion re-entry karsa");
         }
         const galleryImage = page.locator("#gallery-grid img, .gallery-grid img").first();
         if (await galleryImage.count()) {
