@@ -2375,7 +2375,7 @@
       // on the next animation frame.
       const reachedPageEnd =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3;
-      if (reachedPageEnd) window.scrollTo({ top: 0, behavior: "auto" });
+      if (reachedPageEnd) window.scrollTo({ top: 0, behavior: "instant" });
       autoButton.textContent = "Ⅱ";
       autoButton.classList.add("is-running");
       autoButton.setAttribute("aria-pressed", "true");
