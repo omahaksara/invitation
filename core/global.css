@@ -1498,3 +1498,23 @@ html[data-oa-theme="luma"] #oa-floating-controls button { color:#dce6f2!importan
     border-radius:999px!important;
   }
 }
+
+
+/* Luma uses a vertical rail at the upper-right on desktop. Its overflow panel
+   must open beside the rail, not above it (the shared upward anchor can place
+   the panel outside the viewport when the rail starts near the top edge). */
+@media (min-width: 601px) {
+  html[data-oa-theme="luma"].oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+    position: fixed !important;
+    top: 16px !important;
+    right: 82px !important;
+    bottom: 16px !important;
+    left: auto !important;
+    width: min(280px, calc(100vw - 110px)) !important;
+    max-width: calc(100vw - 110px) !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+  }
+}
