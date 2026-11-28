@@ -1459,3 +1459,62 @@ html[data-oa-theme="luma"] { --oa-reveal-time:.46s; --oa-reveal-ease:cubic-bezie
   }
 }
 
+
+
+/* Luma's editorial rail is deliberately top-right on desktop and returns to a
+   compact bottom dock on phones; scope it by theme so it works even if a
+   theme program is unavailable during a legacy template boot. */
+html[data-oa-theme="luma"] #oa-floating-controls {
+  position:fixed!important;
+  left:auto!important;
+  right:14px!important;
+  top:16px!important;
+  bottom:auto!important;
+  transform:none!important;
+  flex-direction:column!important;
+  width:58px!important;
+  max-width:calc(100vw - 20px)!important;
+  padding:7px 5px!important;
+  gap:5px!important;
+  border-radius:28px!important;
+  background:#15191f!important;
+  border:1px solid #a7b7c9!important;
+  box-shadow:0 12px 32px #0009!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+html[data-oa-theme="luma"] #oa-floating-controls button { color:#dce6f2!important; border-color:#a7b7c9!important; }
+@media(max-width:600px) {
+  html[data-oa-theme="luma"] #oa-floating-controls {
+    left:8px!important;
+    right:8px!important;
+    top:auto!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    transform:none!important;
+    flex-direction:row!important;
+    width:auto!important;
+    max-width:none!important;
+    justify-content:space-around!important;
+    border-radius:999px!important;
+  }
+}
+
+
+/* Luma uses a vertical rail at the upper-right on desktop. Its overflow panel
+   must open beside the rail, not above it (the shared upward anchor can place
+   the panel outside the viewport when the rail starts near the top edge). */
+@media (min-width: 601px) {
+  html[data-oa-theme="luma"].oa-invitation-opened > #oa-floating-controls .oa-nav-overflow {
+    position: fixed !important;
+    top: 16px !important;
+    right: 82px !important;
+    bottom: 16px !important;
+    left: auto !important;
+    width: min(280px, calc(100vw - 110px)) !important;
+    max-width: calc(100vw - 110px) !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+  }
+}

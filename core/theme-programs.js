@@ -98,11 +98,11 @@
           nodes.forEach(node => node.classList.add(revealClass));
           return;
         }
+        // Keep observing both edges so scrolling out reverses the reveal and
+        // scrolling back in replays the theme's own transition.
         const observer = new IntersectionObserver(entries => {
           entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add(revealClass);
-            observer.unobserve(entry.target);
+            entry.target.classList.toggle(revealClass, entry.isIntersecting);
           });
         }, { threshold: 0.08, rootMargin: "0px 0px -4% 0px", ...options });
         nodes.forEach(node => observer.observe(node));
